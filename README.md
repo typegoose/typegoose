@@ -12,7 +12,7 @@ Typegoose aims to solve this problem by defining only a TypeScript interface (cl
 which need to be annotated with special Mongoose annotations.
 
 Instead of:
-```
+```typescript
 interface User {
   name?: string;
   age: number;
@@ -44,7 +44,7 @@ mongoose.model('Car', {
 });
 ```
 You can just:
-```
+```typescript
 class User extends Typegoose {
   @prop
   name?: string;
