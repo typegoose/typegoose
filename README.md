@@ -1,4 +1,4 @@
-# typegoose
+# Typegoose
 Define Mongoose models using TypeScript classes.
 
 A common problem when using Mongoose with TypeScript is that you have to define
