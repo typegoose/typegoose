@@ -56,8 +56,7 @@ export function required(target: any, key: string) {
 export type Ref<T> = T | string;
 
 export class Typegoose {
-  _id: string;
-
+  id: string;
   constructor() {
     const name = (this.constructor as any).name;
 

@@ -6,7 +6,8 @@ import { Car } from './car';
 
 export class User extends Typegoose {
   @prop
-  name?: string;
+  @required
+  name: string;
 
   @prop
   age?: number;
