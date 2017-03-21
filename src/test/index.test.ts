@@ -3,6 +3,7 @@ import { expect } from 'chai';
 
 import { model as User } from './models/user';
 import { model as Car } from './models/car';
+import { Genders } from './enums/genders';
 
 (<any>mongoose).Promise = Promise;
 
@@ -21,6 +22,7 @@ describe('Typegoose', () => {
     const user = await User.create({
       name: 'John Doe',
       age: 20,
+      gender: Genders.MALE,
       job: {
         title: 'Developer',
         position: 'Lead',
@@ -33,6 +35,7 @@ describe('Typegoose', () => {
     expect(foundUser).to.be.ok;
     expect(foundUser).to.have.property('name', 'John Doe');
     expect(foundUser).to.have.property('age', 20);
+    expect(foundUser).to.have.property('gender', Genders.MALE);
     expect(foundUser).to.have.property('job');
     expect(foundUser.job).to.have.property('title', 'Developer');
     expect(foundUser.job).to.have.property('position', 'Lead');

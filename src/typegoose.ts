@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import * as mongoose from 'mongoose';
+import * as _ from 'lodash';
 
 const schema = {};
 const models = {};
@@ -51,6 +52,19 @@ export function required(target: any, key: string) {
     schema[target.constructor.name] = {};
   }
   schema[target.constructor.name][key] = { ...schema[target.constructor.name][key], required: true };
+}
+
+export function enumeration(enumeration: any) {
+  return function(target: any, key: string) {
+    if (!schema[target.constructor.name]) {
+      schema[target.constructor.name] = {};
+    }
+    schema[target.constructor.name][key] = {
+      ...schema[target.constructor.name][key],
+      type: String,
+      enum: _.values(enumeration),
+    };
+  };
 }
 
 export type Ref<T> = T | string;
