@@ -6,6 +6,9 @@ const schema = {};
 const models = {};
 
 const isPrimitive = (Type) => _.includes(['String', 'Number', 'Boolean'], Type.name);
+const isArray = (Type) => Type.name === 'Array';
+const initAsObject = (name, key) => schema[name] || (schema[name] = { [key]: {} });
+const initAsArray = (name, key) => schema[name] || (schema[name] = { [key]: [{}] });
 
 export const prop = (target: any, key: string, type?: any) => {
   const Type = type || Reflect.getMetadata('design:type', target, key);
@@ -16,9 +19,7 @@ export const prop = (target: any, key: string, type?: any) => {
     throw new Error(`${Type.name} is not a primitive type nor a Typegoose schema (Not extending it).`);
   }
 
-  if (!schema[target.constructor.name]) {
-    schema[target.constructor.name] = {};
-  }
+  initAsObject(target.constructor.name, key);
 
   if (isPrimitive(Type)) {
     schema[target.constructor.name][key] = {
@@ -34,9 +35,8 @@ export const prop = (target: any, key: string, type?: any) => {
 };
 
 export const refProp = (refModel: any) => (target: any, key: string) => {
-  if (!schema[target.constructor.name]) {
-    schema[target.constructor.name] = {};
-  }
+  initAsObject(target.constructor.name, key);
+
   schema[target.constructor.name][key] = {
     ...schema[target.constructor.name][key],
     type: mongoose.Schema.Types.ObjectId,
@@ -46,9 +46,8 @@ export const refProp = (refModel: any) => (target: any, key: string) => {
 
 export const required = (target: any, key: string) => {
   const type = Reflect.getMetadata('design:type', target, key);
-  if (!schema[target.constructor.name]) {
-    schema[target.constructor.name] = {};
-  }
+  initAsObject(target.constructor.name, key);
+
   schema[target.constructor.name][key] = {
     ...schema[target.constructor.name][key],
     required: true,
@@ -56,9 +55,7 @@ export const required = (target: any, key: string) => {
 };
 
 export const enumProp = (enumeration: any) => (target: any, key: string) => {
-  if (!schema[target.constructor.name]) {
-    schema[target.constructor.name] = {};
-  }
+  initAsObject(target.constructor.name, key);
   schema[target.constructor.name][key] = {
     ...schema[target.constructor.name][key],
     type: String,

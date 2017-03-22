@@ -25,6 +25,9 @@ export class User extends Typegoose {
 
   @arrayProp(String)
   languages: string[];
+
+  @arrayProp(Car)
+  previousCars: Car[];
 }
 
 export const model = new User()._getModel();
