@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 const schema = {};
 const models = {};
 
-export function prop(target: any, key: string) {
+export const prop = (target: any, key: string) => {
   const type = Reflect.getMetadata('design:type', target, key);
   if (!schema[target.constructor.name]) {
     schema[target.constructor.name] = {};
@@ -14,9 +14,9 @@ export function prop(target: any, key: string) {
     ...schema[target.constructor.name][key],
     type,
   };
-}
+};
 
-export function subdoc(target: any, key: string) {
+export const subdocProp = (target: any, key: string) => {
   const type = Reflect.getMetadata('design:type', target, key);
   const instance = new type();
   const subSchema = schema[instance.constructor.name];
@@ -31,41 +31,40 @@ export function subdoc(target: any, key: string) {
     ...schema[target.constructor.name][key],
     ...subSchema,
   };
-}
+};
 
-export function ref(refModel: any) {
-  return function(target: any, key: string) {
-    if (!schema[target.constructor.name]) {
-      schema[target.constructor.name] = {};
-    }
-    schema[target.constructor.name][key] = {
-      ...schema[target.constructor.name][key],
-      type: mongoose.Schema.Types.ObjectId,
-      ref: refModel.name,
-    };
+export const refProp = (refModel: any) => (target: any, key: string) => {
+  if (!schema[target.constructor.name]) {
+    schema[target.constructor.name] = {};
   }
-}
+  schema[target.constructor.name][key] = {
+    ...schema[target.constructor.name][key],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: refModel.name,
+  };
+};
 
-export function required(target: any, key: string) {
+export const required = (target: any, key: string) => {
   const type = Reflect.getMetadata('design:type', target, key);
   if (!schema[target.constructor.name]) {
     schema[target.constructor.name] = {};
   }
-  schema[target.constructor.name][key] = { ...schema[target.constructor.name][key], required: true };
-}
-
-export function enumeration(enumeration: any) {
-  return function(target: any, key: string) {
-    if (!schema[target.constructor.name]) {
-      schema[target.constructor.name] = {};
-    }
-    schema[target.constructor.name][key] = {
-      ...schema[target.constructor.name][key],
-      type: String,
-      enum: _.values(enumeration),
-    };
+  schema[target.constructor.name][key] = {
+    ...schema[target.constructor.name][key],
+    required: true,
   };
-}
+};
+
+export const enumProp = (enumeration: any) => (target: any, key: string) => {
+  if (!schema[target.constructor.name]) {
+    schema[target.constructor.name] = {};
+  }
+  schema[target.constructor.name][key] = {
+    ...schema[target.constructor.name][key],
+    type: String,
+    enum: _.values(enumeration),
+  };
+};
 
 export type Ref<T> = T | string;
 

@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { Typegoose, prop, subdoc, ref, Ref, required, enumeration } from '../../typegoose';
+import { Typegoose, prop, subdocProp, refProp, Ref, required, enumProp } from '../../typegoose';
 import { Job } from './job';
 import { Car } from './car';
 import { Gender, Genders } from '../enums/genders';
@@ -13,14 +13,14 @@ export class User extends Typegoose {
   @prop
   age?: number;
 
-  @enumeration(Genders)
+  @enumProp(Genders)
   @required
   gender: Gender;
 
-  @subdoc
+  @subdocProp
   job: Job;
 
-  @ref(Car)
+  @refProp(Car)
   car: Ref<Car>;
 }
 

@@ -1,4 +1,4 @@
-import { Typegoose, prop, subdoc } from '../../typegoose';
+import { Typegoose, prop } from '../../typegoose';
 
 export class Job extends Typegoose {
   @prop
