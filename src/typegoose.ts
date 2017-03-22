@@ -5,32 +5,32 @@ import * as _ from 'lodash';
 const schema = {};
 const models = {};
 
-export const prop = (target: any, key: string) => {
-  const type = Reflect.getMetadata('design:type', target, key);
-  if (!schema[target.constructor.name]) {
-    schema[target.constructor.name] = {};
-  }
-  schema[target.constructor.name][key] = {
-    ...schema[target.constructor.name][key],
-    type,
-  };
-};
+const isPrimitive = (Type) => _.includes(['String', 'Number', 'Boolean'], Type.name);
 
-export const subdocProp = (target: any, key: string) => {
-  const type = Reflect.getMetadata('design:type', target, key);
-  const instance = new type();
+export const prop = (target: any, key: string, type?: any) => {
+  const Type = type || Reflect.getMetadata('design:type', target, key);
+  const instance = new Type();
+
   const subSchema = schema[instance.constructor.name];
-  if (!subSchema) {
-    throw new Error(`${type.name} is not a Typegoose schema (Not extending it).`);
+  if (!subSchema && !isPrimitive(Type)) {
+    throw new Error(`${Type.name} is not a primitive type nor a Typegoose schema (Not extending it).`);
   }
 
   if (!schema[target.constructor.name]) {
     schema[target.constructor.name] = {};
   }
-  schema[target.constructor.name][key] = {
-    ...schema[target.constructor.name][key],
-    ...subSchema,
-  };
+
+  if (isPrimitive(Type)) {
+    schema[target.constructor.name][key] = {
+      ...schema[target.constructor.name][key],
+      type: Type,
+    };
+  } else {
+    schema[target.constructor.name][key] = {
+      ...schema[target.constructor.name][key],
+      ...subSchema,
+    };
+  }
 };
 
 export const refProp = (refModel: any) => (target: any, key: string) => {
@@ -64,6 +64,11 @@ export const enumProp = (enumeration: any) => (target: any, key: string) => {
     type: String,
     enum: _.values(enumeration),
   };
+};
+
+export const arrayProp = (type: any) => (target: any, key: string) => {
+  prop(target, key, type);
+  schema[target.constructor.name][key] = [schema[target.constructor.name][key]];
 };
 
 export type Ref<T> = T | string;

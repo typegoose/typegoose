@@ -51,7 +51,7 @@ class User extends Typegoose {
   @required
   age: number;
 
-  @subdocProp
+  @prop
   job?: Job;
 
   @refProp(Car)
