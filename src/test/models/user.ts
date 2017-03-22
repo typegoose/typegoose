@@ -18,16 +18,17 @@ export class User extends Typegoose {
   gender: Gender;
 
   @prop
-  job: Job;
+  job?: Job;
 
   @refProp(Car)
   car: Ref<Car>;
 
+  @required
   @arrayProp(String)
   languages: string[];
 
   @arrayProp(Car)
-  previousCars: Car[];
+  previousCars?: Car[];
 }
 
 export const model = new User()._getModel();
