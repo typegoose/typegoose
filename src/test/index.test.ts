@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import * as _ from 'lodash';
 import { expect } from 'chai';
 
 import { model as User } from './models/user';
@@ -29,6 +30,11 @@ describe('Typegoose', () => {
       },
       car: car.id,
       languages: ['english', 'typescript'],
+      previousCars: [{
+        model: 'Mazda',
+      }, {
+        model: 'VW',
+      }],
     });
 
     const foundUser = await User.findById(user.id).populate('car').exec();
@@ -43,6 +49,11 @@ describe('Typegoose', () => {
     expect(foundUser.job).to.have.property('title', 'Developer');
     expect(foundUser.job).to.have.property('position', 'Lead');
     expect(foundUser.car).to.have.property('model', 'Tesla');
+    expect(foundUser).to.have.property('previousCars').to.have.length(2);
+    const sortedPreviousCars = _.sortBy(foundUser.previousCars, (c) => c.model);
+    const [mazda, vw] = sortedPreviousCars;
+    expect(mazda).to.have.property('model', 'Mazda');
+    expect(vw).to.have.property('model', 'VW');
   });
 
   it('should test the required decorator', async () => {
