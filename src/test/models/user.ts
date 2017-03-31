@@ -1,9 +1,21 @@
 import * as mongoose from 'mongoose';
 
-import { Typegoose, prop, refProp, Ref, required, enumProp, arrayProp, staticFunc, ModelType, InstanceType } from '../../typegoose';
 import { Job } from './job';
 import { Car } from './car';
 import { Gender, Genders } from '../enums/genders';
+import {
+  Ref,
+  prop,
+  refProp,
+  required,
+  enumProp,
+  arrayProp,
+  Typegoose,
+  ModelType,
+  InstanceType,
+  staticMethod,
+  instanceMethod,
+} from '../../typegoose';
 
 export class User extends Typegoose {
   @prop
@@ -30,14 +42,21 @@ export class User extends Typegoose {
   @arrayProp(Car)
   previousCars?: Car[];
 
-  @staticFunc
-  static foo() {
-    const self = this as any as ModelType<User>;
+  static smth () {
+
   }
 
-  bar() {
-    const self = this as any as InstanceType<User>;
+  @staticMethod
+  static findByAge(this: ModelType<User> & typeof User, age: number) {
+    return this.findOne({ age });
+  }
+
+  @instanceMethod
+  incrementAge(this: InstanceType<User>) {
+    const age = this.age || 1;
+    this.age = age + 1;
+    return this.save();
   }
 }
 
-export const model = new User()._getModel(User);
+export const model = new User().getModelForClass(User);

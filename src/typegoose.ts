@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
+const methods = { staticMethods: {}, instanceMethods: {} };
 const schema = {};
 const models = {};
 
@@ -10,9 +11,7 @@ const isArray = (Type) => Type.name === 'Array';
 
 const initAsObject = (name, key) => {
   if (!schema[name]) {
-    schema[name] = {
-      _staticFuncs: {},
-    };
+    schema[name] = {};
   }
   if (!schema[name][key]) {
     schema[name][key] = {};
@@ -119,49 +118,61 @@ export const arrayProp = (type: any) => (target: any, key: string) => {
 };
 
 export type Ref<T> = T | string;
+type MethodType = 'instanceMethods' | 'staticMethods';
 
-export const staticFunc = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>) => {
-  console.log('in statics', { key });
-
-  if(descriptor === undefined) {
+const baseMethod = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>, methodType: MethodType) => {
+  if (descriptor === undefined) {
     descriptor = Object.getOwnPropertyDescriptor(target, key);
   }
 
+  let name;
+  if (methodType === 'instanceMethods') {
+    name = target.constructor.name;
+  }
+  if (methodType === 'staticMethods') {
+    name = target.name;
+  }
+
+  if (!methods[methodType][name]) {
+    methods[methodType][name] = {};
+  }
+
   const method = descriptor.value;
-
-  const name = target.constructor.name;
-  initAsObject(name, key);
-
-  schema[name]._staticFuncs = {
-    ...schema[name][key]._staticFuncs,
+  methods[methodType][name] = {
+    ...methods[methodType][name],
     [key]: method,
   };
 };
 
+export const staticMethod = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>) =>
+  baseMethod(target, key, descriptor, 'staticMethods');
+
+export const instanceMethod = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>) =>
+  baseMethod(target, key, descriptor, 'instanceMethods');
+
 export type InstanceType<T> = T & mongoose.Document;
 
-export type ModelType<T> = mongoose.Model<InstanceType<T>>;
+export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
 
 export class Typegoose {
   id: string;
 
-  constructor(x?: string) {
-    if (!x) {
-      const name = (this.constructor as any).name;
-      if (!models[name]) {
-        const sch = new mongoose.Schema(_.omit(schema[name], ['_staticFuncs']) as mongoose.SchemaDefinition);
-
-        const staticFuncs = schema[name]._staticFuncs;
-        sch.statics = staticFuncs;
-
-        models[name] = mongoose.model<InstanceType<this>>(name, sch);
-      }
-    }
-  }
-
-  _getModel<T>(t: T) {
+  getModelForClass<T>(t: T) {
     const name = (this.constructor as any).name;
+    if (!models[name]) {
+      const sch = new mongoose.Schema(schema[name]);
 
-    return models[name] as ModelType<this> & typeof t;
+      const staticMethods = methods.staticMethods[name];
+      console.log(name, 'staticM', staticMethods);
+
+      sch.statics = staticMethods;
+
+      const instanceMethods = methods.instanceMethods[name];
+      sch.methods = instanceMethods;
+
+      models[name] = mongoose.model<InstanceType<this>>(name, sch);
+    }
+
+    return models[name] as ModelType<this> & T;
   }
 }

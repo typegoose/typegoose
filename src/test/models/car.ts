@@ -5,4 +5,4 @@ export class Car extends Typegoose {
   model: string;
 }
 
-export const model = new Car()._getModel(Car);
+export const model = new Car().getModelForClass(Car);

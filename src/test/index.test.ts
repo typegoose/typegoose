@@ -38,7 +38,6 @@ describe('Typegoose', () => {
     });
 
     const foundUser = await User.findById(user.id).populate('car').exec();
-    console.log(JSON.stringify(foundUser, null, 2));
     expect(foundUser).to.be.ok;
     expect(foundUser).to.have.property('name', 'John Doe');
     expect(foundUser).to.have.property('age', 20);
@@ -54,6 +53,13 @@ describe('Typegoose', () => {
     const [mazda, vw] = sortedPreviousCars;
     expect(mazda).to.have.property('model', 'Mazda');
     expect(vw).to.have.property('model', 'VW');
+
+    await foundUser.incrementAge();
+    expect(foundUser).to.have.property('age', 21);
+
+    const foundUserByAge = await User.findByAge(21);
+    expect(foundUser).to.be.ok;
+    expect(foundUser).to.have.property('name', 'John Doe');
   });
 
   it('should test the required decorator', async () => {
