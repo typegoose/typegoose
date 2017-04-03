@@ -30,10 +30,10 @@ describe('Typegoose', () => {
       },
       car: car.id,
       languages: ['english', 'typescript'],
-      previousCars: [{
-        model: 'Mazda',
+      previousJobs: [{
+        title: 'Janitor',
       }, {
-        model: 'VW',
+        title: 'Manager',
       }],
     });
 
@@ -48,11 +48,11 @@ describe('Typegoose', () => {
     expect(foundUser.job).to.have.property('title', 'Developer');
     expect(foundUser.job).to.have.property('position', 'Lead');
     expect(foundUser.car).to.have.property('model', 'Tesla');
-    expect(foundUser).to.have.property('previousCars').to.have.length(2);
-    const sortedPreviousCars = _.sortBy(foundUser.previousCars, (c) => c.model);
-    const [mazda, vw] = sortedPreviousCars;
-    expect(mazda).to.have.property('model', 'Mazda');
-    expect(vw).to.have.property('model', 'VW');
+    expect(foundUser).to.have.property('previousJobs').to.have.length(2);
+    const sortedPreviousJobs = _.sortBy(foundUser.previousJobs, (job => job.title));
+    const [janitor, manager] = sortedPreviousJobs;
+    expect(janitor).to.have.property('title', 'Janitor');
+    expect(manager).to.have.property('title', 'Manager');
 
     await foundUser.incrementAge();
     expect(foundUser).to.have.property('age', 21);

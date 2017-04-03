@@ -39,12 +39,8 @@ export class User extends Typegoose {
   @arrayProp(String)
   languages: string[];
 
-  @arrayProp(Car)
-  previousCars?: Car[];
-
-  static smth () {
-
-  }
+  @arrayProp(Job)
+  previousJobs?: Job[];
 
   @staticMethod
   static findByAge(this: ModelType<User> & typeof User, age: number) {
