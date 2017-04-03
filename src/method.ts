@@ -25,3 +25,9 @@ export const baseMethod = (target: any, key: string, descriptor: TypedPropertyDe
     [key]: method,
   };
 };
+
+export const staticMethod = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>) =>
+  baseMethod(target, key, descriptor, 'staticMethods');
+
+export const instanceMethod = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>) =>
+  baseMethod(target, key, descriptor, 'instanceMethods');

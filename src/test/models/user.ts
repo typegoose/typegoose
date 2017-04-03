@@ -13,6 +13,7 @@ import {
   Typegoose,
   ModelType,
   InstanceType,
+  refArrayProp,
   staticMethod,
   instanceMethod,
 } from '../../typegoose';
@@ -41,6 +42,9 @@ export class User extends Typegoose {
 
   @arrayProp(Job)
   previousJobs?: Job[];
+
+  @refArrayProp(Car)
+  previousCars?: Ref<Car>[];
 
   @staticMethod
   static findByAge(this: ModelType<User> & typeof User, age: number) {

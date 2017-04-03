@@ -4,13 +4,9 @@ import * as _ from 'lodash';
 
 import { schema, models, methods } from './data';
 
-export * from './arrayProp';
-export * from './enumProp';
-export * from './instanceMethod';
+export * from './method';
 export * from './prop';
-export * from './refProp';
 export * from './required';
-export * from './staticMethod';
 
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;

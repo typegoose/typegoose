@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { expect } from 'chai';
 
 import { model as User } from './models/user';
-import { model as Car } from './models/car';
+import { model as Car, Car as CarType } from './models/car';
 import { Genders } from './enums/genders';
 
 (<any>mongoose).Promise = Promise;
@@ -20,6 +20,12 @@ describe('Typegoose', () => {
       model: 'Tesla',
     });
 
+    const [trabant, zastava] = await Car.create([{
+      model: 'Trabant',
+    }, {
+      model: 'Zastava',
+    }]);
+
     const user = await User.create({
       name: 'John Doe',
       age: 20,
@@ -35,9 +41,14 @@ describe('Typegoose', () => {
       }, {
         title: 'Manager',
       }],
+      previousCars: [trabant.id, zastava.id],
     });
 
-    const foundUser = await User.findById(user.id).populate('car').exec();
+    const foundUser = await User
+      .findById(user.id)
+      .populate('car previousCars')
+      .exec();
+
     expect(foundUser).to.be.ok;
     expect(foundUser).to.have.property('name', 'John Doe');
     expect(foundUser).to.have.property('age', 20);
@@ -49,8 +60,8 @@ describe('Typegoose', () => {
     expect(foundUser.job).to.have.property('position', 'Lead');
     expect(foundUser.car).to.have.property('model', 'Tesla');
     expect(foundUser).to.have.property('previousJobs').to.have.length(2);
-    const sortedPreviousJobs = _.sortBy(foundUser.previousJobs, (job => job.title));
-    const [janitor, manager] = sortedPreviousJobs;
+
+    const [janitor, manager] = _.sortBy(foundUser.previousJobs, (job => job.title));
     expect(janitor).to.have.property('title', 'Janitor');
     expect(manager).to.have.property('title', 'Manager');
 
@@ -60,6 +71,11 @@ describe('Typegoose', () => {
     const foundUserByAge = await User.findByAge(21);
     expect(foundUser).to.be.ok;
     expect(foundUser).to.have.property('name', 'John Doe');
+
+    expect(foundUser).to.have.property('previousCars').to.have.length(2);
+    const [foundTrabant, foundZastava] = _.sortBy(foundUser.previousCars, (car) => (car as CarType).model);
+    expect(foundTrabant).to.have.property('model', 'Trabant');
+    expect(foundZastava).to.have.property('model', 'Zastava');
   });
 
   it('should test the required decorator', async () => {

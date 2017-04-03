@@ -1,5 +1,8 @@
+import * as mongoose from 'mongoose';
+import * as _ from 'lodash';
+
 import { schema } from './data';
-import { isPrimitive, initAsObject } from './utils';
+import { isPrimitive, initAsObject, initAsArray } from './utils';
 
 export const prop = (target: any, key: string) => {
   const Type = Reflect.getMetadata('design:type', target, key);
@@ -24,4 +27,63 @@ export const prop = (target: any, key: string) => {
       ...subSchema,
     };
   }
+};
+
+export const arrayProp = (type: any) => (target: any, key: string) => {
+  const Type = type;
+  const instance = new Type();
+
+  const subSchema = schema[instance.constructor.name];
+  if (!subSchema && !isPrimitive(Type)) {
+    throw new Error(`${Type.name} is not a primitive type nor a Typegoose schema (Not extending it).`);
+  }
+
+  const name = target.constructor.name;
+  initAsArray(name, key);
+
+  if (isPrimitive(Type)) {
+    schema[name][key][0] = {
+      ...schema[name][key][0],
+      type: Type,
+    };
+  } else {
+    schema[name][key][0] = {
+      ...schema[name][key][0],
+      ...subSchema,
+    };
+  }
+};
+
+export type Ref<T> = T | string;
+
+export const refProp = (refModel: any) => (target: any, key: string) => {
+  const name = target.constructor.name;
+  initAsObject(name, key);
+
+  schema[name][key] = {
+    ...schema[name][key],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: refModel.name,
+  };
+};
+
+export const enumProp = (enumeration: any) => (target: any, key: string) => {
+  const name = target.constructor.name;
+  initAsObject(name, key);
+  schema[name][key] = {
+    ...schema[name][key],
+    type: String,
+    enum: _.values(enumeration),
+  };
+};
+
+export const refArrayProp = (refModel: any) => (target: any, key: string) => {
+  const name = target.constructor.name;
+  initAsArray(name, key);
+
+  schema[name][key][0] = {
+    ...schema[name][key][0],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: refModel.name,
+  };
 };
