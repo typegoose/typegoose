@@ -5,6 +5,8 @@ import { Car } from './car';
 import { Gender, Genders } from '../enums/genders';
 import {
   Ref,
+  min,
+  max,
   prop,
   refProp,
   required,
@@ -20,14 +22,16 @@ import {
 
 export class User extends Typegoose {
   @prop
-  @required
+  @required()
   name: string;
 
   @prop
+  @min(10)
+  @max(21)
   age?: number;
 
   @enumProp(Genders)
-  @required
+  @required()
   gender: Gender;
 
   @prop
@@ -36,7 +40,7 @@ export class User extends Typegoose {
   @refProp(Car)
   car: Ref<Car>;
 
-  @required
+  @required()
   @arrayProp(String)
   languages: string[];
 

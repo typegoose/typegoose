@@ -7,6 +7,7 @@ import { schema, models, methods } from './data';
 export * from './method';
 export * from './prop';
 export * from './required';
+export * from './validators';
 
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;

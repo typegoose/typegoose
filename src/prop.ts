@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 
 import { schema } from './data';
 import { isPrimitive, initAsObject, initAsArray } from './utils';
+import { InvalidPropError } from './errors';
 
 export const prop = (target: any, key: string) => {
   const Type = Reflect.getMetadata('design:type', target, key);
@@ -10,7 +11,7 @@ export const prop = (target: any, key: string) => {
 
   const subSchema = schema[instance.constructor.name];
   if (!subSchema && !isPrimitive(Type)) {
-    throw new Error(`${Type.name} is not a primitive type nor a Typegoose schema (Not extending it).`);
+    throw new InvalidPropError(Type.name, key);
   }
 
   const name = target.constructor.name;
@@ -35,7 +36,7 @@ export const arrayProp = (type: any) => (target: any, key: string) => {
 
   const subSchema = schema[instance.constructor.name];
   if (!subSchema && !isPrimitive(Type)) {
-    throw new Error(`${Type.name} is not a primitive type nor a Typegoose schema (Not extending it).`);
+    throw new InvalidPropError(Type.name, key);
   }
 
   const name = target.constructor.name;

@@ -6,6 +6,8 @@ export const isPrimitive = (Type) => _.includes(['String', 'Number', 'Boolean'],
 
 export const isArray = (Type) => Type.name === 'Array';
 
+export const isNumber = (Type) => Type.name === 'Number';
+
 export const initAsObject = (name, key) => {
   if (!schema[name]) {
     schema[name] = {};

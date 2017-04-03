@@ -1,7 +1,9 @@
 import { schema } from './data';
 import { initAsObject, initAsArray, isArray } from './utils';
 
-export const required = (target: any, key: string) => {
+type RequiredType = boolean | string | Function | [Function, string];
+
+export const required = (options: RequiredType = true) => (target: any, key: string) => {
   const type = Reflect.getMetadata('design:type', target, key);
 
   const name = target.constructor.name;
@@ -9,13 +11,13 @@ export const required = (target: any, key: string) => {
     initAsArray(name, key);
     schema[name][key][0] = {
       ...schema[name][key][0],
-      required: true,
+      required: options,
     };
   } else {
     initAsObject(name, key);
     schema[name][key] = {
       ...schema[name][key],
-      required: true,
+      required: options,
     };
   }
 };
