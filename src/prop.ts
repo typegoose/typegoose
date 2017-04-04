@@ -5,86 +5,94 @@ import { schema } from './data';
 import { isPrimitive, initAsObject, initAsArray } from './utils';
 import { InvalidPropError } from './errors';
 
-export const prop = (target: any, key: string) => {
-  const Type = Reflect.getMetadata('design:type', target, key);
-  const instance = new Type();
+type RequiredType = boolean | [boolean, string] | string | Function | [Function, string];
 
+interface BasePropOptions {
+  required?: RequiredType;
+  enum?: Object;
+}
+
+interface PropOptions extends BasePropOptions {
+  ref?: any;
+}
+
+export const baseProp = (rawOptions, Type, target, key, isArray = false) => {
+  const name = target.constructor.name;
+  if (isArray) {
+    initAsArray(name, key);
+  } else {
+    initAsObject(name, key);
+  }
+
+  const ref = rawOptions.ref;
+  if (ref) {
+    return schema[name][key] = {
+      ...schema[name][key],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: ref.name,
+    };
+  }
+
+  const itemsRef = rawOptions.itemsRef;
+  if (itemsRef) {
+    return schema[name][key][0] = {
+      ...schema[name][key][0],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: itemsRef.name,
+    };
+  }
+
+  const instance = new Type();
   const subSchema = schema[instance.constructor.name];
   if (!subSchema && !isPrimitive(Type)) {
     throw new InvalidPropError(Type.name, key);
   }
-
-  const name = target.constructor.name;
-  initAsObject(name, key);
-
+  const options = _.omit(rawOptions, ['ref', 'enum', 'items']);
   if (isPrimitive(Type)) {
-    schema[name][key] = {
+    const enumValues = rawOptions.enum ? _.values(rawOptions.enum) : {};
+    if (isArray) {
+      return schema[name][key][0] = {
+        ...schema[name][key][0],
+        ...options,
+        ...enumValues,
+        type: Type,
+      };
+    }
+    return schema[name][key] = {
       ...schema[name][key],
+      ...options,
+      ...enumValues,
       type: Type,
     };
-  } else {
-    schema[name][key] = {
-      ...schema[name][key],
+  }
+
+  if (isArray) {
+    return schema[name][key][0] = {
+      ...schema[name][key][0],
+      ...options,
       ...subSchema,
     };
   }
+  return schema[name][key] = {
+    ...schema[name][key],
+    ...options,
+    ...subSchema,
+  };
 };
 
-export const arrayProp = (type: any) => (target: any, key: string) => {
-  const Type = type;
-  const instance = new Type();
+export const prop = (options: PropOptions = {}) => (target: any, key: string) => {
+  const Type = Reflect.getMetadata('design:type', target, key);
+  return baseProp(options, Type, target, key);
+};
 
-  const subSchema = schema[instance.constructor.name];
-  if (!subSchema && !isPrimitive(Type)) {
-    throw new InvalidPropError(Type.name, key);
-  }
+interface ArrayPropOptions extends BasePropOptions {
+  items?: any;
+  itemsRef?: any;
+}
 
-  const name = target.constructor.name;
-  initAsArray(name, key);
-
-  if (isPrimitive(Type)) {
-    schema[name][key][0] = {
-      ...schema[name][key][0],
-      type: Type,
-    };
-  } else {
-    schema[name][key][0] = {
-      ...schema[name][key][0],
-      ...subSchema,
-    };
-  }
+export const arrayProp = (options: ArrayPropOptions) => (target: any, key: string) => {
+  const Type = options.items;
+  return baseProp(options, Type, target, key, true);
 };
 
 export type Ref<T> = T | string;
-
-export const refProp = (refModel: any) => (target: any, key: string) => {
-  const name = target.constructor.name;
-  initAsObject(name, key);
-
-  schema[name][key] = {
-    ...schema[name][key],
-    type: mongoose.Schema.Types.ObjectId,
-    ref: refModel.name,
-  };
-};
-
-export const enumProp = (enumeration: any) => (target: any, key: string) => {
-  const name = target.constructor.name;
-  initAsObject(name, key);
-  schema[name][key] = {
-    ...schema[name][key],
-    type: String,
-    enum: _.values(enumeration),
-  };
-};
-
-export const refArrayProp = (refModel: any) => (target: any, key: string) => {
-  const name = target.constructor.name;
-  initAsArray(name, key);
-
-  schema[name][key][0] = {
-    ...schema[name][key][0],
-    type: mongoose.Schema.Types.ObjectId,
-    ref: refModel.name,
-  };
-};

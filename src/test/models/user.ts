@@ -5,49 +5,40 @@ import { Car } from './car';
 import { Gender, Genders } from '../enums/genders';
 import {
   Ref,
-  min,
-  max,
   prop,
-  refProp,
+  validate,
   required,
-  enumProp,
   arrayProp,
   Typegoose,
   ModelType,
   InstanceType,
-  refArrayProp,
   staticMethod,
   instanceMethod,
 } from '../../typegoose';
 
 export class User extends Typegoose {
-  @prop
-  @required()
+  @prop({ required: true })
   name: string;
 
-  @prop
-  @min(10)
-  @max(21)
+  @prop()
   age?: number;
 
-  @enumProp(Genders)
-  @required()
+  @prop({ enum: Genders, required: true })
   gender: Gender;
 
-  @prop
+  @prop()
   job?: Job;
 
-  @refProp(Car)
+  @prop({ ref: Car })
   car: Ref<Car>;
 
-  @required()
-  @arrayProp(String)
+  @arrayProp({ items: String, required: true })
   languages: string[];
 
-  @arrayProp(Job)
+  @arrayProp({ items: Job })
   previousJobs?: Job[];
 
-  @refArrayProp(Car)
+  @arrayProp({ itemsRef: Car })
   previousCars?: Ref<Car>[];
 
   @staticMethod

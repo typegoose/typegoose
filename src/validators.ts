@@ -1,26 +1,40 @@
 import { schema } from './data';
-import { isNumber, initAsObject } from './utils';
-import { NotNumberTypeError } from './errors';
+import { isNumber, initAsObject, isString } from './utils';
+import { NotNumberTypeError, NotStringTypeError } from './errors';
 
-type MinMaxType = number | [number, string];
+interface ValidateNumberOptions {
+  min?: number | [number, string];
+  max?: number | [number, string];
+}
 
-type ValidatorType = 'min' | 'max';
+interface ValidateStringOptions {
+  minlength?: number | [number, string];
+  maxlength?: number | [number, string];
+  match?: RegExp | [RegExp, string];
+}
 
-const minMaxBase = (options: MinMaxType, validatorType: ValidatorType) => (target: any, key: string) => {
-  const type = Reflect.getMetadata('design:type', target, key);
+export const validate = {
+  number: (options: ValidateNumberOptions) => (target: any, key: string) => {
+    const type = Reflect.getMetadata('design:type', target, key);
+    if (!isNumber(type)) {
+      throw new NotNumberTypeError(key);
+    }
+    return validator(options, type, target, key);
+  },
+  string: (options: ValidateStringOptions) => (target: any, key: string) => {
+    const type = Reflect.getMetadata('design:type', target, key);
+    if (!isString(type)) {
+      throw new NotStringTypeError(key);
+    }
+    return validator(options, type, target, key);
+  },
+};
 
-  if (!isNumber(type)) {
-    throw new NotNumberTypeError(key);
-  }
-
+const validator = (options, type, target, key) => {
   const name = target.constructor.name;
   initAsObject(name, key);
   schema[name][key] = {
     ...schema[name][key],
-    [validatorType]: options,
+    ...options,
   };
 };
-
-export const min = (options: MinMaxType) => minMaxBase(options, 'min');
-
-export const max = (options: MinMaxType) => minMaxBase(options, 'max');

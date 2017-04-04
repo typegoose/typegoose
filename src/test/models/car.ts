@@ -1,7 +1,7 @@
 import { Typegoose, prop } from '../../typegoose';
 
 export class Car extends Typegoose {
-  @prop
+  @prop({ required: true })
   model: string;
 }
 

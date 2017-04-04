@@ -1,9 +1,9 @@
 import { Typegoose, prop } from '../../typegoose';
 
 export class Job extends Typegoose {
-  @prop
+  @prop()
   title?: string;
 
-  @prop
+  @prop()
   position?: string;
 }

@@ -9,3 +9,9 @@ export class NotNumberTypeError extends Error {
     super(`Type of ${key} property is not a number.`);
   }
 }
+export class NotStringTypeError extends Error {
+  constructor(key) {
+    super(`Type of ${key} property is not a string.`);
+  }
+}
+
