@@ -76,7 +76,8 @@ class Car extends Typegoose {
 
 ## Requirements
 
-yarn
+* TypeScript 2.1+
+* Yarn
 
 ## Install
 
