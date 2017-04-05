@@ -1,4 +1,7 @@
 # Typegoose
+
+[![Build Status](https://travis-ci.org/szokodiakos/typegoose.svg?branch=master)](https://travis-ci.org/szokodiakos/typegoose)
+
 Define Mongoose models using TypeScript classes.
 
 A common problem when using Mongoose with TypeScript is that you have to define
