@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { Mockgoose } from 'mockgoose';
 import * as _ from 'lodash';
 import { expect } from 'chai';
 
@@ -7,12 +8,20 @@ import { model as Car, Car as CarType } from './models/car';
 import { Genders } from './enums/genders';
 
 (<any>mongoose).Promise = Promise;
+const mockgoose = new Mockgoose(mongoose);
 
-const connect = () => new Promise((resolve) => mongoose.connect('mongodb://localhost:11010/test', () => resolve()));
-const initDatabase = () => connect().then(() => mongoose.connection.db.dropDatabase());
+const connect = () =>
+  mockgoose.prepareStorage().then(() =>
+    new Promise((resolve) => mongoose.connect('mongodb://localhost:11010/test', () => resolve())));
+
+const initDatabase = () =>
+  connect().then(() => mongoose.connection.db.dropDatabase());
 
 describe('Typegoose', () => {
-  before(() => initDatabase());
+  before(function() {
+    this.timeout(100000);
+    return initDatabase();
+  });
 
   it('should create a User with connections', async () => {
     const car = await Car.create({
