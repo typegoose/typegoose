@@ -47,31 +47,29 @@ mongoose.model('Car', {
 You can just:
 ```typescript
 class User extends Typegoose {
-  @prop
+  @prop()
   name?: string;
 
-  @prop
-  @required
+  @prop({ required: true })
   age: number;
 
-  @prop
+  @prop()
   job?: Job;
 
-  @refProp(Car)
-  @required
+  @prop({ ref: Car, required: true })
   car: Ref<Car>;
 }
 
 class Job extends Typegoose {
-  @prop
+  @prop()
   title?: string;
 
-  @prop
+  @prop()
   position?: string;
 }
 
 class Car extends Typegoose {
-  @prop
+  @prop()
   model?: string;
 }
 ```
