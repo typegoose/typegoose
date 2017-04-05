@@ -74,6 +74,10 @@ class Car extends Typegoose {
 }
 ```
 
+## Requirements
+
+yarn
+
 ## Install
 
 `yarn add typegoose`
@@ -127,5 +131,5 @@ TODO
 ## Improvements
 
 * Add frequently used (currently not present) features if needed
-* Create small unit tests (break down current into multiple)
+* Create moar tests (break down current huge one into multiple unit tests)
 * Add coverage & linting
