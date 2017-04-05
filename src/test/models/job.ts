@@ -6,4 +6,7 @@ export class Job extends Typegoose {
 
   @prop()
   position?: string;
+
+  @prop({ required: true, default: Date.now })
+  startedAt: Date;
 }

@@ -2,15 +2,14 @@ import 'reflect-metadata';
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
-import { schema, models, methods } from './data';
+import { schema, models, methods, virtuals } from './data';
 
 export * from './method';
 export * from './prop';
-export * from './required';
-export * from './validators';
 
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
+
 
 export class Typegoose {
   id: string;
@@ -25,6 +24,16 @@ export class Typegoose {
 
       const instanceMethods = methods.instanceMethods[name];
       sch.methods = instanceMethods;
+
+      const getterSetters = virtuals[name];
+      _.forEach(getterSetters, (value, key) => {
+        if (value.get) {
+          sch.virtual(key).get(value.get);
+        }
+        if (value.set) {
+          sch.virtual(key).set(value.set);
+        }
+      });
 
       models[name] = mongoose.model<InstanceType<this>>(name, sch);
     }

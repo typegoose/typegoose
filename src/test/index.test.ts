@@ -8,9 +8,8 @@ import { Genders } from './enums/genders';
 
 (<any>mongoose).Promise = Promise;
 
-function initDatabase() {
-  mongoose.connect('mongodb://localhost:11010/test');
-}
+const connect = () => new Promise((resolve) => mongoose.connect('mongodb://localhost:11010/test', () => resolve()));
+const initDatabase = () => connect().then(() => mongoose.connection.db.dropDatabase());
 
 describe('Typegoose', () => {
   before(() => initDatabase());
@@ -27,7 +26,8 @@ describe('Typegoose', () => {
     }]);
 
     const user = await User.create({
-      name: 'John Doe',
+      firstName: 'John',
+      lastName: 'Doe',
       age: 20,
       gender: Genders.MALE,
       job: {
@@ -44,54 +44,50 @@ describe('Typegoose', () => {
       previousCars: [trabant.id, zastava.id],
     });
 
-    const foundUser = await User
-      .findById(user.id)
-      .populate('car previousCars')
-      .exec();
+    {
+      const foundUser = await User
+        .findById(user.id)
+        .populate('car previousCars')
+        .exec();
 
-    expect(foundUser).to.be.ok;
-    expect(foundUser).to.have.property('name', 'John Doe');
-    expect(foundUser).to.have.property('age', 20);
-    expect(foundUser).to.have.property('gender', Genders.MALE);
-    expect(foundUser).to.have.property('job');
-    expect(foundUser).to.have.property('car');
-    expect(foundUser).to.have.property('languages').to.have.length(2).to.include('english').to.include('typescript');
-    expect(foundUser.job).to.have.property('title', 'Developer');
-    expect(foundUser.job).to.have.property('position', 'Lead');
-    expect(foundUser.car).to.have.property('model', 'Tesla');
-    expect(foundUser).to.have.property('previousJobs').to.have.length(2);
+      expect(foundUser).to.be.ok;
+      expect(foundUser).to.have.property('nick', 'Nothing');
+      expect(foundUser).to.have.property('firstName', 'John');
+      expect(foundUser).to.have.property('lastName', 'Doe');
+      expect(foundUser).to.have.property('age', 20);
+      expect(foundUser).to.have.property('gender', Genders.MALE);
+      expect(foundUser).to.have.property('job');
+      expect(foundUser).to.have.property('car');
+      expect(foundUser).to.have.property('languages').to.have.length(2).to.include('english').to.include('typescript');
+      expect(foundUser.job).to.have.property('title', 'Developer');
+      expect(foundUser.job).to.have.property('position', 'Lead');
+      expect(foundUser.job).to.have.property('startedAt').to.be.instanceof(Date);
+      expect(foundUser.car).to.have.property('model', 'Tesla');
+      expect(foundUser).to.have.property('previousJobs').to.have.length(2);
 
-    const [janitor, manager] = _.sortBy(foundUser.previousJobs, (job => job.title));
-    expect(janitor).to.have.property('title', 'Janitor');
-    expect(manager).to.have.property('title', 'Manager');
+      expect(foundUser).to.have.property('fullName', 'John Doe');
 
-    await foundUser.incrementAge();
-    expect(foundUser).to.have.property('age', 21);
+      const [janitor, manager] = _.sortBy(foundUser.previousJobs, (job => job.title));
+      expect(janitor).to.have.property('title', 'Janitor');
+      expect(manager).to.have.property('title', 'Manager');
 
-    const foundUserByAge = await User.findByAge(21);
-    expect(foundUser).to.be.ok;
-    expect(foundUser).to.have.property('name', 'John Doe');
+      expect(foundUser).to.have.property('previousCars').to.have.length(2);
+      const [foundTrabant, foundZastava] = _.sortBy(foundUser.previousCars, (car) => (car as CarType).model);
+      expect(foundTrabant).to.have.property('model', 'Trabant');
+      expect(foundZastava).to.have.property('model', 'Zastava');
 
-    expect(foundUser).to.have.property('previousCars').to.have.length(2);
-    const [foundTrabant, foundZastava] = _.sortBy(foundUser.previousCars, (car) => (car as CarType).model);
-    expect(foundTrabant).to.have.property('model', 'Trabant');
-    expect(foundZastava).to.have.property('model', 'Zastava');
-  });
+      foundUser.fullName = 'Sherlock Holmes';
+      expect(foundUser).to.have.property('firstName', 'Sherlock');
+      expect(foundUser).to.have.property('lastName', 'Holmes');
 
-  it('should test the required decorator', async () => {
-    let err;
-    try {
-      await User.create({
-        age: 20,
-      });
-    } catch (e) {
-      err = e;
+      await foundUser.incrementAge();
+      expect(foundUser).to.have.property('age', 21);
     }
-    expect(err).to.be.ok;
-    expect(err).to.have.property('name', 'ValidationError');
-    expect(err)
-      .to.have.property('errors')
-        .to.have.property('name')
-          .to.have.property('message', 'Path `name` is required.');
+
+    {
+      const foundUser = await User.findByAge(21);
+      expect(foundUser).to.have.property('firstName', 'Sherlock');
+      expect(foundUser).to.have.property('lastName', 'Holmes');
+    }
   });
 });
