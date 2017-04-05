@@ -1,7 +1,7 @@
 {
   "name": "typegoose",
   "version": "1.0.0",
-  "description": "",
+  "description": "Define Mongoose models using TypeScript classes.",
   "main": "src/index.ts",
   "scripts": {
     "start": "yarn build&&node ./build/index.js",
@@ -9,8 +9,12 @@
     "pretest": "yarn build",
     "test": "mocha build/test/**/*.test.js"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/szokodiakos/typegoose.git"
+  },
+  "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
+  "license": "MIT",
   "dependencies": {
     "@types/es6-promise": "^0.0.32",
     "@types/lodash": "^4.14.55",

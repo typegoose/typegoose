@@ -38,7 +38,7 @@ const isWithStringValidate = (options: PropOptionsWithStringValidate) =>
 const isWithNumberValidate = (options: PropOptionsWithNumberValidate) =>
   (options.min || options.max)
 
-export const baseProp = (rawOptions, Type, target, key, isArray = false) => {
+const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   const name = target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
   if (isGetterSetter) {

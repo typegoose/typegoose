@@ -10,7 +10,6 @@ export * from './prop';
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
 
-
 export class Typegoose {
   id: string;
 

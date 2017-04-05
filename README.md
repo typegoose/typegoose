@@ -73,3 +73,59 @@ class Car extends Typegoose {
   model?: string;
 }
 ```
+
+## Install
+
+`yarn add typegoose`
+
+## API Documentation
+
+### Classes
+
+#### Typegoose
+
+This is the class which your schema defining classes must extend.
+
+##### Methods:
+
+`getModelForClass<T>(t: T)`
+
+This method assembles the Mongoose Schema from the decorated schema defining class, creates the Mongoose Model and returns it. For typing reasons the schema defining class must be passed down to it.
+
+### Decorators
+
+#### prop(options)
+
+TODO About simple props, ref props, enums, validators, virtuals
+
+#### arrayProp(options)
+
+TODO
+
+#### staticMethod
+
+TODO About this typing, method must be static
+
+#### instanceMethod
+
+TODO About this typing, method mustnt be static
+
+### Types
+
+#### InstanceType<T>
+
+TODO
+
+#### ModelType<T>
+
+TODO
+
+#### Ref<T>
+
+TODO
+
+## Improvements
+
+* Add frequently used (currently not present) features if needed
+* Create small unit tests (break down current into multiple)
+* Add coverage & linting
