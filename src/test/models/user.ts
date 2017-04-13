@@ -45,7 +45,7 @@ export class User extends Typegoose {
   job?: Job;
 
   @prop({ ref: Car })
-  car: Ref<Car>;
+  car?: Ref<Car>;
 
   @arrayProp({ items: String, required: true })
   languages: string[];
