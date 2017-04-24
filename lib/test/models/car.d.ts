@@ -1,6 +1,6 @@
 /// <reference types="mongoose" />
-import { Typegoose } from '../../typegoose';
 import * as mongoose from 'mongoose';
+import { Typegoose } from '../../typegoose';
 export declare class Car extends Typegoose {
     model: string;
 }

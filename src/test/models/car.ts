@@ -1,5 +1,6 @@
-import { Typegoose, prop } from '../../typegoose';
 import * as mongoose from 'mongoose';
+
+import { Typegoose, prop } from '../../typegoose';
 
 export class Car extends Typegoose {
   @prop({ required: true })

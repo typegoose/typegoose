@@ -1,41 +1,46 @@
 {
   "name": "typegoose",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Define Mongoose models using TypeScript classes.",
   "main": "lib/typegoose.js",
   "scripts": {
-    "start": "npm run build&&node ./lib/typegoose.js",
-    "build": "tsc",
+    "start": "npm run build && node ./lib/typegoose.js",
+    "build": "rimraf lib && tsc",
     "pretest": "npm run build",
     "precommit": "npm run test",
+    "fail-on-lib-changed": "if [ $(git diff --name-only lib) ]; then exit 1; fi",
     "test": "mocha lib/test/**/*.test.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/szokodiakos/typegoose.git"
   },
+  "types": "lib/typegoose.d.ts",
+  "typings": "lib/typegoose.d.ts",
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
   "license": "MIT",
   "dependencies": {
-    "@types/es6-promise": "^0.0.32",
-    "@types/lodash": "^4.14.55",
-    "@types/mongoose": "^4.7.1",
-    "@types/node": "^6.0.52",
-    "@types/reflect-metadata": "^0.0.5",
     "lodash": "^4.17.4",
     "mongoose": "^4.7.3",
     "reflect-metadata": "^0.1.8",
     "typescript": "^2.2.1"
   },
   "devDependencies": {
+    "@types/es6-promise": "^0.0.32",
+    "@types/lodash": "^4.14.55",
+    "@types/mongoose": "^4.7.1",
+    "@types/node": "^6.0.52",
+    "@types/reflect-metadata": "^0.0.5",
     "@types/chai": "^3.4.35",
     "@types/mocha": "^2.2.33",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
     "mockgoose": "^7.1.1",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "rimraf": "^2.6.1"
   },
   "pre-commit": [
-    "precommit"
+    "precommit",
+    "fail-on-lib-changed"
   ]
 }
