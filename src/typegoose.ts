@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import * as mongoose from 'mongoose';
+import { Document, Model, Schema, model } from 'mongoose';
 import * as _ from 'lodash';
 
 import { schema, models, methods, virtuals } from './data';
@@ -7,8 +7,8 @@ import { schema, models, methods, virtuals } from './data';
 export * from './method';
 export * from './prop';
 
-export type InstanceType<T> = T & mongoose.Document;
-export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
+export type InstanceType<T> = T & Document;
+export type ModelType<T> = Model<InstanceType<T>> & T;
 
 export class Typegoose {
   id: string;
@@ -16,7 +16,7 @@ export class Typegoose {
   getModelForClass<T>(t: T) {
     const name = (this.constructor as any).name;
     if (!models[name]) {
-      const sch = new mongoose.Schema(schema[name]);
+      const sch = new Schema(schema[name]);
 
       const staticMethods = methods.staticMethods[name];
       sch.statics = staticMethods;
@@ -34,7 +34,7 @@ export class Typegoose {
         }
       });
 
-      models[name] = mongoose.model<InstanceType<this>>(name, sch);
+      models[name] = model<InstanceType<this>>(name, sch);
     }
 
     return models[name] as ModelType<this> & T;

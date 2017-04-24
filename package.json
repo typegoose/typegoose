@@ -2,12 +2,13 @@
   "name": "typegoose",
   "version": "1.0.0",
   "description": "Define Mongoose models using TypeScript classes.",
-  "main": "src/index.ts",
+  "main": "lib/index.js",
   "scripts": {
-    "start": "yarn build&&node ./build/index.js",
+    "start": "npm run build&&node ./build/index.js",
     "build": "tsc",
-    "pretest": "yarn build",
-    "test": "mocha build/test/**/*.test.js"
+    "pretest": "npm run build",
+    "precommit": "npm run test",
+    "test": "mocha lib/test/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,10 @@
     "@types/mocha": "^2.2.33",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
-    "mockgoose": "^7.1.1"
-  }
+    "mockgoose": "^7.1.1",
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "precommit"
+  ]
 }

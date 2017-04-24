@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES5",
+    "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "outDir": "build",
+    "outDir": "lib",
     "sourceMap": true
   },
   "include": [

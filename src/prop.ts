@@ -5,32 +5,32 @@ import { schema, virtuals } from './data';
 import { isPrimitive, initAsObject, initAsArray, isString, isNumber } from './utils';
 import { InvalidPropError, NotNumberTypeError, NotStringTypeError } from './errors';
 
-type RequiredType = boolean | [boolean, string] | string | Function | [Function, string];
+export type RequiredType = boolean | [boolean, string] | string | Function | [Function, string];
 
-interface BasePropOptions {
+export interface BasePropOptions {
   required?: RequiredType;
   enum?: string[];
   default?: any;
 }
 
-interface PropOptions extends BasePropOptions {
+export interface PropOptions extends BasePropOptions {
   ref?: any;
 }
 
-interface ValidateNumberOptions {
+export interface ValidateNumberOptions {
   min?: number | [number, string];
   max?: number | [number, string];
 }
 
-interface ValidateStringOptions {
+export interface ValidateStringOptions {
   minlength?: number | [number, string];
   maxlength?: number | [number, string];
   match?: RegExp | [RegExp, string];
 }
 
-type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
-type PropOptionsWithStringValidate = PropOptions & ValidateStringOptions;
-type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate;
+export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
+export type PropOptionsWithStringValidate = PropOptions & ValidateStringOptions;
+export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate;
 
 const isWithStringValidate = (options: PropOptionsWithStringValidate) =>
   (options.minlength || options.maxlength || options.match)
@@ -144,7 +144,7 @@ export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key
   return baseProp(options, Type, target, key);
 };
 
-interface ArrayPropOptions extends BasePropOptions {
+export interface ArrayPropOptions extends BasePropOptions {
   items?: any;
   itemsRef?: any;
 }
