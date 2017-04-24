@@ -1,10 +1,10 @@
 {
   "name": "typegoose",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Define Mongoose models using TypeScript classes.",
-  "main": "lib/index.js",
+  "main": "lib/typegoose.js",
   "scripts": {
-    "start": "npm run build&&node ./build/index.js",
+    "start": "npm run build&&node ./lib/typegoose.js",
     "build": "tsc",
     "pretest": "npm run build",
     "precommit": "npm run test",
