@@ -141,6 +141,14 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
 
 export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key: string) => {
   const Type = Reflect.getMetadata('design:type', target, key);
+  
+  if (!Type) {
+    throw new Error(
+      `There is no metadata for the "${key}" property. ` +
+      'Check if emitDecoratorMetadata is enable in tsconfig.json'
+    );
+  }
+  
   return baseProp(options, Type, target, key);
 };
 
