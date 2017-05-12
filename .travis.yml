@@ -3,4 +3,4 @@ node_js:
   - 6
 script:
   - npm test
-  - npm coveralls
+  - npm run coveralls
