@@ -7,11 +7,12 @@
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "rimraf lib && tsc",
     "lint": "tslint --type-check --project tsconfig.json",
-    "pretest": "npm run build",
     "precommit": "npm run test",
     "fail-on-lib-changed": "if [ $(git diff --name-only lib) ]; then exit 1; fi",
-    "test": "npm run lint && npm run mocha",
-    "mocha": "mocha lib/test/**/*.test.js"
+    "test": "npm run lint && npm run cover",
+    "mocha": "npm run build && mocha lib/test/**/*.test.js",
+    "cover": "npm run build && istanbul cover _mocha -- lib/test/**/*.test.js -R spec",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,8 @@
     "@types/node": "^6.0.52",
     "@types/reflect-metadata": "^0.0.5",
     "chai": "^3.5.0",
+    "coveralls": "^2.13.1",
+    "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "mockgoose": "^7.1.1",
     "pre-commit": "^1.2.2",
