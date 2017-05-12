@@ -39,7 +39,7 @@ export class Typegoose {
       });
 
       const model = existingMongoose ?
-        existingMongoose.model.bind(existingMongoose):
+        existingMongoose.model.bind(existingMongoose) :
         mongoose.model.bind(mongoose);
 
       models[name] = model(name, sch);

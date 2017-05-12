@@ -5,7 +5,9 @@ import { schema, virtuals } from './data';
 import { isPrimitive, initAsObject, initAsArray, isString, isNumber } from './utils';
 import { InvalidPropError, NotNumberTypeError, NotStringTypeError } from './errors';
 
-export type RequiredType = boolean | [boolean, string] | string | Function | [Function, string];
+export type Func = (...args) => any;
+
+export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
 
 export interface BasePropOptions {
   required?: RequiredType;
@@ -33,10 +35,10 @@ export type PropOptionsWithStringValidate = PropOptions & ValidateStringOptions;
 export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate;
 
 const isWithStringValidate = (options: PropOptionsWithStringValidate) =>
-  (options.minlength || options.maxlength || options.match)
+  (options.minlength || options.maxlength || options.match);
 
 const isWithNumberValidate = (options: PropOptionsWithNumberValidate) =>
-  (options.min || options.max)
+  (options.min || options.max);
 
 const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   const name = target.constructor.name;
@@ -141,14 +143,14 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
 
 export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key: string) => {
   const Type = Reflect.getMetadata('design:type', target, key);
-  
+
   if (!Type) {
     throw new Error(
       `There is no metadata for the "${key}" property. ` +
-      'Check if emitDecoratorMetadata is enable in tsconfig.json'
+      'Check if emitDecoratorMetadata is enable in tsconfig.json',
     );
   }
-  
+
   return baseProp(options, Type, target, key);
 };
 

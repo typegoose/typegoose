@@ -14,4 +14,3 @@ export class NotStringTypeError extends Error {
     super(`Type of ${key} property is not a string.`);
   }
 }
-

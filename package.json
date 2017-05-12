@@ -6,10 +6,12 @@
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "rimraf lib && tsc",
+    "lint": "tslint --type-check --project tsconfig.json",
     "pretest": "npm run build",
     "precommit": "npm run test",
     "fail-on-lib-changed": "if [ $(git diff --name-only lib) ]; then exit 1; fi",
-    "test": "mocha lib/test/**/*.test.js"
+    "test": "npm run lint && npm run mocha",
+    "mocha": "mocha lib/test/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -20,24 +22,25 @@
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
   "license": "MIT",
   "dependencies": {
+    "@types/mongoose": "^4.7.1",
     "lodash": "^4.17.4",
     "mongoose": "^4.7.3",
     "reflect-metadata": "^0.1.8",
-    "typescript": "^2.2.1",
-    "@types/mongoose": "^4.7.1"
+    "typescript": "^2.2.1"
   },
   "devDependencies": {
+    "@types/chai": "^3.4.35",
     "@types/es6-promise": "^0.0.32",
     "@types/lodash": "^4.14.55",
+    "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.52",
     "@types/reflect-metadata": "^0.0.5",
-    "@types/chai": "^3.4.35",
-    "@types/mocha": "^2.2.33",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
     "mockgoose": "^7.1.1",
     "pre-commit": "^1.2.2",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.1",
+    "tslint": "^5.2.0"
   },
   "pre-commit": [
     "precommit",

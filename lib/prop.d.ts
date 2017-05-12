@@ -1,4 +1,5 @@
-export declare type RequiredType = boolean | [boolean, string] | string | Function | [Function, string];
+export declare type Func = (...args) => any;
+export declare type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
 export interface BasePropOptions {
     required?: RequiredType;
     enum?: string[];

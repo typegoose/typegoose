@@ -7,7 +7,7 @@ import { model as User } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
 import { Genders } from './enums/genders';
 
-(<any>mongoose).Promise = Promise;
+(mongoose as any).Promise = Promise;
 const mockgoose = new Mockgoose(mongoose);
 
 const connect = () =>
@@ -59,7 +59,6 @@ describe('Typegoose', () => {
         .populate('car previousCars')
         .exec();
 
-      expect(foundUser).to.be.ok;
       expect(foundUser).to.have.property('nick', 'Nothing');
       expect(foundUser).to.have.property('firstName', 'John');
       expect(foundUser).to.have.property('lastName', 'Doe');
@@ -76,12 +75,13 @@ describe('Typegoose', () => {
 
       expect(foundUser).to.have.property('fullName', 'John Doe');
 
-      const [janitor, manager] = _.sortBy(foundUser.previousJobs, (job => job.title));
+      const [janitor, manager] = _.sortBy(foundUser.previousJobs, ((job) => job.title));
       expect(janitor).to.have.property('title', 'Janitor');
       expect(manager).to.have.property('title', 'Manager');
 
       expect(foundUser).to.have.property('previousCars').to.have.length(2);
-      const [foundTrabant, foundZastava] = _.sortBy(foundUser.previousCars, (car) => (car as CarType).model);
+      const [foundTrabant, foundZastava] =
+        _.sortBy(foundUser.previousCars, (previousCar) => (previousCar as CarType).model);
       expect(foundTrabant).to.have.property('model', 'Trabant');
       expect(foundZastava).to.have.property('model', 'Zastava');
 
