@@ -23,12 +23,12 @@
     "lodash": "^4.17.4",
     "mongoose": "^4.7.3",
     "reflect-metadata": "^0.1.8",
-    "typescript": "^2.2.1"
+    "typescript": "^2.2.1",
+    "@types/mongoose": "^4.7.1"
   },
   "devDependencies": {
     "@types/es6-promise": "^0.0.32",
     "@types/lodash": "^4.14.55",
-    "@types/mongoose": "^4.7.1",
     "@types/node": "^6.0.52",
     "@types/reflect-metadata": "^0.0.5",
     "@types/chai": "^3.4.35",
