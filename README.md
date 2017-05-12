@@ -77,6 +77,7 @@ class Car extends Typegoose {
 ## Requirements
 
 * TypeScript 2.1+
+* `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
 
 ## Install
 
@@ -94,9 +95,11 @@ This is the class which your schema defining classes must extend.
 
 #### Methods:
 
-`getModelForClass<T>(t: T)`
+`getModelForClass<T>(t: T, existingMongoose?: mongoose)`
 
 This method assembles the Mongoose Schema from the decorated schema defining class, creates the Mongoose Model and returns it. For typing reasons the schema defining class must be passed down to it.
+
+An existing Mongoose instance can also be passed down as an optional parameter. If given, Typegoose uses this Mongoose instance's `Schema` and `model` methods.
 
 ### Decorators
 
