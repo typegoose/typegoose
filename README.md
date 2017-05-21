@@ -6,6 +6,32 @@
 
 Define Mongoose models using TypeScript classes.
 
+## Basic usage
+
+```typescript
+import { prop, Typegoose, ModelType, InstanceType } from 'typegoose';
+import * as mongoose from 'mongoose';
+
+mongoose.connect('mongodb://localhost:27017/test');
+
+class User extends Typegoose {
+  @prop()
+  name?: string;
+}
+
+const UserModel = new User().getModelForClass(User);
+
+// UserModel is a regular Mongoose Model with correct types
+(async () => {
+  const u = new UserModel({ name: 'JohnDoe' });
+  await u.save();
+  const user = await UserModel.findOne();
+
+  // prints { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
+  console.log(user);
+})();
+```
+
 ## Motivation
 
 A common problem when using Mongoose with TypeScript is that you have to define both the Mongoose model and the TypeScript interface. If the model changes, you also have to keep the TypeScript interface file in sync or the TypeScript interface would not represent the real data structure of the model.
