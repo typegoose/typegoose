@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import * as mongoose from 'mongoose';
 export * from './method';
 export * from './prop';
+export * from './hooks';
 export declare type InstanceType<T> = T & mongoose.Document;
 export declare type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
 export declare class Typegoose {
