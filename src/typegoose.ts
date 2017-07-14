@@ -2,10 +2,11 @@ import 'reflect-metadata';
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
-import { schema, models, methods, virtuals } from './data';
+import { schema, models, methods, virtuals, hooks } from './data';
 
 export * from './method';
 export * from './prop';
+export * from './hooks';
 
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
@@ -29,6 +30,13 @@ export class Typegoose {
 
       const instanceMethods = methods.instanceMethods[name];
       sch.methods = instanceMethods;
+
+      if (hooks[name]) {
+        const preHooks = hooks[name].pre;
+        preHooks.forEach((preHookArgs) => {
+          sch.pre(...preHookArgs);
+        });
+      }
 
       const getterSetters = virtuals[name];
       _.forEach(getterSetters, (value, key) => {
