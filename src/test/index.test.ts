@@ -12,7 +12,8 @@ const mockgoose = new Mockgoose(mongoose);
 
 const connect = () =>
   mockgoose.prepareStorage().then(() =>
-    new Promise((resolve) => mongoose.connect('mongodb://localhost:11010/test', () => resolve())));
+    new Promise((resolve, reject) =>
+      mongoose.connect('mongodb://localhost:11010/test', (err) => err ? reject(err) : resolve())));
 
 const initDatabase = () =>
   connect().then(() => mongoose.connection.db.dropDatabase());
