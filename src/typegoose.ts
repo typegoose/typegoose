@@ -34,6 +34,10 @@ export class Typegoose {
         preHooks.forEach((preHookArgs) => {
           sch.pre(...preHookArgs);
         });
+        const postHooks = hooks[name].post;
+        postHooks.forEach((postHookArgs) => {
+          sch.post(...postHookArgs);
+        });
       }
 
       const getterSetters = virtuals[name];
