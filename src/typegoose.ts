@@ -11,17 +11,24 @@ export * from './hooks';
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
 
+export interface GetModelForClassOptions {
+  existingMongoose?: mongoose.Mongoose;
+  schemaOptions?: mongoose.SchemaOptions;
+}
+
 export class Typegoose {
   id: string;
 
-  getModelForClass<T>(t: T, existingMongoose?: mongoose.Mongoose) {
+  getModelForClass<T>(t: T, { existingMongoose, schemaOptions }: GetModelForClassOptions = {}) {
     const name = (this.constructor as any).name;
     if (!models[name]) {
       const Schema = existingMongoose ?
         existingMongoose.Schema.bind(existingMongoose) :
         mongoose.Schema.bind(mongoose);
 
-      const sch = new Schema(schema[name]);
+      const sch = schemaOptions ?
+        new Schema(schema[name], schemaOptions) :
+        new Schema(schema[name]);
 
       const staticMethods = methods.staticMethods[name];
       sch.statics = staticMethods;

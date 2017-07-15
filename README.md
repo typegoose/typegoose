@@ -123,11 +123,13 @@ This is the class which your schema defining classes must extend.
 
 #### Methods:
 
-`getModelForClass<T>(t: T, existingMongoose?: mongoose)`
+`getModelForClass<T>(t: T, options?: GetModelForClassOptions)`
 
 This method assembles the Mongoose Schema from the decorated schema defining class, creates the Mongoose Model and returns it. For typing reasons the schema defining class must be passed down to it.
 
-An existing Mongoose instance can also be passed down as an optional parameter. If given, Typegoose uses this Mongoose instance's `Schema` and `model` methods.
+The `GetModelForClassOptions` provides multiple optional configurations:
+ * `existingMongoose: mongoose`: An existing Mongoose instance can also be passed down. If given, Typegoose uses this Mongoose instance's `Schema` and `model` methods.
+ * `schemaOptions: mongoose.SchemaOptions`: Additional [schema options](http://mongoosejs.com/docs/guide.html#options) can be passed down to the schema-to-be-created.
 
 ### Property decorators
 

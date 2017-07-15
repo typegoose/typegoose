@@ -6,7 +6,11 @@ export * from './prop';
 export * from './hooks';
 export declare type InstanceType<T> = T & mongoose.Document;
 export declare type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
+export interface GetModelForClassOptions {
+    existingMongoose?: mongoose.Mongoose;
+    schemaOptions?: mongoose.SchemaOptions;
+}
 export declare class Typegoose {
     id: string;
-    getModelForClass<T>(t: T, existingMongoose?: mongoose.Mongoose): mongoose.Model<InstanceType<this>> & this & T;
+    getModelForClass<T>(t: T, {existingMongoose, schemaOptions}?: GetModelForClassOptions): mongoose.Model<InstanceType<this>> & this & T;
 }
