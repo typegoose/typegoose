@@ -13,6 +13,7 @@ import {
   InstanceType,
   staticMethod,
   instanceMethod,
+  post,
 } from '../../typegoose';
 
 export class User extends Typegoose {

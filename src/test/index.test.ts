@@ -1,5 +1,7 @@
+import { config as configDotenv } from 'dotenv';
+configDotenv();
+
 import * as mongoose from 'mongoose';
-import { Mockgoose } from 'mockgoose';
 import * as _ from 'lodash';
 import { expect } from 'chai';
 
@@ -8,20 +10,20 @@ import { model as Car, Car as CarType } from './models/car';
 import { Genders } from './enums/genders';
 
 (mongoose as any).Promise = Promise;
-const mockgoose = new Mockgoose(mongoose);
 
+const MONGO_PORT = process.env.MONGO_PORT || 27017;
+
+const connectionOptions = { useMongoClient: true } as mongoose.ConnectionOptions;
 const connect = () =>
-  mockgoose.prepareStorage().then(() =>
-    new Promise((resolve) => mongoose.connect('mongodb://localhost:11010/test', () => resolve())));
+  new Promise((resolve, reject) =>
+    mongoose.connect(`mongodb://localhost:${MONGO_PORT}/typegoosetest`, connectionOptions, (err) =>
+      err ? reject(err) : resolve()));
 
 const initDatabase = () =>
   connect().then(() => mongoose.connection.db.dropDatabase());
 
 describe('Typegoose', () => {
-  before(function() {
-    this.timeout(100000);
-    return initDatabase();
-  });
+  before(() => initDatabase());
 
   it('should create a User with connections', async () => {
     const car = await Car.create({
@@ -83,7 +85,9 @@ describe('Typegoose', () => {
       const [foundTrabant, foundZastava] =
         _.sortBy(foundUser.previousCars, (previousCar) => (previousCar as CarType).model);
       expect(foundTrabant).to.have.property('model', 'Trabant');
+      expect(foundTrabant).to.have.property('isSedan', true);
       expect(foundZastava).to.have.property('model', 'Zastava');
+      expect(foundZastava).to.have.property('isSedan', undefined);
 
       foundUser.fullName = 'Sherlock Holmes';
       expect(foundUser).to.have.property('firstName', 'Sherlock');

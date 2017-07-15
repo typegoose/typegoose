@@ -129,7 +129,7 @@ This method assembles the Mongoose Schema from the decorated schema defining cla
 
 An existing Mongoose instance can also be passed down as an optional parameter. If given, Typegoose uses this Mongoose instance's `Schema` and `model` methods.
 
-### Decorators
+### Property decorators
 
 Typegoose comes with TypeScript decorators, which responsibility is to connect the Mongoose schema behind the TypeScript class.
 
@@ -271,6 +271,57 @@ incrementAge(this: InstanceType<User>) {
   return this.save();
 }
 ```
+
+### Class decorators
+
+Mongoose allows the developer to add pre and post [hooks / middlewares](http://mongoosejs.com/docs/middleware.html) to the schema. With this it is possible to add document transformations and observations before or after validation, save and more.
+
+Typegoose provides this functionality through TypeScript's class decorators.
+
+### pre
+
+We can simply attach a `@pre` decorator to the Typegoose class and define the hook function like you normally would in Mongoose.
+
+```typescript
+@pre<Car>('save', function(next) { // or @pre(this: Car, 'save', ...
+  if (this.model === 'Tesla') {
+    this.isFast = true;
+  }
+  next();
+})
+class Car extends Typegoose {
+  @prop({ required: true })
+  model: string;
+
+  @prop()
+  isFast: boolean;
+}
+```
+
+This will execute the pre-save hook each time a `Car` document is saved. Inside the pre-hook Mongoose binds the actual document to `this`.
+
+Note that additional typing information is required either by passing the class itself as a type parameter `<Car>` or explicity telling TypeScript that `this` is a `Car` (`this: Car`). This will grant typing informations inside the hook function.
+
+#### post
+
+Same as `pre`, the `post` hook is also implemented as a class decorator. Usage is equivalent with the one Mongoose provides.
+
+```typescript
+@post<Car>('save', (car) => { // or @post('save', (car: Car) => { ...
+  if (car.topSpeedInKmH > 300) {
+    console.log(car.model, 'is fast!');
+  }
+})
+class Car extends Typegoose {
+  @prop({ required: true })
+  model: string;
+
+  @prop({ required: true })
+  topSpeedInKmH: number;
+}
+```
+
+Of course `this` is not the document in a post hook (see Mongoose docs). Again typing information is required either by explicit parameter typing or by providing a template type.
 
 ### Types
 
