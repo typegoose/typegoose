@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
+    "@types/dotenv": "^4.0.0",
     "@types/es6-promise": "^0.0.32",
     "@types/lodash": "^4.14.55",
     "@types/mocha": "^2.2.33",
@@ -38,9 +39,9 @@
     "@types/reflect-metadata": "^0.0.5",
     "chai": "^3.5.0",
     "coveralls": "^2.13.1",
+    "dotenv": "^4.0.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
-    "mockgoose": "^7.1.1",
     "pre-commit": "^1.2.2",
     "rimraf": "^2.6.1",
     "tslint": "^5.2.0"

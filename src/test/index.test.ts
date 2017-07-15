@@ -1,5 +1,7 @@
+import { config as configDotenv } from 'dotenv';
+configDotenv();
+
 import * as mongoose from 'mongoose';
-import { Mockgoose } from 'mockgoose';
 import * as _ from 'lodash';
 import { expect } from 'chai';
 
@@ -8,21 +10,18 @@ import { model as Car, Car as CarType } from './models/car';
 import { Genders } from './enums/genders';
 
 (mongoose as any).Promise = Promise;
-const mockgoose = new Mockgoose(mongoose);
+
+const MONGO_PORT = process.env.MONGO_PORT || 27017;
 
 const connect = () =>
-  mockgoose.prepareStorage().then(() =>
-    new Promise((resolve, reject) =>
-      mongoose.connect('mongodb://localhost:11010/test', (err) => err ? reject(err) : resolve())));
+  new Promise((resolve, reject) =>
+    mongoose.connect(`mongodb://localhost:${MONGO_PORT}/typegoosetest`, (err) => err ? reject(err) : resolve()));
 
 const initDatabase = () =>
   connect().then(() => mongoose.connection.db.dropDatabase());
 
 describe('Typegoose', () => {
-  before(function() {
-    this.timeout(200000);
-    return initDatabase();
-  });
+  before(() => initDatabase());
 
   it('should create a User with connections', async () => {
     const car = await Car.create({

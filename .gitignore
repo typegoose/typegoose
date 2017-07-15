@@ -220,3 +220,4 @@ $RECYCLE.BIN/
 # End of https://www.gitignore.io/api/linux,macos,windows,visualstudiocode,node,intellij,webstorm
 
 build
+.env
