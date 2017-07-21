@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 
 import { schema, virtuals } from './data';
 import { isPrimitive, initAsObject, initAsArray, isString, isNumber } from './utils';
-import { InvalidPropError, NotNumberTypeError, NotStringTypeError } from './errors';
+import { InvalidPropError, NotNumberTypeError, NotStringTypeError, NoMetadataError } from './errors';
 
 export type Func = (...args) => any;
 
@@ -145,10 +145,7 @@ export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key
   const Type = Reflect.getMetadata('design:type', target, key);
 
   if (!Type) {
-    throw new Error(
-      `There is no metadata for the "${key}" property. ` +
-      'Check if emitDecoratorMetadata is enable in tsconfig.json',
-    );
+    throw new NoMetadataError(key);
   }
 
   return baseProp(options, Type, target, key);
