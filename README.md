@@ -42,11 +42,8 @@ Under the hood it uses the [reflect-metadata](https://github.com/rbuckton/reflec
 
 Instead of:
 ```typescript
-interface User {
-  name?: string;
-  age: number;
-  job?: Job;
-  car: Car | string;
+interface Car {
+  model?: string;
 }
 
 interface Job {
@@ -54,8 +51,11 @@ interface Job {
   position?: string;
 }
 
-interface Car {
-  model?: string;
+interface User {
+  name?: string;
+  age: number;
+  job?: Job;
+  car: Car | string;
 }
 
 mongoose.model('User', {
@@ -74,6 +74,19 @@ mongoose.model('Car', {
 ```
 You can just:
 ```typescript
+class Job extends Typegoose {
+  @prop()
+  title?: string;
+
+  @prop()
+  position?: string;
+}
+
+class Car extends Typegoose {
+  @prop()
+  model?: string;
+}
+
 class User extends Typegoose {
   @prop()
   name?: string;
@@ -86,19 +99,6 @@ class User extends Typegoose {
 
   @prop({ ref: Car, required: true })
   car: Ref<Car>;
-}
-
-class Job extends Typegoose {
-  @prop()
-  title?: string;
-
-  @prop()
-  position?: string;
-}
-
-class Car extends Typegoose {
-  @prop()
-  model?: string;
 }
 ```
 
