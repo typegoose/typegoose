@@ -34,7 +34,7 @@ export class Typegoose {
       sch.statics = staticMethods;
 
       const instanceMethods = methods.instanceMethods[name];
-      sch.methods = instanceMethods;
+      sch.methods = instanceMethods || {};
 
       if (hooks[name]) {
         const preHooks = hooks[name].pre;
