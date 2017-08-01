@@ -33,7 +33,7 @@ export class User extends Typegoose {
     this.lastName = split[1];
   }
 
-  @prop({ default: 'Nothing' })
+  @prop({ default: 'Nothing', index: true, unique: true })
   nick: string;
 
   @prop({ min: 10, max: 21 })
