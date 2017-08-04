@@ -325,6 +325,28 @@ class Car extends Typegoose {
 
 Of course `this` is not the document in a post hook (see Mongoose docs). Again typing information is required either by explicit parameter typing or by providing a template type.
 
+#### plugin
+
+Using the `plugin` decorator enables the developer to attach various Mongoose plugins to the schema. Just like the regular `schema.plugin()` call, the decorator accepts 1 or 2 parameters: the plugin itself, and an optional configuration object. Multiple `plugin` decorator can be used for a single Typegoose class.
+
+If the plugin enhances the schema with additional properties or instance / static methods this typing information should be added manually to the Typegoose class as well.
+
+```typescript
+import * as findOrCreate from 'mongoose-findorcreate';
+
+@plugin(findOrCreate)
+class User extends Typegoose {
+  // this isn't the complete method signature, just an example
+  static findOrCreate(condition: InstanceType<User>):
+    Promise<{ doc: InstanceType<User>, created: boolean }>;
+}
+
+const UserModel = new User().getModelForClass(User);
+UserModel.findOrCreate({ ... }).then(findOrCreateResult => {
+  ...
+});
+```
+
 ### Types
 
 Some additional types were added to make Typegoose more user friendly.

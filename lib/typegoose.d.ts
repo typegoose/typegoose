@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose';
 export * from './method';
 export * from './prop';
 export * from './hooks';
+export * from './plugin';
 export declare type InstanceType<T> = T & mongoose.Document;
 export declare type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
 export interface GetModelForClassOptions {

@@ -2,11 +2,12 @@ import 'reflect-metadata';
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
-import { schema, models, methods, virtuals, hooks } from './data';
+import { schema, models, methods, virtuals, hooks, plugins } from './data';
 
 export * from './method';
 export * from './prop';
 export * from './hooks';
+export * from './plugin';
 
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
@@ -44,6 +45,12 @@ export class Typegoose {
         const postHooks = hooks[name].post;
         postHooks.forEach((postHookArgs) => {
           sch.post(...postHookArgs);
+        });
+      }
+
+      if (plugins[name]) {
+        _.forEach(plugins[name], (plugin) => {
+          sch.plugin(plugin.mongoosePlugin, plugin.options);
         });
       }
 

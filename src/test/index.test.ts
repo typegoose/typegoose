@@ -102,5 +102,30 @@ describe('Typegoose', () => {
       expect(foundUser).to.have.property('firstName', 'Sherlock');
       expect(foundUser).to.have.property('lastName', 'Holmes');
     }
+
+    {
+      const createdUser = await User.findOrCreate({
+        firstName: 'Jane',
+        lastName: 'Doe',
+        gender: Genders.FEMALE,
+      });
+
+      expect(createdUser).to.be.ok;
+      expect(createdUser).to.have.property('created');
+      expect(createdUser.created).to.be.true;
+      expect(createdUser).to.have.property('doc');
+      expect(createdUser.doc).to.have.property('firstName', 'Jane');
+
+      const foundUser = await User.findOrCreate({
+        firstName: 'Jane',
+        lastName: 'Doe',
+      });
+
+      expect(foundUser).to.be.ok;
+      expect(foundUser).to.have.property('created');
+      expect(foundUser.created).to.be.false;
+      expect(foundUser).to.have.property('doc');
+      expect(foundUser.doc).to.have.property('firstName', 'Jane');
+    }
   });
 });
