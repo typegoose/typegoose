@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
+import * as findOrCreate from 'mongoose-findorcreate';
 
 import { Job } from './job';
 import { Car } from './car';
@@ -14,8 +15,15 @@ import {
   staticMethod,
   instanceMethod,
   post,
+  plugin,
 } from '../../typegoose';
 
+export interface FindOrCreateResult<T> {
+  created: boolean;
+  doc: InstanceType<T>;
+}
+
+@plugin(findOrCreate)
 export class User extends Typegoose {
   @prop({ required: true })
   firstName: string;
@@ -34,7 +42,7 @@ export class User extends Typegoose {
   }
 
   @prop({ default: 'Nothing' })
-  nick: string;
+  nick?: string;
 
   @prop({ min: 10, max: 21 })
   age?: number;
@@ -68,6 +76,8 @@ export class User extends Typegoose {
     this.age = age + 1;
     return this.save();
   }
+
+  static findOrCreate: (condition: any) => Promise<FindOrCreateResult<User>>;
 }
 
 export const model = new User().getModelForClass(User);
