@@ -40,8 +40,8 @@ describe('Typegoose', () => {
       _id: mongoose.Types.ObjectId(),
       firstName: 'John',
       lastName: 'Doe',
-      uniqueId: 'john-doe-20',
       age: 20,
+      uniqueId: 'john-doe-20',
       gender: Genders.MALE,
       job: {
         title: 'Developer',
@@ -129,6 +129,20 @@ describe('Typegoose', () => {
       expect(foundUser.created).to.be.false;
       expect(foundUser).to.have.property('doc');
       expect(foundUser.doc).to.have.property('firstName', 'Jane');
+
+      try {
+        const cloneUser = await User.create({
+          _id: mongoose.Types.ObjectId(),
+          firstName: 'John',
+          lastName: 'Doe',
+          age: 20,
+          gender: Genders.MALE,
+          uniqueId: 'john-doe-20',
+        });
+      } catch (err) {
+        expect(err).to.have.property('name', 'MongoError');
+        expect(err).to.have.property('code', 110000);
+      }
     }
   });
 });
