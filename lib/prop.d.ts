@@ -4,6 +4,8 @@ export interface BasePropOptions {
     required?: RequiredType;
     enum?: string[];
     default?: any;
+    unique?: boolean;
+    index?: boolean;
 }
 export interface PropOptions extends BasePropOptions {
     ref?: any;

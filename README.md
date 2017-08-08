@@ -154,6 +154,14 @@ firstName: string;
 lastName?: string; // using the ? optional property
 ```
 
+  - `unique`: Just like the [Mongoose unique](http://mongoosejs.com/docs/api.html#schematype_SchemaType-unique), tells Mongoose to ensure a unique index is created for this path.
+
+```typescript
+// this field is now unique across the collection
+@prop({ unique: true })
+uniqueId?: string;
+```
+
   - `enum`: The enum option accepts a string array. The class property which gets this decorator should have an enum-like type which values are from the provided string array. The way how the enum is created is delegated to the developer, Typegoose needs a string array which hold the enum values, and a TypeScript type which tells the possible values of the enum.
 
 ```typescript

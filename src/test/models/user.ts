@@ -44,6 +44,9 @@ export class User extends Typegoose {
   @prop({ default: 'Nothing' })
   nick?: string;
 
+  @prop({ index: true, unique: true })
+  uniqueId?: string;
+
   @prop({ min: 10, max: 21 })
   age?: number;
 

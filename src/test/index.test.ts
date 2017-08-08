@@ -37,9 +37,11 @@ describe('Typegoose', () => {
     }]);
 
     const user = await User.create({
+      _id: mongoose.Types.ObjectId(),
       firstName: 'John',
       lastName: 'Doe',
       age: 20,
+      uniqueId: 'john-doe-20',
       gender: Genders.MALE,
       job: {
         title: 'Developer',
@@ -64,6 +66,7 @@ describe('Typegoose', () => {
       expect(foundUser).to.have.property('nick', 'Nothing');
       expect(foundUser).to.have.property('firstName', 'John');
       expect(foundUser).to.have.property('lastName', 'Doe');
+      expect(foundUser).to.have.property('uniqueId', 'john-doe-20');
       expect(foundUser).to.have.property('age', 20);
       expect(foundUser).to.have.property('gender', Genders.MALE);
       expect(foundUser).to.have.property('job');
@@ -126,6 +129,20 @@ describe('Typegoose', () => {
       expect(foundUser.created).to.be.false;
       expect(foundUser).to.have.property('doc');
       expect(foundUser.doc).to.have.property('firstName', 'Jane');
+
+      try {
+        const cloneUser = await User.create({
+          _id: mongoose.Types.ObjectId(),
+          firstName: 'John',
+          lastName: 'Doe',
+          age: 20,
+          gender: Genders.MALE,
+          uniqueId: 'john-doe-20',
+        });
+      } catch (err) {
+        expect(err).to.have.property('name', 'MongoError');
+        expect(err).to.have.property('code', 11000);
+      }
     }
   });
 });
