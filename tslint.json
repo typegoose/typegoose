@@ -26,6 +26,9 @@
         ],
         "member-ordering": [
             false
+        ],
+        "no-unused-expression": [
+            false
         ]
     },
     "rulesDirectory": []
