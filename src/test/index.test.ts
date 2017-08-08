@@ -141,7 +141,7 @@ describe('Typegoose', () => {
         });
       } catch (err) {
         expect(err).to.have.property('name', 'MongoError');
-        expect(err).to.have.property('code', 110000);
+        expect(err).to.have.property('code', 11000);
       }
     }
   });
