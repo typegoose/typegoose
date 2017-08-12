@@ -154,7 +154,20 @@ firstName: string;
 lastName?: string; // using the ? optional property
 ```
 
+  - `index`: Tells Mongoose whether to define an index for the property.
+
+```typescript
+@prop({ index: true })
+indexedField?: string;
+```
+
   - `unique`: Just like the [Mongoose unique](http://mongoosejs.com/docs/api.html#schematype_SchemaType-unique), tells Mongoose to ensure a unique index is created for this path.
+
+```typescript
+// this field is now unique across the collection
+@prop({ unique: true })
+uniqueId?: string;
+```
 
 ```typescript
 // this field is now unique across the collection
