@@ -5,7 +5,7 @@ import { schema, virtuals } from './data';
 import { isPrimitive, initAsObject, initAsArray, isString, isNumber } from './utils';
 import { InvalidPropError, NotNumberTypeError, NotStringTypeError, NoMetadataError } from './errors';
 
-export type Func = (...args) => any;
+export type Func = (...args: any[]) => any;
 
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
 
