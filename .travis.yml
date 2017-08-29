@@ -3,6 +3,16 @@ services:
   - mongodb
 node_js:
   - 6
+env:
+  - USE_OLDEST_NPM_VERSIONS=0
+  - USE_OLDEST_NPM_VERSIONS=1
+before_install:
+  - |
+    if [ $USE_OLDEST_NPM_VERSIONS -eq 1 ]
+    then
+      # Test against oldest allowed versions in package.json - Use sed to remove ^ characters
+      sed -i 's/"\^/"/g' package.json
+    fi
 script:
   - npm test
   - npm run coveralls
