@@ -5,6 +5,7 @@ import * as findOrCreate from 'mongoose-findorcreate';
 import { Job } from './job';
 import { Car } from './car';
 import { Gender, Genders } from '../enums/genders';
+import { Role } from "../enums/role";
 import {
   Ref,
   prop,
@@ -52,6 +53,9 @@ export class User extends Typegoose {
 
   @prop({ enum: _.values(Genders), required: true })
   gender: Gender;
+
+  @prop({ enum: Role, required: true })
+  role: Role;
 
   @prop()
   job?: Job;
