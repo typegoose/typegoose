@@ -11,7 +11,7 @@ export type RequiredType = boolean | [boolean, string] | string | Func | [Func, 
 
 export interface BasePropOptions {
   required?: RequiredType;
-  enum?: string[]|object;
+  enum?: string[] | object;
   default?: any;
   unique?: boolean;
   index?: boolean;

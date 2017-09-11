@@ -8,7 +8,7 @@ import { expect } from 'chai';
 import { model as User } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
 import { Genders } from './enums/genders';
-import { Role } from "./enums/role";
+import { Role } from './enums/role';
 
 (mongoose as any).Promise = Promise;
 

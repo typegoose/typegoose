@@ -5,7 +5,7 @@ import * as findOrCreate from 'mongoose-findorcreate';
 import { Job } from './job';
 import { Car } from './car';
 import { Gender, Genders } from '../enums/genders';
-import { Role } from "../enums/role";
+import { Role } from '../enums/role';
 import {
   Ref,
   prop,
