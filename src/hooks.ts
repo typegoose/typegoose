@@ -1,3 +1,5 @@
+import { MongooseDocument } from 'mongoose';
+
 import { hooks as hooksData } from './data';
 
 type Method = 'init' | 'validate' | 'save' | 'remove';
@@ -5,11 +7,11 @@ type ClassDecorator = (constructor: any) => void;
 type HookNextFn = (err?: Error) => void;
 
 type PreDoneFn = () => void;
-type PreFn<T> = (this: T, next: HookNextFn, done: PreDoneFn) => void;
+type PreFn<T> = (this: T & MongooseDocument, next: HookNextFn, done: PreDoneFn) => void;
 type PreErrorCb = (err: Error) => void;
 
-type PostFn<T> = (doc: T, next: HookNextFn) => void;
-type PostFnWithError<T> = (error: Error, doc: T, next: HookNextFn) => void;
+type PostFn<T> = (doc: T & MongooseDocument, next: HookNextFn) => void;
+type PostFnWithError<T> = (error: Error, doc: T & MongooseDocument, next: HookNextFn) => void;
 
 interface Hooks {
   pre<T>(method: Method, parallel: boolean, fn: PreFn<T>, errorCb?: PreErrorCb): ClassDecorator;
