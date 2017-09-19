@@ -1,26 +1,11 @@
-import { config as configDotenv } from 'dotenv';
-configDotenv();
-
-import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 import { expect } from 'chai';
+import * as mongoose from 'mongoose';
 
 import { model as User } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
 import { Genders } from './enums/genders';
-
-(mongoose as any).Promise = Promise;
-
-const MONGO_PORT = process.env.MONGO_PORT || 27017;
-
-const connectionOptions = { useMongoClient: true } as mongoose.ConnectionOptions;
-const connect = () =>
-  new Promise((resolve, reject) =>
-    mongoose.connect(`mongodb://localhost:${MONGO_PORT}/typegoosetest`, connectionOptions, (err) =>
-      err ? reject(err) : resolve()));
-
-const initDatabase = () =>
-  connect().then(() => mongoose.connection.db.dropDatabase());
+import { initDatabase } from './utils/mongoConnect';
 
 describe('Typegoose', () => {
   before(() => initDatabase());
