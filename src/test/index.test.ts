@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose';
 
 import { model as User } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
+import { model as Dummy } from './models/dummy';
 import { Genders } from './enums/genders';
 import { initDatabase } from './utils/mongoConnect';
 
@@ -129,5 +130,19 @@ describe('Typegoose', () => {
         expect(err).to.have.property('code', 11000);
       }
     }
+  });
+
+  it('should test find post hook', async () => {
+    const dummy = await Dummy.create({ text: 'initial' });
+
+    const [dummyFromDb] = await Dummy.find({ text: 'initial' });
+    expect(dummyFromDb).to.have.property('text', 'changed in post find hook');
+  });
+
+  it('should test findOne post hook', async () => {
+    const dummy = await Dummy.create({ text: 'initial' });
+
+    const dummyFromDb = await Dummy.findOne({ text: 'initial' });
+    expect(dummyFromDb).to.have.property('text', 'changed in post findOne hook');
   });
 });
