@@ -74,7 +74,7 @@ mongoose.model('Car', {
 ```
 You can just:
 ```typescript
-class Job extends Typegoose {
+class Job {
   @prop()
   title?: string;
 
