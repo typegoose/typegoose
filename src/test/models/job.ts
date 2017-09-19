@@ -1,4 +1,4 @@
-import { Typegoose, prop } from '../../typegoose';
+import { prop } from '../../typegoose';
 
 export class Job {
   @prop()
