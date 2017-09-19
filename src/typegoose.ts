@@ -18,8 +18,6 @@ export interface GetModelForClassOptions {
 }
 
 export class Typegoose {
-  id: string;
-
   getModelForClass<T>(t: T, { existingMongoose, schemaOptions }: GetModelForClassOptions = {}) {
     const name = (this.constructor as any).name;
     if (!models[name]) {
