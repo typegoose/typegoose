@@ -1,6 +1,6 @@
 import { Typegoose, prop } from '../../typegoose';
 
-export class Job extends Typegoose {
+export class Job {
   @prop()
   title?: string;
 
@@ -8,5 +8,5 @@ export class Job extends Typegoose {
   position?: string;
 
   @prop({ required: true, default: Date.now })
-  startedAt: Date;
+  startedAt?: Date;
 }
