@@ -10,7 +10,6 @@ type ClassDecorator = (constructor: any) => void;
 type HookNextFn = (err?: Error) => void;
 
 type PreDoneFn = () => void;
-type PreErrorCb = (err: Error) => void;
 
 type TypegooseDoc<T> = T & MongooseDocument;
 
@@ -39,15 +38,14 @@ type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | Docume
 type MultipleMethod = 'find' | 'update';
 
 interface Hooks {
-  pre<T>(method: DocumentMethod, fn: DocumentPreSerialFn<T>, errorCb?: PreErrorCb): ClassDecorator;
-  pre<T>(method: DocumentMethod, parallel: boolean, fn: DocumentPreParallelFn<T>, errorCb?: PreErrorCb): ClassDecorator;
+  pre<T>(method: DocumentMethod, fn: DocumentPreSerialFn<T>): ClassDecorator;
+  pre<T>(method: DocumentMethod, parallel: boolean, fn: DocumentPreParallelFn<T>): ClassDecorator;
 
-  pre<T>(method: QueryMethod | ModelMethod, fn: SimplePreSerialFn<T>, errorCb?: PreErrorCb): ClassDecorator;
+  pre<T>(method: QueryMethod | ModelMethod, fn: SimplePreSerialFn<T>): ClassDecorator;
   pre<T>(
     method: QueryMethod | ModelMethod,
     parallel: boolean,
-    fn: SimplePreParallelFn<T>,
-    errorCb?: PreErrorCb): ClassDecorator;
+    fn: SimplePreParallelFn<T>): ClassDecorator;
 
   // I had to disable linter to allow this. I only got proper code completion separating the functions
   post<T>(method: NumberMethod, fn: PostNumberResponse<T>): ClassDecorator;
