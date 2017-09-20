@@ -176,6 +176,7 @@ uniqueId?: string;
 ```
 
   - `enum`: The enum option accepts a string array. The class property which gets this decorator should have an enum-like type which values are from the provided string array. The way how the enum is created is delegated to the developer, Typegoose needs a string array which hold the enum values, and a TypeScript type which tells the possible values of the enum.
+  However, if you use TS 2.4+, you can use string enum as well.
 
 ```typescript
 // Enum-like type and definition example.
@@ -186,6 +187,16 @@ const Genders = {
 };
 
 @prop({ enum: Object.values(Genders) })
+gender?: Gender;
+
+
+// TS 2.4+ string enum example
+enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+}
+
+@prop({ enum: Gender })
 gender?: Gender;
 ```
 
