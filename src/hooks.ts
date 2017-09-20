@@ -35,7 +35,7 @@ type PostSingleWithError<T> = (error: Error, result: TypegooseDoc<T>, next: Hook
 type PostMultipleWithError<T> = (error: Error, result: TypegooseDoc<T>[], net: HookNextFn) => void;
 
 type NumberMethod = 'count';
-type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate';
+type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | DocumentMethod;
 type MultipleMethod = 'find' | 'update';
 
 interface Hooks {
@@ -48,8 +48,6 @@ interface Hooks {
     parallel: boolean,
     fn: SimplePreParallelFn<T>,
     errorCb?: PreErrorCb): ClassDecorator;
-
-  post<T>(method: DocumentMethod, fn: DocumentPostFn<T> | PostSingleWithError<T>): ClassDecorator;
 
   // I had to disable linter to allow this. I only got proper code completion separating the functions
   post<T>(method: NumberMethod, fn: PostNumberResponse<T>): ClassDecorator;
