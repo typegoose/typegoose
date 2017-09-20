@@ -31,8 +31,17 @@ type DocumentPostFn<T> = (this: TypegooseDoc<T>, doc: TypegooseDoc<T>, next?: Ho
 type QueryPostFn<T> = (this: Query<T>, result: PostResult<T>, next?: HookNextFn) => void;
 type ModelPostFn<T> = (this: any, result: any, next?: HookNextFn) => void;
 
-type PostFn<T> = (result: PostResult<T>, next: HookNextFn) => void;
-type PostFnWithError<T> = (error: Error, result: PostResult<T>, next: HookNextFn) => void;
+type PostNumberResponse<T> = (this: Query<T>, result: number, next?: HookNextFn) => void;
+type PostSingleResponse<T> = (this: Query<T>, result: TypegooseDoc<T>, next?: HookNextFn) => void;
+type PostMultipleResponse<T> = (this: Query<T>, result: TypegooseDoc<T>[], next?: HookNextFn) => void;
+
+type PostNumberWithError<T> = (error: Error, result: number, next: HookNextFn) => void;
+type PostSingleWithError<T> = (error: Error, result: TypegooseDoc<T>, next: HookNextFn) => void;
+type PostMultipleWithError<T> = (error: Error, result: TypegooseDoc<T>[], net: HookNextFn) => void;
+
+type NumberMethod = 'count';
+type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate';
+type MultipleMethod = 'find' | 'update';
 
 interface Hooks {
   pre<T>(method: DocumentMethod, fn: DocumentPreSerialFn<T>, errorCb?: PreErrorCb): ClassDecorator;
@@ -44,9 +53,22 @@ interface Hooks {
   pre<T>(method: ModelMethod, fn: ModelPreSerialFn<T>, errorCb?: PreErrorCb): ClassDecorator;
   pre<T>(method: ModelMethod, parallel: boolean, fn: ModelPreParallelFn<T>, errorCb?: PreErrorCb): ClassDecorator;
 
-  post<T>(method: DocumentMethod, fn: DocumentPostFn<T> | PostFnWithError<T>): ClassDecorator;
-  post<T>(method: QueryMethod, fn: QueryPostFn<T> | PostFnWithError<T>): ClassDecorator;
-  post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostFnWithError<T>): ClassDecorator;
+  post<T>(method: DocumentMethod, fn: DocumentPostFn<T> | PostSingleWithError<T>): ClassDecorator;
+
+  // I had to disable linter to allow this. I only got proper code completion separating the functions
+  post<T>(method: NumberMethod, fn: PostNumberResponse<T>): ClassDecorator;
+  // tslint:disable-next-line:unified-signatures
+  post<T>(method: NumberMethod, fn: PostNumberWithError<T>): ClassDecorator;
+
+  post<T>(method: SingleMethod, fn: PostSingleResponse<T>): ClassDecorator;
+  // tslint:disable-next-line:unified-signatures
+  post<T>(method: SingleMethod, fn: PostSingleWithError<T>): ClassDecorator;
+
+  post<T>(method: MultipleMethod, fn: PostMultipleResponse<T>): ClassDecorator;
+  // tslint:disable-next-line:unified-signatures
+  post<T>(method: MultipleMethod, fn: PostMultipleWithError<T>): ClassDecorator;
+
+  post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>): ClassDecorator;
 }
 
 const hooks: Hooks = {
