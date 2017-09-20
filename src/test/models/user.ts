@@ -80,6 +80,20 @@ export class User extends Typegoose {
     return this.save();
   }
 
+  @instanceMethod
+  addLanguage(this: InstanceType<User>) {
+    this.languages.push('Hungarian');
+
+    return this.save();
+  }
+
+  @instanceMethod
+  addJob(this: InstanceType<User>, job: Partial<Job> = {}) {
+    this.previousJobs.push(job);
+
+    return this.save();
+  }
+
   static findOrCreate: (condition: any) => Promise<FindOrCreateResult<User>>;
 }
 
