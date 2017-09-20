@@ -101,6 +101,7 @@ class User extends Typegoose {
   car: Ref<Car>;
 }
 ```
+Please note that sub documents doesn't have to extend Typegoose. You can still give them default value in prop decorator, but you can't create staic or instance methods on them.
 
 ## Requirements
 
