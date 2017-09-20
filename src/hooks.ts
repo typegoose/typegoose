@@ -20,7 +20,7 @@ type SimplePreSerialFn<T> = (next: HookNextFn) => void;
 type SimplePreParallelFn<T> = (next: HookNextFn, done: PreDoneFn) => void;
 
 type DocumentPostFn<T> = (this: TypegooseDoc<T>, doc: TypegooseDoc<T>, next?: HookNextFn) => void;
-type ModelPostFn<T> = (this: any, result: any, next?: HookNextFn) => void;
+type ModelPostFn<T> = (result: any, next?: HookNextFn) => void;
 
 type PostNumberResponse<T> = (result: number, next?: HookNextFn) => void;
 type PostSingleResponse<T> = (result: TypegooseDoc<T>, next?: HookNextFn) => void;
