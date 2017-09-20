@@ -133,4 +133,23 @@ describe('Typegoose', () => {
       }
     }
   });
+
+  it('should add a language and job using instance methods', async () => {
+    const user = await User.create({
+      firstName: 'harry',
+      lastName: 'potter',
+      gender: Genders.MALE,
+      languages: ['english'],
+      uniqueId: 'unique-id',
+    });
+    await user.addJob({ position: 'Dark Wizzard', title: 'Archmage' });
+    await user.addJob();
+    const savedUser = await user.addLanguage();
+
+    expect(savedUser.languages).to.include('Hungarian');
+    expect(savedUser.previousJobs.length).to.be.above(0);
+    _.map(savedUser.previousJobs, (prevJob) => {
+      expect(prevJob.startedAt).to.be.ok;
+    });
+  });
 });
