@@ -221,6 +221,3 @@ $RECYCLE.BIN/
 
 build
 .env
-
-# build folder
-lib
