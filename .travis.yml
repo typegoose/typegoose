@@ -7,7 +7,6 @@ script:
   - npm test
   - npm run coveralls
 deploy:
-  skip_cleanup: true
   provider: npm
   email: "szokodiakos@gmail.com"
   api_key:
