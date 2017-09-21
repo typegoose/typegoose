@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/linux,macos,windows,visualstudiocode,node,intellij,webstorm
 
 ### Intellij ###
@@ -221,4 +220,3 @@ $RECYCLE.BIN/
 
 build
 .env
-lib
