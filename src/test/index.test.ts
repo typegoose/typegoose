@@ -5,6 +5,7 @@ import * as mongoose from 'mongoose';
 import { model as User } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
 import { Genders } from './enums/genders';
+import { Role } from './enums/role';
 import { initDatabase } from './utils/mongoConnect';
 
 describe('Typegoose', () => {
@@ -28,6 +29,7 @@ describe('Typegoose', () => {
       age: 20,
       uniqueId: 'john-doe-20',
       gender: Genders.MALE,
+      role: Role.User,
       job: {
         title: 'Developer',
         position: 'Lead',
@@ -54,6 +56,7 @@ describe('Typegoose', () => {
       expect(foundUser).to.have.property('uniqueId', 'john-doe-20');
       expect(foundUser).to.have.property('age', 20);
       expect(foundUser).to.have.property('gender', Genders.MALE);
+      expect(foundUser).to.have.property('role', Role.User);
       expect(foundUser).to.have.property('job');
       expect(foundUser).to.have.property('car');
       expect(foundUser).to.have.property('languages').to.have.length(2).to.include('english').to.include('typescript');

@@ -1,6 +1,6 @@
 {
   "name": "typegoose",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "Define Mongoose models using TypeScript classes.",
   "main": "lib/typegoose.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "lodash": "^4.17.4",
     "mongoose": "^4.7.3",
     "reflect-metadata": "^0.1.8",
-    "typescript": "^2.2.1"
+    "typescript": "^2.4.2"
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
@@ -36,7 +36,6 @@
     "@types/lodash": "^4.14.55 <4.14.74",
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.52",
-    "@types/reflect-metadata": "^0.0.5",
     "chai": "^3.5.0",
     "coveralls": "^2.13.1",
     "dotenv": "^4.0.0",

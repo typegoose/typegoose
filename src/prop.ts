@@ -11,7 +11,7 @@ export type RequiredType = boolean | [boolean, string] | string | Func | [Func, 
 
 export interface BasePropOptions {
   required?: RequiredType;
-  enum?: string[];
+  enum?: string[] | object;
   default?: any;
   unique?: boolean;
   index?: boolean;
@@ -96,6 +96,13 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
       type: mongoose.Schema.Types.ObjectId,
       ref: itemsRef.name,
     };
+  }
+
+  const enumOption = rawOptions.enum;
+  if (enumOption) {
+    if (!Array.isArray(enumOption)) {
+      rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
+    }
   }
 
   // check for validation inconsistencies
