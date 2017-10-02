@@ -13,7 +13,7 @@ export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
 
 export interface GetModelForClassOptions {
-  existingMongoose?: mongoose.Mongoose; // TODO deprecated
+  existingMongoose?: mongoose.Mongoose;
   schemaOptions?: mongoose.SchemaOptions;
   existingConnection?: mongoose.Connection;
 }
@@ -61,9 +61,12 @@ export class Typegoose {
         }
       });
 
-      const model = existingConnection ?
-        existingConnection.model.bind(existingConnection) :
-        mongoose.model.bind(mongoose);
+      let model = mongoose.model.bind(mongoose);
+      if (existingConnection) {
+        model = existingConnection.model.bind(existingConnection);
+      } else if (existingMongoose) {
+        model = existingMongoose.model.bind(existingMongoose);
+      }
 
       models[name] = model(name, sch);
     }
