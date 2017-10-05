@@ -22,7 +22,7 @@
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
   "license": "MIT",
   "dependencies": {
-    "@types/mongoose": "^4.7.1",
+    "@types/mongoose": "^4.7.15",
     "lodash": "^4.17.4",
     "mongoose": "^4.7.3",
     "reflect-metadata": "^0.1.8",
