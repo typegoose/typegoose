@@ -24,7 +24,7 @@
   "dependencies": {
     "@types/mongoose": "^4.7.15",
     "lodash": "^4.17.4",
-    "mongoose": "^4.7.3",
+    "mongoose": "^4.11.1",
     "reflect-metadata": "^0.1.8",
     "typescript": "^2.4.2"
   },
