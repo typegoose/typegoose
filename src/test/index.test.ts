@@ -2,11 +2,12 @@ import * as _ from 'lodash';
 import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { model as User } from './models/user';
+import { model as User, User as UserType } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { initDatabase } from './utils/mongoConnect';
+import { getClassForDocument } from '../utils';
 
 describe('Typegoose', () => {
   before(() => initDatabase());
@@ -152,4 +153,31 @@ describe('Typegoose', () => {
       expect(prevJob.startedAt).to.be.ok;
     });
   });
+});
+
+describe('getClassForDocument()', () => {
+  before(() => initDatabase());
+
+  it('should return correct class type for document', async () => {
+    const car = await Car.create({
+      model: 'Tesla',
+    });
+    const carReflectedType = getClassForDocument(car);
+    expect(carReflectedType).to.equals(CarType);
+
+    const user = await User.create({
+      _id: mongoose.Types.ObjectId(),
+      firstName: 'John2',
+      lastName: 'Doe2',
+      gender: Genders.MALE,
+      languages: ['english2', 'typescript2'],
+    });
+    const userReflectedType = getClassForDocument(user);
+    expect(userReflectedType).to.equals(UserType);
+
+    // assert negative to be sure (false positive)
+    expect(carReflectedType).to.not.equals(UserType);
+    expect(userReflectedType).to.not.equals(CarType);
+  });
+
 });
