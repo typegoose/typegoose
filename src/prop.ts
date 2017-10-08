@@ -82,20 +82,22 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
 
   const ref = rawOptions.ref;
   if (ref) {
-    return schema[name][key] = {
+    schema[name][key] = {
       ...schema[name][key],
       type: mongoose.Schema.Types.ObjectId,
       ref: ref.name,
     };
+    return;
   }
 
   const itemsRef = rawOptions.itemsRef;
   if (itemsRef) {
-    return schema[name][key][0] = {
+    schema[name][key][0] = {
       ...schema[name][key][0],
       type: mongoose.Schema.Types.ObjectId,
       ref: itemsRef.name,
     };
+    return;
   }
 
   const enumOption = rawOptions.enum;
@@ -123,31 +125,35 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   const options = _.omit(rawOptions, ['ref', 'items']);
   if (isPrimitive(Type)) {
     if (isArray) {
-      return schema[name][key][0] = {
+      schema[name][key][0] = {
         ...schema[name][key][0],
         ...options,
         type: Type,
       };
+      return;
     }
-    return schema[name][key] = {
+    schema[name][key] = {
       ...schema[name][key],
       ...options,
       type: Type,
     };
+    return;
   }
 
   if (isArray) {
-    return schema[name][key][0] = {
+    schema[name][key][0] = {
       ...schema[name][key][0],
       ...options,
       ...subSchema,
     };
+    return;
   }
-  return schema[name][key] = {
+  schema[name][key] = {
     ...schema[name][key],
     ...options,
     ...subSchema,
   };
+  return;
 };
 
 export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key: string) => {
@@ -157,7 +163,7 @@ export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key
     throw new NoMetadataError(key);
   }
 
-  return baseProp(options, Type, target, key);
+  baseProp(options, Type, target, key);
 };
 
 export interface ArrayPropOptions extends BasePropOptions {
@@ -167,7 +173,7 @@ export interface ArrayPropOptions extends BasePropOptions {
 
 export const arrayProp = (options: ArrayPropOptions) => (target: any, key: string) => {
   const Type = options.items;
-  return baseProp(options, Type, target, key, true);
+  baseProp(options, Type, target, key, true);
 };
 
 export type Ref<T> = T | string;
