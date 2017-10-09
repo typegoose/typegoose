@@ -157,7 +157,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
 };
 
 export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key: string) => {
-  const Type = Reflect.getMetadata('design:type', target, key);
+  const Type = (Reflect as any).getMetadata('design:type', target, key);
 
   if (!Type) {
     throw new NoMetadataError(key);

@@ -2,12 +2,13 @@ import 'reflect-metadata';
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
-import { schema, models, methods, virtuals, hooks, plugins } from './data';
+import { schema, models, methods, virtuals, hooks, plugins, constructors } from './data';
 
 export * from './method';
 export * from './prop';
 export * from './hooks';
 export * from './plugin';
+export { getClassForDocument } from './utils';
 
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
@@ -20,7 +21,7 @@ export interface GetModelForClassOptions {
 
 export class Typegoose {
   getModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}) {
-    const name = (this.constructor as any).name;
+    const name = this.constructor.name;
     if (!models[name]) {
       const Schema = mongoose.Schema;
 
@@ -69,6 +70,7 @@ export class Typegoose {
       }
 
       models[name] = model(name, sch);
+      constructors[name] = this.constructor;
     }
 
     return models[name] as ModelType<this> & T;

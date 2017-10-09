@@ -9,8 +9,8 @@
     "lint": "tslint --type-check --project tsconfig.json",
     "precommit": "npm run test",
     "test": "npm run lint && npm run cover",
-    "mocha": "npm run build && mocha 'lib/test/**/*.test.js'",
-    "cover": "npm run build && istanbul cover _mocha -- 'lib/test/**/*.test.js' -R spec",
+    "mocha": "npm run build && mocha ./lib/test/**/*.test.js",
+    "cover": "npm run build && istanbul cover node_modules/mocha/bin/_mocha -- ./lib/test/**/*.test.js -R spec",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
@@ -31,7 +31,6 @@
   "devDependencies": {
     "@types/chai": "^3.4.35",
     "@types/dotenv": "^4.0.0",
-    "@types/es6-promise": "^0.0.32",
     "@types/lodash": "^4.14.55 <4.14.74",
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.52",

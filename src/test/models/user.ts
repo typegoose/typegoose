@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
-import * as findOrCreate from 'mongoose-findorcreate';
+// tslint:disable-next-line:no-var-requires
+const findOrCreate = require('mongoose-findorcreate');
 
 import { Job } from './job';
 import { Car } from './car';
