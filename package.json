@@ -7,7 +7,6 @@
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "rimraf lib && tsc",
     "lint": "tslint --type-check --project tsconfig.json",
-    "precommit": "npm run test",
     "test": "npm run lint && npm run cover",
     "mocha": "npm run build && mocha ./lib/test/**/*.test.js",
     "cover": "npm run build && istanbul cover node_modules/mocha/bin/_mocha -- ./lib/test/**/*.test.js -R spec",
@@ -40,11 +39,7 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "mongoose-findorcreate": "^2.0.0",
-    "pre-commit": "^1.2.2",
     "rimraf": "^2.6.1",
     "tslint": "^5.2.0"
-  },
-  "pre-commit": [
-    "precommit"
-  ]
+  }
 }
