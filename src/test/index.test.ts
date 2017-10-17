@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose';
 
 import { model as User, User as UserType } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
+import { model as Person } from './models/person';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { initDatabase } from './utils/mongoConnect';
@@ -180,4 +181,30 @@ describe('getClassForDocument()', () => {
     expect(userReflectedType).to.not.equals(CarType);
   });
 
+  it('should use inherited schema', async () => {
+    let user = await Person.create({
+      email: 'my@email.com',
+    });
+
+    const car = await Car.create({
+      model: 'Tesla',
+    });
+
+    await user.addCar(car);
+
+    user = await Person.findById(user.id).populate('cars');
+
+    // verify properties
+    expect(user).to.have.property('createdAt');
+    expect(user).to.have.property('email', 'my@email.com');
+
+    expect(user.cars.length).to.be.above(0);
+    _.map(user.cars, (currentCar: CarType) => {
+      expect(currentCar.model).to.be.ok;
+    });
+
+    // verify methods
+    expect(user.getClassName()).to.equals('Person');
+    expect(Person.getStaticName()).to.equals('Person');
+  });
 });
