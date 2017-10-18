@@ -30,7 +30,7 @@ export class Typegoose {
         new Schema(schema[name]);
 
       const staticMethods = methods.staticMethods[name];
-      sch.statics = staticMethods;
+      sch.statics = staticMethods || {};
 
       const instanceMethods = methods.instanceMethods[name];
       sch.methods = instanceMethods || {};
