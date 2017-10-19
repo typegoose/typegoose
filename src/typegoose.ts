@@ -65,6 +65,8 @@ export class Typegoose {
     const staticMethods = methods.staticMethods[name];
     if (staticMethods) {
       sch.statics = Object.assign(staticMethods, sch.statics || {});
+    } else {
+      sch.statics = sch.statics || {};
     }
 
     const instanceMethods = methods.instanceMethods[name];
