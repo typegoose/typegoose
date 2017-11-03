@@ -23,30 +23,36 @@ export class Typegoose {
   getModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}) {
     const name = this.constructor.name;
     if (!models[name]) {
-      const Schema = mongoose.Schema;
-
-      // get schema of current model
-      let sch = this.buildSchema(name, schemaOptions);
-      // get parents class name
-      let parentCtor = Object.getPrototypeOf(this.constructor.prototype).constructor;
-      // iterate trough all parents
-      while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
-        // extend schema
-        sch = this.buildSchema(parentCtor.name, schemaOptions, sch);
-        // next parent
-        parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
-      }
-
-      let model = mongoose.model.bind(mongoose);
-      if (existingConnection) {
-        model = existingConnection.model.bind(existingConnection);
-      } else if (existingMongoose) {
-        model = existingMongoose.model.bind(existingMongoose);
-      }
-
-      models[name] = model(name, sch);
-      constructors[name] = this.constructor;
+      this.setModelForClass(t, { existingMongoose, schemaOptions, existingConnection });
     }
+
+    return models[name] as ModelType<this> & T;
+  }
+
+  setModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}) {
+    const name = this.constructor.name;
+
+    // get schema of current model
+    let sch = this.buildSchema(name, schemaOptions);
+    // get parents class name
+    let parentCtor = Object.getPrototypeOf(this.constructor.prototype).constructor;
+    // iterate trough all parents
+    while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
+      // extend schema
+      sch = this.buildSchema(parentCtor.name, schemaOptions, sch);
+      // next parent
+      parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
+    }
+
+    let model = mongoose.model.bind(mongoose);
+    if (existingConnection) {
+      model = existingConnection.model.bind(existingConnection);
+    } else if (existingMongoose) {
+      model = existingMongoose.model.bind(existingMongoose);
+    }
+
+    models[name] = model(name, sch);
+    constructors[name] = this.constructor;
 
     return models[name] as ModelType<this> & T;
   }
