@@ -126,12 +126,20 @@ This is the class which your schema defining classes must extend.
 
 `getModelForClass<T>(t: T, options?: GetModelForClassOptions)`
 
-This method assembles the Mongoose Schema from the decorated schema defining class, creates the Mongoose Model and returns it. For typing reasons the schema defining class must be passed down to it.
+This method returns the corresponding Mongoose Model for the class (`T`). If no Mongoose model exists for this class yet, one will be created automatically (by calling the method `setModelForClass`).
+
+
+`setModelForClass<T>(t: T, options?: GetModelForClassOptions)`
+
+This method assembles the Mongoose Schema from the decorated schema defining class, creates the Mongoose Model and returns it. For typing reasons, the schema defining class must be passed down to it.
+
+Hint: If a Mongoose Model already exists for this class, it will be overwritten.
+
 
 The `GetModelForClassOptions` provides multiple optional configurations:
  * `existingMongoose: mongoose`: An existing Mongoose instance can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.
  * `schemaOptions: mongoose.SchemaOptions`: Additional [schema options](http://mongoosejs.com/docs/guide.html#options) can be passed down to the schema-to-be-created.
-  * `existingConnection: mongoose.Connection`: An existing Mongoose connection can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.
+ * `existingConnection: mongoose.Connection`: An existing Mongoose connection can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.
 
 ### Property decorators
 
