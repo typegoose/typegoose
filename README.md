@@ -126,7 +126,7 @@ This is the class which your schema defining classes must extend.
 
 `getModelForClass<T>(t: T, options?: GetModelForClassOptions)`
 
-This method returns the corresponding Mongoose Model for the class (`T`). If no Mongoose model exists for this class yet, one will be created automatically (by calling the method `setModelForClass)`.
+This method returns the corresponding Mongoose Model for the class (`T`). If no Mongoose model exists for this class yet, one will be created automatically (by calling the method `setModelForClass`).
 
 
 `setModelForClass<T>(t: T, options?: GetModelForClassOptions)`
