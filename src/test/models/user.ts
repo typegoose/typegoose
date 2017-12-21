@@ -49,6 +49,12 @@ export class User extends Typegoose {
   @prop({ index: true, unique: true })
   uniqueId?: string;
 
+  @prop({ unique: true, sparse: true })
+  username?: string;
+
+  @prop({ expires: '24h' })
+  expireAt?: Date;
+
   @prop({ min: 10, max: 21 })
   age?: number;
 
