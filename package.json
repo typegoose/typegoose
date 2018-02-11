@@ -25,7 +25,7 @@
     "lodash": "^4.17.4",
     "mongoose": "^4.11.1",
     "reflect-metadata": "^0.1.8",
-    "typescript": "^2.4.2"
+    "typescript": "2.6.2"
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
