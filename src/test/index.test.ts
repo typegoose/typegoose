@@ -4,7 +4,8 @@ import * as mongoose from 'mongoose';
 
 import { model as User, User as UserType } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
-import { model as Person } from './models/person';
+import { model as Person, PersistentModel } from './models/person';
+import { PersonNested, AddressNested, PersonNestedModel } from './models/nested-object';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { initDatabase } from './utils/mongoConnect';
@@ -206,5 +207,26 @@ describe('getClassForDocument()', () => {
     // verify methods
     expect(user.getClassName()).to.equals('Person');
     expect(Person.getStaticName()).to.equals('Person');
+  });
+
+  it('Should store nested address', async () => {
+    const personInput = new PersonNested();
+    personInput.name = 'Person, Some';
+    personInput.address = new AddressNested('A Street 1');
+    personInput.moreAddresses = [
+      new AddressNested('A Street 2'),
+      new AddressNested('A Street 3'),
+    ];
+
+    const person = await PersonNestedModel.create(personInput);
+
+    expect(person).is.not.undefined;
+    expect(person.name).equals('Person, Some');
+    expect(person.address).is.not.undefined;
+    expect(person.address.street).equals('A Street 1');
+    expect(person.moreAddresses).is.not.undefined;
+    expect(person.moreAddresses.length).equals(2);
+    expect(person.moreAddresses[0].street).equals('A Street 2');
+    expect(person.moreAddresses[1].street).equals('A Street 3');
   });
 });

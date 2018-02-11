@@ -5,6 +5,20 @@ import { schema, constructors } from './data';
 
 export const isPrimitive = (Type) => _.includes(['String', 'Number', 'Boolean', 'Date'], Type.name);
 
+export const isObject = (Type) => {
+  let prototype = Type.prototype;
+  let name = Type.name;
+  while (name) {
+    if (name === 'Object') {
+      return true;
+    }
+    prototype = Object.getPrototypeOf(prototype);
+    name = prototype ? prototype.constructor.name : null;
+  }
+
+  return false;
+};
+
 export const isNumber = (Type) => Type.name === 'Number';
 
 export const isString = (Type) => Type.name === 'String';
