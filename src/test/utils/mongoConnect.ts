@@ -1,8 +1,7 @@
-import { config as configDotenv } from "dotenv";
+import { config as configDotenv } from 'dotenv';
 configDotenv();
 
-import * as mongoose from "mongoose";
-(mongoose as any).Promise = Promise;
+import * as mongoose from 'mongoose';
 
 const MONGO_PORT = process.env.MONGO_PORT || 27017;
 const connect = () =>
