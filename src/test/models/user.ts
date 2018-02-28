@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
-// tslint:disable-next-line:no-var-requires
-const findOrCreate = require('mongoose-findorcreate');
+import { findOrCreatePlugin } from '../utils/findOrCreatePlugin';
 
 import { Job } from './job';
 import { Car } from './car';
@@ -25,7 +24,7 @@ export interface FindOrCreateResult<T> {
   doc: InstanceType<T>;
 }
 
-@plugin(findOrCreate)
+@plugin(findOrCreatePlugin)
 export class User extends Typegoose {
   @prop({ required: true })
   firstName: string;
@@ -64,6 +63,7 @@ export class User extends Typegoose {
   @prop({ enum: Role })
   role: Role;
 
+  // @prop({ required: true })
   @prop()
   job?: Job;
 

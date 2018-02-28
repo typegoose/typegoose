@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "rimraf lib && tsc",
-    "lint": "tslint --type-check --project tsconfig.json",
+    "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && npm run cover",
     "mocha": "npm run build && mocha ./lib --recursive",
     "cover": "npm run build && istanbul cover _mocha -- lib --recursive -R spec",
@@ -21,9 +21,9 @@
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
   "license": "MIT",
   "dependencies": {
-    "@types/mongoose": "^4.7.28",
+    "@types/mongoose": "^5.0.2",
     "lodash": "^4.17.4",
-    "mongoose": "^4.11.1",
+    "mongoose": "^5.0.7",
     "reflect-metadata": "^0.1.8",
     "typescript": "2.6.2"
   },
@@ -38,7 +38,6 @@
     "dotenv": "^4.0.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
-    "mongoose-findorcreate": "^2.0.0",
     "rimraf": "^2.6.1",
     "tslint": "^5.2.0"
   }

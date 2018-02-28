@@ -121,7 +121,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   const instance = new Type();
   const subSchema = schema[instance.constructor.name];
   if (!subSchema && !isPrimitive(Type) && !isObject(Type)) {
-      throw new InvalidPropError(Type.name, key);
+    throw new InvalidPropError(Type.name, key);
   }
 
   const options = _.omit(rawOptions, ['ref', 'items']);
@@ -161,10 +161,13 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
     };
     return;
   }
+
+  const Schema = mongoose.Schema;
+
   schema[name][key] = {
     ...schema[name][key],
     ...options,
-    ...subSchema,
+    type: new Schema({ ...subSchema }),
   };
   return;
 };

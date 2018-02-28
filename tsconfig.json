@@ -5,10 +5,11 @@
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "allowJs": false,
     "outDir": "lib",
     "sourceMap": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts"
   ]
 }

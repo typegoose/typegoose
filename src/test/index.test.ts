@@ -36,6 +36,10 @@ describe('Typegoose', () => {
       job: {
         title: 'Developer',
         position: 'Lead',
+        jobType: {
+          salery: 5000,
+          field: "IT",
+        },
       },
       car: car.id,
       languages: ['english', 'typescript'],
@@ -66,6 +70,9 @@ describe('Typegoose', () => {
       expect(foundUser.job).to.have.property('title', 'Developer');
       expect(foundUser.job).to.have.property('position', 'Lead');
       expect(foundUser.job).to.have.property('startedAt').to.be.instanceof(Date);
+      expect(foundUser.job.jobType).to.have.property('salery', 5000);
+      expect(foundUser.job.jobType).to.have.property('field', 'IT');
+      expect(foundUser.job.jobType).to.have.property('salery').to.be.a('number');
       expect(foundUser.car).to.have.property('model', 'Tesla');
       expect(foundUser).to.have.property('previousJobs').to.have.length(2);
 
