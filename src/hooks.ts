@@ -3,7 +3,7 @@ import { MongooseDocument } from 'mongoose';
 import { hooks as hooksData } from './data';
 
 type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
-type QueryMethod = 'count' | 'find' | 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'update';
+type QueryMethod = 'count' | 'find' | 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'update' | 'updateOne';
 type ModelMethod = 'insertMany';
 
 type ClassDecorator = (constructor: any) => void;
