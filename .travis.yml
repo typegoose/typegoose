@@ -12,6 +12,9 @@ before_install:
     then
       # Test against oldest allowed versions in package.json - Use sed to remove ^ characters
       sed -i 's/"\^/"/g' package.json
+      npm i mongoose@5.0.11 reflect-metadata@0.1.8
+    else
+      npm i mongoose reflect-metadata
     fi
 script:
   - npm test

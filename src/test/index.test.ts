@@ -8,11 +8,13 @@ import { model as Person, PersistentModel } from './models/person';
 import { PersonNested, AddressNested, PersonNestedModel } from './models/nested-object';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
-import { initDatabase } from './utils/mongoConnect';
+import { initDatabase, closeDatabase } from './utils/mongoConnect';
 import { getClassForDocument } from '../utils';
 
 describe('Typegoose', () => {
   before(() => initDatabase());
+
+  after(() => closeDatabase());
 
   it('should create a User with connections', async () => {
     const car = await Car.create({

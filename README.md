@@ -112,6 +112,10 @@ Please note that sub documents doesn't have to extend Typegoose. You can still g
 
 `npm install typegoose -S`
 
+You also need to install `mongoose` and `reflect-metadata`, in versions < 5.0, these packages were listed as dependencies in `package.json`, starting with version 5.0 these packages are listed as peer dependencies.
+
+`npm install mongoose reflect-metadata -S`
+
 ## Testing
 
 `npm test`
