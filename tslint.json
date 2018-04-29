@@ -29,6 +29,10 @@
         ],
         "no-unused-expression": [
             false
+        ],
+        "whitespace": [
+            true,
+            "check-module"
         ]
     },
     "rulesDirectory": []

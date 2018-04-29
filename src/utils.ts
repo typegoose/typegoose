@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 
 import { schema, constructors } from './data';
 
-export const isPrimitive = (Type) => _.includes(['String', 'Number', 'Boolean', 'Date'], Type.name);
+export const isPrimitive = (Type) => _.includes(['String', 'Number', 'Boolean', 'Date', 'Decimal128'], Type.name);
 
 export const isObject = (Type) => {
   let prototype = Type.prototype;
