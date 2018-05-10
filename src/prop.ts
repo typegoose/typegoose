@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { schema, virtuals } from './data';
 import { isPrimitive, initAsObject, initAsArray, isString, isNumber, isObject } from './utils';
 import { InvalidPropError, NotNumberTypeError, NotStringTypeError, NoMetadataError } from './errors';
+import { ObjectID } from 'bson';
 
 export type Func = (...args: any[]) => any;
 
@@ -194,4 +195,4 @@ export const arrayProp = (options: ArrayPropOptions) => (target: any, key: strin
   baseProp(options, Type, target, key, true);
 };
 
-export type Ref<T> = T | string;
+export type Ref<T> = T | ObjectID;
