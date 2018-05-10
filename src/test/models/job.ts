@@ -18,6 +18,6 @@ export class Job {
   @prop({ required: true, default: Date.now })
   startedAt?: Date;
 
-  @prop()
+  @prop({ _id: false })
   jobType?: JobType;
 }

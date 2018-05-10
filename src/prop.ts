@@ -17,6 +17,7 @@ export interface BasePropOptions {
   index?: boolean;
   sparse?: boolean;
   expires?: string | number;
+  _id?: boolean;
 }
 
 export interface PropOptions extends BasePropOptions {
@@ -164,10 +165,11 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
 
   const Schema = mongoose.Schema;
 
+  const supressSubschemaId = rawOptions._id === false;
   schema[name][key] = {
     ...schema[name][key],
     ...options,
-    type: new Schema({ ...subSchema }),
+    type: new Schema({ ...subSchema }, supressSubschemaId ? { _id: false } : {}),
   };
   return;
 };
