@@ -2,7 +2,7 @@ language: node_js
 services:
   - mongodb
 node_js:
-  - 6
+  - "lts/*"
 env:
   - USE_OLDEST_NPM_VERSIONS=0
   - USE_OLDEST_NPM_VERSIONS=1
@@ -12,7 +12,7 @@ before_install:
     then
       # Test against oldest allowed versions in package.json - Use sed to remove ^ characters
       sed -i 's/"\^/"/g' package.json
-      npm i mongoose@5.0.11 reflect-metadata@0.1.8
+      npm i mongoose@5.0.0 reflect-metadata@0.1.12
     else
       npm i mongoose reflect-metadata
     fi
