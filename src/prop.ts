@@ -10,10 +10,17 @@ export type Func = (...args: any[]) => any;
 
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
 
+export type ValidatorFunction = (value: any) => boolean | Promise<boolean>;
+export type Validator = ValidatorFunction | RegExp | {
+    validator: ValidatorFunction,
+    message?: string,
+};
+
 export interface BasePropOptions {
   required?: RequiredType;
   enum?: string[] | object;
   default?: any;
+  validate?: Validator | Validator[];
   unique?: boolean;
   index?: boolean;
   sparse?: boolean;

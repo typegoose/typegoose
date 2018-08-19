@@ -264,4 +264,15 @@ describe('getClassForDocument()', () => {
     expect(foundCar.price).to.be.a.instanceof(mongoose.Types.Decimal128);
     expect(foundCar.price.toString()).to.eq('123.45');
   });
+
+  it('Should validate email', async () => {
+    try {
+      await Person.create({
+          email: 'email',
+      });
+      fail('Validation must fail.');
+    } catch (e) {
+      expect(e).to.be.a.instanceof((mongoose.Error as any).ValidationError);
+    }
+  });
 });
