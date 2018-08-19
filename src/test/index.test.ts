@@ -10,7 +10,6 @@ import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { initDatabase, closeDatabase } from './utils/mongoConnect';
 import { getClassForDocument } from '../utils';
-import { Decimal128 } from 'bson';
 import { fail } from 'assert';
 
 describe('Typegoose', () => {
@@ -21,15 +20,15 @@ describe('Typegoose', () => {
   it('should create a User with connections', async () => {
     const car = await Car.create({
       model: 'Tesla',
-      price: Decimal128.fromString('50123.25'),
+      price: mongoose.Types.Decimal128.fromString('50123.25'),
     });
 
     const [trabant, zastava] = await Car.create([{
       model: 'Trabant',
-      price: Decimal128.fromString('28189.25'),
+      price: mongoose.Types.Decimal128.fromString('28189.25'),
     }, {
       model: 'Zastava',
-      price: Decimal128.fromString('1234.25'),
+        price: mongoose.Types.Decimal128.fromString('1234.25'),
     }]);
 
     const user = await User.create({
@@ -178,7 +177,7 @@ describe('getClassForDocument()', () => {
   it('should return correct class type for document', async () => {
     const car = await Car.create({
       model: 'Tesla',
-      price: Decimal128.fromString('50123.25'),
+      price: mongoose.Types.Decimal128.fromString('50123.25'),
     });
     const carReflectedType = getClassForDocument(car);
     expect(carReflectedType).to.equals(CarType);
@@ -205,7 +204,7 @@ describe('getClassForDocument()', () => {
 
     const car = await Car.create({
       model: 'Tesla',
-      price: Decimal128.fromString('50123.25'),
+      price: mongoose.Types.Decimal128.fromString('50123.25'),
     });
 
     await user.addCar(car);
@@ -259,10 +258,10 @@ describe('getClassForDocument()', () => {
     }
     const car = await Car.create({
       model: 'Tesla',
-      price: Decimal128.fromString('123.45'),
+      price: mongoose.Types.Decimal128.fromString('123.45'),
     });
     const foundCar = await Car.findById(car._id).exec();
-    expect(foundCar.price).to.be.a.instanceof(Decimal128);
+    expect(foundCar.price).to.be.a.instanceof(mongoose.Types.Decimal128);
     expect(foundCar.price.toString()).to.eq('123.45');
   });
 });
