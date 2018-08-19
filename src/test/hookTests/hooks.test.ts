@@ -37,5 +37,20 @@ describe('Typegoose', () => {
       expect(foundDummies[0]).to.have.property('text', 'changed in post find hook');
       expect(foundDummies[1]).to.have.property('text', 'saved');
     });
+
+    it('should test the updateMany hook', async () => {
+      const dummy = await Dummy.insertMany([{ text: 'foobar42' }, { text: 'foobar42' }]);
+
+      await Dummy.updateMany({
+        text: 'foobar42',
+      }, {
+        text: 'lorem ipsum',
+      });
+
+      const foundUpdatedDummies = await Dummy.find({ text: 'updateManied'});
+
+      // pre-updateMany-hook changed text to 'updateManied'
+      expect(foundUpdatedDummies.length).to.equal(2);
+    });
   });
 });

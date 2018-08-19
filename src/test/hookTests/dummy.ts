@@ -7,6 +7,10 @@ import { prop, Typegoose, pre, post } from '../../typegoose';
 
   next();
 })
+// eslint-disable-next-line only-arrow-functions (need `this` in hook)
+@pre<Dummy>('updateMany', async function() {
+  this._update.text = 'updateManied';
+})
 @post<Dummy>('find', (result) => {
   result[0].text = 'changed in post find hook';
 })
