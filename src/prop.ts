@@ -92,13 +92,20 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   }
 
   const ref = rawOptions.ref;
-  if (ref) {
+  if (typeof ref === 'string') {
     schema[name][key] = {
+      ...schema[name][key],
+      type: mongoose.Schema.Types.ObjectId,
+      ref,
+    };
+    return;
+  } else if (ref) {
+     schema[name][key] = {
       ...schema[name][key],
       type: mongoose.Schema.Types.ObjectId,
       ref: ref.name,
     };
-    return;
+     return;
   }
 
   const itemsRef = rawOptions.itemsRef;
