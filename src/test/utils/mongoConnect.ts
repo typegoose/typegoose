@@ -11,7 +11,12 @@ const connect = () =>
   );
 
 export const initDatabase = () =>
-  connect().then(() => mongoose.connection.db.dropDatabase());
+  connect()
+    .then(() => mongoose.connection.db.dropDatabase())
+    // recreate all indices
+    .then(() => Promise.all(Object.keys(mongoose.models).map(async (modelName) => {
+      await mongoose.models[modelName].createIndexes();
+    })));
 
 export const closeDatabase = () =>
   mongoose.connection.close();

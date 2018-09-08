@@ -437,6 +437,33 @@ UserModel.findOrCreate({ ... }).then(findOrCreateResult => {
 });
 ```
 
+#### index
+
+The `@index` decorator can be used to define advanced index types and index options not available via the
+`index` option of the `@prop` property decorator, such as compound indices, GeoJSON index types,
+partial indices, expiring documents, etc. Any values supported by
+[MongoDB's createIndex()](https://docs.mongodb.com/manual/reference/method/db.collection.createIndex/#db.collection.createIndex)
+are also valid for `@index`. For more info refer to interface `IndexOptions`
+
+ ```typescript
+@index({ article: 1, user: 1 }, { unique: true })
+@index({ location: '2dsphere' })
+@index({ article: 1 }, { partialFilterExpression: { stars: { $gte: 4.5 } } })
+export class Location extends Typegoose {
+  @prop()
+  article: number;
+
+  @prop()
+  user: number;
+
+  @prop()
+  stars: number;
+
+  @arrayProp({ items: Array })
+  location: [[Number]]
+}
+```
+
 ### Types
 
 Some additional types were added to make Typegoose more user friendly.
