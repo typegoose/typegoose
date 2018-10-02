@@ -143,10 +143,10 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   const options = _.omit(rawOptions, ['ref', 'items']);
   if (isPrimitive(Type)) {
     if (isArray) {
-      schema[name][key][0] = {
+      schema[name][key] = {
         ...schema[name][key][0],
         ...options,
-        type: Type,
+        type: [Type],
       };
       return;
     }

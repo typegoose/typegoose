@@ -64,6 +64,9 @@ export class User extends Typegoose {
   @prop({ enum: Role })
   role: Role;
 
+  @arrayProp({ items: String, enum: Role, default: Role.Guest })
+  roles: Role[];
+
   // @prop({ required: true })
   @prop()
   job?: Job;
