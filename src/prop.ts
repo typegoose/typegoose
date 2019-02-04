@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
-import { schema, virtuals } from './data';
+import { schema, virtuals, methods } from './data';
 import { isPrimitive, initAsObject, initAsArray, isString, isNumber, isObject } from './utils';
 import { InvalidPropError, NotNumberTypeError, NotStringTypeError, NoMetadataError } from './errors';
 import { ObjectID } from 'bson';
@@ -181,10 +181,17 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   const Schema = mongoose.Schema;
 
   const supressSubschemaId = rawOptions._id === false;
+  const virtualSchema = new Schema({ ...subSchema }, supressSubschemaId ? { _id: false } : {});
+
+  const schemaInstanceMethods = methods.instanceMethods[instance.constructor.name];
+  if (schemaInstanceMethods) {
+    virtualSchema.methods = schemaInstanceMethods;
+  }
+
   schema[name][key] = {
     ...schema[name][key],
     ...options,
-    type: new Schema({ ...subSchema }, supressSubschemaId ? { _id: false } : {}),
+    type: virtualSchema,
   };
   return;
 };

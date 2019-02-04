@@ -79,6 +79,7 @@ describe('Typegoose', () => {
       expect(foundUser.job).to.have.property('position', 'Lead');
       expect(foundUser.job).to.have.property('startedAt').to.be.instanceof(Date);
       expect(foundUser.job.jobType).to.not.have.property('_id');
+      expect(foundUser.job.titleInUppercase()).to.eq("Developer".toUpperCase());
       expect(foundUser.job.jobType).to.have.property('salery', 5000);
       expect(foundUser.job.jobType).to.have.property('field', 'IT');
       expect(foundUser.job.jobType).to.have.property('salery').to.be.a('number');

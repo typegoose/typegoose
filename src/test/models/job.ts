@@ -1,4 +1,4 @@
-import { prop } from '../../typegoose';
+import { instanceMethod, prop } from '../../typegoose';
 
 export class JobType {
   @prop({ required: true })
@@ -20,4 +20,9 @@ export class Job {
 
   @prop({ _id: false })
   jobType?: JobType;
+
+  @instanceMethod
+  titleInUppercase?() {
+    return this.title.toUpperCase();
+  }
 }
