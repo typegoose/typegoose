@@ -101,7 +101,7 @@ class User extends Typegoose {
   car: Ref<Car>;
 }
 ```
-Please note that sub documents doesn't have to extend Typegoose. You can still give them default value in `prop` decorator, but you can't create static or instance methods on them.
+Please note that sub documents do not have to extend Typegoose. You can still give them default value in `prop` decorator, but you can't create static or instance methods on them.
 
 ## Requirements
 
@@ -158,61 +158,55 @@ The `options` object accepts multiple config properties:
     it accepts a handful of parameters. Please note that it's the developer's responsibility to make sure that
     if `required` is set to `false` then the class property should be [optional](https://www.typescriptlang.org/docs/handbook/interfaces.html#optional-properties).
 
-```typescript
-// this is now required in the schema
-@prop({ required: true })
-firstName: string;
+    ```typescript
+    // this is now required in the schema
+    @prop({ required: true })
+    firstName: string;
 
-// by default, a property is not required
-@prop()
-lastName?: string; // using the ? optional property
-```
+    // by default, a property is not required
+    @prop()
+    lastName?: string; // using the ? optional property
+    ```
 
   - `index`: Tells Mongoose whether to define an index for the property.
 
-```typescript
-@prop({ index: true })
-indexedField?: string;
-```
+    ```typescript
+    @prop({ index: true })
+    indexedField?: string;
+    ```
 
   - `unique`: Just like the [Mongoose unique](http://mongoosejs.com/docs/api.html#schematype_SchemaType-unique), tells Mongoose to ensure a unique index is created for this path.
 
-```typescript
-// this field is now unique across the collection
-@prop({ unique: true })
-uniqueId?: string;
-```
-
-```typescript
-// this field is now unique across the collection
-@prop({ unique: true })
-uniqueId?: string;
-```
+    ```typescript
+    // this field is now unique across the collection
+    @prop({ unique: true })
+    uniqueId?: string;
+    ```
 
   - `enum`: The enum option accepts a string array. The class property which gets this decorator should have an enum-like type which values are from the provided string array. The way how the enum is created is delegated to the developer, Typegoose needs a string array which hold the enum values, and a TypeScript type which tells the possible values of the enum.
   However, if you use TS 2.4+, you can use string enum as well.
 
-```typescript
-// Enum-like type and definition example.
-type Gender = 'male' | 'female';
-const Genders = {
-  MALE: 'male' as Gender,
-  FEMALE: 'female' as Gender,
-};
+    ```typescript
+    // Enum-like type and definition example.
+    type Gender = 'male' | 'female';
+    const Genders = {
+      MALE: 'male' as Gender,
+      FEMALE: 'female' as Gender,
+    };
 
-@prop({ enum: Object.values(Genders) })
-gender?: Gender;
+    @prop({ enum: Object.values(Genders) })
+    gender?: Gender;
 
 
-// TS 2.4+ string enum example
-enum Gender {
-  MALE = 'male',
-  FEMALE = 'female',
-}
+    // TS 2.4+ string enum example
+    enum Gender {
+      MALE = 'male',
+      FEMALE = 'female',
+    }
 
-@prop({ enum: Gender })
-gender?: Gender;
-```
+    @prop({ enum: Gender })
+    gender?: Gender;
+    ```
 
   - `lowercase`: for strings only; whether to always call .toLowerCase() on the value.
 
@@ -237,77 +231,77 @@ nickName?: string;
 
   - `default`: The provided value will be the default for that Mongoose property.
 
-```typescript
-@prop({ default: 'Nick' })
-nickName?: string;
-```
+    ```typescript
+    @prop({ default: 'Nick' })
+    nickName?: string;
+    ```
 
   - `ref`: By adding the `ref` option with another Typegoose class as value, a Mongoose reference property will be created. The type of the property on the Typegoose extending class should be `Ref<T>` (see Types section).
 
-```typescript
-class Car extends Typegoose {}
+    ```typescript
+    class Car extends Typegoose {}
 
-@prop({ ref: Car })
-car?: Ref<Car>;
-```
+    @prop({ ref: Car })
+    car?: Ref<Car>;
+    ```
 
   - `min` / `max` (numeric validators): Same as [Mongoose numberic validators](http://mongoosejs.com/docs/api.html#schema_number_SchemaNumber-max).
 
-```typescript
-@prop({ min: 10, max: 21 })
-age?: number;
-```
+    ```typescript
+    @prop({ min: 10, max: 21 })
+    age?: number;
+    ```
 
   - `minlength` / `maxlength` / `match` (string validators): Same as [Mongoose string validators](http://mongoosejs.com/docs/api.html#schema_string_SchemaString-match).
 
-```typescript
-@prop({ minlength: 5, maxlength: 10, match: /[0-9a-f]*/ })
-favouriteHexNumber: string;
-```
+    ```typescript
+    @prop({ minlength: 5, maxlength: 10, match: /[0-9a-f]*/ })
+    favouriteHexNumber: string;
+    ```
 
 
   - `validate` (custom validators): You can define your own validator function/regex using this. The function has to return a `boolean` or a Promise (async validation).
 
-```typescript
-// you have to get your own `isEmail` function, this is a placeholder
+    ```typescript
+    // you have to get your own `isEmail` function, this is a placeholder
 
-@prop({ validate: (value) => isEmail(value)})
-email?: string;
+    @prop({ validate: (value) => isEmail(value)})
+    email?: string;
 
-// or
+    // or
 
-@prop({ validate: (value) => { return new Promise(res => { res(isEmail(value)) }) })
-email?: string;
+    @prop({ validate: (value) => { return new Promise(res => { res(isEmail(value)) }) })
+    email?: string;
 
-// or
+    // or
 
-@prop({ validate: { 
-    validator: val => isEmail(val), 
-    message: `{VALUE} is not a valid email`
-}})
-email?: string;
+    @prop({ validate: { 
+        validator: val => isEmail(val), 
+        message: `{VALUE} is not a valid email`
+    }})
+    email?: string;
 
-// or
+    // or
 
-@prop({ validate: /\S+@\S+\.\S+/ })
-email?: string;
+    @prop({ validate: /\S+@\S+\.\S+/ })
+    email?: string;
 
-// you can also use multiple validators in an array.
+    // you can also use multiple validators in an array.
 
-@prop({ validate: 
-    [
-        { 
-            validator: val => isEmail(val), 
-            message: `{VALUE} is not a valid email`
-        }, 
-        {
-            validator: val => isBlacklisted(val), 
-            message: `{VALUE} is blacklisted`
-        }
-    ]
-})
-email?: string;
-```
+    @prop({ validate: 
+        [
+            { 
+                validator: val => isEmail(val), 
+                message: `{VALUE} is not a valid email`
+            }, 
+            {
+                validator: val => isBlacklisted(val), 
+                message: `{VALUE} is blacklisted`
+            }
+        ]
+    })
+    email?: string;
+    ```
 
 Mongoose gives developers the option to create [virtual properties](http://mongoosejs.com/docs/api.html#schema_Schema-virtual). This means that actual database read/write will not occur these are just 'calculated properties'. A virtual property can have a setter and a getter. TypeScript also has a similar feature which Typegoose uses for virtual property definitions (using the `prop` decorator).
 
@@ -337,21 +331,21 @@ The `options` object accepts `required`, `enum` and `default`, just like the `pr
 
   - `items`: This will tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
 
-```typescript
-@arrayProp({ items: String })
-languages?: string[];
-```
+    ```typescript
+    @arrayProp({ items: String })
+    languages?: string[];
+    ```
 
 Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API does not let us determine the type of the array, it only returns `Array` when the type of the property is queried. This is why redundancy is required here.
 
   - `itemsRef`: In mutual exclusion with `items`, this tells Typegoose that instead of a subdocument array, this is an array with references in it. On the Mongoose side this means that an array of Object IDs will be stored under this property. Just like with `ref` in the `prop` decorator, the type of this property should be `Ref<T>[]`.
 
-```typescript
-class Car extends Typegoose {}
+    ```typescript
+    class Car extends Typegoose {}
 
-@arrayProp({ itemsRef: Car })
-previousCars?: Ref<Car>[];
-```
+    @arrayProp({ itemsRef: Car })
+    previousCars?: Ref<Car>[];
+    ```
 
 ### Method decorators
 
