@@ -51,6 +51,10 @@ export interface IndexOptions {
   partialFilterExpression?: any;
   collation?: object;
   default_language?: string;
+
+  lowercase?: boolean; // whether to always call .toLowerCase() on the value
+  uppercase?: boolean; // whether to always call .toUpperCase() on the value
+  trim?: boolean; // whether to always call .trim() on the value
 }
 
 /**

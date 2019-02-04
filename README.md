@@ -214,6 +214,27 @@ enum Gender {
 gender?: Gender;
 ```
 
+  - `lowercase`: for strings only; whether to always call .toLowerCase() on the value.
+
+```typescript
+@prop({ lowercase: true })
+nickName?: string;
+```
+
+  - `uppercase`: for strings only; whether to always call .toUpperCase() on the value.
+
+```typescript
+@prop({ uppercase: true })
+nickName?: string;
+```
+
+  - `trim`: for strings only; whether to always call .trim() on the value.
+
+```typescript
+@prop({ trim: true })
+nickName?: string;
+```
+
   - `default`: The provided value will be the default for that Mongoose property.
 
 ```typescript

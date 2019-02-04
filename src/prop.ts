@@ -43,12 +43,21 @@ export interface ValidateStringOptions {
   match?: RegExp | [RegExp, string];
 }
 
+export interface TransformStringOptions {
+  lowercase?: boolean; // whether to always call .toLowerCase() on the value
+  uppercase?: boolean; // whether to always call .toUpperCase() on the value
+  trim?: boolean; // whether to always call .trim() on the value
+}
+
 export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
-export type PropOptionsWithStringValidate = PropOptions & ValidateStringOptions;
+export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions & ValidateStringOptions;
 export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate;
 
 const isWithStringValidate = (options: PropOptionsWithStringValidate) =>
   (options.minlength || options.maxlength || options.match);
+
+const isWithStringTransform = (options: PropOptionsWithStringValidate) =>
+  (options.lowercase || options.uppercase || options.trim);
 
 const isWithNumberValidate = (options: PropOptionsWithNumberValidate) =>
   (options.min || options.max);
@@ -132,6 +141,11 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
 
   if (isWithNumberValidate(rawOptions) && !isNumber(Type)) {
     throw new NotNumberTypeError(key);
+  }
+
+  // check for transform inconsistencies
+  if (isWithStringTransform(rawOptions) && !isString(Type)) {
+    throw new NotStringTypeError(key);
   }
 
   const instance = new Type();

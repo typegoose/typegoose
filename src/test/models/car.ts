@@ -12,6 +12,9 @@ export class Car extends Typegoose {
   @prop({ required: true })
   model: string;
 
+  @prop({ lowercase: true })
+  version: string;
+
   @prop()
   isSedan?: boolean;
 
