@@ -25,7 +25,7 @@
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
   "license": "MIT",
   "dependencies": {
-    "lodash": "4.17.10"
+    "lodash": "~4.17.11"
   },
   "peerDependencies": {
     "mongoose": "^5.0.0",
