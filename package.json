@@ -1,6 +1,6 @@
 {
   "name": "typegoose",
-  "version": "5.5.0",
+  "version": "5.5.1",
   "description": "Define Mongoose models using TypeScript classes.",
   "main": "lib/typegoose.js",
   "files": [
@@ -39,7 +39,7 @@
     "@types/mongoose": "5.0.10",
     "@types/node": "8.10.0",
     "chai": "4.1.2",
-    "coveralls": "^3.0.1",
+    "coveralls": "^3.0.3",
     "dotenv": "5.0.1",
     "istanbul": "0.4.5",
     "mocha": "^5.2.0",
