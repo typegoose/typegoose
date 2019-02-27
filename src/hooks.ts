@@ -26,7 +26,7 @@ type TypegooseDoc<T> = T & MongooseDocument;
 type DocumentPreSerialFn<T> = (this: TypegooseDoc<T>, next: HookNextFn) => void;
 type DocumentPreParallelFn<T> = (this: TypegooseDoc<T>, next: HookNextFn, done: PreDoneFn) => void;
 
-type SimplePreSerialFn<T> = (next: HookNextFn) => void;
+type SimplePreSerialFn<T> = (next: HookNextFn, docs?: any[]) => void;
 type SimplePreParallelFn<T> = (next: HookNextFn, done: PreDoneFn) => void;
 
 type DocumentPostFn<T> = (this: TypegooseDoc<T>, doc: TypegooseDoc<T>, next?: HookNextFn) => void;
