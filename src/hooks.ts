@@ -1,10 +1,19 @@
+/** @format */
+
 import { MongooseDocument } from 'mongoose';
 
 import { hooks as hooksData } from './data';
 
 type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
-type QueryMethod = 'count' | 'find' | 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' |
-  'update' | 'updateOne' | 'updateMany';
+type QueryMethod =
+  | 'count'
+  | 'find'
+  | 'findOne'
+  | 'findOneAndRemove'
+  | 'findOneAndUpdate'
+  | 'update'
+  | 'updateOne'
+  | 'updateMany';
 type ModelMethod = 'insertMany';
 
 type ClassDecorator = (constructor: any) => void;
@@ -40,10 +49,7 @@ interface Hooks {
   pre<T>(method: DocumentMethod, parallel: boolean, fn: DocumentPreParallelFn<T>): ClassDecorator;
 
   pre<T>(method: QueryMethod | ModelMethod, fn: SimplePreSerialFn<T>): ClassDecorator;
-  pre<T>(
-    method: QueryMethod | ModelMethod,
-    parallel: boolean,
-    fn: SimplePreParallelFn<T>): ClassDecorator;
+  pre<T>(method: QueryMethod | ModelMethod, parallel: boolean, fn: SimplePreParallelFn<T>): ClassDecorator;
 
   // I had to disable linter to allow this. I only got proper code completion separating the functions
   post<T>(method: NumberMethod, fn: PostNumberResponse<T>): ClassDecorator;

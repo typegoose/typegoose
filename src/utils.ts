@@ -1,11 +1,13 @@
-import * as _ from 'lodash';
+/** @format */
+
 import * as mongoose from 'mongoose';
 
 import { schema, constructors } from './data';
 
-export const isPrimitive = (Type) => _.includes(['String', 'Number', 'Boolean', 'Date', 'Decimal128'], Type.name);
+export const isPrimitive = (Type: any) =>
+  ['String', 'Number', 'Boolean', 'Date'].includes(Type.name);
 
-export const isObject = (Type) => {
+export const isObject = (Type: any) => {
   let prototype = Type.prototype;
   let name = Type.name;
   while (name) {
@@ -19,9 +21,9 @@ export const isObject = (Type) => {
   return false;
 };
 
-export const isNumber = (Type) => Type.name === 'Number';
+export const isNumber = (Type: any) => Type.name === 'Number';
 
-export const isString = (Type) => Type.name === 'String';
+export const isString = (Type: any) => Type.name === 'String';
 
 export const initAsObject = (name, key) => {
   if (!schema[name]) {
@@ -32,7 +34,7 @@ export const initAsObject = (name, key) => {
   }
 };
 
-export const initAsArray = (name, key) => {
+export const initAsArray = (name: any, key: any) => {
   if (!schema[name]) {
     schema[name] = {};
   }
@@ -42,6 +44,7 @@ export const initAsArray = (name, key) => {
 };
 
 export const getClassForDocument = (document: mongoose.Document): any => {
-  const modelName = (document.constructor as mongoose.Model<typeof document>).modelName;
+  const modelName = (document.constructor as mongoose.Model<typeof document>)
+    .modelName;
   return constructors[modelName];
 };

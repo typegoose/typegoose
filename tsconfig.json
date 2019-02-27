@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es5",
+    "lib": ["esnext"],
     "module": "commonjs",
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowJs": false,
     "outDir": "lib",
-    "sourceMap": true
+    "inlineSourceMap": true
   },
-  "include": [
-    "src/**/*.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }

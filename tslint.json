@@ -1,39 +1,23 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-        "quotemark": [
-            "single"
-        ],
-        "max-classes-per-file": [
-            false
-        ],
-        "ordered-imports": [
-            false
-        ],
-        "interface-name": [
-            false
-        ],
-        "object-literal-sort-keys": false,
-        "member-access": [
-            false
-        ],
-        "array-type": [
-            false
-        ],
-        "member-ordering": [
-            false
-        ],
-        "no-unused-expression": [
-            false
-        ],
-        "whitespace": [
-            true,
-            "check-module"
-        ]
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-prettier",
+    "prettier-tslint"
+  ],
+  "jsRules": {},
+  "rules": {
+    "quotemark": false,
+    "max-classes-per-file": false,
+    "ordered-imports": false,
+    "interface-name": false,
+    "object-literal-sort-keys": false,
+    "member-access": false,
+    "array-type": false,
+    "member-ordering": false,
+    "no-unused-expression": false,
+    "whitespace": [true, "check-module"],
+    "no-var-requires": false
+  },
+  "rulesDirectory": []
 }

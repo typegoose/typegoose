@@ -18,7 +18,6 @@ before_install:
   fi
 script:
 - npm test
-- npm run coveralls
 deploy:
   provider: npm
   email: benedikt.huss@gmail.com
@@ -29,3 +28,5 @@ deploy:
     branches:
       only:
       - master
+after_success:
+- npm run coverage

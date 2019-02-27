@@ -1,5 +1,8 @@
-/**
- * copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
+/** @format */
+
+/*
+ copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
+
  */
 export interface IndexOptions {
   /**
@@ -62,7 +65,7 @@ export interface IndexOptions {
  * @param options Options to pass to MongoDB driver's createIndex() function
  */
 export const index = (fields: any, options?: IndexOptions) => {
-  return (constructor) => {
+  return (constructor: any) => {
     const indices = Reflect.getMetadata('typegoose:indices', constructor) || [];
     indices.push({ fields, options });
     Reflect.defineMetadata('typegoose:indices', indices, constructor);

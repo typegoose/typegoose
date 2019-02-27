@@ -1,3 +1,5 @@
+/** @format */
+
 import { methods } from './data';
 
 type MethodType = 'instanceMethods' | 'staticMethods';
@@ -7,7 +9,7 @@ const baseMethod = (target: any, key: string, descriptor: TypedPropertyDescripto
     descriptor = Object.getOwnPropertyDescriptor(target, key);
   }
 
-  let name;
+  let name: any;
   if (methodType === 'instanceMethods') {
     name = target.constructor.name;
   }

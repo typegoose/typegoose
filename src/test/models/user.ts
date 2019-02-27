@@ -1,23 +1,19 @@
-import * as mongoose from 'mongoose';
-import * as _ from 'lodash';
-// tslint:disable-next-line:no-var-requires
 const findOrCreate = require('mongoose-findorcreate');
 
-import { Job } from './job';
 import { Car } from './car';
 import { Gender, Genders } from '../enums/genders';
+import { Job } from './job';
 import { Role } from '../enums/role';
 import {
-  Ref,
-  prop,
   arrayProp,
-  Typegoose,
-  ModelType,
-  InstanceType,
-  staticMethod,
   instanceMethod,
-  post,
+  InstanceType,
+  ModelType,
   plugin,
+  prop,
+  Ref,
+  staticMethod,
+  Typegoose,
 } from '../../typegoose';
 
 export interface FindOrCreateResult<T> {
@@ -58,7 +54,7 @@ export class User extends Typegoose {
   @prop({ min: 10, max: 21 })
   age?: number;
 
-  @prop({ enum: _.values(Genders), required: true })
+  @prop({ enum: Object.values(Genders), required: true })
   gender: Gender;
 
   @prop({ enum: Role })
@@ -67,7 +63,6 @@ export class User extends Typegoose {
   @arrayProp({ items: String, enum: Role, default: Role.Guest })
   roles: Role[];
 
-  // @prop({ required: true })
   @prop()
   job?: Job;
 
