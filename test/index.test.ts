@@ -7,6 +7,7 @@ import { Ref } from '../src/prop';
 import { getClassForDocument } from '../src/utils';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
+import { Alias, model as AliasModel } from './models/alias';
 import { Car as CarType, model as Car } from './models/car';
 import { model as InternetUser } from './models/internet-user';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from './models/inventory';
@@ -349,6 +350,32 @@ describe('Typegoose', () => {
     expect(user.sideNotes.get('day1')).to.have.property('content', 'day1');
     expect(user.sideNotes.get('day1')).to.have.property('link', 'url');
     expect(user.sideNotes.has('day2')).to.be.equal(true);
+  });
+
+  it('it should alias correctly', () => {
+    const created = new AliasModel({ alias: 'hello from aliasProp', normalProp: 'hello from normalProp' } as Alias);
+
+    expect(created).to.not.be.an('undefined');
+    expect(created).to.have.property('normalProp', 'hello from normalProp');
+    expect(created).to.have.property('alias', 'hello from aliasProp');
+    expect(created).to.have.property('aliasProp');
+
+    // include virtuals
+    {
+      const toObject = created.toObject({ virtuals: true });
+      expect(toObject).to.not.be.an('undefined');
+      expect(toObject).to.have.property('normalProp', 'hello from normalProp');
+      expect(toObject).to.have.property('alias', 'hello from aliasProp');
+      expect(toObject).to.have.property('aliasProp', 'hello from aliasProp');
+    }
+    // do not include virtuals
+    {
+      const toObject = created.toObject();
+      expect(toObject).to.not.be.an('undefined');
+      expect(toObject).to.have.property('normalProp', 'hello from normalProp');
+      expect(toObject).to.have.property('alias', 'hello from aliasProp');
+      expect(toObject).to.not.have.property('aliasProp');
+    }
   });
 });
 

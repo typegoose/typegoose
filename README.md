@@ -210,24 +210,24 @@ The `options` object accepts multiple config properties:
 
   - `lowercase`: for strings only; whether to always call .toLowerCase() on the value.
 
-```typescript
-@prop({ lowercase: true })
-nickName?: string;
-```
+    ```typescript
+    @prop({ lowercase: true })
+    nickName?: string;
+    ```
 
   - `uppercase`: for strings only; whether to always call .toUpperCase() on the value.
 
-```typescript
-@prop({ uppercase: true })
-nickName?: string;
-```
+    ```typescript
+    @prop({ uppercase: true })
+    nickName?: string;
+    ```
 
   - `trim`: for strings only; whether to always call .trim() on the value.
 
-```typescript
-@prop({ trim: true })
-nickName?: string;
-```
+    ```typescript
+    @prop({ trim: true })
+    nickName?: string;
+    ```
 
   - `default`: The provided value will be the default for that Mongoose property.
 
@@ -310,6 +310,15 @@ nickName?: string;
         ]
     })
     email?: string;
+    ```
+
+  - `alias` (alias): Same as [Mongoose Alias](https://mongoosejs.com/docs/guide.html#aliases), only difference is the extra property for type completion
+    ```ts
+    class Dummy extends Typegoose {
+      @prop({ alias: "helloWorld" })
+      public hello: string; // will be included in the DB
+      public helloWorld: string; // will NOT be included in the DB, just for type completion (gets passed as hello in the DB)
+    }
     ```
 
 Mongoose gives developers the option to create [virtual properties](http://mongoosejs.com/docs/api.html#schema_Schema-virtual). This means that actual database read/write will not occur these are just 'calculated properties'. A virtual property can have a setter and a getter. TypeScript also has a similar feature which Typegoose uses for virtual property definitions (using the `prop` decorator).
