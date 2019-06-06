@@ -487,6 +487,8 @@ Some additional types were added to make Typegoose more user friendly.
 
 This is basically the logical 'and' of the `T` and the `mongoose.Document`, so that both the Mongoose instance properties/functions and the user defined properties/instance methods are available on the instance.
 
+Note: TypeScript has its own InstanceType, you should import it from Typegoose
+
 #### ModelType<T>
 
 This is the logical 'and' of `mongoose.Model<InstanceType<T>>` and `T`, so that the Mongoose model creates `InstanceType<T>` typed instances and all user defined static methods are available on the model.
