@@ -11,6 +11,8 @@ import { Role } from './enums/role';
 import { initDatabase, closeDatabase } from './utils/mongoConnect';
 import { getClassForDocument } from '../utils';
 import { fail } from 'assert';
+import { Virtual, VirtualSub } from "./models/virtualprop";
+import { ObjectID } from "bson";
 
 describe('Typegoose', () => {
   before(() => initDatabase());
@@ -29,7 +31,7 @@ describe('Typegoose', () => {
       price: mongoose.Types.Decimal128.fromString('28189.25'),
     }, {
       model: 'Zastava',
-        price: mongoose.Types.Decimal128.fromString('1234.25'),
+      price: mongoose.Types.Decimal128.fromString('1234.25'),
     }]);
 
     const user = await User.create({
@@ -169,7 +171,7 @@ describe('Typegoose', () => {
 
     expect(savedUser.languages).to.include('Hungarian');
     expect(savedUser.previousJobs.length).to.be.above(0);
-     savedUser.previousJobs.map((prevJob) => {
+    savedUser.previousJobs.map((prevJob) => {
       expect(prevJob.startedAt).to.be.ok;
     });
   });
@@ -185,6 +187,26 @@ describe('Typegoose', () => {
       .then(() => true).catch(() => false);
 
     expect(created).to.be.false;
+  });
+
+  it("should add and populate the virtual properties", async () => {
+    const virtualModel = new Virtual().getModelForClass(Virtual);
+    const virtualSubModel = new VirtualSub().getModelForClass(VirtualSub);
+
+    const virtual1 = await new virtualModel({ dummyVirtual: "dummyVirtual1" } as Virtual).save();
+    const virtualsub1 = await new virtualSubModel({ dummy: "virtualSub1", virtual: virtual1._id } as VirtualSub).save();
+    const virtualsub2 = await new virtualSubModel({ dummy: "virtualSub2", virtual: new ObjectID() } as VirtualSub).save();
+    const virtualsub3 = await new virtualSubModel({ dummy: "virtualSub3", virtual: virtual1._id } as VirtualSub).save();
+
+    const newfound = await virtualModel.findById(virtual1._id).populate("virtualSubs").exec();
+
+    expect(newfound.dummyVirtual).to.be.equal("dummyVirtual1");
+    expect(newfound.virtualSubs).to.not.be.an("undefined");
+    expect(newfound.virtualSubs[0].dummy).to.be.equal("virtualSub1");
+    expect(newfound.virtualSubs[0]._id.toString()).to.be.equal(virtualsub1._id.toString());
+    expect(newfound.virtualSubs[1].dummy).to.be.equal("virtualSub3");
+    expect(newfound.virtualSubs[1]._id.toString()).to.be.equal(virtualsub3._id.toString());
+    expect(newfound.virtualSubs).to.not.include(virtualsub2);
   });
 });
 
@@ -288,7 +310,7 @@ describe('getClassForDocument()', () => {
   it('Should validate email', async () => {
     try {
       await Person.create({
-          email: 'email',
+        email: 'email',
       });
       fail('Validation must fail.');
     } catch (e) {

@@ -108,12 +108,16 @@ export class Typegoose {
     const getterSetters = virtuals[name];
     if (getterSetters) {
       for (const key of Object.keys(getterSetters)) {
-        if (getterSetters[key].get) {
-          sch.virtual(key).get(getterSetters[key].get);
-        }
+        if (getterSetters[key].options && getterSetters[key].options.overwrite) {
+          sch.virtual(key, getterSetters[key].options)
+        } else {
+          if (getterSetters[key].get) {
+            sch.virtual(key, getterSetters[key].options).get(getterSetters[key].get);
+          }
 
-        if (getterSetters[key].set) {
-          sch.virtual(key).set(getterSetters[key].set);
+          if (getterSetters[key].set) {
+            sch.virtual(key, getterSetters[key].options).set(getterSetters[key].set);
+          }
         }
       }
     }
