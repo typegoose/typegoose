@@ -235,6 +235,15 @@ nickName?: string;
     @prop({ default: 'Nick' })
     nickName?: string;
     ```
+    
+  - `_id`: When false, no \_id is added to the subdocument
+
+    ```typescript
+    class Car extends Typegoose {}
+    
+    @prop({ _id: false })
+    car?: Car;
+    ```
 
   - `ref`: By adding the `ref` option with another Typegoose class as value, a Mongoose reference property will be created. The type of the property on the Typegoose extending class should be `Ref<T>` (see Types section).
 
