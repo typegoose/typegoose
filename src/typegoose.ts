@@ -3,8 +3,6 @@
 import 'reflect-metadata';
 import * as mongoose from 'mongoose';
 
-(mongoose as any).Promise = global.Promise;
-
 import { constructors, hooks, methods, models, plugins, schema, virtuals } from './data';
 
 export * from './method';
@@ -109,7 +107,7 @@ export class Typegoose {
     if (getterSetters) {
       for (const key of Object.keys(getterSetters)) {
         if (getterSetters[key].options && getterSetters[key].options.overwrite) {
-          sch.virtual(key, getterSetters[key].options)
+          sch.virtual(key, getterSetters[key].options);
         } else {
           if (getterSetters[key].get) {
             sch.virtual(key, getterSetters[key].options).get(getterSetters[key].get);
