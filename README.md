@@ -356,6 +356,40 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
     previousCars?: Ref<Car>[];
     ```
 
+### Dynamic References
+Mongoose supports the concept of [dynamic references](https://mongoosejs.com/docs/populate.html#dynamic-ref): which is, an item-specific model reference instead of a model-specific reference.
+```js
+const Comment = new Schema({
+    body: { type: String, required: true },
+    on: { type: Schema.Types.ObjectId, required: true, refPath: 'onModel' },
+    onModel: { type: String, required: true, enum: ['BlogPost', 'Product']}
+})
+
+// later
+const post = new BlogPost()
+const comment = new Comment({
+    body: 'First!'
+    on: post,
+    onModel: 'BlogPost'
+})
+```
+
+This is now supported with `@prop({refPath: 'string' })`.  You will need to expose the field containing the referenced model name as a `@prop()` as well.
+```ts
+class Schema extends Typegoose {
+    @prop()
+    body: string
+
+    @prop({ required: true, refPath: 'onModel' })
+    on: Ref<BlogPost | Product>
+
+    @prop()
+    onModel: string
+}
+```
+
+For arrays, use `@prop({ itemsRefPath: 'name'})`
+
 ### Method decorators
 
 In Mongoose we can attach two types of methods for our schemas: static (model) methods and instance methods. Both of them are supported by Typegoose.

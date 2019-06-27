@@ -6,6 +6,7 @@ import { model as Car, Car as CarType } from './models/car';
 import { model as Person } from './models/person';
 import { model as Rating } from './models/rating';
 import { PersonNested, AddressNested, PersonNestedModel } from './models/nested-object';
+import { InventoryModel as Inventory, BeverageModel as Beverage, ScooterModel as Scooter } from './models/inventory'
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { initDatabase, closeDatabase } from './utils/mongoConnect';
@@ -208,6 +209,48 @@ describe('Typegoose', () => {
     expect(newfound.virtualSubs[1]._id.toString()).to.be.equal(virtualsub3._id.toString());
     expect(newfound.virtualSubs).to.not.include(virtualsub2);
   });
+
+  it('Should support dynamic references via refPath', async () => {
+    const sprite = new Beverage({
+        isDecaf: true,
+        isSugarFree: false
+    })
+    await sprite.save()
+
+    const cokeZero = new Beverage({
+        isDecaf: false,
+        isSugarFree: true
+    })
+    await sprite.save()
+
+    const vespa = new Scooter({
+        makeAndModel: 'Vespa'
+    })
+    await vespa.save()
+
+    const in1 = new Inventory({
+        refItemPathName: 'Beverage',
+        kind: sprite,
+        count: 10,
+        value: 1.99
+    })
+    await in1.save()
+
+    const in2 = new Inventory({
+        refItemPathName: 'Scooter',
+        kind: vespa,
+        count: 1,
+        value: 1099.98
+    })
+    await in2.save()
+
+    // I should now have two "inventory" items, with different embedded reference documents.
+    const items = await Inventory.find({}).populate('kind')
+    expect((items[0].kind as typeof Beverage).isDecaf).to.be.true
+
+    // wrong type to make typescript happy
+    expect((items[1].kind as typeof Beverage).isDecaf).to.be.undefined
+  })
 });
 
 describe('getClassForDocument()', () => {

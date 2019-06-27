@@ -16,9 +16,9 @@ export type Validator =
   | ValidatorFunction
   | RegExp
   | {
-    validator: ValidatorFunction;
-    message?: string;
-  };
+      validator: ValidatorFunction;
+      message?: string;
+    };
 
 export interface BasePropOptions {
   required?: RequiredType;
@@ -34,6 +34,7 @@ export interface BasePropOptions {
 
 export interface PropOptions extends BasePropOptions {
   ref?: any;
+  refPath?: string;
 }
 
 export interface ValidateNumberOptions {
@@ -141,6 +142,26 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     return;
   }
 
+  const refPath = rawOptions.refPath;
+  if (refPath && typeof refPath === 'string') {
+    schema[name][key] = {
+      ...schema[name][key],
+      type: mongoose.Schema.Types.ObjectId,
+      refPath,
+    };
+    return;
+  }
+
+  const itemsRefPath = rawOptions.itemsRefPath;
+  if (refPath && typeof refPath === 'string') {
+    schema[name][key][0] = {
+      ...schema[name][key][0],
+      type: mongoose.Schema.Types.ObjectId,
+      refPath,
+    };
+    return;
+  }
+
   const enumOption = rawOptions.enum;
   if (enumOption) {
     if (!Array.isArray(enumOption)) {
@@ -240,6 +261,7 @@ export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key
 export interface ArrayPropOptions extends BasePropOptions {
   items?: any;
   itemsRef?: any;
+  itemsRefPath?: any;
 }
 
 export const arrayProp = (options: ArrayPropOptions) => (target: any, key: string) => {
