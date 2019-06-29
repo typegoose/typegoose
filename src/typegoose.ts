@@ -1,7 +1,7 @@
 /** @format */
 
-import 'reflect-metadata';
 import * as mongoose from 'mongoose';
+import 'reflect-metadata';
 
 import { constructors, hooks, methods, models, plugins, schema, virtuals } from './data';
 
@@ -22,7 +22,10 @@ export interface GetModelForClassOptions {
 }
 
 export class Typegoose {
-  getModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}) {
+  public getModelForClass<T>(
+    t: T,
+    { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
+  ) {
     const name = this.constructor.name;
     if (!models[name]) {
       this.setModelForClass(t, {
@@ -35,7 +38,10 @@ export class Typegoose {
     return models[name] as ModelType<this> & T;
   }
 
-  setModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}) {
+  public setModelForClass<T>(
+    t: T,
+    { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
+  ) {
     const name = this.constructor.name;
 
     // get schema of current model

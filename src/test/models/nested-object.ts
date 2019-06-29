@@ -1,8 +1,7 @@
-import * as mongoose from 'mongoose';
 import * as tg from '../../typegoose';
 
 export class AddressNested {
-  street: string;
+  public street: string;
 
   constructor(street: string) {
     this.street = street;
@@ -11,11 +10,13 @@ export class AddressNested {
 
 export class PersonNested extends tg.Typegoose {
   @tg.prop()
-  name: string;
+  public name: string;
+
   @tg.prop()
-  address: AddressNested;
+  public address: AddressNested;
+
   @tg.prop()
-  moreAddresses: AddressNested[] = [];
+  public moreAddresses: AddressNested[] = [];
 }
 
 export const PersonNestedModel = new PersonNested().getModelForClass(PersonNested);

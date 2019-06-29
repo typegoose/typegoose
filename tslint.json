@@ -5,19 +5,85 @@
     "tslint-config-prettier",
     "prettier-tslint"
   ],
-  "jsRules": {},
   "rules": {
-    "quotemark": false,
+    "quotemark": {
+      "severity": "warn",
+      "options": [
+        "single"
+      ]
+    },
+    "indent": {
+      "severity": "error",
+      "options": [
+        "spaces",
+        2
+      ]
+    },
+    "semicolon": {
+      "severity": "error",
+      "options": [
+        "always"
+      ]
+    },
+    "linebreak-style": [
+      true,
+      "LF"
+    ],
+    "max-line-length": [
+      true,
+      120
+    ],
+    "comment-format": {
+      "options": [
+        "check-space"
+      ],
+      "severity": "warn"
+    },
+    "whitespace": {
+      "options": [
+        "check-branch",
+        "check-operator",
+        "check-separator",
+        "check-preblock",
+        "check-branch",
+        "check-module"
+      ]
+    },
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore",
+      "require-const-for-all-caps",
+      "allow-pascal-case"
+    ],
+    "no-implicit-dependencies": [
+      true,
+      "dev"
+    ],
+    "member-access": [
+      true,
+      "check-accessor",
+      "check-parameter-property"
+    ],
+    "no-unused-variable": {
+      "severity": "warn"
+    },
+    "no-unused-expression": {
+      "severity": "warn"
+    },
+    "encoding": true,
+    "no-invalid-template-strings": true,
+    "eofline": true,
+    "restrict-plus-operands": true,
+    "use-isnan": true,
+    "no-duplicate-imports": true,
+    "prefer-method-signature": true,
+    "no-require-imports": true,
     "max-classes-per-file": false,
-    "ordered-imports": false,
     "interface-name": false,
     "object-literal-sort-keys": false,
-    "member-access": false,
     "array-type": false,
-    "member-ordering": false,
-    "no-unused-expression": false,
-    "whitespace": [true, "check-module"],
-    "no-var-requires": false
-  },
-  "rulesDirectory": []
+    "member-ordering": false
+  }
 }

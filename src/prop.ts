@@ -2,10 +2,10 @@
 
 import * as mongoose from 'mongoose';
 
-import { schema, virtuals, methods } from './data';
-import { isPrimitive, initAsObject, initAsArray, isString, isNumber, isObject } from './utils';
-import { InvalidPropError, NotNumberTypeError, NotStringTypeError, NoMetadataError } from './errors';
 import { ObjectID } from 'bson';
+import { methods, schema, virtuals } from './data';
+import { InvalidPropError, NoMetadataError, NotNumberTypeError, NotStringTypeError } from './errors';
+import { initAsArray, initAsObject, isNumber, isObject, isPrimitive, isString } from './utils';
 
 export type Func = (...args: any[]) => any;
 
@@ -16,9 +16,9 @@ export type Validator =
   | ValidatorFunction
   | RegExp
   | {
-      validator: ValidatorFunction;
-      message?: string;
-    };
+    validator: ValidatorFunction;
+    message?: string;
+  };
 
 export interface BasePropOptions {
   required?: RequiredType;
@@ -153,11 +153,11 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
   }
 
   const itemsRefPath = rawOptions.itemsRefPath;
-  if (refPath && typeof refPath === 'string') {
+  if (itemsRefPath && typeof itemsRefPath === 'string') {
     schema[name][key][0] = {
       ...schema[name][key][0],
       type: mongoose.Schema.Types.ObjectId,
-      refPath,
+      itemsRefPath,
     };
     return;
   }
@@ -223,7 +223,7 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
       ...schema[name][key][0],
       ...options,
       type: [{
-        ...(typeof options._id !== 'undefined' ? {_id: options._id} : {}),
+        ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
         ...subSchema,
       }],
     };

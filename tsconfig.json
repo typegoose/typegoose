@@ -1,14 +1,23 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["esnext"],
+    "lib": [
+      "esnext"
+    ],
+    "removeComments": true,
     "module": "commonjs",
+    "moduleResolution": "node",
+    "newLine": "LF",
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowJs": false,
     "outDir": "lib",
-    "inlineSourceMap": true
+    "inlineSourceMap": true,
+    "incremental": true,
+    "tsBuildInfoFile": "./.tsbuildinfo"
   },
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts"
+  ]
 }

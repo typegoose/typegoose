@@ -2,27 +2,27 @@ import { instanceMethod, prop } from '../../typegoose';
 
 export class JobType {
   @prop({ required: true })
-  field: string;
+  public field: string;
 
   @prop({ required: true })
-  salery: number;
+  public salery: number;
 }
 
 export class Job {
   @prop()
-  title?: string;
+  public title?: string;
 
   @prop()
-  position?: string;
+  public position?: string;
 
   @prop({ required: true, default: Date.now })
-  startedAt?: Date;
+  public startedAt?: Date;
 
   @prop({ _id: false })
-  jobType?: JobType;
+  public jobType?: JobType;
 
   @instanceMethod
-  titleInUppercase?() {
+  public titleInUppercase?() {
     return this.title.toUpperCase();
   }
 }

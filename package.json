@@ -10,6 +10,7 @@
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "rimraf lib && tsc",
+    "watch": "rimraf lib && tsc -w",
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && nyc npm run mocha",
     "mocha": "npm run build && mocha ./lib --recursive --exit",
@@ -48,6 +49,7 @@
     "typescript": "3.5.1"
   },
   "dependencies": {
+    "bson": "^4.0.2",
     "reflect-metadata": "^0.1.13"
   }
 }

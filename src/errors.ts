@@ -23,7 +23,7 @@ export class NoMetadataError extends Error {
     super(
       `There is no metadata for the "${key}" property. ` +
         'Check if emitDecoratorMetadata is enabled in tsconfig.json ' +
-        "or check if you've declared a sub document's class after usage."
+        'or check if you\'ve declared a sub document\'s class after usage.'
     );
   }
 }

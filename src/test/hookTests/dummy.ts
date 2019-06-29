@@ -1,14 +1,12 @@
-import * as mongoose from 'mongoose';
+import { post, pre, prop, Typegoose } from '../../typegoose';
 
-import { prop, Typegoose, pre, post } from '../../typegoose';
-
-@pre<Dummy>('save', function(next) {
+@pre<Dummy>('save', function (next) {
   this.text = 'saved';
 
   next();
 })
 // eslint-disable-next-line only-arrow-functions (need `this` in hook)
-@pre<Dummy>('updateMany', async function() {
+@pre<Dummy>('updateMany', async function () {
   this._update.text = 'updateManied';
 })
 @post<Dummy>('find', (result) => {
@@ -19,7 +17,7 @@ import { prop, Typegoose, pre, post } from '../../typegoose';
 })
 export class Dummy extends Typegoose {
   @prop()
-  text: string;
+  public text: string;
 }
 
 export const model = new Dummy().getModelForClass(Dummy);

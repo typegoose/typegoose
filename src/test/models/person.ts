@@ -13,17 +13,17 @@ import { PersistentModel } from './PersistentModel';
 export class Person extends PersistentModel {
   // add new property
   @tg.prop({ required: true, validate: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/ })
-  email: string;
+  public email: string;
 
   // override instanceMethod
   @tg.instanceMethod
-  getClassName() {
+  public getClassName() {
     return 'Person';
   }
 
   // override staticMethod
   @tg.staticMethod
-  static getStaticName() {
+  public static getStaticName() {
     return 'Person';
   }
 }

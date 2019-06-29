@@ -3,32 +3,32 @@ import { prop, Ref, Typegoose } from '../../typegoose';
 
 export  class Scooter extends Typegoose {
     @prop()
-    makeAndModel: string
+    public makeAndModel: string;
 }
 
 export  class Beverage extends Typegoose {
     @prop({ default: false })
-    isSugarFree: boolean
+    public isSugarFree: boolean;
 
     @prop({ default: false })
-    isDecaf: boolean
+    public isDecaf: boolean;
 }
 
 export class Inventory extends Typegoose {
     @prop({ default: 100 })
-    count: number
+    public count: number;
 
     @prop({ default: 1.00 })
-    value: number
+    public value: number;
 
     @prop({ required: true, enum: ['Beverage', 'Scooter']})
-    refItemPathName: string
+    public refItemPathName: string;
 
     @prop()
-    name: string
+    public name: string;
 
     @prop({ refPath: 'refItemPathName', required: true})
-    kind: Ref<Beverage | Scooter>
+    public kind: Ref<Beverage | Scooter>;
 }
 
 export const ScooterModel = new Scooter().getModelForClass(Scooter);

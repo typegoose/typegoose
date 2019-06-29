@@ -1,7 +1,6 @@
-import * as mongoose from 'mongoose';
 
 import { index } from '../..';
-import { Ref, arrayProp } from '../../prop';
+import { arrayProp, Ref } from '../../prop';
 import { prop, Typegoose } from '../../typegoose';
 import { Car } from './car';
 import { User } from './user';
@@ -10,16 +9,16 @@ import { User } from './user';
 @index({ location: '2dsphere'})
 export class Rating extends Typegoose {
   @prop({ ref: Car })
-  car: Ref<Car>;
+  public car: Ref<Car>;
 
   @prop({ ref: User })
-  user: Ref<User>;
+  public user: Ref<User>;
 
   @prop()
-  stars: number;
+  public stars: number;
 
   @arrayProp({ items: Array })
-  location: [[number]];
+  public location: [[number]];
 }
 
 export const model = new Rating().getModelForClass(Rating);

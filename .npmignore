@@ -220,3 +220,6 @@ $RECYCLE.BIN/
 
 build
 .env
+
+# ts's build info
+.tsbuildinfo
