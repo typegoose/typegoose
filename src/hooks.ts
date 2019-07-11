@@ -37,7 +37,7 @@ type PostMultipleResponse<T> = (result: TypegooseDoc<T>[], next?: HookNextFn) =>
 
 type PostNumberWithError<T> = (error: Error, result: number, next: HookNextFn) => void;
 type PostSingleWithError<T> = (error: Error, result: TypegooseDoc<T>, next: HookNextFn) => void;
-type PostMultipleWithError<T> = (error: Error, result: TypegooseDoc<T>[], net: HookNextFn) => void;
+type PostMultipleWithError<T> = (error: Error, result: TypegooseDoc<T>[], next: HookNextFn) => void;
 
 type NumberMethod = 'count';
 type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | DocumentMethod;
