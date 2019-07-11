@@ -1,4 +1,4 @@
-import * as tg from '../../typegoose';
+import * as tg from '../../src/typegoose';
 import { Car } from './car';
 
 export abstract class PersistentModel extends tg.Typegoose {

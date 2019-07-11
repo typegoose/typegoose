@@ -225,3 +225,6 @@ lib
 
 # ts's build info
 .tsbuildinfo
+
+# the config
+test/config.json

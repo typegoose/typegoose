@@ -2,21 +2,19 @@ language: node_js
 services:
 - mongodb
 node_js:
+# Test against oldest node version in package.json
+- "8"
+# Test against highest node version available
 - lts/*
-env:
-- USE_OLDEST_NPM_VERSIONS=0
-- USE_OLDEST_NPM_VERSIONS=1
 before_install:
 - |
-  if [ $USE_OLDEST_NPM_VERSIONS -eq 1 ]
-  then
-    # Test against oldest allowed versions in package.json - Use sed to remove ^ characters
-    sed -i 's/"\^/"/g' package.json
-    npm i mongoose@5.4.5 reflect-metadata@0.1.12 --no-save
-  else
-    npm i mongoose reflect-metadata --no-save
-  fi
+  # Test against oldest allowed packages
+  # sed -i 's/"\^/"/g' package.json
+  npm i mongoose@5.5.14 --no-save
 script:
+# Audit to make sure there are no vulnerabilities
+- npm audit
+# Test everything
 - npm test
 deploy:
   provider: npm
@@ -29,4 +27,5 @@ deploy:
       only:
       - master
 after_success:
+# Generate the Coverage
 - npm run coverage

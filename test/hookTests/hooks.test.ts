@@ -1,12 +1,13 @@
 import { expect } from 'chai';
 
-import { initDatabase } from '../utils/mongoConnect';
+import { connect, disconnect } from '../utils/mongooseConnect';
 import { model as Dummy } from './dummy';
 import { model as Hook } from './hooktestModel';
 
 describe('Typegoose', () => {
   describe('Hooks', () => {
-    before(() => initDatabase());
+    before(() => connect());
+    after(() => disconnect());
 
     it('should update the property using isModified during pre save hook', async () => {
       const hook = await Hook.create({

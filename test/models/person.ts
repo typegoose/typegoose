@@ -1,10 +1,10 @@
 /** @format */
 
-import * as tg from '../../typegoose';
+import * as tg from '../../src/typegoose';
 import { PersistentModel } from './PersistentModel';
 
 // add a pre-save hook to PersistentModel
-@tg.pre<PersistentModel>('save', function(next) {
+@tg.pre<PersistentModel>('save', function (next) {
   if (!this.createdAt) {
     this.createdAt = new Date();
   }

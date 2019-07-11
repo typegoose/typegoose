@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 
-import { pre, prop, Typegoose } from '../../typegoose';
+import { pre, prop, Typegoose } from '../../src/typegoose';
 
-@pre<Car>('save', function(next) {
+@pre<Car>('save', function (next) {
   if (this.model === 'Trabant') {
     this.isSedan = true;
   }

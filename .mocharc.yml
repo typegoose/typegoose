@@ -1,0 +1,9 @@
+color: true
+recursive: true
+require: 
+  - "ts-node/register"
+  - "source-map-support/register"
+extension: 
+  - ts
+ui: "bdd"
+check-leaks: true

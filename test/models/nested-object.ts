@@ -1,4 +1,4 @@
-import * as tg from '../../typegoose';
+import * as tg from '../../src/typegoose';
 
 export class AddressNested {
   public street: string;

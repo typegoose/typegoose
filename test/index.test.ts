@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
 import { fail } from 'assert';
-import { ObjectID } from 'bson';
-import { getClassForDocument } from '../utils';
+import { Ref } from '../src/prop';
+import { getClassForDocument } from '../src/utils';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { Car as CarType, model as Car } from './models/car';
@@ -13,26 +13,25 @@ import { model as Person } from './models/person';
 import { model as Rating } from './models/rating';
 import { model as User, User as UserType } from './models/user';
 import { Virtual, VirtualSub } from './models/virtualprop';
-import { closeDatabase, initDatabase } from './utils/mongoConnect';
+import { connect, disconnect } from './utils/mongooseConnect';
 
 describe('Typegoose', () => {
-  before(() => initDatabase());
-
-  after(() => closeDatabase());
+  before(() => connect());
+  after(() => disconnect());
 
   it('should create a User with connections', async () => {
     const car = await Car.create({
       model: 'Tesla',
       version: 'ModelS',
-      price: mongoose.Types.Decimal128.fromString('50123.25'),
+      price: mongoose.Types.Decimal128.fromString('50123.25')
     });
 
     const [trabant, zastava] = await Car.create([{
       model: 'Trabant',
-      price: mongoose.Types.Decimal128.fromString('28189.25'),
+      price: mongoose.Types.Decimal128.fromString('28189.25')
     }, {
       model: 'Zastava',
-      price: mongoose.Types.Decimal128.fromString('1234.25'),
+      price: mongoose.Types.Decimal128.fromString('1234.25')
     }]);
 
     const user = await User.create({
@@ -181,10 +180,10 @@ describe('Typegoose', () => {
     const user = await User.findOne();
     const car = await Car.findOne();
 
-    await Rating.create({ user: user._id, car: car._id, stars: 4 });
+    await Rating.create({ user, car, stars: 4 });
 
     // should fail, because user and car should be unique
-    const created = await Rating.create({ user: user._id, car: car._id, stars: 5 })
+    const created = await Rating.create({ user, car, stars: 5 })
       .then(() => true).catch(() => false);
 
     expect(created).to.be.equals(false);
@@ -198,15 +197,15 @@ describe('Typegoose', () => {
     const virtualsub1 = await new virtualSubModel({
       dummy: 'virtualSub1',
       virtual: virtual1._id
-    } as VirtualSub).save();
+    } as Partial<VirtualSub>).save();
     const virtualsub2 = await new virtualSubModel({
       dummy: 'virtualSub2',
-      virtual: new ObjectID()
-    } as VirtualSub).save();
+      virtual: mongoose.Types.ObjectId() as Ref<any>
+    } as Partial<VirtualSub>).save();
     const virtualsub3 = await new virtualSubModel({
       dummy: 'virtualSub3',
       virtual: virtual1._id
-    } as VirtualSub).save();
+    } as Partial<VirtualSub>).save();
 
     const newfound = await virtualModel.findById(virtual1._id).populate('virtualSubs').exec();
 
@@ -263,22 +262,23 @@ describe('Typegoose', () => {
 });
 
 describe('getClassForDocument()', () => {
-  before(() => initDatabase());
+  before(() => connect());
+  after(() => disconnect());
 
   it('should return correct class type for document', async () => {
     const car = await Car.create({
       model: 'Tesla',
-      price: mongoose.Types.Decimal128.fromString('50123.25'),
+      price: mongoose.Types.Decimal128.fromString('50123.25')
     });
     const carReflectedType = getClassForDocument(car);
     expect(carReflectedType).to.equals(CarType);
 
     const user = await User.create({
-      _id: mongoose.Types.ObjectId(),
       firstName: 'John2',
       lastName: 'Doe2',
       gender: Genders.MALE,
       languages: ['english2', 'typescript2'],
+      uniqueId: 'not-needed'
     });
     const userReflectedType = getClassForDocument(user);
     expect(userReflectedType).to.equals(UserType);
@@ -295,7 +295,7 @@ describe('getClassForDocument()', () => {
 
     const car = await Car.create({
       model: 'Tesla',
-      price: mongoose.Types.Decimal128.fromString('50123.25'),
+      price: mongoose.Types.Decimal128.fromString('50123.25')
     });
 
     await user.addCar(car);
@@ -352,7 +352,7 @@ describe('getClassForDocument()', () => {
     }
     const car = await Car.create({
       model: 'Tesla',
-      price: mongoose.Types.Decimal128.fromString('123.45'),
+      price: mongoose.Types.Decimal128.fromString('123.45')
     });
     const foundCar = await Car.findById(car._id).exec();
     expect(foundCar.price).to.be.a.instanceof(mongoose.Types.Decimal128);

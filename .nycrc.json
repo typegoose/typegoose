@@ -1,0 +1,27 @@
+{
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "extension": [
+    ".ts"
+  ],
+  "exclude": [
+    "**/*.d.ts"
+  ],
+  "include": [
+    "src/**/*.ts"
+  ],
+  "check-coverage": true,
+  "per-file": true,
+  "cache": true,
+  "all": true,
+  "reporter": [
+    "text",
+    "html"
+  ],
+  "sourceMap": true,
+  "instrument": true,
+  "_comment": "this below is just while porting to gitlab is going on",
+  "lines": 0,
+  "statements": 0,
+  "functions": 0,
+  "branches": 0
+}

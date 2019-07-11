@@ -2,7 +2,6 @@
 
 import * as mongoose from 'mongoose';
 
-import { ObjectID } from 'bson';
 import { methods, schema, virtuals } from './data';
 import { InvalidPropError, NoMetadataError, NotNumberTypeError, NotStringTypeError } from './errors';
 import { initAsArray, initAsObject, isNumber, isObject, isPrimitive, isString } from './utils';
@@ -269,4 +268,4 @@ export const arrayProp = (options: ArrayPropOptions) => (target: any, key: strin
   baseProp(options, Type, target, key, true);
 };
 
-export type Ref<T> = T | ObjectID;
+export type Ref<T> = T | mongoose.Schema.Types.ObjectId;

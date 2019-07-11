@@ -9,7 +9,7 @@ import {
   Ref,
   staticMethod,
   Typegoose,
-} from '../../typegoose';
+} from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Role } from '../enums/role';
 import { Car } from './car';

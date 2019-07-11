@@ -1,12 +1,12 @@
 // Tests for discriminators and refPaths
-import { prop, Ref, Typegoose } from '../../typegoose';
+import { prop, Ref, Typegoose } from '../../src/typegoose';
 
-export  class Scooter extends Typegoose {
+export class Scooter extends Typegoose {
     @prop()
     public makeAndModel: string;
 }
 
-export  class Beverage extends Typegoose {
+export class Beverage extends Typegoose {
     @prop({ default: false })
     public isSugarFree: boolean;
 
@@ -21,13 +21,13 @@ export class Inventory extends Typegoose {
     @prop({ default: 1.00 })
     public value: number;
 
-    @prop({ required: true, enum: ['Beverage', 'Scooter']})
+    @prop({ required: true, enum: ['Beverage', 'Scooter'] })
     public refItemPathName: string;
 
     @prop()
     public name: string;
 
-    @prop({ refPath: 'refItemPathName', required: true})
+    @prop({ refPath: 'refItemPathName', required: true })
     public kind: Ref<Beverage | Scooter>;
 }
 

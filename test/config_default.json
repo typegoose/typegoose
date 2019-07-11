@@ -1,0 +1,10 @@
+{
+    "DataBase": "typegooseTest",
+    "Port": 27017,
+    "Auth": {
+        "DB": "",
+        "User": "",
+        "Passwd": ""
+    },
+    "IP": "localhost"
+}

@@ -1,4 +1,4 @@
-import { prop, Ref, Typegoose } from '../../typegoose';
+import { prop, Ref, Typegoose } from '../../src/typegoose';
 
 export class Virtual extends Typegoose {
     @prop({ required: true })

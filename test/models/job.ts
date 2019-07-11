@@ -1,4 +1,4 @@
-import { instanceMethod, prop } from '../../typegoose';
+import { instanceMethod, prop } from '../../src/typegoose';
 
 export class JobType {
   @prop({ required: true })
