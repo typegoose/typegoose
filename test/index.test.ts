@@ -389,6 +389,12 @@ describe('getClassForDocument()', () => {
     expect(person.moreAddresses[1].street).equals('A Street 3');
   });
 
+  it('should properly set Decimal128, ObjectID types to field', () => {
+    expect((Car.schema as any).paths.price.instance).to.eq('Decimal128');
+    expect((Car.schema as any).paths.someId.instance).to.eq('ObjectID');
+  
+  });
+
   // faild validation will need to be checked
   it('Should validate Decimal128', async () => {
     try {

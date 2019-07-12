@@ -1,6 +1,4 @@
 language: node_js
-services:
-- mongodb
 node_js:
 # Test against oldest node version in package.json
 - "8"

@@ -5,7 +5,7 @@ import * as mongoose from 'mongoose';
 import { constructors, schema } from './data';
 
 export const isPrimitive = (Type: any) =>
-  ['String', 'Number', 'Boolean', 'Date'].includes(Type.name);
+  ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID'].includes(Type.name);
 
 export const isObject = (Type: any) => {
   let prototype = Type.prototype;

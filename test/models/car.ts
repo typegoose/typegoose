@@ -20,6 +20,9 @@ export class Car extends Typegoose {
 
   @prop({ required: true })
   public price: mongoose.Types.Decimal128;
+
+  @prop()
+  public someId: mongoose.Types.ObjectId;
 }
 
 export const model = new Car().getModelForClass(Car);

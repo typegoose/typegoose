@@ -16,7 +16,7 @@
     "watch": "tsc -w",
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && nyc npm run mocha",
-    "mocha": "npm run build && mocha \"./test/*.ts\"",
+    "mocha": "npm run build && mocha \"./test/*.ts\" --timeout 15000",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "clean": "rimraf lib && rm .tsbuildinfo && rimraf .nyc_output && rimraf coverage"
   },
@@ -42,6 +42,7 @@
     "chai-as-promised": "7.1.1",
     "coveralls": "^3.0.4",
     "mocha": "^6.1.4",
+    "mongodb-memory-server-global": "^5.1.5",
     "mongoose": "^5.5.13",
     "mongoose-findorcreate": "3.0.0",
     "nyc": "^14.1.1",
