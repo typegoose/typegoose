@@ -1,7 +1,8 @@
-import { expect } from 'chai';
+import { expect, use } from 'chai';
 import * as mongoose from 'mongoose';
 
 import { fail } from 'assert';
+import * as cap from 'chai-as-promised';
 import { Ref } from '../src/prop';
 import { getClassForDocument } from '../src/utils';
 import { Genders } from './enums/genders';
@@ -12,9 +13,12 @@ import { AddressNested, PersonNested, PersonNestedModel } from './models/nested-
 import { model as Person } from './models/person';
 import { model as Rating } from './models/rating';
 import { model as Select } from './models/select';
+import { model as StringValidators } from './models/stringValidators';
 import { model as User, User as UserType } from './models/user';
 import { Virtual, VirtualSub } from './models/virtualprop';
 import { connect, disconnect } from './utils/mongooseConnect';
+
+use(cap);
 
 describe('Typegoose', () => {
   before(() => connect());
@@ -259,6 +263,43 @@ describe('Typegoose', () => {
 
     // wrong type to make typescript happy
     expect((items[1].kind as typeof Beverage).isDecaf).to.be.an('undefined');
+  });
+  describe('string validators', () => {
+    // TODO: Specify an identifier for the error messages, e. g. as a regex to the message content.
+    // Otherwise we could catch errors that have nothing to do with what is being tested.
+
+    it('should respect maxlength', (done) => {
+      expect(StringValidators.create({
+        maxLength: 'this is too long',
+      })).to.eventually.rejectedWith(mongoose.Error).and.notify(done);
+    });
+
+    it('should trim', async () => {
+      const trimmed = await StringValidators.create({
+        trimmed: 'trim my end    ',
+      });
+      expect(trimmed.trimmed).equals('trim my end');
+    });
+
+    it('should uppercase', async () => {
+      const uppercased = await StringValidators.create({
+        uppercased: 'make me uppercase',
+      });
+      expect(uppercased.uppercased).equals('MAKE ME UPPERCASE');
+    });
+
+    it('should lowercase', async () => {
+      const lowercased = await StringValidators.create({
+        lowercased: 'MAKE ME LOWERCASE',
+      });
+      expect(lowercased.lowercased).equals('make me lowercase');
+    });
+
+    it('should respect enum', (done) => {
+      expect(StringValidators.create({
+        enumed: 'i am not valid',
+      })).to.eventually.rejectedWith(mongoose.Error).and.notify(done);
+    });
   });
 
   it('should only return selected types', async () => {
