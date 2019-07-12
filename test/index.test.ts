@@ -11,6 +11,7 @@ import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as
 import { AddressNested, PersonNested, PersonNestedModel } from './models/nested-object';
 import { model as Person } from './models/person';
 import { model as Rating } from './models/rating';
+import { model as Select } from './models/select';
 import { model as User, User as UserType } from './models/user';
 import { Virtual, VirtualSub } from './models/virtualprop';
 import { connect, disconnect } from './utils/mongooseConnect';
@@ -258,6 +259,16 @@ describe('Typegoose', () => {
 
     // wrong type to make typescript happy
     expect((items[1].kind as typeof Beverage).isDecaf).to.be.an('undefined');
+  });
+
+  it('should only return selected types', async () => {
+    const selecttest = new Select();
+    await selecttest.save();
+
+    const foundselect = (await Select.findById(selecttest.id).exec()).toObject();
+    expect(foundselect).to.not.have.property('test1');
+    expect(foundselect).to.have.property('test2', 'testing 2 should be included');
+    expect(foundselect).to.not.have.property('test3');
   });
 });
 

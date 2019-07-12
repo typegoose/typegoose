@@ -20,14 +20,24 @@ export type Validator =
   };
 
 export interface BasePropOptions {
+  /** include this value? 
+   * @default true 
+   */
+  select?: boolean;
+  /** is this value required? */
   required?: RequiredType;
+  /** only values from an string array? */
   enum?: string[] | object;
+  /** does the value should have a default? */
   default?: any;
   validate?: Validator | Validator[];
+  /** should this value be unique? */
   unique?: boolean;
+  /** should this value get an index? */
   index?: boolean;
   sparse?: boolean;
   expires?: string | number;
+  /** should subdocuments get their own id? */
   _id?: boolean;
 }
 
@@ -166,6 +176,15 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     if (!Array.isArray(enumOption)) {
       rawOptions.enum = Object.keys(enumOption).map(propKey => enumOption[propKey]);
     }
+  }
+
+  const selectOption = rawOptions.select;
+  if (typeof selectOption === 'boolean') {
+    schema[name][key][0] = {
+      ...schema[name][key][0],
+      selectOption,
+    };
+    return;
   }
 
   // check for validation inconsistencies
