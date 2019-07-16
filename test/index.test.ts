@@ -1,8 +1,8 @@
+import { fail } from 'assert';
 import { expect, use } from 'chai';
+import * as cap from 'chai-as-promised';
 import * as mongoose from 'mongoose';
 
-import { fail } from 'assert';
-import * as cap from 'chai-as-promised';
 import { Ref } from '../src/prop';
 import { getClassForDocument } from '../src/utils';
 import { Genders } from './enums/genders';
@@ -12,7 +12,7 @@ import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as
 import { AddressNested, PersonNested, PersonNestedModel } from './models/nested-object';
 import { model as Person } from './models/person';
 import { model as Rating } from './models/rating';
-import { model as Select } from './models/select';
+import { model as Select, SelectStrings } from './models/select';
 import { model as StringValidators } from './models/stringValidators';
 import { model as User, User as UserType } from './models/user';
 import { Virtual, VirtualSub } from './models/virtualprop';
@@ -130,7 +130,7 @@ describe('Typegoose', () => {
         gender: Genders.FEMALE,
       });
 
-      expect(createdUser).to.be.ok;
+      expect(createdUser).to.not.be.an('undefined');
       expect(createdUser).to.have.property('created');
       expect(createdUser.created).to.be.equals(true);
       expect(createdUser).to.have.property('doc');
@@ -141,7 +141,7 @@ describe('Typegoose', () => {
         lastName: 'Doe',
       });
 
-      expect(foundUser).to.be.ok;
+      expect(foundUser).to.not.be.an('undefined');
       expect(foundUser).to.have.property('created');
       expect(foundUser.created).to.be.equals(false);
       expect(foundUser).to.have.property('doc');
@@ -230,32 +230,29 @@ describe('Typegoose', () => {
     });
     await sprite.save();
 
-    const cokeZero = new Beverage({
+    await new Beverage({
       isDecaf: false,
       isSugarFree: true
-    });
-    await cokeZero.save();
+    }).save();
 
     const vespa = new Scooter({
       makeAndModel: 'Vespa'
     });
     await vespa.save();
 
-    const in1 = new Inventory({
+    await new Inventory({
       refItemPathName: 'Beverage',
       kind: sprite,
       count: 10,
       value: 1.99
-    });
-    await in1.save();
+    }).save();
 
-    const in2 = new Inventory({
+    await new Inventory({
       refItemPathName: 'Scooter',
       kind: vespa,
       count: 1,
       value: 1099.98
-    });
-    await in2.save();
+    }).save();
 
     // I should now have two "inventory" items, with different embedded reference documents.
     const items = await Inventory.find({}).populate('kind');
@@ -265,13 +262,10 @@ describe('Typegoose', () => {
     expect((items[1].kind as typeof Beverage).isDecaf).to.be.an('undefined');
   });
   describe('string validators', () => {
-    // TODO: Specify an identifier for the error messages, e. g. as a regex to the message content.
-    // Otherwise we could catch errors that have nothing to do with what is being tested.
-
     it('should respect maxlength', (done) => {
       expect(StringValidators.create({
         maxLength: 'this is too long',
-      })).to.eventually.rejectedWith(mongoose.Error).and.notify(done);
+      })).to.eventually.rejectedWith(mongoose.Error.ValidationError).and.notify(done);
     });
 
     it('should trim', async () => {
@@ -302,14 +296,27 @@ describe('Typegoose', () => {
     });
   });
 
-  it('should only return selected types', async () => {
-    const selecttest = new Select();
-    await selecttest.save();
+  describe('should only return properties with {select}', () => {
+    before(async () => {
+      const selecttest = new Select();
+      await selecttest.save();
+    });
 
-    const foundselect = (await Select.findById(selecttest.id).exec()).toObject();
-    expect(foundselect).to.not.have.property('test1');
-    expect(foundselect).to.have.property('test2', 'testing 2 should be included');
-    expect(foundselect).to.not.have.property('test3');
+    it('should only return default selected properties', async () => {
+      // variable name long: foundSelectDefault
+      const fSDefault = (await Select.findOne({}).exec()).toObject();
+      expect(fSDefault).to.not.have.property('test1');
+      expect(fSDefault).to.have.property('test2', SelectStrings.test2);
+      expect(fSDefault).to.not.have.property('test3');
+    });
+
+    it('should only return specificly selected properties', async () => {
+      // variable name long: foundSelectExtra
+      const fSExtra = (await Select.findOne({}).select(['+test1', '+test3', '-test2']).exec()).toObject();
+      expect(fSExtra).to.have.property('test1', SelectStrings.test1);
+      expect(fSExtra).to.not.have.property('test2');
+      expect(fSExtra).to.have.property('test3', SelectStrings.test3);
+    });
   });
 });
 
@@ -341,15 +348,12 @@ describe('getClassForDocument()', () => {
   });
 
   it('should use inherited schema', async () => {
-    let user = await Person.create({
-      email: 'my@email.com',
-    });
+    let user = await Person.create({ email: 'my@email.com' });
 
     const car = await Car.create({
       model: 'Tesla',
       price: mongoose.Types.Decimal128.fromString('50123.25')
     });
-
     await user.addCar(car);
 
     user = await Person.findById(user.id).populate('cars');
@@ -392,7 +396,6 @@ describe('getClassForDocument()', () => {
   it('should properly set Decimal128, ObjectID types to field', () => {
     expect((Car.schema as any).paths.price.instance).to.eq('Decimal128');
     expect((Car.schema as any).paths.someId.instance).to.eq('ObjectID');
-  
   });
 
   // faild validation will need to be checked

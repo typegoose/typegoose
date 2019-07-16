@@ -192,11 +192,10 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
 
   const selectOption = rawOptions.select;
   if (typeof selectOption === 'boolean') {
-    schema[name][key][0] = {
-      ...schema[name][key][0],
-      selectOption,
+    schema[name][key] = {
+      ...schema[name][key],
+      select: selectOption,
     };
-    return;
   }
 
   // check for validation inconsistencies
