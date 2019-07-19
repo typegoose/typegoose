@@ -1,7 +1,7 @@
 ---
 name: Bug
 about: Create a bug report
-title: '[Bug] '
+title: ''
 labels: bug
 assignees: ''
 ---
@@ -9,7 +9,9 @@ assignees: ''
 ---
 *please remove the parts in "---"*
 
-In Versions, only include the Typegoose version you use (NPM or from GIT)
+- In Versions, only include the Typegoose version you use (NPM or from GIT)
+- in "Code Example" add as many code blocks as needed
+- in "Do you know *why* it happenes replace the "*no*" if you know why
 
 ---
 
@@ -20,3 +22,13 @@ In Versions, only include the Typegoose version you use (NPM or from GIT)
 - Typegoose(GIT): commithash
 - mongoose: 0.0.0
 - mongodb: 0.0.0
+
+## Code Example
+
+```ts
+code here
+```
+
+## Do you know *why* it happenes?
+
+*no*
