@@ -1,4 +1,4 @@
-import { post, pre, prop, Typegoose } from '../../typegoose';
+import { post, pre, prop, Typegoose } from '../../src/typegoose';
 
 @pre<Dummy>('save', function (next) {
   this.text = 'saved';

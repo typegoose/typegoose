@@ -16,6 +16,7 @@ import { model as Select, SelectStrings } from './models/select';
 import { model as StringValidators } from './models/stringValidators';
 import { model as User, User as UserType } from './models/user';
 import { Virtual, VirtualSub } from './models/virtualprop';
+import { suite as HookTest } from './tests/hooks.test';
 import { connect, disconnect } from './utils/mongooseConnect';
 
 use(cap);
@@ -23,6 +24,8 @@ use(cap);
 describe('Typegoose', () => {
   before(() => connect());
   after(() => disconnect());
+
+  describe('Hooks', HookTest.bind(this));
 
   it('should create a User with connections', async () => {
     const car = await Car.create({

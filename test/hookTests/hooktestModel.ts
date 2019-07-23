@@ -1,4 +1,4 @@
-import { pre, prop, Typegoose } from '../../typegoose';
+import { pre, prop, Typegoose } from '../../src/typegoose';
 
 @pre<Hook>('save', function (next) {
   if (this.isModified('shape')) {
