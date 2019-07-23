@@ -66,6 +66,7 @@ interface Hooks {
   post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>): ClassDecorator;
 }
 
+// Note: Documentation for the hooks cant be added without adding it to *every* overload
 const hooks: Hooks = {
   pre(...args) {
     return (constructor: any) => {
@@ -79,12 +80,18 @@ const hooks: Hooks = {
   },
 };
 
-const addToHooks = (name, hookType: 'pre' | 'post', args) => {
+/**
+ * Add a hook to the hooks Array
+ * @param name With wich name should they be registered
+ * @param hookType What type is it
+ * @param args All Arguments, that should be passed-throught
+ */
+function addToHooks(name: string, hookType: 'pre' | 'post', args: any) {
   if (!hooksData[name]) {
     hooksData[name] = { pre: [], post: [] };
   }
   hooksData[name][hookType].push(args);
-};
+}
 
 export const pre = hooks.pre;
 export const post = hooks.post;

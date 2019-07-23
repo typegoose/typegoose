@@ -10,8 +10,8 @@ before_install:
   # sed -i 's/"\^/"/g' package.json
   npm i mongoose@5.5.14 --no-save
 script:
-# Audit to make sure there are no vulnerabilities
-- npm audit
+# Audit to make sure there are no vulnerabilities, but do not affect the whole build
+- (npm audit || exit 0)
 # Test everything
 - npm test
 deploy:

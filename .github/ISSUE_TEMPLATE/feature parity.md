@@ -9,10 +9,10 @@ assignees: ''
 ---
 *please remove the parts in "---"*
 
-## What to include in your Questions
+## How to Structure your Feature Parity request
 
 - remove "not needed" from your parity below
-- Make sure you read [Mastering-Markdown](https://guides.github.com/features/mastering-markdown/) , thanks
+- Make sure you read [Mastering-Markdown](https://guides.github.com/features/mastering-markdown/), thanks
 
 ---
 

@@ -2,6 +2,7 @@
 
 import * as mongoose from 'mongoose';
 
+import { isNullOrUndefined } from 'util';
 import { methods, schema, virtuals } from './data';
 import { InvalidPropError, NoMetadataError, NotNumberTypeError, NotStringTypeError } from './errors';
 import { initAsArray, initAsObject, isNumber, isObject, isPrimitive, isString } from './utils';
@@ -21,50 +22,71 @@ export type Validator =
 
 export interface BasePropOptions {
   /** include this value? 
-   * @default true 
+   * @default true (Implicitly)
    */
   select?: boolean;
-  /** is this value required? */
+  /** is this value required?
+   * @default false (Implicitly)
+   */
   required?: RequiredType;
-  /** only values from an string array? */
+  /** Only accept Values from the Enum(|Array) */
   enum?: string[] | object;
-  /** does the value should have a default? */
+  /** Give the Property a default Value */
   default?: any;
+  /** Give an Validator RegExp or Function */
   validate?: Validator | Validator[];
-  /** should this value be unique? */
+  /** should this value be unique?
+   * @link https://docs.mongodb.com/manual/indexes/#unique-indexes
+   */
   unique?: boolean;
-  /** should this value get an index? */
+  /** should this value get an index?
+   * @link https://docs.mongodb.com/manual/indexes
+   */
   index?: boolean;
+  /** @link https://docs.mongodb.com/manual/indexes/#sparse-indexes */
   sparse?: boolean;
+  /** when should this property expire?
+   * @link https://docs.mongodb.com/manual/tutorial/expire-data
+   */
   expires?: string | number;
-  /** should subdocuments get their own id? */
+  /** should subdocuments get their own id?
+   * @default true (Implicitly)
+   */
   _id?: boolean;
 }
 
 export interface PropOptions extends BasePropOptions {
+  /** Reference an other Document (you should use Ref<T> as Prop type) */
   ref?: any;
+  /** Take the Path and try to resolve it to a Model */
   refPath?: string;
 }
 
 export interface ValidateNumberOptions {
+  /** The Number must be at least this high */
   min?: number | [number, string];
+  /** The Number can only be lower than this */
   max?: number | [number, string];
 }
 
 export interface ValidateStringOptions {
-  lowercase?: boolean;
-  uppercase?: boolean;
-  trim?: boolean;
+  /** Only Allowes if the value matches an RegExp */
   match?: RegExp | [RegExp, string];
+  /** Only Allowes if the value is in the Enum */
   enum?: string[];
+  /** Only Allowes if the value is at least the lenght */
   minlength?: number | [number, string];
+  /** Only Allowes if the value is not longer than the maxlenght */
   maxlength?: number | [number, string];
 }
 
 export interface TransformStringOptions {
-  lowercase?: boolean; // whether to always call .toLowerCase() on the value
-  uppercase?: boolean; // whether to always call .toUpperCase() on the value
-  trim?: boolean; // whether to always call .trim() on the value
+  /** Should it be lowercased before save? */
+  lowercase?: boolean;
+  /** Should it be uppercased before save? */
+  uppercase?: boolean;
+  /** Should it be trimmed before save? */
+  trim?: boolean;
 }
 
 export interface VirtualOptions {
@@ -87,23 +109,44 @@ enum WhatIsIt {
   NONE = ''
 }
 
-const isWithStringValidate = (options: PropOptionsWithStringValidate) =>
-  (
-    options.lowercase
-    || options.uppercase
-    || options.trim
-    || options.match
+/**
+ * Return true if there are Options
+ * @param options The raw Options
+ */
+function isWithStringValidate(options: PropOptionsWithStringValidate): boolean {
+  return !isNullOrUndefined(
+    options.match
     || options.enum
     || options.minlength
     || options.maxlength
   );
+}
 
-const isWithStringTransform = (options: PropOptionsWithStringValidate) =>
-  options.lowercase || options.uppercase || options.trim;
+/**
+ * Return true if there are Options
+ * @param options The raw Options
+ */
+function isWithStringTransform(options: PropOptionsWithStringValidate) {
+  return !isNullOrUndefined(options.lowercase || options.uppercase || options.trim);
+}
 
-const isWithNumberValidate = (options: PropOptionsWithNumberValidate) => options.min || options.max;
+/**
+ * Return true if there are Options
+ * @param options The raw Options
+ */
+function isWithNumberValidate(options: PropOptionsWithNumberValidate) {
+  return !isNullOrUndefined(options.min || options.max);
+}
 
-const baseProp = (rawOptions: any, Type: any, target: any, key: any, whatis: WhatIsIt = WhatIsIt.NONE) => {
+/**
+ * Base Function for prop & arrayProp
+ * @param rawOptions The options (like require)
+ * @param Type What Type it is
+ * @param target <no info>
+ * @param key <no info>
+ * @param isArray is it an array?
+ */
+function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: WhatIsIt = WhatIsIt.NONE): void {
   const name: string = target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
   if (isGetterSetter) {
@@ -305,21 +348,33 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, whatis: Wha
     type: virtualSchema,
   };
   return;
-};
+}
 
-export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key: string) => {
-  const Type = (Reflect as any).getMetadata('design:type', target, key);
+/**
+ * Set Property Options for the property below
+ * @param options Options
+ * @public
+ */
+export function prop(options: PropOptionsWithValidate = {}) {
+  return (target: any, key: string) => {
+    const Type = (Reflect as any).getMetadata('design:type', target, key);
 
-  if (!Type) {
-    throw new NoMetadataError(key);
-  }
+    if (!Type) {
+      throw new NoMetadataError(key);
+    }
 
-  baseProp(options, Type, target, key, WhatIsIt.NONE);
-};
+    baseProp(options, Type, target, key, WhatIsIt.NONE);
+  };
+}
 
 export interface ArrayPropOptions extends BasePropOptions {
+  /** What array is it? 
+   * Note: this is only needed because Reflect & refelact Metadata cant give an accurate Response for an array
+   */
   items?: any;
+  /** Same as {@link PropOptions.ref}, only that it is for an array */
   itemsRef?: any;
+  /** Same as {@link PropOptions.refPath}, only that it is for an array */
   itemsRefPath?: any;
 }
 export interface MapPropOptions extends BasePropOptions {
@@ -327,19 +382,30 @@ export interface MapPropOptions extends BasePropOptions {
   mapDefault?: any;
 }
 
-export const arrayProp = (options: ArrayPropOptions) => (target: any, key: string) => {
-  const Type = options.items;
-  baseProp(options, Type, target, key, WhatIsIt.ARRAY);
-};
-
 /**
- * Set Options for the Map (options -> mongoose)
+ * Set Property(that are Maps) Options for the property below
  * @param options Options for the Map
  * @public
  */
-export const mapProp = (options: MapPropOptions) => (target: any, key: string) => {
-  const Type = options.of;
-  baseProp(options, Type, target, key, WhatIsIt.MAP);
-};
+export function mapProp(options: MapPropOptions) {
+  return (target: any, key: string) => {
+    const Type = options.of;
+    baseProp(options, Type, target, key, WhatIsIt.MAP);
+  };
+}
+/**
+ * Set Property(that are Arrays) Options for the property below
+ * @param options Options
+ * @public
+ */
+export function arrayProp(options: ArrayPropOptions) {
+  return (target: any, key: string) => {
+    const Type = options.items;
+    baseProp(options, Type, target, key, WhatIsIt.ARRAY);
+  };
+}
 
+/**
+ * Reference another Model
+ */
 export type Ref<T> = T | mongoose.Schema.Types.ObjectId;

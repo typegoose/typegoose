@@ -1,10 +1,10 @@
 /** @format */
 
-import * as tg from '../../src/typegoose';
+import { instanceMethod, pre, prop, staticMethod } from '../../src/typegoose';
 import { PersistentModel } from './PersistentModel';
 
 // add a pre-save hook to PersistentModel
-@tg.pre<PersistentModel>('save', function (next) {
+@pre<PersistentModel>('save', function (next) {
   if (!this.createdAt) {
     this.createdAt = new Date();
   }
@@ -12,17 +12,17 @@ import { PersistentModel } from './PersistentModel';
 })
 export class Person extends PersistentModel {
   // add new property
-  @tg.prop({ required: true, validate: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/ })
+  @prop({ required: true, validate: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/ })
   public email: string;
 
   // override instanceMethod
-  @tg.instanceMethod
+  @instanceMethod
   public getClassName() {
     return 'Person';
   }
 
   // override staticMethod
-  @tg.staticMethod
+  @staticMethod
   public static getStaticName() {
     return 'Person';
   }

@@ -10,6 +10,7 @@ if (config.Memory) {
   instance = new MongoMemoryServer();
 }
 
+/** is it the First time connecting in this test run? */
 let isFirst = true;
 /**
  * Make a Connection to MongoDB
@@ -48,6 +49,7 @@ export async function connect(): Promise<void> {
 
 /**
  * Disconnect from MongoDB
+ * @returns when it is disconnected
  */
 export async function disconnect(): Promise<any> {
   await mongoose.disconnect();

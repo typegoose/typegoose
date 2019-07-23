@@ -62,12 +62,18 @@ export interface IndexOptions {
 
 /**
  * Defines an index (most likely compound) for this schema.
+ * @param fields Wich fields to give the Options
  * @param options Options to pass to MongoDB driver's createIndex() function
+ * @example Example:
+ * ```
+ *  @index({ article: 1, user: 1 }, { unique: true })
+ *  class Name extends Typegoose {}
+ * ```
  */
-export const index = (fields: any, options?: IndexOptions) => {
+export function index(fields: any, options?: IndexOptions) {
   return (constructor: any) => {
     const indices = Reflect.getMetadata('typegoose:indices', constructor) || [];
     indices.push({ fields, options });
     Reflect.defineMetadata('typegoose:indices', indices, constructor);
   };
-};
+}

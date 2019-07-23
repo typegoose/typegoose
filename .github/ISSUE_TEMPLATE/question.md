@@ -13,6 +13,6 @@ assignees: ''
 
 - Make sure you provide an understandable question
 - Make sure you provide all the needed code
-- Make sure you read [Mastering-Markdown](https://guides.github.com/features/mastering-markdown/) , thanks
+- Make sure you read [Mastering-Markdown](https://guides.github.com/features/mastering-markdown/), thanks
 
 ---

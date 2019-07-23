@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 interface IConfig {
     Memory: boolean;
     DataBase: string;
@@ -19,7 +21,6 @@ enum EConfig {
     MONGODB_AUTH = 'You should activate & use MongoDB Authentication!'
 }
 
-import * as fs from 'fs';
 const env: NodeJS.ProcessEnv = process.env; // just to write less
 
 let path: string = env.CONFIG ? env.CONFIG : './test/config.json';
@@ -42,14 +43,17 @@ const configFINAL: Readonly<IConfig> = {
     IP: env.C_IP || configRAW.IP || 'mongodb'
 };
 
+/** Small callback for the tests below */
 function cb(text: string): void {
     // tslint:disable-next-line:no-console
     console.error(text);
     process.exit(-1);
 }
 
-if (!configFINAL.IP) { cb(EConfig.MONGODB_IP); }
-if (!configFINAL.DataBase) { cb(EConfig.MONGODB_DB); }
-if (!configFINAL.Port) { cb(EConfig.MONGODB_PORT); }
+if (!configFINAL.Memory) {
+    if (!configFINAL.IP) { cb(EConfig.MONGODB_IP); }
+    if (!configFINAL.DataBase) { cb(EConfig.MONGODB_DB); }
+    if (!configFINAL.Port) { cb(EConfig.MONGODB_PORT); }
+}
 
 export { configFINAL as config };

@@ -4,10 +4,21 @@ import * as mongoose from 'mongoose';
 
 import { constructors, schema } from './data';
 
-export const isPrimitive = (Type: any) =>
-  ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID'].includes(Type.name);
+/**
+ * Returns true, if it includes the Type
+ * @param Type The Type
+ * @returns true, if it includes it
+ */
+export function isPrimitive(Type: any): boolean {
+  return ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID'].includes(Type.name);
+}
 
-export const isObject = (Type: any) => {
+/**
+ * Returns true, if it is an Object
+ * @param Type The Type
+ * @returns true, if it is an Object
+ */
+export function isObject(Type: any): boolean {
   let prototype = Type.prototype;
   let name = Type.name;
   while (name) {
@@ -19,31 +30,59 @@ export const isObject = (Type: any) => {
   }
 
   return false;
-};
+}
 
-export const isNumber = (Type: any) => Type.name === 'Number';
+/**
+ * Returns true, if it is an Number
+ * @param Type The Type
+ * @returns true, if it is an Number
+ */
+export function isNumber(Type: any): boolean {
+  return Type.name === 'Number';
+}
 
-export const isString = (Type: any) => Type.name === 'String';
+/**
+ * Returns true, if it is an String
+ * @param Type The Type
+ * @returns true, if it is an String
+ */
+export function isString(Type: any): boolean {
+  return Type.name === 'String';
+}
 
-export const initAsObject = (name, key) => {
+/**
+ * Initialize as Object
+ * @param name <no info>
+ * @param key <no info>
+ */
+export function initAsObject(name, key): void {
   if (!schema[name]) {
     schema[name] = {};
   }
   if (!schema[name][key]) {
     schema[name][key] = {};
   }
-};
+}
 
-export const initAsArray = (name: any, key: any) => {
+/**
+ * Initialize as Array
+ * @param name <no info>
+ * @param key <no info>
+ */
+export function initAsArray(name: any, key: any): void {
   if (!schema[name]) {
     schema[name] = {};
   }
   if (!schema[name][key]) {
     schema[name][key] = [{}];
   }
-};
+}
 
-export const getClassForDocument = (document: mongoose.Document): any => {
+/**
+ * Get the Class for a given Document
+ * @param document The Document
+ */
+export function getClassForDocument(document: mongoose.Document): any {
   const modelName = (document.constructor as mongoose.Model<typeof document>).modelName;
   return constructors[modelName];
-};
+}

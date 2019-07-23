@@ -1,10 +1,12 @@
 /** @format */
 
+/* imports */
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 
 import { constructors, hooks, methods, models, plugins, schema, virtuals } from './data';
 
+/* exports */
 export * from './method';
 export * from './prop';
 export * from './hooks';
@@ -16,12 +18,29 @@ export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
 
 export interface GetModelForClassOptions {
+  /** An Existing Mongoose Connection */
   existingMongoose?: mongoose.Mongoose;
+  /** Supports all Mongoose's Schema Options */
   schemaOptions?: mongoose.SchemaOptions;
+  /** An Existing Connection */
   existingConnection?: mongoose.Connection;
 }
 
+/**
+ * Main Class
+ */
 export class Typegoose {
+  /**
+   * Get a Model for a Class
+   * Executes .setModelForClass if it cant find it already
+   * @param t The uninitialized Class
+   * @param __namedParameters The Options
+   * @param existingMongoose An Existing Mongoose Connection
+   * @param schemaOptions Supports all Mongoose's Schema Options
+   * @param existingConnection An Existing Connection
+   * @returns The Model
+   * @public
+   */
   public getModelForClass<T>(
     t: T,
     { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
@@ -38,6 +57,16 @@ export class Typegoose {
     return models[name] as ModelType<this> & T;
   }
 
+  /**
+   * Builds the Schema & The Model
+   * @param t The uninitialized Class
+   * @param __namedParameters The Options
+   * @param existingMongoose An Existing Mongoose Connection
+   * @param schemaOptions Supports all Mongoose's Schema Options
+   * @param existingConnection An Existing Connection
+   * @returns The Model
+   * @public
+   */
   public setModelForClass<T>(
     t: T,
     { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}

@@ -228,3 +228,6 @@ lib
 
 # the config
 test/config.json
+
+# typedoc docs folder
+doc/

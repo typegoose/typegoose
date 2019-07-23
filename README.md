@@ -97,7 +97,7 @@ class User extends Typegoose {
   @prop()
   job?: Job;
 
-  @prop({ ref: Car, required: true })
+  @prop({ ref: Car })
   car: Ref<Car>;
 }
 ```
