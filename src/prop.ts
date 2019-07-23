@@ -80,6 +80,13 @@ export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
 export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions & ValidateStringOptions;
 export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate | VirtualOptions;
 
+/** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
+enum WhatIsIt {
+  ARRAY = 'Array',
+  MAP = 'Map',
+  NONE = ''
+}
+
 const isWithStringValidate = (options: PropOptionsWithStringValidate) =>
   (
     options.lowercase
@@ -96,7 +103,7 @@ const isWithStringTransform = (options: PropOptionsWithStringValidate) =>
 
 const isWithNumberValidate = (options: PropOptionsWithNumberValidate) => options.min || options.max;
 
-const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = false) => {
+const baseProp = (rawOptions: any, Type: any, target: any, key: any, whatis: WhatIsIt = WhatIsIt.NONE) => {
   const name: string = target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
   if (isGetterSetter) {
@@ -130,7 +137,7 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     return;
   }
 
-  if (isArray) {
+  if (whatis === WhatIsIt.ARRAY) {
     initAsArray(name, key);
   } else {
     initAsObject(name, key);
@@ -218,13 +225,24 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     throw new InvalidPropError(Type.name, key);
   }
 
-  const { ['ref']: r, ['items']: i, ...options } = rawOptions;
+  const { ['ref']: r, ['items']: i, ['of']: o, ...options } = rawOptions;
   if (isPrimitive(Type)) {
-    if (isArray) {
+    if (whatis === WhatIsIt.ARRAY) {
       schema[name][key] = {
         ...schema[name][key][0],
         ...options,
         type: [Type],
+      };
+      return;
+    }
+    if (whatis === WhatIsIt.MAP) {
+      const { mapDefault } = options;
+      delete options.mapDefault;
+      schema[name][key] = {
+        ...schema[name][key],
+        type: Map,
+        default: mapDefault,
+        of: { type: Type, ...options },
       };
       return;
     }
@@ -247,7 +265,7 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     return;
   }
 
-  if (isArray) {
+  if (whatis === WhatIsIt.ARRAY) {
     schema[name][key] = {
       ...schema[name][key][0],
       ...options,
@@ -259,6 +277,18 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     return;
   }
 
+  if (whatis === WhatIsIt.MAP) {
+    schema[name][key] = {
+      ...schema[name][key],
+      type: Map,
+      ...options
+    };
+    schema[name][key].of = {
+      ...schema[name][key].of,
+      ...subSchema,
+    };
+    return;
+  }
   const Schema = mongoose.Schema;
 
   const supressSubschemaId = rawOptions._id === false;
@@ -284,7 +314,7 @@ export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key
     throw new NoMetadataError(key);
   }
 
-  baseProp(options, Type, target, key);
+  baseProp(options, Type, target, key, WhatIsIt.NONE);
 };
 
 export interface ArrayPropOptions extends BasePropOptions {
@@ -292,10 +322,24 @@ export interface ArrayPropOptions extends BasePropOptions {
   itemsRef?: any;
   itemsRefPath?: any;
 }
+export interface MapPropOptions extends BasePropOptions {
+  of?: any;
+  mapDefault?: any;
+}
 
 export const arrayProp = (options: ArrayPropOptions) => (target: any, key: string) => {
   const Type = options.items;
-  baseProp(options, Type, target, key, true);
+  baseProp(options, Type, target, key, WhatIsIt.ARRAY);
+};
+
+/**
+ * Set Options for the Map (options -> mongoose)
+ * @param options Options for the Map
+ * @public
+ */
+export const mapProp = (options: MapPropOptions) => (target: any, key: string) => {
+  const Type = options.of;
+  baseProp(options, Type, target, key, WhatIsIt.MAP);
 };
 
 export type Ref<T> = T | mongoose.Schema.Types.ObjectId;

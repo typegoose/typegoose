@@ -356,39 +356,35 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
     previousCars?: Ref<Car>[];
     ```
 
-### Dynamic References
-Mongoose supports the concept of [dynamic references](https://mongoosejs.com/docs/populate.html#dynamic-ref): which is, an item-specific model reference instead of a model-specific reference.
-```js
-const Comment = new Schema({
-    body: { type: String, required: true },
-    on: { type: Schema.Types.ObjectId, required: true, refPath: 'onModel' },
-    onModel: { type: String, required: true, enum: ['BlogPost', 'Product']}
-})
+#### mapProp(options)
 
-// later
-const post = new BlogPost()
-const comment = new Comment({
-    body: 'First!'
-    on: post,
-    onModel: 'BlogPost'
-})
-```
+The `mapProp` is a `prop` decorator which makes it possible to create map schema properties.
 
-This is now supported with `@prop({refPath: 'string' })`.  You will need to expose the field containing the referenced model name as a `@prop()` as well.
-```ts
-class Schema extends Typegoose {
-    @prop()
-    body: string
+The options object accepts `enum` and `default`, just like `prop`  decorator. In addition to these the following properties are accepted:
 
-    @prop({ required: true, refPath: 'onModel' })
-    on: Ref<BlogPost | Product>
+  - `of`  : This will tell Typegoose that the Map value consists of primitives (if `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
 
-    @prop()
-    onModel: string
-}
-```
+    ```ts
+    class Car extends Typegoose {
+      @mapProp({ of: Car })
+      public keys: Map<string, Car>;
+    }
+    ```
 
-For arrays, use `@prop({ itemsRefPath: 'name'})`
+  - `mapDefault` : This will set the default value for the map.
+
+    ```ts
+    enum ProjectState {
+        WORKING = 'working',
+        BROKEN = 'broken',
+        MAINTAINANCE = 'maintainance',
+    }
+
+    class Car extends Typegoose {
+      @mapProp({ of: String, enum: ProjectState,mapDefault: { 'MainProject' : ProjectState.WORKING }})
+      public projects: Map<string, ProjectState>;
+    }
+    ```
 
 ### Method decorators
 

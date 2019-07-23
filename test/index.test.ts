@@ -8,6 +8,7 @@ import { getClassForDocument } from '../src/utils';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { Car as CarType, model as Car } from './models/car';
+import { model as InternetUser } from './models/internet-user';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from './models/inventory';
 import { AddressNested, PersonNested, PersonNestedModel } from './models/nested-object';
 import { model as Person } from './models/person';
@@ -321,6 +322,34 @@ describe('Typegoose', () => {
       expect(fSExtra).to.have.property('test3', SelectStrings.test3);
     });
   });
+
+  it(`should add dynamic fields using map`, async () => {
+    const user = await InternetUser.create({
+      socialNetworks: {
+        'twitter': 'twitter account',
+        'facebook': 'facebook account',
+      },
+      sideNotes: {
+        'day1': {
+          content: 'day1',
+          link: 'url'
+        },
+        'day2': {
+          content: 'day2',
+          link: 'url//2'
+        },
+      },
+      projects: {},
+    });
+    expect(user).to.not.be.an('undefined');
+    expect(user).to.have.property('socialNetworks').to.be.instanceOf(Map);
+    expect(user.socialNetworks.get('twitter')).to.be.eq('twitter account');
+    expect(user.socialNetworks.get('facebook')).to.be.eq('facebook account');
+    expect(user).to.have.property('sideNotes').to.be.instanceOf(Map);
+    expect(user.sideNotes.get('day1')).to.have.property('content', 'day1');
+    expect(user.sideNotes.get('day1')).to.have.property('link', 'url');
+    expect(user.sideNotes.has('day2')).to.be.equal(true);
+  });
 });
 
 describe('getClassForDocument()', () => {
@@ -430,7 +459,26 @@ describe('getClassForDocument()', () => {
       });
       fail('Validation must fail.');
     } catch (e) {
-      expect(e).to.be.a.instanceof((mongoose.Error as any).ValidationError);
+      expect(e).to.be.a.instanceof(mongoose.Error.ValidationError);
+      expect(e.message).to.be.equal( // test it specificly, to know that it is not another error
+        'Person validation failed: email: Validator failed for path `email` with value `email`'
+      );
+    }
+  });
+
+  it(`Should Validate Map`, async () => {
+    try {
+      await InternetUser.create({
+        projects: {
+          p1: 'project'
+        }
+      });
+      fail('Validation Should Fail');
+    } catch (e) {
+      expect(e).to.be.a.instanceof(mongoose.Error.ValidationError);
+      expect(e.message).to.be.equal( // test it specificly, to know that it is not another error
+        'InternetUser validation failed: projects.p1: `project` is not a valid enum value for path `projects.p1`.'
+      );
     }
   });
 });
