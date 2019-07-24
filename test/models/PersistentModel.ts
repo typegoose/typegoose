@@ -1,28 +1,28 @@
-import * as tg from '../../src/typegoose';
+import { arrayProp, instanceMethod, InstanceType, prop, Ref, staticMethod, Typegoose } from '../../src/typegoose';
 import { Car } from './car';
 
-export abstract class PersistentModel extends tg.Typegoose {
-  @tg.prop()
+export abstract class PersistentModel extends Typegoose {
+  @prop()
   public createdAt: Date;
 
-  @tg.arrayProp({ itemsRef: Car })
-  public cars?: tg.Ref<Car>[];
+  @arrayProp({ itemsRef: Car })
+  public cars?: Ref<Car>[];
 
   // define an 'instanceMethod' that will be overwritten
-  @tg.instanceMethod
+  @instanceMethod
   public getClassName() {
     return 'PersistentModel';
   }
 
   // define an 'instanceMethod' that will be overwritten
-  @tg.staticMethod
+  @staticMethod
   public static getStaticName() {
     return 'PersistentModel';
   }
 
   // define an instanceMethod that is called by the derived class
-  @tg.instanceMethod
-  public addCar(this: tg.InstanceType<PersistentModel>, car: Car) {
+  @instanceMethod
+  public addCar(this: InstanceType<PersistentModel>, car: Car) {
     if (!this.cars) {
       this.cars = [];
     }

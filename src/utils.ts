@@ -1,5 +1,3 @@
-/** @format */
-
 import * as mongoose from 'mongoose';
 
 import { constructors, schema } from './data';

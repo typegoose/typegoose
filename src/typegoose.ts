@@ -1,5 +1,3 @@
-/** @format */
-
 /* imports */
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';

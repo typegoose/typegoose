@@ -6,8 +6,7 @@
   "useTabs": false,
   "arrowParens": "avoid",
   "endOfLine": "auto",
-  "insertPragma": true,
-  "requirePragma": true,
+  "insertPragma": false,
   "printWidth": 120,
   "proseWrap": "always"
 }

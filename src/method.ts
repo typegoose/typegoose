@@ -1,5 +1,3 @@
-/** @format */
-
 import { methods } from './data';
 
 type MethodType = 'instanceMethods' | 'staticMethods';
