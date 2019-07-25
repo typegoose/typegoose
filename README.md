@@ -396,7 +396,7 @@ Static Mongoose methods must be declared with `static` keyword on the Typegoose 
 
 If we want to use another static method of the model (built-in or created by us) we have to override the `this` in the method using the [type specifying of `this` for functions](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#specifying-the-type-of-this-for-functions). If we don't do this, TypeScript will throw development-time error on missing methods.
 
-```typescript
+```ts
 @staticMethod
 static findByAge(this: ModelType<User> & typeof User, age: number) {
   return this.findOne({ age });
@@ -409,7 +409,7 @@ Note that the `& typeof T` is only mandatory if we want to use the developer def
 
 Instance methods are on the Mongoose document instances, thus they must be defined as non-static methods. Again if we want to call other instance methods the type of `this` must be redefined to `InstanceType<T>` (see Types).
 
-```typescript
+```ts
 @instanceMethod
 incrementAge(this: InstanceType<User>) {
   const age = this.age || 1;
@@ -424,11 +424,12 @@ Mongoose allows the developer to add pre and post [hooks / middlewares](http://m
 
 Typegoose provides this functionality through TypeScript's class decorators.
 
-### pre
+#### pre
 
 We can simply attach a `@pre` decorator to the Typegoose class and define the hook function like you normally would in Mongoose.
+(Method supports REGEXP)
 
-```typescript
+```ts
 @pre<Car>('save', function(next) { // or @pre(this: Car, 'save', ...
   if (this.model === 'Tesla') {
     this.isFast = true;
@@ -451,8 +452,9 @@ Note that additional typing information is required either by passing the class 
 #### post
 
 Same as `pre`, the `post` hook is also implemented as a class decorator. Usage is equivalent with the one Mongoose provides.
+(Method supports REGEXP)
 
-```typescript
+```ts
 @post<Car>('save', (car) => { // or @post('save', (car: Car) => { ...
   if (car.topSpeedInKmH > 300) {
     console.log(car.model, 'is fast!');
@@ -475,7 +477,7 @@ Using the `plugin` decorator enables the developer to attach various Mongoose pl
 
 If the plugin enhances the schema with additional properties or instance / static methods this typing information should be added manually to the Typegoose class as well.
 
-```typescript
+```ts
 import * as findOrCreate from 'mongoose-findorcreate';
 
 @plugin(findOrCreate)
@@ -499,7 +501,7 @@ partial indices, expiring documents, etc. Any values supported by
 [MongoDB's createIndex()](https://docs.mongodb.com/manual/reference/method/db.collection.createIndex/#db.collection.createIndex)
 are also valid for `@index`. For more info refer to interface `IndexOptions`
 
- ```typescript
+ ```ts
 @index({ article: 1, user: 1 }, { unique: true })
 @index({ location: '2dsphere' })
 @index({ article: 1 }, { partialFilterExpression: { stars: { $gte: 4.5 } } })
