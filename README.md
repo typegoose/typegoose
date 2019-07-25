@@ -8,7 +8,7 @@ Define Mongoose models using TypeScript classes.
 
 ## Basic usage
 
-```typescript
+```ts
 import { prop, Typegoose, ModelType, InstanceType } from 'typegoose';
 import * as mongoose from 'mongoose';
 
@@ -23,8 +23,7 @@ const UserModel = new User().getModelForClass(User);
 
 // UserModel is a regular Mongoose Model with correct types
 (async () => {
-  const u = new UserModel({ name: 'JohnDoe' });
-  await u.save();
+  const u = await UserModel.create({ name: 'JohnDoe' });
   const user = await UserModel.findOne();
 
   // prints { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
@@ -41,7 +40,8 @@ Typegoose aims to solve this problem by defining only a TypeScript interface (cl
 Under the hood it uses the [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the properties, so redundancy can be significantly reduced.
 
 Instead of:
-```typescript
+
+```ts
 interface Car {
   model?: string;
 }
@@ -72,8 +72,10 @@ mongoose.model('Car', {
   model: string,
 });
 ```
+
 You can just:
-```typescript
+
+```ts
 class Job {
   @prop()
   title?: string;
@@ -92,21 +94,25 @@ class User extends Typegoose {
   name?: string;
 
   @prop({ required: true })
-  age: number;
+  age!: number;
 
   @prop()
   job?: Job;
 
   @prop({ ref: Car })
-  car: Ref<Car>;
+  car?: Ref<Car>;
 }
 ```
+
 Please note that sub documents do not have to extend Typegoose. You can still give them default value in `prop` decorator, but you can't create static or instance methods on them.
 
 ## Requirements
 
-* TypeScript 2.1+
+* TypeScript 3.2+
+* Node 8+
+* mongoose 5+
 * `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
+* `reflect-metadata` must be installed
 
 ## Install
 
@@ -158,10 +164,12 @@ The `options` object accepts multiple config properties:
     it accepts a handful of parameters. Please note that it's the developer's responsibility to make sure that
     if `required` is set to `false` then the class property should be [optional](https://www.typescriptlang.org/docs/handbook/interfaces.html#optional-properties).
 
-    ```typescript
+    Note: for coding style (and type completion) you should use `!` when it is marked as required
+
+    ```ts
     // this is now required in the schema
     @prop({ required: true })
-    firstName: string;
+    firstName!: string;
 
     // by default, a property is not required
     @prop()
@@ -170,14 +178,14 @@ The `options` object accepts multiple config properties:
 
   - `index`: Tells Mongoose whether to define an index for the property.
 
-    ```typescript
+    ```ts
     @prop({ index: true })
     indexedField?: string;
     ```
 
   - `unique`: Just like the [Mongoose unique](http://mongoosejs.com/docs/api.html#schematype_SchemaType-unique), tells Mongoose to ensure a unique index is created for this path.
 
-    ```typescript
+    ```ts
     // this field is now unique across the collection
     @prop({ unique: true })
     uniqueId?: string;
@@ -186,19 +194,7 @@ The `options` object accepts multiple config properties:
   - `enum`: The enum option accepts a string array. The class property which gets this decorator should have an enum-like type which values are from the provided string array. The way how the enum is created is delegated to the developer, Typegoose needs a string array which hold the enum values, and a TypeScript type which tells the possible values of the enum.
   However, if you use TS 2.4+, you can use string enum as well.
 
-    ```typescript
-    // Enum-like type and definition example.
-    type Gender = 'male' | 'female';
-    const Genders = {
-      MALE: 'male' as Gender,
-      FEMALE: 'female' as Gender,
-    };
-
-    @prop({ enum: Object.values(Genders) })
-    gender?: Gender;
-
-
-    // TS 2.4+ string enum example
+    ```ts
     enum Gender {
       MALE = 'male',
       FEMALE = 'female',
@@ -210,35 +206,35 @@ The `options` object accepts multiple config properties:
 
   - `lowercase`: for strings only; whether to always call .toLowerCase() on the value.
 
-```typescript
-@prop({ lowercase: true })
-nickName?: string;
-```
+    ```ts
+    @prop({ lowercase: true })
+    nickName?: string;
+    ```
 
   - `uppercase`: for strings only; whether to always call .toUpperCase() on the value.
 
-```typescript
-@prop({ uppercase: true })
-nickName?: string;
-```
+    ```ts
+    @prop({ uppercase: true })
+    nickName?: string;
+    ```
 
   - `trim`: for strings only; whether to always call .trim() on the value.
 
-```typescript
-@prop({ trim: true })
-nickName?: string;
-```
+    ```ts
+    @prop({ trim: true })
+    nickName?: string;
+    ```
 
   - `default`: The provided value will be the default for that Mongoose property.
 
-    ```typescript
+    ```ts
     @prop({ default: 'Nick' })
     nickName?: string;
     ```
     
   - `_id`: When false, no \_id is added to the subdocument
 
-    ```typescript
+    ```ts
     class Car extends Typegoose {}
     
     @prop({ _id: false })
@@ -247,31 +243,47 @@ nickName?: string;
 
   - `ref`: By adding the `ref` option with another Typegoose class as value, a Mongoose reference property will be created. The type of the property on the Typegoose extending class should be `Ref<T>` (see Types section).
 
-    ```typescript
+    ```ts
     class Car extends Typegoose {}
 
     @prop({ ref: Car })
     car?: Ref<Car>;
     ```
 
+  - `refPath`: Is the same as `ref`, only that it looks at the path specified, and this path decides which model to use
+
+    ```ts
+    class Car extends Typegoose {}
+    class Shop extends Typegoose {}
+
+    // in another class
+    class Another extends Typegoose {
+      @prop({ required: true, enum: 'Car' | 'Shop' })
+      which!: string;
+
+      @prop({ refPath: 'which' })
+      kind?: Ref<Car | Shop>;
+    }
+    ```
+
   - `min` / `max` (numeric validators): Same as [Mongoose numberic validators](http://mongoosejs.com/docs/api.html#schema_number_SchemaNumber-max).
 
-    ```typescript
+    ```ts
     @prop({ min: 10, max: 21 })
     age?: number;
     ```
 
   - `minlength` / `maxlength` / `match` (string validators): Same as [Mongoose string validators](http://mongoosejs.com/docs/api.html#schema_string_SchemaString-match).
 
-    ```typescript
+    ```ts
     @prop({ minlength: 5, maxlength: 10, match: /[0-9a-f]*/ })
-    favouriteHexNumber: string;
+    favouriteHexNumber?: string;
     ```
 
 
   - `validate` (custom validators): You can define your own validator function/regex using this. The function has to return a `boolean` or a Promise (async validation).
 
-    ```typescript
+    ```ts
     // you have to get your own `isEmail` function, this is a placeholder
 
     @prop({ validate: (value) => isEmail(value)})
@@ -298,23 +310,23 @@ nickName?: string;
     // you can also use multiple validators in an array.
 
     @prop({ validate:
-        [
-            {
-                validator: val => isEmail(val),
-                message: `{VALUE} is not a valid email`
-            },
-            {
-                validator: val => isBlacklisted(val),
-                message: `{VALUE} is blacklisted`
-            }
-        ]
+      [
+        {
+            validator: val => isEmail(val),
+            message: `{VALUE} is not a valid email`
+        },
+        {
+            validator: val => isBlacklisted(val),
+            message: `{VALUE} is blacklisted`
+        }
+      ]
     })
     email?: string;
     ```
 
 Mongoose gives developers the option to create [virtual properties](http://mongoosejs.com/docs/api.html#schema_Schema-virtual). This means that actual database read/write will not occur these are just 'calculated properties'. A virtual property can have a setter and a getter. TypeScript also has a similar feature which Typegoose uses for virtual property definitions (using the `prop` decorator).
 
-```typescript
+```ts
 @prop()
 firstName?: string;
 
@@ -332,6 +344,8 @@ set fullName(full) {
 }
 ```
 
+TODO: add documentation for virtual population
+
 #### arrayProp(options)
 
 The `arrayProp` is a `prop` decorator which makes it possible to create array schema properties.
@@ -340,7 +354,7 @@ The `options` object accepts `required`, `enum` and `default`, just like the `pr
 
   - `items`: This will tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
 
-    ```typescript
+    ```ts
     @arrayProp({ items: String })
     languages?: string[];
     ```
@@ -349,11 +363,28 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
 
   - `itemsRef`: In mutual exclusion with `items`, this tells Typegoose that instead of a subdocument array, this is an array with references in it. On the Mongoose side this means that an array of Object IDs will be stored under this property. Just like with `ref` in the `prop` decorator, the type of this property should be `Ref<T>[]`.
 
-    ```typescript
+    ```ts
     class Car extends Typegoose {}
 
+    // in another class
     @arrayProp({ itemsRef: Car })
     previousCars?: Ref<Car>[];
+    ```
+
+  - `itemsRefPath`(IRP): Is the same as `itemsRef` only that it looks at the specified path of the class which specifies which model to use
+
+    ```ts
+    class Car extends Typegoose {}
+    class Shop extends Typegoose {}
+
+    // in another class
+    class Another extends Typegoose {
+      @prop({ required: true, enum: 'Car' | 'Shop' })
+      which!: string;
+
+      @arrayProp({ itemsRefPath: 'which' })
+      items?: Ref<Car | Shop>[];
+    }
     ```
 
 #### mapProp(options)
@@ -367,7 +398,7 @@ The options object accepts `enum` and `default`, just like `prop`  decorator. In
     ```ts
     class Car extends Typegoose {
       @mapProp({ of: Car })
-      public keys: Map<string, Car>;
+      public keys?: Map<string, Car>;
     }
     ```
 
@@ -382,7 +413,7 @@ The options object accepts `enum` and `default`, just like `prop`  decorator. In
 
     class Car extends Typegoose {
       @mapProp({ of: String, enum: ProjectState,mapDefault: { 'MainProject' : ProjectState.WORKING }})
-      public projects: Map<string, ProjectState>;
+      public projects?: Map<string, ProjectState>;
     }
     ```
 
@@ -409,7 +440,7 @@ Note that the `& typeof T` is only mandatory if we want to use the developer def
 
 Instance methods are on the Mongoose document instances, thus they must be defined as non-static methods. Again if we want to call other instance methods the type of `this` must be redefined to `InstanceType<T>` (see Types).
 
-```typescript
+```ts
 @instanceMethod
 incrementAge(this: InstanceType<User>) {
   const age = this.age || 1;
@@ -428,7 +459,7 @@ Typegoose provides this functionality through TypeScript's class decorators.
 
 We can simply attach a `@pre` decorator to the Typegoose class and define the hook function like you normally would in Mongoose.
 
-```typescript
+```ts
 @pre<Car>('save', function(next) { // or @pre(this: Car, 'save', ...
   if (this.model === 'Tesla') {
     this.isFast = true;
@@ -437,10 +468,10 @@ We can simply attach a `@pre` decorator to the Typegoose class and define the ho
 })
 class Car extends Typegoose {
   @prop({ required: true })
-  model: string;
+  model!: string;
 
   @prop()
-  isFast: boolean;
+  isFast?: boolean;
 }
 ```
 
@@ -452,18 +483,18 @@ Note that additional typing information is required either by passing the class 
 
 Same as `pre`, the `post` hook is also implemented as a class decorator. Usage is equivalent with the one Mongoose provides.
 
-```typescript
-@post<Car>('save', (car) => { // or @post('save', (car: Car) => { ...
+```ts
+@post<Car>('save', (car) => {
   if (car.topSpeedInKmH > 300) {
     console.log(car.model, 'is fast!');
   }
 })
 class Car extends Typegoose {
   @prop({ required: true })
-  model: string;
+  model!: string;
 
   @prop({ required: true })
-  topSpeedInKmH: number;
+  topSpeedInKmH!: number;
 }
 ```
 
@@ -475,7 +506,7 @@ Using the `plugin` decorator enables the developer to attach various Mongoose pl
 
 If the plugin enhances the schema with additional properties or instance / static methods this typing information should be added manually to the Typegoose class as well.
 
-```typescript
+```ts
 import * as findOrCreate from 'mongoose-findorcreate';
 
 @plugin(findOrCreate)
@@ -499,22 +530,22 @@ partial indices, expiring documents, etc. Any values supported by
 [MongoDB's createIndex()](https://docs.mongodb.com/manual/reference/method/db.collection.createIndex/#db.collection.createIndex)
 are also valid for `@index`. For more info refer to interface `IndexOptions`
 
- ```typescript
+ ```ts
 @index({ article: 1, user: 1 }, { unique: true })
 @index({ location: '2dsphere' })
 @index({ article: 1 }, { partialFilterExpression: { stars: { $gte: 4.5 } } })
 export class Location extends Typegoose {
   @prop()
-  article: number;
+  article?: number;
 
   @prop()
-  user: number;
+  user?: number;
 
   @prop()
-  stars: number;
+  stars?: number;
 
   @arrayProp({ items: Array })
-  location: [[Number]]
+  location?: [[Number]]
 }
 ```
 
