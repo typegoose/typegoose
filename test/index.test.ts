@@ -8,6 +8,7 @@ import { getClassForDocument } from '../src/utils';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { Car as CarType, model as Car } from './models/car';
+import { IndexWeights, model as IndexWeightsModel } from './models/indexweigths';
 import { model as InternetUser } from './models/internet-user';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from './models/inventory';
 import { AddressNested, PersonNested, PersonNestedModel } from './models/nested-object';
@@ -27,6 +28,37 @@ describe('Typegoose', () => {
   after(() => disconnect());
 
   describe('Hooks', HookTest.bind(this));
+
+  it('should create and find indexes with weights', async () => {
+    const docMongoDB = await IndexWeightsModel.create({
+      about: 'NodeJS module for MongoDB',
+      content: 'MongoDB-native is the default driver for MongoDB in NodeJS',
+      keywords: ['mongodb', 'js', 'nodejs']
+    } as IndexWeights);
+    const docMongoose = await IndexWeightsModel.create({
+      about: 'NodeJS module for MongoDB',
+      content: 'Mongoose is a Module for NodeJS that interfaces with MongoDB',
+      keywords: ['mongoose', 'js', 'nodejs']
+    } as IndexWeights);
+    const docTypegoose = await IndexWeightsModel.create({
+      about: 'TypeScript Module for Mongoose',
+      content: 'Typegoose is a Module for NodeJS that makes Mongoose more compatible with Typescript',
+      keywords: ['typegoose', 'ts', 'nodejs', 'mongoose']
+    } as IndexWeights);
+
+    {
+      const found = await IndexWeightsModel.find({ $text: { $search: 'mongodb' } }).exec();
+      expect(found).to.be.length(2);
+      // expect it to be sorted by textScore
+      expect(found[0].id).to.be.equal(docMongoDB.id);
+      expect(found[1].id).to.be.equal(docMongoose.id);
+    }
+    {
+      const found = await IndexWeightsModel.find({ $text: { $search: 'mongoose -js' } }).exec();
+      expect(found).to.be.length(1);
+      expect(found[0].id).to.be.equal(docTypegoose.id);
+    }
+  });
 
   it('should create a User with connections', async () => {
     const car = await Car.create({

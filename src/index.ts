@@ -4,7 +4,7 @@
  copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
 
  */
-export interface IndexOptions {
+export interface IndexOptions<T> {
   /**
    * Mongoose-specific syntactic sugar, uses ms to convert
    * expires option into seconds for the expireAfterSeconds in the above link.
@@ -58,6 +58,10 @@ export interface IndexOptions {
   lowercase?: boolean; // whether to always call .toLowerCase() on the value
   uppercase?: boolean; // whether to always call .toUpperCase() on the value
   trim?: boolean; // whether to always call .trim() on the value
+
+  weights?: {
+    [P in keyof Partial<T>]: number;
+  };
 }
 
 /**
@@ -70,7 +74,7 @@ export interface IndexOptions {
  *  class Name extends Typegoose {}
  * ```
  */
-export function index(fields: any, options?: IndexOptions) {
+export function index<T>(fields: T, options?: IndexOptions<T>) {
   return (constructor: any) => {
     const indices = Reflect.getMetadata('typegoose:indices', constructor) || [];
     indices.push({ fields, options });
