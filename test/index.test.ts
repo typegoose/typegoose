@@ -18,6 +18,8 @@ import { model as StringValidators } from './models/stringValidators';
 import { model as User, User as UserType } from './models/user';
 import { Virtual, VirtualSub } from './models/virtualprop';
 import { suite as HookTest } from './tests/hooks.test';
+import { typeguards as TypeguardsTest } from './tests/typeguards.test';
+
 import { connect, disconnect } from './utils/mongooseConnect';
 
 use(cap);
@@ -27,7 +29,8 @@ describe('Typegoose', () => {
   after(() => disconnect());
 
   describe('Hooks', HookTest.bind(this));
-
+  describe('Type guards', TypeguardsTest.bind(this));
+  
   it('should create a User with connections', async () => {
     const car = await Car.create({
       model: 'Tesla',
