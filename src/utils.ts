@@ -1,6 +1,8 @@
 import * as mongoose from 'mongoose';
 
 import { constructors, schema } from './data';
+import { Ref } from './prop';
+import { InstanceType } from './typegoose';
 
 /**
  * Returns true, if it includes the Type
@@ -83,4 +85,20 @@ export function initAsArray(name: any, key: any): void {
 export function getClassForDocument(document: mongoose.Document): any {
   const modelName = (document.constructor as mongoose.Model<typeof document>).modelName;
   return constructors[modelName];
+}
+
+/**
+ * Check if the given document is already populated
+ * @param doc The Ref with uncertain type
+ */
+export function isDocument<T>(doc: Ref<T>): doc is InstanceType<T> {
+  return doc instanceof mongoose.Model;
+}
+
+/**
+ * Check if the given array is already populated
+ * @param docs The Array of Refs with uncertain type
+ */
+export function isDocumentArray<T>(docs: Ref<T>[]): docs is InstanceType<T>[] {
+  return Array.isArray(docs) && docs.every(v => isDocument(v));
 }
