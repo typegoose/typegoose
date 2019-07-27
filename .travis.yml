@@ -4,11 +4,6 @@ node_js:
 - "8"
 # Test against highest node version available
 - lts/*
-before_install:
-- |
-  # Test against oldest allowed packages
-  # sed -i 's/"\^/"/g' package.json
-  npm i mongoose@5.5.14 --no-save
 script:
 # Audit to make sure there are no vulnerabilities, but do not affect the whole build
 - (npm audit || exit 0)
@@ -25,5 +20,8 @@ deploy:
       only:
       - master
 after_success:
-# Generate the Coverage
-- npm run coverage
+# Generate the Coverage only for one version
+- |
+  if [[ $TRAVIS_NODE_VERSION == "lts/*" ]]; then
+    npm run coverage
+  fi

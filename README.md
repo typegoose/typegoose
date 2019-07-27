@@ -541,3 +541,7 @@ For reference properties:
 
 * Add frequently used (currently not present) features if needed
 * Create more tests (break down current huge one into multiple unit tests)
+
+### Notes
+
+* `mongoose` is a peer-dependency, and a dev dependency to install it for dev purposes
