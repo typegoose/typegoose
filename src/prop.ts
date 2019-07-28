@@ -215,7 +215,14 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   }
 
   const itemsRef = rawOptions.itemsRef;
-  if (itemsRef) {
+  if (typeof itemsRef === 'string') {
+    schema[name][key][0] = {
+      ...schema[name][key][0],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: itemsRef,
+    };
+    return;
+  } else if (itemsRef) {
     schema[name][key][0] = {
       ...schema[name][key][0],
       type: mongoose.Schema.Types.ObjectId,
@@ -239,7 +246,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schema[name][key][0] = {
       ...schema[name][key][0],
       type: mongoose.Schema.Types.ObjectId,
-      itemsRefPath,
+      refPath: itemsRefPath,
     };
     return;
   }
@@ -321,7 +328,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
 
   if (whatis === WhatIsIt.ARRAY) {
     schema[name][key] = {
-      ...schema[name][key][0],
+      ...schema[name][key][0], // [0] is needed, because "initasArray" adds this (empty)
       ...options,
       type: [{
         ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
