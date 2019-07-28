@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { model as Hook } from '../models/hook1';
+import { Hook, model as HookModel } from '../models/hook1';
 import { model as Dummy } from '../models/hook2';
 
 /**
@@ -15,8 +15,19 @@ import { model as Dummy } from '../models/hook2';
  * ```
  */
 export function suite() {
+  it('RegEXP tests', async () => {
+    const doc = new HookModel({ material: 'iron' } as Hook);
+    await doc.save();
+    await doc.updateOne(doc); // to run the update hook with regexp, find dosnt work (it dosnt get applied)
+
+    const found = await HookModel.findById(doc.id).exec();
+    expect(found).to.not.be.an('undefined');
+    expect(found).to.have.property('material', 'REGEXP_POST');
+    expect(found).to.have.property('shape', 'REGEXP_PRE');
+  });
+
   it('should update the property using isModified during pre save hook', async () => {
-    const hook = await Hook.create({
+    const hook = await HookModel.create({
       material: 'steel',
     });
     expect(hook).to.have.property('shape', 'oldShape');

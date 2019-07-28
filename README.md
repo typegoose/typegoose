@@ -427,7 +427,7 @@ Static Mongoose methods must be declared with `static` keyword on the Typegoose 
 
 If we want to use another static method of the model (built-in or created by us) we have to override the `this` in the method using the [type specifying of `this` for functions](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#specifying-the-type-of-this-for-functions). If we don't do this, TypeScript will throw development-time error on missing methods.
 
-```typescript
+```ts
 @staticMethod
 static findByAge(this: ModelType<User> & typeof User, age: number) {
   return this.findOne({ age });
@@ -455,9 +455,10 @@ Mongoose allows the developer to add pre and post [hooks / middlewares](http://m
 
 Typegoose provides this functionality through TypeScript's class decorators.
 
-### pre
+#### pre
 
 We can simply attach a `@pre` decorator to the Typegoose class and define the hook function like you normally would in Mongoose.
+(Method supports REGEXP)
 
 ```ts
 @pre<Car>('save', function(next) { // or @pre(this: Car, 'save', ...
@@ -482,6 +483,7 @@ Note that additional typing information is required either by passing the class 
 #### post
 
 Same as `pre`, the `post` hook is also implemented as a class decorator. Usage is equivalent with the one Mongoose provides.
+(Method supports REGEXP)
 
 ```ts
 @post<Car>('save', (car) => {

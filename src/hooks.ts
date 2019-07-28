@@ -42,26 +42,26 @@ type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | Docume
 type MultipleMethod = 'find' | 'update';
 
 interface Hooks {
-  pre<T>(method: DocumentMethod, fn: DocumentPreSerialFn<T>): ClassDecorator;
-  pre<T>(method: DocumentMethod, parallel: boolean, fn: DocumentPreParallelFn<T>): ClassDecorator;
+  pre<T>(method: DocumentMethod | RegExp, fn: DocumentPreSerialFn<T>): ClassDecorator;
+  pre<T>(method: DocumentMethod | RegExp, parallel: boolean, fn: DocumentPreParallelFn<T>): ClassDecorator;
 
-  pre<T>(method: QueryMethod | ModelMethod, fn: SimplePreSerialFn<T>): ClassDecorator;
-  pre<T>(method: QueryMethod | ModelMethod, parallel: boolean, fn: SimplePreParallelFn<T>): ClassDecorator;
+  pre<T>(method: QueryMethod | ModelMethod | RegExp, fn: SimplePreSerialFn<T>): ClassDecorator;
+  pre<T>(method: QueryMethod | ModelMethod | RegExp, parallel: boolean, fn: SimplePreParallelFn<T>): ClassDecorator;
 
   // I had to disable linter to allow this. I only got proper code completion separating the functions
-  post<T>(method: NumberMethod, fn: PostNumberResponse<T>): ClassDecorator;
+  post<T>(method: NumberMethod | RegExp, fn: PostNumberResponse<T>): ClassDecorator;
   // tslint:disable-next-line:unified-signatures
-  post<T>(method: NumberMethod, fn: PostNumberWithError<T>): ClassDecorator;
+  post<T>(method: NumberMethod | RegExp, fn: PostNumberWithError<T>): ClassDecorator;
 
-  post<T>(method: SingleMethod, fn: PostSingleResponse<T>): ClassDecorator;
+  post<T>(method: SingleMethod | RegExp, fn: PostSingleResponse<T>): ClassDecorator;
   // tslint:disable-next-line:unified-signatures
-  post<T>(method: SingleMethod, fn: PostSingleWithError<T>): ClassDecorator;
+  post<T>(method: SingleMethod | RegExp, fn: PostSingleWithError<T>): ClassDecorator;
 
-  post<T>(method: MultipleMethod, fn: PostMultipleResponse<T>): ClassDecorator;
+  post<T>(method: MultipleMethod | RegExp, fn: PostMultipleResponse<T>): ClassDecorator;
   // tslint:disable-next-line:unified-signatures
-  post<T>(method: MultipleMethod, fn: PostMultipleWithError<T>): ClassDecorator;
+  post<T>(method: MultipleMethod | RegExp, fn: PostMultipleWithError<T>): ClassDecorator;
 
-  post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>): ClassDecorator;
+  post<T>(method: ModelMethod | RegExp, fn: ModelPostFn<T> | PostMultipleResponse<T>): ClassDecorator;
 }
 
 // Note: Documentation for the hooks cant be added without adding it to *every* overload
