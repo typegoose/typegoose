@@ -58,6 +58,19 @@ export interface PropOptions extends BasePropOptions {
   ref?: any;
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
+  /** 
+   * Give the Property an alias in the output
+   * Note: you should include the alias as a variable in the class, but not with a prop decorator
+   * @example
+   * ```ts
+   * class Dummy extends Typegoose {
+   *   @prop({ alias: "helloWorld" })
+   *   public hello: string; // normal, with @prop
+   *   public helloWorld: string; // is just for type Completion, will not be included in the DB
+   * }
+   * ```
+   */
+  alias?: string;
 }
 
 export interface ValidateNumberOptions {
