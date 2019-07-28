@@ -10,6 +10,7 @@ export * from './prop';
 export * from './hooks';
 export * from './plugin';
 export * from '.';
+export * from './typeguards';
 export { getClassForDocument } from './utils';
 
 export type InstanceType<T> = T & mongoose.Document;

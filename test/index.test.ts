@@ -10,6 +10,8 @@ import { suite as HookTest } from './tests/hooks.test';
 import { suite as SelectTests } from './tests/select.test';
 import { suite as ShouldAddTest } from './tests/shouldAdd.test';
 import { suite as StringValidatorTests } from './tests/stringValidator.test';
+import { suite as TypeguardsTest } from './tests/typeguards.test';
+
 import { connect, disconnect } from './utils/mongooseConnect';
 
 use(cap);
@@ -21,6 +23,8 @@ describe('Typegoose', () => {
   describe('BigUser', BigUserTest.bind(this));
 
   describe('Hooks', HookTest.bind(this));
+
+  describe('Type guards', TypeguardsTest.bind(this));
 
   describe('Should add', ShouldAddTest.bind(this));
 
