@@ -1,5 +1,3 @@
-/** @format */
-
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
@@ -274,7 +272,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
       schema[name][key] = {
         ...schema[name][key][0],
         ...options,
-        type: [Type],
+        type: [Type]
       };
       return;
     }
@@ -285,14 +283,14 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
         ...schema[name][key],
         type: Map,
         default: mapDefault,
-        of: { type: Type, ...options },
+        of: { type: Type, ...options }
       };
       return;
     }
     schema[name][key] = {
       ...schema[name][key],
       ...options,
-      type: Type,
+      type: Type
     };
     return;
   }
@@ -303,7 +301,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schema[name][key] = {
       ...schema[name][key],
       ...options,
-      type: Object,
+      type: Object
     };
     return;
   }
@@ -315,7 +313,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
       type: [{
         ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
         ...subSchema,
-      }],
+      }]
     };
     return;
   }
@@ -328,7 +326,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     };
     schema[name][key].of = {
       ...schema[name][key].of,
-      ...subSchema,
+      ...subSchema
     };
     return;
   }
@@ -345,7 +343,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   schema[name][key] = {
     ...schema[name][key],
     ...options,
-    type: virtualSchema,
+    type: virtualSchema
   };
   return;
 }

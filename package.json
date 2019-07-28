@@ -12,8 +12,8 @@
   ],
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
-    "build": "tsc",
-    "watch": "tsc -w",
+    "build": "tsc -p tsconfig.build.json",
+    "watch": "tsc -w -p tsconfig.build.json",
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && nyc npm run mocha",
     "mocha": "npm run build && mocha \"./test/*.ts\" --timeout 15000",
@@ -54,6 +54,7 @@
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
     "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0",
     "typedoc": "^0.15.0",
     "typescript": "^3.5.3"
   },

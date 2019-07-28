@@ -541,6 +541,10 @@ For reference properties:
 
 * Add frequently used (currently not present) features if needed
 * Create more tests (break down current huge one into multiple unit tests)
+* Add Tests for:
+  - Hooks: add hook test for pre & post with error
+  - test for the errors (if invalid arguments are given)
+  - improve baseProp `required` handeling ()
 
 ### Notes
 

@@ -1,5 +1,3 @@
-/** @format */
-
 /*
  copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
 

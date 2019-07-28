@@ -1,5 +1,3 @@
-/** @format */
-
 import { MongooseDocument } from 'mongoose';
 
 import { hooks as hooksData } from './data';

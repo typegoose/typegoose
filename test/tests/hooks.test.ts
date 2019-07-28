@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 
-import { model as Dummy } from '../hookTests/dummy';
-import { model as Hook } from '../hookTests/hooktestModel';
+import { model as Hook } from '../models/hook1';
+import { model as Dummy } from '../models/hook2';
 
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
  * @example
  * ```
- * import { suite as HookTests } from './hooks.test.ts'
+ * import { suite as HookTests } from './hooks.test'
  * ...
  * describe('Hooks', HookTests.bind(this));
  * ...
@@ -48,11 +48,7 @@ export function suite() {
   it('should test the updateMany hook', async () => {
     await Dummy.insertMany([{ text: 'foobar42' }, { text: 'foobar42' }]);
 
-    await Dummy.updateMany({
-      text: 'foobar42',
-    }, {
-        text: 'lorem ipsum',
-      });
+    await Dummy.updateMany({ text: 'foobar42' }, { text: 'lorem ipsum' });
 
     const foundUpdatedDummies = await Dummy.find({ text: 'updateManied' });
 

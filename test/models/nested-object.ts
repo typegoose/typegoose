@@ -1,4 +1,4 @@
-import * as tg from '../../src/typegoose';
+import { prop, Typegoose } from '../../src/typegoose';
 
 export class AddressNested {
   public street: string;
@@ -8,14 +8,14 @@ export class AddressNested {
   }
 }
 
-export class PersonNested extends tg.Typegoose {
-  @tg.prop()
+export class PersonNested extends Typegoose {
+  @prop()
   public name: string;
 
-  @tg.prop()
+  @prop()
   public address: AddressNested;
 
-  @tg.prop()
+  @prop()
   public moreAddresses: AddressNested[] = [];
 }
 

@@ -4,6 +4,9 @@ export class StringValidators extends Typegoose {
   @prop({ maxlength: 3 })
   public maxLength: string;
 
+  @prop({ minlength: 10 })
+  public minLength: string;
+
   @prop({ trim: true })
   public trimmed: string;
 

@@ -1,5 +1,3 @@
-/** @format */
-
 import { instanceMethod, pre, prop, staticMethod } from '../../src/typegoose';
 import { PersistentModel } from './PersistentModel';
 

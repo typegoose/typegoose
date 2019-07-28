@@ -60,13 +60,11 @@ export async function disconnect(): Promise<any> {
 }
 
 /**
- * Only execute these when the Tests were not started
+ * Only execute this function when the tests were not started
  */
 async function firstConnect() {
   isFirst = false;
   await mongoose.connection.db.dropDatabase(); // to always have a clean database
-  await disconnect();
-  await connect();
 
   await Promise.all( // recreate the indexes that were dropped
     Object.keys(mongoose.models).map(async modelName => {
