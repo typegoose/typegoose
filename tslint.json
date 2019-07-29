@@ -5,6 +5,9 @@
     "tslint-config-prettier",
     "prettier-tslint"
   ],
+  "rulesDirectory": [
+    "node_modules/tslint-eslint-rules/dist/rules"
+  ],
   "rules": {
     "quotemark": {
       "severity": "warn",
@@ -19,6 +22,10 @@
         2
       ]
     },
+    "ter-indent": [
+      true,
+      2
+    ],
     "semicolon": {
       "severity": "error",
       "options": [

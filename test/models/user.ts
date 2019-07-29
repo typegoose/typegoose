@@ -59,7 +59,7 @@ export class User extends Typegoose {
   @prop({ enum: Role })
   public role: Role;
 
-  @arrayProp({ items: String, enum: Role, default: Role.Guest })
+  @arrayProp({ items: String, enum: Role, default: [Role.Guest] })
   public roles: Role[];
 
   @prop()

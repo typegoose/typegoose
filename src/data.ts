@@ -1,5 +1,3 @@
-/** @format */
-
 export const methods = { staticMethods: {}, instanceMethods: {} };
 /** Schema Collection */
 export const schema = {};

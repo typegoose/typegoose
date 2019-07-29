@@ -1,5 +1,3 @@
-/** @format */
-
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
@@ -60,6 +58,19 @@ export interface PropOptions extends BasePropOptions {
   ref?: any;
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
+  /** 
+   * Give the Property an alias in the output
+   * Note: you should include the alias as a variable in the class, but not with a prop decorator
+   * @example
+   * ```ts
+   * class Dummy extends Typegoose {
+   *   @prop({ alias: "helloWorld" })
+   *   public hello: string; // normal, with @prop
+   *   public helloWorld: string; // is just for type Completion, will not be included in the DB
+   * }
+   * ```
+   */
+  alias?: string;
 }
 
 export interface ValidateNumberOptions {
@@ -204,7 +215,14 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   }
 
   const itemsRef = rawOptions.itemsRef;
-  if (itemsRef) {
+  if (typeof itemsRef === 'string') {
+    schema[name][key][0] = {
+      ...schema[name][key][0],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: itemsRef,
+    };
+    return;
+  } else if (itemsRef) {
     schema[name][key][0] = {
       ...schema[name][key][0],
       type: mongoose.Schema.Types.ObjectId,
@@ -228,7 +246,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schema[name][key][0] = {
       ...schema[name][key][0],
       type: mongoose.Schema.Types.ObjectId,
-      itemsRefPath,
+      refPath: itemsRefPath,
     };
     return;
   }
@@ -274,7 +292,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
       schema[name][key] = {
         ...schema[name][key][0],
         ...options,
-        type: [Type],
+        type: [Type]
       };
       return;
     }
@@ -285,14 +303,14 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
         ...schema[name][key],
         type: Map,
         default: mapDefault,
-        of: { type: Type, ...options },
+        of: { type: Type, ...options }
       };
       return;
     }
     schema[name][key] = {
       ...schema[name][key],
       ...options,
-      type: Type,
+      type: Type
     };
     return;
   }
@@ -303,19 +321,19 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schema[name][key] = {
       ...schema[name][key],
       ...options,
-      type: Object,
+      type: Object
     };
     return;
   }
 
   if (whatis === WhatIsIt.ARRAY) {
     schema[name][key] = {
-      ...schema[name][key][0],
+      ...schema[name][key][0], // [0] is needed, because "initasArray" adds this (empty)
       ...options,
       type: [{
         ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
         ...subSchema,
-      }],
+      }]
     };
     return;
   }
@@ -328,7 +346,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     };
     schema[name][key].of = {
       ...schema[name][key].of,
-      ...subSchema,
+      ...subSchema
     };
     return;
   }
@@ -345,7 +363,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   schema[name][key] = {
     ...schema[name][key],
     ...options,
-    type: virtualSchema,
+    type: virtualSchema
   };
   return;
 }

@@ -1,6 +1,4 @@
 {
-// Unter https://go.microsoft.com/fwlink/?LinkId=733558
-// finden Sie Informationen zum Format von "tasks.json"
     "version": "2.0.0",
     "tasks": [
         {

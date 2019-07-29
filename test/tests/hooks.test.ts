@@ -1,22 +1,33 @@
 import { expect } from 'chai';
 
-import { model as Dummy } from '../hookTests/dummy';
-import { model as Hook } from '../hookTests/hooktestModel';
+import { Hook, model as HookModel } from '../models/hook1';
+import { model as Dummy } from '../models/hook2';
 
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
  * @example
  * ```
- * import { suite as HookTests } from './hooks.test.ts'
+ * import { suite as HookTests } from './hooks.test'
  * ...
  * describe('Hooks', HookTests.bind(this));
  * ...
  * ```
  */
 export function suite() {
+  it('RegEXP tests', async () => {
+    const doc = new HookModel({ material: 'iron' } as Hook);
+    await doc.save();
+    await doc.updateOne(doc); // to run the update hook with regexp, find dosnt work (it dosnt get applied)
+
+    const found = await HookModel.findById(doc.id).exec();
+    expect(found).to.not.be.an('undefined');
+    expect(found).to.have.property('material', 'REGEXP_POST');
+    expect(found).to.have.property('shape', 'REGEXP_PRE');
+  });
+
   it('should update the property using isModified during pre save hook', async () => {
-    const hook = await Hook.create({
+    const hook = await HookModel.create({
       material: 'steel',
     });
     expect(hook).to.have.property('shape', 'oldShape');
@@ -48,11 +59,7 @@ export function suite() {
   it('should test the updateMany hook', async () => {
     await Dummy.insertMany([{ text: 'foobar42' }, { text: 'foobar42' }]);
 
-    await Dummy.updateMany({
-      text: 'foobar42',
-    }, {
-        text: 'lorem ipsum',
-      });
+    await Dummy.updateMany({ text: 'foobar42' }, { text: 'lorem ipsum' });
 
     const foundUpdatedDummies = await Dummy.find({ text: 'updateManied' });
 
