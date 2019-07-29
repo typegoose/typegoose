@@ -46,17 +46,17 @@
     "mongodb-memory-server-global": "^5.1.9",
     "mongoose": "^5.6.7",
     "mongoose-findorcreate": "3.0.0",
-    "nyc": "^14.1.1",
+    "nyc": "*14.1.1",
     "prettier": "^1.18.2",
     "prettier-tslint": "^0.4.2",
-    "rimraf": "^2.6.3",
+    "rimraf": "*2.6.3",
     "source-map-support": "^0.5.12",
     "ts-node": "^8.3.0",
-    "tslint": "^5.18.0",
+    "tslint": "*5.18.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-eslint-rules": "^5.4.0",
-    "typedoc": "^0.15.0",
-    "typescript": "^3.5.3"
+    "typedoc": "*0.15.0",
+    "typescript": "*3.5.3"
   },
   "dependencies": {
     "reflect-metadata": "^0.1.13"

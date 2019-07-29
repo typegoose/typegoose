@@ -9,4 +9,25 @@
 - Make sure when you make documentation of a something, you use the [TSDoc standard](https://api-extractor.com/pages/tsdoc/doc_comment_syntax/), not JSDoc, thanks
 
 ---
+
+## How to structure Commits
+
+```
+Some Title
+- moving fileA to folderB/
+- removing fileB
+- adding tests for FeatureX
+- adding `@prop({ optionA })`
+- adding tsdoc for FeatureX
+- modify README to include Docs about A
+- 
+```
+*Legend:*
+- add `[#1]` at the end when there is an issue for it (and modify it to the actual number)
+- the title should be a short introduction like (for small fixes)`Add @mapProp for Maps with tests` (for bigger)`Adding TSDoc`[preferably split the commits when they get to large with adding more features]
+- the first word should be "adding" "removing" "moving", expect if it cant be expressed with those
+
+*Note: if you make a Pull Request that dosnt conform with this structure, it will be first rebased and then merged*
+
+---
 *this is just the base, changes will occure*
