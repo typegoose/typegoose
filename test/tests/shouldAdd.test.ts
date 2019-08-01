@@ -3,10 +3,9 @@ import * as mongoose from 'mongoose';
 
 import { Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
-import { model as Car } from '../models/car';
+import { Alias, model as AliasModel } from '../models/alias';
 import { model as InternetUser } from '../models/internet-user';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
-import { model as Rating } from '../models/rating';
 import { model as User } from '../models/user';
 import { Virtual, VirtualSub } from '../models/virtualprop';
 
@@ -39,21 +38,6 @@ export function suite() {
     savedUser.previousJobs.map((prevJob) => {
       expect(prevJob.startedAt).to.be.a('date');
     });
-  });
-
-  it('should add compound index', async () => {
-    const user = await User.findOne();
-    const car = await Car.findOne();
-
-    await Rating.create({ user, car, stars: 4 });
-
-    // should fail, because user and car should be unique
-    try {
-      await Rating.create({ user, car, stars: 5 });
-    } catch (err) {
-      expect(err).to.have.property('code', 11000);
-    }
-    // await expect(Rating.create({ user, car, stars: 5 })).to.be.rejected.and.have.property('code', 11000);
   });
 
   it('should add and populate the virtual properties', async () => {
@@ -150,5 +134,31 @@ export function suite() {
 
     // wrong type to make typescript happy
     expect((items[1].kind as typeof Beverage).isDecaf).to.be.an('undefined');
+  });
+
+  it('it should alias correctly', () => {
+    const created = new AliasModel({ alias: 'hello from aliasProp', normalProp: 'hello from normalProp' } as Alias);
+
+    expect(created).to.not.be.an('undefined');
+    expect(created).to.have.property('normalProp', 'hello from normalProp');
+    expect(created).to.have.property('alias', 'hello from aliasProp');
+    expect(created).to.have.property('aliasProp');
+
+    // include virtuals
+    {
+      const toObject = created.toObject({ virtuals: true });
+      expect(toObject).to.not.be.an('undefined');
+      expect(toObject).to.have.property('normalProp', 'hello from normalProp');
+      expect(toObject).to.have.property('alias', 'hello from aliasProp');
+      expect(toObject).to.have.property('aliasProp', 'hello from aliasProp');
+    }
+    // do not include virtuals
+    {
+      const toObject = created.toObject();
+      expect(toObject).to.not.be.an('undefined');
+      expect(toObject).to.have.property('normalProp', 'hello from normalProp');
+      expect(toObject).to.have.property('alias', 'hello from aliasProp');
+      expect(toObject).to.not.have.property('aliasProp');
+    }
   });
 }
