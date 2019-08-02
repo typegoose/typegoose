@@ -126,6 +126,15 @@ You also need to install `mongoose` and `reflect-metadata`, in versions < 5.0, t
 
 `npm test`
 
+## Versioning
+
+`Major.Minor.Fix` (or how npm expresses it `Major.Minor.Patch`)
+
+* `0.0.x` is for minor fixes, like hot-fixes
+* `0.x.0` is for Minor things like adding features, that are non-breaking (or at least should not be breaking anything)
+* `x.0.0` is for Major things like adding features that are breaking or refactoring which is a breaking change
+* `0.0.0-x` is for a Pre-Release, that are not yet ready to be published
+
 ## API Documentation
 
 ### Typegoose class
@@ -591,3 +600,4 @@ For reference properties:
 ### Notes
 
 * `mongoose` is a peer-dependency, and a dev dependency to install it for dev purposes
+* Please dont add comments with `+1` or something like that, use the Reactions
