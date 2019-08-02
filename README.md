@@ -9,7 +9,7 @@ Define Mongoose models using TypeScript classes.
 ## Basic usage
 
 ```ts
-import { prop, Typegoose, ModelType, InstanceType } from 'typegoose';
+import { prop, Typegoose } from 'typegoose';
 import * as mongoose from 'mongoose';
 
 mongoose.connect('mongodb://localhost:27017/test');
@@ -141,19 +141,17 @@ You also need to install `mongoose` and `reflect-metadata`, in versions < 5.0, t
 
 This is the class which your schema defining classes must extend.
 
-#### Methods:
+#### Methods
 
 `getModelForClass<T>(t: T, options?: GetModelForClassOptions)`
 
 This method returns the corresponding Mongoose Model for the class (`T`). If no Mongoose model exists for this class yet, one will be created automatically (by calling the method `setModelForClass`).
-
 
 `setModelForClass<T>(t: T, options?: GetModelForClassOptions)`
 
 This method assembles the Mongoose Schema from the decorated schema defining class, creates the Mongoose Model and returns it. For typing reasons, the schema defining class must be passed down to it.
 
 Hint: If a Mongoose Model already exists for this class, it will be overwritten.
-
 
 The `GetModelForClassOptions` provides multiple optional configurations:
  * `existingMongoose: mongoose`: An existing Mongoose instance can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.
@@ -240,12 +238,12 @@ The `options` object accepts multiple config properties:
     @prop({ default: 'Nick' })
     nickName?: string;
     ```
-    
+
   - `_id`: When false, no \_id is added to the subdocument
 
     ```ts
     class Car extends Typegoose {}
-    
+
     @prop({ _id: false })
     car?: Car;
     ```
@@ -288,7 +286,6 @@ The `options` object accepts multiple config properties:
     @prop({ minlength: 5, maxlength: 10, match: /[0-9a-f]*/ })
     favouriteHexNumber?: string;
     ```
-
 
   - `validate` (custom validators): You can define your own validator function/regex using this. The function has to return a `boolean` or a Promise (async validation).
 
@@ -334,6 +331,7 @@ The `options` object accepts multiple config properties:
     ```
 
   - `alias` (alias): Same as [Mongoose Alias](https://mongoosejs.com/docs/guide.html#aliases), only difference is the extra property for type completion
+
     ```ts
     class Dummy extends Typegoose {
       @prop({ alias: "helloWorld" })
@@ -456,11 +454,11 @@ Note that the `& typeof T` is only mandatory if we want to use the developer def
 
 #### instanceMethod
 
-Instance methods are on the Mongoose document instances, thus they must be defined as non-static methods. Again if we want to call other instance methods the type of `this` must be redefined to `InstanceType<T>` (see Types).
+Instance methods are on the Mongoose document instances, thus they must be defined as non-static methods. Again if we want to call other instance methods the type of `this` must be redefined to `DocumentType<T>` (see Types).
 
 ```ts
 @instanceMethod
-incrementAge(this: InstanceType<User>) {
+incrementAge(this: DocumentType<User>) {
   const age = this.age || 1;
   this.age = age + 1;
   return this.save();
@@ -532,8 +530,8 @@ import * as findOrCreate from 'mongoose-findorcreate';
 @plugin(findOrCreate)
 class User extends Typegoose {
   // this isn't the complete method signature, just an example
-  static findOrCreate(condition: InstanceType<User>):
-    Promise<{ doc: InstanceType<User>, created: boolean }>;
+  static findOrCreate(condition: DocumentType<User>):
+    Promise<{ doc: DocumentType<User>, created: boolean }>;
 }
 
 const UserModel = new User().getModelForClass(User);
@@ -573,15 +571,13 @@ export class Location extends Typegoose {
 
 Some additional types were added to make Typegoose more user friendly.
 
-#### InstanceType<T>
+#### DocumentType<T>
 
 This is basically the logical 'and' of the `T` and the `mongoose.Document`, so that both the Mongoose instance properties/functions and the user defined properties/instance methods are available on the instance.
 
-Note: TypeScript has its own InstanceType, you should import it from Typegoose
-
 #### ModelType<T>
 
-This is the logical 'and' of `mongoose.Model<InstanceType<T>>` and `T`, so that the Mongoose model creates `InstanceType<T>` typed instances and all user defined static methods are available on the model.
+This is the logical 'and' of `mongoose.Model<DocumentType<T>>` and `T`, so that the Mongoose model creates `DocumentType<T>` typed instances and all user defined static methods are available on the model.
 
 #### Ref<T>
 

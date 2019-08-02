@@ -1,4 +1,4 @@
-import { arrayProp, instanceMethod, InstanceType, prop, Ref, staticMethod, Typegoose } from '../../src/typegoose';
+import { arrayProp, DocumentType, instanceMethod, prop, Ref, staticMethod, Typegoose } from '../../src/typegoose';
 import { Car } from './car';
 
 export abstract class PersistentModel extends Typegoose {
@@ -22,7 +22,7 @@ export abstract class PersistentModel extends Typegoose {
 
   // define an instanceMethod that is called by the derived class
   @instanceMethod
-  public addCar(this: InstanceType<PersistentModel>, car: Car) {
+  public addCar(this: DocumentType<PersistentModel>, car: Car) {
     if (!this.cars) {
       this.cars = [];
     }

@@ -1,5 +1,5 @@
 import { isArray } from 'util';
-import { InstanceType, post, pre, prop, Typegoose } from '../../src/typegoose';
+import { DocumentType, post, pre, prop, Typegoose } from '../../src/typegoose';
 
 @pre<Hook>('save', function () {
   if (this.isModified('shape')) {
@@ -15,7 +15,7 @@ import { InstanceType, post, pre, prop, Typegoose } from '../../src/typegoose';
     this.update({ shape: 'REGEXP_PRE' });
   }
 })
-@post<Hook>(/^find/, (doc: InstanceType<Hook> | InstanceType<Hook>[]) => {
+@post<Hook>(/^find/, (doc: DocumentType<Hook> | DocumentType<Hook>[]) => {
   if (isArray(doc)) {
     doc.forEach((v) => v.material = 'REGEXP_POST');
   } else {

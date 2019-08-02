@@ -13,8 +13,8 @@ export * from '.';
 export * from './typeguards';
 export { getClassForDocument } from './utils';
 
-export type InstanceType<T> = T & mongoose.Document;
-export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
+export type DocumentType<T> = T & mongoose.Document;
+export type ModelType<T> = mongoose.Model<DocumentType<T>> & T;
 
 export interface GetModelForClassOptions {
   /** An Existing Mongoose Connection */

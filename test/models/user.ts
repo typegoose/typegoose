@@ -1,8 +1,8 @@
 import * as findOrCreate from 'mongoose-findorcreate';
 import {
   arrayProp,
+  DocumentType,
   instanceMethod,
-  InstanceType,
   ModelType,
   plugin,
   prop,
@@ -17,7 +17,7 @@ import { Job } from './job';
 
 export interface FindOrCreateResult<T> {
   created: boolean;
-  doc: InstanceType<T>;
+  doc: DocumentType<T>;
 }
 
 @plugin(findOrCreate)
@@ -83,21 +83,21 @@ export class User extends Typegoose {
   }
 
   @instanceMethod
-  public incrementAge(this: InstanceType<User>) {
+  public incrementAge(this: DocumentType<User>) {
     const age = this.age || 1;
     this.age = age + 1;
     return this.save();
   }
 
   @instanceMethod
-  public addLanguage(this: InstanceType<User>) {
+  public addLanguage(this: DocumentType<User>) {
     this.languages.push('Hungarian');
 
     return this.save();
   }
 
   @instanceMethod
-  public addJob(this: InstanceType<User>, job: Partial<Job> = {}) {
+  public addJob(this: DocumentType<User>, job: Partial<Job> = {}) {
     this.previousJobs.push(job);
 
     return this.save();
