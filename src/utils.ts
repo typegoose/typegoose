@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { constructors, schema } from './data';
+import { constructors, schemas } from './data';
 
 /**
  * Returns true, if it includes the Type
@@ -54,11 +54,11 @@ export function isString(Type: any): boolean {
  * @param key <no info>
  */
 export function initAsObject(name, key): void {
-  if (!schema[name]) {
-    schema[name] = {};
+  if (!schemas.get(name)) {
+    schemas.set(name, {});
   }
-  if (!schema[name][key]) {
-    schema[name][key] = {};
+  if (!schemas.get(name)[key]) {
+    schemas.get(name)[key] = {};
   }
 }
 
@@ -68,11 +68,11 @@ export function initAsObject(name, key): void {
  * @param key <no info>
  */
 export function initAsArray(name: any, key: any): void {
-  if (!schema[name]) {
-    schema[name] = {};
+  if (!schemas.get(name)) {
+    schemas.set(name, {});
   }
-  if (!schema[name][key]) {
-    schema[name][key] = [{}];
+  if (!schemas.get(name)[key]) {
+    schemas.get(name)[key] = [{}];
   }
 }
 
@@ -80,7 +80,7 @@ export function initAsArray(name: any, key: any): void {
  * Get the Class for a given Document
  * @param document The Document
  */
-export function getClassForDocument(document: mongoose.Document): any {
+export function getClassForDocument(document: mongoose.Document): NewableFunction | undefined {
   const modelName = (document.constructor as mongoose.Model<typeof document>).modelName;
-  return constructors[modelName];
+  return constructors.get(modelName);
 }

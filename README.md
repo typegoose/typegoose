@@ -122,6 +122,8 @@ You also need to install `mongoose` and `reflect-metadata`, in versions < 5.0, t
 
 `npm install mongoose reflect-metadata -S`
 
+Note: typegoose uses the package `object.fromEntries` as a polyfill for node versions <12
+
 ## Testing
 
 `npm test`
@@ -134,6 +136,7 @@ You also need to install `mongoose` and `reflect-metadata`, in versions < 5.0, t
 * `0.x.0` is for Minor things like adding features, that are non-breaking (or at least should not be breaking anything)
 * `x.0.0` is for Major things like adding features that are breaking or refactoring which is a breaking change
 * `0.0.0-x` is for a Pre-Release, that are not yet ready to be published
+  -> if you plan to make an PR, you dont need to modify the version, we will do this when its merged
 
 ## API Documentation
 

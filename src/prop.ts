@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
-import { methods, schema, virtuals } from './data';
+import { methods, schemas, virtuals } from './data';
 import { InvalidPropError, NoMetadataError, NotNumberTypeError, NotStringTypeError } from './errors';
 import { initAsArray, initAsObject, isNumber, isObject, isPrimitive, isString } from './utils';
 
@@ -161,32 +161,24 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   const name: string = target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
   if (isGetterSetter) {
+    if (!virtuals.get(name)) {
+      virtuals.set(name, new Map());
+    }
+
     if (isGetterSetter.get) {
-      if (!virtuals[name]) {
-        virtuals[name] = {};
-      }
-      if (!virtuals[name][key]) {
-        virtuals[name][key] = {};
-      }
-      virtuals[name][key] = {
-        ...virtuals[name][key],
+      virtuals.get(name).set(key, {
+        ...virtuals.get(name).get(key),
         get: isGetterSetter.get,
         options: rawOptions,
-      };
+      });
     }
 
     if (isGetterSetter.set) {
-      if (!virtuals[name]) {
-        virtuals[name] = {};
-      }
-      if (!virtuals[name][key]) {
-        virtuals[name][key] = {};
-      }
-      virtuals[name][key] = {
-        ...virtuals[name][key],
+      virtuals.get(name).set(key, {
+        ...virtuals.get(name).get(key),
         set: isGetterSetter.set,
         options: rawOptions,
-      };
+      });
     }
     return;
   }
@@ -199,15 +191,15 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
 
   const ref = rawOptions.ref;
   if (typeof ref === 'string') {
-    schema[name][key] = {
-      ...schema[name][key],
+    schemas.get(name)[key] = {
+      ...schemas.get(name)[key],
       type: mongoose.Schema.Types.ObjectId,
       ref,
     };
     return;
   } else if (ref) {
-    schema[name][key] = {
-      ...schema[name][key],
+    schemas.get(name)[key] = {
+      ...schemas.get(name)[key],
       type: mongoose.Schema.Types.ObjectId,
       ref: ref.name,
     };
@@ -216,15 +208,15 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
 
   const itemsRef = rawOptions.itemsRef;
   if (typeof itemsRef === 'string') {
-    schema[name][key][0] = {
-      ...schema[name][key][0],
+    schemas.get(name)[key][0] = {
+      ...schemas.get(name)[key][0],
       type: mongoose.Schema.Types.ObjectId,
       ref: itemsRef,
     };
     return;
   } else if (itemsRef) {
-    schema[name][key][0] = {
-      ...schema[name][key][0],
+    schemas.get(name)[key][0] = {
+      ...schemas.get(name)[key][0],
       type: mongoose.Schema.Types.ObjectId,
       ref: itemsRef.name,
     };
@@ -233,8 +225,8 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
 
   const refPath = rawOptions.refPath;
   if (refPath && typeof refPath === 'string') {
-    schema[name][key] = {
-      ...schema[name][key],
+    schemas.get(name)[key] = {
+      ...schemas.get(name)[key],
       type: mongoose.Schema.Types.ObjectId,
       refPath,
     };
@@ -243,8 +235,8 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
 
   const itemsRefPath = rawOptions.itemsRefPath;
   if (itemsRefPath && typeof itemsRefPath === 'string') {
-    schema[name][key][0] = {
-      ...schema[name][key][0],
+    schemas.get(name)[key][0] = {
+      ...schemas.get(name)[key][0],
       type: mongoose.Schema.Types.ObjectId,
       refPath: itemsRefPath,
     };
@@ -260,8 +252,8 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
 
   const selectOption = rawOptions.select;
   if (typeof selectOption === 'boolean') {
-    schema[name][key] = {
-      ...schema[name][key],
+    schemas.get(name)[key] = {
+      ...schemas.get(name)[key],
       select: selectOption,
     };
   }
@@ -281,7 +273,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   }
 
   const instance = new Type();
-  const subSchema = schema[instance.constructor.name];
+  const subSchema = schemas.get(instance.constructor.name);
   if (!subSchema && !isPrimitive(Type) && !isObject(Type)) {
     throw new InvalidPropError(Type.name, key);
   }
@@ -289,8 +281,8 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   const { ['ref']: r, ['items']: i, ['of']: o, ...options } = rawOptions;
   if (isPrimitive(Type)) {
     if (whatis === WhatIsIt.ARRAY) {
-      schema[name][key] = {
-        ...schema[name][key][0],
+      schemas.get(name)[key] = {
+        ...schemas.get(name)[key][0],
         ...options,
         // HACK: replace this with "[Type]" if https://github.com/Automattic/mongoose/issues/8034 got fixed
         type: [Type.name === 'ObjectID' ? 'ObjectId' : Type]
@@ -300,16 +292,16 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     if (whatis === WhatIsIt.MAP) {
       const { mapDefault } = options;
       delete options.mapDefault;
-      schema[name][key] = {
-        ...schema[name][key],
+      schemas.get(name)[key] = {
+        ...schemas.get(name)[key],
         type: Map,
         default: mapDefault,
         of: { type: Type, ...options }
       };
       return;
     }
-    schema[name][key] = {
-      ...schema[name][key],
+    schemas.get(name)[key] = {
+      ...schemas.get(name)[key],
       ...options,
       type: Type
     };
@@ -319,8 +311,8 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
   if (isObject(Type) && !subSchema) {
-    schema[name][key] = {
-      ...schema[name][key],
+    schemas.get(name)[key] = {
+      ...schemas.get(name)[key],
       ...options,
       type: Object
     };
@@ -328,8 +320,8 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   }
 
   if (whatis === WhatIsIt.ARRAY) {
-    schema[name][key] = {
-      ...schema[name][key][0], // [0] is needed, because "initasArray" adds this (empty)
+    schemas.get(name)[key] = {
+      ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
       ...options,
       type: [{
         ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
@@ -340,13 +332,13 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   }
 
   if (whatis === WhatIsIt.MAP) {
-    schema[name][key] = {
-      ...schema[name][key],
+    schemas.get(name)[key] = {
+      ...schemas.get(name)[key],
       type: Map,
       ...options
     };
-    schema[name][key].of = {
-      ...schema[name][key].of,
+    (schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of = {
+      ...(schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of,
       ...subSchema
     };
     return;
@@ -356,13 +348,13 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   const supressSubschemaId = rawOptions._id === false;
   const virtualSchema = new Schema({ ...subSchema }, supressSubschemaId ? { _id: false } : {});
 
-  const schemaInstanceMethods = methods.instanceMethods[instance.constructor.name];
+  const schemaInstanceMethods = methods.instanceMethods.get(instance.constructor.name);
   if (schemaInstanceMethods) {
-    virtualSchema.methods = schemaInstanceMethods;
+    virtualSchema.methods = Object.fromEntries(schemaInstanceMethods);
   }
 
-  schema[name][key] = {
-    ...schema[name][key],
+  schemas.get(name)[key] = {
+    ...schemas.get(name)[key],
     ...options,
     type: virtualSchema
   };

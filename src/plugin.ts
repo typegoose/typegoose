@@ -8,9 +8,9 @@ import { plugins } from './data';
 export function plugin(mongoosePlugin: any, options?: any) {
   return (constructor: any) => {
     const name: string = constructor.name;
-    if (!plugins[name]) {
-      plugins[name] = [];
+    if (!plugins.get(name)) {
+      plugins.set(name, []);
     }
-    plugins[name].push({ mongoosePlugin, options });
+    plugins.get(name).push({ mongoosePlugin, options });
   };
 }

@@ -1,6 +1,6 @@
 import { MongooseDocument } from 'mongoose';
 
-import { hooks as hooksData } from './data';
+import { hooks as hooksData, HooksPrePost } from './data';
 
 type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
 type QueryMethod =
@@ -84,11 +84,26 @@ const hooks: Hooks = {
  * @param hookType What type is it
  * @param args All Arguments, that should be passed-throught
  */
-function addToHooks(name: string, hookType: 'pre' | 'post', args: any) {
-  if (!hooksData[name]) {
-    hooksData[name] = { pre: [], post: [] };
+function addToHooks(name: string, hookType: 'pre' | 'post', args: any[]) {
+  const method: string | RegExp = args[0];
+  const paralell: boolean | undefined = typeof args[1] === 'boolean' ? args[1] : undefined;
+  const func: () => void = typeof args[1] === 'boolean' ? args[2] : args[1];
+
+  if (!hooksData.get(name)) {
+    hooksData.set(name, {
+      post: new Map(),
+      pre: new Map()
+    } as HooksPrePost);
   }
-  hooksData[name][hookType].push(args);
+
+  switch (hookType) {
+    case 'post':
+      hooksData.get(name).post.set(method, { func });
+      break;
+    case 'pre':
+      hooksData.get(name).pre.set(method, { func, parallel: paralell });
+      break;
+  }
 }
 
 export const pre = hooks.pre;

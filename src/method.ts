@@ -5,7 +5,7 @@ type MethodType = 'instanceMethods' | 'staticMethods';
 /**
  * Base Function for staticMethod & instanceMethod
  * @param target <no info>
- * @param key <no info>
+ * @param key Method Name
  * @param descriptor <no info>
  * @param methodType What type it is
  */
@@ -14,23 +14,14 @@ function baseMethod(target: any, key: string, descriptor: TypedPropertyDescripto
     descriptor = Object.getOwnPropertyDescriptor(target, key);
   }
 
-  let name: any;
-  if (methodType === 'instanceMethods') {
-    name = target.constructor.name;
-  }
-  if (methodType === 'staticMethods') {
-    name = target.name;
-  }
-
-  if (!methods[methodType][name]) {
-    methods[methodType][name] = {};
-  }
-
   const method = descriptor.value;
-  methods[methodType][name] = {
-    ...methods[methodType][name],
-    [key]: method,
-  };
+  if (methodType === 'instanceMethods') {
+    const name = target.constructor.name;
+    methods.instanceMethods.get(name).set(key, method);
+  } else if (methodType === 'staticMethods') {
+    const name = target.name;
+    methods.staticMethods.get(name).set(key, method);
+  }
 }
 
 /**
@@ -42,10 +33,14 @@ function baseMethod(target: any, key: string, descriptor: TypedPropertyDescripto
  *  public static hello() {}
  * ```
  * @param target <no info>
- * @param key <no info>
+ * @param key Method Name
  * @param descriptor <no info>
  */
 export function staticMethod(target: any, key: string, descriptor: TypedPropertyDescriptor<any>) {
+  const name = target.name;
+  if (!methods.staticMethods.get(name)) {
+    methods.staticMethods.set(name, new Map());
+  }
   return baseMethod(target, key, descriptor, 'staticMethods');
 }
 
@@ -57,9 +52,13 @@ export function staticMethod(target: any, key: string, descriptor: TypedProperty
  *  public hello() {}
  * ```
  * @param target <no info>
- * @param key <no info>
+ * @param key Method Name
  * @param descriptor <no info>
  */
 export function instanceMethod(target: any, key: string, descriptor: TypedPropertyDescriptor<any>) {
+  const name = target.constructor.name;
+  if (!methods.instanceMethods.get(name)) {
+    methods.instanceMethods.set(name, new Map());
+  }
   return baseMethod(target, key, descriptor, 'instanceMethods');
 }

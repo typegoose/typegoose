@@ -1,8 +1,14 @@
 /* imports */
 import * as mongoose from 'mongoose';
+import { shim } from 'object.fromentries';
 import 'reflect-metadata';
+import { isNullOrUndefined } from 'util';
 
-import { constructors, hooks, methods, models, plugins, schema, virtuals } from './data';
+if (!Object.fromEntries) {
+  shim();
+}
+
+import { constructors, hooks, methods, models, plugins, schemas, virtuals } from './data';
 
 /* exports */
 export * from './method';
@@ -45,7 +51,7 @@ export class Typegoose {
     { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
   ) {
     const name = this.constructor.name;
-    if (!models[name]) {
+    if (!models.get(name)) {
       this.setModelForClass(t, {
         existingMongoose,
         schemaOptions,
@@ -53,7 +59,7 @@ export class Typegoose {
       });
     }
 
-    return models[name] as ModelType<this> & T;
+    return models.get(name) as ModelType<this> & T;
   }
 
   /**
@@ -81,10 +87,10 @@ export class Typegoose {
       model = existingMongoose.model.bind(existingMongoose);
     }
 
-    models[name] = model(name, sch);
-    constructors[name] = this.constructor;
+    models.set(name, model(name, sch));
+    constructors.set(name, this.constructor);
 
-    return models[name] as ModelType<this> & T;
+    return models.get(name) as ModelType<this> & T;
   }
 
   /**
@@ -121,60 +127,65 @@ export class Typegoose {
  * @returns Returns the Build Schema
  * @private
  */
-function _buildSchema<T>(t: T, name: string, schemaOptions: any, sch?: mongoose.Schema) {
+function _buildSchema<T>(t: T, name: string, schemaOptions: mongoose.SchemaOptions, sch?: mongoose.Schema) {
   /** Simplify the usage */
   const Schema = mongoose.Schema;
+  schemaOptions = schemaOptions ? schemaOptions : {};
 
   if (!sch) {
-    sch = schemaOptions ? new Schema(schema[name], schemaOptions) : new Schema(schema[name]);
+    sch = new Schema(schemas.get(name), schemaOptions);
   } else {
-    sch.add(schema[name]);
+    sch.add(schemas.get(name));
   }
 
   /** Simplify the usage */
-  const staticMethods = methods.staticMethods[name];
+  const staticMethods = methods.staticMethods.get(name);
   if (staticMethods) {
-    sch.statics = Object.assign(staticMethods, sch.statics || {});
+    sch.statics = Object.assign(Object.fromEntries(staticMethods), sch.statics || {});
   } else {
     sch.statics = sch.statics || {};
   }
 
   /** Simplify the usage */
-  const instanceMethods = methods.instanceMethods[name];
+  const instanceMethods = methods.instanceMethods.get(name);
   if (instanceMethods) {
-    sch.methods = Object.assign(instanceMethods, sch.methods || {});
+    sch.methods = Object.assign(Object.fromEntries(instanceMethods), sch.methods || {});
   } else {
     sch.methods = sch.methods || {};
   }
 
-  if (hooks[name]) { // checking to just dont get errors like "hooks[name].pre is not defined"
-    hooks[name].pre.forEach(preHookArgs => {
-      (sch as any).pre(...preHookArgs);
+  const hook = hooks.get(name);
+  if (hook) {
+    hook.pre.forEach((v, k) => {
+      if (!isNullOrUndefined(v.parallel)) {
+        sch.pre(k, v.parallel, v.func);
+      } else {
+        sch.pre(k as string, v.func); // look at https://github.com/DefinitelyTyped/DefinitelyTyped/issues/37333
+      }
     });
-    hooks[name].post.forEach(postHookArgs => {
-      (sch as any).post(...postHookArgs);
-    });
+
+    hook.post.forEach((v, k) => sch.post(k, v.func));
   }
 
-  if (plugins[name]) { // same as the "if (hooks[name])"
-    for (const plugin of plugins[name]) {
+  if (plugins.get(name)) {
+    for (const plugin of plugins.get(name)) {
       sch.plugin(plugin.mongoosePlugin, plugin.options);
     }
   }
 
   /** Simplify the usage */
-  const getterSetters = virtuals[name];
+  const getterSetters = virtuals.get(name);
   if (getterSetters) {
-    for (const key of Object.keys(getterSetters)) {
-      if (getterSetters[key].options && getterSetters[key].options.overwrite) {
-        sch.virtual(key, getterSetters[key].options);
+    for (const [key, virtual] of getterSetters) {
+      if (virtual.options && virtual.options.overwrite) {
+        sch.virtual(key, virtual.options);
       } else {
-        if (getterSetters[key].get) {
-          sch.virtual(key, getterSetters[key].options).get(getterSetters[key].get);
+        if (virtual.get) {
+          sch.virtual(key, virtual.options).get(virtual.get);
         }
 
-        if (getterSetters[key].set) {
-          sch.virtual(key, getterSetters[key].options).set(getterSetters[key].set);
+        if (virtual.set) {
+          sch.virtual(key, virtual.options).set(virtual.set);
         }
       }
     }
