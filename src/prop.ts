@@ -292,7 +292,8 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
       schema[name][key] = {
         ...schema[name][key][0],
         ...options,
-        type: [Type]
+        // HACK: replace this with "[Type]" if https://github.com/Automattic/mongoose/issues/8034 got fixed
+        type: [Type.name === 'ObjectID' ? 'ObjectId' : Type]
       };
       return;
     }
