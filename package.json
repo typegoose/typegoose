@@ -13,12 +13,13 @@
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "tsc -p tsconfig.build.json",
+    "buildtests": "tsc -p tsconfig.json",
     "watch": "tsc -w -p tsconfig.build.json",
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && nyc npm run mocha",
-    "mocha": "npm run build && mocha \"./test/*.ts\" --timeout 15000",
+    "mocha": "npm run buildtests && mocha \"./test/index.test.ts\" --timeout 15000",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "clean": "rimraf lib && rm .tsbuildinfo && rimraf .nyc_output && rimraf coverage && rimraf doc",
+    "clean": "rimraf lib && rm .tsbuildinfo && rimraf .nyc_output && rimraf coverage && rimraf doc && rimraf build",
     "doc": "typedoc --out ./doc ./src --mode modules"
   },
   "repository": {
