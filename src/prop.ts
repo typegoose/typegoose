@@ -18,7 +18,7 @@ export type Validator =
     message?: string;
   };
 
-export interface BasePropOptions {
+export interface BasePropOptions<T = any> {
   /** include this value? 
    * @default true (Implicitly)
    */
@@ -51,6 +51,7 @@ export interface BasePropOptions {
    * @default true (Implicitly)
    */
   _id?: boolean;
+  set?(value: T): T;
 }
 
 export interface PropOptions extends BasePropOptions {
@@ -159,17 +160,26 @@ function isWithNumberValidate(options: PropOptionsWithNumberValidate) {
  */
 function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: WhatIsIt = WhatIsIt.NONE): void {
   const name: string = target.constructor.name;
+  rawOptions = Object.assign(rawOptions, {});
+
+  if (!virtuals.get(name)) {
+    virtuals.set(name, new Map());
+  }
+
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
   if (isGetterSetter) {
-    if (!virtuals.get(name)) {
-      virtuals.set(name, new Map());
+    if (rawOptions.overwrite) {
+      virtuals.get(name).set(key, {
+        options: rawOptions
+      });
+      return;
     }
 
     if (isGetterSetter.get) {
       virtuals.get(name).set(key, {
         ...virtuals.get(name).get(key),
         get: isGetterSetter.get,
-        options: rawOptions,
+        options: rawOptions
       });
     }
 
@@ -177,7 +187,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
       virtuals.get(name).set(key, {
         ...virtuals.get(name).get(key),
         set: isGetterSetter.set,
-        options: rawOptions,
+        options: rawOptions
       });
     }
     return;
@@ -187,6 +197,18 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     initAsArray(name, key);
   } else {
     initAsObject(name, key);
+  }
+
+  if (rawOptions.set) {
+    /*
+     * Note:
+     * this dosnt have a check if prop & returntype of the function is the same, because it cant be accessed at runtime
+     */
+    schemas.get(name)[key] = {
+      ...schemas.get(name)[key],
+      type: Type,
+      set: rawOptions.set
+    };
   }
 
   const ref = rawOptions.ref;

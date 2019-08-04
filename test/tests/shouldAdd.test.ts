@@ -7,7 +7,7 @@ import { Alias, model as AliasModel } from '../models/alias';
 import { model as InternetUser } from '../models/internet-user';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
 import { model as User } from '../models/user';
-import { Virtual, VirtualSub } from '../models/virtualprop';
+import { NonVirtual, nonVirtualModel, Virtual, virtualModel, VirtualSub, virtualSubModel } from '../models/virtualprop';
 
 /**
  * Function to pass into describe
@@ -41,22 +41,19 @@ export function suite() {
   });
 
   it('should add and populate the virtual properties', async () => {
-    const virtualModel = new Virtual().getModelForClass(Virtual);
-    const virtualSubModel = new VirtualSub().getModelForClass(VirtualSub);
-
-    const virtual1 = await new virtualModel({ dummyVirtual: 'dummyVirtual1' } as Virtual).save();
-    const virtualsub1 = await new virtualSubModel({
+    const virtual1 = await virtualModel.create({ dummyVirtual: 'dummyVirtual1' } as Virtual);
+    const virtualsub1 = await virtualSubModel.create({
       dummy: 'virtualSub1',
       virtual: virtual1._id
-    } as Partial<VirtualSub>).save();
-    const virtualsub2 = await new virtualSubModel({
+    } as Partial<VirtualSub>);
+    const virtualsub2 = await virtualSubModel.create({
       dummy: 'virtualSub2',
       virtual: mongoose.Types.ObjectId() as Ref<any>
-    } as Partial<VirtualSub>).save();
-    const virtualsub3 = await new virtualSubModel({
+    } as Partial<VirtualSub>);
+    const virtualsub3 = await virtualSubModel.create({
       dummy: 'virtualSub3',
       virtual: virtual1._id
-    } as Partial<VirtualSub>).save();
+    } as Partial<VirtualSub>);
 
     const newfound = await virtualModel.findById(virtual1._id).populate('virtualSubs').exec();
 
@@ -67,6 +64,23 @@ export function suite() {
     expect(newfound.virtualSubs[1].dummy).to.be.equal('virtualSub3');
     expect(newfound.virtualSubs[1]._id.toString()).to.be.equal(virtualsub3._id.toString());
     expect(newfound.virtualSubs).to.not.include(virtualsub2);
+  });
+
+  it('should add a nonVirtual setter to db', async () => {
+    {
+      // test if everything works
+      const doc = await nonVirtualModel.create({ non: 'HELLO THERE' } as Partial<NonVirtual>);
+
+      expect(doc.non).to.not.be.an('undefined');
+      expect(doc.non).to.be.equals('hello there');
+    }
+    {
+      // test if other options work too
+      const doc = await nonVirtualModel.create({});
+
+      expect(doc.non).to.not.be.an('undefined');
+      expect(doc.non).to.be.equals('hello_default');
+    }
   });
 
   it(`should add dynamic fields using map`, async () => {
