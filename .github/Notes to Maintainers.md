@@ -8,8 +8,15 @@
 
 ## How to Merge
 
-Try to to use Fast-Forward merge if it fits with the styles
--> if it dosnt fit, rebase it manually
+* If its is just one commit that is just a fix or a hotfix, use FF
+* If it is a larger Branch (like a release) use merge --no-ff
+
+## When to make a Version
+
+* If a release branch (like 6.0.0) gets merged into master, make a Major Version
+* If a collection of "should-not-break" commits, make a minor version
+* If a hotfix, that dosnt break anything make a patch version
+* If a hotfix, that can potentially break something, make a minor version
 
 ## Versioning
 

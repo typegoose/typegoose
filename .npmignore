@@ -223,3 +223,9 @@ build
 
 # ts's build info
 .tsbuildinfo
+
+# source folder
+src 
+
+# tests
+test

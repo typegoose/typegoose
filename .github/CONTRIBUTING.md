@@ -12,7 +12,7 @@
 
 ## How to structure Commits
 
-```
+```txt
 Some Title
 - moving fileA to folderB/
 - removing fileB
@@ -20,8 +20,10 @@ Some Title
 - adding `@prop({ optionA })`
 - adding tsdoc for FeatureX
 - modify README to include Docs about A
-- 
 ```
+
+-> if you make fixing commits (like fixing a typo, fixing travis) use `git commit --fixup` (for autosquash)
+
 *Legend:*
 - add `[#1]` at the end when there is an issue for it (and modify it to the actual number)
 - the title should be a short introduction like (for small fixes)`Add @mapProp for Maps with tests` (for bigger)`Adding TSDoc`[preferably split the commits when they get to large with adding more features]

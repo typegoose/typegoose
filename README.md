@@ -124,6 +124,10 @@ You also need to install `mongoose` and `reflect-metadata`, in versions < 5.0, t
 
 Note: typegoose uses the package `object.fromEntries` as a polyfill for node versions <12
 
+### Migrate to 6.0.0
+
+[migrate_to_6](migrate_to_6.md)
+
 ## Testing
 
 `npm test`
