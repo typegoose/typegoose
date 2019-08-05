@@ -55,7 +55,7 @@ export class Typegoose {
       this.setModelForClass(t, {
         existingMongoose,
         schemaOptions,
-        existingConnection,
+        existingConnection
       });
     }
 
@@ -113,6 +113,7 @@ export class Typegoose {
       // next parent
       parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
     }
+
     return sch;
   }
 }

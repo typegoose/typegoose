@@ -75,8 +75,8 @@ export function suite() {
   });
 
   it('should add compound index', async () => {
-    const user = await User.findOne();
-    const car = await Car.findOne();
+    const user = await User.findOne().exec();
+    const car = await Car.findOne().exec();
 
     await Rating.create({ user, car, stars: 4 });
 

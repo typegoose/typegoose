@@ -1,5 +1,5 @@
 import { instanceMethod, pre, prop, staticMethod } from '../../src/typegoose';
-import { PersistentModel } from './PersistentModel';
+import { PersistentModel } from './persistentModel';
 
 // add a pre-save hook to PersistentModel
 @pre<PersistentModel>('save', function (next) {

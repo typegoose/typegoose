@@ -18,5 +18,5 @@ export function isDocument<T>(doc: Ref<T>): doc is DocumentType<T> {
  * @param docs The Array of Refs with uncertain type
  */
 export function isDocumentArray<T>(docs: Ref<T>[]): docs is DocumentType<T>[] {
-  return Array.isArray(docs) && docs.every(v => isDocument(v));
+  return Array.isArray(docs) && docs.every((v) => isDocument(v));
 }

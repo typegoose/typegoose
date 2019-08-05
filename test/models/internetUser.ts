@@ -11,7 +11,7 @@ export class SideNote {
 enum ProjectValue {
   WORKING = 'working',
   UNDERDEVELOPMENT = 'underdevelopment',
-  BROKEN = 'broken',
+  BROKEN = 'broken'
 }
 
 class InternetUser extends Typegoose {

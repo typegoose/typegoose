@@ -19,7 +19,7 @@ export type Validator =
   };
 
 export interface BasePropOptions<T = any> {
-  /** include this value? 
+  /** include this value?
    * @default true (Implicitly)
    */
   select?: boolean;
@@ -51,7 +51,22 @@ export interface BasePropOptions<T = any> {
    * @default true (Implicitly)
    */
   _id?: boolean;
-  set?(value: T): T;
+  /**
+   * Set an Setter (Non-Virtual) to pre-process your value
+   * @param value The Value that needs to get modified
+   * @returns The Value, but modified OR anything
+   * @example
+   * ```ts
+   * function setHello(val: string): string {
+   *   return val.toLowerCase()
+   * }
+   * class Dummy extends Typegoose {
+   *   @prop({ set: setHello }) /7 many options can be used, like required
+   *   public hello: string;
+   * }
+   * ```
+   */
+  set?(value: T): T | any;
 }
 
 export interface PropOptions extends BasePropOptions {
@@ -59,7 +74,7 @@ export interface PropOptions extends BasePropOptions {
   ref?: any;
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
-  /** 
+  /**
    * Give the Property an alias in the output
    * Note: you should include the alias as a variable in the class, but not with a prop decorator
    * @example
@@ -116,9 +131,9 @@ export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOption
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
 enum WhatIsIt {
-  ARRAY = 'Array',
-  MAP = 'Map',
-  NONE = ''
+  ARRAY,
+  MAP,
+  NONE
 }
 
 /**
@@ -172,6 +187,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
       virtuals.get(name).set(key, {
         options: rawOptions
       });
+
       return;
     }
 
@@ -190,6 +206,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
         options: rawOptions
       });
     }
+
     return;
   }
 
@@ -216,15 +233,17 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       type: mongoose.Schema.Types.ObjectId,
-      ref,
+      ref
     };
+
     return;
   } else if (ref) {
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       type: mongoose.Schema.Types.ObjectId,
-      ref: ref.name,
+      ref: ref.name
     };
+
     return;
   }
 
@@ -233,15 +252,17 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schemas.get(name)[key][0] = {
       ...schemas.get(name)[key][0],
       type: mongoose.Schema.Types.ObjectId,
-      ref: itemsRef,
+      ref: itemsRef
     };
+
     return;
   } else if (itemsRef) {
     schemas.get(name)[key][0] = {
       ...schemas.get(name)[key][0],
       type: mongoose.Schema.Types.ObjectId,
-      ref: itemsRef.name,
+      ref: itemsRef.name
     };
+
     return;
   }
 
@@ -250,8 +271,9 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       type: mongoose.Schema.Types.ObjectId,
-      refPath,
+      refPath
     };
+
     return;
   }
 
@@ -260,15 +282,16 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schemas.get(name)[key][0] = {
       ...schemas.get(name)[key][0],
       type: mongoose.Schema.Types.ObjectId,
-      refPath: itemsRefPath,
+      refPath: itemsRefPath
     };
+
     return;
   }
 
   const enumOption = rawOptions.enum;
   if (enumOption) {
     if (!Array.isArray(enumOption)) {
-      rawOptions.enum = Object.keys(enumOption).map(propKey => enumOption[propKey]);
+      rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
     }
   }
 
@@ -276,7 +299,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   if (typeof selectOption === 'boolean') {
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
-      select: selectOption,
+      select: selectOption
     };
   }
 
@@ -309,6 +332,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
         // HACK: replace this with "[Type]" if https://github.com/Automattic/mongoose/issues/8034 got fixed
         type: [Type.name === 'ObjectID' ? 'ObjectId' : Type]
       };
+
       return;
     }
     if (whatis === WhatIsIt.MAP) {
@@ -320,6 +344,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
         default: mapDefault,
         of: { type: Type, ...options }
       };
+
       return;
     }
     schemas.get(name)[key] = {
@@ -327,6 +352,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
       ...options,
       type: Type
     };
+
     return;
   }
 
@@ -338,6 +364,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
       ...options,
       type: Object
     };
+
     return;
   }
 
@@ -347,9 +374,10 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
       ...options,
       type: [{
         ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
-        ...subSchema,
+        ...subSchema
       }]
     };
+
     return;
   }
 
@@ -363,6 +391,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
       ...(schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of,
       ...subSchema
     };
+
     return;
   }
   const Schema = mongoose.Schema;
@@ -380,6 +409,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     ...options,
     type: virtualSchema
   };
+
   return;
 }
 
@@ -401,7 +431,7 @@ export function prop(options: PropOptionsWithValidate = {}) {
 }
 
 export interface ArrayPropOptions extends BasePropOptions {
-  /** What array is it? 
+  /** What array is it?
    * Note: this is only needed because Reflect & refelact Metadata cant give an accurate Response for an array
    */
   items?: any;

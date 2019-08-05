@@ -75,7 +75,7 @@ const hooks: Hooks = {
     return (constructor: any) => {
       addToHooks(constructor.name, 'post', args);
     };
-  },
+  }
 };
 
 /**

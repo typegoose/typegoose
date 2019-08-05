@@ -18,7 +18,7 @@ export class Inventory extends Typegoose {
   @prop({ default: 100 })
   public count?: number;
 
-  @prop({ default: 1.00 })
+  @prop({ default: 1 })
   public value?: number;
 
   @prop({ required: true, enum: ['Beverage', 'Scooter'] })

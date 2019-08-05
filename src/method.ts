@@ -41,6 +41,7 @@ export function staticMethod(target: any, key: string, descriptor: TypedProperty
   if (!methods.staticMethods.get(name)) {
     methods.staticMethods.set(name, new Map());
   }
+
   return baseMethod(target, key, descriptor, 'staticMethods');
 }
 
@@ -60,5 +61,6 @@ export function instanceMethod(target: any, key: string, descriptor: TypedProper
   if (!methods.instanceMethods.get(name)) {
     methods.instanceMethods.set(name, new Map());
   }
+
   return baseMethod(target, key, descriptor, 'instanceMethods');
 }

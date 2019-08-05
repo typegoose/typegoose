@@ -22,7 +22,7 @@ export abstract class PersistentModel extends Typegoose {
 
   // define an instanceMethod that is called by the derived class
   @instanceMethod
-  public addCar(this: DocumentType<PersistentModel>, car: Car) {
+  public async addCar(this: DocumentType<PersistentModel>, car: Car) {
     if (!this.cars) {
       this.cars = [];
     }

@@ -82,5 +82,6 @@ export function initAsArray(name: any, key: any): void {
  */
 export function getClassForDocument(document: mongoose.Document): NewableFunction | undefined {
   const modelName = (document.constructor as mongoose.Model<typeof document>).modelName;
+
   return constructors.get(modelName);
 }

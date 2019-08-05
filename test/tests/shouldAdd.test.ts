@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 import { Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
-import { model as InternetUser } from '../models/internet-user';
+import { model as InternetUser } from '../models/internetUser';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
 import { model as User } from '../models/user';
 import { NonVirtual, nonVirtualModel, Virtual, virtualModel, VirtualSub, virtualSubModel } from '../models/virtualprop';
@@ -27,7 +27,7 @@ export function suite() {
       lastName: 'potter',
       gender: Genders.MALE,
       languages: ['english'],
-      uniqueId: 'unique-id',
+      uniqueId: 'unique-id'
     });
     await user.addJob({ position: 'Dark Wizzard', title: 'Archmage' });
     await user.addJob();
@@ -86,20 +86,20 @@ export function suite() {
   it(`should add dynamic fields using map`, async () => {
     const user = await InternetUser.create({
       socialNetworks: {
-        'twitter': 'twitter account',
-        'facebook': 'facebook account',
+        twitter: 'twitter account',
+        facebook: 'facebook account'
       },
       sideNotes: {
-        'day1': {
+        day1: {
           content: 'day1',
           link: 'url'
         },
-        'day2': {
+        day2: {
           content: 'day2',
           link: 'url//2'
-        },
+        }
       },
-      projects: {},
+      projects: {}
     });
     expect(user).to.not.be.an('undefined');
     expect(user).to.have.property('socialNetworks').to.be.instanceOf(Map);
@@ -143,7 +143,7 @@ export function suite() {
     }).save();
 
     // I should now have two "inventory" items, with different embedded reference documents.
-    const items = await Inventory.find({}).populate('kind');
+    const items = await Inventory.find({}).populate('kind').exec();
     expect((items[0].kind as typeof Beverage).isDecaf).to.be.equals(true);
 
     // wrong type to make typescript happy

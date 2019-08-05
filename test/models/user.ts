@@ -8,7 +8,7 @@ import {
   prop,
   Ref,
   staticMethod,
-  Typegoose,
+  Typegoose
 } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Role } from '../enums/role';
@@ -78,26 +78,27 @@ export class User extends Typegoose {
   public previousCars?: Ref<Car>[];
 
   @staticMethod
-  public static findByAge(this: ModelType<User> & typeof User, age: number) {
-    return this.findOne({ age });
+  public static async findByAge(this: ModelType<User> & typeof User, age: number) {
+    return this.findOne({ age }).exec();
   }
 
   @instanceMethod
-  public incrementAge(this: DocumentType<User>) {
+  public async incrementAge(this: DocumentType<User>) {
     const age = this.age || 1;
     this.age = age + 1;
+
     return this.save();
   }
 
   @instanceMethod
-  public addLanguage(this: DocumentType<User>) {
+  public async addLanguage(this: DocumentType<User>) {
     this.languages.push('Hungarian');
 
     return this.save();
   }
 
   @instanceMethod
-  public addJob(this: DocumentType<User>, job: Partial<Job> = {}) {
+  public async addJob(this: DocumentType<User>, job: Partial<Job> = {}) {
     this.previousJobs.push(job);
 
     return this.save();

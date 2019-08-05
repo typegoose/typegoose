@@ -5,8 +5,8 @@ import { fail } from 'assert';
 import { getClassForDocument } from '../../src/utils';
 import { Genders } from '../enums/genders';
 import { Car as CarType, model as Car } from '../models/car';
-import { model as InternetUser } from '../models/internet-user';
-import { AddressNested, PersonNested, PersonNestedModel } from '../models/nested-object';
+import { model as InternetUser } from '../models/internetUser';
+import { AddressNested, PersonNested, PersonNestedModel } from '../models/nestedObject';
 import { model as Person } from '../models/person';
 import { model as User, User as UserType } from '../models/user';
 
@@ -54,7 +54,7 @@ export function suite() {
     });
     await user.addCar(car);
 
-    user = await Person.findById(user.id).populate('cars');
+    user = await Person.findById(user.id).populate('cars').exec();
 
     // verify properties
     expect(user).to.have.property('createdAt');
@@ -76,7 +76,7 @@ export function suite() {
     personInput.address = new AddressNested('A Street 1');
     personInput.moreAddresses = [
       new AddressNested('A Street 2'),
-      new AddressNested('A Street 3'),
+      new AddressNested('A Street 3')
     ];
 
     const person = await PersonNestedModel.create(personInput);
@@ -101,7 +101,7 @@ export function suite() {
     try {
       await Car.create({
         model: 'Tesla',
-        price: 'NO DECIMAL',
+        price: 'NO DECIMAL'
       });
       // fail('Validation must fail.');
 
@@ -121,7 +121,7 @@ export function suite() {
   it('Should validate email', async () => {
     try {
       await Person.create({
-        email: 'email',
+        email: 'email'
       });
       fail('Validation must fail.');
     } catch (e) {
