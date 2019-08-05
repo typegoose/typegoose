@@ -1,4 +1,4 @@
-import { instanceMethod, pre, prop, staticMethod } from '../../src/typegoose';
+import { getModelForClass, instanceMethod, pre, prop, staticMethod } from '../../src/typegoose';
 import { PersistentModel } from './persistentModel';
 
 // add a pre-save hook to PersistentModel
@@ -26,4 +26,4 @@ export class Person extends PersistentModel {
   }
 }
 
-export const model = new Person().getModelForClass(Person);
+export const model = getModelForClass(Person);

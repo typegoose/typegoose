@@ -1,5 +1,5 @@
 import { isArray } from 'util';
-import { DocumentType, post, pre, prop, Typegoose } from '../../src/typegoose';
+import { DocumentType, getModelForClass, post, pre, prop, Typegoose } from '../../src/typegoose';
 
 @pre<Hook>('save', function () {
   if (this.isModified('shape')) {
@@ -30,4 +30,4 @@ export class Hook extends Typegoose {
   public shape?: string;
 }
 
-export const model = new Hook().getModelForClass(Hook);
+export const model = getModelForClass(Hook);

@@ -1,4 +1,4 @@
-import { post, pre, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, post, pre, prop, Typegoose } from '../../src/typegoose';
 
 @pre<Dummy>('save', function (next) {
   this.text = 'saved';
@@ -20,4 +20,4 @@ export class Dummy extends Typegoose {
   public text: string;
 }
 
-export const model = new Dummy().getModelForClass(Dummy);
+export const model = getModelForClass(Dummy);

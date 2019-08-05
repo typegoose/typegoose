@@ -1,4 +1,4 @@
-import { mapProp, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, mapProp, prop, Typegoose } from '../../src/typegoose';
 
 export class SideNote {
   @prop()
@@ -25,4 +25,4 @@ class InternetUser extends Typegoose {
   public projects: Map<string, ProjectValue>;
 }
 
-export const model = new InternetUser().getModelForClass(InternetUser);
+export const model = getModelForClass(InternetUser);

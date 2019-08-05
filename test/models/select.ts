@@ -1,4 +1,4 @@
-import { prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, prop, Typegoose } from '../../src/typegoose';
 
 export enum SelectStrings {
   test1 = 'testing 1 should not default include',
@@ -18,4 +18,4 @@ export class Select extends Typegoose {
   public test3!: string;
 }
 
-export const model = new Select().getModelForClass(Select);
+export const model = getModelForClass(Select);

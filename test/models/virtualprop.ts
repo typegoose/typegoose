@@ -1,4 +1,4 @@
-import { prop, Ref, Typegoose } from '../../src/typegoose';
+import { getModelForClass, prop, Ref, Typegoose } from '../../src/typegoose';
 
 export class Virtual extends Typegoose {
   @prop({ required: true })
@@ -25,6 +25,6 @@ export class NonVirtual extends Typegoose {
   public non: string;
 }
 
-export const virtualModel = new Virtual().getModelForClass(Virtual);
-export const virtualSubModel = new VirtualSub().getModelForClass(VirtualSub);
-export const nonVirtualModel = new NonVirtual().getModelForClass(NonVirtual);
+export const virtualModel = getModelForClass(Virtual);
+export const virtualSubModel = getModelForClass(VirtualSub);
+export const nonVirtualModel = getModelForClass(NonVirtual);

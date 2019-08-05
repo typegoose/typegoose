@@ -1,4 +1,4 @@
-import { prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, prop, Typegoose } from '../../src/typegoose';
 
 export class AddressNested {
   public street: string;
@@ -19,4 +19,4 @@ export class PersonNested extends Typegoose {
   public moreAddresses: AddressNested[] = [];
 }
 
-export const PersonNestedModel = new PersonNested().getModelForClass(PersonNested);
+export const PersonNestedModel = getModelForClass(PersonNested);

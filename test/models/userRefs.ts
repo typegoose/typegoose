@@ -1,4 +1,4 @@
-import { arrayProp, prop, Ref, Typegoose } from '../../src/typegoose';
+import { arrayProp, getModelForClass, prop, Ref, Typegoose } from '../../src/typegoose';
 
 export class UserRef extends Typegoose {
   @prop({ ref: UserRef, default: null })
@@ -11,4 +11,4 @@ export class UserRef extends Typegoose {
   public name!: string;
 }
 
-export const UserRefModel = new UserRef().getModelForClass(UserRef);
+export const UserRefModel = getModelForClass(UserRef);

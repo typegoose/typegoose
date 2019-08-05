@@ -1,5 +1,5 @@
 // Tests for discriminators and refPaths
-import { arrayProp, prop, Ref, Typegoose } from '../../src/typegoose';
+import { arrayProp, getModelForClass, prop, Ref, Typegoose } from '../../src/typegoose';
 
 export class Scooter extends Typegoose {
   @prop()
@@ -42,7 +42,7 @@ export class TestIRPbyString extends Typegoose {
   public bev!: Ref<Beverage>[];
 }
 
-export const ScooterModel = new Scooter().getModelForClass(Scooter);
-export const BeverageModel = new Beverage().getModelForClass(Beverage);
-export const InventoryModel = new Inventory().getModelForClass(Inventory);
-export const TestIRPbyStringModel = new TestIRPbyString().getModelForClass(TestIRPbyString);
+export const ScooterModel = getModelForClass(Scooter);
+export const BeverageModel = getModelForClass(Beverage);
+export const InventoryModel = getModelForClass(Inventory);
+export const TestIRPbyStringModel = getModelForClass(TestIRPbyString);

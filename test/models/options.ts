@@ -1,4 +1,4 @@
-import { modelOptions, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, modelOptions, prop, Typegoose } from '../../src/typegoose';
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class OptionsClass extends Typegoose {
@@ -9,4 +9,4 @@ export class OptionsClass extends Typegoose {
   public updatedAt: Date;
 }
 
-export const OptionsModel = new OptionsClass().getModelForClass(OptionsClass);
+export const OptionsModel = getModelForClass(OptionsClass);

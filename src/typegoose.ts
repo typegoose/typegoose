@@ -21,76 +21,107 @@ export * from './typeguards';
 export * from './optionsProp';
 export { getClassForDocument } from './utils';
 
+/**
+ * Get the Type of an instance of a Document with Class properties
+ * @example
+ * ```ts
+ * class Name extends Typegoose {}
+ * const NameModel = Name.getModelForClass(Name);
+ *
+ * const t: InstanceType<Name> = await NameModel.create({} as Partitial<Name>);
+ * ```
+ */
 export type DocumentType<T> = T & mongoose.Document;
+/**
+ * Used Internally for ModelTypes
+ * @internal
+ */
 export type ModelType<T> = mongoose.Model<DocumentType<T>> & T;
+/**
+ * Like InstanceType<T> but for no-argument classes
+ * @internal
+ */
+export type NoParamConstructor<T> = new () => T;
+/**
+ * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
+ * @public
+ */
+export type ReturnModelType<T, U extends NoParamConstructor<T>> = ModelType<something<U>> & U;
+/**
+ * i dont know what it does, but it works
+ */
+type something<S> = S extends NoParamConstructor<infer T> ? T : S;
 
 /**
  * Main Class
  */
-export abstract class Typegoose {
-  /**
-   * Get a Model for a Class
-   * Executes .setModelForClass if it cant find it already
-   * @param t The uninitialized Class
-   * @returns The Model
-   * @public
-   */
-  public getModelForClass<T>(t: T) {
-    const name = this.constructor.name;
-    if (!models.get(name)) {
-      this.setModelForClass(t);
-    }
+export abstract class Typegoose { } // this is kept for future use
 
-    return models.get(name) as ModelType<this> & T;
+/**
+ * Generates a Mongoose schema out of class props, iterating through all parents
+ * @param t The not initialized Class
+ * @returns Returns the Build Schema
+ */
+export function buildSchema<T, U extends NoParamConstructor<T>>(t: U) {
+  const name = t.name;
+
+  // get schema of current model
+  let sch = _buildSchema(t, name);
+  /** Parent Constructor */
+  let parentCtor = Object.getPrototypeOf(t.prototype).constructor;
+  // iterate trough all parents
+  while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
+    // extend schema
+    sch = _buildSchema(t, parentCtor.name, sch);
+    // next parent
+    parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
 
-  /**
-   * Builds the Schema & The Model
-   * @param t The uninitialized Class
-   * @returns The Model
-   * @public
-   */
-  public setModelForClass<T>(t: T) {
-    const name = this.constructor.name;
-    const options: IModelOptions = Reflect.getMetadata('typegoose:options', t) || {};
+  return sch;
+}
 
-    const sch = this.buildSchema<T>(t);
-
-    let model = mongoose.model.bind(mongoose);
-    if (options.existingConnection) {
-      model = options.existingConnection.model.bind(options.existingConnection);
-    } else if (options.existingMongoose) {
-      model = options.existingMongoose.model.bind(options.existingMongoose);
-    }
-
-    models.set(name, model(name, sch));
-    constructors.set(name, this.constructor);
-
-    return models.get(name) as ModelType<this> & T;
+/**
+ * Get a Model for a Class
+ * Executes .setModelForClass if it cant find it already
+ * @param t The uninitialized Class
+ * @returns The Model
+ * @public
+ */
+export function getModelForClass<
+  T,
+  U extends NoParamConstructor<T>
+>(t: U) {
+  const name = t.name;
+  if (!models.get(name)) {
+    setModelForClass(t);
   }
 
-  /**
-   * Generates a Mongoose schema out of class props, iterating through all parents
-   * @param t The not initialized Class
-   * @returns Returns the Build Schema
-   */
-  public buildSchema<T>(t: T) {
-    const name = this.constructor.name;
+  return models.get(name) as ReturnModelType<T, U>;
+}
 
-    // get schema of current model
-    let sch = _buildSchema<T>(t, name);
-    /** Parent Constructor */
-    let parentCtor = Object.getPrototypeOf(this.constructor.prototype).constructor;
-    // iterate trough all parents
-    while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
-      // extend schema
-      sch = _buildSchema<T>(t, parentCtor.name, sch);
-      // next parent
-      parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
-    }
+/**
+ * Builds the Schema & The Model
+ * @param t The uninitialized Class
+ * @returns The Model
+ * @public
+ */
+export function setModelForClass<T, U extends NoParamConstructor<T>>(t: U) {
+  const name = t.name;
+  const options: IModelOptions = Reflect.getMetadata('typegoose:options', t) || {};
 
-    return sch;
+  const sch = buildSchema(t);
+
+  let model = mongoose.model.bind(mongoose);
+  if (options.existingConnection) {
+    model = options.existingConnection.model.bind(options.existingConnection);
+  } else if (options.existingMongoose) {
+    model = options.existingMongoose.model.bind(options.existingMongoose);
   }
+
+  models.set(name, model(name, sch));
+  constructors.set(name, t);
+
+  return models.get(name) as ReturnModelType<T, U>;
 }
 
 /**
@@ -102,7 +133,7 @@ export abstract class Typegoose {
  * @returns Returns the Build Schema
  * @private
  */
-function _buildSchema<T>(t: T, name: string, sch?: mongoose.Schema) {
+function _buildSchema<T, U extends NoParamConstructor<T>>(t: U, name: string, sch?: mongoose.Schema) {
   /** Simplify the usage */
   const Schema = mongoose.Schema;
   const { schemaOptions }: IModelOptions = Reflect.getMetadata('typegoose:options', t) || {};

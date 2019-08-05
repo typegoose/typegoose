@@ -2,6 +2,7 @@ import * as findOrCreate from 'mongoose-findorcreate';
 import {
   arrayProp,
   DocumentType,
+  getModelForClass,
   instanceMethod,
   ModelType,
   plugin,
@@ -107,4 +108,4 @@ export class User extends Typegoose {
   public static findOrCreate: (condition: any) => Promise<FindOrCreateResult<User>>;
 }
 
-export const model = new User().getModelForClass(User);
+export const model = getModelForClass(User);

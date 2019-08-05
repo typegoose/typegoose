@@ -1,6 +1,6 @@
 import { index } from '../../src';
 import { arrayProp, Ref } from '../../src/prop';
-import { prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, prop, Typegoose } from '../../src/typegoose';
 import { Car } from './car';
 import { User } from './user';
 
@@ -20,4 +20,4 @@ export class Rating extends Typegoose {
   public location: [[number]];
 }
 
-export const model = new Rating().getModelForClass(Rating);
+export const model = getModelForClass(Rating);
