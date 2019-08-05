@@ -2,8 +2,7 @@
 
 import * as mongoose from 'mongoose';
 
-import { Ref } from './prop';
-import { DocumentType } from './typegoose';
+import { DocumentType, Ref } from './typegoose';
 
 /**
  * Check if the given document is already populated

@@ -8,7 +8,7 @@
 
 ## How to Merge
 
-* If its is just one commit that is just a fix or a hotfix, use FF
+* If its is just one commit that is just a fix or a hotfix, use Squash-Merge
 * If it is a larger Branch (like a release) use merge --no-ff
 
 ## When to make a Version
