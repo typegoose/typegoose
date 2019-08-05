@@ -27,7 +27,7 @@ export type ModelType<T> = mongoose.Model<DocumentType<T>> & T;
 /**
  * Main Class
  */
-export class Typegoose {
+export abstract class Typegoose {
   /**
    * Get a Model for a Class
    * Executes .setModelForClass if it cant find it already

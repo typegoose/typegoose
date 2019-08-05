@@ -8,6 +8,19 @@
 
 data.ts's collections got refactored to use ES6 Maps
 
+## ModelOptions
+
+- `getModelForClass(class, options)`' options got removed
+- `setModelForClass(class, options)`' options got removed
+- `buildSchema(class, options)`' options got removed
+
+use the following decorator now
+
+```ts
+@modelOptions({ schemaOptions: {} })
+class Name extends Typegoose {}
+```
+
 ---
 
 *`ic` means `internal change`*
