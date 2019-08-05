@@ -4,10 +4,10 @@ import {
   DocumentType,
   getModelForClass,
   instanceMethod,
-  ModelType,
   plugin,
   prop,
   Ref,
+  ReturnModelType,
   staticMethod,
   Typegoose
 } from '../../src/typegoose';
@@ -79,7 +79,7 @@ export class User extends Typegoose {
   public previousCars?: Ref<Car>[];
 
   @staticMethod
-  public static async findByAge(this: ModelType<User> & typeof User, age: number) {
+  public static async findByAge(this: ReturnModelType<typeof User>, age: number) {
     return this.findOne({ age }).exec();
   }
 

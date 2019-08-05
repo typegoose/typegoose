@@ -1,6 +1,4 @@
-import { index } from '../../src';
-import { arrayProp, Ref } from '../../src/prop';
-import { getModelForClass, prop, Typegoose } from '../../src/typegoose';
+import { arrayProp, getModelForClass, index, prop, Ref, Typegoose } from '../../src/typegoose';
 import { Car } from './car';
 import { User } from './user';
 

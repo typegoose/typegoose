@@ -10,6 +10,7 @@ if (!Object.fromEntries) {
 
 import { constructors, hooks, methods, models, plugins, schemas, virtuals } from './data';
 import { IModelOptions } from './optionsProp';
+import { DocumentType, NoParamConstructor, Ref, ReturnModelType } from './types';
 
 /* exports */
 export * from './method';
@@ -19,38 +20,8 @@ export * from './plugin';
 export * from '.';
 export * from './typeguards';
 export * from './optionsProp';
+export { DocumentType, Ref, ReturnModelType };
 export { getClassForDocument } from './utils';
-
-/**
- * Get the Type of an instance of a Document with Class properties
- * @example
- * ```ts
- * class Name extends Typegoose {}
- * const NameModel = Name.getModelForClass(Name);
- *
- * const t: InstanceType<Name> = await NameModel.create({} as Partitial<Name>);
- * ```
- */
-export type DocumentType<T> = T & mongoose.Document;
-/**
- * Used Internally for ModelTypes
- * @internal
- */
-export type ModelType<T> = mongoose.Model<DocumentType<T>> & T;
-/**
- * Like InstanceType<T> but for no-argument classes
- * @internal
- */
-export type NoParamConstructor<T> = new () => T;
-/**
- * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
- * @public
- */
-export type ReturnModelType<T, U extends NoParamConstructor<T>> = ModelType<something<U>> & U;
-/**
- * i dont know what it does, but it works
- */
-type something<S> = S extends NoParamConstructor<infer T> ? T : S;
 
 /**
  * Main Class
@@ -83,33 +54,43 @@ export function buildSchema<T, U extends NoParamConstructor<T>>(t: U) {
 /**
  * Get a Model for a Class
  * Executes .setModelForClass if it cant find it already
- * @param t The uninitialized Class
+ * @param cl The uninitialized Class
  * @returns The Model
  * @public
+ * @example
+ * ```ts
+ * class Name {}
+ *
+ * const NameModel = getModelForClass(Name);
+ * ```
  */
-export function getModelForClass<
-  T,
-  U extends NoParamConstructor<T>
->(t: U) {
-  const name = t.name;
+export function getModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
+  const name = cl.name;
   if (!models.get(name)) {
-    setModelForClass(t);
+    setModelForClass(cl);
   }
 
-  return models.get(name) as ReturnModelType<T, U>;
+  return models.get(name) as ReturnModelType<U, T>;
 }
 
 /**
  * Builds the Schema & The Model
- * @param t The uninitialized Class
+ * Note: you should use {@link getModelForClass}
+ * @param cl The uninitialized Class
  * @returns The Model
  * @public
+ * @example
+ * ```ts
+ * class Name {}
+ *
+ * const NameModel = setModelForClass(Name);
+ * ```
  */
-export function setModelForClass<T, U extends NoParamConstructor<T>>(t: U) {
-  const name = t.name;
-  const options: IModelOptions = Reflect.getMetadata('typegoose:options', t) || {};
+export function setModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
+  const name = cl.name;
+  const options: IModelOptions = Reflect.getMetadata('typegoose:options', cl) || {};
 
-  const sch = buildSchema(t);
+  const sch = buildSchema(cl);
 
   let model = mongoose.model.bind(mongoose);
   if (options.existingConnection) {
@@ -119,24 +100,24 @@ export function setModelForClass<T, U extends NoParamConstructor<T>>(t: U) {
   }
 
   models.set(name, model(name, sch));
-  constructors.set(name, t);
+  constructors.set(name, cl);
 
-  return models.get(name) as ReturnModelType<T, U>;
+  return models.get(name) as ReturnModelType<U, T>;
 }
 
 /**
  * Private schema builder out of class props
  * -> If you discover this, dont use this function, use Typegoose.buildSchema!
- * @param t The not initialized Class
+ * @param cl The not initialized Class
  * @param name The Name to save the Schema Under (Mostly Constructor.name)
  * @param sch Already Existing Schema?
  * @returns Returns the Build Schema
  * @private
  */
-function _buildSchema<T, U extends NoParamConstructor<T>>(t: U, name: string, sch?: mongoose.Schema) {
+function _buildSchema<T, U extends NoParamConstructor<T>>(cl: U, name: string, sch?: mongoose.Schema) {
   /** Simplify the usage */
   const Schema = mongoose.Schema;
-  const { schemaOptions }: IModelOptions = Reflect.getMetadata('typegoose:options', t) || {};
+  const { schemaOptions }: IModelOptions = Reflect.getMetadata('typegoose:options', cl) || {};
 
   if (!sch) {
     sch = new Schema(schemas.get(name), schemaOptions);
@@ -198,7 +179,7 @@ function _buildSchema<T, U extends NoParamConstructor<T>>(t: U, name: string, sc
   }
 
   /** Get Metadata for indices */
-  const indices = Reflect.getMetadata('typegoose:indices', t) || [];
+  const indices = Reflect.getMetadata('typegoose:indices', cl) || [];
   for (const index of indices) {
     sch.index(index.fields, index.options);
   }
