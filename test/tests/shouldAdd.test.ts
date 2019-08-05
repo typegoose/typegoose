@@ -6,6 +6,7 @@ import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
 import { model as InternetUser } from '../models/internetUser';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
+import { OptionsClass, OptionsModel } from '../models/options';
 import { model as User } from '../models/user';
 import { NonVirtual, nonVirtualModel, Virtual, virtualModel, VirtualSub, virtualSubModel } from '../models/virtualprop';
 
@@ -174,5 +175,16 @@ export function suite() {
       expect(toObject).to.have.property('alias', 'hello from aliasProp');
       expect(toObject).to.not.have.property('aliasProp');
     }
+  });
+
+  it('should add model with createdAt and updatedAt', async () => {
+    const { id: createdId } = await OptionsModel.create({ someprop: 10 } as OptionsClass);
+
+    const found = await OptionsModel.findById(createdId).exec();
+
+    expect(found).to.not.be.an('undefined');
+    expect(found).to.have.property('someprop', 10);
+    expect(found.createdAt).to.be.a.instanceOf(Date);
+    expect(found.updatedAt).to.be.a.instanceOf(Date);
   });
 }

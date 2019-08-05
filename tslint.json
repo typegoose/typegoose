@@ -37,10 +37,10 @@
       true,
       "LF"
     ],
-    "max-line-length": [
-      true,
-      120
-    ],
+    "max-line-length": {
+      "severity": "warn",
+      "options": 120
+    },
     "comment-format": {
       "options": [
         "check-space"

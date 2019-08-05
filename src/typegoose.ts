@@ -9,6 +9,7 @@ if (!Object.fromEntries) {
 }
 
 import { constructors, hooks, methods, models, plugins, schemas, virtuals } from './data';
+import { IModelOptions } from './optionsProp';
 
 /* exports */
 export * from './method';
@@ -17,19 +18,11 @@ export * from './hooks';
 export * from './plugin';
 export * from '.';
 export * from './typeguards';
+export * from './optionsProp';
 export { getClassForDocument } from './utils';
 
 export type DocumentType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<DocumentType<T>> & T;
-
-export interface GetModelForClassOptions {
-  /** An Existing Mongoose Connection */
-  existingMongoose?: mongoose.Mongoose;
-  /** Supports all Mongoose's Schema Options */
-  schemaOptions?: mongoose.SchemaOptions;
-  /** An Existing Connection */
-  existingConnection?: mongoose.Connection;
-}
 
 /**
  * Main Class
@@ -39,24 +32,13 @@ export class Typegoose {
    * Get a Model for a Class
    * Executes .setModelForClass if it cant find it already
    * @param t The uninitialized Class
-   * @param __namedParameters The Options
-   * @param existingMongoose An Existing Mongoose Connection
-   * @param schemaOptions Supports all Mongoose's Schema Options
-   * @param existingConnection An Existing Connection
    * @returns The Model
    * @public
    */
-  public getModelForClass<T>(
-    t: T,
-    { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
-  ) {
+  public getModelForClass<T>(t: T) {
     const name = this.constructor.name;
     if (!models.get(name)) {
-      this.setModelForClass(t, {
-        existingMongoose,
-        schemaOptions,
-        existingConnection
-      });
+      this.setModelForClass(t);
     }
 
     return models.get(name) as ModelType<this> & T;
@@ -65,26 +47,20 @@ export class Typegoose {
   /**
    * Builds the Schema & The Model
    * @param t The uninitialized Class
-   * @param __namedParameters The Options
-   * @param existingMongoose An Existing Mongoose Connection
-   * @param schemaOptions Supports all Mongoose's Schema Options
-   * @param existingConnection An Existing Connection
    * @returns The Model
    * @public
    */
-  public setModelForClass<T>(
-    t: T,
-    { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
-  ) {
+  public setModelForClass<T>(t: T) {
     const name = this.constructor.name;
+    const options: IModelOptions = Reflect.getMetadata('typegoose:options', t) || {};
 
-    const sch = this.buildSchema<T>(t, { existingMongoose, schemaOptions });
+    const sch = this.buildSchema<T>(t);
 
     let model = mongoose.model.bind(mongoose);
-    if (existingConnection) {
-      model = existingConnection.model.bind(existingConnection);
-    } else if (existingMongoose) {
-      model = existingMongoose.model.bind(existingMongoose);
+    if (options.existingConnection) {
+      model = options.existingConnection.model.bind(options.existingConnection);
+    } else if (options.existingMongoose) {
+      model = options.existingMongoose.model.bind(options.existingMongoose);
     }
 
     models.set(name, model(name, sch));
@@ -96,20 +72,19 @@ export class Typegoose {
   /**
    * Generates a Mongoose schema out of class props, iterating through all parents
    * @param t The not initialized Class
-   * @param schemaOptions Options for the Schema
    * @returns Returns the Build Schema
    */
-  public buildSchema<T>(t: T, { schemaOptions }: GetModelForClassOptions = {}) {
+  public buildSchema<T>(t: T) {
     const name = this.constructor.name;
 
     // get schema of current model
-    let sch = _buildSchema<T>(t, name, schemaOptions);
+    let sch = _buildSchema<T>(t, name);
     /** Parent Constructor */
     let parentCtor = Object.getPrototypeOf(this.constructor.prototype).constructor;
     // iterate trough all parents
     while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
       // extend schema
-      sch = _buildSchema<T>(t, parentCtor.name, schemaOptions, sch);
+      sch = _buildSchema<T>(t, parentCtor.name, sch);
       // next parent
       parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
     }
@@ -123,15 +98,14 @@ export class Typegoose {
  * -> If you discover this, dont use this function, use Typegoose.buildSchema!
  * @param t The not initialized Class
  * @param name The Name to save the Schema Under (Mostly Constructor.name)
- * @param schemaOptions Options for the Schema
  * @param sch Already Existing Schema?
  * @returns Returns the Build Schema
  * @private
  */
-function _buildSchema<T>(t: T, name: string, schemaOptions: mongoose.SchemaOptions, sch?: mongoose.Schema) {
+function _buildSchema<T>(t: T, name: string, sch?: mongoose.Schema) {
   /** Simplify the usage */
   const Schema = mongoose.Schema;
-  schemaOptions = schemaOptions ? schemaOptions : {};
+  const { schemaOptions }: IModelOptions = Reflect.getMetadata('typegoose:options', t) || {};
 
   if (!sch) {
     sch = new Schema(schemas.get(name), schemaOptions);
