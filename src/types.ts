@@ -159,3 +159,8 @@ export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOption
  * @public
  */
 export type Ref<T> = T | mongoose.Schema.Types.ObjectId;
+
+/**
+ * An Function type for a function that dosnt have any arguments and dosnt return anything
+ */
+export type EmptyVoidFn = () => void;

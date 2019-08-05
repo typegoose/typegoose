@@ -6,7 +6,7 @@ import { getModelForClass, post, pre, prop, Typegoose } from '../../src/typegoos
   next();
 })
 // eslint-disable-next-line only-arrow-functions (need `this` in hook)
-@pre<Dummy>('updateMany', async function () {
+@pre<Dummy>('updateMany', async function (this: any) {
   this._update.text = 'updateManied';
 })
 @post<Dummy>('find', (result) => {

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Hook, model as HookModel } from '../models/hook1';
+import { Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
 import { model as Dummy } from '../models/hook2';
 
 /**
@@ -64,6 +64,18 @@ export function suite() {
     const foundUpdatedDummies = await Dummy.find({ text: 'updateManied' }).exec();
 
     // pre-updateMany-hook changed text to 'updateManied'
-    expect(foundUpdatedDummies.length).to.equal(2);
+    expect(foundUpdatedDummies).to.be.lengthOf(2);
+  });
+
+  it('should execute multiple hooks with array', async () => {
+    const doc = await HookArrayModel.create({} as HookArray);
+    await HookArrayModel.find({}).exec();
+    await HookArrayModel.findOne({ _id: doc.id }).exec();
+
+    const found = await HookArrayModel.findById(doc.id).exec();
+    expect(found).to.not.be.an('undefined');
+    expect(found.testArray).to.be.an('array');
+    expect(found.testArray).to.be.lengthOf(3);
+    expect(found.testArray).to.deep.equal(['hello', 'hello', 'hello']);
   });
 }

@@ -105,6 +105,9 @@
     "await-promise": {
       "severity": "warn"
     },
+    "no-console": {
+      "severity": "warn"
+    },
     "space-before-function-paren": false,
     "encoding": true,
     "no-invalid-template-strings": true,
@@ -124,6 +127,7 @@
     "deprecation": true,
     "return-undefined": true,
     "newline-before-return": true,
-    "number-literal-format": true
+    "number-literal-format": true,
+    "unified-signatures": false
   }
 }

@@ -43,6 +43,11 @@ use the following decorator now
 class Name extends Typegoose {}
 ```
 
+## Hooks
+
+Hooks got (in 6.0.0-13) a change for the types to comply with the latest mongoose (5.6.8)
+-> no workarounds or typedefs required anymore
+
 ---
 
 *`ic` means `internal change`*

@@ -1,5 +1,5 @@
 import { isArray } from 'util';
-import { DocumentType, getModelForClass, post, pre, prop, Typegoose } from '../../src/typegoose';
+import { arrayProp, getModelForClass, isDocument, post, pre, prop, Typegoose } from '../../src/typegoose';
 
 @pre<Hook>('save', function () {
   if (this.isModified('shape')) {
@@ -15,10 +15,10 @@ import { DocumentType, getModelForClass, post, pre, prop, Typegoose } from '../.
     this.update({ shape: 'REGEXP_PRE' });
   }
 })
-@post<Hook>(/^find/, (doc: DocumentType<Hook> | DocumentType<Hook>[]) => {
+@post<Hook>(/^find/, (doc) => {
   if (isArray(doc)) {
     doc.forEach((v) => v.material = 'REGEXP_POST');
-  } else {
+  } else if (isDocument(doc)) {
     doc.material = 'REGEXP_POST';
   }
 })
@@ -30,4 +30,21 @@ export class Hook extends Typegoose {
   public shape?: string;
 }
 
-export const model = getModelForClass(Hook);
+@post<HookArray>(['find', 'findOne'], async (docs) => {
+  if (isArray(docs)) {
+    await Promise.all(docs.map(async (v) => {
+      v.testArray.push('hello');
+      await v.save();
+    }));
+  } else if (isDocument(docs)) {
+    docs.testArray.push('hello');
+    await docs.save();
+  }
+})
+export class HookArray extends Typegoose {
+  @arrayProp({ required: true, items: String })
+  public testArray: string[];
+}
+
+export const HookModel = getModelForClass(Hook);
+export const HookArrayModel = getModelForClass(HookArray);
