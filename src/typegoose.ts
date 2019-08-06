@@ -2,7 +2,6 @@
 import * as mongoose from 'mongoose';
 import { shim } from 'object.fromentries';
 import 'reflect-metadata';
-import { isNullOrUndefined } from 'util';
 
 if (!Object.fromEntries) {
   shim();
@@ -10,7 +9,7 @@ if (!Object.fromEntries) {
 
 import { constructors, hooks, methods, models, plugins, schemas, virtuals } from './data';
 import { IModelOptions } from './optionsProp';
-import { DocumentType, NoParamConstructor, Ref, ReturnModelType } from './types';
+import { DocumentType, EmptyVoidFn, NoParamConstructor, Ref, ReturnModelType } from './types';
 
 /* exports */
 export * from './method';
@@ -143,15 +142,12 @@ function _buildSchema<T, U extends NoParamConstructor<T>>(cl: U, name: string, s
 
   const hook = hooks.get(name);
   if (hook) {
-    hook.pre.forEach((v, k) => {
-      if (!isNullOrUndefined(v.parallel)) {
-        sch.pre(k, v.parallel, v.func);
-      } else {
-        sch.pre(k as string, v.func); // look at https://github.com/DefinitelyTyped/DefinitelyTyped/issues/37333
-      }
+    hook.pre.forEach((func, method) => {
+      sch.pre(method as string, func as EmptyVoidFn);
+      // ^ look at https://github.com/DefinitelyTyped/DefinitelyTyped/issues/37333
     });
 
-    hook.post.forEach((v, k) => sch.post(k, v.func));
+    hook.post.forEach((v, k) => sch.post(k, v));
   }
 
   if (plugins.get(name)) {

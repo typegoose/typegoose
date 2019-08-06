@@ -1,4 +1,5 @@
 import { Model, Schema, SchemaDefinition } from 'mongoose';
+import { EmptyVoidFn } from './types';
 
 // types
 /* Methods */
@@ -8,15 +9,9 @@ interface Methods {
 }
 /* end Methods */
 /* Hooks */
-interface Hook {
-  func(): void;
-}
-interface PreHook extends Hook {
-  parallel: boolean;
-}
 export interface HooksPrePost {
-  pre: Map<string | RegExp, PreHook>;
-  post: Map<string | RegExp, Hook>;
+  pre: Map<string | RegExp, (error?: Error) => void>;
+  post: Map<string | RegExp, EmptyVoidFn>;
 }
 /* end Hooks */
 /* Virtuals */

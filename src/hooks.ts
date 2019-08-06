@@ -9,8 +9,8 @@ type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 type ClassDecorator = (constructor: any) => void;
 type HookNextErrorFn = (err?: Error) => void;
 
-type DocumentPreFn<T> = (this: DocumentType<T>, next?: EmptyVoidFn) => void;
-type SimplePreFn<T> = (
+type PreFnWithDT<T> = (this: DocumentType<T>, next?: EmptyVoidFn) => void;
+type PreFnWithQuery<T> = (
   this: Query<T>,
   next?: (error?: Error) => void,
   done?: EmptyVoidFn) => void;
@@ -48,10 +48,9 @@ type QDM = QMR | DocumentMethod;
 type DR = DocumentMethod | RegExp;
 
 interface Hooks {
-  pre<T>(method: DR | DR[], fn: DocumentPreFn<T>): ClassDecorator;
+  pre<T>(method: DR | DR[], fn: PreFnWithDT<T>): ClassDecorator;
 
-  // it is not possible without "extends" and "typeof" in the user code, at least i couldnt find anything
-  pre<T>(method: QMR | QMR[], fn: SimplePreFn<T>): ClassDecorator;
+  pre<T>(method: QMR | QMR[], fn: PreFnWithQuery<T>): ClassDecorator;
 
   post<T>(method: RegExp, fn: PostRegExpResponse<T>): ClassDecorator;
   post<T>(method: RegExp, fn: PostRegExpWithError<T>): ClassDecorator;
@@ -96,16 +95,18 @@ function addToHooks(name: string, hookType: 'pre' | 'post', args: any[]) {
   }
 
   const methods: QDM[] = isArray(args[0]) ? args[0] : [args[0]];
-  const paralell: boolean | undefined = typeof args[1] === 'boolean' ? args[1] : undefined;
-  const func: EmptyVoidFn = typeof args[1] === 'boolean' ? args[2] : args[1];
+  if (typeof args[1] !== 'function') {
+    throw new TypeError(`"${name}.${hookType}.${methods.join(' ')}"'s function is not a function!`);
+  }
+  const func: EmptyVoidFn = args[1];
 
   for (const method of methods) {
     switch (hookType) {
       case 'post':
-        hooksData.get(name).post.set(method, { func });
+        hooksData.get(name).post.set(method, func);
         break;
       case 'pre':
-        hooksData.get(name).pre.set(method, { func, parallel: paralell });
+        hooksData.get(name).pre.set(method, func);
         break;
     }
   }
