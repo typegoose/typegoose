@@ -98,7 +98,13 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     initAsObject(name, key);
   }
 
-  if (rawOptions.set) {
+  if (rawOptions.set || rawOptions.get) {
+    if (typeof rawOptions.set !== 'function') {
+      throw new TypeError(`"${name}.${key}" does not have a set function!`);
+    }
+    if (typeof rawOptions.get !== 'function') {
+      throw new TypeError(`"${name}.${key}" does not have a get function!`);
+    }
     /*
      * Note:
      * this dosnt have a check if prop & returntype of the function is the same, because it cant be accessed at runtime
@@ -106,7 +112,8 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       type: Type,
-      set: rawOptions.set
+      set: rawOptions.set,
+      get: rawOptions.get
     };
   }
 

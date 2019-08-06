@@ -16,15 +16,17 @@ export class VirtualSub extends Typegoose {
   public dummy: string;
 }
 
-function setNon(val: string) {
-  return val.toLowerCase();
-}
-
 export class NonVirtual extends Typegoose {
-  @prop({ set: setNon, default: 'hello_default' })
+  @prop({ set: (val: string) => val.toLowerCase(), get: (val: string) => val, default: 'hello_default' })
   public non: string;
 }
 
-export const virtualModel = getModelForClass(Virtual);
-export const virtualSubModel = getModelForClass(VirtualSub);
-export const nonVirtualModel = getModelForClass(NonVirtual);
+export class NonVirtualGS {
+  @prop({ set: (val: string[]) => val.join(' '), get: (val: string) => val.split(' ') })
+  public non: string[];
+}
+
+export const VirtualModel = getModelForClass(Virtual);
+export const VirtualSubModel = getModelForClass(VirtualSub);
+export const NonVirtualModel = getModelForClass(NonVirtual);
+export const NonVirtualGSModel = getModelForClass(NonVirtualGS);

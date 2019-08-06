@@ -8,7 +8,16 @@ import { model as InternetUser } from '../models/internetUser';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
 import { OptionsClass, OptionsModel } from '../models/options';
 import { model as User } from '../models/user';
-import { NonVirtual, nonVirtualModel, Virtual, virtualModel, VirtualSub, virtualSubModel } from '../models/virtualprop';
+import {
+  NonVirtual,
+  NonVirtualGS,
+  NonVirtualGSModel,
+  NonVirtualModel,
+  Virtual,
+  VirtualModel,
+  VirtualSub,
+  VirtualSubModel
+} from '../models/virtualprop';
 
 /**
  * Function to pass into describe
@@ -42,21 +51,21 @@ export function suite() {
   });
 
   it('should add and populate the virtual properties', async () => {
-    const virtual1 = await virtualModel.create({ dummyVirtual: 'dummyVirtual1' } as Virtual);
-    const virtualsub1 = await virtualSubModel.create({
+    const virtual1 = await VirtualModel.create({ dummyVirtual: 'dummyVirtual1' } as Virtual);
+    const virtualsub1 = await VirtualSubModel.create({
       dummy: 'virtualSub1',
       virtual: virtual1._id
     } as Partial<VirtualSub>);
-    const virtualsub2 = await virtualSubModel.create({
+    const virtualsub2 = await VirtualSubModel.create({
       dummy: 'virtualSub2',
       virtual: mongoose.Types.ObjectId() as Ref<any>
     } as Partial<VirtualSub>);
-    const virtualsub3 = await virtualSubModel.create({
+    const virtualsub3 = await VirtualSubModel.create({
       dummy: 'virtualSub3',
       virtual: virtual1._id
     } as Partial<VirtualSub>);
 
-    const newfound = await virtualModel.findById(virtual1._id).populate('virtualSubs').exec();
+    const newfound = await VirtualModel.findById(virtual1._id).populate('virtualSubs').exec();
 
     expect(newfound.dummyVirtual).to.be.equal('dummyVirtual1');
     expect(newfound.virtualSubs).to.not.be.an('undefined');
@@ -67,17 +76,17 @@ export function suite() {
     expect(newfound.virtualSubs).to.not.include(virtualsub2);
   });
 
-  it('should add a nonVirtual setter to db', async () => {
+  it('should make use of nonVirtual set pre-processor', async () => {
     {
       // test if everything works
-      const doc = await nonVirtualModel.create({ non: 'HELLO THERE' } as Partial<NonVirtual>);
+      const doc = await NonVirtualModel.create({ non: 'HELLO THERE' } as Partial<NonVirtual>);
 
       expect(doc.non).to.not.be.an('undefined');
       expect(doc.non).to.be.equals('hello there');
     }
     {
       // test if other options work too
-      const doc = await nonVirtualModel.create({});
+      const doc = await NonVirtualModel.create({});
 
       expect(doc.non).to.not.be.an('undefined');
       expect(doc.non).to.be.equals('hello_default');
@@ -186,5 +195,13 @@ export function suite() {
     expect(found).to.have.property('someprop', 10);
     expect(found.createdAt).to.be.a.instanceOf(Date);
     expect(found.updatedAt).to.be.a.instanceOf(Date);
+  });
+
+  it('should make use of non-virtuals with pre- and post-processors', async () => {
+    const doc = await NonVirtualGSModel.create({ non: ['hi', 'where?'] } as NonVirtualGS);
+    // stored gets { non: 'hi where?' }
+
+    expect(doc.non).to.not.be.an('undefined');
+    expect(doc.non).to.deep.equals(['hi', 'where?']);
   });
 }

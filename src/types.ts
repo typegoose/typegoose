@@ -91,7 +91,8 @@ export interface BasePropOptions<T = any> {
    * }
    * ```
    */
-  set?(value: T): T | any;
+  set?(val: any): any;
+  get?(val: any): any;
 }
 
 export interface PropOptions extends BasePropOptions {
