@@ -108,6 +108,9 @@
     "no-console": {
       "severity": "warn"
     },
+    "ordered-imports": {
+      "severity": "warn"
+    },
     "space-before-function-paren": false,
     "encoding": true,
     "no-invalid-template-strings": true,

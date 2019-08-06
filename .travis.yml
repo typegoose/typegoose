@@ -19,11 +19,14 @@ stages:
   - deploy
 jobs:
   include:
-    - stage: compile
+    - name: 'Test Compile Ability'
+      stage: compile
+      node_js: 10 # use version 10, because that speeds up the task, because travis's default is v10
       script: |
         (npm audit || exit 0)
         npm run buildtests # build tests too to check if errors from tsc are present
-    - stage: deploy
+    - name: 'Deploy to NPM'
+      stage: deploy
       if: tag IS present
       script: skip
       deploy:
@@ -35,7 +38,8 @@ jobs:
           secure: pNyluNoFqt4/mH0afzIdGnDHsDqjJTafh766eUIB2jriaEQ0v6DQ/JaTnsx8v7S7W8ibXM4xgoidbAbqs1Y7ZPYTMwlZTIlEa19CUtOdUnP+cT2V4feQMYMi3jlSMoOm7k56CaufFz2yUyGwvqMJFHspXyVbLnpdJWX9OOnL0E42NSBHhs+jBB3QdyLKIiQQzGBHAAsr/Yl2ot3k9ndfyzSPhGkvQWYeRn7AwulWg9LB8qiTFsEXPxtVQOo/tkVbF4pWpA99CZbaY/ibDzm9OYCl73qHMX0N8FG4eB1ByGGUnxGjAJWfvB2QWkZcsnH7ywJCJRjHjaOpkXHmPQVZ0i3F6fGcTg0vyhuQ9W3staYO+kxZa+Ol6EzAZSsUsgWepOJYMfW4w31PKwQsoJrz/efFNORzPfX4GmaRkqXBRfIdYgnrl7SFV3S6ljADPLo3rbAuNYjgZ+Ui7Ged1fHr5OESuEzhue8ldoEcWJGoC78+6UE40XFB0CSnugRt/LVe6JM1fov5LcuwCjtLYTiDR/AsMb8pX6fVlYIbox/zGMVghZlRwc/iSMn6+3RrQGB8f30l1vx+/M/Tb3sHiiTFyXa58uIwGisaQ39//LuwezrYG0sNwzqrV8YEahZxIx9AvqqZ9nGjjp4cKRQ0vt5t58f6Cr/vz1VHhvEtlKMmOA8=
         on:
           tags: true
-    - stage: deploy
+    - name: 'Deploy to GitHub Pages'
+      stage: deploy
       if: branch = master # i know this redunant, but it is needed otherwise the test will always create a deploy of this
       script: npm run travis-docs
       deploy:
@@ -47,3 +51,4 @@ jobs:
         on:
           branch:
             - master
+# TODO: make a deploy rolling-release npm deployment (branch "unstable"?)
