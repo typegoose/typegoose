@@ -363,7 +363,7 @@ The `options` object accepts multiple config properties:
 
   DB Document:
 
-  ```bson
+  ```js
   {
     _id: ObjectId("<some long id>"),
     firstName: "Will",
@@ -395,7 +395,7 @@ The `options` object accepts multiple config properties:
 
   DB Document:
 
-  ```bson
+  ```js
   {
     _id: ObjectId("<some long id>"),
     fullname: "Will Smith"

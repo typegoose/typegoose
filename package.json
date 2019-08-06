@@ -12,15 +12,16 @@
   ],
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
-    "build": "tsc -p tsconfig.build.json",
-    "buildtests": "tsc -p tsconfig.json",
+    "build": "npm run lint && tsc -p tsconfig.build.json",
+    "buildtests": "npm run lint && tsc -p tsconfig.json",
     "watch": "tsc -w -p tsconfig.build.json",
     "lint": "tslint --project tsconfig.json",
-    "test": "npm run lint && nyc npm run mocha",
-    "mocha": "npm run buildtests && mocha \"./test/index.test.ts\" --timeout 15000",
+    "test": "npm run buildtests && npm run mocha",
+    "mocha": "nyc mocha \"./test/index.test.ts\" --timeout 15000",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "clean": "rimraf lib && rm .tsbuildinfo && rimraf .nyc_output && rimraf coverage && rimraf doc && rimraf build",
-    "doc": "typedoc --out ./doc ./src --mode modules"
+    "doc": "typedoc --out ./doc ./src --mode modules",
+    "travis-docs": "npm run doc && mv ./doc ./docs"
   },
   "repository": {
     "type": "git",

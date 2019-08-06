@@ -1,27 +1,49 @@
 language: node_js
-node_js:
-# Test against oldest node version in package.json
-- "8"
-# Test against highest node version available
-- lts/*
-script:
-# Audit to make sure there are no vulnerabilities, but do not affect the whole build
-- (npm audit || exit 0)
-# Test everything
-- npm test
-deploy:
-  provider: npm
-  email: benedikt.huss@gmail.com
-  skip_cleanup: true
-  api_key:
-    secure: pNyluNoFqt4/mH0afzIdGnDHsDqjJTafh766eUIB2jriaEQ0v6DQ/JaTnsx8v7S7W8ibXM4xgoidbAbqs1Y7ZPYTMwlZTIlEa19CUtOdUnP+cT2V4feQMYMi3jlSMoOm7k56CaufFz2yUyGwvqMJFHspXyVbLnpdJWX9OOnL0E42NSBHhs+jBB3QdyLKIiQQzGBHAAsr/Yl2ot3k9ndfyzSPhGkvQWYeRn7AwulWg9LB8qiTFsEXPxtVQOo/tkVbF4pWpA99CZbaY/ibDzm9OYCl73qHMX0N8FG4eB1ByGGUnxGjAJWfvB2QWkZcsnH7ywJCJRjHjaOpkXHmPQVZ0i3F6fGcTg0vyhuQ9W3staYO+kxZa+Ol6EzAZSsUsgWepOJYMfW4w31PKwQsoJrz/efFNORzPfX4GmaRkqXBRfIdYgnrl7SFV3S6ljADPLo3rbAuNYjgZ+Ui7Ged1fHr5OESuEzhue8ldoEcWJGoC78+6UE40XFB0CSnugRt/LVe6JM1fov5LcuwCjtLYTiDR/AsMb8pX6fVlYIbox/zGMVghZlRwc/iSMn6+3RrQGB8f30l1vx+/M/Tb3sHiiTFyXa58uIwGisaQ39//LuwezrYG0sNwzqrV8YEahZxIx9AvqqZ9nGjjp4cKRQ0vt5t58f6Cr/vz1VHhvEtlKMmOA8=
-  on:
-    branches:
-      only:
-      - master
-after_success:
-# Generate the Coverage only for one version
-- |
-  if [[ $TRAVIS_NODE_VERSION == "lts/*" ]]; then
-    npm run coverage
+node_js: [
+    # check Latest
+    12,
+    # check LTS
+    10,
+    # check against oldest supported
+    8,
+  ]
+# this has to be used, otherwise it executes the tests twice (because of "default build script")
+script: |
+  npm run mocha
+  if [[ $TRAVIS_NODE_VERSION == "12" ]]; then
+      npm run coverage
   fi
+stages:
+  - compile
+  - test
+  - deploy
+jobs:
+  include:
+    - stage: compile
+      script: |
+        (npm audit || exit 0)
+        npm run buildtests # build tests too to check if errors from tsc are present
+    - stage: deploy
+      if: tag IS present
+      script: skip
+      deploy:
+        provider: npm
+        email: benedikt.huss@gmail.com
+        tag: latest
+        skip_cleanup: true
+        api_key:
+          secure: pNyluNoFqt4/mH0afzIdGnDHsDqjJTafh766eUIB2jriaEQ0v6DQ/JaTnsx8v7S7W8ibXM4xgoidbAbqs1Y7ZPYTMwlZTIlEa19CUtOdUnP+cT2V4feQMYMi3jlSMoOm7k56CaufFz2yUyGwvqMJFHspXyVbLnpdJWX9OOnL0E42NSBHhs+jBB3QdyLKIiQQzGBHAAsr/Yl2ot3k9ndfyzSPhGkvQWYeRn7AwulWg9LB8qiTFsEXPxtVQOo/tkVbF4pWpA99CZbaY/ibDzm9OYCl73qHMX0N8FG4eB1ByGGUnxGjAJWfvB2QWkZcsnH7ywJCJRjHjaOpkXHmPQVZ0i3F6fGcTg0vyhuQ9W3staYO+kxZa+Ol6EzAZSsUsgWepOJYMfW4w31PKwQsoJrz/efFNORzPfX4GmaRkqXBRfIdYgnrl7SFV3S6ljADPLo3rbAuNYjgZ+Ui7Ged1fHr5OESuEzhue8ldoEcWJGoC78+6UE40XFB0CSnugRt/LVe6JM1fov5LcuwCjtLYTiDR/AsMb8pX6fVlYIbox/zGMVghZlRwc/iSMn6+3RrQGB8f30l1vx+/M/Tb3sHiiTFyXa58uIwGisaQ39//LuwezrYG0sNwzqrV8YEahZxIx9AvqqZ9nGjjp4cKRQ0vt5t58f6Cr/vz1VHhvEtlKMmOA8=
+        on:
+          tags: true
+    - stage: deploy
+      if: branch = master # i know this redunant, but it is needed otherwise the test will always create a deploy of this
+      script: npm run travis-docs
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_GH_PAGES
+        keep_history: true
+        target_branch: gh-pages # i know this the default, but just to be sure
+        on:
+          branch:
+            - master
