@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { assert, expect } from 'chai';
 
 import { isDocument, isDocumentArray } from '../../src/typeguards';
 import { UserRefModel } from '../models/userRefs';
@@ -34,7 +34,7 @@ export function suite() {
         expect(doc.name).to.not.be.equal('other');
       }
     } else {
-      throw new Error('"UserMaster.subAccounts" is not populated!');
+      assert.fail('"UserMaster.subAccounts" is not populated!');
     }
   });
 
@@ -54,7 +54,7 @@ export function suite() {
       expect(UserSub.master.name).to.be.equal('master');
       expect(UserSub.master.name).to.not.be.equal('other');
     } else {
-      throw new Error('"UserSub.master" is not populated!');
+      assert.fail('"UserSub.master" is not populated!');
     }
   });
 
@@ -73,9 +73,7 @@ export function suite() {
         expect(doc).to.not.have.property('name');
       }
     } else {
-      throw new Error(
-        '"UserMaster.subAccounts" is populated where it should not!'
-      );
+      assert.fail('"UserMaster.subAccounts" is populated where it should not!');
     }
   });
 
@@ -92,7 +90,7 @@ export function suite() {
     if (!isDocument(UserSub.master)) {
       expect(UserSub.master).to.not.have.property('name');
     } else {
-      throw new Error('"UserSub.master" is populated where it should not!');
+      assert.fail('"UserSub.master" is populated where it should not!');
     }
   });
 
@@ -117,10 +115,10 @@ export function suite() {
         // User3.master.master === User1
         expect(User3.master.master.name).to.be.equal(User1.name);
       } else {
-        throw new Error('User3.master.master should be populated!');
+        assert.fail('User3.master.master should be populated!');
       }
     } else {
-      throw new Error('User3.master should be populated!');
+      assert.fail('User3.master should be populated!');
     }
 
     await User3.populate({
@@ -155,7 +153,7 @@ export function suite() {
       expect(User3.master.name).to.be.equal(User2.name);
       expect(User3.master.master.name).to.be.equal(User1.name);
     } else {
-      throw new Error('"User3" should be deep populated!');
+      assert.fail('"User3" should be deep populated!');
     }
   });
 }

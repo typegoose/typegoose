@@ -50,10 +50,10 @@ export function isString(Type: any): boolean {
 
 /**
  * Initialize as Object
- * @param name <no info>
- * @param key <no info>
+ * @param name The Name of the Schema
+ * @param key The Property key to set
  */
-export function initAsObject(name, key): void {
+export function initAsObject(name: string, key: string): void {
   if (!schemas.get(name)) {
     schemas.set(name, {});
   }
@@ -64,8 +64,8 @@ export function initAsObject(name, key): void {
 
 /**
  * Initialize as Array
- * @param name <no info>
- * @param key <no info>
+ * @param name The Name of the Schema
+ * @param key The Property key to set
  */
 export function initAsArray(name: any, key: any): void {
   if (!schemas.get(name)) {

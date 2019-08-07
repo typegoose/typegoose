@@ -5,6 +5,7 @@ import { methods, schemas, virtuals } from './data';
 import { InvalidPropError, NoMetadataError, NotNumberTypeError, NotStringTypeError } from './errors';
 import {
   BasePropOptions,
+  NoParamConstructor,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
   PropOptionsWithValidate
@@ -55,7 +56,13 @@ function isWithNumberValidate(options: PropOptionsWithNumberValidate) {
  * @param key <no info>
  * @param isArray is it an array?
  */
-function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: WhatIsIt = WhatIsIt.NONE): void {
+function baseProp(
+  rawOptions: any,
+  Type: NoParamConstructor<any>,
+  target: any,
+  key: string,
+  whatis: WhatIsIt = WhatIsIt.NONE
+): void {
   const name: string = target.constructor.name;
   rawOptions = Object.assign(rawOptions, {});
 
@@ -98,7 +105,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     initAsObject(name, key);
   }
 
-  if (rawOptions.set || rawOptions.get) {
+  if (!isNullOrUndefined(rawOptions.set) || !isNullOrUndefined(rawOptions.get)) {
     if (typeof rawOptions.set !== 'function') {
       throw new TypeError(`"${name}.${key}" does not have a set function!`);
     }
@@ -197,19 +204,18 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     throw new NotStringTypeError(key);
   }
 
-  if (isWithNumberValidate(rawOptions) && !isNumber(Type)) {
-    throw new NotNumberTypeError(key);
-  }
-
   // check for transform inconsistencies
   if (isWithStringTransform(rawOptions) && !isString(Type)) {
     throw new NotStringTypeError(key);
   }
 
-  const instance = new Type();
-  const subSchema = schemas.get(instance.constructor.name);
+  if (isWithNumberValidate(rawOptions) && !isNumber(Type)) {
+    throw new NotNumberTypeError(key);
+  }
+
+  const subSchema = schemas.get(Type.name);
   if (!subSchema && !isPrimitive(Type) && !isObject(Type)) {
-    throw new InvalidPropError(Type.name, key);
+    throw new InvalidPropError(Type.name, key); // This seems to be never thrown!
   }
 
   const { ['ref']: r, ['items']: i, ['of']: o, ...options } = rawOptions;
@@ -288,7 +294,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   const supressSubschemaId = rawOptions._id === false;
   const virtualSchema = new Schema({ ...subSchema }, supressSubschemaId ? { _id: false } : {});
 
-  const schemaInstanceMethods = methods.instanceMethods.get(instance.constructor.name);
+  const schemaInstanceMethods = methods.instanceMethods.get(Type.name);
   if (schemaInstanceMethods) {
     virtualSchema.methods = Object.fromEntries(schemaInstanceMethods);
   }
@@ -309,7 +315,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
  */
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
-    const Type = (Reflect as any).getMetadata('design:type', target, key);
+    const Type = Reflect.getMetadata('design:type', target, key);
 
     if (!Type) {
       throw new NoMetadataError(key);
