@@ -1,3 +1,4 @@
+import { GridFSBucket } from 'mongodb';
 import * as mongoose from 'mongoose';
 import { buildSchemas, hooks, plugins, schemas, virtuals } from './data';
 import { IModelOptions } from './typegoose';
@@ -16,7 +17,7 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
   cl: U,
   sch?: mongoose.Schema,
   opt: mongoose.SchemaOptions = {}
-) {
+): mongoose.Schema {
   const name = cl.name;
   if (buildSchemas.get(name)) {
     return buildSchemas.get(name);
@@ -24,11 +25,20 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
 
   /** Simplify the usage */
   const Schema = mongoose.Schema;
-  const { schemaOptions: ropt }: IModelOptions = Reflect.getMetadata('typegoose:options', cl) || {};
+  const {
+    existingConnection,
+    schemaOptions: ropt,
+    gridFS: gridFSOptions
+  }: IModelOptions = Reflect.getMetadata('typegoose:options', cl) || {};
   const schemaOptions = Object.assign(ropt || {}, opt);
 
   if (!schemas.get(name)) {
     schemas.set(name, {});
+  }
+
+  if (cl.name === 'GridFS') {
+    gridFSOptions.bucketName = gridFSOptions.bucketName ? gridFSOptions.bucketName : cl.name;
+    schemaOptions.collection = `${gridFSOptions.bucketName}.files`;
   }
 
   if (!sch) {
@@ -38,6 +48,14 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
   }
 
   sch.loadClass(cl);
+
+  if (cl.name === 'GridFS') {
+    console.log('GridFS');
+    const connection = existingConnection ? existingConnection : mongoose.connection;
+    sch.statics.bucket = new GridFSBucket(connection.db, gridFSOptions);
+
+    return sch;
+  }
 
   const hook = hooks.get(name);
   if (hook) {

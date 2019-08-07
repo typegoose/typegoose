@@ -1,3 +1,4 @@
+import { GridFSBucketOptions } from 'mongodb';
 import * as mongoose from 'mongoose';
 
 export interface IModelOptions {
@@ -7,6 +8,8 @@ export interface IModelOptions {
   schemaOptions?: mongoose.SchemaOptions;
   /** An Existing Connection */
   existingConnection?: mongoose.Connection;
+  /** gridFS Options (needs to extend the GridFS class) */
+  gridFS?: GridFSBucketOptions;
 }
 
 /**

@@ -59,6 +59,7 @@
     "typescript": "*3.5.3"
   },
   "dependencies": {
+    "mongodb": "^3.3.0-beta2",
     "object.fromentries": "^2.0.0",
     "reflect-metadata": "^0.1.13"
   }
