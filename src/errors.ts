@@ -25,3 +25,9 @@ export class NoMetadataError extends Error {
     );
   }
 }
+
+export class NotAllElementsError extends Error {
+  constructor(name: string, key: string, needed: string[]) {
+    super(`"${name}.${key}" has not all needed Virtual Populate Options! Needed are: ${needed.join(', ')}, ref`);
+  }
+}

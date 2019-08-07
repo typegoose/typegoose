@@ -111,6 +111,9 @@
     "ordered-imports": {
       "severity": "warn"
     },
+    "deprecation": {
+      "severity": "warn"
+    },
     "space-before-function-paren": false,
     "encoding": true,
     "no-invalid-template-strings": true,
@@ -127,7 +130,6 @@
     "no-reference": true,
     "promise-function-async": true,
     "function-constructor": true,
-    "deprecation": true,
     "return-undefined": true,
     "newline-before-return": true,
     "number-literal-format": true,

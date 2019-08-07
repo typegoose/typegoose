@@ -3,12 +3,10 @@ import {
   arrayProp,
   DocumentType,
   getModelForClass,
-  instanceMethod,
   plugin,
   prop,
   Ref,
-  ReturnModelType,
-  staticMethod
+  ReturnModelType
 } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Role } from '../enums/role';
@@ -28,7 +26,6 @@ export class User {
   @prop({ required: true })
   public lastName: string;
 
-  @prop()
   public get fullName() {
     return `${this.firstName} ${this.lastName}`;
   }
@@ -77,12 +74,10 @@ export class User {
   @arrayProp({ itemsRef: Car })
   public previousCars?: Ref<Car>[];
 
-  @staticMethod
   public static async findByAge(this: ReturnModelType<typeof User>, age: number) {
     return this.findOne({ age }).exec();
   }
 
-  @instanceMethod
   public async incrementAge(this: DocumentType<User>) {
     const age = this.age || 1;
     this.age = age + 1;
@@ -90,14 +85,12 @@ export class User {
     return this.save();
   }
 
-  @instanceMethod
   public async addLanguage(this: DocumentType<User>) {
     this.languages.push('Hungarian');
 
     return this.save();
   }
 
-  @instanceMethod
   public async addJob(this: DocumentType<User>, job: Partial<Job> = {}) {
     this.previousJobs.push(job);
 

@@ -1,7 +1,7 @@
-import { expect } from 'chai';
+import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { Ref } from '../../src/typegoose';
+import { getModelForClass, isDocumentArray, Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
 import { model as InternetUser } from '../models/internetUser';
@@ -69,11 +69,15 @@ export function suite() {
 
     expect(newfound.dummyVirtual).to.be.equal('dummyVirtual1');
     expect(newfound.virtualSubs).to.not.be.an('undefined');
-    expect(newfound.virtualSubs[0].dummy).to.be.equal('virtualSub1');
-    expect(newfound.virtualSubs[0]._id.toString()).to.be.equal(virtualsub1._id.toString());
-    expect(newfound.virtualSubs[1].dummy).to.be.equal('virtualSub3');
-    expect(newfound.virtualSubs[1]._id.toString()).to.be.equal(virtualsub3._id.toString());
-    expect(newfound.virtualSubs).to.not.include(virtualsub2);
+    if (isDocumentArray(newfound.virtualSubs)) {
+      expect(newfound.virtualSubs[0].dummy).to.be.equal('virtualSub1');
+      expect(newfound.virtualSubs[0]._id.toString()).to.be.equal(virtualsub1._id.toString());
+      expect(newfound.virtualSubs[1].dummy).to.be.equal('virtualSub3');
+      expect(newfound.virtualSubs[1]._id.toString()).to.be.equal(virtualsub3._id.toString());
+      expect(newfound.virtualSubs).to.not.include(virtualsub2);
+    } else {
+      assert.fail('Expected "newfound.virtualSubs" to be populated');
+    }
   });
 
   it('should make use of nonVirtual set pre-processor', async () => {
@@ -203,5 +207,11 @@ export function suite() {
 
     expect(doc.non).to.not.be.an('undefined');
     expect(doc.non).to.deep.equals(['hi', 'where?']);
+  });
+
+  it('should not error when trying to get model multiple times', () => {
+    class TEST { }
+    getModelForClass(TEST);
+    getModelForClass(TEST);
   });
 }

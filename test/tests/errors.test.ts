@@ -1,5 +1,6 @@
 import { assert, expect } from 'chai';
-import { NoMetadataError, NotNumberTypeError, NotStringTypeError } from '../../src/errors';
+
+import { NoMetadataError, NotAllElementsError, NotNumberTypeError, NotStringTypeError } from '../../src/errors';
 import { pre } from '../../src/hooks';
 import { prop } from '../../src/prop';
 
@@ -104,6 +105,18 @@ export function suite() {
     } catch (err) {
       expect(err).to.be.an.instanceOf(TypeError);
       expect((err as TypeError).message).to.be.equals(`"TEST.test" does not have a get function!`);
+    }
+  });
+
+  it('should error if not all needed parameters for virtual-populate are given [NotAllElementsError]', async () => {
+    try {
+      class TEST {
+        @prop({ localField: true })
+        public test: string;
+      }
+      assert.fail('Expected to throw "NotAllElementsError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(NotAllElementsError);
     }
   });
 }

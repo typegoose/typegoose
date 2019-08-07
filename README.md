@@ -149,9 +149,7 @@ This method returns the corresponding Mongoose Model for the class (`T`). If no 
 
 `setModelForClass<T>(cl: T)`
 
-This method assembles the Mongoose Schema from the decorated schema defining class, creates the Mongoose Model and returns it. For typing reasons, the schema defining class must be passed down to it.
-
-Note: If a Mongoose Model already exists for this class, it will be overwritten.
+This Method is Deprecated see [Migrate to 6.0.0](migrate_to_6.md)
 
 ### Property decorators
 
@@ -349,7 +347,7 @@ The `options` object accepts multiple config properties:
     @prop()
     lastName?: string;
 
-    @prop() // this will create a virtual property called 'fullName'
+    // this will create a virtual property called 'fullName'
     get fullName() {
       return `${this.firstName} ${this.lastName}`;
     }
@@ -402,7 +400,25 @@ The `options` object accepts multiple config properties:
   }
   ```
 
-TODO: add documentation for virtual population
+- Virtual-Populate is also supported by doing
+
+  ```ts
+  class RefClass {
+    @prop({ required: true, ref: Virtual })
+    public refToName: Ref<Virtual>;
+  }
+  class Name {
+    @prop({ ref: RefClass, foreignField: 'refToName', localField: '_id', justOne: false })
+    public somevalue: Ref<RefClass>;
+  }
+  ```
+
+  Options ([look here for more details](https://mongoosejs.com/docs/api/schema.html#schema_Schema-virtual)):
+    - `ref`: This is like a normal ref [Required]
+    - `foreignField`: Which property(on the ref-Class) to match `localField` against [Required]
+    - `localField`: Which property(on the current-Class) to match `foreignField` against [Required]
+    - `justOne`: Return as One Document(true) or as Array(false) [Optional]
+    - `count`: Return the number of Documents found instead of the actual Documents [Optional]
 
 #### arrayProp(options)
 
@@ -477,35 +493,7 @@ The options object accepts `enum` and `default`, just like `prop`  decorator. In
 
 ### Method decorators
 
-In Mongoose we can attach two types of methods for our schemas: static (model) methods and instance methods. Both of them are supported by Typegoose.
-
-#### staticMethod
-
-Static Mongoose methods must be declared with `static` keyword on the Typegoose extending class. This will ensure, that these methods are callable on the Mongoose model (TypeScript won't throw development-time error for unexisting method on model object).
-
-If we want to use another static method of the model (built-in or created by us) we have to override the `this` in the method using the [type specifying of `this` for functions](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#specifying-the-type-of-this-for-functions). If we don't do this, TypeScript will throw development-time error on missing methods.
-
-```ts
-@staticMethod
-static findByAge(this: ReturnModelType<typeof User>, age: number) {
-  return this.findOne({ age });
-}
-```
-
-Note that the `& typeof T` is only mandatory if we want to use the developer defined static methods inside this static method. If not then the `ModelType<T>` is sufficient, which will be explained in the Types section.
-
-#### instanceMethod
-
-Instance methods are on the Mongoose document instances, thus they must be defined as non-static methods. Again if we want to call other instance methods the type of `this` must be redefined to `DocumentType<T>` (see Types).
-
-```ts
-@instanceMethod
-incrementAge(this: DocumentType<User>) {
-  const age = this.age || 1;
-  this.age = age + 1;
-  return this.save();
-}
-```
+Method Decorators are deprecated see [Migrate to 6.0.0](migrate_to_6.md)
 
 ### Class decorators
 
@@ -644,11 +632,8 @@ For reference properties:
 
 ## Improvements
 
-* add more errors and checks if the arguments are right
 * Add Tests for:
   - Hooks: add hook test for pre & post with error
-  - test for the errors (if invalid arguments are given)
-  - improve baseProp `required` handeling (so that virtuals can be required too?)
 
 ### Notes
 

@@ -1,8 +1,15 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
-import { methods, schemas, virtuals } from './data';
-import { InvalidPropError, NoMetadataError, NotNumberTypeError, NotStringTypeError } from './errors';
+import { schemas, virtuals } from './data';
+import {
+  InvalidPropError,
+  NoMetadataError,
+  NotAllElementsError,
+  NotNumberTypeError,
+  NotStringTypeError
+} from './errors';
+import { _buildSchema } from './schema';
 import {
   BasePropOptions,
   NoParamConstructor,
@@ -48,6 +55,8 @@ function isWithNumberValidate(options: PropOptionsWithNumberValidate) {
   return !isNullOrUndefined(options.min || options.max);
 }
 
+const virtualOptions = ['localField', 'foreignField'];
+
 /**
  * Base Function for prop & arrayProp
  * @param rawOptions The options (like require)
@@ -70,31 +79,11 @@ function baseProp(
     virtuals.set(name, new Map());
   }
 
-  const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
-  if (isGetterSetter) {
-    if (rawOptions.overwrite) {
-      virtuals.get(name).set(key, {
-        options: rawOptions
-      });
-
-      return;
+  if (Object.keys(rawOptions).some((val) => virtualOptions.includes(val))) {
+    if (!virtualOptions.every((val) => Object.keys(rawOptions).includes(val))) {
+      throw new NotAllElementsError(name, key, virtualOptions);
     }
-
-    if (isGetterSetter.get) {
-      virtuals.get(name).set(key, {
-        ...virtuals.get(name).get(key),
-        get: isGetterSetter.get,
-        options: rawOptions
-      });
-    }
-
-    if (isGetterSetter.set) {
-      virtuals.get(name).set(key, {
-        ...virtuals.get(name).get(key),
-        set: isGetterSetter.set,
-        options: rawOptions
-      });
-    }
+    virtuals.get(name).set(key, rawOptions);
 
     return;
   }
@@ -289,16 +278,8 @@ function baseProp(
 
     return;
   }
-  const Schema = mongoose.Schema;
 
-  const supressSubschemaId = rawOptions._id === false;
-  const virtualSchema = new Schema({ ...subSchema }, supressSubschemaId ? { _id: false } : {});
-
-  const schemaInstanceMethods = methods.instanceMethods.get(Type.name);
-  if (schemaInstanceMethods) {
-    virtualSchema.methods = Object.fromEntries(schemaInstanceMethods);
-  }
-
+  const virtualSchema = _buildSchema(Type, null, { _id: rawOptions._id });
   schemas.get(name)[key] = {
     ...schemas.get(name)[key],
     ...options,

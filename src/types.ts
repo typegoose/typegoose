@@ -43,7 +43,7 @@ export type Validator =
     message?: string;
   };
 
-export interface BasePropOptions<T = any> {
+export interface BasePropOptions {
   [key: string]: any;
   /** include this value?
    * @default true (Implicitly)
@@ -147,8 +147,14 @@ export interface VirtualOptions {
   ref: string;
   localField: string;
   foreignField: string;
-  justOne: boolean;
-  /** Set to true, when it is an "virtual populate-able" */
+  /** Return as One Document(true) or as Array(false) */
+  justOne?: boolean;
+  /** Return the number of Documents found instead of the actual Documents */
+  count?: boolean;
+  /**
+   * DEPRECATED (see README#Migrate to 6.0.0)
+   * @deprecated
+   */
   overwrite: boolean;
 }
 
