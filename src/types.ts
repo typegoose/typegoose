@@ -44,6 +44,7 @@ export type Validator =
   };
 
 export interface BasePropOptions<T = any> {
+  [key: string]: any;
   /** include this value?
    * @default true (Implicitly)
    */
