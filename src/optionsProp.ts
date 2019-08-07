@@ -15,7 +15,7 @@ export interface IModelOptions {
  * @example Example:
  * ```
  *  @modelOptions({ schemaOptions: { timestamps: true } })
- *  class Name extends Typegoose {}
+ *  class Name {}
  * ```
  */
 export function modelOptions(options: IModelOptions) {

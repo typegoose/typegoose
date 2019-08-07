@@ -1,4 +1,4 @@
-import { getModelForClass, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose';
 
 export enum SelectStrings {
   test1 = 'testing 1 should not default include',
@@ -7,7 +7,7 @@ export enum SelectStrings {
 }
 
 // Note: "select: true" is just to test if it works, and dosnt give an error
-export class Select extends Typegoose {
+export class Select {
   @prop({ required: true, default: SelectStrings.test1, select: false })
   public test1!: string;
 

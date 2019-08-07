@@ -9,19 +9,37 @@
   "include": [
     "src/**/*.ts"
   ],
-  "check-coverage": true,
-  "per-file": true,
-  "cache": true,
-  "all": true,
   "reporter": [
     "text",
     "html"
   ],
+  "watermarks": {
+    "lines": [
+      80,
+      92
+    ],
+    "functions": [
+      80,
+      92
+    ],
+    "branches": [
+      80,
+      92
+    ],
+    "statements": [
+      80,
+      92
+    ]
+  },
+  "check-coverage": true,
+  "per-file": true,
+  "cache": true,
+  "all": true,
   "sourceMap": true,
   "instrument": true,
-  "_comment": "this below is just while porting to gitlab is going on",
-  "lines": 0,
-  "statements": 0,
-  "functions": 0,
-  "branches": 0
+  "lines": 40,
+  "statements": 40,
+  "functions": 40,
+  "_comment": "please dont change this to a higher value until https://github.com/gotwarlost/istanbul/issues/35 is fixed",
+  "branches": 20
 }

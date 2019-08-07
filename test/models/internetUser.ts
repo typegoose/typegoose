@@ -1,4 +1,4 @@
-import { getModelForClass, mapProp, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, mapProp, prop } from '../../src/typegoose';
 
 export class SideNote {
   @prop()
@@ -14,7 +14,7 @@ enum ProjectValue {
   BROKEN = 'broken'
 }
 
-class InternetUser extends Typegoose {
+class InternetUser {
   @mapProp({ of: String, mapDefault: {} })
   public socialNetworks?: Map<string, string>;
 

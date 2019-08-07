@@ -69,7 +69,7 @@ export interface IndexOptions<T> {
  * @example Example:
  * ```
  *  @index({ article: 1, user: 1 }, { unique: true })
- *  class Name extends Typegoose {}
+ *  class Name {}
  * ```
  */
 export function index<T>(fields: T, options?: IndexOptions<T>) {

@@ -1,7 +1,7 @@
-import { getModelForClass, modelOptions, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, modelOptions, prop } from '../../src/typegoose';
 
 @modelOptions({ schemaOptions: { timestamps: true } })
-export class OptionsClass extends Typegoose {
+export class OptionsClass {
   @prop({ required: true })
   public someprop: number;
 

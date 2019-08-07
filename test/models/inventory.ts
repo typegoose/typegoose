@@ -1,12 +1,12 @@
 // Tests for discriminators and refPaths
-import { arrayProp, getModelForClass, prop, Ref, Typegoose } from '../../src/typegoose';
+import { arrayProp, getModelForClass, prop, Ref } from '../../src/typegoose';
 
-export class Scooter extends Typegoose {
+export class Scooter {
   @prop()
   public makeAndModel?: string;
 }
 
-export class Beverage extends Typegoose {
+export class Beverage {
   @prop({ default: false })
   public isSugarFree?: boolean;
 
@@ -14,7 +14,7 @@ export class Beverage extends Typegoose {
   public isDecaf?: boolean;
 }
 
-export class Inventory extends Typegoose {
+export class Inventory {
   @prop({ default: 100 })
   public count?: number;
 
@@ -34,7 +34,7 @@ export class Inventory extends Typegoose {
   public irp!: Ref<Beverage | Scooter>[];
 }
 
-export class TestIRPbyString extends Typegoose {
+export class TestIRPbyString {
   @prop({ required: true })
   public normalProp!: string;
 

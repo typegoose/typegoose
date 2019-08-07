@@ -3,11 +3,13 @@ import * as mongoose from 'mongoose';
 import { shim } from 'object.fromentries';
 import 'reflect-metadata';
 
+/* istanbul ignore next */
 if (!Object.fromEntries) {
   shim();
 }
 
 import { constructors, hooks, methods, models, plugins, schemas, virtuals } from './data';
+import * as defaultClasses from './defaultClasses';
 import { IModelOptions } from './optionsProp';
 import { DocumentType, EmptyVoidFn, NoParamConstructor, Ref, ReturnModelType } from './types';
 
@@ -19,13 +21,9 @@ export * from './plugin';
 export * from '.';
 export * from './typeguards';
 export * from './optionsProp';
+export { defaultClasses };
 export { DocumentType, Ref, ReturnModelType };
 export { getClassForDocument } from './utils';
-
-/**
- * Main Class
- */
-export abstract class Typegoose { } // this is kept for future use
 
 /**
  * Generates a Mongoose schema out of class props, iterating through all parents
@@ -40,7 +38,7 @@ export function buildSchema<T, U extends NoParamConstructor<T>>(t: U) {
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(t.prototype).constructor;
   // iterate trough all parents
-  while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
+  while (parentCtor && parentCtor.name !== 'Object') {
     // extend schema
     sch = _buildSchema(t, parentCtor.name, sch);
     // next parent
@@ -74,7 +72,7 @@ export function getModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
 
 /**
  * Builds the Schema & The Model
- * Note: you should use {@link getModelForClass}
+ * Note: you should use {@link getModelForClass} otherwise the model will be redefined!
  * @param cl The uninitialized Class
  * @returns The Model
  * @public
@@ -117,6 +115,10 @@ function _buildSchema<T, U extends NoParamConstructor<T>>(cl: U, name: string, s
   /** Simplify the usage */
   const Schema = mongoose.Schema;
   const { schemaOptions }: IModelOptions = Reflect.getMetadata('typegoose:options', cl) || {};
+
+  if (!schemas.get(name)) {
+    schemas.set(name, {});
+  }
 
   if (!sch) {
     sch = new Schema(schemas.get(name), schemaOptions);

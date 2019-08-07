@@ -1,6 +1,6 @@
-import { getModelForClass, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose';
 
-export class Alias extends Typegoose {
+export class Alias {
   @prop({ required: true })
   public normalProp: string;
 

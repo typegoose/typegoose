@@ -3,6 +3,8 @@ import * as cap from 'chai-as-promised';
 
 import { suite as BigUserTest } from './tests/biguser.test';
 import { suite as IndexTests } from './tests/dbIndex.test';
+import { suite as DefaultClassesTests } from './tests/dClasses.test';
+import { suite as ErrorTests } from './tests/errors.test';
 import { suite as GCFDTest } from './tests/getClassForDocument.test';
 import { suite as HookTest } from './tests/hooks.test';
 import { suite as ShouldAddTest } from './tests/shouldAdd.test';
@@ -30,4 +32,8 @@ describe('Typegoose', () => {
   describe('String Validators', StringValidatorTests.bind(this));
 
   describe('getClassForDocument()', GCFDTest.bind(this));
+
+  // describe('Test if the correct errors are returned', ErrorTests.bind(this));
+
+  describe('Default Classes', DefaultClassesTests.bind(this));
 });

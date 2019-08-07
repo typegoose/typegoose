@@ -1,4 +1,4 @@
-import { getModelForClass, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose';
 
 export class AddressNested {
   public street: string;
@@ -8,7 +8,7 @@ export class AddressNested {
   }
 }
 
-export class PersonNested extends Typegoose {
+export class PersonNested {
   @prop()
   public name: string;
 

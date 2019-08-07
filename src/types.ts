@@ -5,7 +5,7 @@ import * as mongoose from 'mongoose';
  * @public
  * @example
  * ```ts
- * class Name extends Typegoose {}
+ * class Name {}
  * const NameModel = Name.getModelForClass(Name);
  *
  * const t: InstanceType<Name> = await NameModel.create({} as Partitial<Name>);
@@ -85,7 +85,7 @@ export interface BasePropOptions<T = any> {
    * function setHello(val: string): string {
    *   return val.toLowerCase()
    * }
-   * class Dummy extends Typegoose {
+   * class Dummy {
    *   @prop({ set: setHello }) /7 many options can be used, like required
    *   public hello: string;
    * }
@@ -105,7 +105,7 @@ export interface PropOptions extends BasePropOptions {
    * Note: you should include the alias as a variable in the class, but not with a prop decorator
    * @example
    * ```ts
-   * class Dummy extends Typegoose {
+   * class Dummy {
    *   @prop({ alias: "helloWorld" })
    *   public hello: string; // normal, with @prop
    *   public helloWorld: string; // is just for type Completion, will not be included in the DB

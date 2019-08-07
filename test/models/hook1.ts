@@ -1,5 +1,5 @@
 import { isArray } from 'util';
-import { arrayProp, getModelForClass, isDocument, post, pre, prop, Typegoose } from '../../src/typegoose';
+import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
 
 @pre<Hook>('save', function () {
   if (this.isModified('shape')) {
@@ -22,7 +22,7 @@ import { arrayProp, getModelForClass, isDocument, post, pre, prop, Typegoose } f
     doc.material = 'REGEXP_POST';
   }
 })
-export class Hook extends Typegoose {
+export class Hook {
   @prop({ required: true })
   public material: string;
 
@@ -41,7 +41,7 @@ export class Hook extends Typegoose {
     await docs.save();
   }
 })
-export class HookArray extends Typegoose {
+export class HookArray {
   @arrayProp({ required: true, items: String })
   public testArray: string[];
 }

@@ -8,8 +8,7 @@ import {
   prop,
   Ref,
   ReturnModelType,
-  staticMethod,
-  Typegoose
+  staticMethod
 } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Role } from '../enums/role';
@@ -22,7 +21,7 @@ export interface FindOrCreateResult<T> {
 }
 
 @plugin(findOrCreate)
-export class User extends Typegoose {
+export class User {
   @prop({ required: true })
   public firstName: string;
 

@@ -1,6 +1,6 @@
-import { getModelForClass, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose';
 
-export class StringValidators extends Typegoose {
+export class StringValidators {
   @prop({ maxlength: 3 })
   public maxLength: string;
 

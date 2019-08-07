@@ -15,15 +15,6 @@ class Name {}
 const NameModel = getModelForClass(Name);
 ```
 
-or
-
-```ts
-import { getModelForClass } from 'typegoose';
-class Name extends Typegoose {}
-
-const NameModel = getModelForClass(Name);
-```
-
 Note: Typegoose is an empty class now, it is kept for future use, and "style"
 
 ## (ic) data.ts collections are now Map<T, S>
@@ -40,7 +31,7 @@ use the following decorator now
 
 ```ts
 @modelOptions({ schemaOptions: {} })
-class Name extends Typegoose {}
+class Name {}
 ```
 
 ## Hooks

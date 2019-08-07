@@ -1,4 +1,4 @@
-import { getModelForClass, post, pre, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, post, pre, prop } from '../../src/typegoose';
 
 @pre<Dummy>('save', function (next) {
   this.text = 'saved';
@@ -15,7 +15,7 @@ import { getModelForClass, post, pre, prop, Typegoose } from '../../src/typegoos
 @post<Dummy>('findOne', (result) => {
   result.text = 'changed in post findOne hook';
 })
-export class Dummy extends Typegoose {
+export class Dummy {
   @prop()
   public text: string;
 }

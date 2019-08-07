@@ -1,6 +1,6 @@
-import { getModelForClass, prop, Ref, Typegoose } from '../../src/typegoose';
+import { getModelForClass, prop, Ref } from '../../src/typegoose';
 
-export class Virtual extends Typegoose {
+export class Virtual {
   @prop({ required: true })
   public dummyVirtual?: string;
 
@@ -8,7 +8,7 @@ export class Virtual extends Typegoose {
   public get virtualSubs() { return undefined; }
 }
 
-export class VirtualSub extends Typegoose {
+export class VirtualSub {
   @prop({ required: true, ref: Virtual })
   public virtual: Ref<Virtual>;
 
@@ -16,7 +16,7 @@ export class VirtualSub extends Typegoose {
   public dummy: string;
 }
 
-export class NonVirtual extends Typegoose {
+export class NonVirtual {
   @prop({ set: (val: string) => val.toLowerCase(), get: (val: string) => val, default: 'hello_default' })
   public non: string;
 }

@@ -1,7 +1,7 @@
-import { arrayProp, DocumentType, instanceMethod, prop, Ref, staticMethod, Typegoose } from '../../src/typegoose';
+import { arrayProp, DocumentType, instanceMethod, prop, Ref, staticMethod } from '../../src/typegoose';
 import { Car } from './car';
 
-export abstract class PersistentModel extends Typegoose {
+export abstract class PersistentModel {
   @prop()
   public createdAt: Date;
 

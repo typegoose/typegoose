@@ -1,4 +1,4 @@
-import { arrayProp, getModelForClass, index, prop, Typegoose } from '../../src/typegoose';
+import { arrayProp, getModelForClass, index, prop } from '../../src/typegoose';
 
 // using examples from https://docs.mongodb.com/manual/tutorial/control-results-of-text-search/
 @index({ content: 'text', about: 'text', keywords: 'text' }, {
@@ -8,7 +8,7 @@ import { arrayProp, getModelForClass, index, prop, Typegoose } from '../../src/t
   },
   name: 'TextIndex'
 })
-export class IndexWeights extends Typegoose {
+export class IndexWeights {
   @prop({ required: true })
   public content: string;
 
