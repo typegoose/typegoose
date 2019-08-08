@@ -10,7 +10,7 @@ import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../
 })
 @pre<Hook>(/^update/, function () {
   if (isArray(this)) {
-    this.forEach((v) => v.update({ shape: 'REGEXP_PRE' })); // i know this is inefficient
+    this.forEach(async (v) => await v.update({ shape: 'REGEXP_PRE' })); // i know this is inefficient
   } else {
     this.update({ shape: 'REGEXP_PRE' });
   }

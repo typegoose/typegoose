@@ -14,7 +14,7 @@
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "npm run lint && tsc -p tsconfig.build.json",
     "buildtests": "npm run lint && tsc -p tsconfig.json",
-    "watch": "tsc -w -p tsconfig.build.json",
+    "watch": "tsc -w -p tsconfig.json",
     "lint": "tslint --project tsconfig.json",
     "test": "npm run buildtests && npm run mocha",
     "mocha": "nyc mocha \"./test/index.test.ts\" --timeout 15000",
