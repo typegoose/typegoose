@@ -646,3 +646,4 @@ For reference properties:
 
 * `mongoose` is a peer-dependency, and a dev dependency to install it for dev purposes
 * Please dont add comments with `+1` or something like that, use the Reactions
+* Typegoose **cannot** be used with classes of the same name, it will always return the first build class with that name
