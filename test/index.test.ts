@@ -8,6 +8,7 @@ import { suite as ErrorTests } from './tests/errors.test';
 import { suite as GCFDTest } from './tests/getClassForDocument.test';
 import { suite as HookTest } from './tests/hooks.test';
 import { suite as ShouldAddTest } from './tests/shouldAdd.test';
+import { suite as ShouldRunTests } from './tests/shouldRun.test';
 import { suite as StringValidatorTests } from './tests/stringValidator.test';
 import { suite as TypeguardsTest } from './tests/typeguards.test';
 
@@ -36,4 +37,6 @@ describe('Typegoose', () => {
   describe('Test if the correct errors are returned', ErrorTests.bind(this));
 
   describe('Default Classes', DefaultClassesTests.bind(this));
+
+  describe('Should just Run', ShouldRunTests.bind(this));
 });

@@ -1,7 +1,7 @@
 import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { getModelForClass, isDocumentArray, Ref } from '../../src/typegoose';
+import { isDocumentArray, Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
 import { model as InternetUser } from '../models/internetUser';
@@ -207,11 +207,5 @@ export function suite() {
 
     expect(doc.non).to.not.be.an('undefined');
     expect(doc.non).to.deep.equals(['hi', 'where?']);
-  });
-
-  it('should not error when trying to get model multiple times', () => {
-    class TEST { }
-    getModelForClass(TEST);
-    getModelForClass(TEST);
   });
 }

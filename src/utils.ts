@@ -27,7 +27,7 @@ export function isObject(Type: any): boolean {
     name = prototype ? prototype.constructor.name : null;
   }
 
-  return false;
+  return false; // can this even return false?
 }
 
 /**
@@ -57,9 +57,7 @@ export function initAsObject(name: string, key: string): void {
   if (!schemas.get(name)) {
     schemas.set(name, {});
   }
-  if (!schemas.get(name)[key]) {
-    schemas.get(name)[key] = {};
-  }
+  schemas.get(name)[key] = {};
 }
 
 /**
@@ -71,9 +69,7 @@ export function initAsArray(name: any, key: any): void {
   if (!schemas.get(name)) {
     schemas.set(name, {});
   }
-  if (!schemas.get(name)[key]) {
-    schemas.get(name)[key] = [{}];
-  }
+  schemas.get(name)[key] = [{}];
 }
 
 /**

@@ -8,6 +8,7 @@ import { plugins } from './data';
 export function plugin(mongoosePlugin: any, options?: any) {
   return (constructor: any) => {
     const name: string = constructor.name;
+    /* istanbul ignore else */
     if (!plugins.get(name)) {
       plugins.set(name, []);
     }

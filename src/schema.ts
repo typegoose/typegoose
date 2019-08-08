@@ -69,5 +69,7 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
     sch.index(index.fields, index.options);
   }
 
+  buildSchemas.set(name, sch);
+
   return sch;
 }
