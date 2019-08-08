@@ -5,7 +5,6 @@ import { getModelForClass, post, pre, prop } from '../../src/typegoose';
 
   next();
 })
-// eslint-disable-next-line only-arrow-functions (need `this` in hook)
 @pre<Dummy>('updateMany', async function (this: any) {
   this._update.text = 'updateManied';
 })

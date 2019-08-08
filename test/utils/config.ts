@@ -45,7 +45,7 @@ const configFINAL: Readonly<IConfig> = {
 
 /** Small callback for the tests below */
 function cb(text: string): void {
-  // tslint:disable-next-line:no-console
+  // eslint-disable-next-line no-console
   console.error(text);
   process.exit(-1);
 }

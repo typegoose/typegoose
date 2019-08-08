@@ -17,8 +17,8 @@ import { connect, disconnect } from './utils/mongooseConnect';
 use(cap);
 
 describe('Typegoose', () => {
-  before(() => connect());
-  after(() => disconnect());
+  before(connect);
+  after(disconnect);
 
   describe('BigUser', BigUserTest.bind(this));
 
