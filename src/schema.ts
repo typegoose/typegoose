@@ -34,6 +34,7 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
   if (!sch) {
     sch = new Schema(schemas.get(name), schemaOptions);
   } else {
+    sch = sch.clone();
     sch.add(schemas.get(name));
   }
 

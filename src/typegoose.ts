@@ -9,7 +9,7 @@ if (!Object.fromEntries) {
 }
 
 import { deprecate } from 'util';
-import { constructors, models } from './data';
+import { buildSchemas, constructors, models } from './data';
 import * as defaultClasses from './defaultClasses';
 import { IModelOptions } from './optionsProp';
 import { _buildSchema } from './schema';
@@ -91,6 +91,9 @@ export function setModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
  * @returns Returns the Build Schema
  */
 export function buildSchema<T, U extends NoParamConstructor<T>>(cl: U) {
+  if (buildSchemas.get(cl.name)) {
+    return buildSchemas.get(cl.name);
+  }
   let sch: mongoose.Schema<U>;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
@@ -105,4 +108,29 @@ export function buildSchema<T, U extends NoParamConstructor<T>>(cl: U) {
   sch = _buildSchema(cl, sch);
 
   return sch;
+}
+
+/**
+ * Build a Model from a given class and return the model
+ * @param from The Model to build From
+ * @param cl The Class to make a model out
+ * @param id The Identifier to use to differentiate documents (default: cl.name)
+ */
+export function getDiscriminatorModelForClass<T, U extends NoParamConstructor<T>>(
+  from: mongoose.Model<any>,
+  cl: U,
+  id?: string
+) {
+  const name = cl.name;
+  if (models.get(name)) {
+    return models.get(name) as ReturnModelType<U, T>;
+  }
+
+  const sch = buildSchema(cl);
+  const model = from.discriminator(name, sch, id ? id : name);
+
+  models.set(name, model);
+  constructors.set(name, cl);
+
+  return models.get(name) as ReturnModelType<U, T>;
 }
