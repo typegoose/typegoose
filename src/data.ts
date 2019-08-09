@@ -1,20 +1,14 @@
 import { Model, Schema, SchemaDefinition } from 'mongoose';
 import { EmptyVoidFn, VirtualOptions } from './types';
 
-// types
-/* Hooks */
 export interface HooksPrePost {
   pre: Map<string | RegExp, (error?: Error) => void>;
   post: Map<string | RegExp, EmptyVoidFn>;
 }
-/* end Hooks */
-/* Plugins */
-interface PluginMap {
+export interface PluginMap {
   mongoosePlugin(schema: Schema<any>, options: object): void;
   options: object;
 }
-/* end Plugins */
-// end types
 
 /** Schema Map */
 export const schemas: Map<string, SchemaDefinition> = new Map();

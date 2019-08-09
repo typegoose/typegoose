@@ -15,8 +15,9 @@
 
 * If a release branch (like 6.0.0) gets merged into master, make a Major Version
 * If a collection of "should-not-break" commits, make a minor version
-* If a hotfix, that dosnt break anything make a patch version
-* If a hotfix, that can potentially break something, make a minor version
+* If a hotfix | fix, that dosnt break anything make a patch version
+* If a fix, that can potentially break something, make a minor version
+* ([Advanced](https://semver.org))
 
 ## Versioning
 

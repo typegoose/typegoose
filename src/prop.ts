@@ -213,8 +213,7 @@ function baseProp(
       schemas.get(name)[key] = {
         ...schemas.get(name)[key][0],
         ...options,
-        // HACK: replace this with "[Type]" if https://github.com/Automattic/mongoose/issues/8034 got fixed
-        type: [Type.name === 'ObjectID' ? 'ObjectId' : Type]
+        type: [Type]
       };
 
       return;

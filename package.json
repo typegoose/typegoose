@@ -1,6 +1,6 @@
 {
   "name": "typegoose",
-  "version": "6.0.0-14",
+  "version": "6.0.0-15",
   "description": "Define Mongoose models using TypeScript classes.",
   "main": "lib/typegoose.js",
   "engines": {
@@ -23,38 +23,39 @@
     "doc": "typedoc --out ./doc ./src --mode modules",
     "travis-docs": "npm run doc && mv ./doc ./docs"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/szokodiakos/typegoose.git"
-  },
+  "repository": "github:szokodiakos/typegoose",
   "types": "lib/typegoose.d.ts",
   "typings": "lib/typegoose.d.ts",
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
+  "contributors": [
+    "Ben305",
+    "hasezoey <hasezoey@gmail.com>"
+  ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "^5.6.7"
+    "mongoose": "^5.6.9"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^0.1.3",
-    "@types/chai": "^4.1.7",
-    "@types/chai-as-promised": "^7.1.1",
+    "@types/chai": "^4.2.0",
+    "@types/chai-as-promised": "^7.1.2",
     "@types/mocha": "^5.2.7",
-    "@types/mongoose": "^5.5.11",
+    "@types/mongoose": "^5.5.12",
     "@types/node": "^8.10.51",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "coveralls": "^3.0.5",
+    "coveralls": "^3.0.6",
     "mocha": "^6.2.0",
     "mongodb-memory-server-global": "^5.1.10",
-    "mongoose": "^5.6.8",
-    "mongoose-findorcreate": "3.0.0",
-    "nyc": "*14.1.1",
+    "mongoose": "^5.6.9",
+    "mongoose-findorcreate": "^3.0.0",
+    "nyc": "^14.1.1",
     "prettier": "^1.18.2",
     "rimraf": "*2.6.3",
     "source-map-support": "^0.5.13",
     "ts-node": "^8.3.0",
     "tslint": "*5.18.0",
-    "tslint-eslint-rules": "^5.4.0",
+    "tslint-eslint-rules": "*5.4.0",
     "typedoc": "*0.15.0",
     "typescript": "*3.5.3"
   },

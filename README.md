@@ -1,5 +1,6 @@
 # Typegoose
 
+<sub>(These badges are from szokodiakos:master)</sub>  
 [![Build Status](https://travis-ci.org/szokodiakos/typegoose.svg?branch=master)](https://travis-ci.org/szokodiakos/typegoose)
 [![Coverage Status](https://coveralls.io/repos/github/szokodiakos/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/szokodiakos/typegoose?branch=master)
 [![npm](https://img.shields.io/npm/dt/typegoose.svg)](https://www.npmjs.com/package/typegoose)
@@ -23,8 +24,8 @@ const UserModel = getModelForClass(User);
 
 // UserModel is a regular Mongoose Model with correct types
 (async () => {
-  const u = await UserModel.create({ name: 'JohnDoe' });
-  const user = await UserModel.findOne();
+  const { _id: id } = await UserModel.create({ name: 'JohnDoe' });
+  const user = await UserModel.findById(id).exec();
 
   console.log(user);
   // prints { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
@@ -37,7 +38,7 @@ A common problem when using Mongoose with TypeScript is that you have to define 
 
 Typegoose aims to solve this problem by defining only a TypeScript interface (class) which need to be enhanced with special Typegoose decorators.
 
-Under the hood it uses the [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the properties, so redundancy can be significantly reduced.
+Under the hood it uses the Reflect & [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the properties, so redundancy can be significantly reduced.
 
 Instead of:
 
@@ -106,6 +107,8 @@ class User {
 
 Please note that sub documents do not have to extend Typegoose. You can still give them default value in `prop` decorator, but you can't create static or instance methods on them.
 
+---
+
 ## Requirements
 
 * TypeScript 3.2+
@@ -116,13 +119,13 @@ Please note that sub documents do not have to extend Typegoose. You can still gi
 
 ## Install
 
-`npm install typegoose -S`
+`npm i -s typegoose`
 
-You also need to install `mongoose` and `reflect-metadata`, in versions < 5.0, these packages were listed as dependencies in `package.json`, starting with version 5.0 these packages are listed as peer dependencies.
+You also need to install `mongoose`, since version 5 it is listed as a peer-dependency
 
-`npm install mongoose reflect-metadata -S`
+`npm i -s mongoose`
 
-Note: typegoose uses the package `object.fromEntries` as a polyfill for node versions <12
+*Note: typegoose uses the package `object.fromEntries` as a polyfill for node versions <12*
 
 ## [Migrate to 6.0.0](migrate_to_6.md)
 
@@ -133,15 +136,17 @@ Note: typegoose uses the package `object.fromEntries` as a polyfill for node ver
 ## Versioning
 
 `Major.Minor.Fix` (or how npm expresses it `Major.Minor.Patch`)  
-(This Project should comply with semver)
+(This Project should comply with [Semver](https://semver.org))
+
+---
 
 ## API Documentation
 
 ### Typegoose class
 
-Since 6.0.0 this is just a placeholder class
+Since 6.0.0 deprecated, please try to remove it
 
-#### Methods
+### Methods
 
 `getModelForClass<T>(cl: T)`
 
@@ -151,11 +156,11 @@ This method returns the corresponding Mongoose Model for the class (`T`). If no 
 
 This Method is Deprecated see [Migrate to 6.0.0](migrate_to_6.md)
 
-### Property decorators
+## Property decorators
 
 Typegoose comes with TypeScript decorators, which responsibility is to connect the Mongoose schema behind the TypeScript class.
 
-#### prop(options)
+### prop(options)
 
 The `prop` decorator adds the target class property to the Mongoose schema as a property. Typegoose checks the decorated property's type and sets the schema property accordingly. If another Typegoose extending class is given as the type, Typegoose will recognize this property as a sub document.
 
@@ -420,7 +425,7 @@ The `options` object accepts multiple config properties:
     - `justOne`: Return as One Document(true) or as Array(false) [Optional]
     - `count`: Return the number of Documents found instead of the actual Documents [Optional]
 
-#### arrayProp(options)
+### arrayProp(options)
 
 The `arrayProp` is a `prop` decorator which makes it possible to create array schema properties.
 
@@ -461,7 +466,7 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
     }
     ```
 
-#### mapProp(options)
+### mapProp(options)
 
 The `mapProp` is a `prop` decorator which makes it possible to create map schema properties.
 
@@ -501,7 +506,7 @@ Mongoose allows the developer to add pre and post [hooks / middlewares](http://m
 
 Typegoose provides this functionality through TypeScript's class decorators.
 
-### modelOptions
+#### modelOptions
 
 The Model Options can be used like below
 
@@ -630,12 +635,14 @@ For reference properties:
 * `isDocument(T)`: returns `true` if `T` is populated, false otherwise
 * `isDocumentArray(T)`: returns `true` if `T`  is an Array **AND** is fully populated
 
+---
+
 ## Improvements
 
 * Add Tests for:
   - Hooks: add hook test for pre & post with error
 
-### Notes
+## Notes
 
 * `mongoose` is a peer-dependency, and a dev dependency to install it for dev purposes
 * Please dont add comments with `+1` or something like that, use the Reactions

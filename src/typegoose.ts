@@ -28,6 +28,11 @@ export { DocumentType, Ref, ReturnModelType };
 export { getClassForDocument } from './utils';
 
 /**
+ * @deprecated
+ */
+export class Typegoose { }
+
+/**
  * Get a Model for a Class
  * Executes .setModelForClass if it cant find it already
  * @param cl The uninitialized Class
@@ -41,6 +46,11 @@ export { getClassForDocument } from './utils';
  * ```
  */
 export function getModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
+  if (cl.name === 'Typegoose') {
+    // tslint:disable-next-line:no-console
+    console.error('The Typegoose Class is deprecated, please try to remove it');
+  }
+
   const name = cl.name;
   if (models.get(name)) {
     return models.get(name) as ReturnModelType<U, T>;

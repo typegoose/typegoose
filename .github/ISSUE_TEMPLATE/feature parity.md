@@ -1,7 +1,7 @@
 ---
 name: Feature parity
 about: Ask for feature parity with mongoose
-title: '[FP] '
+title: ''
 labels: parity
 assignees: ''
 ---
