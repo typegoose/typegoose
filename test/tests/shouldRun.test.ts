@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import * as mongoose from 'mongoose';
-import { buildSchema, getModelForClass, modelOptions } from '../../src/typegoose';
+import { addModelToTypegoose, buildSchema, getModelForClass, modelOptions, prop } from '../../src/typegoose';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 
 /**
@@ -53,5 +53,22 @@ export function suite() {
     expect(damdoc.above1).to.equals('hello DAM');
     // any is required otherwise typescript complains about "__t" not existing
     expect((damdoc as any).__t).to.equals('DisAbove');
+  });
+
+  it('should make use of addModelToTypegoose', async () => {
+    // addModelToTypegoose
+    class TestAMTT {
+      @prop({ required: true })
+      public somevalue!: string;
+
+      public somesecondvalue!: string;
+    }
+    const schema = buildSchema(TestAMTT);
+    schema.add({ somesecondvalue: { type: String, required: true } });
+    const model = addModelToTypegoose(mongoose.model(TestAMTT.name, schema), TestAMTT);
+    const doc = await model.create({ somevalue: 'hello from SV', somesecondvalue: 'hello from SSV' } as TestAMTT);
+    expect(doc).to.not.be.an('undefined');
+    expect(doc.somevalue).to.equal('hello from SV');
+    expect(doc.somesecondvalue).to.equal('hello from SSV');
   });
 }

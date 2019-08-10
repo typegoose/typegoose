@@ -65,10 +65,7 @@ export function getModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
     model = options.existingMongoose.model.bind(options.existingMongoose);
   }
 
-  models.set(name, model(name, buildSchema(cl)));
-  constructors.set(name, cl);
-
-  return models.get(name) as ReturnModelType<U, T>;
+  return addModelToTypegoose(model(name, buildSchema(cl)), cl);
 }
 
 /* istanbul ignore next */
@@ -111,10 +108,48 @@ export function buildSchema<T, U extends NoParamConstructor<T>>(cl: U) {
 }
 
 /**
+ * This can be used to add custom Models to Typegoose, with the type infomation of cl
+ * Note: no gurantee that the type infomation is fully correct
+ * @param model The model to store
+ * @param cl The Class to store
+ * @example
+ * ```ts
+ * class T {}
+ *
+ * const schema = buildSchema(T);
+ * // modifications to the schame can be done
+ * const model = addModelToTypegoose(mongoose.model(schema), T);
+ * ```
+ */
+export function addModelToTypegoose<T, U extends NoParamConstructor<T>>(model: mongoose.Model<any>, cl: U) {
+  if (!(model.prototype instanceof mongoose.Model)) {
+    throw new TypeError(`"${model}" is not a valid Model!`);
+  }
+  if (typeof cl !== 'function') {
+    throw new TypeError(`"${cl}" is not a function(/constructor)!`);
+  }
+
+  const name = cl.name;
+
+  models.set(name, model);
+  constructors.set(name, cl);
+
+  return models.get(name) as ReturnModelType<U, T>;
+}
+
+/**
  * Build a Model from a given class and return the model
  * @param from The Model to build From
  * @param cl The Class to make a model out
  * @param id The Identifier to use to differentiate documents (default: cl.name)
+ * @example
+ * ```ts
+ * class C1 {}
+ * class C2 extends C1 {}
+ *
+ * const C1Model = getModelForClass(C1);
+ * const C2Model = getDiscriminatorModelForClass(C1Model, C1);
+ * ```
  */
 export function getDiscriminatorModelForClass<T, U extends NoParamConstructor<T>>(
   from: mongoose.Model<any>,
@@ -129,8 +164,5 @@ export function getDiscriminatorModelForClass<T, U extends NoParamConstructor<T>
   const sch = buildSchema(cl);
   const model = from.discriminator(name, sch, id ? id : name);
 
-  models.set(name, model);
-  constructors.set(name, cl);
-
-  return models.get(name) as ReturnModelType<U, T>;
+  return addModelToTypegoose(model, cl);
 }

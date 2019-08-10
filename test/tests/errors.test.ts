@@ -1,8 +1,10 @@
 import { assert, expect } from 'chai';
 
+import { model, Schema } from 'mongoose';
 import { NoMetadataError, NotAllElementsError, NotNumberTypeError, NotStringTypeError } from '../../src/errors';
 import { pre } from '../../src/hooks';
 import { prop } from '../../src/prop';
+import { addModelToTypegoose } from '../../src/typegoose';
 
 // disable "no-unused-variable" for this file, because it tests for errors
 // tslint:disable:no-unused-variable
@@ -108,7 +110,7 @@ export function suite() {
     }
   });
 
-  it('should error if not all needed parameters for virtual-populate are given [NotAllElementsError]', async () => {
+  it('should error if not all needed parameters for virtual-populate are given [NotAllElementsError]', () => {
     try {
       class TEST {
         @prop({ localField: true })
@@ -117,6 +119,26 @@ export function suite() {
       assert.fail('Expected to throw "NotAllElementsError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(NotAllElementsError);
+    }
+  });
+
+  it('should error if no valid model is supplied to addModelToTypegoose [TypeError]', () => {
+    try {
+      // @ts-ignore
+      addModelToTypegoose('hello');
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if no valid class is supplied to addModelToTypegoose [TypeError]', () => {
+    try {
+      // @ts-ignore
+      addModelToTypegoose(model('hello', new Schema()), 'not class');
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
     }
   });
 }
