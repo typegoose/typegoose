@@ -30,7 +30,7 @@ export { getClassForDocument } from './utils';
 /**
  * @deprecated
  */
-export class Typegoose { }
+export abstract class Typegoose { }
 
 /**
  * Get a Model for a Class
