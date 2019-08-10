@@ -94,6 +94,17 @@ export interface BasePropOptions {
    */
   set?(val: any): any;
   get?(val: any): any;
+  /**
+   * Make a property read-only
+   * @example
+   * ```ts
+   * class SomeClass {
+   *  @prop({ immutable: true })
+   *  public someprop: Readonly<string>;
+   * }
+   * ```
+   */
+  immutable?: boolean;
 }
 
 export interface PropOptions extends BasePropOptions {

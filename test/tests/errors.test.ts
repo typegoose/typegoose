@@ -4,7 +4,7 @@ import { model, Schema } from 'mongoose';
 import { NoMetadataError, NotAllElementsError, NotNumberTypeError, NotStringTypeError } from '../../src/errors';
 import { pre } from '../../src/hooks';
 import { prop } from '../../src/prop';
-import { addModelToTypegoose } from '../../src/typegoose';
+import { addModelToTypegoose, getModelForClass } from '../../src/typegoose';
 
 // disable "no-unused-variable" for this file, because it tests for errors
 // tslint:disable:no-unused-variable
@@ -140,5 +140,19 @@ export function suite() {
     } catch (err) {
       expect(err).to.be.an.instanceOf(TypeError);
     }
+  });
+
+  it('should not modify an immutable', async () => {
+    class TestImmutable {
+      @prop({ required: true, immutable: true })
+      public someprop: Readonly<string>;
+    }
+
+    const TIModel = getModelForClass(TestImmutable);
+    const doc = await TIModel.create({ someprop: 'Hello' } as TestImmutable);
+    expect(doc).to.not.be.an('undefined');
+    doc.someprop = 'Hello2';
+    await doc.save();
+    expect(doc.someprop).to.be.equals('Hello');
   });
 }
