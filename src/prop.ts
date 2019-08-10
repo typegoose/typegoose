@@ -115,18 +115,22 @@ function baseProp(
 
   const ref = rawOptions.ref;
   if (typeof ref === 'string') {
+    delete rawOptions.ref;
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       type: mongoose.Schema.Types.ObjectId,
-      ref
+      ref,
+      ...rawOptions
     };
 
     return;
   } else if (ref) {
+    delete rawOptions.ref;
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       type: mongoose.Schema.Types.ObjectId,
-      ref: ref.name
+      ref: ref.name,
+      ...rawOptions
     };
 
     return;
@@ -134,18 +138,22 @@ function baseProp(
 
   const itemsRef = rawOptions.itemsRef;
   if (typeof itemsRef === 'string') {
+    delete rawOptions.itemsRef;
     schemas.get(name)[key][0] = {
       ...schemas.get(name)[key][0],
       type: mongoose.Schema.Types.ObjectId,
-      ref: itemsRef
+      ref: itemsRef,
+      ...rawOptions
     };
 
     return;
   } else if (itemsRef) {
+    delete rawOptions.itemsRef;
     schemas.get(name)[key][0] = {
       ...schemas.get(name)[key][0],
       type: mongoose.Schema.Types.ObjectId,
-      ref: itemsRef.name
+      ref: itemsRef.name,
+      ...rawOptions
     };
 
     return;
@@ -153,10 +161,12 @@ function baseProp(
 
   const refPath = rawOptions.refPath;
   if (refPath && typeof refPath === 'string') {
+    delete rawOptions.refPath;
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       type: mongoose.Schema.Types.ObjectId,
-      refPath
+      refPath,
+      ...rawOptions
     };
 
     return;
@@ -164,10 +174,12 @@ function baseProp(
 
   const itemsRefPath = rawOptions.itemsRefPath;
   if (itemsRefPath && typeof itemsRefPath === 'string') {
+    delete rawOptions.itemsRefPath;
     schemas.get(name)[key][0] = {
       ...schemas.get(name)[key][0],
       type: mongoose.Schema.Types.ObjectId,
-      refPath: itemsRefPath
+      refPath: itemsRefPath,
+      ...rawOptions
     };
 
     return;
@@ -207,7 +219,7 @@ function baseProp(
     throw new InvalidPropError(Type.name, key); // This seems to be never thrown!
   }
 
-  const { ['ref']: r, ['items']: i, ['of']: o, ...options } = rawOptions;
+  const { ['items']: items, ...options } = rawOptions;
   if (isPrimitive(Type)) {
     if (whatis === WhatIsIt.ARRAY) {
       schemas.get(name)[key] = {
@@ -221,6 +233,7 @@ function baseProp(
     if (whatis === WhatIsIt.MAP) {
       const { mapDefault } = options;
       delete options.mapDefault;
+      delete options.of;
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
         type: Map,

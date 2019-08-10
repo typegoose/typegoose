@@ -1,7 +1,7 @@
 import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { isDocumentArray, Ref } from '../../src/typegoose';
+import { arrayProp, buildSchema, isDocumentArray, prop, Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
 import { model as InternetUser } from '../models/internetUser';
@@ -207,5 +207,83 @@ export function suite() {
 
     expect(doc.non).to.not.be.an('undefined');
     expect(doc.non).to.deep.equals(['hi', 'where?']);
+  });
+
+  it('should add options to ref [szokodiakos#379]', () => {
+    class T { }
+    class TestRef {
+      @prop({ ref: T, customoption: 'custom' })
+      public someprop: Ref<T>;
+    }
+
+    const schema = buildSchema(TestRef);
+    const someprop = schema.path('someprop');
+    expect(schema).to.not.be.an('undefined');
+    expect(someprop).to.not.be.an('undefined');
+    // @ts-ignore
+    const opt: any = someprop.options;
+    expect(opt.type).to.be.an('function');
+    expect(opt.ref).to.equal('T');
+    expect(opt).to.have.property('customoption', 'custom');
+  });
+
+  it('should add options to refPath [szokodiakos#379]', () => {
+    class T { }
+    class TestRefPath {
+      @prop({ default: 'T' })
+      public something: string;
+
+      @prop({ refPath: 'something', customoption: 'custom' })
+      public someprop: Ref<T>;
+    }
+
+    const schema = buildSchema(TestRefPath);
+    const someprop = schema.path('someprop');
+    expect(schema).to.not.be.an('undefined');
+    expect(someprop).to.not.be.an('undefined');
+    // @ts-ignore
+    const opt: any = someprop.options;
+    expect(opt.type).to.be.an('function');
+    expect(opt.refPath).to.equal('something');
+    expect(opt).to.have.property('customoption', 'custom');
+  });
+
+  it('should add options to itemsRef [szokodiakos#379]', () => {
+    class T { }
+    class TestItemsRef {
+      @arrayProp({ itemsRef: T, customoption: 'custom' })
+      public someprop: Ref<T>[];
+    }
+
+    const schema = buildSchema(TestItemsRef);
+    const someprop = schema.path('someprop');
+    expect(schema).to.not.be.an('undefined');
+    expect(someprop).to.not.be.an('undefined');
+    // @ts-ignore
+    const opt: any = someprop.options.type[0];
+    expect(opt.type).to.be.an('function');
+    expect(opt.ref).to.equal('T');
+    expect(opt).to.have.property('customoption', 'custom');
+  });
+
+  it('should add options to itemsRefPath [szokodiakos#379]', () => {
+    class T { }
+    class TestItemsRefPath {
+      @prop({ default: 'T' })
+      public something: string;
+
+      @arrayProp({ itemsRefPath: 'something', customoption: 'custom' })
+      public someprop: Ref<T>;
+    }
+
+    const schema = buildSchema(TestItemsRefPath);
+    const someprop = schema.path('someprop');
+    expect(schema).to.not.be.an('undefined');
+    expect(someprop).to.not.be.an('undefined');
+    // @ts-ignore
+    const opt: any = someprop.options.type[0];
+    expect(opt.type).to.be.an('function');
+    expect(opt.refPath).to.equal('something');
+    expect(opt).to.have.property('customoption', 'custom');
   });
 }
