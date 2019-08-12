@@ -15,7 +15,7 @@ enum ProjectValue {
 }
 
 class InternetUser {
-  @mapProp({ of: String, mapDefault: {} })
+  @mapProp({ of: String, default: {} })
   public socialNetworks?: Map<string, string>;
 
   @mapProp({ of: SideNote })

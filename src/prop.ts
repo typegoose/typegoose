@@ -11,12 +11,13 @@ import {
 } from './errors';
 import { _buildSchema } from './schema';
 import {
-  BasePropOptions,
+  ArrayPropOptions,
+  MapPropOptions,
   NoParamConstructor,
+  PropOptions,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
-  PropOptionsWithValidate,
-  RefSchemaType
+  PropOptionsWithValidate
 } from './types';
 import { initAsArray, initAsObject, isNumber, isObject, isPrimitive, isString } from './utils';
 
@@ -234,13 +235,14 @@ function baseProp(
       return;
     }
     if (whatis === WhatIsIt.MAP) {
-      const { mapDefault } = options;
-      delete options.mapDefault;
+      // note "default" is a reserved keyword, thats why "_default" is used
+      const { default: _default }: PropOptions = options;
+      delete options.default;
       delete options.of;
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
         type: Map,
-        default: mapDefault,
+        default: _default,
         of: { type: Type, ...options }
       };
 
@@ -319,24 +321,6 @@ export function prop(options: PropOptionsWithValidate = {}) {
 
     baseProp(options, Type, target, key, WhatIsIt.NONE);
   };
-}
-
-export interface ArrayPropOptions extends BasePropOptions {
-  /** What array is it?
-   * Note: this is only needed because Reflect & refelact Metadata cant give an accurate Response for an array
-   */
-  items?: any;
-  /** Same as {@link PropOptions.ref}, only that it is for an array */
-  itemsRef?: any;
-  /** Same as {@link PropOptions.refPath}, only that it is for an array */
-  itemsRefPath?: any;
-  /** Same as {@link PropOptions.refType}, only that it is for an array */
-  itemsRefType?: RefSchemaType;
-}
-
-export interface MapPropOptions extends BasePropOptions {
-  of?: any;
-  mapDefault?: any;
 }
 
 /**

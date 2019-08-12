@@ -173,12 +173,6 @@ export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
 export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions & ValidateStringOptions;
 export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate | VirtualOptions;
 
-/**
- * Reference another Model
- * @public
- */
-export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T;
-
 export type RefType = number | string | mongoose.Types.ObjectId | Buffer;
 export type RefSchemaType = typeof mongoose.Schema.Types.Number |
   typeof mongoose.Schema.Types.String |
@@ -186,6 +180,32 @@ export type RefSchemaType = typeof mongoose.Schema.Types.Number |
   typeof mongoose.Schema.Types.ObjectId;
 
 /**
+ * Reference another Model
+ * @public
+ */
+export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T;
+
+/**
  * An Function type for a function that dosnt have any arguments and dosnt return anything
  */
 export type EmptyVoidFn = () => void;
+
+export interface ArrayPropOptions extends BasePropOptions {
+  /** What array is it?
+   * Note: this is only needed because Reflect & refelact Metadata cant give an accurate Response for an array
+   */
+  items?: any;
+  /** Same as {@link PropOptions.ref}, only that it is for an array */
+  itemsRef?: any;
+  /** Same as {@link PropOptions.refPath}, only that it is for an array */
+  itemsRefPath?: any;
+  /** Same as {@link PropOptions.refType}, only that it is for an array */
+  itemsRefType?: RefSchemaType;
+}
+
+export interface MapPropOptions extends BasePropOptions {
+  /**
+   * The type of the Map (Map<string, THIS>)
+   */
+  of?: any;
+}

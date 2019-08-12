@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import * as mongoose from 'mongoose';
-import { addModelToTypegoose, buildSchema, getModelForClass, modelOptions, prop } from '../../src/typegoose';
+import { addModelToTypegoose, buildSchema, getModelForClass, mapProp, modelOptions, prop } from '../../src/typegoose';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 
 /**
@@ -70,5 +70,24 @@ export function suite() {
     expect(doc).to.not.be.an('undefined');
     expect(doc.somevalue).to.equal('hello from SV');
     expect(doc.somesecondvalue).to.equal('hello from SSV');
+  });
+
+  it('should make use of Map default', async () => {
+    class TestMapDefault {
+      @mapProp({ of: String, default: new Map([['hello', 'hello']]) })
+      public test: Map<string, string>;
+
+      @prop()
+      public someother: string;
+    }
+
+    const model = getModelForClass(TestMapDefault);
+    const { _id: id } = await model.create({ someother: 'hi' });
+
+    const found = await model.findById(id).exec();
+    expect(found).to.not.be.an('undefined');
+    expect(found.someother).to.be.equal('hi');
+    expect(found.test).to.be.an('map');
+    expect(found.test).to.be.deep.equal(new Map([['hello', 'hello']]));
   });
 }
