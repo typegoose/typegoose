@@ -1,9 +1,9 @@
 # Typegoose
 
-<sub>(These badges are from szokodiakos:master)</sub>  
-[![Build Status](https://travis-ci.org/szokodiakos/typegoose.svg?branch=master)](https://travis-ci.org/szokodiakos/typegoose)
-[![Coverage Status](https://coveralls.io/repos/github/szokodiakos/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/szokodiakos/typegoose?branch=master)
-[![npm](https://img.shields.io/npm/dt/typegoose.svg)](https://www.npmjs.com/package/typegoose)
+<sub>(These badges are from hasezoey:r6/master)</sub>  
+[![Build Status](https://travis-ci.com/hasezoey/typegoose.svg?branch=r6/master)](https://travis-ci.com/hasezoey/typegoose)
+[![Coverage Status](https://coveralls.io/repos/github/hasezoey/typegoose/badge.svg?branch=r6/master#feb282019)](https://coveralls.io/github/hasezoey/typegoose?branch=r6/master)
+[![npm](https://img.shields.io/npm/dt/@hasezoey/typegoose.svg)](https://www.npmjs.com/package/@hasezoey/typegoose)
 
 Define Mongoose models using TypeScript classes.
 
