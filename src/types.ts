@@ -177,7 +177,13 @@ export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOption
  * Reference another Model
  * @public
  */
-export type Ref<T> = T | mongoose.Schema.Types.ObjectId;
+export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T;
+
+export type RefType = number | string | mongoose.Types.ObjectId | Buffer;
+export type RefSchemaType = typeof mongoose.Schema.Types.Number |
+  typeof mongoose.Schema.Types.String |
+  typeof mongoose.Schema.Types.Buffer |
+  typeof mongoose.Schema.Types.ObjectId;
 
 /**
  * An Function type for a function that dosnt have any arguments and dosnt return anything

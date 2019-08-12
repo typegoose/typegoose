@@ -15,7 +15,8 @@ import {
   NoParamConstructor,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
-  PropOptionsWithValidate
+  PropOptionsWithValidate,
+  RefSchemaType
 } from './types';
 import { initAsArray, initAsObject, isNumber, isObject, isPrimitive, isString } from './utils';
 
@@ -114,11 +115,12 @@ function baseProp(
   }
 
   const ref = rawOptions.ref;
+  const refType = rawOptions.refType || mongoose.Schema.Types.ObjectId;
   if (typeof ref === 'string') {
     delete rawOptions.ref;
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
-      type: mongoose.Schema.Types.ObjectId,
+      type: refType,
       ref,
       ...rawOptions
     };
@@ -128,7 +130,7 @@ function baseProp(
     delete rawOptions.ref;
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
-      type: mongoose.Schema.Types.ObjectId,
+      type: refType,
       ref: ref.name,
       ...rawOptions
     };
@@ -137,11 +139,12 @@ function baseProp(
   }
 
   const itemsRef = rawOptions.itemsRef;
+  const itemsRefType = rawOptions.itemsRefType || mongoose.Schema.Types.ObjectId;
   if (typeof itemsRef === 'string') {
     delete rawOptions.itemsRef;
     schemas.get(name)[key][0] = {
       ...schemas.get(name)[key][0],
-      type: mongoose.Schema.Types.ObjectId,
+      type: itemsRefType,
       ref: itemsRef,
       ...rawOptions
     };
@@ -151,7 +154,7 @@ function baseProp(
     delete rawOptions.itemsRef;
     schemas.get(name)[key][0] = {
       ...schemas.get(name)[key][0],
-      type: mongoose.Schema.Types.ObjectId,
+      type: itemsRefType,
       ref: itemsRef.name,
       ...rawOptions
     };
@@ -164,7 +167,7 @@ function baseProp(
     delete rawOptions.refPath;
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
-      type: mongoose.Schema.Types.ObjectId,
+      type: itemsRefType,
       refPath,
       ...rawOptions
     };
@@ -177,7 +180,7 @@ function baseProp(
     delete rawOptions.itemsRefPath;
     schemas.get(name)[key][0] = {
       ...schemas.get(name)[key][0],
-      type: mongoose.Schema.Types.ObjectId,
+      type: itemsRefType,
       refPath: itemsRefPath,
       ...rawOptions
     };
@@ -327,7 +330,10 @@ export interface ArrayPropOptions extends BasePropOptions {
   itemsRef?: any;
   /** Same as {@link PropOptions.refPath}, only that it is for an array */
   itemsRefPath?: any;
+  /** Same as {@link PropOptions.refType}, only that it is for an array */
+  itemsRefType?: RefSchemaType;
 }
+
 export interface MapPropOptions extends BasePropOptions {
   of?: any;
   mapDefault?: any;
