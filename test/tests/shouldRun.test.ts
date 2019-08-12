@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import * as mongoose from 'mongoose';
-import { addModelToTypegoose, buildSchema, getModelForClass, mapProp, modelOptions, prop } from '../../src/typegoose';
+import { addModelToTypegoose, arrayProp, buildSchema, getModelForClass, mapProp, modelOptions, prop } from '../../src/typegoose';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 
 /**
@@ -89,5 +89,23 @@ export function suite() {
     expect(found.someother).to.be.equal('hi');
     expect(found.test).to.be.an('map');
     expect(found.test).to.be.deep.equal(new Map([['hello', 'hello']]));
+  });
+
+  it('should make array of enum [szokodiakos#380]', async () => {
+    enum TestEnum {
+      HELLO1 = 'Hello 1',
+      HELLO2 = 'Hello 2'
+    }
+    class TestEnumArray {
+      @arrayProp({ items: String, enum: TestEnum })
+      public somevalue: TestEnum[];
+    }
+
+    const model = getModelForClass(TestEnumArray);
+    const { _id: id } = await model.create({ somevalue: [TestEnum.HELLO1, TestEnum.HELLO2] } as TestEnumArray);
+    const found = await model.findById(id).exec();
+
+    expect(found).to.not.be.an('undefined');
+    expect(found.somevalue).to.deep.equal(['Hello 1', 'Hello 2']);
   });
 }
