@@ -1,6 +1,6 @@
 {
   "name": "typegoose",
-  "version": "6.0.0-19",
+  "version": "6.0.0-20",
   "description": "Define Mongoose models using TypeScript classes.",
   "main": "lib/typegoose.js",
   "engines": {
@@ -21,7 +21,8 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "clean": "rimraf lib && rm .tsbuildinfo && rimraf .nyc_output && rimraf coverage && rimraf doc && rimraf build",
     "doc": "typedoc --out ./doc ./src --mode modules",
-    "travis-docs": "npm run doc && mv ./doc ./docs"
+    "travis-docs": "npm run doc && mv ./doc ./docs",
+    "prepublish": "npm run build"
   },
   "repository": "github:szokodiakos/typegoose",
   "types": "lib/typegoose.d.ts",
