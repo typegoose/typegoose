@@ -1,6 +1,14 @@
 import { expect } from 'chai';
 import * as mongoose from 'mongoose';
-import { addModelToTypegoose, arrayProp, buildSchema, getModelForClass, mapProp, modelOptions, prop } from '../../src/typegoose';
+import {
+  addModelToTypegoose,
+  arrayProp,
+  buildSchema,
+  getModelForClass,
+  mapProp,
+  modelOptions,
+  prop
+} from '../../src/typegoose';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 
 /**

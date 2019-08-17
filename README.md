@@ -138,6 +138,10 @@ You also need to install `mongoose`, since version 5 it is listed as a peer-depe
 `Major.Minor.Fix` (or how npm expresses it `Major.Minor.Patch`)  
 (This Project should comply with [Semver](https://semver.org))
 
+## Join Our Discord Server
+
+To ask questions or just talk with us [join our Discord Server](https://discord.gg/BpGjTTD)
+
 ---
 
 ## API Documentation
