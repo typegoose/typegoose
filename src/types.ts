@@ -155,8 +155,11 @@ export interface TransformStringOptions {
 }
 
 export interface VirtualOptions {
-  ref: string;
+  /** Reference an other Document (you should use Ref<T> as Prop type) */
+  ref: any;
+  /** Which property(on the current-Class) to match `foreignField` against */
   localField: string;
+  /** Which property(on the ref-Class) to match `localField` against */
   foreignField: string;
   /** Return as One Document(true) or as Array(false) */
   justOne?: boolean;

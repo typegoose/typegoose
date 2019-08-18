@@ -7,8 +7,7 @@ node_js: [
     # check against oldest supported
     8,
   ]
-# this has to be used, otherwise it executes the tests twice (because of "default build script")
-script: |
+script: | # this has to be used, otherwise it executes the tests twice (because of "default build script")
   npm run mocha
   if [ $? -ne 0 ]; then exit $?; fi # this is added because sometimes it fails and exists with 0 in travis
   if [ $TRAVIS_NODE_VERSION == "12" ]; then npm run coverage; fi

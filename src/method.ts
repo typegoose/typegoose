@@ -8,7 +8,7 @@ import { deprecate } from 'util';
  */
 export const staticMethod = deprecate(
   (_1, _2) => undefined,
-  '"" is deprecated, look at README#Migrate to 6.0.0'
+  '"staticMethod" is deprecated, look at README#Migrate to 6.0.0'
 );
 
 /**
@@ -17,5 +17,5 @@ export const staticMethod = deprecate(
  */
 export const instanceMethod = deprecate(
   (_1, _2) => undefined,
-  '"" is deprecated, look at README#Migrate to 6.0.0'
+  '"instanceMethod" is deprecated, look at README#Migrate to 6.0.0'
 );

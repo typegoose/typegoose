@@ -1,7 +1,7 @@
 {
   "name": "typegoose",
   "version": "6.0.0-20",
-  "description": "Define Mongoose models using TypeScript classes.",
+  "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
   "engines": {
     "node": ">=8.10.0"
@@ -47,7 +47,7 @@
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.6",
     "mocha": "^6.2.0",
-    "mongodb-memory-server-global": "^5.1.10",
+    "mongodb-memory-server-global": "^5.2.0",
     "mongoose": "^5.6.9",
     "mongoose-findorcreate": "^3.0.0",
     "nyc": "^14.1.1",

@@ -1,6 +1,5 @@
 /*
  copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
-
  */
 export interface IndexOptions<T> {
   /**
@@ -74,7 +73,7 @@ export interface IndexOptions<T> {
  */
 export function index<T>(fields: T, options?: IndexOptions<T>) {
   return (constructor: any) => {
-    const indices = Reflect.getMetadata('typegoose:indices', constructor) || [];
+    const indices: any[] = Reflect.getMetadata('typegoose:indices', constructor) || [];
     indices.push({ fields, options });
     Reflect.defineMetadata('typegoose:indices', indices, constructor);
   };

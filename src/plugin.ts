@@ -1,11 +1,12 @@
 import { plugins } from './data';
+import { Func } from './types';
 
 /**
  * Add a Middleware-Plugin
  * @param mongoosePlugin The Plugin to plug-in
  * @param options Options for the Plugin, if any
  */
-export function plugin(mongoosePlugin: any, options?: any) {
+export function plugin(mongoosePlugin: Func, options?: any) {
   return (constructor: any) => {
     const name: string = constructor.name;
     /* istanbul ignore else */

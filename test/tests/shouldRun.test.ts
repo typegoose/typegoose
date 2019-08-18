@@ -116,4 +116,19 @@ export function suite() {
     expect(found).to.not.be.an('undefined');
     expect(found.somevalue).to.deep.equal(['Hello 1', 'Hello 2']);
   });
+
+  it('should work with Objects in Class [szokodiakos#54]', async () => {
+    class TESTObject {
+      @prop()
+      public test: {
+        anotherTest: string;
+      };
+    }
+
+    const model = getModelForClass(TESTObject);
+    const doc = await model.create({ test: { anotherTest: 'hello' } } as TESTObject);
+    expect(doc).to.not.be.an('undefined');
+    expect(doc.test).to.be.an('object');
+    expect(doc.test.anotherTest).to.be.equal('hello');
+  });
 }

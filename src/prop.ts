@@ -5,7 +5,7 @@ import { schemas, virtuals } from './data';
 import {
   InvalidPropError,
   NoMetadataError,
-  NotAllElementsError,
+  NotAllVPOPElementsError,
   NotNumberTypeError,
   NotStringTypeError
 } from './errors';
@@ -15,11 +15,9 @@ import {
   MapPropOptions,
   NoParamConstructor,
   PropOptions,
-  PropOptionsWithNumberValidate,
-  PropOptionsWithStringValidate,
   PropOptionsWithValidate
 } from './types';
-import { initAsArray, initAsObject, isNumber, isObject, isPrimitive, isString } from './utils';
+import * as utils from './utils';
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
 enum WhatIsIt {
@@ -29,42 +27,11 @@ enum WhatIsIt {
 }
 
 /**
- * Return true if there are Options
- * @param options The raw Options
- */
-function isWithStringValidate(options: PropOptionsWithStringValidate): boolean {
-  return !isNullOrUndefined(
-    options.match
-    || options.enum
-    || options.minlength
-    || options.maxlength
-  );
-}
-
-/**
- * Return true if there are Options
- * @param options The raw Options
- */
-function isWithStringTransform(options: PropOptionsWithStringValidate) {
-  return !isNullOrUndefined(options.lowercase || options.uppercase || options.trim);
-}
-
-/**
- * Return true if there are Options
- * @param options The raw Options
- */
-function isWithNumberValidate(options: PropOptionsWithNumberValidate) {
-  return !isNullOrUndefined(options.min || options.max);
-}
-
-const virtualOptions = ['localField', 'foreignField'];
-
-/**
  * Base Function for prop & arrayProp
  * @param rawOptions The options (like require)
  * @param Type What Type it is
- * @param target <no info>
- * @param key <no info>
+ * @param target Target Class
+ * @param key Value Key of target class
  * @param isArray is it an array?
  */
 function baseProp(
@@ -81,9 +48,9 @@ function baseProp(
     virtuals.set(name, new Map());
   }
 
-  if (Object.keys(rawOptions).some((val) => virtualOptions.includes(val))) {
-    if (!virtualOptions.every((val) => Object.keys(rawOptions).includes(val))) {
-      throw new NotAllElementsError(name, key, virtualOptions);
+  if (utils.isWithVirtualPOP(rawOptions)) {
+    if (!utils.includesAllVirtualPOP(rawOptions)) {
+      throw new NotAllVPOPElementsError(name, key);
     }
     virtuals.get(name).set(key, rawOptions);
 
@@ -91,9 +58,9 @@ function baseProp(
   }
 
   if (whatis === WhatIsIt.ARRAY) {
-    initAsArray(name, key);
+    utils.initAsArray(name, key);
   } else {
-    initAsObject(name, key);
+    utils.initAsObject(name, key);
   }
 
   if (!isNullOrUndefined(rawOptions.set) || !isNullOrUndefined(rawOptions.get)) {
@@ -141,22 +108,12 @@ function baseProp(
 
   const itemsRef = rawOptions.itemsRef;
   const itemsRefType = rawOptions.itemsRefType || mongoose.Schema.Types.ObjectId;
-  if (typeof itemsRef === 'string') {
+  if (itemsRef) {
     delete rawOptions.itemsRef;
     schemas.get(name)[key][0] = {
       ...schemas.get(name)[key][0],
       type: itemsRefType,
-      ref: itemsRef,
-      ...rawOptions
-    };
-
-    return;
-  } else if (itemsRef) {
-    delete rawOptions.itemsRef;
-    schemas.get(name)[key][0] = {
-      ...schemas.get(name)[key][0],
-      type: itemsRefType,
-      ref: itemsRef.name,
+      ref: typeof itemsRef === 'string' ? itemsRef : itemsRef.name,
       ...rawOptions
     };
 
@@ -205,26 +162,26 @@ function baseProp(
   }
 
   // check for validation inconsistencies
-  if (isWithStringValidate(rawOptions) && !isString(Type)) {
+  if (utils.isWithStringValidate(rawOptions) && !utils.isString(Type)) {
     throw new NotStringTypeError(key);
   }
 
   // check for transform inconsistencies
-  if (isWithStringTransform(rawOptions) && !isString(Type)) {
+  if (utils.isWithStringTransform(rawOptions) && !utils.isString(Type)) {
     throw new NotStringTypeError(key);
   }
 
-  if (isWithNumberValidate(rawOptions) && !isNumber(Type)) {
+  if (utils.isWithNumberValidate(rawOptions) && !utils.isNumber(Type)) {
     throw new NotNumberTypeError(key);
   }
 
   const subSchema = schemas.get(Type.name);
-  if (!subSchema && !isPrimitive(Type) && !isObject(Type)) {
+  if (!subSchema && !utils.isPrimitive(Type) && !utils.isObject(Type)) {
     throw new InvalidPropError(Type.name, key); // This seems to be never thrown!
   }
 
   const { ['items']: items, ...options } = rawOptions;
-  if (isPrimitive(Type)) {
+  if (utils.isPrimitive(Type)) {
     if (whatis === WhatIsIt.ARRAY) {
       schemas.get(name)[key] = {
         ...schemas.get(name)[key][0],
@@ -259,11 +216,11 @@ function baseProp(
 
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
-  if (isObject(Type) && !subSchema) {
+  if (utils.isObject(Type) && !subSchema) {
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       ...options,
-      type: Object
+      type: Object // i think this can take some improvements
     };
 
     return;
@@ -314,7 +271,6 @@ function baseProp(
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
     const Type = Reflect.getMetadata('design:type', target, key);
-
     if (!Type) {
       throw new NoMetadataError(key);
     }

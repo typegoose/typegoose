@@ -27,9 +27,7 @@ export { defaultClasses };
 export { DocumentType, Ref, ReturnModelType };
 export { getClassForDocument } from './utils';
 
-/**
- * @deprecated
- */
+/** @deprecated */
 export abstract class Typegoose { }
 
 /**
@@ -46,11 +44,6 @@ export abstract class Typegoose { }
  * ```
  */
 export function getModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
-  if (cl.name === 'Typegoose') {
-    // tslint:disable-next-line:no-console
-    console.error('The Typegoose Class is deprecated, please try to remove it');
-  }
-
   const name = cl.name;
   if (models.get(name)) {
     return models.get(name) as ReturnModelType<U, T>;
@@ -96,6 +89,11 @@ export function buildSchema<T, U extends NoParamConstructor<T>>(cl: U) {
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   // iterate trough all parents
   while (parentCtor && parentCtor.name !== 'Object') {
+    /* istanbul ignore next */
+    if (parentCtor.name === 'Typegoose') { // TODO: remove this if, if the Typegoose class gets removed [DEPRECATION]
+      // tslint:disable-next-line:no-console
+      console.error('The Typegoose Class is deprecated, please try to remove it');
+    }
     // extend schema
     sch = _buildSchema(parentCtor, sch);
     // set next parent

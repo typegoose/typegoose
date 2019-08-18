@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+
 import { buildSchemas, hooks, plugins, schemas, virtuals } from './data';
 import { IModelOptions } from './typegoose';
 import { EmptyVoidFn, NoParamConstructor } from './types';
@@ -65,7 +66,7 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
   }
 
   /** Get Metadata for indices */
-  const indices = Reflect.getMetadata('typegoose:indices', cl) || [];
+  const indices: any[] = Reflect.getMetadata('typegoose:indices', cl) || [];
   for (const index of indices) {
     sch.index(index.fields, index.options);
   }

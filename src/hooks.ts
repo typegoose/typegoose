@@ -94,6 +94,7 @@ function addToHooks(name: string, hookType: 'pre' | 'post', args: any[]) {
     } as HooksPrePost);
   }
 
+  // Convert Method to array if only a string is provided
   const methods: QDM[] = isArray(args[0]) ? args[0] : [args[0]];
   if (typeof args[1] !== 'function') {
     throw new TypeError(`"${name}.${hookType}.${methods.join(' ')}"'s function is not a function!`);

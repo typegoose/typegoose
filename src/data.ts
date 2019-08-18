@@ -1,4 +1,5 @@
 import { Model, Schema, SchemaDefinition } from 'mongoose';
+
 import { EmptyVoidFn, VirtualOptions } from './types';
 
 export interface HooksPrePost {
