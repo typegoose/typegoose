@@ -84,22 +84,12 @@ function baseProp(
 
   const ref = rawOptions.ref;
   const refType = rawOptions.refType || mongoose.Schema.Types.ObjectId;
-  if (typeof ref === 'string') {
+  if (ref) {
     delete rawOptions.ref;
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       type: refType,
-      ref,
-      ...rawOptions
-    };
-
-    return;
-  } else if (ref) {
-    delete rawOptions.ref;
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key],
-      type: refType,
-      ref: ref.name,
+      ref: typeof ref === 'string' ? ref : ref.name,
       ...rawOptions
     };
 
