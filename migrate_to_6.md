@@ -1,5 +1,10 @@
 # How to migrate from ~5.9 to 6.0.x
 
+## Important, Read this first
+
+To migrate "seamless" you should be on the latest Typegoose Version of 5.x (Currently 5.9.0) and then to migrate, upgrade to 6.0.x (not 6.x)
+because in version 6.1+ the deprecated functions will get removed!
+
 ## InstanceType changed
 
 `InstanceType<T>` got renamed to `DocumentType<T>`
@@ -7,6 +12,7 @@
 ## `getModelForClass`, `setModelForClass`, `buildSchema`
 
 they are not in the Typegoose class anymore, they are now outsourced, which means the new syntax is the following
+(for "seamless" migration the Typegoose Class still exists and has the functions, but with deprecation)
 
 ```ts
 import { getModelForClass } from 'typegoose';
@@ -55,7 +61,6 @@ for normal virtuals, just use `get somevalue() { return ''; }` and `set somevalu
 ## Notes
 
 * (ic) The internal handling of schema creation has changed a bit but tried to keep the inputs & outputs the same, means in some edge-cases it can happen to not work anymore
-* all deprecated functions and options in this version, will get removed in future versions (6.5.0 | 7.0.0, whatever comes first)
 
 ---
 

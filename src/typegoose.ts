@@ -28,7 +28,31 @@ export { DocumentType, Ref, ReturnModelType };
 export { getClassForDocument } from './utils';
 
 /** @deprecated */
-export abstract class Typegoose { }
+export abstract class Typegoose {
+  /* istanbul ignore next */
+  constructor() {
+    // tslint:disable-next-line:no-empty
+    deprecate(() => { }, 'Typegoose Class is Deprecated!')();
+  }
+
+  /* istanbul ignore next */
+  /** @deprecated */
+  public getModelForClass<T, U extends NoParamConstructor<T>>(cl: U, settings?: any) {
+    return deprecate(getModelForClass, 'Typegoose Class is Deprecated!')(cl);
+  }
+
+  /* istanbul ignore next */
+  /** @deprecated */
+  public setModelForClass<T, U extends NoParamConstructor<T>>(cl: U, settings?: any) {
+    return deprecate(setModelForClass, 'Typegoose Class is Deprecated!')(cl);
+  }
+
+  /* istanbul ignore next */
+  /** @deprecated */
+  public buildSchema<T, U extends NoParamConstructor<T>>(cl: U) {
+    return deprecate(buildSchema, 'Typegoose Class is Deprecated!')(cl);
+  }
+}
 
 /**
  * Get a Model for a Class
