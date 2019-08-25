@@ -5,3 +5,4 @@ npm run doc
 find . -not -regex "^\.\/doc.*" -delete
 mv doc/* ./
 rm -rf doc/
+touch .nojekyll
