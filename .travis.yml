@@ -38,13 +38,12 @@ jobs:
     - name: 'Deploy to GitHub Pages'
       stage: deploy
       if: branch IN (master, r6/master) # i know this redundant, but it is needed otherwise the test will always create a deploy of this
-      script: npm run travis-docs
+      script: sh ./ghPagesPre.sh
       deploy:
         provider: pages
         skip_cleanup: true
         github_token: $GITHUB_GH_PAGES
-        keep_history: true
-        local_dir: docs
+        keep_history: false
         target_branch: gh-pages # i know this the default, but just to be sure
         on:
           branch:

@@ -22,7 +22,6 @@
     "clean": "rimraf lib && rm .tsbuildinfo && rimraf .nyc_output && rimraf coverage && rimraf doc && rimraf build",
     "doc": "typedoc --out ./doc ./src --mode modules --exclude \"**/internal/*\"",
     "doc:all": "typedoc --out ./doc ./src --mode modules",
-    "travis-docs": "npm run doc && mv ./doc ./docs",
     "prepublish": "npm run build"
   },
   "repository": "github:hasezoey/typegoose",
