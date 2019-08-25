@@ -9,10 +9,10 @@ if (!Object.fromEntries) {
 }
 
 import { deprecate } from 'util';
-import { buildSchemas, constructors, models } from './data';
 import * as defaultClasses from './defaultClasses';
+import { buildSchemas, constructors, models } from './internal/data';
+import { _buildSchema } from './internal/schema';
 import { IModelOptions } from './optionsProp';
-import { _buildSchema } from './schema';
 import { DocumentType, NoParamConstructor, Ref, ReturnModelType } from './types';
 
 /* exports */
@@ -25,7 +25,7 @@ export * from './typeguards';
 export * from './optionsProp';
 export { defaultClasses };
 export { DocumentType, Ref, ReturnModelType };
-export { getClassForDocument } from './utils';
+export { getClassForDocument } from './internal/utils';
 
 /** @deprecated */
 export abstract class Typegoose {

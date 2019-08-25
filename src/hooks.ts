@@ -1,6 +1,6 @@
 import { Query } from 'mongoose';
 import { isArray } from 'util';
-import { hooks as hooksData, HooksPrePost } from './data';
+import { hooks as hooksData, HooksPrePost } from './internal/data';
 import { DocumentType } from './typegoose';
 import { EmptyVoidFn } from './types';
 

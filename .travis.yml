@@ -37,7 +37,7 @@ jobs:
           tags: true
     - name: 'Deploy to GitHub Pages'
       stage: deploy
-      if: branch = master # i know this redunant, but it is needed otherwise the test will always create a deploy of this
+      if: branch IN (master, r6/master) # i know this redundant, but it is needed otherwise the test will always create a deploy of this
       script: npm run travis-docs
       deploy:
         provider: pages
@@ -48,4 +48,5 @@ jobs:
         on:
           branch:
             - master
+            - r6/master
 # TODO: make a deploy rolling-release npm deployment (branch "unstable"?)

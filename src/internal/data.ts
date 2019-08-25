@@ -1,6 +1,6 @@
 import { Model, Schema, SchemaDefinition } from 'mongoose';
 
-import { EmptyVoidFn, VirtualOptions } from './types';
+import { EmptyVoidFn, VirtualOptions } from '../types';
 
 export interface HooksPrePost {
   pre: Map<string | RegExp, (error?: Error) => void>;

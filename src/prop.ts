@@ -1,15 +1,16 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
-import { schemas, virtuals } from './data';
+import { schemas, virtuals } from './internal/data';
 import {
   InvalidPropError,
   NoMetadataError,
   NotAllVPOPElementsError,
   NotNumberTypeError,
   NotStringTypeError
-} from './errors';
-import { _buildSchema } from './schema';
+} from './internal/errors';
+import { _buildSchema } from './internal/schema';
+import * as utils from './internal/utils';
 import {
   ArrayPropOptions,
   MapPropOptions,
@@ -17,7 +18,6 @@ import {
   PropOptions,
   PropOptionsWithValidate
 } from './types';
-import * as utils from './utils';
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
 enum WhatIsIt {

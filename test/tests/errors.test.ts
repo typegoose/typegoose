@@ -1,8 +1,13 @@
 import { assert, expect } from 'chai';
 
 import { model, Schema } from 'mongoose';
-import { NoMetadataError, NotAllVPOPElementsError, NotNumberTypeError, NotStringTypeError } from '../../src/errors';
 import { pre } from '../../src/hooks';
+import {
+  NoMetadataError,
+  NotAllVPOPElementsError,
+  NotNumberTypeError,
+  NotStringTypeError
+} from '../../src/internal/errors';
 import { prop } from '../../src/prop';
 import { addModelToTypegoose, getModelForClass } from '../../src/typegoose';
 

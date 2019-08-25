@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
+import { PropOptionsWithNumberValidate, PropOptionsWithStringValidate, VirtualOptions } from '../types';
 import { constructors, schemas } from './data';
-import { PropOptionsWithNumberValidate, PropOptionsWithStringValidate, VirtualOptions } from './types';
 
 /**
  * Returns true, if it includes the Type

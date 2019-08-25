@@ -652,3 +652,5 @@ For reference properties:
 * Please dont add comments with `+1` or something like that, use the Reactions
 * Typegoose **cannot** be used with classes of the same name, it will always return the first build class with that name
 * All Models in Typegoose are set to strict by default, and **cant** be changed!
+* `npm run doc` generates all documentation for all files that can be used as modules (is used for github-pages)
+* `npm run doc:all` generates documentation even for internal modules

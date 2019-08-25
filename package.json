@@ -20,7 +20,8 @@
     "mocha": "nyc mocha \"./test/index.test.ts\" --timeout 15000",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "clean": "rimraf lib && rm .tsbuildinfo && rimraf .nyc_output && rimraf coverage && rimraf doc && rimraf build",
-    "doc": "typedoc --out ./doc ./src --mode modules",
+    "doc": "typedoc --out ./doc ./src --mode modules --exclude \"**/internal/*\"",
+    "doc:all": "typedoc --out ./doc ./src --mode modules",
     "travis-docs": "npm run doc && mv ./doc ./docs",
     "prepublish": "npm run build"
   },

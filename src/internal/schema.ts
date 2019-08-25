@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 
+import { IModelOptions } from '../typegoose';
+import { EmptyVoidFn, NoParamConstructor } from '../types';
 import { buildSchemas, hooks, plugins, schemas, virtuals } from './data';
-import { IModelOptions } from './typegoose';
-import { EmptyVoidFn, NoParamConstructor } from './types';
 
 /**
  * Private schema builder out of class props

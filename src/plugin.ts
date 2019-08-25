@@ -1,4 +1,4 @@
-import { plugins } from './data';
+import { plugins } from './internal/data';
 import { Func } from './types';
 
 /**
