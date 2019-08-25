@@ -654,3 +654,4 @@ For reference properties:
 * All Models in Typegoose are set to strict by default, and **cant** be changed!
 * `npm run doc` generates all documentation for all files that can be used as modules (is used for github-pages)
 * `npm run doc:all` generates documentation even for internal modules
+* This module should not be used with `ts-node --transpile-only`, `--type-check` must be added at least, szokodiakos#196

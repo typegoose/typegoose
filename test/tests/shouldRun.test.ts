@@ -11,6 +11,9 @@ import {
 } from '../../src/typegoose';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 
+// Note: this file is meant for github issue verification & test adding for these
+// -> and when not an outsourced class(/model) is needed
+
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
