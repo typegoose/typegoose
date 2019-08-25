@@ -44,6 +44,7 @@ jobs:
         skip_cleanup: true
         github_token: $GITHUB_GH_PAGES
         keep_history: true
+        local_dir: docs
         target_branch: gh-pages # i know this the default, but just to be sure
         on:
           branch:
