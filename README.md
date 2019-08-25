@@ -462,7 +462,7 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
 
     // in another class
     class Another {
-      @prop({ required: true, enum: 'Car' | 'Shop' })
+      @prop({ required: true, enum: ['Car', 'Shop'] })
       which!: string;
 
       @arrayProp({ itemsRefPath: 'which' })
