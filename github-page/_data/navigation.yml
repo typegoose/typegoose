@@ -1,0 +1,31 @@
+main:
+  - title: 'Guides'
+    url: /guides/quick-start-guide
+  - title: 'Documentation'
+    url: /docs
+  - title: 'TypeDoc'
+    url: /typedoc
+
+# Sidebars
+# note: these sidebars below are just placeholders, until actual documentation starts
+docs:
+  - title: Start
+    children:
+      - title: 'Index'
+        url: /docs
+
+  - title: More to Come
+    children:
+      - title: 'More to Come'
+        url: /
+
+guides:
+  - title: Getting Started
+    children:
+      - title: 'Quick-Start Guide'
+        url: /guides/quick-start-guide/
+
+  - title: More to Come
+    children:
+      - title: 'More to Come'
+        url: /

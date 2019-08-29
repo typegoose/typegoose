@@ -1,0 +1,7 @@
+_site
+.sass-cache
+.jekyll-metadata
+typedoc
+
+# keep this doc folder, because its manually written
+!doc/

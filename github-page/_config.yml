@@ -1,0 +1,43 @@
+title: Typegoose
+description: > # this means to ignore newlines until a new statement
+  Documentation for Typegoose
+baseurl: '/typegoose'
+url: 'https://hasezoey.github.io'
+remote_theme: mmistakes/minimal-mistakes
+locale: 'en-US'
+minimal_mistakes_skin: 'default'
+markdown: kramdown
+
+collections:
+  guides:
+    permalink: /guides/:title/
+    output: true
+  docs:
+    permalink: /docs/:title/
+    output: true
+
+plugins:
+  - jekyll-redirect-from
+  - jekyll-include-cache
+
+sass:
+  style: compressed
+
+include:
+  - '*.html' # Needed to include files that start with underscore
+
+defaults:
+  - scope:
+      path: '_guides'
+      type: guides
+    values:
+      layout: single
+      sidebar:
+        nav: 'guides'
+  - scope:
+      path: '_docs'
+      type: docs
+    values:
+      layout: single
+      sidebar:
+        nav: 'docs'
