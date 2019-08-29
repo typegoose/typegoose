@@ -4,6 +4,7 @@
 shopt -s dotglob nullglob
 
 npm run doc
+mkdir github-page/typedoc # redundant but needed in travis
 mv doc/* github-page/typedoc/
 find . -not -regex "^\.\/doc.*\|^\.\/github-page.*\|^\.\/\.git.*" -delete
 mv github-page/* ./
