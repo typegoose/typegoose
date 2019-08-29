@@ -1,7 +1,6 @@
-_site
-.sass-cache
-.jekyll-metadata
-typedoc
+# Please dont forget to modify "travis-.gitignore" too!
 
-# keep this doc folder, because its manually written
-!doc/
+_site/
+.sass-cache/
+.jekyll-metadata/
+typedoc/
