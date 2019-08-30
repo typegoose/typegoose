@@ -485,21 +485,6 @@ The options object accepts `enum` and `default`, just like `prop`  decorator. In
     }
     ```
 
-  - `mapDefault` : This will set the default value for the map.
-
-    ```ts
-    enum ProjectState {
-        WORKING = 'working',
-        BROKEN = 'broken',
-        MAINTAINANCE = 'maintainance',
-    }
-
-    class Car {
-      @mapProp({ of: String, enum: ProjectState,mapDefault: { 'MainProject' : ProjectState.WORKING }})
-      public projects?: Map<string, ProjectState>;
-    }
-    ```
-
 ### Method decorators
 
 Method Decorators are deprecated see [Migrate to 6.0.0](migrate_to_6.md)

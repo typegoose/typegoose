@@ -2,6 +2,8 @@
 title: "Quick Start Guide"
 ---
 
+<sub>Please use [Dark-Reader](https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) for a dark version of the site</sub>
+
 ## Quick Overview of Typegoose
 
 Typegoose is an "wrapper" for mongoose models
