@@ -1,5 +1,6 @@
 ---
 title: "Migrate to 6.0.0"
+classes: wide
 ---
 
 <!--Note this is mostly just a copy of "migrate_to_6.md" on the root of the repo-->

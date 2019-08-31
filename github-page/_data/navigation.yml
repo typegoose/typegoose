@@ -3,6 +3,8 @@ main:
     url: /guides/quick-start-guide
   - title: 'Documentation'
     url: /docs
+  - title: 'Changelog'
+    url: /changelog
   - title: 'TypeDoc'
     url: /typedoc
 
@@ -70,3 +72,8 @@ guides:
         url: /guides/decorators/
       - title: 'Motivation'
         url: /guides/motivation/
+
+  - title: Advanced
+    children:
+      - title: 'Custom Types'
+        url: /guides/custom-types
