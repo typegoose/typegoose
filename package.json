@@ -3,6 +3,7 @@
   "version": "6.0.0-22",
   "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
+  "types": "lib/typegoose.d.ts",
   "engines": {
     "node": ">=8.10.0"
   },
@@ -19,14 +20,12 @@
     "test": "npm run buildtests && npm run mocha",
     "mocha": "nyc mocha \"./test/index.test.ts\" --timeout 15000",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "clean": "rimraf lib && rm .tsbuildinfo && rimraf .nyc_output && rimraf coverage && rimraf doc && rimraf build",
+    "clean": "rimraf lib .tsbuildinfo .nyc_output coverage doc build",
     "doc": "typedoc --out ./doc ./src --mode modules --exclude \"**/internal/*\"",
     "doc:all": "typedoc --out ./doc ./src --mode modules",
     "prepublish": "npm run build"
   },
   "repository": "github:hasezoey/typegoose",
-  "types": "lib/typegoose.d.ts",
-  "typings": "lib/typegoose.d.ts",
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
   "contributors": [
     "Ben305",

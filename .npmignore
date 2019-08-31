@@ -182,3 +182,6 @@ test
 
 # CI only files
 ghPagesPre.sh
+
+# ignore entire github-page
+github-page/

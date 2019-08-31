@@ -115,8 +115,7 @@ export function buildSchema<T, U extends NoParamConstructor<T>>(cl: U) {
   while (parentCtor && parentCtor.name !== 'Object') {
     /* istanbul ignore next */
     if (parentCtor.name === 'Typegoose') { // TODO: remove this if, if the Typegoose class gets removed [DEPRECATION]
-      // tslint:disable-next-line:no-console
-      console.error('The Typegoose Class is deprecated, please try to remove it');
+      deprecate(() => undefined, 'The Typegoose Class is deprecated, please try to remove it')();
     }
     // extend schema
     sch = _buildSchema(parentCtor, sch);

@@ -1,5 +1,6 @@
 color: true
 recursive: true
+bail: false # to see which tests are failing, not just the first
 require:
   - 'ts-node/register'
   - 'source-map-support/register'
