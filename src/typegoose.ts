@@ -9,13 +9,13 @@ if (!Object.fromEntries) {
 }
 
 import { deprecate } from 'util';
+import { DecoratorKeys } from './constants';
 import * as defaultClasses from './defaultClasses';
 import { buildSchemas, constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
+import { assignMetadata } from './internal/utils';
 import { IModelOptions } from './optionsProp';
 import { DocumentType, NoParamConstructor, Ref, ReturnModelType } from './types';
-import { assignMetadata } from './internal/utils';
-import { DecoratorKeys } from './constants';
 
 /* exports */
 export * from './method';
@@ -131,6 +131,13 @@ export function buildSchema<T, U extends NoParamConstructor<T>>(cl: U) {
   }
   // get schema of current model
   sch = _buildSchema(cl, sch);
+
+  const {schemaOptions = {}}: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+
+  Object.entries(schemaOptions)
+    .forEach(([key, value]: [keyof mongoose.SchemaOptions, unknown]) => {
+      sch.set(key, value);
+    });
 
   return sch;
 }
