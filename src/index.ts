@@ -73,8 +73,8 @@ export interface IndexOptions<T> {
  */
 export function index<T>(fields: T, options?: IndexOptions<T>) {
   return (constructor: any) => {
-    const indices: any[] = Reflect.getMetadata('typegoose:indices', constructor) || [];
+    const indices: any[] = Reflect.getMetadata(DecoratorKeys.Index, constructor) || [];
     indices.push({ fields, options });
-    Reflect.defineMetadata('typegoose:indices', indices, constructor);
+    Reflect.defineMetadata(DecoratorKeys.Index, indices, constructor);
   };
 }

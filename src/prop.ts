@@ -18,6 +18,7 @@ import {
   PropOptions,
   PropOptionsWithValidate
 } from './types';
+import { DecoratorKeys } from './constants';
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
 enum WhatIsIt {
@@ -260,7 +261,7 @@ function baseProp(
  */
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
-    const Type = Reflect.getMetadata('design:type', target, key);
+    const Type = Reflect.getMetadata(DecoratorKeys.Prop, target, key);
     if (!Type) {
       throw new NoMetadataError(key);
     }

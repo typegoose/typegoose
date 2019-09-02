@@ -14,6 +14,8 @@ import { buildSchemas, constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
 import { IModelOptions } from './optionsProp';
 import { DocumentType, NoParamConstructor, Ref, ReturnModelType } from './types';
+import { assignMetadata } from './internal/utils';
+import { DecoratorKeys } from './constants';
 
 /* exports */
 export * from './method';
@@ -38,12 +40,16 @@ export abstract class Typegoose {
   /* istanbul ignore next */
   /** @deprecated */
   public getModelForClass<T, U extends NoParamConstructor<T>>(cl: U, settings?: any) {
+    assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
+
     return deprecate(getModelForClass, 'Typegoose Class is Deprecated!')(cl);
   }
 
   /* istanbul ignore next */
   /** @deprecated */
   public setModelForClass<T, U extends NoParamConstructor<T>>(cl: U, settings?: any) {
+    assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
+
     return deprecate(setModelForClass, 'Typegoose Class is Deprecated!')(cl);
   }
 
@@ -73,7 +79,7 @@ export function getModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
     return models.get(name) as ReturnModelType<U, T>;
   }
 
-  const options: IModelOptions = Reflect.getMetadata('typegoose:options', cl) || {};
+  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
 
   let model = mongoose.model.bind(mongoose);
   if (options.existingConnection) {
