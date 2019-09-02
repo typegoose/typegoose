@@ -1,6 +1,8 @@
 /*
  copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
  */
+import { DecoratorKeys } from './constants';
+
 export interface IndexOptions<T> {
   /**
    * Mongoose-specific syntactic sugar, uses ms to convert

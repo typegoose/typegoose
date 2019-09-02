@@ -149,4 +149,3 @@ export function assignMetadata(key: string, value: unknown, cl: new () => {}): v
   const newValue = Object.assign(current, value);
   Reflect.defineMetadata(key, newValue, cl);
 }
-
