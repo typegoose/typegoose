@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
+import { DecoratorKeys } from './internal/constants';
 import { schemas, virtuals } from './internal/data';
 import {
   InvalidPropError,
@@ -260,7 +261,7 @@ function baseProp(
  */
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
-    const Type = Reflect.getMetadata('design:type', target, key);
+    const Type = Reflect.getMetadata(DecoratorKeys.Prop, target, key);
     if (!Type) {
       throw new NoMetadataError(key);
     }

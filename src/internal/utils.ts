@@ -137,3 +137,15 @@ allVirtualoptions.push('ref');
 export function includesAllVirtualPOP(options: VirtualOptions): options is VirtualOptions {
   return allVirtualoptions.every((v) => Object.keys(options).includes(v));
 }
+
+/**
+ * Merges existing metadata with new value
+ * @param key Metadata key
+ * @param value Raw value
+ * @param cl The constructor
+ */
+export function assignMetadata(key: string, value: unknown, cl: new () => {}): void {
+  const current = Reflect.getMetadata(key, cl) || {};
+  const newValue = Object.assign(current, value);
+  Reflect.defineMetadata(key, newValue, cl);
+}

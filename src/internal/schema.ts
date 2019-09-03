@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 
 import { IModelOptions } from '../typegoose';
 import { EmptyVoidFn, NoParamConstructor } from '../types';
+import { DecoratorKeys } from './constants';
 import { buildSchemas, hooks, plugins, schemas, virtuals } from './data';
 
 /**
@@ -25,7 +26,7 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
 
   /** Simplify the usage */
   const Schema = mongoose.Schema;
-  const { schemaOptions: ropt }: IModelOptions = Reflect.getMetadata('typegoose:options', cl) || {};
+  const { schemaOptions: ropt }: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
   const schemaOptions = Object.assign(ropt || {}, opt);
 
   if (!schemas.get(name)) {
@@ -66,7 +67,7 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
   }
 
   /** Get Metadata for indices */
-  const indices: any[] = Reflect.getMetadata('typegoose:indices', cl) || [];
+  const indices: any[] = Reflect.getMetadata(DecoratorKeys.Index, cl) || [];
   for (const index of indices) {
     sch.index(index.fields, index.options);
   }
