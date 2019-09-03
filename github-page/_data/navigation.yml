@@ -67,6 +67,8 @@ guides:
         url: /guides/migrate-to-6/
       - title: 'FAQ'
         url: /guides/faq
+      - title: 'Known Issues'
+        url: /guides/known-issues
 
   - title: Basics
     children:
@@ -79,3 +81,9 @@ guides:
     children:
       - title: 'Custom Types'
         url: /guides/custom-types
+  # - title: Combine with other packages
+  #   children:
+  #     - title: 'type-graphql'
+  #       url: /guides/type-graphql
+  #     - title: 'nestjs'
+  #       url: /guides/nestjs
