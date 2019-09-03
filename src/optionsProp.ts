@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { DecoratorKeys } from './constants';
+import { DecoratorKeys } from './internal/constants';
 
 export interface IModelOptions {
   /** An Existing Mongoose Connection */

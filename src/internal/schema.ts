@@ -2,8 +2,8 @@ import * as mongoose from 'mongoose';
 
 import { IModelOptions } from '../typegoose';
 import { EmptyVoidFn, NoParamConstructor } from '../types';
+import { DecoratorKeys } from './constants';
 import { buildSchemas, hooks, plugins, schemas, virtuals } from './data';
-import { DecoratorKeys } from '../constants';
 
 /**
  * Private schema builder out of class props

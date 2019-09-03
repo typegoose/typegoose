@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
+import { DecoratorKeys } from './internal/constants';
 import { schemas, virtuals } from './internal/data';
 import {
   InvalidPropError,
@@ -18,7 +19,6 @@ import {
   PropOptions,
   PropOptionsWithValidate
 } from './types';
-import { DecoratorKeys } from './constants';
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
 enum WhatIsIt {
