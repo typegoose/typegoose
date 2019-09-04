@@ -1,6 +1,6 @@
 {
   "name": "@hasezoey/typegoose",
-  "version": "6.0.0-23",
+  "version": "6.0.0-24",
   "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
   "types": "lib/typegoose.d.ts",
@@ -8,8 +8,8 @@
     "node": ">=8.10.0"
   },
   "files": [
-    "lib/*.js",
-    "lib/*.d.ts"
+    "lib/**/*.js",
+    "lib/**/*.d.ts"
   ],
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
