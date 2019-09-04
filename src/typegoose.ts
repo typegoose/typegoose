@@ -75,6 +75,10 @@ export abstract class Typegoose {
  * ```
  */
 export function getModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
+
   const name = cl.name;
   if (models.get(name)) {
     return models.get(name) as ReturnModelType<U, T>;

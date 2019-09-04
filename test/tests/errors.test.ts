@@ -182,4 +182,14 @@ export function suite() {
       expect(err).to.be.an.instanceOf(NoValidClass);
     }
   });
+
+  it('should error if no valid class is supplied to getModelForClass [NoValidClass]', () => {
+    try {
+      // @ts-ignore
+      getModelForClass('hello');
+      assert.fail('Expected to throw "NoValidClass"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(NoValidClass);
+    }
+  });
 }
