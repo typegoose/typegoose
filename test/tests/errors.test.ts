@@ -9,6 +9,7 @@ import {
   NotStringTypeError,
   NoValidClass
 } from '../../src/internal/errors';
+import { _buildSchema } from '../../src/internal/schema';
 import { prop } from '../../src/prop';
 import { addModelToTypegoose, buildSchema, getModelForClass } from '../../src/typegoose';
 
@@ -138,16 +139,6 @@ export function suite() {
     }
   });
 
-  it('should error if no valid class is supplied to addModelToTypegoose [TypeError]', () => {
-    try {
-      // @ts-ignore
-      addModelToTypegoose(model('hello', new Schema()), 'not class');
-      assert.fail('Expected to throw "TypeError"');
-    } catch (err) {
-      expect(err).to.be.an.instanceOf(NoValidClass);
-    }
-  });
-
   it('should not modify an immutable', async () => {
     class TestImmutable {
       @prop({ required: true, immutable: true })
@@ -162,10 +153,30 @@ export function suite() {
     expect(doc.someprop).to.be.equals('Hello');
   });
 
+  it('should error if no valid class is supplied to addModelToTypegoose [NoValidClass]', () => {
+    try {
+      // @ts-ignore
+      addModelToTypegoose(model('hello', new Schema()), 'not class');
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(NoValidClass);
+    }
+  });
+
   it('should error if no valid class is supplied to buildSchema [NoValidClass]', () => {
     try {
       // @ts-ignore
       buildSchema('hello');
+      assert.fail('Expected to throw "NoValidClass"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(NoValidClass);
+    }
+  });
+
+  it('should error if no valid class is supplied to _buildSchema [NoValidClass]', () => {
+    try {
+      // @ts-ignore
+      _buildSchema('hello');
       assert.fail('Expected to throw "NoValidClass"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(NoValidClass);

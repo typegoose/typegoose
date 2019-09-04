@@ -4,6 +4,7 @@ import { IModelOptions } from '../typegoose';
 import { EmptyVoidFn, NoParamConstructor } from '../types';
 import { DecoratorKeys } from './constants';
 import { buildSchemas, hooks, plugins, schemas, virtuals } from './data';
+import { NoValidClass } from './errors';
 
 /**
  * Private schema builder out of class props
@@ -19,6 +20,10 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
   sch?: mongoose.Schema,
   opt: mongoose.SchemaOptions = {}
 ) {
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
+
   const name = cl.name;
   if (buildSchemas.get(name)) {
     return buildSchemas.get(name);
@@ -33,7 +38,7 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
     schemas.set(name, {});
   }
 
-  if (!sch) {
+  if (!(sch instanceof mongoose.Schema)) {
     sch = new Schema(schemas.get(name), schemaOptions);
   } else {
     sch = sch.clone();
