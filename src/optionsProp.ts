@@ -8,6 +8,14 @@ export interface IModelOptions {
   schemaOptions?: mongoose.SchemaOptions;
   /** An Existing Connection */
   existingConnection?: mongoose.Connection;
+  /** Typegoose Custom Options */
+  options?: {
+    /**
+     * Set a custom suffix for the model
+     * @default schemaOptions.collection
+     */
+    customName?: string;
+  };
 }
 
 /**

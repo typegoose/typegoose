@@ -5,6 +5,7 @@ import { EmptyVoidFn, NoParamConstructor } from '../types';
 import { DecoratorKeys } from './constants';
 import { buildSchemas, hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
+import { getName } from './utils';
 
 /**
  * Private schema builder out of class props
@@ -24,7 +25,7 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
     throw new NoValidClass(cl);
   }
 
-  const name = cl.name;
+  const name = getName(cl);
   if (buildSchemas.get(name)) {
     return buildSchemas.get(name);
   }

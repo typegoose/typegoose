@@ -80,7 +80,9 @@ guides:
   - title: Advanced
     children:
       - title: 'Custom Types'
-        url: /guides/custom-types
+        url: /guides/advanced/custom-types
+      - title: 'Model with same name'
+        url: /guides/advanced/models-with-same-name
   # - title: Combine with other packages
   #   children:
   #     - title: 'type-graphql'

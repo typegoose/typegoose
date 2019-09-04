@@ -1,7 +1,14 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
-import { PropOptionsWithNumberValidate, PropOptionsWithStringValidate, VirtualOptions } from '../types';
+import { IModelOptions } from '../typegoose';
+import {
+  NoParamConstructor,
+  PropOptionsWithNumberValidate,
+  PropOptionsWithStringValidate,
+  VirtualOptions
+} from '../types';
+import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
 
 /**
@@ -148,4 +155,19 @@ export function assignMetadata(key: string, value: unknown, cl: new () => {}): v
   const current = Reflect.getMetadata(key, cl) || {};
   const newValue = Object.assign(current, value);
   Reflect.defineMetadata(key, newValue, cl);
+}
+
+/**
+ * Get the correct name of the class's model
+ * (with suffix)
+ * @param cl The Class
+ */
+export function getName<T, U extends NoParamConstructor<T>>(cl: U) {
+  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+
+  const baseName = cl.name;
+  const suffix = (options.options ? options.options.customName : undefined) ||
+    (options.schemaOptions ? options.schemaOptions.collection : undefined);
+
+  return suffix ? `${baseName}_${suffix}` : baseName;
 }

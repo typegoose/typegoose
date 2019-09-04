@@ -14,7 +14,7 @@ import { DecoratorKeys } from './internal/constants';
 import { buildSchemas, constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
-import { assignMetadata } from './internal/utils';
+import { assignMetadata, getName } from './internal/utils';
 import { IModelOptions } from './optionsProp';
 import { DocumentType, NoParamConstructor, Ref, ReturnModelType } from './types';
 
@@ -79,12 +79,12 @@ export function getModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
     throw new NoValidClass(cl);
   }
 
-  const name = cl.name;
+  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+  const name = getName(cl);
+
   if (models.get(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
-
-  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
 
   let model = mongoose.model.bind(mongoose);
   if (options.existingConnection) {
@@ -165,7 +165,7 @@ export function addModelToTypegoose<T, U extends NoParamConstructor<T>>(model: m
     throw new NoValidClass(cl);
   }
 
-  const name = cl.name;
+  const name = getName(cl);
 
   models.set(name, model);
   constructors.set(name, cl);
@@ -192,7 +192,7 @@ export function getDiscriminatorModelForClass<T, U extends NoParamConstructor<T>
   cl: U,
   id?: string
 ) {
-  const name = cl.name;
+  const name = getName(cl);
   if (models.get(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
