@@ -34,3 +34,9 @@ export class NotAllVPOPElementsError extends Error {
     super(`"${name}.${key}" has not all needed Virtual Populate Options! Needed are: ${allVirtualoptions.join(', ')}`);
   }
 }
+
+export class NoValidClass extends TypeError {
+  constructor(cl: any) {
+    super(`"${cl}" is not a function(/constructor)!`);
+  }
+}

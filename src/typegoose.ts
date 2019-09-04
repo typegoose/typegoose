@@ -12,6 +12,7 @@ import { deprecate } from 'util';
 import * as defaultClasses from './defaultClasses';
 import { DecoratorKeys } from './internal/constants';
 import { buildSchemas, constructors, models } from './internal/data';
+import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import { assignMetadata } from './internal/utils';
 import { IModelOptions } from './optionsProp';
@@ -111,6 +112,10 @@ export function setModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
  * @returns Returns the Build Schema
  */
 export function buildSchema<T, U extends NoParamConstructor<T>>(cl: U) {
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
+
   if (buildSchemas.get(cl.name)) {
     return buildSchemas.get(cl.name);
   }
@@ -153,7 +158,7 @@ export function addModelToTypegoose<T, U extends NoParamConstructor<T>>(model: m
     throw new TypeError(`"${model}" is not a valid Model!`);
   }
   if (typeof cl !== 'function') {
-    throw new TypeError(`"${cl}" is not a function(/constructor)!`);
+    throw new NoValidClass(cl);
   }
 
   const name = cl.name;

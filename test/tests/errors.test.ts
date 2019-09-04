@@ -6,10 +6,11 @@ import {
   NoMetadataError,
   NotAllVPOPElementsError,
   NotNumberTypeError,
-  NotStringTypeError
+  NotStringTypeError,
+  NoValidClass
 } from '../../src/internal/errors';
 import { prop } from '../../src/prop';
-import { addModelToTypegoose, getModelForClass } from '../../src/typegoose';
+import { addModelToTypegoose, buildSchema, getModelForClass } from '../../src/typegoose';
 
 // disable "no-unused-variable" for this file, because it tests for errors
 // tslint:disable:no-unused-variable
@@ -143,7 +144,7 @@ export function suite() {
       addModelToTypegoose(model('hello', new Schema()), 'not class');
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {
-      expect(err).to.be.an.instanceOf(TypeError);
+      expect(err).to.be.an.instanceOf(NoValidClass);
     }
   });
 
@@ -159,5 +160,15 @@ export function suite() {
     doc.someprop = 'Hello2';
     await doc.save();
     expect(doc.someprop).to.be.equals('Hello');
+  });
+
+  it('should error if no valid class is supplied to buildSchema [NoValidClass]', () => {
+    try {
+      // @ts-ignore
+      buildSchema('hello');
+      assert.fail('Expected to throw "NoValidClass"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(NoValidClass);
+    }
   });
 }

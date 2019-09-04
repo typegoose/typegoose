@@ -25,7 +25,6 @@ export type ModelType<T> = mongoose.Model<DocumentType<T>> & T;
 export type NoParamConstructor<T> = new () => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
- * @internal
  */
 export type ReturnModelType<U extends NoParamConstructor<T>, T = any> = ModelType<InstanceType<U>> & U;
 

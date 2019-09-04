@@ -70,7 +70,7 @@ export function suite() {
     expect(Person.getStaticName()).to.equals('Person');
   });
 
-  it('Should store nested address', async () => {
+  it('should store nested address', async () => {
     const personInput = new PersonNested();
     personInput.name = 'Person, Some';
     personInput.address = new AddressNested('A Street 1');
@@ -97,7 +97,7 @@ export function suite() {
   });
 
   // faild validation will need to be checked
-  it('Should validate Decimal128', async () => {
+  it('should validate Decimal128', async () => {
     try {
       await Car.create({
         model: 'Tesla',
@@ -118,7 +118,7 @@ export function suite() {
     expect(foundCar.price.toString()).to.eq('123.45');
   });
 
-  it('Should validate email', async () => {
+  it('should validate email', async () => {
     try {
       await Person.create({
         email: 'email'
@@ -132,14 +132,14 @@ export function suite() {
     }
   });
 
-  it(`Should Validate Map`, async () => {
+  it(`should Validate Map`, async () => {
     try {
       await InternetUser.create({
         projects: {
           p1: 'project'
         }
       });
-      fail('Validation Should Fail');
+      fail('Validation should Fail');
     } catch (e) {
       expect(e).to.be.a.instanceof(mongoose.Error.ValidationError);
       expect(e.message).to.be.equal( // test it specificly, to know that it is not another error
