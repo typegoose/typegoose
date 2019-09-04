@@ -1,3 +1,17 @@
+# This Repository got moved
+
+Please use [hasezoey's fork](https://github.com/hasezoey/typegoose) to be up-to-date
+Please dont create new issues & pull request anymore, thanks
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
 # Typegoose
 
 [![Build Status](https://travis-ci.org/szokodiakos/typegoose.svg?branch=master)](https://travis-ci.org/szokodiakos/typegoose)

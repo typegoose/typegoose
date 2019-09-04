@@ -1,8 +1,6 @@
 import * as mongoose from 'mongoose';
 
 import { constructors, schema } from './data';
-import { Ref } from './prop';
-import { InstanceType } from './typegoose';
 
 /**
  * Returns true, if it includes the Type
