@@ -3,6 +3,7 @@ import { isArray } from 'util';
 import { hooks as hooksData, HooksPrePost } from './internal/data';
 import { DocumentType } from './typegoose';
 import { EmptyVoidFn } from './types';
+import { getName } from "./internal/utils";
 
 type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 
@@ -73,10 +74,10 @@ interface Hooks {
 // Note: Documentation for the hooks cant be added without adding it to *every* overload
 const hooks: Hooks = {
   pre(...args) {
-    return (constructor: any) => addToHooks(constructor.name, 'pre', args);
+    return (target: any) => addToHooks(getName(target), 'pre', args);
   },
   post(...args) {
-    return (constructor: any) => addToHooks(constructor.name, 'post', args);
+    return (target: any) => addToHooks(getName(target), 'post', args);
   }
 };
 
