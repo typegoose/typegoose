@@ -23,7 +23,7 @@
     "clean": "rimraf lib .tsbuildinfo .nyc_output coverage doc build",
     "doc": "typedoc --out ./doc ./src --mode modules --exclude \"**/internal/*\"",
     "doc:all": "typedoc --out ./doc ./src --mode modules",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   },
   "repository": "github:hasezoey/typegoose",
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
