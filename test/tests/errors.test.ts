@@ -33,10 +33,11 @@ import { addModelToTypegoose, buildSchema, getModelForClass } from '../../src/ty
 export function suite() {
   it('should error if type is not string and a transform is supplied [NotStringTypeError]', () => {
     try {
-      class TEST {
+      class TestNSTETransform {
         @prop({ lowercase: true })
         public test: number;
       }
+      getModelForClass(TestNSTETransform);
       assert.fail('Expected to throw "NotStringTypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(NotStringTypeError);
@@ -45,10 +46,11 @@ export function suite() {
 
   it('should error if type is not string and a validate is supplied [NotStringTypeError]', () => {
     try {
-      class TEST {
+      class TestNSTEValidate {
         @prop({ maxlength: 10 })
         public test: number;
       }
+      getModelForClass(TestNSTEValidate);
       assert.fail('Expected to throw "NotStringTypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(NotStringTypeError);
@@ -57,10 +59,11 @@ export function suite() {
 
   it('should error if type is not number and a validate is supplied [NotNumberTypeError]', () => {
     try {
-      class TEST {
+      class TestNNTEValidate {
         @prop({ max: 10 })
         public test: string;
       }
+      getModelForClass(TestNNTEValidate);
       assert.fail('Expected to throw "NotNumberTypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(NotNumberTypeError);
@@ -69,10 +72,11 @@ export function suite() {
 
   it('should error if an non-existing(runtime) type is given [NoMetadataError]', () => {
     try {
-      class TEST {
+      class TestNME {
         @prop()
         public test: undefined;
       }
+      getModelForClass(TestNME);
       assert.fail('Expected to throw "InvalidPropError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(NoMetadataError);
@@ -84,48 +88,52 @@ export function suite() {
       // ignore that it is not written right, it should be tested so
       // @ts-ignore
       @pre<Test>('')
-      class TEST {
+      class TestNoFunctionHook {
         @prop()
         public test: string;
       }
+      getModelForClass(TestNoFunctionHook);
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(TypeError);
-      expect((err as TypeError).message).to.be.equals(`"TEST.pre."'s function is not a function!`);
+      expect((err as TypeError).message).to.be.equals(`"TestNoFunctionHook.pre."'s function is not a function!`);
     }
   });
 
   it('should error if no get or set function is defined for non-virtuals [TypeError]', () => {
     try {
-      class TEST {
+      class TestNoGetNoSet {
         // @ts-ignore
         @prop({ set: false })
         public test: string;
       }
+      getModelForClass(TestNoGetNoSet);
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(TypeError);
-      expect((err as TypeError).message).to.be.equals(`"TEST.test" does not have a set function!`);
+      expect((err as TypeError).message).to.be.equals(`"TestNoGetNoSet.test" does not have a set function!`);
     }
     try {
-      class TEST {
+      class TestWrongGetSetType {
         // @ts-ignore
         @prop({ set: () => undefined, get: false })
         public test: string;
       }
+      getModelForClass(TestWrongGetSetType);
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(TypeError);
-      expect((err as TypeError).message).to.be.equals(`"TEST.test" does not have a get function!`);
+      expect((err as TypeError).message).to.be.equals(`"TestWrongGetSetType.test" does not have a get function!`);
     }
   });
 
   it('should error if not all needed parameters for virtual-populate are given [NotAllElementsError]', () => {
     try {
-      class TEST {
+      class TestNAEEVirtualPopulate {
         @prop({ localField: true })
         public test: string;
       }
+      getModelForClass(TestNAEEVirtualPopulate);
       assert.fail('Expected to throw "NotAllElementsError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(NotAllVPOPElementsError);

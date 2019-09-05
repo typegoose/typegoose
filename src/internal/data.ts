@@ -10,6 +10,10 @@ export interface PluginMap {
   mongoosePlugin(schema: Schema<any>, options: object): void;
   options: object;
 }
+export interface DecoratorCacheMap {
+  class: NewableFunction;
+  decorators: Map<string, (...args: any) => void>;
+}
 
 /** Schema Map */
 export const schemas: Map<string, SchemaDefinition> = new Map();
@@ -25,3 +29,5 @@ export const plugins: Map<string, PluginMap[]> = new Map();
 export const constructors: Map<string, NewableFunction> = new Map();
 /** Build Schemas */
 export const buildSchemas: Map<string, Schema> = new Map();
+/** Used to cache (inner-class) decorators (because of execution order) */
+export const decoratorCache: Map<string, DecoratorCacheMap> = new Map();

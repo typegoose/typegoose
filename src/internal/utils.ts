@@ -10,7 +10,7 @@ import {
   VirtualOptions
 } from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, schemas } from './data';
+import { constructors, decoratorCache, schemas } from './data';
 import { NoValidClass } from './errors';
 
 const primitives = ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID', 'Array'];
@@ -210,4 +210,33 @@ export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
 
   // return suffix ? `${baseName}_${suffix}` : baseName;
   return cl.name;
+}
+
+/**
+ * Returns if it is not defined in "schemas"
+ * @param cl The Type
+ */
+export function isNotDefined(cl: any) {
+  return typeof cl === 'function' &&
+    !isPrimitive(cl) &&
+    cl !== Object &&
+    cl !== mongoose.Schema.Types.Buffer &&
+    isNullOrUndefined(schemas.get(getName(cl)));
+}
+
+/**
+ * Assign "__uniqueID" to a class
+ * @param cl
+ * @returns the initname to be used as identifier
+ */
+export function createUniqueID(cl: any) {
+  if (!isNullOrUndefined(cl.__uniqueID)) {
+    cl._uniqueID = Date.now();
+  }
+  const initname: string = `${cl.constructor.name}_${cl.__uniqueID}`;
+  if (!decoratorCache.get(initname)) {
+    decoratorCache.set(initname, { class: cl.constructor, decorators: new Map() });
+  }
+
+  return initname;
 }

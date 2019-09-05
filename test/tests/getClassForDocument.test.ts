@@ -6,7 +6,7 @@ import { getClassForDocument } from '../../src/internal/utils';
 import { Genders } from '../enums/genders';
 import { Car as CarType, model as Car } from '../models/car';
 import { model as InternetUser } from '../models/internetUser';
-import { AddressNested, PersonNested, PersonNestedModel } from '../models/nestedObject';
+import { AddressNested, AddressNestedModel, PersonNested, PersonNestedModel } from '../models/nestedObject';
 import { model as Person } from '../models/person';
 import { model as User, User as UserType } from '../models/user';
 
@@ -71,15 +71,14 @@ export function suite() {
   });
 
   it('should store nested address', async () => {
-    const personInput = new PersonNested();
-    personInput.name = 'Person, Some';
-    personInput.address = new AddressNested('A Street 1');
-    personInput.moreAddresses = [
-      new AddressNested('A Street 2'),
-      new AddressNested('A Street 3')
-    ];
-
-    const person = await PersonNestedModel.create(personInput);
+    const person = await PersonNestedModel.create({
+      name: 'Person, Some',
+      address: new AddressNestedModel({ street: 'A Street 1' } as AddressNested),
+      moreAddresses: [
+        new AddressNestedModel({ street: 'A Street 2' } as AddressNested),
+        new AddressNestedModel({ street: 'A Street 3' } as AddressNested)
+      ]
+    } as PersonNested);
 
     expect(person).is.not.be.an('undefined');
     expect(person.name).equals('Person, Some');
