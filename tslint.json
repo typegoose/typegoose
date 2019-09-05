@@ -89,6 +89,10 @@
         "multiline": "never"
       }
     },
+    "ter-padded-blocks": {
+      "severity": "warn",
+      "options": "never"
+    },
     "no-unused-variable": {
       "severity": "warn"
     },

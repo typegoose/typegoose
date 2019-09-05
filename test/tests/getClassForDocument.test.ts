@@ -104,9 +104,7 @@ export function suite() {
         price: 'NO DECIMAL'
       });
       // fail('Validation must fail.');
-
     } catch (e) {
-
       expect(e).to.be.a.instanceof((mongoose.Error as any).ValidationError);
     }
     const car = await Car.create({

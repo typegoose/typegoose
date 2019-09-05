@@ -33,3 +33,9 @@ Some Title
 
 ---
 *this is just the base, changes will occure*
+
+## Additional Style guidelines
+
+- if you ever see `console.log`, someone messed up, this should never be there
+- dont use `console.error`, the only occurence is in test's config when some error occurs
+- use `@deprecate`(tsdoc) & `util.deprecate` to deprecate a function / class / variable
