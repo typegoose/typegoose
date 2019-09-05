@@ -30,8 +30,8 @@ export interface IModelOptions {
  * ```
  */
 export function modelOptions(options: IModelOptions) {
-  return (constructor: any) => {
-    const rfoptions: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, constructor) || {};
-    Reflect.defineMetadata(DecoratorKeys.ModelOptions, Object.assign(rfoptions, options), constructor);
+  return (target: any) => {
+    const rfoptions: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, target) || {};
+    Reflect.defineMetadata(DecoratorKeys.ModelOptions, Object.assign(rfoptions, options), target);
   };
 }

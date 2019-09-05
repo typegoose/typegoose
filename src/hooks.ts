@@ -1,9 +1,9 @@
 import { Query } from 'mongoose';
 import { isArray } from 'util';
 import { hooks as hooksData, HooksPrePost } from './internal/data';
+import { getName } from './internal/utils';
 import { DocumentType } from './typegoose';
 import { EmptyVoidFn } from './types';
-import { getName } from "./internal/utils";
 
 type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 
