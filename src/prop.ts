@@ -42,7 +42,7 @@ function baseProp(
   key: string,
   whatis: WhatIsIt = WhatIsIt.NONE
 ): void {
-  const name: string = utils.getName(target);
+  const name: string = utils.getName(target.constructor);
   rawOptions = Object.assign(rawOptions, {});
 
   if (!virtuals.get(name)) {
