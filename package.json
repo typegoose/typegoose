@@ -1,5 +1,5 @@
 {
-  "name": "typegoose",
+  "name": "@hasezoey/typegoose",
   "version": "5.9.1",
   "description": "Define Mongoose models using TypeScript classes.",
   "main": "lib/typegoose.js",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/szokodiakos/typegoose.git"
+    "url": "https://github.com/hasezoey/typegoose.git"
   },
   "types": "lib/typegoose.d.ts",
   "typings": "lib/typegoose.d.ts",
