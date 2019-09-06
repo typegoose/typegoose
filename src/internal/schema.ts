@@ -7,16 +7,16 @@ import { buildSchemas, decoratorCache, hooks, plugins, schemas, virtuals } from 
 import { NoValidClass } from './errors';
 import { getName } from './utils';
 
-/**
- * Apply Options to an existing Schema
- * @param sch
- * @param opt
- */
-function applyOptions(sch: mongoose.Schema, opt: mongoose.SchemaOptions) {
-  for (const [key, value] of Object.entries(opt)) {
-    sch.set(key as keyof mongoose.SchemaOptions, value);
-  }
-}
+// /**
+//  * Apply Options to an existing Schema
+//  * @param sch
+//  * @param opt
+//  */
+// function applyOptions(sch: mongoose.Schema, opt: mongoose.SchemaOptions) {
+//   for (const [key, value] of Object.entries(opt)) {
+//     sch.set(key as keyof mongoose.SchemaOptions, value);
+//   }
+// }
 
 /**
  * Private schema builder out of class props
@@ -75,7 +75,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   } else {
     sch = sch.clone();
     sch.add(schemas.get(name));
-    applyOptions(sch, opt);
+    // applyOptions(sch, opt);
   }
 
   sch.loadClass(cl);

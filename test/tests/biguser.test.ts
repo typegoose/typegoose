@@ -80,7 +80,7 @@ export function suite() {
       expect(foundUser.job.titleInUppercase()).to.equal('Developer'.toUpperCase());
       // these below are disabled because of https://github.com/Automattic/mongoose/issues/8137
       // console.log('hi', schemas.get(getName(Job)));
-      // expect(foundUser.job.jobType).to.not.have.property('_id');
+      expect(foundUser.job.jobType).to.not.have.property('_id');
       expect(foundUser.job.jobType).to.have.property('salery', 5000);
       expect(foundUser.job.jobType).to.have.property('field', 'IT');
       expect(foundUser.job.jobType).to.have.property('salery').to.be.a('number');

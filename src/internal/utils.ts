@@ -230,8 +230,8 @@ export function isNotDefined(cl: any) {
  * @returns the initname to be used as identifier
  */
 export function createUniqueID(cl: any) {
-  if (!isNullOrUndefined(cl.__uniqueID)) {
-    cl._uniqueID = Date.now();
+  if (isNullOrUndefined(cl.__uniqueID)) {
+    cl.__uniqueID = Date.now();
   }
   const initname: string = `${cl.constructor.name}_${cl.__uniqueID}`;
   if (!decoratorCache.get(initname)) {
