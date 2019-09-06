@@ -2,6 +2,7 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 
+import { deprecate } from 'util';
 import { constructors, hooks, methods, models, plugins, schema, virtuals } from './data';
 
 /* exports */
@@ -12,6 +13,8 @@ export * from './plugin';
 export * from '.';
 export * from './typeguards';
 export { getClassForDocument } from './utils';
+
+deprecate(() => undefined, 'This Package got moved, please use `@hasezoey/typegoose` | github:hasezoey/typegoose')();
 
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
