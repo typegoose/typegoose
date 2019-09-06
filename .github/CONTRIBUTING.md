@@ -22,6 +22,8 @@ Some Title
 - modify README to include Docs about A
 ```
 
+and please sign your commits if possible
+
 -> if you make fixing commits (like fixing a typo, fixing travis) use `git commit --fixup` (for autosquash)
 
 *Legend:*
