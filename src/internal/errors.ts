@@ -1,8 +1,8 @@
 import { allVirtualoptions } from './utils';
 
 export class InvalidPropError extends Error {
-  constructor(typeName: string, key: string) {
-    super(`In property ${key}: ${typeName} is not a primitive type nor a Typegoose schema (Not extending it).`);
+  constructor(targetName: string, key: string) {
+    super(`Property "${targetName}.${key}" has no buildSchema!`);
   }
 }
 

@@ -15,8 +15,7 @@ import { buildSchemas, constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import { assignMetadata, getName } from './internal/utils';
-import { IModelOptions } from './optionsProp';
-import { DocumentType, NoParamConstructor, Ref, ReturnModelType } from './types';
+import { DocumentType, IModelOptions, NoParamConstructor, Ref, ReturnModelType } from './types';
 
 /* exports */
 export * from './method';

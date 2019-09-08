@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
-import { IModelOptions } from '../typegoose';
 import {
+  IModelOptions,
   NoParamConstructor,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
