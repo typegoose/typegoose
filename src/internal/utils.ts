@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
 import {
-  IModelOptions,
+  // IModelOptions,
   NoParamConstructor,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,

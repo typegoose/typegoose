@@ -179,36 +179,38 @@ function baseProp(
 
   const { ['items']: items, ...options } = rawOptions;
   if (utils.isPrimitive(Type)) {
-    if (whatis === WhatIsIt.ARRAY) {
-      schemas.get(name)[key] = {
-        ...schemas.get(name)[key][0],
-        ...options,
-        type: [Type]
-      };
+    switch (whatis) {
+      case WhatIsIt.ARRAY:
+        schemas.get(name)[key] = {
+          ...schemas.get(name)[key][0],
+          ...options,
+          type: [Type]
+        };
 
-      return;
+        return;
+      case WhatIsIt.MAP:
+        // note "default" is a reserved keyword, thats why "_default" is used
+        const { default: _default }: PropOptions = options;
+        delete options.default;
+        delete options.of;
+        schemas.get(name)[key] = {
+          ...schemas.get(name)[key],
+          type: Map,
+          default: _default,
+          of: { type: Type, ...options }
+        };
+
+        return;
+      case WhatIsIt.NONE:
+      default:
+        schemas.get(name)[key] = {
+          ...schemas.get(name)[key],
+          ...options,
+          type: Type
+        };
+
+        return;
     }
-    if (whatis === WhatIsIt.MAP) {
-      // note "default" is a reserved keyword, thats why "_default" is used
-      const { default: _default }: PropOptions = options;
-      delete options.default;
-      delete options.of;
-      schemas.get(name)[key] = {
-        ...schemas.get(name)[key],
-        type: Map,
-        default: _default,
-        of: { type: Type, ...options }
-      };
-
-      return;
-    }
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key],
-      ...options,
-      type: Type
-    };
-
-    return;
   }
 
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
@@ -223,41 +225,44 @@ function baseProp(
     return;
   }
 
-  if (whatis === WhatIsIt.ARRAY) {
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
-      ...options,
-      type: [{
-        ...(typeof options._id === 'boolean' ? { _id: options._id } : {}),
+  switch (whatis) {
+    case WhatIsIt.ARRAY:
+      schemas.get(name)[key] = {
+        ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
+        ...options,
+        type: [{
+          ...(typeof options._id === 'boolean' ? { _id: options._id } : {}),
+          ...subSchema
+        }]
+      };
+
+      return;
+    case WhatIsIt.MAP:
+      schemas.get(name)[key] = {
+        ...schemas.get(name)[key],
+        type: Map,
+        ...options
+      };
+      (schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of = {
+        ...(schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of,
         ...subSchema
-      }]
-    };
+      };
 
-    return;
+      return;
+    case WhatIsIt.NONE:
+    default:
+      const virtualSchema = _buildSchema(
+        Type,
+        null,
+        { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
+      schemas.get(name)[key] = {
+        ...schemas.get(name)[key],
+        ...options,
+        type: virtualSchema
+      };
+
+      return;
   }
-
-  if (whatis === WhatIsIt.MAP) {
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key],
-      type: Map,
-      ...options
-    };
-    (schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of = {
-      ...(schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of,
-      ...subSchema
-    };
-
-    return;
-  }
-
-  const virtualSchema = _buildSchema(Type, null, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
-  schemas.get(name)[key] = {
-    ...schemas.get(name)[key],
-    ...options,
-    type: virtualSchema
-  };
-
-  return;
 }
 
 /**
