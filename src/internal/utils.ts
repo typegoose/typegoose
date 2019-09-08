@@ -3,11 +3,13 @@ import * as mongoose from 'mongoose';
 import { isNullOrUndefined } from 'util';
 import {
   // IModelOptions,
+  IModelOptions,
   NoParamConstructor,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
   VirtualOptions
 } from '../types';
+import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
 
 const primitives = ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID', 'Array'];
@@ -148,13 +150,36 @@ export function includesAllVirtualPOP(options: VirtualOptions): options is Virtu
 }
 
 /**
+ * Check if the given value has options of "IModelOptions"
+ * @param value The Value to evaulate
+ * @internal
+ */
+function isModelOptions(value: unknown): value is IModelOptions {
+  return value && (
+    typeof (value as IModelOptions).schemaOptions === 'object' ||
+    typeof (value as IModelOptions).options === 'object'
+  );
+}
+
+/**
  * Merges existing metadata with new value
  * @param key Metadata key
  * @param value Raw value
  * @param cl The constructor
+ * @internal
  */
-export function assignMetadata(key: string, value: unknown, cl: new () => {}): void {
+export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): void {
   const current = Reflect.getMetadata(key, cl) || {};
+
+  // the following checks are needed, so that the new value dosnt override the full options
+  // "deepmerge" cannot be used because of the other options like "existingMongoose"
+  if (isModelOptions(value) && !isNullOrUndefined(current.schemaOptions)) {
+    value.schemaOptions = Object.assign(current.schemaOptions, value.schemaOptions);
+  }
+  if (isModelOptions(value) && !isNullOrUndefined(current.options)) {
+    value.options = Object.assign(current.options, value.options);
+  }
+
   const newValue = Object.assign(current, value);
   Reflect.defineMetadata(key, newValue, cl);
 }
