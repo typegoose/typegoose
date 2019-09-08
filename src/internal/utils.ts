@@ -8,8 +8,9 @@ import {
   PropOptionsWithStringValidate,
   VirtualOptions
 } from '../types';
-import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
+
+const primitives = ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID', 'Array'];
 
 /**
  * Returns true, if it includes the Type
@@ -17,7 +18,7 @@ import { constructors, schemas } from './data';
  * @returns true, if it includes it
  */
 export function isPrimitive(Type: any): boolean {
-  return ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID'].includes(Type.name);
+  return primitives.includes(Type.name);
 }
 
 /**
@@ -37,6 +38,7 @@ export function isObject(Type: any): boolean {
   }
 
   return false; // can this even return false?
+  // return !isNullOrUndefined(Type) && (typeof Type === 'object' || Type.name === 'Object') && !Array.isArray(Type);
 }
 
 /**
@@ -163,11 +165,14 @@ export function assignMetadata(key: string, value: unknown, cl: new () => {}): v
  * @param cl The Class
  */
 export function getName<T, U extends NoParamConstructor<T>>(cl: U) {
-  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+  // disabled until hasezoey#23 & hasezoey#24 gets fixed
 
-  const baseName = cl.name;
-  const suffix = (options.options ? options.options.customName : undefined) ||
-    (options.schemaOptions ? options.schemaOptions.collection : undefined);
+  // const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
 
-  return suffix ? `${baseName}_${suffix}` : baseName;
+  // const baseName = cl.name;
+  // const suffix = (options.options ? options.options.customName : undefined) ||
+  //   (options.schemaOptions ? options.schemaOptions.collection : undefined);
+
+  // return suffix ? `${baseName}_${suffix}` : baseName;
+  return cl.name;
 }

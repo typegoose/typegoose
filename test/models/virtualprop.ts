@@ -22,7 +22,7 @@ export class NonVirtual {
 }
 
 export class NonVirtualGS {
-  @prop({ set: (val: string[]) => val.join(' '), get: (val: string) => val.split(' ') })
+  @prop({ set: (val: string[]) => val.join(' '), get: (val: string) => val.split(' '), type: String })
   public non: string[];
 }
 

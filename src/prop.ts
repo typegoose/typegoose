@@ -71,16 +71,22 @@ function baseProp(
     if (typeof rawOptions.get !== 'function') {
       throw new TypeError(`"${name}.${key}" does not have a get function!`);
     }
+
+    const newType = rawOptions && rawOptions.type ? rawOptions.type : Type;
+    if (rawOptions && rawOptions.type) {
+      delete rawOptions.type;
+    }
     /*
      * Note:
      * this dosnt have a check if prop & returntype of the function is the same, because it cant be accessed at runtime
      */
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
-      type: Type,
-      set: rawOptions.set,
-      get: rawOptions.get
+      type: newType,
+      ...rawOptions
     };
+
+    return;
   }
 
   const ref = rawOptions.ref;
@@ -222,7 +228,7 @@ function baseProp(
       ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
       ...options,
       type: [{
-        ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
+        ...(typeof options._id === 'boolean' ? { _id: options._id } : {}),
         ...subSchema
       }]
     };
@@ -244,7 +250,7 @@ function baseProp(
     return;
   }
 
-  const virtualSchema = _buildSchema(Type, null, { _id: rawOptions._id });
+  const virtualSchema = _buildSchema(Type, null, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
   schemas.get(name)[key] = {
     ...schemas.get(name)[key],
     ...options,

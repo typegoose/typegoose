@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 
+import { isNullOrUndefined } from 'util';
 import { EmptyVoidFn, IModelOptions, NoParamConstructor } from '../types';
 import { DecoratorKeys } from './constants';
 import { buildSchemas, hooks, plugins, schemas, virtuals } from './data';
@@ -23,6 +24,9 @@ export function _buildSchema<T, U extends NoParamConstructor<T>>(
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
+
+  // Option sanity check
+  opt = isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt;
 
   const name = getName(cl);
   if (buildSchemas.get(name)) {

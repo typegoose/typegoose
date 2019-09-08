@@ -7,7 +7,7 @@ import { suite as DefaultClassesTests } from './tests/dClasses.test';
 import { suite as ErrorTests } from './tests/errors.test';
 import { suite as GCFDTest } from './tests/getClassForDocument.test';
 import { suite as HookTest } from './tests/hooks.test';
-import { suite as OptionTests } from './tests/options.test';
+// import { suite as OptionTests } from './tests/options.test';
 import { suite as RefTest } from './tests/ref.test';
 import { suite as ShouldAddTest } from './tests/shouldAdd.test';
 import { suite as ShouldRunTests } from './tests/shouldRun.test';
@@ -44,5 +44,6 @@ describe('Typegoose', () => {
 
   describe('Ref tests', RefTest.bind(this));
 
-  describe('@modelOptions', OptionTests.bind(this));
+  // The Test Suite is disabled until hasezoey#23 & hasezoey#24 gets fixed
+  // describe('@modelOptions', OptionTests.bind(this));
 });

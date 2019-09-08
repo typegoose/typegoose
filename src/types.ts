@@ -92,7 +92,30 @@ export interface BasePropOptions {
    * ```
    */
   set?(val: any): any;
+  /**
+   * Set an Getter (Non-Virtual) to Post-process your value
+   * @param value The Value that needs to get modified
+   * @returns The Value, but modified OR anything
+   * @example
+   * ```ts
+   * function setHello(val: string): string {
+   *   return val.toLowerCase()
+   * }
+   * function getHello(val: string): string {
+   *   return val.toUpperCase();
+   * }
+   * class Dummy {
+   *   @prop({ set: setHello, get: getHello }) // many options can be used, like required
+   *   public hello: string;
+   * }
+   * ```
+   */
   get?(val: any): any;
+  /**
+   * This may be needed if get/set is used
+   * (this sets the type how it is saved to the DB)
+   */
+  type?: any;
   /**
    * Make a property read-only
    * @example

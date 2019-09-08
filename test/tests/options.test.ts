@@ -2,6 +2,8 @@ import { expect } from 'chai';
 
 import { getClassForDocument, getModelForClass, modelOptions } from '../../src/typegoose';
 
+// This Test Suite is disabled until hasezoey#23 & hasezoey#24 gets fixed
+
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
