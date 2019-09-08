@@ -78,6 +78,8 @@ export interface BasePropOptions {
   _id?: boolean;
   /**
    * Set an Setter (Non-Virtual) to pre-process your value
+   * (when using get/set both are required)
+   * Please note that the option `type` is required, if get/set saves a different value than what is defined
    * @param value The Value that needs to get modified
    * @returns The Value, but modified OR anything
    * @example
@@ -85,8 +87,11 @@ export interface BasePropOptions {
    * function setHello(val: string): string {
    *   return val.toLowerCase()
    * }
+   * function getHello(val: string): string {
+   *   return val.toUpperCase();
+   * }
    * class Dummy {
-   *   @prop({ set: setHello }) /7 many options can be used, like required
+   *   @prop({ set: setHello, get: getHello }) // many options can be used, like required
    *   public hello: string;
    * }
    * ```
@@ -94,6 +99,8 @@ export interface BasePropOptions {
   set?(val: any): any;
   /**
    * Set an Getter (Non-Virtual) to Post-process your value
+   * (when using get/set both are required)
+   * Please note that the option `type` is required, if get/set saves a different value than what is defined
    * @param value The Value that needs to get modified
    * @returns The Value, but modified OR anything
    * @example
