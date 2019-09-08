@@ -5,6 +5,7 @@ import { DecoratorKeys } from './internal/constants';
 import { schemas, virtuals } from './internal/data';
 import {
   InvalidPropError,
+  InvalidTypeError,
   NoMetadataError,
   NotAllVPOPElementsError,
   NotNumberTypeError,
@@ -158,6 +159,11 @@ function baseProp(
     };
   }
 
+  // check if Type is actually a real working Type
+  if (isNullOrUndefined(Type) || typeof Type !== 'function') {
+    throw new InvalidTypeError(target.name, key, Type);
+  }
+
   // check for validation inconsistencies
   if (utils.isWithStringValidate(rawOptions) && !utils.isString(Type)) {
     throw new NotStringTypeError(key);
@@ -189,7 +195,7 @@ function baseProp(
 
         return;
       case WhatIsIt.MAP:
-        // note "default" is a reserved keyword, thats why "_default" is used
+        // "default" is a reserved keyword, thats why "_default" is used
         const { default: _default }: PropOptions = options;
         delete options.default;
         delete options.of;
@@ -202,7 +208,6 @@ function baseProp(
 
         return;
       case WhatIsIt.NONE:
-      default:
         schemas.get(name)[key] = {
           ...schemas.get(name)[key],
           ...options,
@@ -210,6 +215,8 @@ function baseProp(
         };
 
         return;
+      default:
+        throw new Error(`"${whatis}"(whatis(primitive)) is invalid for "${name}.${key}"`);
     }
   }
 
@@ -219,7 +226,7 @@ function baseProp(
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       ...options,
-      type: Object // i think this can take some improvements
+      type: Object // i think this could take some improvements
     };
 
     return;
@@ -250,7 +257,6 @@ function baseProp(
 
       return;
     case WhatIsIt.NONE:
-    default:
       const virtualSchema = _buildSchema(
         Type,
         null,
@@ -262,6 +268,8 @@ function baseProp(
       };
 
       return;
+    default:
+      throw new Error(`"${whatis}"(whatis(subSchema)) is invalid for "${name}.${key}"`);
   }
 }
 

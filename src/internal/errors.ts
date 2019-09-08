@@ -6,6 +6,12 @@ export class InvalidPropError extends Error {
   }
 }
 
+export class InvalidTypeError extends Error {
+  constructor(targetName: string, key: string, Type: unknown) {
+    super(`"${targetName}.${key}"'s Type is invalid! Type is: "${Type}"`);
+  }
+}
+
 export class NotNumberTypeError extends Error {
   constructor(key: string) {
     super(`Type of ${key} property is not a number.`);

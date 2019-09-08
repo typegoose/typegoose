@@ -3,6 +3,7 @@ import { assert, expect } from 'chai';
 import { model, Schema } from 'mongoose';
 import { pre } from '../../src/hooks';
 import {
+  InvalidTypeError,
   NoMetadataError,
   NotAllVPOPElementsError,
   NotNumberTypeError,
@@ -10,7 +11,7 @@ import {
   NoValidClass
 } from '../../src/internal/errors';
 import { _buildSchema } from '../../src/internal/schema';
-import { prop } from '../../src/prop';
+import { arrayProp, mapProp, prop } from '../../src/prop';
 import { addModelToTypegoose, buildSchema, getModelForClass } from '../../src/typegoose';
 
 // disable "no-unused-variable" for this file, because it tests for errors
@@ -129,7 +130,7 @@ export function suite() {
     }
   });
 
-  it('should error if no valid model is supplied to addModelToTypegoose [TypeError]', () => {
+  it('should error if no valid model is supplied to "addModelToTypegoose" [TypeError]', () => {
     try {
       // @ts-ignore
       addModelToTypegoose('hello');
@@ -153,43 +154,73 @@ export function suite() {
     expect(doc.someprop).to.be.equals('Hello');
   });
 
-  it('should error if no valid class is supplied to addModelToTypegoose [NoValidClass]', () => {
-    try {
-      // @ts-ignore
-      addModelToTypegoose(model('hello', new Schema()), 'not class');
-      assert.fail('Expected to throw "TypeError"');
-    } catch (err) {
-      expect(err).to.be.an.instanceOf(NoValidClass);
-    }
+  describe('tests for "NoValidClass"', () => {
+    it('should error if no valid class is supplied to "addModelToTypegoose" [NoValidClass]', () => {
+      try {
+        // @ts-ignore
+        addModelToTypegoose(model('hello', new Schema()), 'not class');
+        assert.fail('Expected to throw "TypeError"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(NoValidClass);
+      }
+    });
+
+    it('should error if no valid class is supplied to "buildSchema" [NoValidClass]', () => {
+      try {
+        // @ts-ignore
+        buildSchema('hello');
+        assert.fail('Expected to throw "NoValidClass"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(NoValidClass);
+      }
+    });
+
+    it('should error if no valid class is supplied to "_buildSchema" [NoValidClass]', () => {
+      try {
+        // @ts-ignore
+        _buildSchema('hello');
+        assert.fail('Expected to throw "NoValidClass"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(NoValidClass);
+      }
+    });
+
+    it('should error if no valid class is supplied to "getModelForClass" [NoValidClass]', () => {
+      try {
+        // @ts-ignore
+        getModelForClass('hello');
+        assert.fail('Expected to throw "NoValidClass"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(NoValidClass);
+      }
+    });
   });
 
-  it('should error if no valid class is supplied to buildSchema [NoValidClass]', () => {
-    try {
-      // @ts-ignore
-      buildSchema('hello');
-      assert.fail('Expected to throw "NoValidClass"');
-    } catch (err) {
-      expect(err).to.be.an.instanceOf(NoValidClass);
-    }
-  });
+  describe('tests for "InvalidTypeError"', () => {
+    // test for @prop will return a "NoMetadataError", which is already tested above
 
-  it('should error if no valid class is supplied to _buildSchema [NoValidClass]', () => {
-    try {
-      // @ts-ignore
-      _buildSchema('hello');
-      assert.fail('Expected to throw "NoValidClass"');
-    } catch (err) {
-      expect(err).to.be.an.instanceOf(NoValidClass);
-    }
-  });
+    it('should error if no valid type is supplied to "@arrayProp" [InvalidTypeError]', () => {
+      try {
+        class TestInvalidTypeError {
+          @arrayProp({ items: undefined })
+          public something: undefined;
+        }
+        assert.fail('Expected to throw "InvalidTypeError"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(InvalidTypeError);
+      }
+    });
 
-  it('should error if no valid class is supplied to getModelForClass [NoValidClass]', () => {
-    try {
-      // @ts-ignore
-      getModelForClass('hello');
-      assert.fail('Expected to throw "NoValidClass"');
-    } catch (err) {
-      expect(err).to.be.an.instanceOf(NoValidClass);
-    }
+    it('should error if no valid type is supplied to "@mapProp" [InvalidTypeError]', () => {
+      try {
+        class TestInvalidTypeError {
+          @mapProp({ items: undefined })
+          public something: undefined;
+        }
+        assert.fail('Expected to throw "InvalidTypeError"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(InvalidTypeError);
+      }
+    });
   });
 }
