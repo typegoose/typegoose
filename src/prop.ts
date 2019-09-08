@@ -16,7 +16,7 @@ import * as utils from './internal/utils';
 import {
   ArrayPropOptions,
   MapPropOptions,
-  NoParamConstructor,
+  AnyParamConstructor,
   PropOptions,
   PropOptionsWithValidate
 } from './types';
@@ -38,7 +38,7 @@ enum WhatIsIt {
  */
 function baseProp(
   rawOptions: any,
-  Type: NoParamConstructor<any>,
+  Type: AnyParamConstructor<any>,
   target: any,
   key: string,
   whatis: WhatIsIt = WhatIsIt.NONE

@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
-import { EmptyVoidFn, IModelOptions, NoParamConstructor } from '../types';
+import { EmptyVoidFn, IModelOptions, AnyParamConstructor } from '../types';
 import { DecoratorKeys } from './constants';
 import { buildSchemas, hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
@@ -16,7 +16,7 @@ import { getName } from './utils';
  * @returns Returns the Build Schema
  * @private
  */
-export function _buildSchema<T, U extends NoParamConstructor<T>>(
+export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   cl: U,
   sch?: mongoose.Schema,
   opt: mongoose.SchemaOptions = {}

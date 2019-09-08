@@ -15,7 +15,7 @@ import { buildSchemas, constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import { assignMetadata, getName } from './internal/utils';
-import { DocumentType, IModelOptions, NoParamConstructor, Ref, ReturnModelType } from './types';
+import { DocumentType, IModelOptions, AnyParamConstructor, Ref, ReturnModelType } from './types';
 
 /* exports */
 export { mongoose }; // export the internally used one, to not need to always import it
@@ -40,7 +40,7 @@ export abstract class Typegoose {
 
   /* istanbul ignore next */
   /** @deprecated */
-  public getModelForClass<T, U extends NoParamConstructor<T>>(cl: U, settings?: any) {
+  public getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
     assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
 
     return deprecate(getModelForClass, 'Typegoose Class is Deprecated!')(cl);
@@ -48,7 +48,7 @@ export abstract class Typegoose {
 
   /* istanbul ignore next */
   /** @deprecated */
-  public setModelForClass<T, U extends NoParamConstructor<T>>(cl: U, settings?: any) {
+  public setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
     assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
 
     return deprecate(setModelForClass, 'Typegoose Class is Deprecated!')(cl);
@@ -56,7 +56,7 @@ export abstract class Typegoose {
 
   /* istanbul ignore next */
   /** @deprecated */
-  public buildSchema<T, U extends NoParamConstructor<T>>(cl: U) {
+  public buildSchema<T, U extends AnyParamConstructor<T>>(cl: U) {
     return deprecate(buildSchema, 'Typegoose Class is Deprecated!')(cl);
   }
 }
@@ -74,7 +74,7 @@ export abstract class Typegoose {
  * const NameModel = getModelForClass(Name);
  * ```
  */
-export function getModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
+export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
@@ -104,7 +104,7 @@ export function getModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
  * @returns The Model
  * @deprecated
  */
-export function setModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
+export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
   return deprecate(
     getModelForClass(cl),
     'setModelForClass is deprecated, please use getModelForClasse (see README#Migrate to 6.0.0');
@@ -115,7 +115,7 @@ export function setModelForClass<T, U extends NoParamConstructor<T>>(cl: U) {
  * @param cl The not initialized Class
  * @returns Returns the Build Schema
  */
-export function buildSchema<T, U extends NoParamConstructor<T>>(cl: U) {
+export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U) {
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
@@ -159,7 +159,7 @@ export function buildSchema<T, U extends NoParamConstructor<T>>(cl: U) {
  * const model = addModelToTypegoose(mongoose.model(schema), T);
  * ```
  */
-export function addModelToTypegoose<T, U extends NoParamConstructor<T>>(model: mongoose.Model<any>, cl: U) {
+export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: mongoose.Model<any>, cl: U) {
   if (!(model.prototype instanceof mongoose.Model)) {
     throw new TypeError(`"${model}" is not a valid Model!`);
   }
@@ -189,7 +189,7 @@ export function addModelToTypegoose<T, U extends NoParamConstructor<T>>(model: m
  * const C2Model = getDiscriminatorModelForClass(C1Model, C1);
  * ```
  */
-export function getDiscriminatorModelForClass<T, U extends NoParamConstructor<T>>(
+export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T>>(
   from: mongoose.Model<any>,
   cl: U,
   id?: string

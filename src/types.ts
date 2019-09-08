@@ -18,15 +18,14 @@ export type DocumentType<T> = T & mongoose.Document;
  */
 export type ModelType<T> = mongoose.Model<DocumentType<T>> & T;
 /**
- * Like InstanceType<T> but for no-argument classes
- * (InstanceType wants that the passed generic is an extendet, but this would make the type useless)
+ * Any-param Constructor
  * @internal
  */
-export type NoParamConstructor<T> = new () => T;
+export type AnyParamConstructor<T> = new (...args: any) => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
  */
-export type ReturnModelType<U extends NoParamConstructor<T>, T = any> = ModelType<InstanceType<U>> & U;
+export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = ModelType<InstanceType<U>> & U;
 
 /** @internal */
 export type Func = (...args: any[]) => any;

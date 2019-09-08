@@ -4,7 +4,7 @@ import { isNullOrUndefined } from 'util';
 import {
   // IModelOptions,
   IModelOptions,
-  NoParamConstructor,
+  AnyParamConstructor,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
   VirtualOptions
@@ -189,7 +189,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
  * (with suffix)
  * @param cl The Class
  */
-export function getName<T, U extends NoParamConstructor<T>>(cl: U) {
+export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
   // disabled until hasezoey#23 & hasezoey#24 gets fixed
 
   // const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
