@@ -40,12 +40,16 @@ redirect_from:
 - adding Types to Ref (to allow not just ObjectID) [{% include gitissue repo="szokodiakos" num=369 %}]
 - szokodiakos#54 seems to work now in 6.0.0 (added test in 6.0.0-21)
 - because of the changes in 6.0.0 #235 got fixed
+- Adding "InvalidTypeError" for the case that "undefined" or "null" is used as a type (or something other happenes)
+- Change Error text of "InvalidPropError"
 - [IC] Remake data.ts to use Maps hasezoey#3
 - [IC] adding many tests and bumping coverage
 - [IC] moving many Types to types.ts
 - [IC] removing unneeded dependencies
 - [IC] changed how travis runs jobs multiple times
 - [IC] many tslint rule changes
+- [IC] getting the name from "class.name" got outsourced into "utils.getName" (for future use)
+- [IC] use switches instead of many if's
 
 ## 5.9.0
 
