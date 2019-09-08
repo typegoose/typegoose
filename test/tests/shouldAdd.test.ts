@@ -18,6 +18,7 @@ import {
   VirtualSub,
   VirtualSubModel
 } from '../models/virtualprop';
+import { GetSetModel, GetSet } from "../models/getSet";
 
 /**
  * Function to pass into describe
@@ -285,5 +286,20 @@ export function suite() {
     expect(opt.type).to.be.an('function');
     expect(opt.refPath).to.equal('something');
     expect(opt).to.have.property('customoption', 'custom');
+  });
+
+  it('should make use of virtual get- & set-ters', async () => {
+    {
+      const doc = await GetSetModel.create({ actualProp: 'hello1' } as GetSet);
+      expect(doc).to.not.be.an('undefined');
+      expect(doc.actualProp).to.equal('hello1');
+      expect(doc.some).to.equal('hello1');
+    }
+    {
+      const doc = await GetSetModel.create({ some: 'hello2' } as GetSet);
+      expect(doc).to.not.be.an('undefined');
+      expect(doc.actualProp).to.equal('hello2');
+      expect(doc.some).to.equal('hello2');
+    }
   });
 }
