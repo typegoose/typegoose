@@ -75,9 +75,9 @@ export interface IndexOptions<T> {
  * ```
  */
 export function index<T>(fields: T, options?: IndexOptions<T>) {
-  return (constructor: any) => {
-    const indices: any[] = Reflect.getMetadata(DecoratorKeys.Index, constructor) || [];
+  return (target: any) => {
+    const indices: any[] = Reflect.getMetadata(DecoratorKeys.Index, target) || [];
     indices.push({ fields, options });
-    Reflect.defineMetadata(DecoratorKeys.Index, indices, constructor);
+    Reflect.defineMetadata(DecoratorKeys.Index, indices, target);
   };
 }

@@ -7,7 +7,7 @@ import { EmptyVoidFn } from './types';
 
 type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 
-type ClassDecorator = (constructor: any) => void;
+type ClassDecorator = (target: any) => void;
 type HookNextErrorFn = (err?: Error) => void;
 
 type PreFnWithDT<T> = (this: DocumentType<T>, next?: EmptyVoidFn) => void;

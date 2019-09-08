@@ -7,8 +7,8 @@ import { Func } from './types';
  * @param options Options for the Plugin, if any
  */
 export function plugin(mongoosePlugin: Func, options?: any) {
-  return (constructor: any) => {
-    const name: string = constructor.name;
+  return (target: any) => {
+    const name: string = target.name;
     /* istanbul ignore else */
     if (!plugins.get(name)) {
       plugins.set(name, []);
