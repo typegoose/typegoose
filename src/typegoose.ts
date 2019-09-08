@@ -18,6 +18,7 @@ import { assignMetadata, getName } from './internal/utils';
 import { DocumentType, IModelOptions, NoParamConstructor, Ref, ReturnModelType } from './types';
 
 /* exports */
+export { mongoose }; // export the internally used one, to not need to always import it
 export * from './method';
 export * from './prop';
 export * from './hooks';

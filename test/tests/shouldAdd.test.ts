@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose';
 import { arrayProp, buildSchema, isDocumentArray, prop, Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
+import { GetSet, GetSetModel } from '../models/getSet';
 import { model as InternetUser } from '../models/internetUser';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
 import { OptionsClass, OptionsModel } from '../models/options';
@@ -18,7 +19,6 @@ import {
   VirtualSub,
   VirtualSubModel
 } from '../models/virtualprop';
-import { GetSetModel, GetSet } from "../models/getSet";
 
 /**
  * Function to pass into describe
