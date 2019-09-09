@@ -3,8 +3,8 @@ import * as mongoose from 'mongoose';
 import { isNullOrUndefined } from 'util';
 import {
   // IModelOptions,
-  IModelOptions,
   AnyParamConstructor,
+  IModelOptions,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
   VirtualOptions

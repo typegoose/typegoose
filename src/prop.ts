@@ -14,9 +14,9 @@ import {
 import { _buildSchema } from './internal/schema';
 import * as utils from './internal/utils';
 import {
+  AnyParamConstructor,
   ArrayPropOptions,
   MapPropOptions,
-  AnyParamConstructor,
   PropOptions,
   PropOptionsWithValidate
 } from './types';

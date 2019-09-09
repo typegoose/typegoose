@@ -15,7 +15,7 @@ import { buildSchemas, constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import { assignMetadata, getName } from './internal/utils';
-import { DocumentType, IModelOptions, AnyParamConstructor, Ref, ReturnModelType } from './types';
+import { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
 
 /* exports */
 export { mongoose }; // export the internally used one, to not need to always import it
@@ -168,6 +168,13 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
   }
 
   const name = getName(cl);
+
+  if (constructors.get(name)) {
+    // tslint:disable-next-line:no-console
+    console.error(new Error('It seems like "addModelToTypegoose" got called twice\n'
+      + 'Or multiple classes with the same name are used, which currently isnt supported!'
+      + `"Erroring" class is ${name}`));
+  }
 
   models.set(name, model);
   constructors.set(name, cl);
