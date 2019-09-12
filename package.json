@@ -1,14 +1,15 @@
 {
   "name": "@hasezoey/typegoose",
-  "version": "5.9.1",
+  "version": "5.9.2",
   "description": "Define Mongoose models using TypeScript classes.",
   "main": "lib/typegoose.js",
+  "types": "lib/typegoose.d.ts",
   "engines": {
     "node": ">=8.10.0"
   },
   "files": [
-    "lib/*.js",
-    "lib/*.d.ts"
+    "lib/**/*.js",
+    "lib/**/*.d.ts"
   ],
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
@@ -18,16 +19,16 @@
     "test": "npm run lint && nyc npm run mocha",
     "mocha": "npm run build && mocha \"./test/*.ts\" --timeout 15000",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "clean": "rimraf lib && rm .tsbuildinfo && rimraf .nyc_output && rimraf coverage && rimraf doc",
-    "doc": "typedoc --out ./doc ./src --mode modules"
+    "clean": "rimraf lib .tsbuildinfo .nyc_output coverage doc",
+    "doc": "typedoc --out ./doc ./src --mode modules",
+    "prepare": "npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/hasezoey/typegoose.git"
-  },
-  "types": "lib/typegoose.d.ts",
-  "typings": "lib/typegoose.d.ts",
+  "repository": "github:hasezoey/typegoose",
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
+  "contributors": [
+    "Ben305",
+    "hasezoey <hasezoey@gmail.com>"
+  ],
   "license": "MIT",
   "peerDependencies": {
     "mongoose": "^5.6.7"

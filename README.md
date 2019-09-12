@@ -1,18 +1,20 @@
 # Typegoose
 
-[![Build Status](https://travis-ci.org/szokodiakos/typegoose.svg?branch=master)](https://travis-ci.org/szokodiakos/typegoose)
-[![Coverage Status](https://coveralls.io/repos/github/szokodiakos/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/szokodiakos/typegoose?branch=master)
-[![npm](https://img.shields.io/npm/dt/typegoose.svg)]()
+[![Build Status](https://travis-ci.com/hasezoey/typegoose.svg?branch=master)](https://travis-ci.com/hasezoey/typegoose)
+[![Coverage Status](https://coveralls.io/repos/github/hasezoey/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/hasezoey/typegoose?branch=master)
+[![npm](https://img.shields.io/npm/dt/@hasezoey/typegoose.svg)](https://npmjs.com/package/@hasezoey/typegoose)
 
 Define Mongoose models using TypeScript classes.
+
+This Repository is the continuation of [the old one](https://github.com/szokodiakos/typegoose)
 
 ## Basic usage
 
 ```ts
-import { prop, Typegoose, ModelType, InstanceType } from 'typegoose';
+import { prop, Typegoose, ModelType, InstanceType } from '@hasezoey/typegoose';
 import * as mongoose from 'mongoose';
 
-mongoose.connect('mongodb://localhost:27017/test');
+mongoose.connect('mongodb://localhost:27017/typegoose');
 
 class User extends Typegoose {
   @prop()
@@ -20,14 +22,14 @@ class User extends Typegoose {
 }
 
 const UserModel = new User().getModelForClass(User);
-
 // UserModel is a regular Mongoose Model with correct types
+
 (async () => {
   const u = await UserModel.create({ name: 'JohnDoe' });
   const user = await UserModel.findOne();
 
-  // prints { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
   console.log(user);
+  // prints { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
 })();
 ```
 
@@ -109,18 +111,17 @@ Please note that sub documents do not have to extend Typegoose. You can still gi
 ## Requirements
 
 * TypeScript 3.2+
-* Node 8+
-* mongoose 5+
+* Node 8.10+
+* mongoose ^5.6.7
 * `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
-* `reflect-metadata` must be installed
 
 ## Install
 
-`npm install typegoose -S`
+`npm install -s @hasezoey/typegoose`
 
-You also need to install `mongoose` and `reflect-metadata`, in versions < 5.0, these packages were listed as dependencies in `package.json`, starting with version 5.0 these packages are listed as peer dependencies.
+You also need to install `mongoose`, in versions < 5.0, these packages were listed as dependencies in `package.json`, starting with version 5.0 these packages are listed as peer dependencies.
 
-`npm install mongoose reflect-metadata -S`
+`npm install -s mongoose`
 
 ## Testing
 
@@ -600,6 +601,6 @@ For reference properties:
 ### Notes
 
 * `mongoose` is a peer-dependency, and a dev dependency to install it for dev purposes
-* Please dont add comments with `+1` or something like that, use the Reactions
+* Please dont add comments with `+1` or something like it, use the Reactions
 * Typegoose **cannot** be used with classes of the same name, it will always return the first build class with that name
-* All Models in Typegoose are set to strict by default, and **cant** be changed!
+* All Models in Typegoose are set to strict by default, and when you really want it to be changed, try `getModelForClass(class, {schemaOptions:{strict:false}})`
