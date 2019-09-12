@@ -154,4 +154,22 @@ export function suite() {
     assignMetadata(DecoratorKeys.ModelOptions, undefined, Dummy);
     expect(Reflect.getMetadata(DecoratorKeys.ModelOptions, Dummy)).to.deep.equal({ test: 'hello' });
   });
+
+  it('merge options with assignMetadata', () => {
+    @modelOptions({ schemaOptions: { timestamps: true, _id: false } })
+    class TestAssignMetadata { }
+
+    getModelForClass(TestAssignMetadata, {
+      // @ts-ignore
+      testOption: 'hello',
+      schemaOptions: { _id: true }
+    });
+
+    const reflected = Reflect.getMetadata(DecoratorKeys.ModelOptions, TestAssignMetadata);
+
+    expect(reflected).to.not.be.an('undefined');
+    expect(reflected).to.have.property('testOption', 'hello');
+    expect(reflected.schemaOptions).to.have.property('timestamps', true);
+    expect(reflected.schemaOptions).to.have.property('_id', true);
+  });
 }

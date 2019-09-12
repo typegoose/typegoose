@@ -74,10 +74,12 @@ export abstract class Typegoose {
  * const NameModel = getModelForClass(Name);
  * ```
  */
-export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
+export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: IModelOptions) {
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
+
+  assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
 
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
   const name = getName(cl);
