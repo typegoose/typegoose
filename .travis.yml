@@ -23,18 +23,18 @@ jobs:
       script: |
         (npm audit || exit 0)
         npm run buildtests # build tests too to check if errors from tsc are present
-    - name: 'Deploy to NPM'
-      stage: deploy
-      if: tag IS present AND NOT type IN (pull_request)
-      script: skip
-      deploy:
-        provider: npm
-        email: $DEPLOY_NPM_EMAIL
-        tag: latest
-        skip_cleanup: true
-        api_key: $DEPLOY_NPM_KEY
-        on:
-          tags: true
+    # - name: 'Deploy to NPM'
+    #   stage: deploy
+    #   if: tag IS present AND NOT type IN (pull_request)
+    #   script: skip
+    #   deploy:
+    #     provider: npm
+    #     email: $DEPLOY_NPM_EMAIL
+    #     tag: latest
+    #     skip_cleanup: true
+    #     api_key: $DEPLOY_NPM_KEY
+    #     on:
+    #       tags: true
     # - name: 'Deploy to GitHub Pages'
     #   stage: deploy
     #   if: branch IN (master, r6/master) AND NOT type IN (pull_request) # i know this redundant, but it is needed otherwise the test will always create a deploy of this
