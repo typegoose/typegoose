@@ -11,6 +11,7 @@ import {
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
+import { NotStringTypeError, NoValidClass } from "./errors";
 
 const primitives = ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID', 'Array'];
 
@@ -169,6 +170,15 @@ function isModelOptions(value: unknown): value is IModelOptions {
  * @internal
  */
 export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): void {
+  if (typeof key !== 'string') {
+    throw new TypeError(`"${key}"(key) is not a string! (assignMetadata)`);
+  }
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
+  if (isNullOrUndefined(value)) {
+    return;
+  }
   const current = Reflect.getMetadata(key, cl) || {};
 
   // the following checks are needed, so that the new value dosnt override the full options

@@ -147,4 +147,11 @@ export function suite() {
     expect(reflected).to.not.be.an('undefined');
     expect(reflected).to.have.property('testOption', 'hello');
   });
+
+  it('should just run with an non existing value in assignMetadata', () => {
+    class Dummy { }
+    assignMetadata(DecoratorKeys.ModelOptions, { test: 'hello' }, Dummy);
+    assignMetadata(DecoratorKeys.ModelOptions, undefined, Dummy);
+    expect(Reflect.getMetadata(DecoratorKeys.ModelOptions, Dummy)).to.deep.equal({ test: 'hello' });
+  });
 }

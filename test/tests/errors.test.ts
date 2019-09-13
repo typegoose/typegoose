@@ -13,6 +13,8 @@ import {
 import { _buildSchema } from '../../src/internal/schema';
 import { arrayProp, mapProp, prop } from '../../src/prop';
 import { addModelToTypegoose, buildSchema, getModelForClass } from '../../src/typegoose';
+import { assignMetadata } from "../../src/internal/utils";
+import { DecoratorKeys } from "../../src/internal/constants";
 
 // disable "no-unused-variable" for this file, because it tests for errors
 // tslint:disable:no-unused-variable
@@ -220,6 +222,30 @@ export function suite() {
         assert.fail('Expected to throw "InvalidTypeError"');
       } catch (err) {
         expect(err).to.be.an.instanceOf(InvalidTypeError);
+      }
+    });
+  });
+
+  describe('tests for "assignMetadata"', () => {
+    it('should error if no valid key is supplied [TypeError]', () => {
+      try {
+        class Dummy { }
+        // @ts-ignore
+        assignMetadata(true, {}, Dummy);
+        assert.fail('Expected to throw "TypeError"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(TypeError);
+        expect((err as TypeError).message).to.be.equals(`"true"(key) is not a string! (assignMetadata)`);
+      }
+    });
+
+    it('should error if no valid key is supplied [NoValidClass]', () => {
+      try {
+        // @ts-ignore
+        assignMetadata(DecoratorKeys.Index, {}, true);
+        assert.fail('Expected to throw "NoValidClass"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(NoValidClass);
       }
     });
   });
