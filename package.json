@@ -60,7 +60,6 @@
     "typescript": "*3.5.3"
   },
   "dependencies": {
-    "object.fromentries": "^2.0.0",
     "reflect-metadata": "^0.1.13"
   }
 }

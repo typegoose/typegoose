@@ -125,8 +125,6 @@ You also need to install `mongoose`, since version 5 it is listed as a peer-depe
 
 `npm i -s mongoose`
 
-*Note: typegoose uses the package `object.fromEntries` as a polyfill for node versions <12*
-
 ## [Migrate to 6.0.0](https://hasezoey.github.io/typegoose/guides/migrate-to-6/)
 
 ## Testing

@@ -1,12 +1,6 @@
 /* imports */
 import * as mongoose from 'mongoose';
-import { shim } from 'object.fromentries';
 import 'reflect-metadata';
-
-/* istanbul ignore next */
-if (!Object.fromEntries) {
-  shim();
-}
 
 import { deprecate } from 'util';
 import * as defaultClasses from './defaultClasses';
