@@ -2,6 +2,7 @@ import { assert, expect } from 'chai';
 
 import { model, Schema } from 'mongoose';
 import { pre } from '../../src/hooks';
+import { DecoratorKeys } from '../../src/internal/constants';
 import {
   InvalidTypeError,
   NoMetadataError,
@@ -11,10 +12,9 @@ import {
   NoValidClass
 } from '../../src/internal/errors';
 import { _buildSchema } from '../../src/internal/schema';
+import { assignMetadata } from '../../src/internal/utils';
 import { arrayProp, mapProp, prop } from '../../src/prop';
 import { addModelToTypegoose, buildSchema, getModelForClass } from '../../src/typegoose';
-import { assignMetadata } from "../../src/internal/utils";
-import { DecoratorKeys } from "../../src/internal/constants";
 
 // disable "no-unused-variable" for this file, because it tests for errors
 // tslint:disable:no-unused-variable

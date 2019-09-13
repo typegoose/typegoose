@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
-import { EmptyVoidFn, IModelOptions, AnyParamConstructor } from '../types';
+import { AnyParamConstructor, EmptyVoidFn, IModelOptions } from '../types';
 import { DecoratorKeys } from './constants';
 import { buildSchemas, hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';

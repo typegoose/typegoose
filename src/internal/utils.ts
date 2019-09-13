@@ -11,7 +11,7 @@ import {
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
-import { NotStringTypeError, NoValidClass } from "./errors";
+import { NoValidClass } from './errors';
 
 const primitives = ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID', 'Array'];
 
