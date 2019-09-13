@@ -20,3 +20,7 @@ Long: Yes it is, but not on the main repo anymore because of [What happened to t
 
 (context: from `typegoose` to `@hasezoey/typegoose`)<br/>
 A: Because of a Repository Switch ([reasons](#is-this-project-still-active)) and because a name cannot be used by multiple packages except if it is scoped
+
+### Why @hasezoey/typegoose
+
+A: because the normal `typegoose` is still working, and i dont want to deal with it, `@hasezoey/typegoose` is perfectly fitting (and because of the repo differences)
