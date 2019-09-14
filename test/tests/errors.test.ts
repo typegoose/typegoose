@@ -216,7 +216,7 @@ export function suite() {
     it('should error if no valid type is supplied to "@mapProp" [InvalidTypeError]', () => {
       try {
         class TestInvalidTypeError {
-          @mapProp({ items: undefined })
+          @mapProp({ of: undefined })
           public something: undefined;
         }
         assert.fail('Expected to throw "InvalidTypeError"');

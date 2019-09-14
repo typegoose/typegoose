@@ -60,6 +60,7 @@
     "typescript": "*3.5.3"
   },
   "dependencies": {
+    "loglevel": "^1.6.4",
     "reflect-metadata": "^0.1.13"
   }
 }
