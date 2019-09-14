@@ -211,11 +211,11 @@ export function suite() {
 
     it('should error if no valid type is supplied to "@arrayProp" [InvalidTypeError]', () => {
       try {
-        class TestInvalidTypeError {
+        class TestInvalidTypeErrorAP {
           @arrayProp({ items: undefined })
           public something: undefined;
         }
-        getModelForClass(TestInvalidTypeError);
+        getModelForClass(TestInvalidTypeErrorAP);
         assert.fail('Expected to throw "InvalidTypeError"');
       } catch (err) {
         expect(err).to.be.an.instanceOf(InvalidTypeError);
@@ -224,11 +224,11 @@ export function suite() {
 
     it('should error if no valid type is supplied to "@mapProp" [InvalidTypeError]', () => {
       try {
-        class TestInvalidTypeError {
+        class TestInvalidTypeErrorMP {
           @mapProp({ of: undefined })
           public something: undefined;
         }
-        getModelForClass(TestInvalidTypeError);
+        getModelForClass(TestInvalidTypeErrorMP);
         assert.fail('Expected to throw "InvalidTypeError"');
       } catch (err) {
         expect(err).to.be.an.instanceOf(InvalidTypeError);
