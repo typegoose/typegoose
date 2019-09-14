@@ -215,6 +215,7 @@ export function suite() {
           @arrayProp({ items: undefined })
           public something: undefined;
         }
+        getModelForClass(TestInvalidTypeError);
         assert.fail('Expected to throw "InvalidTypeError"');
       } catch (err) {
         expect(err).to.be.an.instanceOf(InvalidTypeError);
@@ -227,6 +228,7 @@ export function suite() {
           @mapProp({ items: undefined })
           public something: undefined;
         }
+        getModelForClass(TestInvalidTypeError);
         assert.fail('Expected to throw "InvalidTypeError"');
       } catch (err) {
         expect(err).to.be.an.instanceOf(InvalidTypeError);
