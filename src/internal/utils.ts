@@ -163,13 +163,29 @@ function isModelOptions(value: unknown): value is IModelOptions {
 }
 
 /**
- * Merges existing metadata with new value
+ * Merge value & existing Metadata & Save it to the class
+ * Difference with "mergeMetadata" is that this one DOES save it to the class
  * @param key Metadata key
  * @param value Raw value
  * @param cl The constructor
  * @internal
  */
-export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): void {
+export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): any {
+  const newValue = mergeMetadata(key, value, cl);
+  Reflect.defineMetadata(key, newValue, cl);
+
+  return newValue;
+}
+
+/**
+ * Merge value & existing Metadata
+ * Difference with "assignMetadata" is that this one DOES NOT save it to the class
+ * @param key Metadata key
+ * @param value Raw value
+ * @param cl The constructor
+ * @internal
+ */
+export function mergeMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): any {
   if (typeof key !== 'string') {
     throw new TypeError(`"${key}"(key) is not a string! (assignMetadata)`);
   }
@@ -190,8 +206,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
     value.options = Object.assign(current.options, value.options);
   }
 
-  const newValue = Object.assign(current, value);
-  Reflect.defineMetadata(key, newValue, cl);
+  return Object.assign(current, value);
 }
 
 /**

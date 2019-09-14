@@ -2,13 +2,13 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 
-import { deprecate } from 'util';
+import { deprecate, isNullOrUndefined } from 'util';
 import * as defaultClasses from './defaultClasses';
 import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
-import { assignMetadata, getName } from './internal/utils';
+import { assignMetadata, getName, mergeMetadata } from './internal/utils';
 import { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
 
 /* exports */
@@ -73,9 +73,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
     throw new NoValidClass(cl);
   }
 
-  assignMetadata(DecoratorKeys.ModelOptions, options, cl);
-
-  const roptions: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+  const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options || {}, cl);
   const name = getName(cl);
 
   if (models.get(name)) {
@@ -83,9 +81,9 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
   }
 
   let model = mongoose.model.bind(mongoose);
-  if (roptions.existingConnection) {
+  if (!isNullOrUndefined(roptions.existingConnection)) {
     model = roptions.existingConnection.model.bind(roptions.existingConnection);
-  } else if (roptions.existingMongoose) {
+  } else if (!isNullOrUndefined(roptions.existingMongoose)) {
     model = roptions.existingMongoose.model.bind(roptions.existingMongoose);
   }
 
@@ -116,7 +114,7 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
     throw new NoValidClass(cl);
   }
 
-  assignMetadata(DecoratorKeys.ModelOptions, options, cl);
+  const mergedOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
 
   let sch: mongoose.Schema<U>;
   /** Parent Constructor */
@@ -130,12 +128,12 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
       break;
     }
     // extend schema
-    sch = _buildSchema(parentCtor, sch);
+    sch = _buildSchema(parentCtor, sch, mergedOptions);
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
   // get schema of current model
-  sch = _buildSchema(cl, sch);
+  sch = _buildSchema(cl, sch, mergedOptions);
 
   return sch;
 }
