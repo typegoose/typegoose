@@ -5,7 +5,7 @@ import { AnyParamConstructor, EmptyVoidFn, IModelOptions } from '../types';
 import { DecoratorKeys } from './constants';
 import { decoratorCache, hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
-import { getName, mergeMetadata } from './utils';
+import { getName, mergeSchemaOptions } from './utils';
 
 /**
  * Private schema builder out of class props
@@ -25,12 +25,8 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
     throw new NoValidClass(cl);
   }
 
-  // Option sanity check
-  opt = mergeMetadata(
-    DecoratorKeys.ModelOptions,
-    isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt,
-    cl
-  );
+  // Options sanity check
+  opt = mergeSchemaOptions(isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt, cl);
 
   const name = getName(cl);
 

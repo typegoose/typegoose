@@ -171,6 +171,10 @@ function isModelOptions(value: unknown): value is IModelOptions {
  * @internal
  */
 export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): any {
+  if (isNullOrUndefined(value)) {
+    return value;
+  }
+
   const newValue = mergeMetadata(key, value, cl);
   Reflect.defineMetadata(key, newValue, cl);
 
@@ -192,10 +196,12 @@ export function mergeMetadata(key: DecoratorKeys, value: unknown, cl: new () => 
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
-  if (isNullOrUndefined(value)) {
-    return;
-  }
+
   const current = Reflect.getMetadata(key, cl) || {};
+
+  if (isNullOrUndefined(value)) {
+    return current;
+  }
 
   // the following checks are needed, so that the new value dosnt override the full options
   // "deepmerge" cannot be used because of the other options like "existingMongoose"
@@ -207,6 +213,26 @@ export function mergeMetadata(key: DecoratorKeys, value: unknown, cl: new () => 
   }
 
   return Object.assign(current, value);
+}
+
+/**
+ * Merge only schemaOptions from ModelOptions of the class
+ * @param value The value to use
+ * @param cl The Class to get the values from
+ */
+export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: mongoose.SchemaOptions, cl: U) {
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
+
+  const current = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+  const evaluated = current && current.schemaOptions ? current.schemaOptions : {};
+
+  if (isNullOrUndefined(value)) {
+    return evaluated;
+  }
+
+  return Object.assign(evaluated, value || {});
 }
 
 /**

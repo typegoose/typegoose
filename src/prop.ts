@@ -49,7 +49,7 @@ function baseProp(
   decoratorCache.get(initname).decorators.set(key, () => {
     if (utils.isNotDefined(Type)) {
       if (Type !== target) { // prevent "infinite" buildSchema loop / Maximum Class size exceeded
-        buildSchema(Type, { schemaOptions: { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true } });
+        buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
       }
     }
     const name: string = utils.getName(target.constructor);
@@ -268,9 +268,7 @@ function baseProp(
         return;
       case WhatIsIt.NONE:
         const virtualSchema = buildSchema(Type, {
-          schemaOptions: {
-            _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true
-          }
+          _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true
         });
         schemas.get(name)[key] = {
           ...schemas.get(name)[key],

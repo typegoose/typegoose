@@ -8,7 +8,7 @@ import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
-import { assignMetadata, getName, mergeMetadata } from './internal/utils';
+import { assignMetadata, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
 
 /* exports */
@@ -87,7 +87,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
     model = roptions.existingMongoose.model.bind(roptions.existingMongoose);
   }
 
-  return addModelToTypegoose(model(name, buildSchema(cl)), cl);
+  return addModelToTypegoose(model(name, buildSchema(cl, roptions.schemaOptions)), cl);
 }
 
 /* istanbul ignore next */
@@ -109,12 +109,12 @@ export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
  * @param cl The not initialized Class
  * @returns Returns the Build Schema
  */
-export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
+export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?: mongoose.SchemaOptions) {
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
 
-  const mergedOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
+  const mergedOptions = mergeSchemaOptions(options, cl);
 
   let sch: mongoose.Schema<U>;
   /** Parent Constructor */

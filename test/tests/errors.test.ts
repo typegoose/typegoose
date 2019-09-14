@@ -12,7 +12,7 @@ import {
   NoValidClass
 } from '../../src/internal/errors';
 import { _buildSchema } from '../../src/internal/schema';
-import { assignMetadata } from '../../src/internal/utils';
+import { assignMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import { arrayProp, mapProp, prop } from '../../src/prop';
 import { addModelToTypegoose, buildSchema, getModelForClass } from '../../src/typegoose';
 
@@ -249,7 +249,7 @@ export function suite() {
       }
     });
 
-    it('should error if no valid key is supplied [NoValidClass]', () => {
+    it('should error if no valid class is supplied [NoValidClass]', () => {
       try {
         // @ts-ignore
         assignMetadata(DecoratorKeys.Index, {}, true);
@@ -258,5 +258,15 @@ export function suite() {
         expect(err).to.be.an.instanceOf(NoValidClass);
       }
     });
+  });
+
+  it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClass]', () => {
+    try {
+      // @ts-ignore
+      mergeSchemaOptions({}, true);
+      assert.fail('Expected to throw "NoValidClass"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(NoValidClass);
+    }
   });
 }

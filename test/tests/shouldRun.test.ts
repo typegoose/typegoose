@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 import { DecoratorKeys } from '../../src/internal/constants';
-import { assignMetadata } from '../../src/internal/utils';
+import { assignMetadata, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import {
   addModelToTypegoose,
   arrayProp,
@@ -148,11 +148,24 @@ export function suite() {
     expect(reflected).to.have.property('testOption', 'hello');
   });
 
-  it('should just run with an non existing value in assignMetadata', () => {
+  it('should just run with an non existing value in "assignMetadata"', () => {
     class Dummy { }
     assignMetadata(DecoratorKeys.ModelOptions, { test: 'hello' }, Dummy);
     assignMetadata(DecoratorKeys.ModelOptions, undefined, Dummy);
     expect(Reflect.getMetadata(DecoratorKeys.ModelOptions, Dummy)).to.deep.equal({ test: 'hello' });
+  });
+
+  it('should just run with an non existing value in "mergeMetadata"', () => {
+    class Dummy { }
+    assignMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
+    expect(mergeMetadata(DecoratorKeys.ModelOptions, undefined, Dummy))
+      .to.deep.equal({ schemaOptions: { _id: false } });
+  });
+
+  it('should just run with an non existing value in "mergeSchemaOptions"', () => {
+    class Dummy { }
+    assignMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
+    expect(mergeSchemaOptions(undefined, Dummy)).to.deep.equal({ _id: false });
   });
 
   it('merge options with assignMetadata', () => {
