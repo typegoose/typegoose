@@ -13,6 +13,7 @@ import {
 } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import * as utils from './internal/utils';
+import { logger } from './logSettings';
 import { buildSchema } from './typegoose';
 import {
   AnyParamConstructor,
@@ -295,6 +296,17 @@ export function prop(options: PropOptionsWithValidate = {}) {
       throw new NoMetadataError(key);
     }
 
+    // soft errors
+    {
+      if ('items' in options) {
+        logger.warn(new Error('You might not want to use option "items" in a @prop'));
+      }
+
+      if ('of' in options) {
+        logger.warn(new Error('You might not want to use option "of" in a @prop'));
+      }
+    }
+
     baseProp(options, Type, target, key, WhatIsIt.NONE);
   };
 }
@@ -307,6 +319,11 @@ export function prop(options: PropOptionsWithValidate = {}) {
 export function mapProp(options: MapPropOptions) {
   return (target: any, key: string) => {
     const Type = options.of;
+
+    if ('items' in options) {
+      logger.warn(new Error('You might not want to use option "items" in a @mapProp'));
+    }
+
     baseProp(options, Type, target, key, WhatIsIt.MAP);
   };
 }
@@ -318,6 +335,11 @@ export function mapProp(options: MapPropOptions) {
 export function arrayProp(options: ArrayPropOptions) {
   return (target: any, key: string) => {
     const Type = options.items;
+
+    if ('of' in options) {
+      logger.warn(new Error('You might not want to use option "of" in a @arrayProp'));
+    }
+
     baseProp(options, Type, target, key, WhatIsIt.ARRAY);
   };
 }

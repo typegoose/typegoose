@@ -83,6 +83,8 @@ guides:
         url: /guides/advanced/custom-types
       - title: 'Model with same name'
         url: /guides/advanced/models-with-same-name
+      - title: "Typegoose's Logger" # this is a double quotation mark, because otherwise it would parse wrong
+        url: /guides/advanced/logger
   # - title: Combine with other packages
   #   children:
   #     - title: 'type-graphql'
