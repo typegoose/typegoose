@@ -13,6 +13,7 @@ import {
 } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import * as utils from './internal/utils';
+import { logger } from './logSettings';
 import {
   AnyParamConstructor,
   ArrayPropOptions,
@@ -20,7 +21,6 @@ import {
   PropOptions,
   PropOptionsWithValidate
 } from './types';
-import { logger } from "./logSettings";
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
 enum WhatIsIt {
