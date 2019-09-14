@@ -172,4 +172,22 @@ export function suite() {
     expect(reflected.schemaOptions).to.have.property('timestamps', true);
     expect(reflected.schemaOptions).to.have.property('_id', true);
   });
+
+  it('TEST', async () => {
+    class Nested {
+      @prop()
+      public hi: number;
+    }
+    class TestClass {
+      @prop({ _id: false })
+      public someprop: Nested;
+    }
+
+    const model = getModelForClass(TestClass);
+    const doc = await model.create({ someprop: { hi: 10 } } as TestClass);
+
+    expect(doc).to.not.be.an('undefined');
+    expect(doc.someprop).to.have.property('hi', 10);
+    expect(doc.someprop).to.not.have.property('_id');
+  });
 }

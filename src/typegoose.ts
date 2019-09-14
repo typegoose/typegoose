@@ -5,7 +5,7 @@ import 'reflect-metadata';
 import { deprecate } from 'util';
 import * as defaultClasses from './defaultClasses';
 import { DecoratorKeys } from './internal/constants';
-import { buildSchemas, constructors, models } from './internal/data';
+import { constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import { assignMetadata, getName } from './internal/utils';
@@ -116,9 +116,6 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U) {
     throw new NoValidClass(cl);
   }
 
-  if (buildSchemas.get(getName(cl))) {
-    return buildSchemas.get(getName(cl));
-  }
   let sch: mongoose.Schema<U>;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
