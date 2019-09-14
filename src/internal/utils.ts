@@ -267,6 +267,7 @@ export function isNotDefined(cl: any) {
 
 /**
  * Assign "__uniqueID" to a class
+ * (used for the decoratorCache)
  * @param cl
  * @returns the initname to be used as identifier
  */
