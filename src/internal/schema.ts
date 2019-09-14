@@ -11,15 +11,15 @@ import { getName } from './utils';
  * Private schema builder out of class props
  * -> If you discover this, dont use this function, use Typegoose.buildSchema!
  * @param cl The not initialized Class
- * @param name The Name to save the Schema Under (Mostly Constructor.name)
  * @param sch Already Existing Schema?
+ * @param opt Options to override
  * @returns Returns the Build Schema
  * @private
  */
 export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   cl: U,
   sch?: mongoose.Schema,
-  opt: mongoose.SchemaOptions = {}
+  opt?: mongoose.SchemaOptions
 ) {
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);

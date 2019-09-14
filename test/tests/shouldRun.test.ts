@@ -173,18 +173,18 @@ export function suite() {
     expect(reflected.schemaOptions).to.have.property('_id', true);
   });
 
-  it('TEST', async () => {
-    class Nested {
+  it('should make use of "@prop({ _id: false })" and have no _id', async () => {
+    class TestidFalseNested {
       @prop()
       public hi: number;
     }
-    class TestClass {
+    class TestidFalse {
       @prop({ _id: false })
-      public someprop: Nested;
+      public someprop: TestidFalseNested;
     }
 
-    const model = getModelForClass(TestClass);
-    const doc = await model.create({ someprop: { hi: 10 } } as TestClass);
+    const model = getModelForClass(TestidFalse);
+    const doc = await model.create({ someprop: { hi: 10 } } as TestidFalse);
 
     expect(doc).to.not.be.an('undefined');
     expect(doc.someprop).to.have.property('hi', 10);

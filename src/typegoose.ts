@@ -68,14 +68,14 @@ export abstract class Typegoose {
  * const NameModel = getModelForClass(Name);
  * ```
  */
-export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: IModelOptions) {
+export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
 
-  assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
+  assignMetadata(DecoratorKeys.ModelOptions, options, cl);
 
-  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+  const roptions: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
   const name = getName(cl);
 
   if (models.get(name)) {
@@ -83,10 +83,10 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, set
   }
 
   let model = mongoose.model.bind(mongoose);
-  if (options.existingConnection) {
-    model = options.existingConnection.model.bind(options.existingConnection);
-  } else if (options.existingMongoose) {
-    model = options.existingMongoose.model.bind(options.existingMongoose);
+  if (roptions.existingConnection) {
+    model = roptions.existingConnection.model.bind(roptions.existingConnection);
+  } else if (roptions.existingMongoose) {
+    model = roptions.existingMongoose.model.bind(roptions.existingMongoose);
   }
 
   return addModelToTypegoose(model(name, buildSchema(cl)), cl);
@@ -111,10 +111,12 @@ export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
  * @param cl The not initialized Class
  * @returns Returns the Build Schema
  */
-export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U) {
+export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
+
+  assignMetadata(DecoratorKeys.ModelOptions, options, cl);
 
   let sch: mongoose.Schema<U>;
   /** Parent Constructor */
