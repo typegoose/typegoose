@@ -16,6 +16,6 @@ class Kitten {
 }
 
 const kittenSchema = buildSchema(Kitten);
-const KittenModel = addModelToTypegoose(mongoose.model(kittenSchema), Kitten);
+const KittenModel = addModelToTypegoose(mongoose.model('Kitten', kittenSchema), Kitten);
 // "KittenModel" is now a valid Typegoose model
 ```
