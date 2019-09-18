@@ -8,12 +8,13 @@ import {
   Ref,
   ReturnModelType
 } from '../../src/typegoose';
+import { AnyParamConstructor } from '../../src/types';
 import { Genders } from '../enums/genders';
 import { Role } from '../enums/role';
 import { Car } from './car';
 import { Job } from './job';
 
-export interface FindOrCreateResult<T> {
+export interface FindOrCreateResult<T extends AnyParamConstructor> {
   created: boolean;
   doc: DocumentType<T>;
 }
@@ -78,26 +79,26 @@ export class User {
     return this.findOne({ age }).exec();
   }
 
-  public async incrementAge(this: DocumentType<User>) {
+  public async incrementAge(this: DocumentType<typeof User>) {
     const age = this.age || 1;
     this.age = age + 1;
 
     return this.save();
   }
 
-  public async addLanguage(this: DocumentType<User>) {
+  public async addLanguage(this: DocumentType<typeof User>) {
     this.languages.push('Hungarian');
 
     return this.save();
   }
 
-  public async addJob(this: DocumentType<User>, job: Partial<Job> = {}) {
+  public async addJob(this: DocumentType<typeof User>, job: Partial<Job> = {}) {
     this.previousJobs.push(job);
 
     return this.save();
   }
 
-  public static findOrCreate: (condition: any) => Promise<FindOrCreateResult<User>>;
+  public static findOrCreate: (condition: any) => Promise<FindOrCreateResult<typeof User>>;
 }
 
 export const model = getModelForClass(User);
