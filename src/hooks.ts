@@ -3,14 +3,14 @@ import { isArray } from 'util';
 import { hooks as hooksData, HooksPrePost } from './internal/data';
 import { getName } from './internal/utils';
 import { DocumentType } from './typegoose';
-import { EmptyVoidFn } from './types';
+import { AnyParamConstructor, EmptyVoidFn } from './types';
 
 type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 
 type ClassDecorator = (target: any) => void;
 type HookNextErrorFn = (err?: Error) => void;
 
-type PreFnWithDT<T> = (this: DocumentType<T>, next?: EmptyVoidFn) => void;
+type PreFnWithDT<T extends AnyParamConstructor> = (this: DocumentType<T>, next?: EmptyVoidFn) => void;
 type PreFnWithQuery<T> = (
   this: Query<T>,
   next?: (error?: Error) => void,

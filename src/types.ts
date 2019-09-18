@@ -8,24 +8,24 @@ import * as mongoose from 'mongoose';
  * class Name {}
  * const NameModel = Name.getModelForClass(Name);
  *
- * const t: InstanceType<Name> = await NameModel.create({} as Partitial<Name>);
+ * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
  * ```
  */
-export type DocumentType<T> = T & mongoose.Document;
+export type DocumentType<T extends AnyParamConstructor> = InstanceType<T> & mongoose.Document;
 /**
  * Used Internally for ModelTypes
  * @internal
  */
-export type ModelType<T> = mongoose.Model<DocumentType<T>> & T;
+export type ModelType<T extends AnyParamConstructor> = mongoose.Model<DocumentType<T>> & T;
 /**
  * Any-param Constructor
  * @internal
  */
-export type AnyParamConstructor<T> = new (...args: any) => T;
+export type AnyParamConstructor<T = any> = new (...args: any) => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
  */
-export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = ModelType<InstanceType<U>> & U;
+export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = ModelType<U> & U;
 
 /** @internal */
 export type Func = (...args: any[]) => any;
