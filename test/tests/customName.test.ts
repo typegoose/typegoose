@@ -1,17 +1,15 @@
 import { expect } from 'chai';
 
-import { getClassForDocument, getModelForClass, modelOptions } from '../../src/typegoose';
-
-// This Test Suite is disabled until hasezoey#23 & hasezoey#24 gets fixed
+import { getClassForDocument, getModelForClass, modelOptions, prop } from '../../src/typegoose';
 
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
  * @example
  * ```
- * import { suite as OptionTests } from './options.test'
+ * import { suite as customNameTests } from './options.test'
  * ...
- * describe('@modelOptions', OptionTests.bind(this));
+ * describe('customName', customNameTests.bind(this));
  * ...
  * ```
  */
@@ -63,7 +61,7 @@ export function suite() {
     expect(gotClass).to.equals(BothOptions);
   });
 
-  it('create multiple models depending on options', () => {
+  it('create multiple models depending on options with base class (extends)', () => {
     class MultiModelBase { }
 
     {
@@ -85,6 +83,57 @@ export function suite() {
       expect(model.modelName).to.be.equal('MultiModel_SomethingDifferent');
 
       const doc = new model();
+      const gotClass = getClassForDocument(doc);
+      expect(gotClass).to.equals(MultiModel);
+    }
+  });
+
+  it('create multiple models depending on options without base model', () => {
+    {
+      @modelOptions({ schemaOptions: { collection: 'SomethingNoExtend' } })
+      class MultiModel {
+        @prop({ default: '1' })
+        public t1: string;
+
+        @prop({ default: '2' })
+        public t2: string;
+      }
+
+      const model = getModelForClass(MultiModel);
+      expect(model.modelName).to.be.equal('MultiModel_SomethingNoExtend');
+
+      const doc = new model();
+
+      expect(doc).to.not.be.an('undefined');
+      expect(doc.t1).to.equal('1');
+      expect(doc.t2).to.equal('2');
+      expect(doc).to.not.have.property('t3');
+      expect(doc).to.not.have.property('t4');
+
+      const gotClass = getClassForDocument(doc);
+      expect(gotClass).to.equals(MultiModel);
+    }
+    {
+      @modelOptions({ schemaOptions: { collection: 'SomethingDifferentNoExtend' } })
+      class MultiModel {
+        @prop({ default: '3' })
+        public t3: string;
+
+        @prop({ default: '4' })
+        public t4: string;
+      }
+
+      const model = getModelForClass(MultiModel);
+      expect(model.modelName).to.be.equal('MultiModel_SomethingDifferentNoExtend');
+
+      const doc = new model();
+
+      expect(doc).to.not.be.an('undefined');
+      expect(doc).to.not.have.property('t1');
+      expect(doc).to.not.have.property('t2');
+      expect(doc.t3).to.equal('3');
+      expect(doc.t4).to.equal('4');
+
       const gotClass = getClassForDocument(doc);
       expect(gotClass).to.equals(MultiModel);
     }
