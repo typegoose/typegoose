@@ -77,6 +77,37 @@ class Dummy {
 }
 ```
 
+### get & set
+
+Accepts Type: `(input) => output`
+
+set gets & setters for fields, it is not virtual
+-> both get & set must be defined all the time, even when you just want to use one, we are sorry
+
+```ts
+class Dummy {
+  @prop({ set: (val: string) => val.toLowerCase(), get: (val: string) => val })
+  public hello: string;
+}
+```
+
+### type
+
+Accepts Type: `any`
+
+Override the type that gets saved, used when get/set return different types than set on the prop field:
+
+Example: get as `string[]`, save as `string`
+
+```ts
+class Dummy {
+  @prop({ set: (val: string[]) => val.join(' '), get: (val: string) => val.split(' '), type: String })
+  public hello: string[];
+}
+```
+
+-> only used with [set & get](#get--set)
+
 <!--Below are just the Specific Options-->
 
 ### String Transform options
