@@ -10,7 +10,7 @@ Define Mongoose models using TypeScript classes.
 ## Basic usage
 
 ```ts
-import { prop, getModelForClass } from 'typegoose';
+import { prop, getModelForClass } from '@hasezoey/typegoose';
 import * as mongoose from 'mongoose';
 
 mongoose.connect('mongodb://localhost:27017/test');
@@ -113,13 +113,12 @@ Please note that sub documents do not have to extend Typegoose. You can still gi
 
 * TypeScript 3.2+
 * Node 8+
-* mongoose 5+
+* mongoose ^5.7.1
 * `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
-* `reflect-metadata` must be installed
 
 ## Install
 
-`npm i -s typegoose`
+`npm i -s @hasezoey/typegoose`
 
 You also need to install `mongoose`, since version 5 it is listed as a peer-dependency
 

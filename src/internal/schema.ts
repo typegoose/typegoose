@@ -3,40 +3,46 @@ import * as mongoose from 'mongoose';
 import { isNullOrUndefined } from 'util';
 import { AnyParamConstructor, EmptyVoidFn, IModelOptions } from '../types';
 import { DecoratorKeys } from './constants';
-import { buildSchemas, hooks, plugins, schemas, virtuals } from './data';
+import { decoratorCache, hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
-import { getName } from './utils';
+import { getName, mergeSchemaOptions } from './utils';
 
 /**
  * Private schema builder out of class props
  * -> If you discover this, dont use this function, use Typegoose.buildSchema!
  * @param cl The not initialized Class
- * @param name The Name to save the Schema Under (Mostly Constructor.name)
  * @param sch Already Existing Schema?
+ * @param opt Options to override
  * @returns Returns the Build Schema
  * @private
  */
 export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   cl: U,
   sch?: mongoose.Schema,
-  opt: mongoose.SchemaOptions = {}
+  opt?: mongoose.SchemaOptions
 ) {
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
 
-  // Option sanity check
-  opt = isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt;
+  // Options sanity check
+  opt = mergeSchemaOptions(isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt, cl);
 
   const name = getName(cl);
-  if (buildSchemas.get(name)) {
-    return buildSchemas.get(name);
-  }
 
   /** Simplify the usage */
   const Schema = mongoose.Schema;
   const { schemaOptions: ropt }: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
   const schemaOptions = Object.assign(ropt || {}, opt);
+
+  const { '1': { decorators } } = [...decoratorCache.entries()].find((v) => v[1].class === cl) ||
+    { 1: { decorators: null } };
+
+  if (!isNullOrUndefined(decorators)) {
+    for (const decorator of decorators.values()) {
+      decorator();
+    }
+  }
 
   if (!schemas.get(name)) {
     schemas.set(name, {});
@@ -80,8 +86,6 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   for (const index of indices) {
     sch.index(index.fields, index.options);
   }
-
-  buildSchemas.set(name, sch);
 
   return sch;
 }

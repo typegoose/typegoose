@@ -33,7 +33,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "^5.6.9"
+    "mongoose": "^5.7.1"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^0.1.3",

@@ -68,7 +68,7 @@ export class User {
   @arrayProp({ items: String, required: true })
   public languages: string[];
 
-  @arrayProp({ items: Job })
+  @arrayProp({ items: Job, _id: false })
   public previousJobs?: Job[];
 
   @arrayProp({ itemsRef: Car })
@@ -91,7 +91,7 @@ export class User {
     return this.save();
   }
 
-  public async addJob(this: DocumentType<User>, job: Partial<Job> = {}) {
+  public async addJob(this: DocumentType<User>, job: Job = {}) {
     this.previousJobs.push(job);
 
     return this.save();

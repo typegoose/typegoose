@@ -10,7 +10,7 @@ import {
   VirtualOptions
 } from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, schemas } from './data';
+import { constructors, decoratorCache, schemas } from './data';
 import { NoValidClass } from './errors';
 
 const primitives = ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID', 'Array'];
@@ -163,23 +163,45 @@ function isModelOptions(value: unknown): value is IModelOptions {
 }
 
 /**
- * Merges existing metadata with new value
+ * Merge value & existing Metadata & Save it to the class
+ * Difference with "mergeMetadata" is that this one DOES save it to the class
  * @param key Metadata key
  * @param value Raw value
  * @param cl The constructor
  * @internal
  */
-export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): void {
+export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): any {
+  if (isNullOrUndefined(value)) {
+    return value;
+  }
+
+  const newValue = mergeMetadata(key, value, cl);
+  Reflect.defineMetadata(key, newValue, cl);
+
+  return newValue;
+}
+
+/**
+ * Merge value & existing Metadata
+ * Difference with "assignMetadata" is that this one DOES NOT save it to the class
+ * @param key Metadata key
+ * @param value Raw value
+ * @param cl The constructor
+ * @internal
+ */
+export function mergeMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): any {
   if (typeof key !== 'string') {
     throw new TypeError(`"${key}"(key) is not a string! (assignMetadata)`);
   }
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
-  if (isNullOrUndefined(value)) {
-    return;
-  }
+
   const current = Reflect.getMetadata(key, cl) || {};
+
+  if (isNullOrUndefined(value)) {
+    return current;
+  }
 
   // the following checks are needed, so that the new value dosnt override the full options
   // "deepmerge" cannot be used because of the other options like "existingMongoose"
@@ -190,8 +212,27 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
     value.options = Object.assign(current.options, value.options);
   }
 
-  const newValue = Object.assign(current, value);
-  Reflect.defineMetadata(key, newValue, cl);
+  return Object.assign(current, value);
+}
+
+/**
+ * Merge only schemaOptions from ModelOptions of the class
+ * @param value The value to use
+ * @param cl The Class to get the values from
+ */
+export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: mongoose.SchemaOptions, cl: U) {
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
+
+  const current = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+  const evaluated = current && current.schemaOptions ? current.schemaOptions : {};
+
+  if (isNullOrUndefined(value)) {
+    return evaluated;
+  }
+
+  return Object.assign(evaluated, value || {});
 }
 
 /**
@@ -200,14 +241,41 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
  * @param cl The Class
  */
 export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
-  // disabled until hasezoey#23 & hasezoey#24 gets fixed
+  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
 
-  // const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+  const baseName = cl.name;
+  const suffix = (options.options ? options.options.customName : undefined) ||
+    (options.schemaOptions ? options.schemaOptions.collection : undefined);
 
-  // const baseName = cl.name;
-  // const suffix = (options.options ? options.options.customName : undefined) ||
-  //   (options.schemaOptions ? options.schemaOptions.collection : undefined);
+  return suffix ? `${baseName}_${suffix}` : baseName;
+}
 
-  // return suffix ? `${baseName}_${suffix}` : baseName;
-  return cl.name;
+/**
+ * Returns if it is not defined in "schemas"
+ * @param cl The Type
+ */
+export function isNotDefined(cl: any) {
+  return typeof cl === 'function' &&
+    !isPrimitive(cl) &&
+    cl !== Object &&
+    cl !== mongoose.Schema.Types.Buffer &&
+    isNullOrUndefined(schemas.get(getName(cl)));
+}
+
+/**
+ * Assign "__uniqueID" to a class
+ * (used for the decoratorCache)
+ * @param cl
+ * @returns the initname to be used as identifier
+ */
+export function createUniqueID(cl: any) {
+  if (isNullOrUndefined(cl.__uniqueID)) {
+    cl.__uniqueID = Date.now();
+  }
+  const initname: string = `${cl.constructor.name}_${cl.__uniqueID}`;
+  if (!decoratorCache.get(initname)) {
+    decoratorCache.set(initname, { class: cl.constructor, decorators: new Map() });
+  }
+
+  return initname;
 }

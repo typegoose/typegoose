@@ -2,13 +2,13 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 
-import { deprecate } from 'util';
+import { deprecate, isNullOrUndefined } from 'util';
 import * as defaultClasses from './defaultClasses';
 import { DecoratorKeys } from './internal/constants';
-import { buildSchemas, constructors, models } from './internal/data';
+import { constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
-import { assignMetadata, getName } from './internal/utils';
+import { assignMetadata, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
 
 /* exports */
@@ -69,14 +69,12 @@ export abstract class Typegoose {
  * const NameModel = getModelForClass(Name);
  * ```
  */
-export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: IModelOptions) {
+export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
 
-  assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
-
-  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+  const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options || {}, cl);
   const name = getName(cl);
 
   if (models.get(name)) {
@@ -84,13 +82,13 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, set
   }
 
   let model = mongoose.model.bind(mongoose);
-  if (options.existingConnection) {
-    model = options.existingConnection.model.bind(options.existingConnection);
-  } else if (options.existingMongoose) {
-    model = options.existingMongoose.model.bind(options.existingMongoose);
+  if (!isNullOrUndefined(roptions.existingConnection)) {
+    model = roptions.existingConnection.model.bind(roptions.existingConnection);
+  } else if (!isNullOrUndefined(roptions.existingMongoose)) {
+    model = roptions.existingMongoose.model.bind(roptions.existingMongoose);
   }
 
-  return addModelToTypegoose(model(name, buildSchema(cl)), cl);
+  return addModelToTypegoose(model(name, buildSchema(cl, roptions.schemaOptions)), cl);
 }
 
 /* istanbul ignore next */
@@ -112,14 +110,13 @@ export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
  * @param cl The not initialized Class
  * @returns Returns the Build Schema
  */
-export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U) {
+export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?: mongoose.SchemaOptions) {
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
 
-  if (buildSchemas.get(getName(cl))) {
-    return buildSchemas.get(getName(cl));
-  }
+  const mergedOptions = mergeSchemaOptions(options, cl);
+
   let sch: mongoose.Schema<U>;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
@@ -132,12 +129,12 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U) {
       break;
     }
     // extend schema
-    sch = _buildSchema(parentCtor, sch);
+    sch = _buildSchema(parentCtor, sch, mergedOptions);
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
   // get schema of current model
-  sch = _buildSchema(cl, sch);
+  sch = _buildSchema(cl, sch, mergedOptions);
 
   return sch;
 }

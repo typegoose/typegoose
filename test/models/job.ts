@@ -1,5 +1,6 @@
-import { prop } from '../../src/typegoose';
+import { modelOptions, prop } from '../../src/typegoose';
 
+@modelOptions({ schemaOptions: { _id: false } })
 export class JobType {
   @prop({ required: true })
   public field: string;
@@ -8,6 +9,7 @@ export class JobType {
   public salery: number;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 export class Job {
   @prop()
   public title?: string;
