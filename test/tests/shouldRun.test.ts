@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
 import { DecoratorKeys } from '../../src/internal/constants';
 import { assignMetadata, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
@@ -6,6 +6,7 @@ import {
   addModelToTypegoose,
   arrayProp,
   buildSchema,
+  DocumentType,
   getModelForClass,
   mapProp,
   modelOptions,
@@ -212,4 +213,31 @@ export function suite() {
 
   //   getModelForClass(SelfContaining);
   // });
+
+  it('should make use of required as function [szokodiakos#247]', async () => {
+    class RequiredFunction {
+      @prop({ required: true })
+      public someProp!: number;
+
+      @prop({
+        required(this: DocumentType<RequiredFunction>) {
+          return this.someProp > 0;
+        }
+      })
+      public someRequired?: string;
+    }
+
+    const model = getModelForClass(RequiredFunction);
+
+    // this should work because the length is not higher than 0
+    await model.create({ someProp: 0 } as RequiredFunction);
+
+    try {
+      // this should not work because someProp is higher than 0
+      await model.create({ someProp: 3 } as RequiredFunction);
+      assert.fail('Expected to throw an "ValidationError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(mongoose.Error.ValidationError);
+    }
+  });
 }
