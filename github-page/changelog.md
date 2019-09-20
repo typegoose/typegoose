@@ -14,10 +14,11 @@ redirect_from:
 *<sub>This Version is not released yet, but is considered stable</sub>*<br/>
 [To Migrate, please look at the migration guide]({{ site.baseurl }}{% link _guides/migrate-to-6.md %})
 
+- Project got moved to the new repo (hasezoey/typegoose) and new package `@hasezoey/typegoose`
 - rename `InstanceType<T>` to `DocumentType<T>` [{% include gitissue repo="szokodiakos" num=366 %}]
 - adding a migration guide from ~5.9 to 6.0.0
 - adding missing "get" and "set" property options [{% include gitissue repo="szokodiakos" num=260 %}]
-- adding `@modelOptions` and removing it from `getModelForClass` and `setModelForClass`
+- adding `@modelOptions` and `getModelForClass` and `setModelForClass` will now override it
 - `setModelForClass` is now deprecated [{% include gitissue repo="hasezoey" num=6 %}, {% include gitissue repo="szokodiakos" num=186 %}]
 - setting the Typegoose Class to abstract
 - deprecating the Typegoose Class because of making the functions outsourced [{% include gitissue repo="szokodiakos" num=356 %}]
@@ -29,19 +30,23 @@ redirect_from:
 - method decorators are now deprecated
 - schema generation got refactored (/reconstructed) multiple times
 - adding `count` to VirtualOptions
-- Updated Dependencies (^mongoose@5.6.9)
+- Updated Dependencies (^mongoose@5.7.1)
 - adding discriminator support hasezoey#11
 - adding default class for (schemaOptions) timestamps
 - adding more docs to README & as tsdoc
 - some changes that are probably forgot
 - szokodiakos#363 got reverted in favor of mongoose@5.6.9
-- Fixes Custom Options not passed through to mongoose & plugins when using ref [{% include gitissue repo="szokodiakos" num=379 %}]
+- fixes Custom Options not passed through to mongoose & plugins when using ref [{% include gitissue repo="szokodiakos" num=379 %}]
 - Adding "immutable" prop option [{% include gitissue repo="szokodiakos" num=320 %}]
 - adding Types to Ref (to allow not just ObjectID) [{% include gitissue repo="szokodiakos" num=369 %}]
 - szokodiakos#54 seems to work now in 6.0.0 (added test in 6.0.0-21)
 - because of the changes in 6.0.0 #235 got fixed
 - Adding "InvalidTypeError" for the case that "undefined" or "null" is used as a type (or something other happenes)
 - Change Error text of "InvalidPropError"
+- adding some "soft-errors" and traces with "loglevel"
+- exposing settings for "loglevel"
+- fixes Decorator Execution Order [{% include gitissue repo="hasezoey" num=23 %}, {% include gitissue repo="hasezoey" num=24 %}]
+- [IC] "NoParamConstructor" got renamed into "AnyParamConstructor" it now accepts any arguments
 - [IC] Remake data.ts to use Maps hasezoey#3
 - [IC] adding many tests and bumping coverage
 - [IC] moving many Types to types.ts
@@ -50,6 +55,7 @@ redirect_from:
 - [IC] many tslint rule changes
 - [IC] getting the name from "class.name" got outsourced into "utils.getName" (for future use)
 - [IC] use switches instead of many if's
+- [IC] adding some tests
 
 ## 5.9.0
 
