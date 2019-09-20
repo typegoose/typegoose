@@ -203,4 +203,13 @@ export function suite() {
     expect(doc.someprop).to.have.property('hi', 10);
     expect(doc.someprop).to.not.have.property('_id');
   });
+
+  // it('should run with a self-containing-class [hasezoey#42]', () => {
+  //   class SelfContaining {
+  //     @prop()
+  //     public nest?: SelfContaining;
+  //   }
+
+  //   getModelForClass(SelfContaining);
+  // });
 }
