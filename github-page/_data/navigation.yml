@@ -85,6 +85,8 @@ guides:
         url: /guides/advanced/models-with-same-name
       - title: "Typegoose's Logger" # this is a double quotation mark, because otherwise it would parse wrong
         url: /guides/advanced/logger
+      - title: 'Reference other Classes'
+        url: /guides/advanced/reference-other-classes
   # - title: Combine with other packages
   #   children:
   #     - title: 'type-graphql'
