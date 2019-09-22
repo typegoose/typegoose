@@ -62,5 +62,8 @@
   "dependencies": {
     "loglevel": "^1.6.4",
     "reflect-metadata": "^0.1.13"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

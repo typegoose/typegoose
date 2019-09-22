@@ -172,7 +172,7 @@ function baseProp(
 
     // check if Type is actually a real working Type
     if (isNullOrUndefined(Type) || typeof Type !== 'function') {
-      throw new InvalidTypeError(target.name, key, Type);
+      throw new InvalidTypeError(target.constructor.name, key, Type);
     }
 
     // check for validation inconsistencies

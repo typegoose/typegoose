@@ -123,7 +123,7 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
   // iterate trough all parents
   while (parentCtor && parentCtor.name !== 'Object') {
     /* istanbul ignore next */
-    if (parentCtor.name === 'Typegoose') { // TODO: remove this if, if the Typegoose class gets removed [DEPRECATION]
+    if (parentCtor.name === 'Typegoose') { // TODO: remove this "if", if the Typegoose class gets removed [DEPRECATION]
       deprecate(() => undefined, 'The Typegoose Class is deprecated, please try to remove it')();
 
       break;
