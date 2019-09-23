@@ -199,8 +199,13 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
   if (models.get(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
+  const sch = buildSchema(cl) as mongoose.Schema & {paths: object};
 
-  const sch = buildSchema(cl);
+  const discriminatorKey =  sch.get('discriminatorKey');
+  if (sch.path(discriminatorKey)) {
+    sch.paths[discriminatorKey].options.$skipDiscriminatorCheck = true;
+  }
+
   const model = from.discriminator(name, sch, id ? id : name);
 
   return addModelToTypegoose(model, cl);
