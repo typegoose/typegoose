@@ -245,13 +245,13 @@ function baseProp(
 
     switch (whatis) {
       case WhatIsIt.ARRAY:
+        const virtualSchemaArrayItem = buildSchema(Type, {
+          _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true
+        });
         schemas.get(name)[key] = {
           ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
           ...options,
-          type: [{
-            ...(typeof options._id === 'boolean' ? { _id: options._id } : {}),
-            ...subSchema
-          }]
+          type: [virtualSchemaArrayItem]
         };
 
         return;
