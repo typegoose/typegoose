@@ -13,6 +13,7 @@ import { suite as ShouldAddTest } from './tests/shouldAdd.test';
 import { suite as ShouldRunTests } from './tests/shouldRun.test';
 import { suite as StringValidatorTests } from './tests/stringValidator.test';
 import { suite as TypeguardsTest } from './tests/typeguards.test';
+import { suite as Inheritance } from './tests/inheritance.test';
 
 import { connect, disconnect } from './utils/mongooseConnect';
 
@@ -43,6 +44,8 @@ describe('Typegoose', () => {
   describe('Should just Run', ShouldRunTests.bind(this));
 
   describe('Ref tests', RefTest.bind(this));
+
+  describe('inheritance', Inheritance.bind(this));
 
   describe('customName', customNameTests.bind(this));
 });
