@@ -76,6 +76,8 @@ guides:
         url: /guides/decorators/
       - title: 'Motivation'
         url: /guides/motivation/
+      - title: 'Default Classes'
+        url: /guides/defaultClasses/
 
   - title: Advanced
     children:

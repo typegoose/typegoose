@@ -23,4 +23,4 @@ The Base Class provides the following types:
 
 - `_id`: ObjectId ; when you need an other type, override it
 - `__v`: number
-- `__t`: undefined | string | number
+- `__t`: undefined \| string \| number
