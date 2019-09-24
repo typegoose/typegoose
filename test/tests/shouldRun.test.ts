@@ -160,6 +160,13 @@ export function suite() {
     expect(mergeMetadata(DecoratorKeys.ModelOptions, undefined, Dummy))
       .to.deep.equal({ schemaOptions: { _id: false } });
   });
+  it('should not modify current metadata object in "mergeMetadata"', () => {
+    class Dummy { }
+    const someData = { property: 'value' };
+    Reflect.defineMetadata(DecoratorKeys.ModelOptions, someData, Dummy);
+    mergeMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
+    expect(someData).to.deep.equal({ property: 'value' });
+  });
 
   it('should just run with an non existing value in "mergeSchemaOptions"', () => {
     class Dummy { }
@@ -171,18 +178,17 @@ export function suite() {
     @modelOptions({ schemaOptions: { timestamps: true, _id: false } })
     class TestAssignMetadata { }
 
-    getModelForClass(TestAssignMetadata, {
-      // @ts-ignore
-      testOption: 'hello',
-      schemaOptions: { _id: true }
+    const model = getModelForClass(TestAssignMetadata, {
+      schemaOptions: {
+        _id: true,
+        // @ts-ignore because it is only there for tests and dosnt exists on type "SchemaOptions" (from mongoose)
+        testOption: 'hello'
+      }
     });
 
-    const reflected = Reflect.getMetadata(DecoratorKeys.ModelOptions, TestAssignMetadata);
-
-    expect(reflected).to.not.be.an('undefined');
-    expect(reflected).to.have.property('testOption', 'hello');
-    expect(reflected.schemaOptions).to.have.property('timestamps', true);
-    expect(reflected.schemaOptions).to.have.property('_id', true);
+    expect(model.schema.options).to.have.property('testOption', 'hello');
+    expect(model.schema.options).to.have.property('timestamps', true);
+    expect(model.schema.options).to.have.property('_id', true);
   });
 
   it('should make use of "@prop({ _id: false })" and have no _id', async () => {

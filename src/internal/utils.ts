@@ -197,7 +197,7 @@ export function mergeMetadata(key: DecoratorKeys, value: unknown, cl: new () => 
     throw new NoValidClass(cl);
   }
 
-  const current = Reflect.getMetadata(key, cl) || {};
+  const current = Object.assign({}, Reflect.getMetadata(key, cl) || {});
 
   if (isNullOrUndefined(value)) {
     return current;
