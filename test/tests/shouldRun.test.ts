@@ -59,14 +59,12 @@ export function suite() {
     expect(dmmdoc).to.not.be.an('undefined');
     expect(dmmdoc.main1).to.equals('hello DMM');
     expect(dmmdoc).to.not.have.property('above1');
-    // any is required otherwise typescript complains about "__t" not existing
-    expect((dmmdoc as any).__t).to.be.an('undefined');
+    expect(dmmdoc.__t).to.be.an('undefined');
 
     expect(damdoc).to.not.be.an('undefined');
     expect(damdoc.main1).to.equals('hello DAM');
     expect(damdoc.above1).to.equals('hello DAM');
-    // any is required otherwise typescript complains about "__t" not existing
-    expect((damdoc as any).__t).to.equals('DisAbove');
+    expect(damdoc.__t).to.equals('DisAbove');
   });
 
   it('should make use of addModelToTypegoose', async () => {
