@@ -1,6 +1,6 @@
 {
   "name": "@hasezoey/typegoose",
-  "version": "6.0.0-30",
+  "version": "6.0.0-31",
   "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
   "types": "lib/typegoose.d.ts",
@@ -25,7 +25,7 @@
     "doc:all": "typedoc --out ./doc ./src --mode modules",
     "prepare": "npm run build"
   },
-  "repository": "github:hasezoey/typegoose",
+  "repository": "github:typegoose/typegoose",
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
   "contributors": [
     "Ben305",
