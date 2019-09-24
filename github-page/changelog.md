@@ -46,6 +46,7 @@ redirect_from:
 - adding some "soft-errors" and traces with "loglevel"
 - exposing settings for "loglevel"
 - fixes Decorator Execution Order [{% include gitissue repo="hasezoey" num=23 %}, {% include gitissue repo="hasezoey" num=24 %}]
+- add support for custom discriminator properties
 - [IC] "NoParamConstructor" got renamed into "AnyParamConstructor" it now accepts any arguments
 - [IC] Remake data.ts to use Maps hasezoey#3
 - [IC] adding many tests and bumping coverage
