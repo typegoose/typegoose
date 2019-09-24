@@ -163,7 +163,7 @@ export function suite() {
       .to.deep.equal({ schemaOptions: { _id: false } });
   });
   it('should not modify current metadata object in "mergeMetadata"', () => {
-    class Dummy {}
+    class Dummy { }
     const someData = { property: 'value' };
     Reflect.defineMetadata(DecoratorKeys.ModelOptions, someData, Dummy);
     mergeMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
@@ -183,8 +183,9 @@ export function suite() {
     const model = getModelForClass(TestAssignMetadata, {
       schemaOptions: {
         _id: true,
-        // @ts-ignore
-        testOption: 'hello'}
+        // @ts-ignore because it is only there for tests and dosnt exists on type "SchemaOptions" (from mongoose)
+        testOption: 'hello'
+      }
     });
 
     expect(model.schema.options).to.have.property('testOption', 'hello');
