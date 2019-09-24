@@ -8,12 +8,12 @@ import { suite as DefaultClassesTests } from './tests/dClasses.test';
 import { suite as ErrorTests } from './tests/errors.test';
 import { suite as GCFDTest } from './tests/getClassForDocument.test';
 import { suite as HookTest } from './tests/hooks.test';
+import { suite as Inheritance } from './tests/inheritance.test';
 import { suite as RefTest } from './tests/ref.test';
 import { suite as ShouldAddTest } from './tests/shouldAdd.test';
 import { suite as ShouldRunTests } from './tests/shouldRun.test';
 import { suite as StringValidatorTests } from './tests/stringValidator.test';
 import { suite as TypeguardsTest } from './tests/typeguards.test';
-import { suite as Inheritance } from './tests/inheritance.test';
 
 import { connect, disconnect } from './utils/mongooseConnect';
 
