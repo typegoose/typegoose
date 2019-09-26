@@ -59,6 +59,23 @@ redirect_from:
 - [IC] use switches instead of many if's
 - [IC] adding some tests
 
+## 5.9.2
+
+- Change README examples & badges to the new repo
+- use new travis.yml (from version 6.0.0)
+- use new style of package.json (from version 6.0.0)
+
+- Tags got deleted and added, please remove all local tags and re-download them
+
+This Release did not change anything in the code, it is just there to update the NPM front
+
+## 5.9.1
+
+- fix accidentally added typeguards
+- add a note that typegoose uses mongoose's strict by default
+- add note that typegoose dosnt work with classes with the same name (at least in 5.x, working on it in 6.x)
+- implemented a hack for ObjectId / ObjectID (mongoose some version fixed this)
+
 ## 5.9.0
 
 - This should not be a breaking release
