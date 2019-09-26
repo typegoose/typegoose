@@ -2,7 +2,7 @@ title: Typegoose
 description: > # this means to ignore newlines until a new statement
   Documentation for Typegoose
 baseurl: '/typegoose'
-url: 'https://hasezoey.github.io'
+url: 'https://typegoose.github.io'
 remote_theme: mmistakes/minimal-mistakes
 locale: 'en-US'
 minimal_mistakes_skin: 'default'
@@ -49,7 +49,7 @@ footer:
   links:
     - label: 'GitHub'
       icon: 'fab fa-fw fa-github'
-      url: https://github.com/hasezoey/typegoose/tree/r6/master
+      url: https://github.com/typegoose/typegoose/tree/r6/master
 
 kramdown:
   input: GFM
