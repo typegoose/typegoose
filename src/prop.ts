@@ -45,6 +45,11 @@ function baseProp(
   key: string,
   whatis: WhatIsIt = WhatIsIt.NONE
 ): void {
+  if (Type === target) {
+    throw new Error('It seems like the type used is the same as the target class, which is currently not supported\n'
+      + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`);
+  }
+
   const initname = utils.createUniqueID(target);
 
   decoratorCache.get(initname).decorators.set(key, () => {

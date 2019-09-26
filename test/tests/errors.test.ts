@@ -269,4 +269,16 @@ export function suite() {
       expect(err).to.be.an.instanceOf(NoValidClass);
     }
   });
+
+  it('should throw an error if a self-contained class is used', () => {
+    try {
+      class TestSelfContained {
+        @prop()
+        public self: TestSelfContained;
+      }
+      assert.fail('Expected to throw "NoValidClass"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(Error);
+    }
+  });
 }
