@@ -1,8 +1,8 @@
 # Typegoose
 
-[![Build Status](https://travis-ci.com/hasezoey/typegoose.svg?branch=master)](https://travis-ci.com/hasezoey/typegoose)
-[![Coverage Status](https://coveralls.io/repos/github/hasezoey/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/hasezoey/typegoose?branch=master)
-[![npm](https://img.shields.io/npm/dt/@hasezoey/typegoose.svg)](https://npmjs.com/package/@hasezoey/typegoose)
+[![Build Status](https://travis-ci.com/typegoose/typegoose.svg?branch=old/5.x)](https://travis-ci.com/typegoose/typegoose)
+[![Coverage Status](https://coveralls.io/repos/github/typegoose/typegoose/badge.svg?branch=old/5.x#feb282019)](https://coveralls.io/github/typegoose/typegoose?branch=old/5.x)
+[![npm](https://img.shields.io/npm/dt/@typegoose/typegoose.svg)](https://npmjs.com/package/@typegoose/typegoose)
 
 Define Mongoose models using TypeScript classes.
 
@@ -11,7 +11,7 @@ This Repository is the continuation of [the old one](https://github.com/szokodia
 ## Basic usage
 
 ```ts
-import { prop, Typegoose, ModelType, InstanceType } from '@hasezoey/typegoose';
+import { prop, Typegoose, ModelType, InstanceType } from '@typegoose/typegoose';
 import * as mongoose from 'mongoose';
 
 mongoose.connect('mongodb://localhost:27017/typegoose');
@@ -117,7 +117,7 @@ Please note that sub documents do not have to extend Typegoose. You can still gi
 
 ## Install
 
-`npm install -s @hasezoey/typegoose`
+`npm install -s @typegoose/typegoose`
 
 You also need to install `mongoose`, in versions < 5.0, these packages were listed as dependencies in `package.json`, starting with version 5.0 these packages are listed as peer dependencies.
 
