@@ -1,8 +1,8 @@
 /* imports */
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
-
 import { deprecate, isNullOrUndefined } from 'util';
+
 import * as defaultClasses from './defaultClasses';
 import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
@@ -199,9 +199,9 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
   if (models.get(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
-  const sch = buildSchema(cl) as mongoose.Schema & {paths: object};
+  const sch = buildSchema(cl) as mongoose.Schema & { paths: object };
 
-  const discriminatorKey =  sch.get('discriminatorKey');
+  const discriminatorKey = sch.get('discriminatorKey');
   if (sch.path(discriminatorKey)) {
     sch.paths[discriminatorKey].options.$skipDiscriminatorCheck = true;
   }

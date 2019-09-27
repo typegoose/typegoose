@@ -43,6 +43,21 @@ const model = getModelForClass(CustomNameOption);
 expect(model.modelName).to.be.equal('CustomNameOption_CustomName');
 ```
 
+## Typegoose Custom Options "automaticName" & "customName"
+
+`{ options: { automaticName: false } }` can be used to disable the automatic name generation, option `customName` is required, otherwise it will use automatic names
+-> it will **NOT** throw an error if `customName` is missing, it will only softly warn you
+
+Example:
+
+```ts
+@modelOptions({ options: { automaticName: false, customName: 'CustomName' } })
+class CustomNameOption { }
+
+const model = getModelForClass(CustomNameOption);
+expect(model.modelName).to.be.equal('CustomName');
+```
+
 ---
 
 For more a more detailed use, please look into the code at [the tests that are written for it](https://github.com/hasezoey/typegoose/blob/master/test/tests/options.test.ts)

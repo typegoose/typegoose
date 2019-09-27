@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
+import { logger } from '../logSettings';
 import {
   // IModelOptions,
   AnyParamConstructor,
@@ -242,6 +243,14 @@ export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: m
  */
 export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+
+  if (options.options && options.options.automaticName === false) {
+    if (typeof options.options.customName !== 'string') {
+      logger.warn('Option "automaticName" is set to "false" but no "customName" is provided! (Class: %s)', cl.name);
+    } else {
+      return options.options.customName;
+    }
+  }
 
   const baseName = cl.name;
   const suffix = (options.options ? options.options.customName : undefined) ||

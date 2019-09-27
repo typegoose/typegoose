@@ -255,5 +255,10 @@ export interface IModelOptions {
      * @default schemaOptions.collection
      */
     customName?: string;
+    /**
+     * Disable automatic name generation
+     * @default true
+     */
+    automaticName?: boolean;
   };
 }

@@ -138,4 +138,15 @@ export function suite() {
       expect(gotClass).to.equals(MultiModel);
     }
   });
+
+  it('should not make an automatic name (automaticName)', async () => {
+    @modelOptions({ options: { automaticName: false, customName: 'DAN' } })
+    class DisableAutomaticName {
+      @prop()
+      public test: string;
+    }
+
+    const model = getModelForClass(DisableAutomaticName);
+    expect(model.modelName).to.be.equal('DAN');
+  });
 }
