@@ -1,6 +1,6 @@
 import { Model, Schema, SchemaDefinition } from 'mongoose';
 
-import { EmptyVoidFn, VirtualOptions } from '../types';
+import { EmptyVoidFn, VirtualOptions, AnyParamConstructor } from '../types';
 
 export interface HooksPrePost {
   pre: Map<string | RegExp, (error?: Error) => void>;
@@ -10,10 +10,22 @@ export interface PluginMap {
   mongoosePlugin(schema: Schema<any>, options: object): void;
   options: object;
 }
-export interface DecoratorCacheMap {
-  class: NewableFunction;
-  decorators: Map<string, (...args: any) => void>;
+
+/** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
+export enum WhatIsIt {
+  ARRAY,
+  MAP,
+  NONE
 }
+
+export interface DecoratedPropertyMetadata {
+  rawOptions: any;
+  Type: AnyParamConstructor<any>;
+  target: any;
+  key: string;
+  whatis: WhatIsIt;
+}
+export type DecoratedPropertyMetadataMap = Map<string, DecoratedPropertyMetadata>;
 
 /** Schema Map */
 export const schemas: Map<string, SchemaDefinition> = new Map();
@@ -27,5 +39,3 @@ export const hooks: Map<string, HooksPrePost> = new Map();
 export const plugins: Map<string, PluginMap[]> = new Map();
 /** Constructors Map */
 export const constructors: Map<string, NewableFunction> = new Map();
-/** Used to cache (inner-class) decorators (because of execution order) */
-export const decoratorCache: Map<string, DecoratorCacheMap> = new Map();
