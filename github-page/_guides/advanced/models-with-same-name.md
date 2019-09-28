@@ -60,4 +60,4 @@ expect(model.modelName).to.be.equal('CustomName');
 
 ---
 
-For more a more detailed use, please look into the code at [the tests that are written for it](https://github.com/hasezoey/typegoose/blob/master/test/tests/options.test.ts)
+For more a more detailed use, please look into the code at [the tests that are written for it](https://github.com/typegoose/typegoose/blob/r6/master/test/tests/customName.test.ts)
