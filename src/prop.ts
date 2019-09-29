@@ -113,7 +113,7 @@ function baseProp(
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
         type: refType,
-        ref: typeof ref === 'string' ? ref : ref.name,
+        ref: typeof ref === 'string' ? ref : utils.getName(ref),
         ...rawOptions
       };
 
@@ -123,11 +123,12 @@ function baseProp(
     const itemsRef = rawOptions.itemsRef;
     const itemsRefType = rawOptions.itemsRefType || mongoose.Schema.Types.ObjectId;
     if (itemsRef) {
+      const itemsRefName = typeof itemsRef === 'string' ? itemsRef : utils.getName(itemsRef);
       delete rawOptions.itemsRef;
       schemas.get(name)[key][0] = {
         ...schemas.get(name)[key][0],
         type: itemsRefType,
-        ref: typeof itemsRef === 'string' ? itemsRef : itemsRef.name,
+        ref: itemsRefName,
         ...rawOptions
       };
 
