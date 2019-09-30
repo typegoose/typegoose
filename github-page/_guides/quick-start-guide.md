@@ -114,7 +114,7 @@ let document = await Kitten.create({ name: 'Kitty' });
 // "document" has types of KittenClass
 ```
 
-Please note that `new Kitten({})` or `await Kitten.create({})` has no types of KittenClass, because typegoose dosnt modify functions of mongoose
+Please note that `new Kitten({})` & `await Kitten.create({})` has no types of KittenClass, because typegoose doesn't modify functions of mongoose
 
 ## Do's and Dont's of Typegoose
 
@@ -122,3 +122,7 @@ Please note that `new Kitten({})` or `await Kitten.create({})` has no types of K
 - Typegoose aims to not modify any functions of mongoose
 - Typegoose aims to get mongoose's models to be stable through type-infomation
 - Typegoose aims to make mongoose more usable by making the models more type-rich (thanks to TypeScript)
+- Decorated schema configuration classes (like KittenClass above) must use explicit type declaration
+instead of type inference for their types.  Otherwise, a property's type will become Mixed!  This is
+because Typegoose uses emitDecoratorMetadata to determine types, and by design, emitDecorator emits the
+explicit type instead of what's inferred (see [microsoft/Typegoose#18995](https://github.com/microsoft/TypeScript/issues/18995)).
