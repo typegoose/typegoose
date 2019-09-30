@@ -143,6 +143,8 @@ To ask questions or just talk with us [join our Discord Server](https://discord.
 
 ## API Documentation
 
+Please use [the new guides](https://typegoose.github.io/typegoose/guides/quick-start-guide/) and [the new docs](https://typegoose.github.io/typegoose/docs) this here is just for "legacy reasons" and might be deleted later
+
 ### Typegoose class
 
 Since 6.0.0 deprecated, please try to remove it
