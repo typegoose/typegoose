@@ -11,7 +11,6 @@ redirect_from:
 
 ## 6.0.0
 
-*<sub>This Version is not released yet, but is considered stable</sub>*<br/>
 [To Migrate, please look at the migration guide]({{ site.baseurl }}{% link _guides/migrate-to-6.md %})
 
 - Project got moved to the new repo (hasezoey/typegoose) and new package `@hasezoey/typegoose`
