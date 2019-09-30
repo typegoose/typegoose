@@ -251,13 +251,20 @@ export interface IModelOptions {
   /** Typegoose Custom Options */
   options?: {
     /**
-     * Set a custom suffix for the model
+     * Set the modelName of the class
+     *
+     * if "automaticName" is true it sets a *suffix* instead of the whole name
      * @default schemaOptions.collection
      */
     customName?: string;
     /**
-     * Disable automatic name generation
-     * @default true
+     * Enable Automatic Name generation of a model
+     * Example:
+     * class with name of "SomeClass"
+     * and option "collection" of "SC"
+     *
+     * will generate the name of "SomeClass_SC"
+     * @default false
      */
     automaticName?: boolean;
   };

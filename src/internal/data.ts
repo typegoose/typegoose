@@ -1,6 +1,6 @@
 import { Model, Schema, SchemaDefinition } from 'mongoose';
 
-import { EmptyVoidFn, VirtualOptions } from '../types';
+import { VirtualOptions } from '../types';
 
 export interface IPreHook {
   method: string | RegExp;
