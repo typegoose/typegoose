@@ -9,7 +9,7 @@ redirect_from:
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
-## 6.0.0-x
+## 6.0.0
 
 *<sub>This Version is not released yet, but is considered stable</sub>*<br/>
 [To Migrate, please look at the migration guide]({{ site.baseurl }}{% link _guides/migrate-to-6.md %})
