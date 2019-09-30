@@ -35,17 +35,17 @@ jobs:
     #     api_key: $DEPLOY_NPM_KEY
     #     on:
     #       tags: true
-    # - name: 'Deploy to GitHub Pages'
-    #   stage: deploy
-    #   if: branch IN (master, r6/master) AND NOT type IN (pull_request) # i know this redundant, but it is needed otherwise the test will always create a deploy of this
-    #   script: bash ./ghPagesPre.sh
-    #   deploy:
-    #     provider: pages
-    #     skip_cleanup: true
-    #     github_token: $GITHUB_GH_PAGES
-    #     keep_history: false
-    #     target_branch: gh-pages # i know this the default, but just to be sure
-    #     on:
-    #       branch:
-    #         - master
-    #         - r6/master
+    - name: 'Deploy to GitHub Pages'
+      stage: deploy
+      if: branch IN (master, r6/master) AND NOT type IN (pull_request) # i know this redundant, but it is needed otherwise the test will always create a deploy of this
+      script: bash ./ghPagesPre.sh
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $GITHUB_GH_PAGES
+        keep_history: false
+        target_branch: gh-pages # i know this the default, but just to be sure
+        on:
+          branch:
+            - master
+            - r6/master

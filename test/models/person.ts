@@ -1,5 +1,5 @@
-import { instanceMethod, pre, prop, staticMethod } from '../../src/typegoose';
-import { PersistentModel } from './PersistentModel';
+import { getModelForClass, pre, prop } from '../../src/typegoose';
+import { PersistentModel } from './persistentModel';
 
 // add a pre-save hook to PersistentModel
 @pre<PersistentModel>('save', function (next) {
@@ -14,16 +14,14 @@ export class Person extends PersistentModel {
   public email: string;
 
   // override instanceMethod
-  @instanceMethod
   public getClassName() {
     return 'Person';
   }
 
   // override staticMethod
-  @staticMethod
   public static getStaticName() {
     return 'Person';
   }
 }
 
-export const model = new Person().getModelForClass(Person);
+export const model = getModelForClass(Person);

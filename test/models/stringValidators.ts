@@ -1,6 +1,6 @@
-import { prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose';
 
-export class StringValidators extends Typegoose {
+export class StringValidators {
   @prop({ maxlength: 3 })
   public maxLength: string;
 
@@ -20,4 +20,4 @@ export class StringValidators extends Typegoose {
   public enumed: string;
 }
 
-export const model = new StringValidators().getModelForClass(StringValidators);
+export const model = getModelForClass(StringValidators);

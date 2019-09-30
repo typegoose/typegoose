@@ -1,7 +1,7 @@
-import { arrayProp, instanceMethod, InstanceType, prop, Ref, staticMethod, Typegoose } from '../../src/typegoose';
+import { arrayProp, DocumentType, prop, Ref } from '../../src/typegoose';
 import { Car } from './car';
 
-export abstract class PersistentModel extends Typegoose {
+export abstract class PersistentModel {
   @prop()
   public createdAt: Date;
 
@@ -9,20 +9,17 @@ export abstract class PersistentModel extends Typegoose {
   public cars?: Ref<Car>[];
 
   // define an 'instanceMethod' that will be overwritten
-  @instanceMethod
   public getClassName() {
     return 'PersistentModel';
   }
 
   // define an 'instanceMethod' that will be overwritten
-  @staticMethod
   public static getStaticName() {
     return 'PersistentModel';
   }
 
   // define an instanceMethod that is called by the derived class
-  @instanceMethod
-  public addCar(this: InstanceType<PersistentModel>, car: Car) {
+  public async addCar(this: DocumentType<PersistentModel>, car: Car) {
     if (!this.cars) {
       this.cars = [];
     }

@@ -1,0 +1,1 @@
+[{{ include.repo }}#{{ include.num }}](https://github.com/{{ include.repo }}/typegoose/issues/{{ include.num }})

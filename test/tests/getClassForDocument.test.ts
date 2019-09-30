@@ -2,11 +2,11 @@ import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
 import { fail } from 'assert';
-import { getClassForDocument } from '../../src/utils';
+import { getClassForDocument } from '../../src/internal/utils';
 import { Genders } from '../enums/genders';
 import { Car as CarType, model as Car } from '../models/car';
-import { model as InternetUser } from '../models/internet-user';
-import { AddressNested, PersonNested, PersonNestedModel } from '../models/nested-object';
+import { model as InternetUser } from '../models/internetUser';
+import { AddressNested, AddressNestedModel, PersonNested, PersonNestedModel } from '../models/nestedObject';
 import { model as Person } from '../models/person';
 import { model as User, User as UserType } from '../models/user';
 
@@ -54,7 +54,7 @@ export function suite() {
     });
     await user.addCar(car);
 
-    user = await Person.findById(user.id).populate('cars');
+    user = await Person.findById(user.id).populate('cars').exec();
 
     // verify properties
     expect(user).to.have.property('createdAt');
@@ -70,16 +70,15 @@ export function suite() {
     expect(Person.getStaticName()).to.equals('Person');
   });
 
-  it('Should store nested address', async () => {
-    const personInput = new PersonNested();
-    personInput.name = 'Person, Some';
-    personInput.address = new AddressNested('A Street 1');
-    personInput.moreAddresses = [
-      new AddressNested('A Street 2'),
-      new AddressNested('A Street 3'),
-    ];
-
-    const person = await PersonNestedModel.create(personInput);
+  it('should store nested address', async () => {
+    const person = await PersonNestedModel.create({
+      name: 'Person, Some',
+      address: new AddressNestedModel({ street: 'A Street 1' } as AddressNested),
+      moreAddresses: [
+        new AddressNestedModel({ street: 'A Street 2' } as AddressNested),
+        new AddressNestedModel({ street: 'A Street 3' } as AddressNested)
+      ]
+    } as PersonNested);
 
     expect(person).is.not.be.an('undefined');
     expect(person.name).equals('Person, Some');
@@ -97,16 +96,14 @@ export function suite() {
   });
 
   // faild validation will need to be checked
-  it('Should validate Decimal128', async () => {
+  it('should validate Decimal128', async () => {
     try {
       await Car.create({
         model: 'Tesla',
-        price: 'NO DECIMAL',
+        price: 'NO DECIMAL'
       });
       // fail('Validation must fail.');
-
     } catch (e) {
-
       expect(e).to.be.a.instanceof((mongoose.Error as any).ValidationError);
     }
     const car = await Car.create({
@@ -118,10 +115,10 @@ export function suite() {
     expect(foundCar.price.toString()).to.eq('123.45');
   });
 
-  it('Should validate email', async () => {
+  it('should validate email', async () => {
     try {
       await Person.create({
-        email: 'email',
+        email: 'email'
       });
       fail('Validation must fail.');
     } catch (e) {
@@ -132,14 +129,14 @@ export function suite() {
     }
   });
 
-  it(`Should Validate Map`, async () => {
+  it(`should Validate Map`, async () => {
     try {
       await InternetUser.create({
         projects: {
           p1: 'project'
         }
       });
-      fail('Validation Should Fail');
+      fail('Validation should Fail');
     } catch (e) {
       expect(e).to.be.a.instanceof(mongoose.Error.ValidationError);
       expect(e.message).to.be.equal( // test it specificly, to know that it is not another error

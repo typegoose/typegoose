@@ -1,5 +1,5 @@
 import { isArray } from 'util';
-import { InstanceType, post, pre, prop, Typegoose } from '../../src/typegoose';
+import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
 
 @pre<Hook>('save', function () {
   if (this.isModified('shape')) {
@@ -10,19 +10,19 @@ import { InstanceType, post, pre, prop, Typegoose } from '../../src/typegoose';
 })
 @pre<Hook>(/^update/, function () {
   if (isArray(this)) {
-    this.forEach((v) => v.update({ shape: 'REGEXP_PRE' })); // i know this is inefficient
+    this.forEach(async (v) => await v.update({ shape: 'REGEXP_PRE' })); // i know this is inefficient
   } else {
     this.update({ shape: 'REGEXP_PRE' });
   }
 })
-@post<Hook>(/^find/, (doc: InstanceType<Hook> | InstanceType<Hook>[]) => {
+@post<Hook>(/^find/, (doc) => {
   if (isArray(doc)) {
     doc.forEach((v) => v.material = 'REGEXP_POST');
-  } else {
+  } else if (isDocument(doc)) {
     doc.material = 'REGEXP_POST';
   }
 })
-export class Hook extends Typegoose {
+export class Hook {
   @prop({ required: true })
   public material: string;
 
@@ -30,4 +30,21 @@ export class Hook extends Typegoose {
   public shape?: string;
 }
 
-export const model = new Hook().getModelForClass(Hook);
+@post<HookArray>(['find', 'findOne'], async (docs) => {
+  if (isArray(docs)) {
+    await Promise.all(docs.map(async (v) => {
+      v.testArray.push('hello');
+      await v.save();
+    }));
+  } else if (isDocument(docs)) {
+    docs.testArray.push('hello');
+    await docs.save();
+  }
+})
+export class HookArray {
+  @arrayProp({ required: true, items: String })
+  public testArray: string[];
+}
+
+export const HookModel = getModelForClass(Hook);
+export const HookArrayModel = getModelForClass(HookArray);

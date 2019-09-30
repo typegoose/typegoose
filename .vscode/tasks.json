@@ -7,13 +7,23 @@
             "problemMatcher": [
                 "$tsc-watch"
             ],
-            "isBackground": true
+            "isBackground": true,
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
         },
         {
             "type": "npm",
             "script": "build",
             "problemMatcher": [
                 "$tsc"
+            ]
+        },
+        {
+            "type": "npm",
+            "script": "lint",
+            "problemMatcher": [
+                "$tslint5"
             ]
         }
     ]

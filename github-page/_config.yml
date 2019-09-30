@@ -1,0 +1,65 @@
+title: Typegoose
+description: > # this means to ignore newlines until a new statement
+  Documentation for Typegoose
+baseurl: '/typegoose'
+url: 'https://typegoose.github.io'
+remote_theme: mmistakes/minimal-mistakes
+locale: 'en-US'
+minimal_mistakes_skin: 'default'
+markdown: kramdown
+search: true
+
+collections:
+  guides:
+    permalink: /:collection/:path/ # its ":path" to use the folders in the url
+    output: true
+  docs:
+    permalink: /:collection/:path/ # its ":path" to use the folders in the url
+    output: true
+
+plugins:
+  - jekyll-redirect-from
+  - jekyll-include-cache
+
+sass:
+  style: compressed
+
+include:
+  - '*.html' # Needed to include files that start with underscore
+
+defaults:
+  - scope:
+      path: '_guides'
+      type: guides
+    values:
+      layout: single
+      toc: true
+      sidebar:
+        nav: 'guides'
+  - scope:
+      path: '_docs'
+      type: docs
+    values:
+      layout: single
+      toc: true
+      sidebar:
+        nav: 'docs'
+
+footer:
+  links:
+    - label: 'GitHub'
+      icon: 'fab fa-fw fa-github'
+      url: https://github.com/typegoose/typegoose/tree/r6/master
+
+kramdown:
+  input: GFM
+  hard_wrap: false
+  auto_ids: true
+  footnote_nr: 1
+  entity_output: as_char
+  toc_levels: 1..6
+  smart_quotes: lsquo,rsquo,ldquo,rdquo
+  enable_coderay: false
+
+google:
+  search_engine_id: '015943195979718257496:sxuifq7leav'

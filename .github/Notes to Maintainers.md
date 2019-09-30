@@ -8,8 +8,31 @@
 
 ## How to Merge
 
-Try to to use Fast-Forward merge if it fits with the styles
--> if it dosnt fit, rebase it manually
+* If its is just one commit that is just a fix or a hotfix, use Squash-Merge
+* If it is a larger Branch (like a release) use merge --no-ff
+
+## When to make a Version
+
+* If a release branch (like 6.0.0) gets merged into master, make a Major Version
+* If a collection of "should-not-break" commits, make a minor version
+* If a hotfix | fix, that dosnt break anything make a patch version
+* If a fix, that can potentially break something, make a minor version
+* ([Advanced](https://semver.org))
+
+## Branch structure
+
+*This will take place when verion 6.0.0 will release*
+
+branch `master` will be the current version, where all the feature branches are based on (for the current version)
+branches in `old/` are legacy versions (like `5.x`) which are used to backport / fix version specific things
+when a new (major) version comes out, the old version is moved into `old/` for legacy support
+-> example for it:
+  current version is: 5.9.0 (master)
+  next version is: 6.0.0 (6/master)
+  
+  when 6.0.0 comes out, the old version (5.9.x) will be moved into (`old/5.x`) and `6/master` merged into master
+
+Note to the v6 release: because the package moved over packages & repositorys, the master branch got detached from version 6, thats why it will probably the force-pushed
 
 ## Versioning
 

@@ -1,372 +1,293 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
-import { methods, schema, virtuals } from './data';
-import { InvalidPropError, NoMetadataError, NotNumberTypeError, NotStringTypeError } from './errors';
-import { initAsArray, initAsObject, isNumber, isObject, isPrimitive, isString } from './utils';
-
-export type Func = (...args: any[]) => any;
-
-export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
-
-export type ValidatorFunction = (value: any) => boolean | Promise<boolean>;
-export type Validator =
-  | ValidatorFunction
-  | RegExp
-  | {
-    validator: ValidatorFunction;
-    message?: string;
-  };
-
-export interface BasePropOptions {
-  /** include this value? 
-   * @default true (Implicitly)
-   */
-  select?: boolean;
-  /** is this value required?
-   * @default false (Implicitly)
-   */
-  required?: RequiredType;
-  /** Only accept Values from the Enum(|Array) */
-  enum?: string[] | object;
-  /** Give the Property a default Value */
-  default?: any;
-  /** Give an Validator RegExp or Function */
-  validate?: Validator | Validator[];
-  /** should this value be unique?
-   * @link https://docs.mongodb.com/manual/indexes/#unique-indexes
-   */
-  unique?: boolean;
-  /** should this value get an index?
-   * @link https://docs.mongodb.com/manual/indexes
-   */
-  index?: boolean;
-  /** @link https://docs.mongodb.com/manual/indexes/#sparse-indexes */
-  sparse?: boolean;
-  /** when should this property expire?
-   * @link https://docs.mongodb.com/manual/tutorial/expire-data
-   */
-  expires?: string | number;
-  /** should subdocuments get their own id?
-   * @default true (Implicitly)
-   */
-  _id?: boolean;
-}
-
-export interface PropOptions extends BasePropOptions {
-  /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref?: any;
-  /** Take the Path and try to resolve it to a Model */
-  refPath?: string;
-  /** 
-   * Give the Property an alias in the output
-   * Note: you should include the alias as a variable in the class, but not with a prop decorator
-   * @example
-   * ```ts
-   * class Dummy extends Typegoose {
-   *   @prop({ alias: "helloWorld" })
-   *   public hello: string; // normal, with @prop
-   *   public helloWorld: string; // is just for type Completion, will not be included in the DB
-   * }
-   * ```
-   */
-  alias?: string;
-}
-
-export interface ValidateNumberOptions {
-  /** The Number must be at least this high */
-  min?: number | [number, string];
-  /** The Number can only be lower than this */
-  max?: number | [number, string];
-}
-
-export interface ValidateStringOptions {
-  /** Only Allowes if the value matches an RegExp */
-  match?: RegExp | [RegExp, string];
-  /** Only Allowes if the value is in the Enum */
-  enum?: string[];
-  /** Only Allowes if the value is at least the lenght */
-  minlength?: number | [number, string];
-  /** Only Allowes if the value is not longer than the maxlenght */
-  maxlength?: number | [number, string];
-}
-
-export interface TransformStringOptions {
-  /** Should it be lowercased before save? */
-  lowercase?: boolean;
-  /** Should it be uppercased before save? */
-  uppercase?: boolean;
-  /** Should it be trimmed before save? */
-  trim?: boolean;
-}
-
-export interface VirtualOptions {
-  ref: string;
-  localField: string;
-  foreignField: string;
-  justOne: boolean;
-  /** Set to true, when it is an "virtual populate-able" */
-  overwrite: boolean;
-}
-
-export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
-export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions & ValidateStringOptions;
-export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate | VirtualOptions;
+import { DecoratorKeys } from './internal/constants';
+import { decoratorCache, schemas, virtuals } from './internal/data';
+import {
+  InvalidPropError,
+  InvalidTypeError,
+  NoMetadataError,
+  NotAllVPOPElementsError,
+  NotNumberTypeError,
+  NotStringTypeError
+} from './internal/errors';
+import { _buildSchema } from './internal/schema';
+import * as utils from './internal/utils';
+import { logger } from './logSettings';
+import { buildSchema } from './typegoose';
+import {
+  AnyParamConstructor,
+  ArrayPropOptions,
+  MapPropOptions,
+  PropOptions,
+  PropOptionsWithValidate
+} from './types';
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
 enum WhatIsIt {
-  ARRAY = 'Array',
-  MAP = 'Map',
-  NONE = ''
-}
-
-/**
- * Return true if there are Options
- * @param options The raw Options
- */
-function isWithStringValidate(options: PropOptionsWithStringValidate): boolean {
-  return !isNullOrUndefined(
-    options.match
-    || options.enum
-    || options.minlength
-    || options.maxlength
-  );
-}
-
-/**
- * Return true if there are Options
- * @param options The raw Options
- */
-function isWithStringTransform(options: PropOptionsWithStringValidate) {
-  return !isNullOrUndefined(options.lowercase || options.uppercase || options.trim);
-}
-
-/**
- * Return true if there are Options
- * @param options The raw Options
- */
-function isWithNumberValidate(options: PropOptionsWithNumberValidate) {
-  return !isNullOrUndefined(options.min || options.max);
+  ARRAY,
+  MAP,
+  NONE
 }
 
 /**
  * Base Function for prop & arrayProp
  * @param rawOptions The options (like require)
  * @param Type What Type it is
- * @param target <no info>
- * @param key <no info>
+ * @param target Target Class
+ * @param key Value Key of target class
  * @param isArray is it an array?
  */
-function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: WhatIsIt = WhatIsIt.NONE): void {
-  const name: string = target.constructor.name;
-  const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
-  if (isGetterSetter) {
-    if (isGetterSetter.get) {
-      if (!virtuals[name]) {
-        virtuals[name] = {};
+function baseProp(
+  rawOptions: any,
+  Type: AnyParamConstructor<any>,
+  target: any,
+  key: string,
+  whatis: WhatIsIt = WhatIsIt.NONE
+): void {
+  if (Type === target) {
+    throw new Error('It seems like the type used is the same as the target class, which is currently not supported\n'
+      + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`);
+  }
+
+  const initname = utils.createUniqueID(target);
+
+  decoratorCache.get(initname).decorators.set(key, () => {
+    if (utils.isNotDefined(Type)) {
+      if (Type !== target) { // prevent "infinite" buildSchema loop / Maximum Class size exceeded
+        buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
       }
-      if (!virtuals[name][key]) {
-        virtuals[name][key] = {};
-      }
-      virtuals[name][key] = {
-        ...virtuals[name][key],
-        get: isGetterSetter.get,
-        options: rawOptions,
-      };
+    }
+    const name: string = utils.getName(target.constructor);
+    rawOptions = Object.assign(rawOptions, {});
+
+    if (!virtuals.get(name)) {
+      virtuals.set(name, new Map());
     }
 
-    if (isGetterSetter.set) {
-      if (!virtuals[name]) {
-        virtuals[name] = {};
+    if (utils.isWithVirtualPOP(rawOptions)) {
+      if (!utils.includesAllVirtualPOP(rawOptions)) {
+        throw new NotAllVPOPElementsError(name, key);
       }
-      if (!virtuals[name][key]) {
-        virtuals[name][key] = {};
-      }
-      virtuals[name][key] = {
-        ...virtuals[name][key],
-        set: isGetterSetter.set,
-        options: rawOptions,
-      };
+      virtuals.get(name).set(key, rawOptions);
+
+      return;
     }
-    return;
-  }
 
-  if (whatis === WhatIsIt.ARRAY) {
-    initAsArray(name, key);
-  } else {
-    initAsObject(name, key);
-  }
-
-  const ref = rawOptions.ref;
-  if (typeof ref === 'string') {
-    schema[name][key] = {
-      ...schema[name][key],
-      type: mongoose.Schema.Types.ObjectId,
-      ref,
-    };
-    return;
-  } else if (ref) {
-    schema[name][key] = {
-      ...schema[name][key],
-      type: mongoose.Schema.Types.ObjectId,
-      ref: ref.name,
-    };
-    return;
-  }
-
-  const itemsRef = rawOptions.itemsRef;
-  if (typeof itemsRef === 'string') {
-    schema[name][key][0] = {
-      ...schema[name][key][0],
-      type: mongoose.Schema.Types.ObjectId,
-      ref: itemsRef,
-    };
-    return;
-  } else if (itemsRef) {
-    schema[name][key][0] = {
-      ...schema[name][key][0],
-      type: mongoose.Schema.Types.ObjectId,
-      ref: itemsRef.name,
-    };
-    return;
-  }
-
-  const refPath = rawOptions.refPath;
-  if (refPath && typeof refPath === 'string') {
-    schema[name][key] = {
-      ...schema[name][key],
-      type: mongoose.Schema.Types.ObjectId,
-      refPath,
-    };
-    return;
-  }
-
-  const itemsRefPath = rawOptions.itemsRefPath;
-  if (itemsRefPath && typeof itemsRefPath === 'string') {
-    schema[name][key][0] = {
-      ...schema[name][key][0],
-      type: mongoose.Schema.Types.ObjectId,
-      refPath: itemsRefPath,
-    };
-    return;
-  }
-
-  const enumOption = rawOptions.enum;
-  if (enumOption) {
-    if (!Array.isArray(enumOption)) {
-      rawOptions.enum = Object.keys(enumOption).map(propKey => enumOption[propKey]);
-    }
-  }
-
-  const selectOption = rawOptions.select;
-  if (typeof selectOption === 'boolean') {
-    schema[name][key] = {
-      ...schema[name][key],
-      select: selectOption,
-    };
-  }
-
-  // check for validation inconsistencies
-  if (isWithStringValidate(rawOptions) && !isString(Type)) {
-    throw new NotStringTypeError(key);
-  }
-
-  if (isWithNumberValidate(rawOptions) && !isNumber(Type)) {
-    throw new NotNumberTypeError(key);
-  }
-
-  // check for transform inconsistencies
-  if (isWithStringTransform(rawOptions) && !isString(Type)) {
-    throw new NotStringTypeError(key);
-  }
-
-  const instance = new Type();
-  const subSchema = schema[instance.constructor.name];
-  if (!subSchema && !isPrimitive(Type) && !isObject(Type)) {
-    throw new InvalidPropError(Type.name, key);
-  }
-
-  const { ['ref']: r, ['items']: i, ['of']: o, ...options } = rawOptions;
-  if (isPrimitive(Type)) {
     if (whatis === WhatIsIt.ARRAY) {
-      schema[name][key] = {
-        ...schema[name][key][0],
+      utils.initAsArray(name, key);
+    } else {
+      utils.initAsObject(name, key);
+    }
+
+    if (!isNullOrUndefined(rawOptions.set) || !isNullOrUndefined(rawOptions.get)) {
+      if (typeof rawOptions.set !== 'function') {
+        throw new TypeError(`"${name}.${key}" does not have a set function!`);
+      }
+      if (typeof rawOptions.get !== 'function') {
+        throw new TypeError(`"${name}.${key}" does not have a get function!`);
+      }
+
+      const newType = rawOptions && rawOptions.type ? rawOptions.type : Type;
+      if (rawOptions && rawOptions.type) {
+        delete rawOptions.type;
+      }
+      /*
+       * Note:
+       * this dosnt have a check if prop & returntype of the function is the same,
+       * because it cant be accessed at runtime
+       */
+      schemas.get(name)[key] = {
+        ...schemas.get(name)[key],
+        type: newType,
+        ...rawOptions
+      };
+
+      return;
+    }
+
+    const ref = rawOptions.ref;
+    const refType = rawOptions.refType || mongoose.Schema.Types.ObjectId;
+    if (ref) {
+      delete rawOptions.ref;
+      schemas.get(name)[key] = {
+        ...schemas.get(name)[key],
+        type: refType,
+        ref: typeof ref === 'string' ? ref : utils.getName(ref),
+        ...rawOptions
+      };
+
+      return;
+    }
+
+    const itemsRef = rawOptions.itemsRef;
+    const itemsRefType = rawOptions.itemsRefType || mongoose.Schema.Types.ObjectId;
+    if (itemsRef) {
+      const itemsRefName = typeof itemsRef === 'string' ? itemsRef : utils.getName(itemsRef);
+      delete rawOptions.itemsRef;
+      schemas.get(name)[key][0] = {
+        ...schemas.get(name)[key][0],
+        type: itemsRefType,
+        ref: itemsRefName,
+        ...rawOptions
+      };
+
+      return;
+    }
+
+    const refPath = rawOptions.refPath;
+    if (refPath && typeof refPath === 'string') {
+      delete rawOptions.refPath;
+      schemas.get(name)[key] = {
+        ...schemas.get(name)[key],
+        type: itemsRefType,
+        refPath,
+        ...rawOptions
+      };
+
+      return;
+    }
+
+    const itemsRefPath = rawOptions.itemsRefPath;
+    if (itemsRefPath && typeof itemsRefPath === 'string') {
+      delete rawOptions.itemsRefPath;
+      schemas.get(name)[key][0] = {
+        ...schemas.get(name)[key][0],
+        type: itemsRefType,
+        refPath: itemsRefPath,
+        ...rawOptions
+      };
+
+      return;
+    }
+
+    const enumOption = rawOptions.enum;
+    if (enumOption) {
+      if (!Array.isArray(enumOption)) {
+        rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
+      }
+    }
+
+    const selectOption = rawOptions.select;
+    if (typeof selectOption === 'boolean') {
+      schemas.get(name)[key] = {
+        ...schemas.get(name)[key],
+        select: selectOption
+      };
+    }
+
+    // check if Type is actually a real working Type
+    if (isNullOrUndefined(Type) || typeof Type !== 'function') {
+      throw new InvalidTypeError(target.constructor.name, key, Type);
+    }
+
+    // check for validation inconsistencies
+    if (utils.isWithStringValidate(rawOptions) && !utils.isString(Type)) {
+      throw new NotStringTypeError(key);
+    }
+
+    // check for transform inconsistencies
+    if (utils.isWithStringTransform(rawOptions) && !utils.isString(Type)) {
+      throw new NotStringTypeError(key);
+    }
+
+    if (utils.isWithNumberValidate(rawOptions) && !utils.isNumber(Type)) {
+      throw new NotNumberTypeError(key);
+    }
+
+    const subSchema = schemas.get(utils.getName(Type));
+    if (!subSchema && !utils.isPrimitive(Type) && !utils.isObject(Type)) {
+      throw new InvalidPropError(Type.name, key); // This seems to be never thrown!
+    }
+
+    const { ['items']: items, ...options } = rawOptions;
+    if (utils.isPrimitive(Type)) {
+      switch (whatis) {
+        case WhatIsIt.ARRAY:
+          schemas.get(name)[key] = {
+            ...schemas.get(name)[key][0],
+            ...options,
+            type: [Type]
+          };
+
+          return;
+        case WhatIsIt.MAP:
+          // "default" is a reserved keyword, thats why "_default" is used
+          const { default: _default }: PropOptions = options;
+          delete options.default;
+          delete options.of;
+          schemas.get(name)[key] = {
+            ...schemas.get(name)[key],
+            type: Map,
+            default: _default,
+            of: { type: Type, ...options }
+          };
+
+          return;
+        case WhatIsIt.NONE:
+          schemas.get(name)[key] = {
+            ...schemas.get(name)[key],
+            ...options,
+            type: Type
+          };
+
+          return;
+        default:
+          throw new Error(`"${whatis}"(whatis(primitive)) is invalid for "${name}.${key}"`);
+      }
+    }
+
+    // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
+    // so that mongoose can store it as nested document
+    if (utils.isObject(Type) && !subSchema) {
+      schemas.get(name)[key] = {
+        ...schemas.get(name)[key],
         ...options,
-        // HACK: replace this with "[Type]" if https://github.com/Automattic/mongoose/issues/8034 got fixed
-        type: [Type.name === 'ObjectID' ? 'ObjectId' : Type]
+        type: Object // i think this could take some improvements
       };
+
       return;
     }
-    if (whatis === WhatIsIt.MAP) {
-      const { mapDefault } = options;
-      delete options.mapDefault;
-      schema[name][key] = {
-        ...schema[name][key],
-        type: Map,
-        default: mapDefault,
-        of: { type: Type, ...options }
-      };
-      return;
+
+    switch (whatis) {
+      case WhatIsIt.ARRAY:
+        const virtualSchemaArrayItem = buildSchema(Type, {
+          _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true
+        });
+        schemas.get(name)[key] = {
+          ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
+          ...options,
+          type: [virtualSchemaArrayItem]
+        };
+
+        return;
+      case WhatIsIt.MAP:
+        schemas.get(name)[key] = {
+          ...schemas.get(name)[key],
+          type: Map,
+          ...options
+        };
+        (schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of = {
+          ...(schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of,
+          ...subSchema
+        };
+
+        return;
+      case WhatIsIt.NONE:
+        const virtualSchema = buildSchema(Type, {
+          _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true
+        });
+        schemas.get(name)[key] = {
+          ...schemas.get(name)[key],
+          ...options,
+          type: virtualSchema
+        };
+
+        return;
+      default:
+        throw new Error(`"${whatis}"(whatis(subSchema)) is invalid for "${name}.${key}"`);
     }
-    schema[name][key] = {
-      ...schema[name][key],
-      ...options,
-      type: Type
-    };
-    return;
-  }
-
-  // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
-  // so that mongoose can store it as nested document
-  if (isObject(Type) && !subSchema) {
-    schema[name][key] = {
-      ...schema[name][key],
-      ...options,
-      type: Object
-    };
-    return;
-  }
-
-  if (whatis === WhatIsIt.ARRAY) {
-    schema[name][key] = {
-      ...schema[name][key][0], // [0] is needed, because "initasArray" adds this (empty)
-      ...options,
-      type: [{
-        ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
-        ...subSchema,
-      }]
-    };
-    return;
-  }
-
-  if (whatis === WhatIsIt.MAP) {
-    schema[name][key] = {
-      ...schema[name][key],
-      type: Map,
-      ...options
-    };
-    schema[name][key].of = {
-      ...schema[name][key].of,
-      ...subSchema
-    };
-    return;
-  }
-  const Schema = mongoose.Schema;
-
-  const supressSubschemaId = rawOptions._id === false;
-  const virtualSchema = new Schema({ ...subSchema }, supressSubschemaId ? { _id: false } : {});
-
-  const schemaInstanceMethods = methods.instanceMethods[instance.constructor.name];
-  if (schemaInstanceMethods) {
-    virtualSchema.methods = schemaInstanceMethods;
-  }
-
-  schema[name][key] = {
-    ...schema[name][key],
-    ...options,
-    type: virtualSchema
-  };
-  return;
+  });
 }
 
 /**
@@ -376,29 +297,24 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
  */
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
-    const Type = (Reflect as any).getMetadata('design:type', target, key);
-
+    const Type = Reflect.getMetadata(DecoratorKeys.Prop, target, key);
     if (!Type) {
       throw new NoMetadataError(key);
     }
 
+    // soft errors
+    {
+      if ('items' in options) {
+        logger.warn(new Error('You might not want to use option "items" in a @prop'));
+      }
+
+      if ('of' in options) {
+        logger.warn(new Error('You might not want to use option "of" in a @prop'));
+      }
+    }
+
     baseProp(options, Type, target, key, WhatIsIt.NONE);
   };
-}
-
-export interface ArrayPropOptions extends BasePropOptions {
-  /** What array is it? 
-   * Note: this is only needed because Reflect & refelact Metadata cant give an accurate Response for an array
-   */
-  items?: any;
-  /** Same as {@link PropOptions.ref}, only that it is for an array */
-  itemsRef?: any;
-  /** Same as {@link PropOptions.refPath}, only that it is for an array */
-  itemsRefPath?: any;
-}
-export interface MapPropOptions extends BasePropOptions {
-  of?: any;
-  mapDefault?: any;
 }
 
 /**
@@ -409,6 +325,11 @@ export interface MapPropOptions extends BasePropOptions {
 export function mapProp(options: MapPropOptions) {
   return (target: any, key: string) => {
     const Type = options.of;
+
+    if ('items' in options) {
+      logger.warn(new Error('You might not want to use option "items" in a @mapProp'));
+    }
+
     baseProp(options, Type, target, key, WhatIsIt.MAP);
   };
 }
@@ -420,11 +341,11 @@ export function mapProp(options: MapPropOptions) {
 export function arrayProp(options: ArrayPropOptions) {
   return (target: any, key: string) => {
     const Type = options.items;
+
+    if ('of' in options) {
+      logger.warn(new Error('You might not want to use option "of" in a @arrayProp'));
+    }
+
     baseProp(options, Type, target, key, WhatIsIt.ARRAY);
   };
 }
-
-/**
- * Reference another Model
- */
-export type Ref<T> = T | mongoose.Schema.Types.ObjectId;

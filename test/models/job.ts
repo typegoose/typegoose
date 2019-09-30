@@ -1,5 +1,6 @@
-import { instanceMethod, prop } from '../../src/typegoose';
+import { modelOptions, prop } from '../../src/typegoose';
 
+@modelOptions({ schemaOptions: { _id: false } })
 export class JobType {
   @prop({ required: true })
   public field: string;
@@ -8,6 +9,7 @@ export class JobType {
   public salery: number;
 }
 
+@modelOptions({ schemaOptions: { _id: false } })
 export class Job {
   @prop()
   public title?: string;
@@ -21,7 +23,6 @@ export class Job {
   @prop({ _id: false })
   public jobType?: JobType;
 
-  @instanceMethod
   public titleInUppercase?() {
     return this.title.toUpperCase();
   }

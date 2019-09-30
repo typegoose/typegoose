@@ -44,6 +44,7 @@ export async function connect(): Promise<void> {
   if (isFirst) {
     return await firstConnect();
   }
+
   return;
 }
 
@@ -51,11 +52,12 @@ export async function connect(): Promise<void> {
  * Disconnect from MongoDB
  * @returns when it is disconnected
  */
-export async function disconnect(): Promise<any> {
+export async function disconnect(): Promise<void> {
   await mongoose.disconnect();
   if (config.Memory) {
     await instance.stop();
   }
+
   return;
 }
 
@@ -67,7 +69,7 @@ async function firstConnect() {
   await mongoose.connection.db.dropDatabase(); // to always have a clean database
 
   await Promise.all( // recreate the indexes that were dropped
-    Object.keys(mongoose.models).map(async modelName => {
+    Object.keys(mongoose.models).map(async (modelName) => {
       await mongoose.models[modelName].ensureIndexes();
     })
   );

@@ -1,12 +1,10 @@
-import { index } from '../../src';
-import { arrayProp, Ref } from '../../src/prop';
-import { prop, Typegoose } from '../../src/typegoose';
+import { arrayProp, getModelForClass, index, prop, Ref } from '../../src/typegoose';
 import { Car } from './car';
 import { User } from './user';
 
 @index({ car: 1, user: 1 }, { unique: true })
 @index({ location: '2dsphere' })
-export class Rating extends Typegoose {
+export class Rating {
   @prop({ ref: Car })
   public car: Ref<Car>;
 
@@ -20,4 +18,4 @@ export class Rating extends Typegoose {
   public location: [[number]];
 }
 
-export const model = new Rating().getModelForClass(Rating);
+export const model = getModelForClass(Rating);

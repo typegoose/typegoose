@@ -1,6 +1,6 @@
-import { prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose';
 
-export class Alias extends Typegoose {
+export class Alias {
   @prop({ required: true })
   public normalProp: string;
 
@@ -9,4 +9,4 @@ export class Alias extends Typegoose {
   public aliasProp: string; // its just for type completion
 }
 
-export const model = new Alias().getModelForClass(Alias);
+export const model = getModelForClass(Alias);

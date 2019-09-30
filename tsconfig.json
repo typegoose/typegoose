@@ -4,7 +4,7 @@
     "lib": [
       "esnext"
     ],
-    "removeComments": true,
+    "removeComments": false,
     "module": "commonjs",
     "moduleResolution": "node",
     "newLine": "LF",
@@ -12,12 +12,13 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowJs": false,
-    "outDir": "lib",
+    "outDir": "build",
     "inlineSourceMap": true,
     "incremental": true,
     "tsBuildInfoFile": "./.tsbuildinfo"
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "test/**/*.ts"
   ]
 }

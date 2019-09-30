@@ -44,17 +44,17 @@ export function suite() {
         position: 'Lead',
         jobType: {
           salery: 5000,
-          field: 'IT',
-        },
+          field: 'IT'
+        }
       },
       car: tesla.id,
       languages: ['english', 'typescript'],
       previousJobs: [{
-        title: 'Janitor',
+        title: 'Janitor'
       }, {
-        title: 'Manager',
+        title: 'Manager'
       }],
-      previousCars: [trabant.id, zastava.id],
+      previousCars: [trabant.id, zastava.id]
     });
 
     {
@@ -119,7 +119,7 @@ export function suite() {
     const createdUser = await User.findOrCreate({
       firstName: 'Jane',
       lastName: 'Doe',
-      gender: Genders.FEMALE,
+      gender: Genders.FEMALE
     });
 
     expect(createdUser).to.not.be.an('undefined');
@@ -130,7 +130,7 @@ export function suite() {
 
     const foundUser = await User.findOrCreate({
       firstName: 'Jane',
-      lastName: 'Doe',
+      lastName: 'Doe'
     });
 
     expect(foundUser).to.not.be.an('undefined');
@@ -146,7 +146,7 @@ export function suite() {
         lastName: 'Doe',
         age: 20,
         gender: Genders.MALE,
-        uniqueId: 'john-doe-20',
+        uniqueId: 'john-doe-20'
       });
     } catch (err) {
       expect(err).to.have.property('code', 11000);

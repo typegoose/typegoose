@@ -1,4 +1,4 @@
-import { post, pre, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, post, pre, prop } from '../../src/typegoose';
 
 @pre<Dummy>('save', function (next) {
   this.text = 'saved';
@@ -6,7 +6,7 @@ import { post, pre, prop, Typegoose } from '../../src/typegoose';
   next();
 })
 // eslint-disable-next-line only-arrow-functions (need `this` in hook)
-@pre<Dummy>('updateMany', async function () {
+@pre<Dummy>('updateMany', async function (this: any) {
   this._update.text = 'updateManied';
 })
 @post<Dummy>('find', (result) => {
@@ -15,9 +15,9 @@ import { post, pre, prop, Typegoose } from '../../src/typegoose';
 @post<Dummy>('findOne', (result) => {
   result.text = 'changed in post findOne hook';
 })
-export class Dummy extends Typegoose {
+export class Dummy {
   @prop()
   public text: string;
 }
 
-export const model = new Dummy().getModelForClass(Dummy);
+export const model = getModelForClass(Dummy);

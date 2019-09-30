@@ -1,32 +1,31 @@
 # Typegoose
 
-[![Build Status](https://travis-ci.com/typegoose/typegoose.svg?branch=old/5.x)](https://travis-ci.com/typegoose/typegoose)
-[![Coverage Status](https://coveralls.io/repos/github/typegoose/typegoose/badge.svg?branch=old/5.x#feb282019)](https://coveralls.io/github/typegoose/typegoose?branch=old/5.x)
-[![npm](https://img.shields.io/npm/dt/@typegoose/typegoose.svg)](https://npmjs.com/package/@typegoose/typegoose)
+<sub>(These badges are from typegoose:master)</sub>  
+[![Build Status](https://travis-ci.com/typegoose/typegoose.svg?branch=master)](https://travis-ci.com/typegoose/typegoose)
+[![Coverage Status](https://coveralls.io/repos/github/typegoose/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/typegoose/typegoose?branch=master)
+[![npm](https://img.shields.io/npm/dt/@typegoose/typegoose.svg)](https://www.npmjs.com/package/@typegoose/typegoose)
 
 Define Mongoose models using TypeScript classes.
-
-This Repository is the continuation of [the old one](https://github.com/szokodiakos/typegoose)
 
 ## Basic usage
 
 ```ts
-import { prop, Typegoose, ModelType, InstanceType } from '@typegoose/typegoose';
+import { prop, getModelForClass } from '@typegoose/typegoose';
 import * as mongoose from 'mongoose';
 
-mongoose.connect('mongodb://localhost:27017/typegoose');
+mongoose.connect('mongodb://localhost:27017/test');
 
-class User extends Typegoose {
+class User {
   @prop()
   name?: string;
 }
 
-const UserModel = new User().getModelForClass(User);
-// UserModel is a regular Mongoose Model with correct types
+const UserModel = getModelForClass(User);
 
+// UserModel is a regular Mongoose Model with correct types
 (async () => {
-  const u = await UserModel.create({ name: 'JohnDoe' });
-  const user = await UserModel.findOne();
+  const { _id: id } = await UserModel.create({ name: 'JohnDoe' });
+  const user = await UserModel.findById(id).exec();
 
   console.log(user);
   // prints { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
@@ -39,7 +38,7 @@ A common problem when using Mongoose with TypeScript is that you have to define 
 
 Typegoose aims to solve this problem by defining only a TypeScript interface (class) which need to be enhanced with special Typegoose decorators.
 
-Under the hood it uses the [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the properties, so redundancy can be significantly reduced.
+Under the hood it uses the Reflect & [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the properties, so redundancy can be significantly reduced.
 
 Instead of:
 
@@ -86,12 +85,12 @@ class Job {
   position?: string;
 }
 
-class Car extends Typegoose {
+class Car {
   @prop()
   model?: string;
 }
 
-class User extends Typegoose {
+class User {
   @prop()
   name?: string;
 
@@ -108,20 +107,24 @@ class User extends Typegoose {
 
 Please note that sub documents do not have to extend Typegoose. You can still give them default value in `prop` decorator, but you can't create static or instance methods on them.
 
+---
+
 ## Requirements
 
 * TypeScript 3.2+
-* Node 8.10+
-* mongoose ^5.6.7
+* Node 8+
+* mongoose ^5.7.1
 * `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
 
 ## Install
 
-`npm install -s @typegoose/typegoose`
+`npm i -s @typegoose/typegoose`
 
-You also need to install `mongoose`, in versions < 5.0, these packages were listed as dependencies in `package.json`, starting with version 5.0 these packages are listed as peer dependencies.
+You also need to install `mongoose`, since version 5 it is listed as a peer-dependency
 
-`npm install -s mongoose`
+`npm i -s mongoose`
+
+## [Migrate to 6.0.0](https://typegoose.github.io/typegoose/guides/migrate-to-6/)
 
 ## Testing
 
@@ -129,43 +132,36 @@ You also need to install `mongoose`, in versions < 5.0, these packages were list
 
 ## Versioning
 
-`Major.Minor.Fix` (or how npm expresses it `Major.Minor.Patch`)
+`Major.Minor.Fix` (or how npm expresses it `Major.Minor.Patch`)  
+(This Project should comply with [Semver](https://semver.org))
 
-* `0.0.x` is for minor fixes, like hot-fixes
-* `0.x.0` is for Minor things like adding features, that are non-breaking (or at least should not be breaking anything)
-* `x.0.0` is for Major things like adding features that are breaking or refactoring which is a breaking change
-* `0.0.0-x` is for a Pre-Release, that are not yet ready to be published
+## Join Our Discord Server
+
+To ask questions or just talk with us [join our Discord Server](https://discord.gg/BpGjTTD)
+
+---
 
 ## API Documentation
 
 ### Typegoose class
 
-This is the class which your schema defining classes must extend.
+Since 6.0.0 deprecated, please try to remove it
 
-#### Methods:
+### Methods
 
-`getModelForClass<T>(t: T, options?: GetModelForClassOptions)`
+`getModelForClass<T>(cl: T)`
 
 This method returns the corresponding Mongoose Model for the class (`T`). If no Mongoose model exists for this class yet, one will be created automatically (by calling the method `setModelForClass`).
 
+`setModelForClass<T>(cl: T)`
 
-`setModelForClass<T>(t: T, options?: GetModelForClassOptions)`
+This Method is Deprecated see [Migrate to 6.0.0](https://typegoose.github.io/typegoose/guides/migrate-to-6/)
 
-This method assembles the Mongoose Schema from the decorated schema defining class, creates the Mongoose Model and returns it. For typing reasons, the schema defining class must be passed down to it.
-
-Hint: If a Mongoose Model already exists for this class, it will be overwritten.
-
-
-The `GetModelForClassOptions` provides multiple optional configurations:
- * `existingMongoose: mongoose`: An existing Mongoose instance can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.
- * `schemaOptions: mongoose.SchemaOptions`: Additional [schema options](http://mongoosejs.com/docs/guide.html#options) can be passed down to the schema-to-be-created.
- * `existingConnection: mongoose.Connection`: An existing Mongoose connection can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.
-
-### Property decorators
+## Property decorators
 
 Typegoose comes with TypeScript decorators, which responsibility is to connect the Mongoose schema behind the TypeScript class.
 
-#### prop(options)
+### prop(options)
 
 The `prop` decorator adds the target class property to the Mongoose schema as a property. Typegoose checks the decorated property's type and sets the schema property accordingly. If another Typegoose extending class is given as the type, Typegoose will recognize this property as a sub document.
 
@@ -241,12 +237,12 @@ The `options` object accepts multiple config properties:
     @prop({ default: 'Nick' })
     nickName?: string;
     ```
-    
+
   - `_id`: When false, no \_id is added to the subdocument
 
     ```ts
-    class Car extends Typegoose {}
-    
+    class Car {}
+
     @prop({ _id: false })
     car?: Car;
     ```
@@ -254,7 +250,7 @@ The `options` object accepts multiple config properties:
   - `ref`: By adding the `ref` option with another Typegoose class as value, a Mongoose reference property will be created. The type of the property on the Typegoose extending class should be `Ref<T>` (see Types section).
 
     ```ts
-    class Car extends Typegoose {}
+    class Car {}
 
     @prop({ ref: Car })
     car?: Ref<Car>;
@@ -263,11 +259,11 @@ The `options` object accepts multiple config properties:
   - `refPath`: Is the same as `ref`, only that it looks at the path specified, and this path decides which model to use
 
     ```ts
-    class Car extends Typegoose {}
-    class Shop extends Typegoose {}
+    class Car {}
+    class Shop {}
 
     // in another class
-    class Another extends Typegoose {
+    class Another {
       @prop({ required: true, enum: 'Car' | 'Shop' })
       which!: string;
 
@@ -290,7 +286,6 @@ The `options` object accepts multiple config properties:
     favouriteHexNumber?: string;
     ```
 
-
   - `validate` (custom validators): You can define your own validator function/regex using this. The function has to return a `boolean` or a Promise (async validation).
 
     ```ts
@@ -301,7 +296,7 @@ The `options` object accepts multiple config properties:
 
     // or
 
-    @prop({ validate: (value) => { return new Promise(res => { res(isEmail(value)) }) })
+    @prop({ validate: async (value) => { await isEmail(value) })
     email?: string;
 
     // or
@@ -335,37 +330,103 @@ The `options` object accepts multiple config properties:
     ```
 
   - `alias` (alias): Same as [Mongoose Alias](https://mongoosejs.com/docs/guide.html#aliases), only difference is the extra property for type completion
+
     ```ts
-    class Dummy extends Typegoose {
+    class Dummy {
       @prop({ alias: "helloWorld" })
       public hello: string; // will be included in the DB
       public helloWorld: string; // will NOT be included in the DB, just for type completion (gets passed as hello in the DB)
     }
     ```
 
-Mongoose gives developers the option to create [virtual properties](http://mongoosejs.com/docs/api.html#schema_Schema-virtual). This means that actual database read/write will not occur these are just 'calculated properties'. A virtual property can have a setter and a getter. TypeScript also has a similar feature which Typegoose uses for virtual property definitions (using the `prop` decorator).
+#### Virtuals
 
-```ts
-@prop()
-firstName?: string;
+- Mongoose gives developers the option to create [virtual properties](http://mongoosejs.com/docs/api.html#schema_Schema-virtual). This means that actual database read/write will not occur these are just 'calculated properties'. A virtual property can have a setter and a getter. TypeScript also has a similar feature which Typegoose uses for virtual property definitions (using the `prop` decorator).
 
-@prop()
-lastName?: string;
+  example:
 
-@prop() // this will create a virtual property called 'fullName'
-get fullName() {
-  return `${this.firstName} ${this.lastName}`;
-}
-set fullName(full) {
-  const [firstName, lastName] = full.split(' ');
-  this.firstName = firstName;
-  this.lastName = lastName;
-}
-```
+  ```ts
+  class Name {
+    @prop()
+    firstName?: string;
 
-TODO: add documentation for virtual population
+    @prop()
+    lastName?: string;
 
-#### arrayProp(options)
+    // this will create a virtual property called 'fullName'
+    get fullName() {
+      return `${this.firstName} ${this.lastName}`;
+    }
+    set fullName(full) {
+      const [firstName, lastName] = full.split(' ');
+      this.firstName = firstName;
+      this.lastName = lastName;
+    }
+  }
+  ```
+
+  DB Document:
+
+  ```js
+  {
+    _id: ObjectId("<some long id>"),
+    firstName: "Will",
+    lastName: "Smith"
+  }
+  ```
+
+- Non-Virtuals are supported too:  
+  example:
+
+  ```ts
+  function setFullName(val: string[]): string {
+    return val.join(' ');
+  }
+
+  function getFullname(val: string): string[] {
+    return val.split(' ');
+  }
+
+  class Name {
+    @prop({ set: setFullName, get: getFullname })
+    fullname: string[]; // this is just for type completion & getting the type for the schema
+  }
+
+  ...
+  await NameModel.create({ fullname: ['Will', 'Smith'] });
+  const [first, last]: string[] = (await NameModel.findOne({}).exec()).fullname;
+  ```
+
+  DB Document:
+
+  ```js
+  {
+    _id: ObjectId("<some long id>"),
+    fullname: "Will Smith"
+  }
+  ```
+
+- Virtual-Populate is also supported by doing
+
+  ```ts
+  class RefClass {
+    @prop({ required: true, ref: Virtual })
+    public refToName: Ref<Virtual>;
+  }
+  class Name {
+    @prop({ ref: RefClass, foreignField: 'refToName', localField: '_id', justOne: false })
+    public somevalue: Ref<RefClass>;
+  }
+  ```
+
+  Options ([look here for more details](https://mongoosejs.com/docs/api/schema.html#schema_Schema-virtual)):
+    - `ref`: This is like a normal ref [Required]
+    - `foreignField`: Which property(on the ref-Class) to match `localField` against [Required]
+    - `localField`: Which property(on the current-Class) to match `foreignField` against [Required]
+    - `justOne`: Return as One Document(true) or as Array(false) [Optional]
+    - `count`: Return the number of Documents found instead of the actual Documents [Optional]
+
+### arrayProp(options)
 
 The `arrayProp` is a `prop` decorator which makes it possible to create array schema properties.
 
@@ -383,7 +444,7 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
   - `itemsRef`: In mutual exclusion with `items`, this tells Typegoose that instead of a subdocument array, this is an array with references in it. On the Mongoose side this means that an array of Object IDs will be stored under this property. Just like with `ref` in the `prop` decorator, the type of this property should be `Ref<T>[]`.
 
     ```ts
-    class Car extends Typegoose {}
+    class Car {}
 
     // in another class
     @arrayProp({ itemsRef: Car })
@@ -393,12 +454,12 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
   - `itemsRefPath`(IRP): Is the same as `itemsRef` only that it looks at the specified path of the class which specifies which model to use
 
     ```ts
-    class Car extends Typegoose {}
-    class Shop extends Typegoose {}
+    class Car {}
+    class Shop {}
 
     // in another class
-    class Another extends Typegoose {
-      @prop({ required: true, enum: 'Car' | 'Shop' })
+    class Another {
+      @prop({ required: true, enum: ['Car', 'Shop'] })
       which!: string;
 
       @arrayProp({ itemsRefPath: 'which' })
@@ -406,7 +467,7 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
     }
     ```
 
-#### mapProp(options)
+### mapProp(options)
 
 The `mapProp` is a `prop` decorator which makes it possible to create map schema properties.
 
@@ -415,58 +476,15 @@ The options object accepts `enum` and `default`, just like `prop`  decorator. In
   - `of`  : This will tell Typegoose that the Map value consists of primitives (if `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
 
     ```ts
-    class Car extends Typegoose {
+    class Car {
       @mapProp({ of: Car })
       public keys?: Map<string, Car>;
     }
     ```
 
-  - `mapDefault` : This will set the default value for the map.
-
-    ```ts
-    enum ProjectState {
-        WORKING = 'working',
-        BROKEN = 'broken',
-        MAINTAINANCE = 'maintainance',
-    }
-
-    class Car extends Typegoose {
-      @mapProp({ of: String, enum: ProjectState,mapDefault: { 'MainProject' : ProjectState.WORKING }})
-      public projects?: Map<string, ProjectState>;
-    }
-    ```
-
 ### Method decorators
 
-In Mongoose we can attach two types of methods for our schemas: static (model) methods and instance methods. Both of them are supported by Typegoose.
-
-#### staticMethod
-
-Static Mongoose methods must be declared with `static` keyword on the Typegoose extending class. This will ensure, that these methods are callable on the Mongoose model (TypeScript won't throw development-time error for unexisting method on model object).
-
-If we want to use another static method of the model (built-in or created by us) we have to override the `this` in the method using the [type specifying of `this` for functions](https://github.com/Microsoft/TypeScript/wiki/What%27s-new-in-TypeScript#specifying-the-type-of-this-for-functions). If we don't do this, TypeScript will throw development-time error on missing methods.
-
-```ts
-@staticMethod
-static findByAge(this: ModelType<User> & typeof User, age: number) {
-  return this.findOne({ age });
-}
-```
-
-Note that the `& typeof T` is only mandatory if we want to use the developer defined static methods inside this static method. If not then the `ModelType<T>` is sufficient, which will be explained in the Types section.
-
-#### instanceMethod
-
-Instance methods are on the Mongoose document instances, thus they must be defined as non-static methods. Again if we want to call other instance methods the type of `this` must be redefined to `InstanceType<T>` (see Types).
-
-```ts
-@instanceMethod
-incrementAge(this: InstanceType<User>) {
-  const age = this.age || 1;
-  this.age = age + 1;
-  return this.save();
-}
-```
+Method Decorators are deprecated see [Migrate to 6.0.0](https://typegoose.github.io/typegoose/guides/migrate-to-6/)
 
 ### Class decorators
 
@@ -474,19 +492,33 @@ Mongoose allows the developer to add pre and post [hooks / middlewares](http://m
 
 Typegoose provides this functionality through TypeScript's class decorators.
 
+#### modelOptions
+
+The Model Options can be used like below
+
+```ts
+@modelOptions({ existingMongoose, schemaOptions, existingConnection })
+class Name {}
+```
+
+The Options for `@modelOptions`:
+ * `existingMongoose: mongoose`: An existing Mongoose instance can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.
+ * `schemaOptions: mongoose.SchemaOptions`: Additional [schema options](http://mongoosejs.com/docs/guide.html#options) can be passed down to the schema-to-be-created.
+ * `existingConnection: mongoose.Connection`: An existing Mongoose connection can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.
+
 #### pre
 
 We can simply attach a `@pre` decorator to the Typegoose class and define the hook function like you normally would in Mongoose.
 (Method supports REGEXP)
 
 ```ts
-@pre<Car>('save', function(next) { // or @pre(this: Car, 'save', ...
+@pre<Car>('save', function(next) {
   if (this.model === 'Tesla') {
     this.isFast = true;
   }
   next();
 })
-class Car extends Typegoose {
+class Car {
   @prop({ required: true })
   model!: string;
 
@@ -510,7 +542,7 @@ Same as `pre`, the `post` hook is also implemented as a class decorator. Usage i
     console.log(car.model, 'is fast!');
   }
 })
-class Car extends Typegoose {
+class Car {
   @prop({ required: true })
   model!: string;
 
@@ -531,16 +563,14 @@ If the plugin enhances the schema with additional properties or instance / stati
 import * as findOrCreate from 'mongoose-findorcreate';
 
 @plugin(findOrCreate)
-class User extends Typegoose {
+class User {
   // this isn't the complete method signature, just an example
-  static findOrCreate(condition: InstanceType<User>):
-    Promise<{ doc: InstanceType<User>, created: boolean }>;
+  static findOrCreate(condition: DocumentType<User>):
+    Promise<{ doc: DocumentType<User>, created: boolean }>;
 }
 
-const UserModel = new User().getModelForClass(User);
-UserModel.findOrCreate({ ... }).then(findOrCreateResult => {
-  ...
-});
+const UserModel = getModelForClass(User);
+const result = await UserModel.findOrCreate({ ... });
 ```
 
 #### index
@@ -555,7 +585,7 @@ are also valid for `@index`. For more info refer to interface `IndexOptions`
 @index({ article: 1, user: 1 }, { unique: true })
 @index({ location: '2dsphere' })
 @index({ article: 1 }, { partialFilterExpression: { stars: { $gte: 4.5 } } })
-export class Location extends Typegoose {
+class Location {
   @prop()
   article?: number;
 
@@ -572,35 +602,38 @@ export class Location extends Typegoose {
 
 ### Types
 
-Some additional types were added to make Typegoose more user friendly.
+Some additional types were added to make Typegoose more user friendly.  
+(for some additional types, that are not exported by default can be accessed via `import * as types from 'typegoose/types'`)
 
-#### InstanceType<T>
+#### DocumentType<T>
 
 This is basically the logical 'and' of the `T` and the `mongoose.Document`, so that both the Mongoose instance properties/functions and the user defined properties/instance methods are available on the instance.
 
-Note: TypeScript has its own InstanceType, you should import it from Typegoose
+#### ReturnModelType<T>
 
-#### ModelType<T>
-
-This is the logical 'and' of `mongoose.Model<InstanceType<T>>` and `T`, so that the Mongoose model creates `InstanceType<T>` typed instances and all user defined static methods are available on the model.
+This is the logical 'and' of `mongoose.Model<DocumentType<T>>` and `T`, so that the Mongoose model creates `DocumentType<T>` typed instances and all user defined static methods are available on the model.
 
 #### Ref<T>
 
 For reference properties:
 `Ref<T>` - `T` if populated and `ObjectID` if unpopulated.
+-> there are TypeGuards for this to check named:
+* `isDocument(T)`: returns `true` if `T` is populated, false otherwise
+* `isDocumentArray(T)`: returns `true` if `T`  is an Array **AND** is fully populated
+
+---
 
 ## Improvements
 
-* Add frequently used (currently not present) features if needed
-* Create more tests (break down current huge one into multiple unit tests)
 * Add Tests for:
   - Hooks: add hook test for pre & post with error
-  - test for the errors (if invalid arguments are given)
-  - improve baseProp `required` handeling ()
 
-### Notes
+## Notes
 
 * `mongoose` is a peer-dependency, and a dev dependency to install it for dev purposes
-* Please dont add comments with `+1` or something like it, use the Reactions
+* Please dont add comments with `+1` or something like that, use the Reactions
 * Typegoose **cannot** be used with classes of the same name, it will always return the first build class with that name
-* All Models in Typegoose are set to strict by default, and when you really want it to be changed, try `getModelForClass(class, {schemaOptions:{strict:false}})`
+* All Models in Typegoose are set to strict by default, and **cant** be changed!
+* `npm run doc` generates all documentation for all files that can be used as modules (is used for github-pages)
+* `npm run doc:all` generates documentation even for internal modules
+* This module should not be used with `ts-node --transpile-only`, `--type-check` must be added at least, szokodiakos#196

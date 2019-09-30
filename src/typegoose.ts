@@ -1,190 +1,212 @@
 /* imports */
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
+import { deprecate, isNullOrUndefined } from 'util';
 
-import { constructors, hooks, methods, models, plugins, schema, virtuals } from './data';
+import * as defaultClasses from './defaultClasses';
+import { DecoratorKeys } from './internal/constants';
+import { constructors, models } from './internal/data';
+import { NoValidClass } from './internal/errors';
+import { _buildSchema } from './internal/schema';
+import { assignMetadata, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
 
 /* exports */
+export { mongoose }; // export the internally used one, to not need to always import it
+export { setLogLevel, LogLevels } from './logSettings';
 export * from './method';
 export * from './prop';
 export * from './hooks';
 export * from './plugin';
 export * from '.';
 export * from './typeguards';
-export { getClassForDocument } from './utils';
+export * from './optionsProp';
+export { defaultClasses };
+export { DocumentType, Ref, ReturnModelType };
+export { getClassForDocument } from './internal/utils';
 
-export type InstanceType<T> = T & mongoose.Document;
-export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
+/** @deprecated */
+export abstract class Typegoose {
+  /* istanbul ignore next */
+  constructor() {
+    // tslint:disable-next-line:no-empty
+    deprecate(() => { }, 'Typegoose Class is Deprecated!')();
+  }
 
-export interface GetModelForClassOptions {
-  /** An Existing Mongoose Connection */
-  existingMongoose?: mongoose.Mongoose;
-  /** Supports all Mongoose's Schema Options */
-  schemaOptions?: mongoose.SchemaOptions;
-  /** An Existing Connection */
-  existingConnection?: mongoose.Connection;
+  /* istanbul ignore next */
+  /** @deprecated */
+  public getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
+    assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
+
+    return deprecate(getModelForClass, 'Typegoose Class is Deprecated!')(cl);
+  }
+
+  /* istanbul ignore next */
+  /** @deprecated */
+  public setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
+    assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
+
+    return deprecate(setModelForClass, 'Typegoose Class is Deprecated!')(cl);
+  }
+
+  /* istanbul ignore next */
+  /** @deprecated */
+  public buildSchema<T, U extends AnyParamConstructor<T>>(cl: U) {
+    return deprecate(buildSchema, 'Typegoose Class is Deprecated!')(cl);
+  }
 }
 
 /**
- * Main Class
+ * Get a Model for a Class
+ * Executes .setModelForClass if it cant find it already
+ * @param cl The uninitialized Class
+ * @returns The Model
+ * @public
+ * @example
+ * ```ts
+ * class Name {}
+ *
+ * const NameModel = getModelForClass(Name);
+ * ```
  */
-export class Typegoose {
-  /**
-   * Get a Model for a Class
-   * Executes .setModelForClass if it cant find it already
-   * @param t The uninitialized Class
-   * @param __namedParameters The Options
-   * @param existingMongoose An Existing Mongoose Connection
-   * @param schemaOptions Supports all Mongoose's Schema Options
-   * @param existingConnection An Existing Connection
-   * @returns The Model
-   * @public
-   */
-  public getModelForClass<T>(
-    t: T,
-    { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
-  ) {
-    const name = this.constructor.name;
-    if (!models[name]) {
-      this.setModelForClass(t, {
-        existingMongoose,
-        schemaOptions,
-        existingConnection,
-      });
-    }
-
-    return models[name] as ModelType<this> & T;
+export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
   }
 
-  /**
-   * Builds the Schema & The Model
-   * @param t The uninitialized Class
-   * @param __namedParameters The Options
-   * @param existingMongoose An Existing Mongoose Connection
-   * @param schemaOptions Supports all Mongoose's Schema Options
-   * @param existingConnection An Existing Connection
-   * @returns The Model
-   * @public
-   */
-  public setModelForClass<T>(
-    t: T,
-    { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
-  ) {
-    const name = this.constructor.name;
+  const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options || {}, cl);
+  const name = getName(cl);
 
-    const sch = this.buildSchema<T>(t, { existingMongoose, schemaOptions });
-
-    let model = mongoose.model.bind(mongoose);
-    if (existingConnection) {
-      model = existingConnection.model.bind(existingConnection);
-    } else if (existingMongoose) {
-      model = existingMongoose.model.bind(existingMongoose);
-    }
-
-    models[name] = model(name, sch);
-    constructors[name] = this.constructor;
-
-    return models[name] as ModelType<this> & T;
+  if (models.get(name)) {
+    return models.get(name) as ReturnModelType<U, T>;
   }
 
-  /**
-   * Generates a Mongoose schema out of class props, iterating through all parents
-   * @param t The not initialized Class
-   * @param schemaOptions Options for the Schema
-   * @returns Returns the Build Schema
-   */
-  public buildSchema<T>(t: T, { schemaOptions }: GetModelForClassOptions = {}) {
-    const name = this.constructor.name;
-
-    // get schema of current model
-    let sch = _buildSchema<T>(t, name, schemaOptions);
-    /** Parent Constructor */
-    let parentCtor = Object.getPrototypeOf(this.constructor.prototype).constructor;
-    // iterate trough all parents
-    while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
-      // extend schema
-      sch = _buildSchema<T>(t, parentCtor.name, schemaOptions, sch);
-      // next parent
-      parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
-    }
-    return sch;
+  let model = mongoose.model.bind(mongoose);
+  if (!isNullOrUndefined(roptions.existingConnection)) {
+    model = roptions.existingConnection.model.bind(roptions.existingConnection);
+  } else if (!isNullOrUndefined(roptions.existingMongoose)) {
+    model = roptions.existingMongoose.model.bind(roptions.existingMongoose);
   }
+
+  return addModelToTypegoose(model(name, buildSchema(cl, roptions.schemaOptions)), cl);
+}
+
+/* istanbul ignore next */
+/**
+ * Builds the Schema & The Model
+ * DEPRECTAED: use getModelForClass
+ * @param cl The uninitialized Class
+ * @returns The Model
+ * @deprecated
+ */
+export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
+  return deprecate(
+    getModelForClass(cl),
+    'setModelForClass is deprecated, please use getModelForClasse (see README#Migrate to 6.0.0');
 }
 
 /**
- * Private schema builder out of class props
- * -> If you discover this, dont use this function, use Typegoose.buildSchema!
- * @param t The not initialized Class
- * @param name The Name to save the Schema Under (Mostly Constructor.name)
- * @param schemaOptions Options for the Schema
- * @param sch Already Existing Schema?
+ * Generates a Mongoose schema out of class props, iterating through all parents
+ * @param cl The not initialized Class
  * @returns Returns the Build Schema
- * @private
  */
-function _buildSchema<T>(t: T, name: string, schemaOptions: any, sch?: mongoose.Schema) {
-  /** Simplify the usage */
-  const Schema = mongoose.Schema;
-
-  if (!sch) {
-    sch = schemaOptions ? new Schema(schema[name], schemaOptions) : new Schema(schema[name]);
-  } else {
-    sch.add(schema[name]);
+export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?: mongoose.SchemaOptions) {
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
   }
 
-  /** Simplify the usage */
-  const staticMethods = methods.staticMethods[name];
-  if (staticMethods) {
-    sch.statics = Object.assign(staticMethods, sch.statics || {});
-  } else {
-    sch.statics = sch.statics || {};
-  }
+  const mergedOptions = mergeSchemaOptions(options, cl);
 
-  /** Simplify the usage */
-  const instanceMethods = methods.instanceMethods[name];
-  if (instanceMethods) {
-    sch.methods = Object.assign(instanceMethods, sch.methods || {});
-  } else {
-    sch.methods = sch.methods || {};
-  }
+  let sch: mongoose.Schema<U>;
+  /** Parent Constructor */
+  let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
+  // iterate trough all parents
+  while (parentCtor && parentCtor.name !== 'Object') {
+    /* istanbul ignore next */
+    if (parentCtor.name === 'Typegoose') { // TODO: remove this "if", if the Typegoose class gets removed [DEPRECATION]
+      deprecate(() => undefined, 'The Typegoose Class is deprecated, please try to remove it')();
 
-  if (hooks[name]) { // checking to just dont get errors like "hooks[name].pre is not defined"
-    hooks[name].pre.forEach(preHookArgs => {
-      (sch as any).pre(...preHookArgs);
-    });
-    hooks[name].post.forEach(postHookArgs => {
-      (sch as any).post(...postHookArgs);
-    });
-  }
-
-  if (plugins[name]) { // same as the "if (hooks[name])"
-    for (const plugin of plugins[name]) {
-      sch.plugin(plugin.mongoosePlugin, plugin.options);
+      break;
     }
+    // extend schema
+    sch = _buildSchema(parentCtor, sch, mergedOptions);
+    // set next parent
+    parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
-
-  /** Simplify the usage */
-  const getterSetters = virtuals[name];
-  if (getterSetters) {
-    for (const key of Object.keys(getterSetters)) {
-      if (getterSetters[key].options && getterSetters[key].options.overwrite) {
-        sch.virtual(key, getterSetters[key].options);
-      } else {
-        if (getterSetters[key].get) {
-          sch.virtual(key, getterSetters[key].options).get(getterSetters[key].get);
-        }
-
-        if (getterSetters[key].set) {
-          sch.virtual(key, getterSetters[key].options).set(getterSetters[key].set);
-        }
-      }
-    }
-  }
-
-  /** Get Metadata for indices */
-  const indices = Reflect.getMetadata('typegoose:indices', t) || [];
-  for (const index of indices) {
-    sch.index(index.fields, index.options);
-  }
+  // get schema of current model
+  sch = _buildSchema(cl, sch, mergedOptions);
 
   return sch;
+}
+
+/**
+ * This can be used to add custom Models to Typegoose, with the type infomation of cl
+ * Note: no gurantee that the type infomation is fully correct
+ * @param model The model to store
+ * @param cl The Class to store
+ * @example
+ * ```ts
+ * class T {}
+ *
+ * const schema = buildSchema(T);
+ * // modifications to the schame can be done
+ * const model = addModelToTypegoose(mongoose.model(schema), T);
+ * ```
+ */
+export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: mongoose.Model<any>, cl: U) {
+  if (!(model.prototype instanceof mongoose.Model)) {
+    throw new TypeError(`"${model}" is not a valid Model!`);
+  }
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
+
+  const name = getName(cl);
+
+  if (constructors.get(name)) {
+    // tslint:disable-next-line:no-console
+    console.error(new Error('It seems like "addModelToTypegoose" got called twice\n'
+      + 'Or multiple classes with the same name are used, which currently isnt supported!'
+      + `"Erroring" class is ${name}`));
+  }
+
+  models.set(name, model);
+  constructors.set(name, cl);
+
+  return models.get(name) as ReturnModelType<U, T>;
+}
+
+/**
+ * Build a Model from a given class and return the model
+ * @param from The Model to build From
+ * @param cl The Class to make a model out
+ * @param id The Identifier to use to differentiate documents (default: cl.name)
+ * @example
+ * ```ts
+ * class C1 {}
+ * class C2 extends C1 {}
+ *
+ * const C1Model = getModelForClass(C1);
+ * const C2Model = getDiscriminatorModelForClass(C1Model, C1);
+ * ```
+ */
+export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T>>(
+  from: mongoose.Model<any>,
+  cl: U,
+  id?: string
+) {
+  const name = getName(cl);
+  if (models.get(name)) {
+    return models.get(name) as ReturnModelType<U, T>;
+  }
+  const sch = buildSchema(cl) as mongoose.Schema & { paths: object };
+
+  const discriminatorKey = sch.get('discriminatorKey');
+  if (sch.path(discriminatorKey)) {
+    sch.paths[discriminatorKey].options.$skipDiscriminatorCheck = true;
+  }
+
+  const model = from.discriminator(name, sch, id ? id : name);
+
+  return addModelToTypegoose(model, cl);
 }

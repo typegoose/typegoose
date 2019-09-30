@@ -1,7 +1,9 @@
+import { DecoratorKeys } from './internal/constants';
+
 /*
  copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
-
  */
+
 export interface IndexOptions<T> {
   /**
    * Mongoose-specific syntactic sugar, uses ms to convert
@@ -69,13 +71,13 @@ export interface IndexOptions<T> {
  * @example Example:
  * ```
  *  @index({ article: 1, user: 1 }, { unique: true })
- *  class Name extends Typegoose {}
+ *  class Name {}
  * ```
  */
 export function index<T>(fields: T, options?: IndexOptions<T>) {
-  return (constructor: any) => {
-    const indices = Reflect.getMetadata('typegoose:indices', constructor) || [];
+  return (target: any) => {
+    const indices: any[] = Reflect.getMetadata(DecoratorKeys.Index, target) || [];
     indices.push({ fields, options });
-    Reflect.defineMetadata('typegoose:indices', indices, constructor);
+    Reflect.defineMetadata(DecoratorKeys.Index, indices, target);
   };
 }

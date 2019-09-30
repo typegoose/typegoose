@@ -1,65 +1,21 @@
-import { methods } from './data';
-
-type MethodType = 'instanceMethods' | 'staticMethods';
-
-/**
- * Base Function for staticMethod & instanceMethod
- * @param target <no info>
- * @param key <no info>
- * @param descriptor <no info>
- * @param methodType What type it is
- */
-function baseMethod(target: any, key: string, descriptor: TypedPropertyDescriptor<any>, methodType: MethodType) {
-  if (descriptor === undefined) {
-    descriptor = Object.getOwnPropertyDescriptor(target, key);
-  }
-
-  let name: any;
-  if (methodType === 'instanceMethods') {
-    name = target.constructor.name;
-  }
-  if (methodType === 'staticMethods') {
-    name = target.name;
-  }
-
-  if (!methods[methodType][name]) {
-    methods[methodType][name] = {};
-  }
-
-  const method = descriptor.value;
-  methods[methodType][name] = {
-    ...methods[methodType][name],
-    [key]: method,
-  };
-}
+/* istanbul ignore file */
+import { deprecate } from 'util';
 
 /**
  * Set the function below as a Static Method
  * Note: you need to add static before the name
- * @example Example:
- * ```
- *  @staticMethod
- *  public static hello() {}
- * ```
- * @param target <no info>
- * @param key <no info>
- * @param descriptor <no info>
+ * @deprecated
  */
-export function staticMethod(target: any, key: string, descriptor: TypedPropertyDescriptor<any>) {
-  return baseMethod(target, key, descriptor, 'staticMethods');
-}
+export const staticMethod = deprecate(
+  (_1, _2) => undefined,
+  '"staticMethod" is deprecated, look at README#Migrate to 6.0.0'
+);
 
 /**
  * Set the function below as an Instance Method
- * @example Example:
- * ```
- *  @instanceMethod
- *  public hello() {}
- * ```
- * @param target <no info>
- * @param key <no info>
- * @param descriptor <no info>
+ * @deprecated
  */
-export function instanceMethod(target: any, key: string, descriptor: TypedPropertyDescriptor<any>) {
-  return baseMethod(target, key, descriptor, 'instanceMethods');
-}
+export const instanceMethod = deprecate(
+  (_1, _2) => undefined,
+  '"instanceMethod" is deprecated, look at README#Migrate to 6.0.0'
+);

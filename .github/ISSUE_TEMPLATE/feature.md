@@ -1,8 +1,8 @@
 ---
 name: Feature
 about: Request a feature
-title: '[Request] '
-labels: request
+title: ''
+labels: feature
 assignees: ''
 ---
 

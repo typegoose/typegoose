@@ -1,12 +1,12 @@
 // Tests for discriminators and refPaths
-import { arrayProp, prop, Ref, Typegoose } from '../../src/typegoose';
+import { arrayProp, getModelForClass, prop, Ref } from '../../src/typegoose';
 
-export class Scooter extends Typegoose {
+export class Scooter {
   @prop()
   public makeAndModel?: string;
 }
 
-export class Beverage extends Typegoose {
+export class Beverage {
   @prop({ default: false })
   public isSugarFree?: boolean;
 
@@ -14,11 +14,11 @@ export class Beverage extends Typegoose {
   public isDecaf?: boolean;
 }
 
-export class Inventory extends Typegoose {
+export class Inventory {
   @prop({ default: 100 })
   public count?: number;
 
-  @prop({ default: 1.00 })
+  @prop({ default: 1 })
   public value?: number;
 
   @prop({ required: true, enum: ['Beverage', 'Scooter'] })
@@ -34,7 +34,7 @@ export class Inventory extends Typegoose {
   public irp!: Ref<Beverage | Scooter>[];
 }
 
-export class TestIRPbyString extends Typegoose {
+export class TestIRPbyString {
   @prop({ required: true })
   public normalProp!: string;
 
@@ -42,7 +42,7 @@ export class TestIRPbyString extends Typegoose {
   public bev!: Ref<Beverage>[];
 }
 
-export const ScooterModel = new Scooter().getModelForClass(Scooter);
-export const BeverageModel = new Beverage().getModelForClass(Beverage);
-export const InventoryModel = new Inventory().getModelForClass(Inventory);
-export const TestIRPbyStringModel = new TestIRPbyString().getModelForClass(TestIRPbyString);
+export const ScooterModel = getModelForClass(Scooter);
+export const BeverageModel = getModelForClass(Beverage);
+export const InventoryModel = getModelForClass(Inventory);
+export const TestIRPbyStringModel = getModelForClass(TestIRPbyString);

@@ -1,13 +1,24 @@
-import { expect } from 'chai';
+import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { Ref } from '../../src/typegoose';
+import { arrayProp, buildSchema, isDocumentArray, prop, Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
-import { model as InternetUser } from '../models/internet-user';
+import { GetSet, GetSetModel } from '../models/getSet';
+import { model as InternetUser } from '../models/internetUser';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
+import { OptionsClass, OptionsModel } from '../models/options';
 import { model as User } from '../models/user';
-import { Virtual, VirtualSub } from '../models/virtualprop';
+import {
+  NonVirtual,
+  NonVirtualGS,
+  NonVirtualGSModel,
+  NonVirtualModel,
+  Virtual,
+  VirtualModel,
+  VirtualSub,
+  VirtualSubModel
+} from '../models/virtualprop';
 
 /**
  * Function to pass into describe
@@ -27,7 +38,7 @@ export function suite() {
       lastName: 'potter',
       gender: Genders.MALE,
       languages: ['english'],
-      uniqueId: 'unique-id',
+      uniqueId: 'unique-id'
     });
     await user.addJob({ position: 'Dark Wizzard', title: 'Archmage' });
     await user.addJob();
@@ -41,51 +52,69 @@ export function suite() {
   });
 
   it('should add and populate the virtual properties', async () => {
-    const virtualModel = new Virtual().getModelForClass(Virtual);
-    const virtualSubModel = new VirtualSub().getModelForClass(VirtualSub);
-
-    const virtual1 = await new virtualModel({ dummyVirtual: 'dummyVirtual1' } as Virtual).save();
-    const virtualsub1 = await new virtualSubModel({
+    const virtual1 = await VirtualModel.create({ dummyVirtual: 'dummyVirtual1' } as Virtual);
+    const virtualsub1 = await VirtualSubModel.create({
       dummy: 'virtualSub1',
       virtual: virtual1._id
-    } as Partial<VirtualSub>).save();
-    const virtualsub2 = await new virtualSubModel({
+    } as Partial<VirtualSub>);
+    const virtualsub2 = await VirtualSubModel.create({
       dummy: 'virtualSub2',
       virtual: mongoose.Types.ObjectId() as Ref<any>
-    } as Partial<VirtualSub>).save();
-    const virtualsub3 = await new virtualSubModel({
+    } as Partial<VirtualSub>);
+    const virtualsub3 = await VirtualSubModel.create({
       dummy: 'virtualSub3',
       virtual: virtual1._id
-    } as Partial<VirtualSub>).save();
+    } as Partial<VirtualSub>);
 
-    const newfound = await virtualModel.findById(virtual1._id).populate('virtualSubs').exec();
+    const newfound = await VirtualModel.findById(virtual1._id).populate('virtualSubs').exec();
 
     expect(newfound.dummyVirtual).to.be.equal('dummyVirtual1');
     expect(newfound.virtualSubs).to.not.be.an('undefined');
-    expect(newfound.virtualSubs[0].dummy).to.be.equal('virtualSub1');
-    expect(newfound.virtualSubs[0]._id.toString()).to.be.equal(virtualsub1._id.toString());
-    expect(newfound.virtualSubs[1].dummy).to.be.equal('virtualSub3');
-    expect(newfound.virtualSubs[1]._id.toString()).to.be.equal(virtualsub3._id.toString());
-    expect(newfound.virtualSubs).to.not.include(virtualsub2);
+    if (isDocumentArray(newfound.virtualSubs)) {
+      expect(newfound.virtualSubs[0].dummy).to.be.equal('virtualSub1');
+      expect(newfound.virtualSubs[0]._id.toString()).to.be.equal(virtualsub1._id.toString());
+      expect(newfound.virtualSubs[1].dummy).to.be.equal('virtualSub3');
+      expect(newfound.virtualSubs[1]._id.toString()).to.be.equal(virtualsub3._id.toString());
+      expect(newfound.virtualSubs).to.not.include(virtualsub2);
+    } else {
+      assert.fail('Expected "newfound.virtualSubs" to be populated');
+    }
+  });
+
+  it('should make use of nonVirtual set pre-processor', async () => {
+    {
+      // test if everything works
+      const doc = await NonVirtualModel.create({ non: 'HELLO THERE' } as Partial<NonVirtual>);
+
+      expect(doc.non).to.not.be.an('undefined');
+      expect(doc.non).to.be.equals('hello there');
+    }
+    {
+      // test if other options work too
+      const doc = await NonVirtualModel.create({});
+
+      expect(doc.non).to.not.be.an('undefined');
+      expect(doc.non).to.be.equals('hello_default');
+    }
   });
 
   it(`should add dynamic fields using map`, async () => {
     const user = await InternetUser.create({
       socialNetworks: {
-        'twitter': 'twitter account',
-        'facebook': 'facebook account',
+        twitter: 'twitter account',
+        facebook: 'facebook account'
       },
       sideNotes: {
-        'day1': {
+        day1: {
           content: 'day1',
           link: 'url'
         },
-        'day2': {
+        day2: {
           content: 'day2',
           link: 'url//2'
-        },
+        }
       },
-      projects: {},
+      projects: {}
     });
     expect(user).to.not.be.an('undefined');
     expect(user).to.have.property('socialNetworks').to.be.instanceOf(Map);
@@ -129,7 +158,7 @@ export function suite() {
     }).save();
 
     // I should now have two "inventory" items, with different embedded reference documents.
-    const items = await Inventory.find({}).populate('kind');
+    const items = await Inventory.find({}).populate('kind').exec();
     expect((items[0].kind as typeof Beverage).isDecaf).to.be.equals(true);
 
     // wrong type to make typescript happy
@@ -159,6 +188,118 @@ export function suite() {
       expect(toObject).to.have.property('normalProp', 'hello from normalProp');
       expect(toObject).to.have.property('alias', 'hello from aliasProp');
       expect(toObject).to.not.have.property('aliasProp');
+    }
+  });
+
+  it('should add model with createdAt and updatedAt', async () => {
+    const { id: createdId } = await OptionsModel.create({ someprop: 10 } as OptionsClass);
+
+    const found = await OptionsModel.findById(createdId).exec();
+
+    expect(found).to.not.be.an('undefined');
+    expect(found).to.have.property('someprop', 10);
+    expect(found.createdAt).to.be.a.instanceOf(Date);
+    expect(found.updatedAt).to.be.a.instanceOf(Date);
+  });
+
+  it('should make use of non-virtuals with pre- and post-processors', async () => {
+    const doc = await NonVirtualGSModel.create({ non: ['hi', 'where?'] } as NonVirtualGS);
+    // stored gets { non: 'hi where?' }
+
+    expect(doc.non).to.not.be.an('undefined');
+    expect(doc.non).to.deep.equals(['hi', 'where?']);
+  });
+
+  it('should add options to ref [szokodiakos#379]', () => {
+    class T { }
+    class TestRef {
+      @prop({ ref: T, customoption: 'custom' })
+      public someprop: Ref<T>;
+    }
+
+    const schema = buildSchema(TestRef);
+    const someprop = schema.path('someprop');
+    expect(schema).to.not.be.an('undefined');
+    expect(someprop).to.not.be.an('undefined');
+    // @ts-ignore
+    const opt: any = someprop.options;
+    expect(opt.type).to.be.an('function');
+    expect(opt.ref).to.equal('T');
+    expect(opt).to.have.property('customoption', 'custom');
+  });
+
+  it('should add options to refPath [szokodiakos#379]', () => {
+    class T { }
+    class TestRefPath {
+      @prop({ default: 'T' })
+      public something: string;
+
+      @prop({ refPath: 'something', customoption: 'custom' })
+      public someprop: Ref<T>;
+    }
+
+    const schema = buildSchema(TestRefPath);
+    const someprop = schema.path('someprop');
+    expect(schema).to.not.be.an('undefined');
+    expect(someprop).to.not.be.an('undefined');
+    // @ts-ignore
+    const opt: any = someprop.options;
+    expect(opt.type).to.be.an('function');
+    expect(opt.refPath).to.equal('something');
+    expect(opt).to.have.property('customoption', 'custom');
+  });
+
+  it('should add options to itemsRef [szokodiakos#379]', () => {
+    class T { }
+    class TestItemsRef {
+      @arrayProp({ itemsRef: T, customoption: 'custom' })
+      public someprop: Ref<T>[];
+    }
+
+    const schema = buildSchema(TestItemsRef);
+    const someprop = schema.path('someprop');
+    expect(schema).to.not.be.an('undefined');
+    expect(someprop).to.not.be.an('undefined');
+    // @ts-ignore
+    const opt: any = someprop.options.type[0];
+    expect(opt.type).to.be.an('function');
+    expect(opt.ref).to.equal('T');
+    expect(opt).to.have.property('customoption', 'custom');
+  });
+
+  it('should add options to itemsRefPath [szokodiakos#379]', () => {
+    class T { }
+    class TestItemsRefPath {
+      @prop({ default: 'T' })
+      public something: string;
+
+      @arrayProp({ itemsRefPath: 'something', customoption: 'custom' })
+      public someprop: Ref<T>;
+    }
+
+    const schema = buildSchema(TestItemsRefPath);
+    const someprop = schema.path('someprop');
+    expect(schema).to.not.be.an('undefined');
+    expect(someprop).to.not.be.an('undefined');
+    // @ts-ignore
+    const opt: any = someprop.options.type[0];
+    expect(opt.type).to.be.an('function');
+    expect(opt.refPath).to.equal('something');
+    expect(opt).to.have.property('customoption', 'custom');
+  });
+
+  it('should make use of virtual get- & set-ters', async () => {
+    {
+      const doc = await GetSetModel.create({ actualProp: 'hello1' } as GetSet);
+      expect(doc).to.not.be.an('undefined');
+      expect(doc.actualProp).to.equal('hello1');
+      expect(doc.some).to.equal('hello1');
+    }
+    {
+      const doc = await GetSetModel.create({ some: 'hello2' } as GetSet);
+      expect(doc).to.not.be.an('undefined');
+      expect(doc.actualProp).to.equal('hello2');
+      expect(doc.some).to.equal('hello2');
     }
   });
 }

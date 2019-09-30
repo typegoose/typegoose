@@ -12,7 +12,7 @@
 
 ## How to structure Commits
 
-```
+```txt
 Some Title
 - moving fileA to folderB/
 - removing fileB
@@ -20,8 +20,12 @@ Some Title
 - adding `@prop({ optionA })`
 - adding tsdoc for FeatureX
 - modify README to include Docs about A
-- 
 ```
+
+and please sign your commits if possible
+
+-> if you make fixing commits (like fixing a typo, fixing travis) use `git commit --fixup` (for autosquash)
+
 *Legend:*
 - add `[#1]` at the end when there is an issue for it (and modify it to the actual number)
 - the title should be a short introduction like (for small fixes)`Add @mapProp for Maps with tests` (for bigger)`Adding TSDoc`[preferably split the commits when they get to large with adding more features]
@@ -31,3 +35,9 @@ Some Title
 
 ---
 *this is just the base, changes will occure*
+
+## Additional Style guidelines
+
+- if you ever see `console.log`, someone messed up, this should never be there
+- dont use `console.error`, the only occurence is in test's config when some error occurs
+- use `@deprecate`(tsdoc) & `util.deprecate` to deprecate a function / class / variable

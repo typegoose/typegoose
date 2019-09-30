@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Hook, model as HookModel } from '../models/hook1';
+import { Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
 import { model as Dummy } from '../models/hook2';
 
 /**
@@ -18,7 +18,7 @@ export function suite() {
   it('RegEXP tests', async () => {
     const doc = new HookModel({ material: 'iron' } as Hook);
     await doc.save();
-    await doc.updateOne(doc); // to run the update hook with regexp, find dosnt work (it dosnt get applied)
+    await doc.updateOne(doc).exec(); // to run the update hook with regexp, find dosnt work (it dosnt get applied)
 
     const found = await HookModel.findById(doc.id).exec();
     expect(found).to.not.be.an('undefined');
@@ -28,7 +28,7 @@ export function suite() {
 
   it('should update the property using isModified during pre save hook', async () => {
     const hook = await HookModel.create({
-      material: 'steel',
+      material: 'steel'
     });
     expect(hook).to.have.property('shape', 'oldShape');
 
@@ -41,14 +41,14 @@ export function suite() {
     await Dummy.create({ text: 'initial' });
 
     // text is changed in pre save hook
-    const dummyFromDb = await Dummy.findOne({ text: 'saved' });
+    const dummyFromDb = await Dummy.findOne({ text: 'saved' }).exec();
     expect(dummyFromDb).to.have.property('text', 'changed in post findOne hook');
   });
 
   it('should find the unexpected dummies because of pre and post hooks', async () => {
     await Dummy.create([{ text: 'whatever' }, { text: 'whatever' }]);
 
-    const foundDummies = await Dummy.find({ text: 'saved' });
+    const foundDummies = await Dummy.find({ text: 'saved' }).exec();
 
     // pre-save-hook changed text to saved
     expect(foundDummies.length).to.be.above(2);
@@ -59,11 +59,23 @@ export function suite() {
   it('should test the updateMany hook', async () => {
     await Dummy.insertMany([{ text: 'foobar42' }, { text: 'foobar42' }]);
 
-    await Dummy.updateMany({ text: 'foobar42' }, { text: 'lorem ipsum' });
+    await Dummy.updateMany({ text: 'foobar42' }, { text: 'lorem ipsum' }).exec();
 
-    const foundUpdatedDummies = await Dummy.find({ text: 'updateManied' });
+    const foundUpdatedDummies = await Dummy.find({ text: 'updateManied' }).exec();
 
     // pre-updateMany-hook changed text to 'updateManied'
-    expect(foundUpdatedDummies.length).to.equal(2);
+    expect(foundUpdatedDummies).to.be.lengthOf(2);
+  });
+
+  it('should execute multiple hooks with array', async () => {
+    const doc = await HookArrayModel.create({} as HookArray);
+    await HookArrayModel.find({}).exec();
+    await HookArrayModel.findOne({ _id: doc.id }).exec();
+
+    const found = await HookArrayModel.findById(doc.id).exec();
+    expect(found).to.not.be.an('undefined');
+    expect(found.testArray).to.be.an('array');
+    expect(found.testArray).to.be.lengthOf(3);
+    expect(found.testArray).to.deep.equal(['hello', 'hello', 'hello']);
   });
 }

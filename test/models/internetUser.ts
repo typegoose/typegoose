@@ -1,4 +1,4 @@
-import { mapProp, prop, Typegoose } from '../../src/typegoose';
+import { getModelForClass, mapProp, prop } from '../../src/typegoose';
 
 export class SideNote {
   @prop()
@@ -11,11 +11,11 @@ export class SideNote {
 enum ProjectValue {
   WORKING = 'working',
   UNDERDEVELOPMENT = 'underdevelopment',
-  BROKEN = 'broken',
+  BROKEN = 'broken'
 }
 
-class InternetUser extends Typegoose {
-  @mapProp({ of: String, mapDefault: {} })
+class InternetUser {
+  @mapProp({ of: String, default: {} })
   public socialNetworks?: Map<string, string>;
 
   @mapProp({ of: SideNote })
@@ -25,4 +25,4 @@ class InternetUser extends Typegoose {
   public projects: Map<string, ProjectValue>;
 }
 
-export const model = new InternetUser().getModelForClass(InternetUser);
+export const model = getModelForClass(InternetUser);

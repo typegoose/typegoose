@@ -1,0 +1,97 @@
+main:
+  - title: 'Guides'
+    url: /guides/quick-start-guide
+  - title: 'Documentation'
+    url: /docs
+  - title: 'Changelog'
+    url: /changelog
+  - title: 'TypeDoc'
+    url: /typedoc
+
+# Sidebars
+# note: these sidebars below are just placeholders, until actual documentation starts
+docs:
+  - title: Start
+    children:
+      - title: 'Index'
+        url: /docs
+
+  - title: Decorators
+    children:
+      - title: 'Prop'
+        url: /docs/decorators/prop
+      - title: 'Map Prop'
+        url: /docs/decorators/mapProp
+      - title: 'Array Prop'
+        url: /docs/decorators/arrayProp
+      - title: 'Model Options'
+        url: /docs/decorators/modelOptions
+      - title: 'Hooks'
+        url: /docs/decorators/hooks
+      - title: 'Indexes'
+        url: /docs/decorators/indexes
+      - title: 'Plugins'
+        url: /docs/decorators/plugins
+
+  - title: Functions
+    children:
+      - title: 'Get Model For Class'
+        url: /docs/functions/getModelForClass
+      - title: 'Build Schema'
+        url: /docs/functions/buildSchema
+      - title: 'Get Discriminator Model for Class'
+        url: /docs/functions/getDiscriminatorModelForClass
+      - title: 'Add Model To Typegoose'
+        url: /docs/functions/addModelToTypegoose
+
+  - title: TypeGuards
+    children:
+      - title: 'Is Document'
+        url: /docs/functions/typeguards/isDocument
+
+  - title: Types
+    children:
+      - title: 'Document Type'
+        url: /docs/types/document
+      - title: 'Return Model Type'
+        url: /docs/types/returnModelType
+      - title: 'Ref'
+        url: /docs/types/ref
+
+guides:
+  - title: Getting Started
+    children:
+      - title: 'Quick-Start Guide'
+        url: /guides/quick-start-guide/
+      - title: 'Migrate to 6.0.0'
+        url: /guides/migrate-to-6/
+      - title: 'FAQ'
+        url: /guides/faq
+      - title: 'Known Issues'
+        url: /guides/known-issues
+
+  - title: Basics
+    children:
+      - title: 'All the Decorators'
+        url: /guides/decorators/
+      - title: 'Motivation'
+        url: /guides/motivation/
+      - title: 'Default Classes'
+        url: /guides/defaultClasses/
+
+  - title: Advanced
+    children:
+      - title: 'Custom Types'
+        url: /guides/advanced/custom-types
+      - title: 'Model with same name'
+        url: /guides/advanced/models-with-same-name
+      - title: "Typegoose's Logger" # this is a double quotation mark, because otherwise it would parse wrong
+        url: /guides/advanced/logger
+      - title: 'Reference other Classes'
+        url: /guides/advanced/reference-other-classes
+  # - title: Combine with other packages
+  #   children:
+  #     - title: 'type-graphql'
+  #       url: /guides/type-graphql
+  #     - title: 'nestjs'
+  #       url: /guides/nestjs

@@ -1,9 +1,7 @@
 {
   "defaultSeverity": "error",
   "extends": [
-    "tslint:recommended",
-    "tslint-config-prettier",
-    "prettier-tslint"
+    "tslint:recommended"
   ],
   "rulesDirectory": [
     "node_modules/tslint-eslint-rules/dist/rules"
@@ -24,7 +22,10 @@
     },
     "ter-indent": [
       true,
-      2
+      2,
+      {
+        "SwitchCase": 1
+      }
     ],
     "semicolon": {
       "severity": "error",
@@ -36,10 +37,10 @@
       true,
       "LF"
     ],
-    "max-line-length": [
-      true,
-      120
-    ],
+    "max-line-length": {
+      "severity": "warn",
+      "options": 120
+    },
     "comment-format": {
       "options": [
         "check-space"
@@ -73,12 +74,51 @@
       "check-accessor",
       "check-parameter-property"
     ],
+    "array-type": [
+      true,
+      "array"
+    ],
+    "file-name-casing": [
+      true,
+      "camel-case"
+    ],
+    "trailing-comma": {
+      "severity": "warn",
+      "options": {
+        "singleline": "never",
+        "multiline": "never"
+      }
+    },
+    "ter-padded-blocks": {
+      "severity": "warn",
+      "options": "never"
+    },
     "no-unused-variable": {
       "severity": "warn"
     },
     "no-unused-expression": {
       "severity": "warn"
     },
+    "object-literal-key-quotes": {
+      "severity": "warn",
+      "options": "as-needed"
+    },
+    "no-trailing-whitespace": {
+      "severity": "warn"
+    },
+    "await-promise": {
+      "severity": "warn"
+    },
+    "no-console": {
+      "severity": "warn"
+    },
+    "ordered-imports": {
+      "severity": "warn"
+    },
+    "deprecation": {
+      "severity": "warn"
+    },
+    "space-before-function-paren": false,
     "encoding": true,
     "no-invalid-template-strings": true,
     "eofline": true,
@@ -90,7 +130,13 @@
     "max-classes-per-file": false,
     "interface-name": false,
     "object-literal-sort-keys": false,
-    "array-type": false,
-    "member-ordering": false
+    "member-ordering": false,
+    "no-reference": true,
+    "promise-function-async": true,
+    "function-constructor": true,
+    "return-undefined": true,
+    "newline-before-return": true,
+    "number-literal-format": true,
+    "unified-signatures": false
   }
 }
