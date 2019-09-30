@@ -13,8 +13,6 @@ Define Mongoose models using TypeScript classes.
 import { prop, getModelForClass } from '@typegoose/typegoose';
 import * as mongoose from 'mongoose';
 
-mongoose.connect('mongodb://localhost:27017/test');
-
 class User {
   @prop()
   name?: string;
@@ -24,6 +22,8 @@ const UserModel = getModelForClass(User);
 
 // UserModel is a regular Mongoose Model with correct types
 (async () => {
+  await mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true });
+
   const { _id: id } = await UserModel.create({ name: 'JohnDoe' });
   const user = await UserModel.findById(id).exec();
 
