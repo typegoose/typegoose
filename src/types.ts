@@ -141,6 +141,11 @@ export interface PropOptions extends BasePropOptions {
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
   /**
+   * Override the ref's type
+   * @default ObjectId
+   */
+  refType?: RefSchemaType;
+  /**
    * Give the Property an alias in the output
    * Note: you should include the alias as a variable in the class, but not with a prop decorator
    * @example
