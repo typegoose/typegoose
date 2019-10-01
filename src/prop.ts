@@ -32,14 +32,14 @@ enum WhatIsIt {
 
 /**
  * Base Function for prop & arrayProp
- * @param rawOptions The options (like require)
+ * @param origOptions The options (like require)
  * @param Type What Type it is
  * @param target Target Class
  * @param key Value Key of target class
  * @param isArray is it an array?
  */
 function baseProp(
-  rawOptions: any,
+  origOptions: any,
   Type: AnyParamConstructor<any>,
   target: any,
   key: string,
@@ -55,11 +55,11 @@ function baseProp(
   decoratorCache.get(initname).decorators.set(key, () => {
     if (utils.isNotDefined(Type)) {
       if (Type !== target) { // prevent "infinite" buildSchema loop / Maximum Class size exceeded
-        buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
+        buildSchema(Type, { _id: typeof origOptions._id === 'boolean' ? origOptions._id : true });
       }
     }
     const name: string = utils.getName(target.constructor);
-    rawOptions = Object.assign(rawOptions, {});
+    const rawOptions = Object.assign({}, origOptions);
 
     if (!virtuals.get(name)) {
       virtuals.set(name, new Map());
