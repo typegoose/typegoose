@@ -10,7 +10,7 @@ type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 type ClassDecorator = (target: any) => void;
 type HookNextErrorFn = (err?: Error) => void;
 
-type PreFnWithDT<T> = (this: DocumentType<T>, next?: EmptyVoidFn) => void;
+type PreFnWithDT<T> = (this: DocumentType<T>, next: EmptyVoidFn) => void;
 type PreFnWithQuery<T> = (
   this: Query<T>,
   next?: (error?: Error) => void,
