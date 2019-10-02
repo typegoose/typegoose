@@ -13,7 +13,7 @@ class Kitten {
   @prop()
   public name?: string;
 
-  public static findByName(this: ReturnModelType<Kitten>, name: string) { // this is an Instance Method
+  public static findByName(this: ReturnModelType<typeof Kitten>, name: string) { // this is an Instance Method
     return this.find({ name }).exec(); // thanks to "ReturnModelType" "this" has type infomation
   }
 }
