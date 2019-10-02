@@ -9,6 +9,13 @@ redirect_from:
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
+## 6.0.1
+
+- Add TSDoc for `refType` on PropOptions
+- `refPath` now uses the right type (new uses `refType` instead of `itemsType`)
+- Fix decorator options (rawOptions) mutating thanks to {% include gitissue repo="typegoose" num=60 %}
+- Pre hook's function's `next` is now not marked as "optional" anymore, which caused `next()` to be `EmptyVoidFn | undefined`
+
 ## 6.0.0
 
 [To Migrate, please look at the migration guide]({{ site.baseurl }}{% link _guides/migrate-to-6.md %})
