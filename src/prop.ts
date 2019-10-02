@@ -53,13 +53,14 @@ function baseProp(
   const initname = utils.createUniqueID(target);
 
   decoratorCache.get(initname).decorators.set(key, () => {
+    const rawOptions = Object.assign({}, origOptions);
+
     if (utils.isNotDefined(Type)) {
       if (Type !== target) { // prevent "infinite" buildSchema loop / Maximum Class size exceeded
-        buildSchema(Type, { _id: typeof origOptions._id === 'boolean' ? origOptions._id : true });
+        buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
       }
     }
     const name: string = utils.getName(target.constructor);
-    const rawOptions = Object.assign({}, origOptions);
 
     if (!virtuals.get(name)) {
       virtuals.set(name, new Map());
