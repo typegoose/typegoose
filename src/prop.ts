@@ -110,10 +110,11 @@ function baseProp(
     const refType = rawOptions.refType || mongoose.Schema.Types.ObjectId;
     if (ref) {
       delete rawOptions.ref;
+      const refName = typeof ref === 'string' ? ref : utils.getName(ref);
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
         type: refType,
-        ref: typeof ref === 'string' ? ref : utils.getName(ref),
+        ref: refName,
         ...rawOptions
       };
 
@@ -140,7 +141,7 @@ function baseProp(
       delete rawOptions.refPath;
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
-        type: itemsRefType,
+        type: refType,
         refPath,
         ...rawOptions
       };
