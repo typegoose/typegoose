@@ -9,6 +9,11 @@ redirect_from:
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
+## 6.0.2
+
+- actually allow overwriting "_id" of "Base"
+- [IC] add npm version script
+
 ## 6.0.1
 
 - Add TSDoc for `refType` on PropOptions
