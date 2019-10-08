@@ -158,6 +158,10 @@ export interface PropOptions extends BasePropOptions {
    * ```
    */
   alias?: string;
+  /**
+   * This option as only an effect when the plugin `mongoose-autopopulate` is used
+   */
+  autopopulate?: boolean;
 }
 
 export interface ValidateNumberOptions {

@@ -1,6 +1,7 @@
 import * as findOrCreate from 'mongoose-findorcreate';
 import {
   arrayProp,
+  defaultClasses,
   DocumentType,
   getModelForClass,
   plugin,
@@ -13,13 +14,8 @@ import { Role } from '../enums/role';
 import { Car } from './car';
 import { Job } from './job';
 
-export interface FindOrCreateResult<T> {
-  created: boolean;
-  doc: DocumentType<T>;
-}
-
 @plugin(findOrCreate)
-export class User {
+export class User extends defaultClasses.FindOrCreate {
   @prop({ required: true })
   public firstName: string;
 
@@ -96,8 +92,6 @@ export class User {
 
     return this.save();
   }
-
-  public static findOrCreate: (condition: any) => Promise<FindOrCreateResult<User>>;
 }
 
 export const model = getModelForClass(User);

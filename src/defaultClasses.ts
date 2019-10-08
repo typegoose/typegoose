@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose';
 import { modelOptions } from './optionsProp';
+import { DocumentType } from './types';
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 /**
@@ -19,4 +20,19 @@ export abstract class Base<T_ID extends any = Schema.Types.ObjectId> {
   public __v: number;
   // tslint:disable-next-line:variable-name
   public __t: undefined | string | number;
+}
+
+export interface FindOrCreateResult<T> {
+  created: boolean;
+  doc: DocumentType<T>;
+}
+
+/**
+ * This class contains all types for the module "mongoose-findorcreate"
+ */
+export abstract class FindOrCreate {
+  public static findOrCreate: <T extends FindOrCreate>(
+    this: new (...a: any[]) => T,
+    condition: any
+  ) => Promise<FindOrCreateResult<T>>;
 }
