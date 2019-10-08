@@ -9,6 +9,9 @@ import { Func } from './types';
 export function plugin(mongoosePlugin: Func, options?: any) {
   return (target: any) => {
     const name: string = target.name;
+
+    options = typeof options !== 'object' ? {} : options; // ensure it is an object, even if empty
+
     /* istanbul ignore else */
     if (!plugins.get(name)) {
       plugins.set(name, []);

@@ -9,6 +9,13 @@ redirect_from:
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
+## 6.0.3
+
+- when using `@plugin`, options are now checked if they are an object, when not: make them an object
+- Added many debug logs for `_buildSchema`
+- Added Prop Option `autopopulate`, only has an effect if `mongoose-autopopulate` is used
+- Added default class `FindOrCreate` which has the types for `mongoose-findorcreate`
+
 ## 6.0.2
 
 - actually allow overwriting "_id" of "Base"
