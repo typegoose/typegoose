@@ -46,7 +46,7 @@ function baseProp(
   const initname = utils.createUniqueID(target);
 
   const existingMapForTarget = Reflect.getOwnMetadata(DecoratorKeys.PropProps, target) as DecoratedPropertyMetadataMap;
-  if (!existingMapForTarget) {
+  if (isNullOrUndefined(existingMapForTarget)) {
     Reflect.defineMetadata(DecoratorKeys.PropProps, new Map<string, DecoratedPropertyMetadata>(), target);
   }
   const mapForTarget = existingMapForTarget || (Reflect.getOwnMetadata(DecoratorKeys.PropProps, target) as DecoratedPropertyMetadataMap);
