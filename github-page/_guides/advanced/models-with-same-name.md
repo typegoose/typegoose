@@ -8,6 +8,8 @@ This Guide shows all the possibilitys for a model to use different names
 
 ## SchemaOptions collection
 
+For this to work, `{ options: { automaticName } }` must be true
+
 `{ schemaOptions: { collection } }` can be used to set a custom collection a model should use
 
 Example:
@@ -31,7 +33,7 @@ expect(model.modelName).to.be.equal('MultiModel_Something');
 
 ## Typegoose Custom Options "customName"
 
-`{ options: { customName } }` can be used to apply a suffix to a model's name
+`{ options: { customName } }` can be used to set a custom model name
 
 Example:
 
@@ -40,24 +42,21 @@ Example:
 class CustomNameOption { }
 
 const model = getModelForClass(CustomNameOption);
-expect(model.modelName).to.be.equal('CustomNameOption_CustomName');
+expect(model.modelName).to.be.equal('CustomName');
 ```
 
-## Typegoose Custom Options "automaticName" & "customName"
-
-`{ options: { automaticName: false } }` can be used to disable the automatic name generation, option `customName` is required, otherwise it will use automatic names
--> it will **NOT** throw an error if `customName` is missing, it will only softly warn you
+if `{ options: { customName } }` is used with `{ options: { automaticName: true } }`, then it will be used as a *suffix* of the normal name
 
 Example:
 
 ```ts
-@modelOptions({ options: { automaticName: false, customName: 'CustomName' } })
+@modelOptions({ options: { customName: 'CustomName', automaticName: true } })
 class CustomNameOption { }
 
 const model = getModelForClass(CustomNameOption);
-expect(model.modelName).to.be.equal('CustomName');
+expect(model.modelName).to.be.equal('CustomNameOption_CustomName');
 ```
 
 ---
 
-For more a more detailed use, please look into the code at [the tests that are written for it](https://github.com/hasezoey/typegoose/blob/master/test/tests/options.test.ts)
+For more a more detailed use, please look into the code at [the tests that are written for it](https://github.com/typegoose/typegoose/blob/r6/master/test/tests/customName.test.ts)

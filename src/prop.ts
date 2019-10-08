@@ -25,14 +25,14 @@ import {
 
 /**
  * Base Function for prop & arrayProp
- * @param rawOptions The options (like require)
+ * @param origOptions The options (like require)
  * @param Type What Type it is
  * @param target Target Class
  * @param key Value Key of target class
  * @param isArray is it an array?
  */
 function baseProp(
-  rawOptions: any,
+  origOptions: any,
   Type: AnyParamConstructor<any>,
   target: any,
   key: string,
@@ -51,23 +51,24 @@ function baseProp(
   }
   const mapForTarget = existingMapForTarget || (Reflect.getOwnMetadata(DecoratorKeys.PropProps, target) as DecoratedPropertyMetadataMap);
 
-  mapForTarget.set(key, { rawOptions, Type, target, key, whatis });
+  mapForTarget.set(key, { origOptions, Type, target, key, whatis });
 }
 
 export function _buildPropMetadata(
-  rawOptions: any,
+  origOptions: any,
   Type: AnyParamConstructor<any>,
   target: any,
   key: string,
   whatis: WhatIsIt
 ) {
+  const rawOptions = Object.assign({}, origOptions);
+
   if (utils.isNotDefined(Type)) {
     if (Type !== target) { // prevent "infinite" buildSchema loop / Maximum Class size exceeded
       buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
     }
   }
   const name: string = utils.getName(target.constructor);
-  rawOptions = Object.assign(rawOptions, {});
 
   if (!virtuals.get(name)) {
     virtuals.set(name, new Map());
@@ -118,10 +119,11 @@ export function _buildPropMetadata(
   const refType = rawOptions.refType || mongoose.Schema.Types.ObjectId;
   if (ref) {
     delete rawOptions.ref;
+    const refName = typeof ref === 'string' ? ref : utils.getName(ref);
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       type: refType,
-      ref: typeof ref === 'string' ? ref : ref.name,
+      ref: refName,
       ...rawOptions
     };
 
@@ -131,11 +133,12 @@ export function _buildPropMetadata(
   const itemsRef = rawOptions.itemsRef;
   const itemsRefType = rawOptions.itemsRefType || mongoose.Schema.Types.ObjectId;
   if (itemsRef) {
+    const itemsRefName = typeof itemsRef === 'string' ? itemsRef : utils.getName(itemsRef);
     delete rawOptions.itemsRef;
     schemas.get(name)[key][0] = {
       ...schemas.get(name)[key][0],
       type: itemsRefType,
-      ref: typeof itemsRef === 'string' ? itemsRef : itemsRef.name,
+      ref: itemsRefName,
       ...rawOptions
     };
 
@@ -147,7 +150,7 @@ export function _buildPropMetadata(
     delete rawOptions.refPath;
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
-      type: itemsRefType,
+      type: refType,
       refPath,
       ...rawOptions
     };

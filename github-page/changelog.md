@@ -9,9 +9,20 @@ redirect_from:
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
-## 6.0.0-x
+## 6.0.2
 
-*<sub>This Version is not released yet, but is considered stable</sub>*<br/>
+- actually allow overwriting "_id" of "Base"
+- [IC] add npm version script
+
+## 6.0.1
+
+- Add TSDoc for `refType` on PropOptions
+- `refPath` now uses the right type (new uses `refType` instead of `itemsType`)
+- Fix decorator options (rawOptions) mutating thanks to {% include gitissue repo="typegoose" num=60 %}
+- Pre hook's function's `next` is now not marked as "optional" anymore, which caused `next()` to be `EmptyVoidFn | undefined`
+
+## 6.0.0
+
 [To Migrate, please look at the migration guide]({{ site.baseurl }}{% link _guides/migrate-to-6.md %})
 
 - Project got moved to the new repo (hasezoey/typegoose) and new package `@hasezoey/typegoose`
@@ -48,6 +59,7 @@ redirect_from:
 - fixes Decorator Execution Order [{% include gitissue repo="hasezoey" num=23 %}, {% include gitissue repo="hasezoey" num=24 %}]
 - add support for custom discriminator properties
 - add error if using a self-containing class
+- add support for using multiple classes with the same name (`automaticName`, `customName`, `collection`)
 - [IC] "NoParamConstructor" got renamed into "AnyParamConstructor" it now accepts any arguments
 - [IC] Remake data.ts to use Maps hasezoey#3
 - [IC] adding many tests and bumping coverage

@@ -141,6 +141,11 @@ export interface PropOptions extends BasePropOptions {
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
   /**
+   * Override the ref's type
+   * @default ObjectId
+   */
+  refType?: RefSchemaType;
+  /**
    * Give the Property an alias in the output
    * Note: you should include the alias as a variable in the class, but not with a prop decorator
    * @example
@@ -251,13 +256,20 @@ export interface IModelOptions {
   /** Typegoose Custom Options */
   options?: {
     /**
-     * Set a custom suffix for the model
+     * Set the modelName of the class
+     *
+     * if "automaticName" is true it sets a *suffix* instead of the whole name
      * @default schemaOptions.collection
      */
     customName?: string;
     /**
-     * Disable automatic name generation
-     * @default true
+     * Enable Automatic Name generation of a model
+     * Example:
+     * class with name of "SomeClass"
+     * and option "collection" of "SC"
+     *
+     * will generate the name of "SomeClass_SC"
+     * @default false
      */
     automaticName?: boolean;
   };

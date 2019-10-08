@@ -31,16 +31,14 @@ Note: Typegoose Class has still all the functions, but they are marked deprecate
 
 ## ModelOptions
 
-- `getModelForClass(class, options)`' options got removed
-- `setModelForClass(class, options)`' options got removed
-- `buildSchema(class, options)`' options got removed
-
 use the following decorator now
 
 ```ts
 @modelOptions({ schemaOptions: {} })
 class Name {}
 ```
+
+otherwise the functions still override the settings made in `modelOptions`
 
 ## Hooks
 

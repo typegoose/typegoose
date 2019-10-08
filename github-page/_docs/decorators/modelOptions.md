@@ -14,7 +14,7 @@ redirect_from:
 
 ### customName
 
-`customName` can be used to set custom suffixes to a model
+`customName` can be used to set custom model names
 
 Example:
 
@@ -23,5 +23,36 @@ Example:
 class MultiModel { }
 
 const model = getModelForClass(MultiModel);
+expect(model.modelName).to.be.equal('Something');
+```
+
+if `customName` is used with `automaticName`, it will be a suffix of the class name
+
+Example:
+
+```ts
+@modelOptions({ options: { customName: 'Something', automaticName: true } })
+class MultiModel { }
+
+const model = getModelForClass(MultiModel);
 expect(model.modelName).to.be.equal('MultiModel_Something');
 ```
+
+### automaticName
+
+`automaticName` can be used to automaticly generate custom model names based on `{ schemaOptions: { collection } }` or `{ options: { customName } }`
+-> `customName` will be prioritzed over `collection`
+-> only if `automaticName` is true, `customName` will be a *suffix* of the base class name
+
+Example:
+
+```ts
+// yes this is the same example as the one above
+@modelOptions({ options: { customName: 'Something', automaticName: true } })
+class MultiModel { }
+
+const model = getModelForClass(MultiModel);
+expect(model.modelName).to.be.equal('MultiModel_Something');
+```
+
+Note: on request this was made "opt-in" instead of "opt-out"

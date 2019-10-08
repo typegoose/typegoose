@@ -13,8 +13,8 @@ export abstract class TimeStamps {
 /**
  * This class provied the basic mongoose document properties
  */
-export abstract class Base {
-  public _id: Schema.Types.ObjectId;
+export abstract class Base<T_ID extends any = Schema.Types.ObjectId> {
+  public _id: T_ID;
   // tslint:disable-next-line:variable-name
   public __v: number;
   // tslint:disable-next-line:variable-name

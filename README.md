@@ -1,19 +1,17 @@
 # Typegoose
 
-<sub>(These badges are from typegoose:r6/master)</sub>  
-[![Build Status](https://travis-ci.com/typegoose/typegoose.svg?branch=r6/master)](https://travis-ci.com/typegoose/typegoose)
-[![Coverage Status](https://coveralls.io/repos/github/typegoose/typegoose/badge.svg?branch=r6/master#feb282019)](https://coveralls.io/github/typegoose/typegoose?branch=r6/master)
-[![npm](https://img.shields.io/npm/dt/@hasezoey/typegoose.svg)](https://www.npmjs.com/package/@hasezoey/typegoose)
+<sub>(These badges are from typegoose:master)</sub>  
+[![Build Status](https://travis-ci.com/typegoose/typegoose.svg?branch=master)](https://travis-ci.com/typegoose/typegoose)
+[![Coverage Status](https://coveralls.io/repos/github/typegoose/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/typegoose/typegoose?branch=master)
+[![npm](https://img.shields.io/npm/dt/@typegoose/typegoose.svg)](https://www.npmjs.com/package/@typegoose/typegoose)
 
 Define Mongoose models using TypeScript classes.
 
 ## Basic usage
 
 ```ts
-import { prop, getModelForClass } from '@hasezoey/typegoose';
+import { prop, getModelForClass } from '@typegoose/typegoose';
 import * as mongoose from 'mongoose';
-
-mongoose.connect('mongodb://localhost:27017/test');
 
 class User {
   @prop()
@@ -24,6 +22,8 @@ const UserModel = getModelForClass(User);
 
 // UserModel is a regular Mongoose Model with correct types
 (async () => {
+  await mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true });
+
   const { _id: id } = await UserModel.create({ name: 'JohnDoe' });
   const user = await UserModel.findById(id).exec();
 
@@ -118,13 +118,13 @@ Please note that sub documents do not have to extend Typegoose. You can still gi
 
 ## Install
 
-`npm i -s @hasezoey/typegoose`
+`npm i -s @typegoose/typegoose`
 
 You also need to install `mongoose`, since version 5 it is listed as a peer-dependency
 
 `npm i -s mongoose`
 
-## [Migrate to 6.0.0](https://hasezoey.github.io/typegoose/guides/migrate-to-6/)
+## [Migrate to 6.0.0](https://typegoose.github.io/typegoose/guides/migrate-to-6/)
 
 ## Testing
 
@@ -143,6 +143,8 @@ To ask questions or just talk with us [join our Discord Server](https://discord.
 
 ## API Documentation
 
+Please use [the new guides](https://typegoose.github.io/typegoose/guides/quick-start-guide/) and [the new docs](https://typegoose.github.io/typegoose/docs) this here is just for "legacy reasons" and might be deleted later
+
 ### Typegoose class
 
 Since 6.0.0 deprecated, please try to remove it
@@ -155,7 +157,7 @@ This method returns the corresponding Mongoose Model for the class (`T`). If no 
 
 `setModelForClass<T>(cl: T)`
 
-This Method is Deprecated see [Migrate to 6.0.0](migrate_to_6.md)
+This Method is Deprecated see [Migrate to 6.0.0](https://typegoose.github.io/typegoose/guides/migrate-to-6/)
 
 ## Property decorators
 
@@ -484,7 +486,7 @@ The options object accepts `enum` and `default`, just like `prop`  decorator. In
 
 ### Method decorators
 
-Method Decorators are deprecated see [Migrate to 6.0.0](migrate_to_6.md)
+Method Decorators are deprecated see [Migrate to 6.0.0](https://typegoose.github.io/typegoose/guides/migrate-to-6/)
 
 ### Class decorators
 

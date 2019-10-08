@@ -1,6 +1,6 @@
 {
-  "name": "@hasezoey/typegoose",
-  "version": "6.0.0-31",
+  "name": "@typegoose/typegoose",
+  "version": "6.0.2",
   "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
   "types": "lib/typegoose.d.ts",
@@ -23,7 +23,8 @@
     "clean": "rimraf lib .tsbuildinfo .nyc_output coverage doc build",
     "doc": "typedoc --out ./doc ./src --mode modules --exclude \"**/internal/*\"",
     "doc:all": "typedoc --out ./doc ./src --mode modules",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "version:patch": "npm version patch -m 'Release %s'"
   },
   "repository": "github:typegoose/typegoose",
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
@@ -45,7 +46,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.6",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.1",
     "mongodb-memory-server-global": "^5.2.5",
     "mongoose": "^5.7.1",
     "mongoose-findorcreate": "^3.0.0",

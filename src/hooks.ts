@@ -1,6 +1,6 @@
 import { Query } from 'mongoose';
 import { isArray } from 'util';
-import { hooks as hooksData, HooksPrePost } from './internal/data';
+import { hooks as hooksData, IHooks } from './internal/data';
 import { getName } from './internal/utils';
 import { DocumentType } from './typegoose';
 import { EmptyVoidFn } from './types';
@@ -10,7 +10,7 @@ type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 type ClassDecorator = (target: any) => void;
 type HookNextErrorFn = (err?: Error) => void;
 
-type PreFnWithDT<T> = (this: DocumentType<T>, next?: EmptyVoidFn) => void;
+type PreFnWithDT<T> = (this: DocumentType<T>, next: EmptyVoidFn) => void;
 type PreFnWithQuery<T> = (
   this: Query<T>,
   next?: (error?: Error) => void,
@@ -90,9 +90,9 @@ const hooks: Hooks = {
 function addToHooks(name: string, hookType: 'pre' | 'post', args: any[]) {
   if (!hooksData.get(name)) {
     hooksData.set(name, {
-      post: new Map(),
-      pre: new Map()
-    } as HooksPrePost);
+      post: [],
+      pre: []
+    } as IHooks);
   }
 
   // Convert Method to array if only a string is provided
@@ -105,10 +105,10 @@ function addToHooks(name: string, hookType: 'pre' | 'post', args: any[]) {
   for (const method of methods) {
     switch (hookType) {
       case 'post':
-        hooksData.get(name).post.set(method, func);
+        hooksData.get(name).post.push({ method, func });
         break;
       case 'pre':
-        hooksData.get(name).pre.set(method, func);
+        hooksData.get(name).pre.push({ method, func });
         break;
     }
   }

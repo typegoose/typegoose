@@ -40,7 +40,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   if (!isNullOrUndefined(decorators)) {
     for (const decorator of decorators.values()) {
-      _buildPropMetadata(decorator.rawOptions, decorator.Type, decorator.target, decorator.key, decorator.whatis);
+      _buildPropMetadata(decorator.origOptions, decorator.Type, decorator.target, decorator.key, decorator.whatis);
     }
   }
 
@@ -59,12 +59,12 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   const hook = hooks.get(name);
   if (hook) {
-    hook.pre.forEach((func, method) => {
-      sch.pre(method as string, func as EmptyVoidFn);
+    hook.pre.forEach((obj) => {
+      sch.pre(obj.method as string, obj.func as EmptyVoidFn);
       // ^ look at https://github.com/DefinitelyTyped/DefinitelyTyped/issues/37333
     });
 
-    hook.post.forEach((v, k) => sch.post(k, v));
+    hook.post.forEach((obj) => sch.post(obj.method, obj.func));
   }
 
   if (plugins.get(name)) {

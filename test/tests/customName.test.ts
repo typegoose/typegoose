@@ -25,8 +25,8 @@ export function suite() {
     expect(gotClass).to.equals(NormalOptions);
   });
 
-  it('expect if collection is defined to be automaticly used', () => {
-    @modelOptions({ schemaOptions: { collection: 'Something' } })
+  it('expect if collection is defined to be automaticly used with automaticName', () => {
+    @modelOptions({ schemaOptions: { collection: 'Something' }, options: { automaticName: true } })
     class CollectionOption { }
 
     const model = getModelForClass(CollectionOption);
@@ -37,8 +37,8 @@ export function suite() {
     expect(gotClass).to.equals(CollectionOption);
   });
 
-  it('expect if options.customName is defined to be used', () => {
-    @modelOptions({ options: { customName: 'CustomName' } })
+  it('expect if options.customName is defined to be used with automaticName', () => {
+    @modelOptions({ options: { customName: 'CustomName', automaticName: true } })
     class CustomNameOption { }
 
     const model = getModelForClass(CustomNameOption);
@@ -49,8 +49,8 @@ export function suite() {
     expect(gotClass).to.equals(CustomNameOption);
   });
 
-  it('expect to use options.customName if both are defined', () => {
-    @modelOptions({ options: { customName: 'CustomName2' }, schemaOptions: { collection: 'Something2' } })
+  it('expect to use options.customName if both are defined with automaticName', () => {
+    @modelOptions({ options: { customName: 'CustomName2', automaticName: true }, schemaOptions: { collection: 'Something2' } })
     class BothOptions { }
 
     const model = getModelForClass(BothOptions);
@@ -61,11 +61,11 @@ export function suite() {
     expect(gotClass).to.equals(BothOptions);
   });
 
-  it('create multiple models depending on options with base class (extends)', () => {
+  it('create multiple models depending on options with base class (extends) with automaticName', () => {
     class MultiModelBase { }
 
     {
-      @modelOptions({ schemaOptions: { collection: 'Something' } })
+      @modelOptions({ schemaOptions: { collection: 'Something' }, options: { automaticName: true } })
       class MultiModel extends MultiModelBase { }
 
       const model = getModelForClass(MultiModel);
@@ -76,7 +76,7 @@ export function suite() {
       expect(gotClass).to.equals(MultiModel);
     }
     {
-      @modelOptions({ schemaOptions: { collection: 'SomethingDifferent' } })
+      @modelOptions({ schemaOptions: { collection: 'SomethingDifferent' }, options: { automaticName: true } })
       class MultiModel extends MultiModelBase { }
 
       const model = getModelForClass(MultiModel);
@@ -88,9 +88,9 @@ export function suite() {
     }
   });
 
-  it('create multiple models depending on options without base model', () => {
+  it('create multiple models depending on options without base model with automaticName', () => {
     {
-      @modelOptions({ schemaOptions: { collection: 'SomethingNoExtend' } })
+      @modelOptions({ schemaOptions: { collection: 'SomethingNoExtend' }, options: { automaticName: true } })
       class MultiModel {
         @prop({ default: '1' })
         public t1: string;
@@ -114,7 +114,7 @@ export function suite() {
       expect(gotClass).to.equals(MultiModel);
     }
     {
-      @modelOptions({ schemaOptions: { collection: 'SomethingDifferentNoExtend' } })
+      @modelOptions({ schemaOptions: { collection: 'SomethingDifferentNoExtend' }, options: { automaticName: true } })
       class MultiModel {
         @prop({ default: '3' })
         public t3: string;
@@ -139,7 +139,7 @@ export function suite() {
     }
   });
 
-  it('should not make an automatic name (automaticName)', async () => {
+  it('should not make an automatic name (automaticName)', () => {
     @modelOptions({ options: { automaticName: false, customName: 'DAN' } })
     class DisableAutomaticName {
       @prop()
