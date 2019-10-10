@@ -9,6 +9,12 @@ redirect_from:
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
+## 6.0.4
+
+<sub>This Version is not yet released, only changes made until now are listed here</sub>
+- Update Dependencies
+  - Upgrade mongoose from 5.7.1 to 5.7.4
+
 ## 6.0.3
 
 - when using `@plugin`, options are now checked if they are an object, when not: make them an object
