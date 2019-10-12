@@ -30,7 +30,7 @@ class Person {
   public name: string;
 
   // Use `ref` for single items
-  @arrayProp({ ref: 'Cat' })
+  @prop({ ref: 'Cat' })
   public pet?: Ref<Cat>;
 }
 ```
