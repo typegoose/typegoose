@@ -8,17 +8,17 @@ import { getModelForClass, modelOptions } from '../../src/typegoose';
   }
 })
 export class Building {
-  @prop({default: 100})
+  @prop({ default: 100 })
   public width: number;
 }
 
 export class OfficeBuilding extends Building {
-  @prop({default: 4})
+  @prop({ default: 4 })
   public doors: number;
 }
 
 export class Garage extends Building {
-  @prop({default: 10})
+  @prop({ default: 10 })
   public slotsForCars: number;
 }
 
@@ -28,14 +28,14 @@ export class Garage extends Building {
   }
 })
 export class Skyscraper extends OfficeBuilding {
-  @prop({default: 'Some cool string'})
+  @prop({ default: 'Some cool string' })
   public name: string;
 
   @prop()
   public mainGarage: Garage;
 
-  @arrayProp({items: Garage})
+  @arrayProp({ items: Garage })
   public garagesInArea: Garage[];
 }
 
-export const model = getModelForClass<Skyscraper, any >(Skyscraper);
+export const model = getModelForClass<Skyscraper, any>(Skyscraper);
