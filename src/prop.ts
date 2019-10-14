@@ -235,8 +235,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       case WhatIsIt.ARRAY:
         schemas.get(name)[key] = {
           ...schemas.get(name)[key][0],
-          ...options,
-          type: [Type]
+          ...utils.mapArrayOptions(rawOptions, Type)
         };
 
         return;

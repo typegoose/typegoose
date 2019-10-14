@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
+import { logger } from '../logSettings';
 import {
   AnyParamConstructor,
   IModelOptions,
@@ -286,4 +287,50 @@ export function createUniqueID(cl: any) {
   }
 
   return false;
+}
+
+/**
+ * Map Options to "inner" & "outer"
+ * -> inner: means inner of "type: [{here})"
+ * -> outer: means outer of "type: [{}], here"
+ * @param rawOptions The raw options
+ * @param Type The Type of the array
+ */
+export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>): mongoose.SchemaTypeOpts<any> {
+  if (getName(Type) in mongoose.Schema.Types) {
+    logger.info('Converting %s to mongoose Type', getName(Type));
+    Type = mongoose.Schema.Types[getName(Type)];
+  }
+
+  const options = Object.assign({}, rawOptions); // for sanity
+
+  delete options.items;
+
+  const returnObject = {
+    type: [{
+      type: Type
+    }]
+  };
+
+  // TODO: get answer to https://github.com/Automattic/mongoose/issues/8012#issuecomment-541868507
+
+  // @ts-ignore
+  if (Type.prototype.OptionsConstructor instanceof mongoose.SchemaTypeOptions) {
+    for (const [key, value] of Object.entries(options)) {
+      logger.debug('HI', key, value);
+      if (key in Type.prototype.OptionsConstructor) {
+        logger.debug('Value is in OC:', key);
+        returnObject.type[0][key] = value;
+      } else {
+        logger.debug('Value is not in OC:', key);
+        returnObject[key] = value;
+      }
+    }
+
+    logger.debug('final obj', returnObject);
+  } else {
+    logger.debug('NOPE');
+  }
+
+  return returnObject;
 }

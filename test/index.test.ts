@@ -1,6 +1,7 @@
 import { use } from 'chai';
 import * as cap from 'chai-as-promised';
 
+import { suite as ArrayValidatorTests } from './tests/arrayValidator.test';
 import { suite as BigUserTest } from './tests/biguser.test';
 import { suite as customNameTests } from './tests/customName.test';
 import { suite as IndexTests } from './tests/dbIndex.test';
@@ -35,6 +36,8 @@ describe('Typegoose', () => {
   describe('Indexes', IndexTests.bind(this));
 
   describe('String Validators', StringValidatorTests.bind(this));
+
+  describe.only('Array Validators', ArrayValidatorTests.bind(this));
 
   describe('getClassForDocument()', GCFDTest.bind(this));
 
