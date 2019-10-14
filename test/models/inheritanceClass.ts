@@ -38,4 +38,4 @@ export class Skyscraper extends OfficeBuilding {
   public garagesInArea: Garage[];
 }
 
-export const model = getModelForClass<Skyscraper, any>(Skyscraper);
+export const model = getModelForClass(Skyscraper);

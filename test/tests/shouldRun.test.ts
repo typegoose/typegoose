@@ -54,17 +54,17 @@ export function suite() {
   });
 
   it('should make use of discriminators', async () => {
-    const dmmdoc = await DisMainModel.create({ main1: 'hello DMM' } as DisMain);
-    const damdoc = await DisAboveModel.create({ main1: 'hello DAM', above1: 'hello DAM' } as DisAbove);
-    expect(dmmdoc).to.not.be.an('undefined');
-    expect(dmmdoc.main1).to.equals('hello DMM');
-    expect(dmmdoc).to.not.have.property('above1');
-    expect(dmmdoc.__t).to.be.an('undefined');
+    const disMainDoc = await DisMainModel.create({ main1: 'hello DMM' } as DisMain);
+    const disAboveDoc = await DisAboveModel.create({ main1: 'hello DAM', above1: 'hello DAM' } as DisAbove);
+    expect(disMainDoc).to.not.be.an('undefined');
+    expect(disMainDoc.main1).to.equals('hello DMM');
+    expect(disMainDoc).to.not.have.property('above1');
+    expect(disMainDoc.__t).to.be.an('undefined');
 
-    expect(damdoc).to.not.be.an('undefined');
-    expect(damdoc.main1).to.equals('hello DAM');
-    expect(damdoc.above1).to.equals('hello DAM');
-    expect(damdoc.__t).to.equals('DisAbove');
+    expect(disAboveDoc).to.not.be.an('undefined');
+    expect(disAboveDoc.main1).to.equals('hello DAM');
+    expect(disAboveDoc.above1).to.equals('hello DAM');
+    expect(disAboveDoc.__t).to.equals('DisAbove');
   });
 
   it('should make use of addModelToTypegoose', async () => {
