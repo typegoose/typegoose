@@ -1,5 +1,8 @@
 ---
 title: "Document Type"
+redirect_from:
+  - /docs/types/document
+  - /docs/types/documenttype
 ---
 
 The Type `DocumentType<T>` (formally known as `InstanceType<T>`) is the type used for Documents

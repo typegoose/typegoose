@@ -52,7 +52,7 @@ docs:
   - title: Types
     children:
       - title: 'Document Type'
-        url: /docs/types/document
+        url: /docs/types/documentType
       - title: 'Return Model Type'
         url: /docs/types/returnModelType
       - title: 'Ref'
