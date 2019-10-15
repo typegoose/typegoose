@@ -159,7 +159,3 @@ Accepts Type: `number`
 Set a lowest number the property can have
 
 <!--Logical Seperator-->
-
-## Virtuals
-
-*no Documentation*
