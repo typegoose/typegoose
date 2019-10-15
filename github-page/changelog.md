@@ -13,6 +13,8 @@ redirect_from:
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
+- Completly remove `@staticMethod` & `@instanceMethod`, because they were completly obsolete
+
 ## 6.0.4
 
 This Release didnt change anything on the code, it was mostly tests & github-page
