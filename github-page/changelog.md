@@ -9,11 +9,20 @@ redirect_from:
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
-## 6.0.4
+## 6.1.0
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+## 6.0.4
+
+This Release didnt change anything on the code, it was mostly tests & github-page
 - Update Dependencies
   - Upgrade mongoose from 5.7.1 to 5.7.4
+- Added soft warning when using "ref" in an "arrayProp"
+- Added soft warning when using "refPath" in an "arrayProp"
+- Add missing ")" to a deprecation message
+- [IC] Fixed some Test's types
+- [IC] internal variable renames to better reflect what they are for
 
 ## 6.0.3
 
