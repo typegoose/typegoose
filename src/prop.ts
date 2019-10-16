@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
 import { DecoratorKeys } from './internal/constants';
-import { schemas, virtuals, WhatIsIt, DecoratedPropertyMetadata, DecoratedPropertyMetadataMap } from './internal/data';
+import { DecoratedPropertyMetadata, DecoratedPropertyMetadataMap, schemas, virtuals, WhatIsIt } from './internal/data';
 import {
   InvalidPropError,
   InvalidTypeError,

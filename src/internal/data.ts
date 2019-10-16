@@ -1,6 +1,6 @@
 import { Model, Schema, SchemaDefinition } from 'mongoose';
 
-import { VirtualOptions, AnyParamConstructor } from '../types';
+import { AnyParamConstructor, VirtualOptions } from '../types';
 
 export interface IPreHook {
   method: string | RegExp;
