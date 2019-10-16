@@ -49,7 +49,7 @@ footer:
   links:
     - label: 'GitHub'
       icon: 'fab fa-fw fa-github'
-      url: https://github.com/typegoose/typegoose/tree/r6/master
+      url: https://github.com/typegoose/typegoose/
 
 kramdown:
   input: GFM
