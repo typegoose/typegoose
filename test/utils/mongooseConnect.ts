@@ -28,9 +28,10 @@ export async function connect(): Promise<void> {
       useNewUrlParser: true,
       useFindAndModify: true,
       useCreateIndex: true,
+      useUnifiedTopology: true,
       dbName: config.DataBase,
       autoIndex: true
-    };
+    } as mongoose.ConnectionOptions;
     if (config.Auth.User.length > 0) {
       Object.assign(options, {
         user: config.Auth.User,
