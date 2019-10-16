@@ -484,10 +484,6 @@ The options object accepts `enum` and `default`, just like `prop`  decorator. In
     }
     ```
 
-### Method decorators
-
-Method Decorators are deprecated see [Migrate to 6.0.0](https://typegoose.github.io/typegoose/guides/migrate-to-6/)
-
 ### Class decorators
 
 Mongoose allows the developer to add pre and post [hooks / middlewares](http://mongoosejs.com/docs/middleware.html) to the schema. With this it is possible to add document transformations and observations before or after validation, save and more.

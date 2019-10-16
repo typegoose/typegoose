@@ -14,7 +14,6 @@ import { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType 
 /* exports */
 export { mongoose }; // export the internally used one, to not need to always import it
 export { setLogLevel, LogLevels } from './logSettings';
-export * from './method';
 export * from './prop';
 export * from './hooks';
 export * from './plugin';
