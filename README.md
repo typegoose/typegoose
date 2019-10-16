@@ -482,33 +482,6 @@ const UserModel = getModelForClass(User);
 const result = await UserModel.findOrCreate({ ... });
 ```
 
-#### index
-
-The `@index` decorator can be used to define advanced index types and index options not available via the
-`index` option of the `@prop` property decorator, such as compound indices, GeoJSON index types,
-partial indices, expiring documents, etc. Any values supported by
-[MongoDB's createIndex()](https://docs.mongodb.com/manual/reference/method/db.collection.createIndex/#db.collection.createIndex)
-are also valid for `@index`. For more info refer to interface `IndexOptions`
-
- ```ts
-@index({ article: 1, user: 1 }, { unique: true })
-@index({ location: '2dsphere' })
-@index({ article: 1 }, { partialFilterExpression: { stars: { $gte: 4.5 } } })
-class Location {
-  @prop()
-  article?: number;
-
-  @prop()
-  user?: number;
-
-  @prop()
-  stars?: number;
-
-  @arrayProp({ items: Array })
-  location?: [[Number]]
-}
-```
-
 ---
 
 ## Known Issues
