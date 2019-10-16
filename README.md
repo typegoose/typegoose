@@ -462,53 +462,6 @@ Mongoose allows the developer to add pre and post [hooks / middlewares](http://m
 
 Typegoose provides this functionality through TypeScript's class decorators.
 
-#### pre
-
-We can simply attach a `@pre` decorator to the Typegoose class and define the hook function like you normally would in Mongoose.
-(Method supports REGEXP)
-
-```ts
-@pre<Car>('save', function(next) {
-  if (this.model === 'Tesla') {
-    this.isFast = true;
-  }
-  next();
-})
-class Car {
-  @prop({ required: true })
-  model!: string;
-
-  @prop()
-  isFast?: boolean;
-}
-```
-
-This will execute the pre-save hook each time a `Car` document is saved. Inside the pre-hook Mongoose binds the actual document to `this`.
-
-Note that additional typing information is required either by passing the class itself as a type parameter `<Car>` or explicity telling TypeScript that `this` is a `Car` (`this: Car`). This will grant typing informations inside the hook function.
-
-#### post
-
-Same as `pre`, the `post` hook is also implemented as a class decorator. Usage is equivalent with the one Mongoose provides.
-(Method supports REGEXP)
-
-```ts
-@post<Car>('save', (car) => {
-  if (car.topSpeedInKmH > 300) {
-    console.log(car.model, 'is fast!');
-  }
-})
-class Car {
-  @prop({ required: true })
-  model!: string;
-
-  @prop({ required: true })
-  topSpeedInKmH!: number;
-}
-```
-
-Of course `this` is not the document in a post hook (see Mongoose docs). Again typing information is required either by explicit parameter typing or by providing a template type.
-
 #### plugin
 
 Using the `plugin` decorator enables the developer to attach various Mongoose plugins to the schema. Just like the regular `schema.plugin()` call, the decorator accepts 1 or 2 parameters: the plugin itself, and an optional configuration object. Multiple `plugin` decorator can be used for a single Typegoose class.
