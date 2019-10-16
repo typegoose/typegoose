@@ -128,7 +128,8 @@ You also need to install `mongoose`, since version 5 it is listed as a peer-depe
 
 ## Testing
 
-`npm test`
+`npm run test`
+Run our tests after running `npm i -D`
 
 ## Versioning
 
@@ -145,19 +146,11 @@ To ask questions or just talk with us [join our Discord Server](https://discord.
 
 Please use [the new guides](https://typegoose.github.io/typegoose/guides/quick-start-guide/) and [the new docs](https://typegoose.github.io/typegoose/docs) this here is just for "legacy reasons" and might be deleted later
 
-### Typegoose class
-
-Since 6.0.0 deprecated, please try to remove it
-
 ### Methods
 
 `getModelForClass<T>(cl: T)`
 
-This method returns the corresponding Mongoose Model for the class (`T`). If no Mongoose model exists for this class yet, one will be created automatically (by calling the method `setModelForClass`).
-
-`setModelForClass<T>(cl: T)`
-
-This Method is Deprecated see [Migrate to 6.0.0](https://typegoose.github.io/typegoose/guides/migrate-to-6/)
+This method returns the corresponding Mongoose Model for the class (`T`). If no Mongoose model exists for this class yet, one will be created automatically
 
 ## Property decorators
 
@@ -598,40 +591,20 @@ class Location {
 }
 ```
 
-### Types
-
-Some additional types were added to make Typegoose more user friendly.  
-(for some additional types, that are not exported by default can be accessed via `import * as types from 'typegoose/types'`)
-
-#### DocumentType<T>
-
-This is basically the logical 'and' of the `T` and the `mongoose.Document`, so that both the Mongoose instance properties/functions and the user defined properties/instance methods are available on the instance.
-
-#### ReturnModelType<T>
-
-This is the logical 'and' of `mongoose.Model<DocumentType<T>>` and `T`, so that the Mongoose model creates `DocumentType<T>` typed instances and all user defined static methods are available on the model.
-
-#### Ref<T>
-
-For reference properties:
-`Ref<T>` - `T` if populated and `ObjectID` if unpopulated.
--> there are TypeGuards for this to check named:
-* `isDocument(T)`: returns `true` if `T` is populated, false otherwise
-* `isDocumentArray(T)`: returns `true` if `T`  is an Array **AND** is fully populated
-
 ---
 
-## Improvements
+## Known Issues
 
-* Add Tests for:
-  - Hooks: add hook test for pre & post with error
+[Here are the known-issues](https://typegoose.github.io/typegoose/guides/known-issues/)
+
+## FAQ
+
+[Here is the FAQ](https://typegoose.github.io/typegoose/guides/faq/)
 
 ## Notes
 
 * `mongoose` is a peer-dependency, and a dev dependency to install it for dev purposes
 * Please dont add comments with `+1` or something like that, use the Reactions
-* Typegoose **cannot** be used with classes of the same name, it will always return the first build class with that name
-* All Models in Typegoose are set to strict by default, and **cant** be changed!
 * `npm run doc` generates all documentation for all files that can be used as modules (is used for github-pages)
 * `npm run doc:all` generates documentation even for internal modules
 * This module should not be used with `ts-node --transpile-only`, `--type-check` must be added at least, szokodiakos#196

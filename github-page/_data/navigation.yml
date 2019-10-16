@@ -59,6 +59,8 @@ docs:
         url: /docs/types/returnModelType
       - title: 'Ref'
         url: /docs/types/ref
+      - title: 'Additional Types'
+        url: /docs/types/additional
 
 guides:
   - title: Getting Started
