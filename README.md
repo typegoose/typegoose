@@ -462,20 +462,6 @@ Mongoose allows the developer to add pre and post [hooks / middlewares](http://m
 
 Typegoose provides this functionality through TypeScript's class decorators.
 
-#### modelOptions
-
-The Model Options can be used like below
-
-```ts
-@modelOptions({ existingMongoose, schemaOptions, existingConnection })
-class Name {}
-```
-
-The Options for `@modelOptions`:
- * `existingMongoose: mongoose`: An existing Mongoose instance can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.
- * `schemaOptions: mongoose.SchemaOptions`: Additional [schema options](http://mongoosejs.com/docs/guide.html#options) can be passed down to the schema-to-be-created.
- * `existingConnection: mongoose.Connection`: An existing Mongoose connection can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.
-
 #### pre
 
 We can simply attach a `@pre` decorator to the Typegoose class and define the hook function like you normally would in Mongoose.
