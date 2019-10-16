@@ -29,10 +29,15 @@ export enum WhatIsIt {
 }
 
 export interface DecoratedPropertyMetadata {
+  /** Prop Options */
   origOptions: any;
+  /** What the Property Type should be */
   Type: AnyParamConstructor<any>;
+  /** Target Class */
   target: any;
+  /** Property name */
   key: string;
+  /** What is it for a prop type? */
   whatis: WhatIsIt;
 }
 export type DecoratedPropertyMetadataMap = Map<string, DecoratedPropertyMetadata>;

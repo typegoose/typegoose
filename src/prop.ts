@@ -16,7 +16,6 @@ import * as utils from './internal/utils';
 import { logger } from './logSettings';
 import { buildSchema } from './typegoose';
 import {
-  AnyParamConstructor,
   ArrayPropOptions,
   MapPropOptions,
   PropOptions,
@@ -25,19 +24,16 @@ import {
 
 /**
  * Base Function for prop & arrayProp
- * @param origOptions The options (like require)
- * @param Type What Type it is
- * @param target Target Class
- * @param key Value Key of target class
- * @param isArray is it an array?
+ * @param input All the options needed for prop's
  */
-function baseProp(
-  origOptions: any,
-  Type: AnyParamConstructor<any>,
-  target: any,
-  key: string,
-  whatis: WhatIsIt = WhatIsIt.NONE
-): void {
+function baseProp(input: DecoratedPropertyMetadata): void {
+  const {
+    Type,
+    key,
+    origOptions,
+    target,
+    whatis
+  } = input;
   if (Type === target) {
     throw new Error('It seems like the type used is the same as the target class, which is currently not supported\n'
       + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`);
@@ -56,13 +52,18 @@ function baseProp(
   mapForTarget.set(key, { origOptions, Type, target, key, whatis });
 }
 
-export function _buildPropMetadata(
-  origOptions: any,
-  Type: AnyParamConstructor<any>,
-  target: any,
-  key: string,
-  whatis: WhatIsIt
-) {
+/**
+ * Function that is the actual processing of the prop's (used for caching)
+ * @param input All the options needed for prop's
+ */
+export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
+  const {
+    Type,
+    key,
+    origOptions,
+    target,
+    whatis
+  } = input;
   const rawOptions = Object.assign({}, origOptions);
 
   if (utils.isNotDefined(Type)) {
@@ -334,7 +335,13 @@ export function prop(options: PropOptionsWithValidate = {}) {
       }
     }
 
-    baseProp(options, Type, target, key, WhatIsIt.NONE);
+    baseProp({
+      Type,
+      key,
+      origOptions: options,
+      target,
+      whatis: WhatIsIt.NONE
+    });
   };
 }
 
@@ -351,7 +358,13 @@ export function mapProp(options: MapPropOptions) {
       logger.warn(new Error('You might not want to use option "items" in a @mapProp'));
     }
 
-    baseProp(options, Type, target, key, WhatIsIt.MAP);
+    baseProp({
+      Type,
+      key,
+      origOptions: options,
+      target,
+      whatis: WhatIsIt.MAP
+    });
   };
 }
 /**
@@ -367,6 +380,12 @@ export function arrayProp(options: ArrayPropOptions) {
       logger.warn(new Error('You might not want to use option "of" in a @arrayProp'));
     }
 
-    baseProp(options, Type, target, key, WhatIsIt.ARRAY);
+    baseProp({
+      Type,
+      key,
+      origOptions: options,
+      target,
+      whatis: WhatIsIt.ARRAY
+    });
   };
 }

@@ -43,7 +43,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   if (!isNullOrUndefined(decorators)) {
     for (const decorator of decorators.values()) {
-      _buildPropMetadata(decorator.origOptions, decorator.Type, decorator.target, decorator.key, decorator.whatis);
+      _buildPropMetadata(decorator);
     }
   }
 
