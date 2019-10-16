@@ -146,12 +146,6 @@ To ask questions or just talk with us [join our Discord Server](https://discord.
 
 Please use [the new guides](https://typegoose.github.io/typegoose/guides/quick-start-guide/) and [the new docs](https://typegoose.github.io/typegoose/docs) this here is just for "legacy reasons" and might be deleted later
 
-### Methods
-
-`getModelForClass<T>(cl: T)`
-
-This method returns the corresponding Mongoose Model for the class (`T`). If no Mongoose model exists for this class yet, one will be created automatically
-
 ## Property decorators
 
 Typegoose comes with TypeScript decorators, which responsibility is to connect the Mongoose schema behind the TypeScript class.
@@ -607,4 +601,3 @@ class Location {
 * Please dont add comments with `+1` or something like that, use the Reactions
 * `npm run doc` generates all documentation for all files that can be used as modules (is used for github-pages)
 * `npm run doc:all` generates documentation even for internal modules
-* This module should not be used with `ts-node --transpile-only`, `--type-check` must be added at least, szokodiakos#196
