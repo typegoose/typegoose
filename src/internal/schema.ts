@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
+import { logger } from '../logSettings';
 import { AnyParamConstructor, EmptyVoidFn, IModelOptions } from '../types';
 import { DecoratorKeys } from './constants';
 import { hooks, plugins, schemas, virtuals, DecoratedPropertyMetadataMap } from './data';
@@ -30,6 +31,8 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   opt = mergeSchemaOptions(isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt, cl);
 
   const name = getName(cl);
+
+  logger.debug('_buildSchema Called for %s with options:', name, opt);
 
   /** Simplify the usage */
   const Schema = mongoose.Schema;
@@ -69,6 +72,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   if (plugins.get(name)) {
     for (const plugin of plugins.get(name)) {
+      logger.debug('Applying Plugin:', plugin);
       sch.plugin(plugin.mongoosePlugin, plugin.options);
     }
   }
@@ -77,6 +81,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   const getterSetters = virtuals.get(name);
   if (getterSetters) {
     for (const [key, virtual] of getterSetters) {
+      logger.debug('Applying Getter\'s & Setter\'s:', key, virtual);
       sch.virtual(key, virtual);
     }
   }
@@ -84,6 +89,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   /** Get Metadata for indices */
   const indices: any[] = Reflect.getMetadata(DecoratorKeys.Index, cl) || [];
   for (const index of indices) {
+    logger.debug('Applying Index:', index);
     sch.index(index.fields, index.options);
   }
 

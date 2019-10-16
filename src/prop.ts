@@ -118,6 +118,11 @@ export function _buildPropMetadata(
   const ref = rawOptions.ref;
   const refType = rawOptions.refType || mongoose.Schema.Types.ObjectId;
   if (ref) {
+    if (whatis === WhatIsIt.ARRAY) {
+      logger.warn('"ref" is used in an arrayProp, which should not be used! (%s, %s)\n'
+        + 'Use "itemsRef"',
+        utils.getName(target), key);
+    }
     delete rawOptions.ref;
     const refName = typeof ref === 'string' ? ref : utils.getName(ref);
     schemas.get(name)[key] = {
@@ -147,6 +152,11 @@ export function _buildPropMetadata(
 
   const refPath = rawOptions.refPath;
   if (refPath && typeof refPath === 'string') {
+    if (whatis === WhatIsIt.ARRAY) {
+      logger.warn('"refPath" is used in an arrayProp, which should not be used! (%s, %s)\n'
+        + 'Use "itemsRefPath"',
+        utils.getName(target), key);
+    }
     delete rawOptions.refPath;
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],

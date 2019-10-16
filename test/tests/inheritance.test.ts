@@ -24,7 +24,8 @@ export function suite() {
     const instance = await inheritanceClass.create(input);
     expect(instance.mainGarage.slotsForCars).to.equals(3);
     expect(instance.mainGarage.width).to.equals(100);
-    expect(instance.mainGarage.doors).to.equals(undefined);
+    // this has an any type assertion, because it shouldnt exists on this type, what is tested here
+    expect((instance.mainGarage as any).doors).to.equals(undefined);
   });
 
   it('should set all parent props for nested array items', async () => {
@@ -38,6 +39,7 @@ export function suite() {
     const firstGarage = instance.garagesInArea.pop();
     expect(firstGarage.slotsForCars).to.equals(2);
     expect(firstGarage.width).to.equals(100);
-    expect(firstGarage.doors).to.be.equals(undefined);
+    // this has an any type assertion, because it shouldnt exists on this type, what is tested here
+    expect((firstGarage as any).doors).to.be.equals(undefined);
   });
 }

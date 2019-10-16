@@ -1,6 +1,6 @@
 {
   "name": "@typegoose/typegoose",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
   "types": "lib/typegoose.d.ts",
@@ -34,21 +34,21 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "^5.7.1"
+    "mongoose": "^5.7.4"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^0.1.3",
     "@types/chai": "^4.2.3",
     "@types/chai-as-promised": "^7.1.2",
     "@types/mocha": "^5.2.7",
-    "@types/mongoose": "^5.5.18",
+    "@types/mongoose": "^5.5.20",
     "@types/node": "^8.10.53",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.6",
     "mocha": "^6.2.1",
-    "mongodb-memory-server-global": "^5.2.5",
-    "mongoose": "^5.7.1",
+    "mongodb-memory-server-global": "^5.2.8",
+    "mongoose": "^5.7.4",
     "mongoose-findorcreate": "^3.0.0",
     "nyc": "^14.1.1",
     "prettier": "^1.18.2",
@@ -58,7 +58,7 @@
     "tslint": "5.20.0",
     "tslint-eslint-rules": "*5.4.0",
     "typedoc": "*0.15.0",
-    "typescript": "3.6.3"
+    "typescript": "3.6.4"
   },
   "dependencies": {
     "loglevel": "^1.6.4",
