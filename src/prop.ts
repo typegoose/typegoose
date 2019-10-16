@@ -53,6 +53,8 @@ function baseProp(input: DecoratedPropertyMetadata): void {
     || Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
 
   mapForTarget.set(key, { origOptions, Type, target, key, whatis });
+
+  logger.debug('Added "%s.%s" to the Decorator Cache', target.constructor.name, key);
 }
 
 /**
@@ -68,6 +70,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     whatis
   } = input;
   const rawOptions = Object.assign({}, origOptions);
+  logger.debug('Starting to process "%s.%s"', target.constructor.name, key);
 
   if (utils.isNotDefined(Type)) {
     if (Type !== target) { // prevent "infinite" buildSchema loop / Maximum Class size exceeded
