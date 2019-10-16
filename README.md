@@ -456,21 +456,6 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
     }
     ```
 
-### mapProp(options)
-
-The `mapProp` is a `prop` decorator which makes it possible to create map schema properties.
-
-The options object accepts `enum` and `default`, just like `prop`  decorator. In addition to these the following properties are accepted:
-
-  - `of`  : This will tell Typegoose that the Map value consists of primitives (if `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
-
-    ```ts
-    class Car {
-      @mapProp({ of: Car })
-      public keys?: Map<string, Car>;
-    }
-    ```
-
 ### Class decorators
 
 Mongoose allows the developer to add pre and post [hooks / middlewares](http://mongoosejs.com/docs/middleware.html) to the schema. With this it is possible to add document transformations and observations before or after validation, save and more.
