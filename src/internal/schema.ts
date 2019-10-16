@@ -2,9 +2,10 @@ import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
 import { logger } from '../logSettings';
-import { AnyParamConstructor, EmptyVoidFn, IModelOptions } from '../types';
+import { _buildPropMetadata } from '../prop';
+import { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IModelOptions } from '../types';
 import { DecoratorKeys } from './constants';
-import { decoratorCache, hooks, plugins, schemas, virtuals } from './data';
+import { hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
 import { getName, mergeSchemaOptions } from './utils';
 
@@ -38,12 +39,11 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   const { schemaOptions: ropt }: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
   const schemaOptions = Object.assign(ropt || {}, opt);
 
-  const { '1': { decorators } } = [...decoratorCache.entries()].find((v) => v[1].class === cl) ||
-    { 1: { decorators: null } };
+  const decorators = Reflect.getMetadata(DecoratorKeys.PropCache, cl.prototype) as DecoratedPropertyMetadataMap;
 
   if (!isNullOrUndefined(decorators)) {
     for (const decorator of decorators.values()) {
-      decorator();
+      _buildPropMetadata(decorator);
     }
   }
 

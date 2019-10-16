@@ -2,7 +2,21 @@
  * Collection of Reflect Types for easy maintenance
  */
 export enum DecoratorKeys {
-  Prop = 'design:type',
+  /** Get the Typescript assigned Type at runtime */
+  Type = 'design:type',
+  /**
+   * "@prop" Cache
+   * -> Use only for a class
+   */
+  PropCache = 'typegoose:properties',
+  /**
+   * Storage location for Model Options
+   * -> Use only for a class
+   */
   ModelOptions = 'typegoose:options',
-  Index = 'typegoose:indices'
+  /**
+   * Storage location for Indexes
+   * -> Use only for a class
+   */
+  Index = 'typegoose:indexes'
 }

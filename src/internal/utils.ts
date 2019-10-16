@@ -9,7 +9,7 @@ import {
   VirtualOptions
 } from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, decoratorCache, schemas } from './data';
+import { constructors, schemas } from './data';
 import { NoValidClass } from './errors';
 
 const primitives = ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID', 'Array'];
@@ -275,18 +275,15 @@ export function isNotDefined(cl: any) {
 
 /**
  * Assign "__uniqueID" to a class
- * (used for the decoratorCache)
  * @param cl
- * @returns the initname to be used as identifier
+ * @returns boolean, true if uniqueID is created, false if already existing
  */
 export function createUniqueID(cl: any) {
   if (isNullOrUndefined(cl.__uniqueID)) {
     cl.__uniqueID = Date.now();
-  }
-  const initname: string = `${cl.constructor.name}_${cl.__uniqueID}`;
-  if (!decoratorCache.get(initname)) {
-    decoratorCache.set(initname, { class: cl.constructor, decorators: new Map() });
+
+    return true;
   }
 
-  return initname;
+  return false;
 }
