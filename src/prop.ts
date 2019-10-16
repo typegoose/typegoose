@@ -43,13 +43,15 @@ function baseProp(
       + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`);
   }
 
-  const initname = utils.createUniqueID(target);
+  // assign a Unique ID to the target class
+  utils.createUniqueID(target);
 
-  const existingMapForTarget = Reflect.getOwnMetadata(DecoratorKeys.PropProps, target) as DecoratedPropertyMetadataMap;
+  const existingMapForTarget = Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
   if (isNullOrUndefined(existingMapForTarget)) {
-    Reflect.defineMetadata(DecoratorKeys.PropProps, new Map<string, DecoratedPropertyMetadata>(), target);
+    Reflect.defineMetadata(DecoratorKeys.PropCache, new Map<string, DecoratedPropertyMetadata>(), target);
   }
-  const mapForTarget = existingMapForTarget || (Reflect.getOwnMetadata(DecoratorKeys.PropProps, target) as DecoratedPropertyMetadataMap);
+  const mapForTarget = existingMapForTarget
+    || Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
 
   mapForTarget.set(key, { origOptions, Type, target, key, whatis });
 }
@@ -316,7 +318,7 @@ export function _buildPropMetadata(
  */
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
-    const Type = Reflect.getMetadata(DecoratorKeys.Prop, target, key);
+    const Type = Reflect.getMetadata(DecoratorKeys.Type, target, key);
     if (!Type) {
       throw new NoMetadataError(key);
     }

@@ -275,15 +275,15 @@ export function isNotDefined(cl: any) {
 
 /**
  * Assign "__uniqueID" to a class
- * (used for the decoratorCache)
  * @param cl
- * @returns the initname to be used as identifier
+ * @returns boolean, true if uniqueID is created, false if already existing
  */
 export function createUniqueID(cl: any) {
   if (isNullOrUndefined(cl.__uniqueID)) {
     cl.__uniqueID = Date.now();
-  }
-  const initname: string = `${cl.constructor.name}_${cl.__uniqueID}`;
 
-  return initname;
+    return true;
+  }
+
+  return false;
 }

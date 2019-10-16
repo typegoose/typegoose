@@ -39,7 +39,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   const { schemaOptions: ropt }: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
   const schemaOptions = Object.assign(ropt || {}, opt);
 
-  const decorators = Reflect.getMetadata(DecoratorKeys.PropProps, cl.prototype) as DecoratedPropertyMetadataMap;
+  const decorators = Reflect.getMetadata(DecoratorKeys.PropCache, cl.prototype) as DecoratedPropertyMetadataMap;
 
   if (!isNullOrUndefined(decorators)) {
     for (const decorator of decorators.values()) {
