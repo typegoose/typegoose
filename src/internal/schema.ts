@@ -78,11 +78,11 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   }
 
   /** Simplify the usage */
-  const getterSetters = virtuals.get(name);
-  if (getterSetters) {
-    for (const [key, virtual] of getterSetters) {
-      logger.debug('Applying Getter\'s & Setter\'s:', key, virtual);
-      sch.virtual(key, virtual);
+  const virtualPopulates = virtuals.get(name);
+  if (virtualPopulates) {
+    for (const [key, options] of virtualPopulates) {
+      logger.debug('Applying Virtual Populates:', key, options);
+      sch.virtual(key, options);
     }
   }
 

@@ -102,7 +102,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
 export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
   return deprecate(
     getModelForClass(cl),
-    'setModelForClass is deprecated, please use getModelForClasse (see README#Migrate to 6.0.0');
+    'setModelForClass is deprecated, please use getModelForClasse (see README#Migrate to 6.0.0)');
 }
 
 /**
