@@ -1,6 +1,6 @@
 import { Model, Schema, SchemaDefinition } from 'mongoose';
 
-import { AnyParamConstructor, VirtualOptions } from '../types';
+import { VirtualOptions } from '../types';
 
 export interface IPreHook {
   method: string | RegExp;
@@ -20,27 +20,6 @@ export interface IPluginMap {
   mongoosePlugin(schema: Schema<any>, options: object): void;
   options: object;
 }
-
-/** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
-export enum WhatIsIt {
-  ARRAY,
-  MAP,
-  NONE
-}
-
-export interface DecoratedPropertyMetadata {
-  /** Prop Options */
-  origOptions: any;
-  /** What the Property Type should be */
-  Type: AnyParamConstructor<any>;
-  /** Target Class */
-  target: any;
-  /** Property name */
-  key: string;
-  /** What is it for a prop type? */
-  whatis: WhatIsIt;
-}
-export type DecoratedPropertyMetadataMap = Map<string, DecoratedPropertyMetadata>;
 
 /** Schema Map */
 export const schemas: Map<string, SchemaDefinition> = new Map();

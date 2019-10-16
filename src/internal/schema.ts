@@ -3,9 +3,9 @@ import * as mongoose from 'mongoose';
 import { isNullOrUndefined } from 'util';
 import { logger } from '../logSettings';
 import { _buildPropMetadata } from '../prop';
-import { AnyParamConstructor, EmptyVoidFn, IModelOptions } from '../types';
+import { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IModelOptions } from '../types';
 import { DecoratorKeys } from './constants';
-import { DecoratedPropertyMetadataMap, hooks, plugins, schemas, virtuals } from './data';
+import { hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
 import { getName, mergeSchemaOptions } from './utils';
 
