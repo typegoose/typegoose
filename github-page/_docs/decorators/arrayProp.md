@@ -18,23 +18,27 @@ Accepts Type: `any`
 
 This will tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
 
-```
-@arrayProp({ items: String })
-languages?: string[];
+```ts
+class Something {
+  @arrayProp({ items: String })
+  public languages?: string[];
+}
 ```
 
 ### itemsRef
 
-Accepts Type: `Ref<any>[]`
+Accepts Type: `Class | String` (String of the modelName)
 
 Same as [`@prop`'s `ref`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#ref)
 
-```
+```ts
 class Car extends Typegoose {}
 
 // in another class
-@arrayProp({ itemsRef: Car })
-previousCars?: Ref<Car>[];
+class Something {
+  @arrayProp({ itemsRef: Car })
+  public previousCars?: Ref<Car>[];
+}
 ```
 
 ### itemsRefPath
@@ -43,17 +47,17 @@ Accepts Type: `string`
 
 Same as [`@prop`'s `refpath`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#refPath)
 
-```
+```ts
 class Car extends Typegoose {}
 class Shop extends Typegoose {}
 
 // in another class
 class Another extends Typegoose {
   @prop({ required: true, enum: 'Car' | 'Shop' })
-  which!: string;
+  public which!: string;
 
   @arrayProp({ itemsRefPath: 'which' })
-  items?: Ref<Car | Shop>[];
+  public items?: Ref<Car | Shop>[];
 }
 ```
 
