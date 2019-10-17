@@ -16,19 +16,50 @@ Please note that arrayProp (by mongoose default) initializes the array with `[]`
 
 Accepts Type: `any`
 
-Specify what the array consists of (the type cannot be infered)
+This will tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
+
+```ts
+class Something {
+  @arrayProp({ items: String })
+  public languages?: string[];
+}
+```
 
 ### itemsRef
 
-Accepts Type: `Ref<any>[]`
+Accepts Type: `Class | String` (String of the modelName)
 
 Same as [`@prop`'s `ref`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#ref)
+
+```ts
+class Car extends Typegoose {}
+
+// in another class
+class Something {
+  @arrayProp({ itemsRef: Car })
+  public previousCars?: Ref<Car>[];
+}
+```
 
 ### itemsRefPath
 
 Accepts Type: `string`
 
 Same as [`@prop`'s `refpath`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#refPath)
+
+```ts
+class Car extends Typegoose {}
+class Shop extends Typegoose {}
+
+// in another class
+class Another extends Typegoose {
+  @prop({ required: true, enum: 'Car' | 'Shop' })
+  public which!: string;
+
+  @arrayProp({ itemsRefPath: 'which' })
+  public items?: Ref<Car | Shop>[];
+}
+```
 
 ## Options from @prop that do **NOT** work on @arrayProp
 
