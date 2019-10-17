@@ -52,8 +52,11 @@ Here you can find extra infomation
 
 ### Use multiple classes together
 
-Because [TimeStamps](#timestamps) dont extend [Base](#base), you can use multiple classes like in this Example:
+Because [TimeStamps](#timestamps) dosnt extend [Base](#base), you can combine them like below, but because multiple extends are not supported nativly in ES/JS/TS, you have to use mixins
+-> [Look at Typescript guide to understand this](https://www.typescriptlang.org/docs/handbook/mixins.html)
 
 ```ts
-class Something extends TimeStamps, Base {}
+interface Something extends Base, TimeStamps {} // have the interface to override the types
+class Something {} // have your class
+applyMixins(Something, [Base, TimeStamps]); // apply the two other classes
 ```
