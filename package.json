@@ -43,6 +43,7 @@
     "@types/mocha": "^5.2.7",
     "@types/mongoose": "^5.5.20",
     "@types/node": "^8.10.53",
+    "@types/semver": "^6.0.2",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.7",
@@ -62,7 +63,8 @@
   },
   "dependencies": {
     "loglevel": "^1.6.4",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "semver": "^6.3.0"
   },
   "publishConfig": {
     "access": "public"

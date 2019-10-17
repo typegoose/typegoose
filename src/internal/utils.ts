@@ -317,21 +317,23 @@ export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>)
   // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
   if (Type.prototype.OptionsConstructor.prototype instanceof (mongoose as any).SchemaTypeOptions) {
     for (const [key, value] of Object.entries(options)) {
-      logger.debug('HI', key, value);
-      logger.debug('Type is', Type.name);
+      // logger.debug('HI', key, value);
+      // logger.debug('Type is', Type.name);
       if (Object.getOwnPropertyNames(Type.prototype.OptionsConstructor.prototype).includes(key)) {
-        logger.debug('Value is in OC:', key);
+        // logger.debug('Value is in OC:', key);
         returnObject.type[0][key] = value;
       } else {
-        logger.debug('Value is not in OC:', key);
+        // logger.debug('Value is not in OC:', key);
         returnObject[key] = value;
       }
     }
 
-    logger.debug('final obj', returnObject);
-  } else {
+    // logger.debug('final obj', returnObject);
+  } /* else {
     logger.debug('NOPE');
-  }
+  } */
+
+  logger.debug('Final mapped Options for Type "%s"', getName(Type), returnObject);
 
   return returnObject;
 }

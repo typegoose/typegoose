@@ -1,7 +1,12 @@
 /* imports */
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
+import * as semver from 'semver';
 import { deprecate, isNullOrUndefined } from 'util';
+
+if (semver.lt(mongoose.version, '5.7.5')) {
+  throw new Error('Please use mongoose 5.7.5 or higher');
+}
 
 import * as defaultClasses from './defaultClasses';
 import { DecoratorKeys } from './internal/constants';
