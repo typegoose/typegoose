@@ -1,5 +1,6 @@
 import { assert, expect } from 'chai';
 
+import { AssertionError } from 'assert';
 import { model, Schema } from 'mongoose';
 import { pre } from '../../src/hooks';
 import { DecoratorKeys } from '../../src/internal/constants';
@@ -14,7 +15,7 @@ import {
 import { _buildSchema } from '../../src/internal/schema';
 import { assignMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import { arrayProp, mapProp, prop } from '../../src/prop';
-import { addModelToTypegoose, buildSchema, getModelForClass } from '../../src/typegoose';
+import { addModelToTypegoose, buildSchema, deleteModel, deleteModelWithClass, getModelForClass } from '../../src/typegoose';
 
 // disable "no-unused-variable" for this file, because it tests for errors
 // tslint:disable:no-unused-variable
@@ -276,9 +277,30 @@ export function suite() {
         @prop()
         public self: TestSelfContained;
       }
+      assert.fail('Expected to throw "Error"');
+    } catch (err) {
+      expect(err).to.not.be.an.instanceOf(AssertionError);
+      expect(err).to.be.an.instanceOf(Error);
+    }
+  });
+
+  it('should throw when "deleteModel" is called with no string [TypeError]', () => {
+    try {
+      // @ts-ignore
+      deleteModel(true);
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should throw when "deleteModelWithClass" is called and its not a valid class [NoValidClass]', () => {
+    try {
+      // @ts-ignore
+      deleteModelWithClass(true);
       assert.fail('Expected to throw "NoValidClass"');
     } catch (err) {
-      expect(err).to.be.an.instanceOf(Error);
+      expect(err).to.be.an.instanceOf(NoValidClass);
     }
   });
 }

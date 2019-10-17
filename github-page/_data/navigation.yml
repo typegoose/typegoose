@@ -45,6 +45,8 @@ docs:
         url: /docs/functions/getDiscriminatorModelForClass
       - title: 'Add Model To Typegoose'
         url: /docs/functions/addModelToTypegoose
+      - title: 'Delete Models'
+        url: /docs/functions/deleteModel
 
   - title: TypeGuards
     children:

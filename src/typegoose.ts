@@ -9,6 +9,7 @@ import { constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import { assignMetadata, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import { logger } from './logSettings';
 import { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
 
 /* exports */
@@ -182,14 +183,31 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
  * @param key
  */
 export function deleteModel(name: string) {
-  const existingModel = models.get(name);
+  if (typeof name !== 'string') {
+    throw new TypeError('name is not an string! (deleteModel)');
+  }
 
-  if (!existingModel) {
+  logger.debug('Deleting Model "%s"', name);
+
+  if (!models.has(name)) {
     throw new Error(`Model "${name}" could not be found`);
   }
 
-  models.delete(name);
   mongoose.connection.deleteModel(name);
+  models.delete(name);
+  constructors.delete(name);
+}
+
+/**
+ * Delete a model, with the given class
+ * @param cl The Class
+ */
+export function deleteModelWithClass<T, U extends AnyParamConstructor<T>>(cl: U) {
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
+
+  return deleteModel(getName(cl));
 }
 
 /**

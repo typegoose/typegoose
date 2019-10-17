@@ -38,7 +38,7 @@ describe('Typegoose', () => {
 
   describe('getClassForDocument()', GCFDTest.bind(this));
 
-  describe('Test if the correct errors are returned', ErrorTests.bind(this));
+  describe('Should Error', ErrorTests.bind(this));
 
   describe('Default Classes', DefaultClassesTests.bind(this));
 
