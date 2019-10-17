@@ -9,6 +9,7 @@ import { suite as ErrorTests } from './tests/errors.test';
 import { suite as GCFDTest } from './tests/getClassForDocument.test';
 import { suite as HookTest } from './tests/hooks.test';
 import { suite as Inheritance } from './tests/inheritance.test';
+import { suite as OverwrittenModels } from './tests/overwrittenModel.test';
 import { suite as RefTest } from './tests/ref.test';
 import { suite as ShouldAddTest } from './tests/shouldAdd.test';
 import { suite as ShouldRunTests } from './tests/shouldRun.test';
@@ -48,4 +49,6 @@ describe('Typegoose', () => {
   describe('inheritance', Inheritance.bind(this));
 
   describe('customName', customNameTests.bind(this));
+
+  describe('Overwritten Model', OverwrittenModels.bind(this));
 });

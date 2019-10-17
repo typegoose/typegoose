@@ -176,6 +176,23 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
 }
 
 /**
+ * Deletes an existing model so that it can be overwritten
+ * with another model
+ *
+ * @param key
+ */
+export function deleteModel(name: string) {
+  const existingModel = models.get(name);
+
+  if (!existingModel) {
+    throw new Error(`Model "${name}" could not be found`);
+  }
+
+  models.delete(name);
+  mongoose.connection.deleteModel(name);
+}
+
+/**
  * Build a Model from a given class and return the model
  * @param from The Model to build From
  * @param cl The Class to make a model out
