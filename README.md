@@ -15,20 +15,18 @@ import * as mongoose from 'mongoose';
 
 class User {
   @prop()
-  name?: string;
+  public name?: string;
 }
 
-const UserModel = getModelForClass(User);
+const UserModel = getModelForClass(User); // UserModel is a regular Mongoose Model with correct types
 
-// UserModel is a regular Mongoose Model with correct types
 (async () => {
-  await mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true });
+  await mongoose.connect('mongodb://localhost:27017/', { useNewUrlParser: true, useUnifiedTopology: true, dbName: "test" });
 
-  const { _id: id } = await UserModel.create({ name: 'JohnDoe' });
+  const { _id: id } = await UserModel.create({ name: 'JohnDoe' } as User); // an "as" assertion, to have types for all properties
   const user = await UserModel.findById(id).exec();
 
-  console.log(user);
-  // prints { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
+  console.log(user); // prints { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
 })();
 ```
 
@@ -79,40 +77,38 @@ You can just:
 ```ts
 class Job {
   @prop()
-  title?: string;
+  public title?: string;
 
   @prop()
-  position?: string;
+  public position?: string;
 }
 
 class Car {
   @prop()
-  model?: string;
+  public model?: string;
 }
 
 class User {
   @prop()
-  name?: string;
+  public name?: string;
 
   @prop({ required: true })
-  age!: number;
+  public age!: number;
 
   @prop()
-  job?: Job;
+  public job?: Job;
 
   @prop({ ref: Car })
-  car?: Ref<Car>;
+  public car?: Ref<Car>;
 }
 ```
-
-Please note that sub documents do not have to extend Typegoose. You can still give them default value in `prop` decorator, but you can't create static or instance methods on them.
 
 ---
 
 ## Requirements
 
 * TypeScript 3.2+
-* Node 8+
+* Node 8.10+
 * mongoose ^5.7.4
 * `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
 
@@ -123,8 +119,6 @@ Please note that sub documents do not have to extend Typegoose. You can still gi
 You also need to install `mongoose`, since version 5 it is listed as a peer-dependency
 
 `npm i -s mongoose`
-
-## [Migrate to 6.0.0](https://typegoose.github.io/typegoose/guides/migrate-to-6/)
 
 ## Testing
 
@@ -140,14 +134,14 @@ Run our tests after running `npm i -D`
 
 To ask questions or just talk with us [join our Discord Server](https://discord.gg/BpGjTTD)
 
----
-
 ## Documentation
 
 [Here is the Documentation](https://typegoose.github.io/typegoose/docs)  
 [Here are Guides](https://typegoose.github.io/typegoose/guides)  
 
----
+## Migrate to 6.0.0
+
+[Migrate to 6.0.0](https://typegoose.github.io/typegoose/guides/migrate-to-6/)
 
 ## Known Issues
 
@@ -159,7 +153,6 @@ To ask questions or just talk with us [join our Discord Server](https://discord.
 
 ## Notes
 
-* `mongoose` is a peer-dependency, and a dev dependency to install it for dev purposes
 * Please dont add comments with `+1` or something like that, use the Reactions
 * `npm run doc` generates all documentation for all files that can be used as modules (is used for github-pages)
 * `npm run doc:all` generates documentation even for internal modules
