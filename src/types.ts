@@ -33,13 +33,15 @@ export type Func = (...args: any[]) => any;
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
 
 export type ValidatorFunction = (value: any) => boolean | Promise<boolean>;
+export interface ValidatorOptions {
+  validator: ValidatorFunction;
+  message?: string;
+}
 export type Validator =
   | ValidatorFunction
   | RegExp
-  | {
-    validator: ValidatorFunction;
-    message?: string;
-  };
+  | ValidatorOptions
+  | ValidatorOptions[];
 
 export interface BasePropOptions {
   [key: string]: any;
