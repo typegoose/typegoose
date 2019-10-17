@@ -14,6 +14,9 @@ redirect_from:
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Completly remove `@staticMethod` & `@instanceMethod`, because they were completly obsolete
+- README now has no documentation anymore
+- `@prop({ validate })` now accepts `{ validator, message }` as an array
+- [IC] Added more debug logs to `prop.ts`
 - [IC] Move Decorator Cache to the class itself
 - [IC] "baseProp" now uses one single arguments, whith all the options
 - [IC] "createUniqueID" now returns a boolean instead of the "initname"
