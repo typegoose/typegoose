@@ -40,6 +40,12 @@ How to override `_id` type:
 class Something extends Base<mongoose.Schema.Type.String> {} // _id is now of type "String" (from mongoose)
 ```
 
+### FindOrCreate
+
+This class provides all the types supplied be the plugin `mongoose-findOrCreate`
+
+-> This class should only be used if the plugin is used too
+
 ## Extra Infomation
 
 Here you can find extra infomation

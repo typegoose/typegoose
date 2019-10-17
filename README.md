@@ -456,32 +456,6 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
     }
     ```
 
-### Class decorators
-
-Mongoose allows the developer to add pre and post [hooks / middlewares](http://mongoosejs.com/docs/middleware.html) to the schema. With this it is possible to add document transformations and observations before or after validation, save and more.
-
-Typegoose provides this functionality through TypeScript's class decorators.
-
-#### plugin
-
-Using the `plugin` decorator enables the developer to attach various Mongoose plugins to the schema. Just like the regular `schema.plugin()` call, the decorator accepts 1 or 2 parameters: the plugin itself, and an optional configuration object. Multiple `plugin` decorator can be used for a single Typegoose class.
-
-If the plugin enhances the schema with additional properties or instance / static methods this typing information should be added manually to the Typegoose class as well.
-
-```ts
-import * as findOrCreate from 'mongoose-findorcreate';
-
-@plugin(findOrCreate)
-class User {
-  // this isn't the complete method signature, just an example
-  static findOrCreate(condition: DocumentType<User>):
-    Promise<{ doc: DocumentType<User>, created: boolean }>;
-}
-
-const UserModel = getModelForClass(User);
-const result = await UserModel.findOrCreate({ ... });
-```
-
 ---
 
 ## Known Issues
