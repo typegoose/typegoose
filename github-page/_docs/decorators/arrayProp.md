@@ -6,9 +6,11 @@ redirect_from:
 
 `@arrayProp(options: object)` is almost the same as `@prop`, here are just the differences listed
 
-Please note that arrayProp (by mongoose default) initializes the array with `[]` instead of an `null`
+Please note that arrayProp (by mongoose default) initializes the array with `[]` instead of an `null` / `undefined`
 
 ## Options
+
+*All options from [`@prop`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#options) are valid, except the ones [listed on the bottom](#options-from-prop-that-do-not-work-on-arrayprop)*
 
 ### items
 
