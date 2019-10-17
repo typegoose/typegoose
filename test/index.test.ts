@@ -37,7 +37,7 @@ describe('Typegoose', () => {
 
   describe('String Validators', StringValidatorTests.bind(this));
 
-  describe.only('Array Validators', ArrayValidatorTests.bind(this));
+  describe('Array Validators', ArrayValidatorTests.bind(this));
 
   describe('getClassForDocument()', GCFDTest.bind(this));
 

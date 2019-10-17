@@ -300,6 +300,8 @@ export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>)
   if (getName(Type) in mongoose.Schema.Types) {
     logger.info('Converting %s to mongoose Type', getName(Type));
     Type = mongoose.Schema.Types[getName(Type)];
+  } else if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
+    throw new TypeError('Type does not have an valid "OptionsConstructor"!');
   }
 
   const options = Object.assign({}, rawOptions); // for sanity
@@ -312,13 +314,12 @@ export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>)
     }]
   };
 
-  // TODO: get answer to https://github.com/Automattic/mongoose/issues/8012#issuecomment-541868507
-
-  // @ts-ignore
-  if (Type.prototype.OptionsConstructor instanceof mongoose.SchemaTypeOptions) {
+  // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
+  if (Type.prototype.OptionsConstructor.prototype instanceof (mongoose as any).SchemaTypeOptions) {
     for (const [key, value] of Object.entries(options)) {
       logger.debug('HI', key, value);
-      if (key in Type.prototype.OptionsConstructor) {
+      logger.debug('Type is', Type.name);
+      if (Object.getOwnPropertyNames(Type.prototype.OptionsConstructor.prototype).includes(key)) {
         logger.debug('Value is in OC:', key);
         returnObject.type[0][key] = value;
       } else {
