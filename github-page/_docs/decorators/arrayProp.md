@@ -16,7 +16,12 @@ Please note that arrayProp (by mongoose default) initializes the array with `[]`
 
 Accepts Type: `any`
 
-Specify what the array consists of (the type cannot be infered)
+This will tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
+
+```
+@arrayProp({ items: String })
+languages?: string[];
+```
 
 ### itemsRef
 
@@ -24,11 +29,33 @@ Accepts Type: `Ref<any>[]`
 
 Same as [`@prop`'s `ref`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#ref)
 
+```
+class Car extends Typegoose {}
+
+// in another class
+@arrayProp({ itemsRef: Car })
+previousCars?: Ref<Car>[];
+```
+
 ### itemsRefPath
 
 Accepts Type: `string`
 
 Same as [`@prop`'s `refpath`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#refPath)
+
+```
+class Car extends Typegoose {}
+class Shop extends Typegoose {}
+
+// in another class
+class Another extends Typegoose {
+  @prop({ required: true, enum: 'Car' | 'Shop' })
+  which!: string;
+
+  @arrayProp({ itemsRefPath: 'which' })
+  items?: Ref<Car | Shop>[];
+}
+```
 
 ## Options from @prop that do **NOT** work on @arrayProp
 
