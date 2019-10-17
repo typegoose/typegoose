@@ -12,6 +12,13 @@ redirect_from:
 
 [Please look here for more](https://mongoosejs.com/docs/guide.html#options)
 
+Example:
+
+```ts
+@modelOptions({ schemaOptions: { collection: "NotSomething" } })
+class Something {}
+```
+
 ### existingConnection
 
 An existing Mongoose connection can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.  
