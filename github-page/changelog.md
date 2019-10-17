@@ -16,6 +16,7 @@ redirect_from:
 - Completly remove `@staticMethod` & `@instanceMethod`, because they were completly obsolete
 - README now has no documentation anymore
 - `@prop({ validate })` now accepts `{ validator, message }` as an array
+- Add function "deleteModel" & "deleteModelWithClass"
 - [IC] Added more debug logs to `prop.ts`
 - [IC] Move Decorator Cache to the class itself
 - [IC] "baseProp" now uses one single arguments, whith all the options
