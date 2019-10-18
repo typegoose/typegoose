@@ -22,6 +22,10 @@ assignees: ''
 - Typegoose(GIT): commithash
 - mongoose: 0.0.0
 - mongodb: 0.0.0
+  
+## What is the Problem?
+
+<!--Please add an description of what the bug / problem is-->
 
 ## Code Example
 
