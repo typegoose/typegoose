@@ -10,7 +10,7 @@ type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 type ClassDecorator = (target: any) => void;
 type HookNextErrorFn = (err?: Error) => void;
 
-type PreFnWithDT<T> = (this: DocumentType<T>, next: EmptyVoidFn) => void;
+type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => void;
 type PreFnWithQuery<T> = (
   this: Query<T>,
   next?: (error?: Error) => void,
@@ -49,7 +49,7 @@ type QDM = QMR | DocumentMethod;
 type DR = DocumentMethod | RegExp;
 
 interface Hooks {
-  pre<T>(method: DR | DR[], fn: PreFnWithDT<T>): ClassDecorator;
+  pre<T>(method: DR | DR[], fn: PreFnWithDocumentType<T>): ClassDecorator;
 
   pre<T>(method: QMR | QMR[], fn: PreFnWithQuery<T>): ClassDecorator;
 
