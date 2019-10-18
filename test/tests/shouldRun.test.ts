@@ -245,7 +245,7 @@ export function suite() {
     }
   });
 
-  it.only('should use type "Buffer" [typegoose#88]', async () => {
+  it('should use type "Buffer" [typegoose#88]', async () => {
     class TestBuffer {
       @prop({ required: true })
       public propy!: Buffer;
