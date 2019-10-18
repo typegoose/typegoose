@@ -52,11 +52,11 @@ Here you can find extra infomation
 
 ### Use multiple classes together
 
-Because [TimeStamps](#timestamps) dosnt extend [Base](#base), you can combine them like below, but because multiple extends are not supported nativly in ES/JS/TS, you have to use mixins
--> [Look at Typescript guide to understand this](https://www.typescriptlang.org/docs/handbook/mixins.html)
+Because Typescript & JavaScript dont have functions for multiple inheritance, it can only be achived by the following
 
 ```ts
-interface Something extends Base, TimeStamps {} // have the interface to override the types
-class Something {} // have your class
-applyMixins(Something, [Base, TimeStamps]); // apply the two other classes
+interface Something extends Base {} // have the interface to add the types of "Base" to the class
+class Something extends TimeStamps {} // have your class
 ```
+
+Note: This only works because `Base` only has types and does not modify anything
