@@ -164,6 +164,10 @@ export interface PropOptions extends BasePropOptions {
    * This option as only an effect when the plugin `mongoose-autopopulate` is used
    */
   autopopulate?: boolean;
+  /**
+   * Skip schema creation so that properties for class types can be used
+   */
+  skipSchemaCreation?: boolean;
 }
 
 export interface ValidateNumberOptions {

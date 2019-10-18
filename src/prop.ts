@@ -72,7 +72,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   const rawOptions = Object.assign({}, origOptions);
   logger.debug('Starting to process "%s.%s"', target.constructor.name, key);
 
-  if (utils.isNotDefined(Type)) {
+  const skipSchemaCreation = origOptions.skipSchemaCreation === true ? true : false;
+  if (utils.isNotDefined(Type) && !skipSchemaCreation) {
     if (Type !== target) { // prevent "infinite" buildSchema loop / Maximum Class size exceeded
       buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
     }
