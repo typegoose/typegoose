@@ -12,15 +12,17 @@ import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
 import { NoValidClass } from './errors';
 
-const primitives = ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID', 'Array'];
-
 /**
- * Returns true, if it includes the Type
+ * Returns true, if the type is included in mongoose.Schema.Types
  * @param Type The Type
  * @returns true, if it includes it
  */
 export function isPrimitive(Type: any): boolean {
-  return primitives.includes(Type.name);
+  if (Type && typeof Type.name === 'string') {
+    return Object.getOwnPropertyNames(mongoose.Schema.Types).includes(Type.name);
+  }
+
+  return false;
 }
 
 /**

@@ -244,4 +244,22 @@ export function suite() {
       expect(err).to.be.an.instanceOf(mongoose.Error.ValidationError);
     }
   });
+
+  it.only('should use type "Buffer" [typegoose#88]', async () => {
+    class TestBuffer {
+      @prop({ required: true })
+      public propy!: Buffer;
+    }
+
+    const model = getModelForClass(TestBuffer);
+
+    expect(model.schema.path('propy')).to.be.an.instanceOf(mongoose.Schema.Types.Buffer);
+
+    const { _id: id } = await model.create({ propy: Buffer.from('Hello') } as TestBuffer);
+
+    const found = await model.findById(id).exec();
+    expect(found).to.not.be.an('undefined');
+    expect(found.propy).to.be.an.instanceOf(Buffer);
+    expect(found.propy.toString()).to.be.equal('Hello');
+  });
 }
