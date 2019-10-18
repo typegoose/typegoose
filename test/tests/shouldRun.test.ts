@@ -262,4 +262,20 @@ export function suite() {
     expect(found.propy).to.be.an.instanceOf(Buffer);
     expect(found.propy.toString()).to.be.equal('Hello');
   });
+
+  it('should use "type" as a last resort', async () => {
+    class TestPropOptionType {
+      @prop({ type: mongoose.Schema.Types.Number })
+      public propy: string;
+    }
+
+    const model = getModelForClass(TestPropOptionType);
+
+    expect(model.schema.path('propy')).to.be.an.instanceOf(mongoose.Schema.Types.Number);
+
+    const doc = new model({ propy: 100 });
+
+    expect(doc).to.not.be.an('undefined');
+    expect(doc.propy).to.be.equal(100);
+  });
 }

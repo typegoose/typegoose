@@ -193,7 +193,9 @@ class Dummy {
 Accepts Type: `any`
 
 This option is mainly used for [get & set](#get--set) to override the inferred type  
-but it can be used to override the inferred type of any prop - but when that happens, please open a new issue
+but it can also be used to override the inferred type of any prop  
+
+-> this overwriting is meant as a last resort, please open a new issue if you need to use it
 
 Example: get as `string[]`, save as `string`
 
@@ -204,7 +206,14 @@ class Dummy {
 }
 ```
 
--> only used with [set & get](#get--set)
+Example: Overwrite inferred type as last resort
+
+```ts
+class Dummy {
+  @prop({ type: mongoose.Schema.Types.Mixed }) // used for mongoose / how it is stored to the DB
+  public something: NewableFunction; // used for intellisense / typescript
+}
+```
 
 <!--Below are just the Specific Options-->
 
