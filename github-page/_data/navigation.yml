@@ -39,6 +39,8 @@ docs:
     children:
       - title: 'Get Model For Class'
         url: /docs/functions/getModelForClass
+      - title: 'Get Class For Document'
+        url: /docs/functions/getClassForDocument
       - title: 'Build Schema'
         url: /docs/functions/buildSchema
       - title: 'Get Discriminator Model for Class'
