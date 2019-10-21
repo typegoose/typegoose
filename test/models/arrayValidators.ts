@@ -1,7 +1,6 @@
-import { logger } from '../../src/logSettings';
 import { arrayProp, getModelForClass } from '../../src/typegoose';
 
-logger.setLevel('DEBUG');
+// Please try to keep this file in sync with ./stringValidators.ts
 
 export class ArrayValidators {
   @arrayProp({ items: String, maxlength: 3 })

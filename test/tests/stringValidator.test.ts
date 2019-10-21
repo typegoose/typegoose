@@ -3,6 +3,8 @@ import * as mongoose from 'mongoose';
 
 import { model as StringValidators } from '../models/stringValidators';
 
+// Please try to keep this file in sync with ./arrayValidator.test.ts
+
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
