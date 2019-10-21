@@ -245,7 +245,7 @@ export interface ArrayPropOptions extends BasePropOptions {
   itemsRefType?: RefSchemaType;
   /**
    * Use this to define inner-options
-   * Use this if the auto-mapping is not correct
+   * Use this if the auto-mapping is not correct or for plugin options
    *
    * Please open a new issue if some option is mismatched or not existing / mapped
    */
@@ -254,7 +254,7 @@ export interface ArrayPropOptions extends BasePropOptions {
   };
   /**
    * Use this to define outer-options
-   * Use this if the auto-mapping is not correct
+   * Use this if the auto-mapping is not correct or for plugin options
    *
    * Please open a new issue if some option is mismatched or not existing / mapped
    */

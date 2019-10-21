@@ -61,6 +61,68 @@ class Another extends Typegoose {
 }
 ```
 
+### innerOptions
+
+`innerOptions` is used to overwrite here the options in this object go
+-> Use this only when absolutly needed and please open a new issue about it - or for plugins
+
+Example:
+
+```ts
+class Something {
+  @arrayProp({ required: true })
+  public propy: string;
+}
+
+// This would be mapped to
+{
+  type: [{ type: String }],
+  required: true
+}
+
+// when using the overwrite
+class Something {
+  @arrayProp({ innerOptions: { required: true } })
+  public propy: string;
+}
+
+// This would be mapped to
+{
+  type: [{ type: String, required: true }]
+}
+```
+
+### outerOptions
+
+`outerOptions` is used to overwrite here the options in this object go
+-> Use this only when absolutly needed and please open a new issue about it - or for plugins
+
+Example:
+
+```ts
+class Something {
+  @arrayProp({ maxlength: 1 })
+  public propy: string;
+}
+
+// This would be mapped to
+{
+  type: [{ type: String, maxlength: 1 }]
+}
+
+// when using the overwrite
+class Something {
+  @arrayProp({ outerOptions: { maxlength: 1 } })
+  public propy: string;
+}
+
+// This would be mapped to
+{
+  type: [{ type: String }],
+  maxlength: 1
+}
+```
+
 ## Options from @prop that do **NOT** work on @arrayProp
 
 - `ref` does not work, instead use `itemsRef` (please let us know if you are interested in combining them into one)

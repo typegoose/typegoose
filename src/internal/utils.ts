@@ -334,6 +334,17 @@ export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>)
     logger.info('The Type "%s" does not have an OptionsConstructor', getName(Type));
   }
 
+  if (typeof options.innerOptions === 'object') {
+    for (const [key, value] of Object.entries(options.innerOptions)) {
+      returnObject.type[0][key] = value;
+    }
+  }
+  if (typeof options.outerOptions === 'object') {
+    for (const [key, value] of Object.entries(options.outerOptions)) {
+      returnObject[key] = value;
+    }
+  }
+
   logger.debug('Final mapped Options for Type "%s"', getName(Type), returnObject);
 
   return returnObject;
