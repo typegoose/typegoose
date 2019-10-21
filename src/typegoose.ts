@@ -4,8 +4,8 @@ import 'reflect-metadata';
 import * as semver from 'semver';
 import { deprecate, isNullOrUndefined } from 'util';
 
-if (semver.lt(mongoose.version, '5.7.5')) {
-  throw new Error('Please use mongoose 5.7.5 or higher');
+if (semver.lt(mongoose.version, '5.7.6')) {
+  throw new Error('Please use mongoose 5.7.6 or higher');
 }
 
 import * as defaultClasses from './defaultClasses';
