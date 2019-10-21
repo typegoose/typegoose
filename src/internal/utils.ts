@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
+import { logger } from '../logSettings';
 import {
   AnyParamConstructor,
   IModelOptions,
@@ -293,4 +294,58 @@ export function createUniqueID(cl: any) {
   }
 
   return false;
+}
+
+/**
+ * Map Options to "inner" & "outer"
+ * -> inner: means inner of "type: [{here})"
+ * -> outer: means outer of "type: [{}], here"
+ * @param rawOptions The raw options
+ * @param Type The Type of the array
+ */
+export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>): mongoose.SchemaTypeOpts<any> {
+  if (getName(Type) in mongoose.Schema.Types) {
+    logger.info('Converting %s to mongoose Type', getName(Type));
+    Type = mongoose.Schema.Types[getName(Type)];
+  } else if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
+    throw new TypeError('Type does not have an valid "OptionsConstructor"!');
+  }
+
+  const options = Object.assign({}, rawOptions); // for sanity
+
+  delete options.items;
+
+  const returnObject = {
+    type: [{
+      type: Type
+    }]
+  };
+
+  // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
+  if (Type.prototype.OptionsConstructor.prototype instanceof (mongoose as any).SchemaTypeOptions) {
+    for (const [key, value] of Object.entries(options)) {
+      if (Object.getOwnPropertyNames(Type.prototype.OptionsConstructor.prototype).includes(key)) {
+        returnObject.type[0][key] = value;
+      } else {
+        returnObject[key] = value;
+      }
+    }
+  } else {
+    logger.info('The Type "%s" does not have an OptionsConstructor', getName(Type));
+  }
+
+  if (typeof options.innerOptions === 'object') {
+    for (const [key, value] of Object.entries(options.innerOptions)) {
+      returnObject.type[0][key] = value;
+    }
+  }
+  if (typeof options.outerOptions === 'object') {
+    for (const [key, value] of Object.entries(options.outerOptions)) {
+      returnObject[key] = value;
+    }
+  }
+
+  logger.debug('Final mapped Options for Type "%s"', getName(Type), returnObject);
+
+  return returnObject;
 }

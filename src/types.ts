@@ -243,6 +243,24 @@ export interface ArrayPropOptions extends BasePropOptions {
   itemsRefPath?: any;
   /** Same as {@link PropOptions.refType}, only that it is for an array */
   itemsRefType?: RefSchemaType;
+  /**
+   * Use this to define inner-options
+   * Use this if the auto-mapping is not correct or for plugin options
+   *
+   * Please open a new issue if some option is mismatched or not existing / mapped
+   */
+  innerOptions?: {
+    [key: string]: any;
+  };
+  /**
+   * Use this to define outer-options
+   * Use this if the auto-mapping is not correct or for plugin options
+   *
+   * Please open a new issue if some option is mismatched or not existing / mapped
+   */
+  outerOptions?: {
+    [key: string]: any;
+  };
 }
 
 export interface MapPropOptions extends BasePropOptions {
