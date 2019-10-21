@@ -62,8 +62,8 @@ function baseProp(input: DecoratedPropertyMetadata): void {
  * @param input All the options needed for prop's
  */
 export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
+  let { Type } = input;
   const {
-    Type,
     key,
     origOptions,
     target,
@@ -72,8 +72,13 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   const rawOptions = Object.assign({}, origOptions);
   logger.debug('Starting to process "%s.%s"', target.constructor.name, key);
 
-  if (utils.isNotDefined(Type)) {
-    if (Type !== target) { // prevent "infinite" buildSchema loop / Maximum Class size exceeded
+  if (!isNullOrUndefined(rawOptions.type)) {
+    logger.info('Prop Option "type" is set to', rawOptions.type);
+    Type = rawOptions.type;
+  }
+
+  if (utils.isNotDefined(Type) && isNullOrUndefined(rawOptions.type)) {
+    if (Type !== target) { // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
       buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
     }
   }
