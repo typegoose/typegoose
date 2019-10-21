@@ -8,13 +8,6 @@ import { model as StringValidators } from '../models/stringValidators';
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as StringValidatorTests } from './stringValidator.test'
- * ...
- * describe('String Validators', StringValidatorTests.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('should respect maxlength', (done) => {
