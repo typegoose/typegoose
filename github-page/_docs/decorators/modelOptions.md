@@ -86,6 +86,6 @@ Set this to a Severity you want
 - `WARN`: Warn for it in the logger, but still allow the use of it
 - `ERROR`: Error out when it comes to it
 
-### runSyncIndexes
+#### runSyncIndexes
 
 Run "model.syncIndexes" when model is finished compiling?
