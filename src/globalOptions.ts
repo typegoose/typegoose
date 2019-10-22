@@ -12,6 +12,8 @@ export function setGlobalOptions(options: IGlobalOptions) {
   logger.info('"setGlobalOptions" got called with', options);
 
   for (const key of Object.keys(options)) {
-    globalOptions[key] = Object.assign({}, globalOptions[key], options[key]);
+    if (key !== 'globalOptions') {
+      globalOptions[key] = Object.assign({}, globalOptions[key], options[key]);
+    }
   }
 }

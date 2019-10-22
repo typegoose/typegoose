@@ -19,6 +19,9 @@ redirect_from:
 - Add function "deleteModel" & "deleteModelWithClass"
 - allow Prop Option "type" to overwrite the inferred type [look here for an example](https://typegoose.github.io/typegoose/docs/decorators/prop/#type)
 - integrate "Array Validators & Transform" tests {% include gitissue repo="typegoose" num=29 %}
+- adding global options, with `setGlobalOptions`
+- add modelOption `runSyncIndexes`
+- add modelOption `allowMixed`
 - [IC] Refactor how "isPrimitive" works, some types like `Buffer` & `Decimal` now work
 - [IC] Added more debug logs to `prop.ts`
 - [IC] Move Decorator Cache to the class itself
