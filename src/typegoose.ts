@@ -102,7 +102,14 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
     model = roptions.existingMongoose.model.bind(roptions.existingMongoose);
   }
 
-  return addModelToTypegoose(model(name, buildSchema(cl, roptions.schemaOptions)), cl);
+  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions));
+  const refetchedOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions || {};
+
+  if (refetchedOptions && refetchedOptions.options && refetchedOptions.options.runSyncIndexes) {
+    compiledmodel.syncIndexes({}); // the "{}" is because @types/mongoose dosnt allow it without ...
+  }
+
+  return addModelToTypegoose(compiledmodel, cl);
 }
 
 /* istanbul ignore next */

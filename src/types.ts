@@ -301,6 +301,8 @@ export interface ICustomOptions {
   automaticName?: boolean;
   /** Allow "mongoose.Schema.Types.Mixed"? */
   allowMixed?: Severity;
+  /** Run "model.syncIndexes" when model is finished compiling? */
+  runSyncIndexes?: boolean;
 }
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
