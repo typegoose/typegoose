@@ -305,8 +305,13 @@ export function createUniqueID(cl: any) {
  */
 export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>): mongoose.SchemaTypeOpts<any> {
   if (getName(Type) in mongoose.Schema.Types) {
-    logger.info('Converting %s to mongoose Type', getName(Type));
+    logger.info('Converting "%s" to mongoose Type', getName(Type));
     Type = mongoose.Schema.Types[getName(Type)];
+
+    /* istanbul ignore next */
+    if (Type === mongoose.Schema.Types.Mixed) {
+      logger.warn('Converted Type to Mixed!');
+    }
   } else if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
     throw new TypeError('Type does not have an valid "OptionsConstructor"!');
   }
