@@ -19,6 +19,14 @@ import { suite as TypeguardsTest } from './tests/typeguards.test';
 
 import { connect, disconnect } from './utils/mongooseConnect';
 
+/*
+ * // use this style
+ * import { suite as ShouldAddTest } from './shouldAdd.test'
+ * ...
+ * describe('Should add', ShouldAddTest.bind(this));
+ * ...
+ */
+
 use(cap);
 
 describe('Typegoose', () => {

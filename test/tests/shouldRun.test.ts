@@ -20,13 +20,6 @@ import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discri
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as ShouldRunTests } from './shouldRun.test'
- * ...
- * describe('Should just Run', ShouldRunTests.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('should not error when trying to get model multiple times', () => {

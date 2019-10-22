@@ -23,13 +23,6 @@ import { addModelToTypegoose, buildSchema, deleteModel, deleteModelWithClass, ge
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as ErrorTests } from './errors.test'
- * ...
- * describe('Test if the correct errors are returned', ErrorTests.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('should error if type is not string and a transform is supplied [NotStringTypeError]', () => {

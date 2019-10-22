@@ -5,13 +5,6 @@ import { getClassForDocument, getModelForClass, modelOptions, prop } from '../..
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as customNameTests } from './options.test'
- * ...
- * describe('customName', customNameTests.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('expect no changes to model Name when not using customOptions or collection', () => {

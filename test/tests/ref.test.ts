@@ -7,13 +7,6 @@ import { model as RefTestModel, RefTestBufferModel, RefTestNumberModel, RefTestS
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as RefTests } from './ref.test'
- * ...
- * describe('Ref Tests', RefTests.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('check generated ref schema for ObjectID _id', async () => {

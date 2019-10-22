@@ -2,6 +2,10 @@ import { expect } from 'chai';
 import { deleteModel, deleteModelWithClass, getModelForClass } from '../../src/typegoose';
 import { NormalUser, OverwrittenUser } from './../models/overwrittenUser';
 
+/**
+ * Function to pass into describe
+ * ->Important: you need to always bind this
+ */
 export function suite() {
   it('should be possible to overwrite an existing model', () => {
     const userModel = getModelForClass(NormalUser);

@@ -4,13 +4,6 @@ import { TestTimeStamps, TestTimeStampsModel } from '../models/dClasses';
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as DefaultClassesTests } from './dClasses.test'
- * ...
- * describe('Default Classes', DefaultClassesTests.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('TimeStamp Model', async () => {

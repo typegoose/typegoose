@@ -6,13 +6,6 @@ import { UserRefModel } from '../models/userRefs';
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as TypeguardsTest } from './typeguards.test'
- * ...
- * describe('Type guards', TypeguardsTest.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('should guarantee array of document types', async () => {
