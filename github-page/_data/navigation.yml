@@ -49,6 +49,8 @@ docs:
         url: /docs/functions/addModelToTypegoose
       - title: 'Delete Models'
         url: /docs/functions/deleteModel
+      - title: 'Set Global Options'
+        url: /docs/functions/setGlobalOptions
 
   - title: TypeGuards
     children:

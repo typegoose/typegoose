@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 
-import { isNullOrUndefined } from 'util';
+import { format, isNullOrUndefined } from 'util';
 import { DecoratorKeys } from './internal/constants';
-import { schemas, virtuals } from './internal/data';
+import { globalOptions, schemas, Severity, virtuals } from './internal/data';
 import {
   InvalidPropError,
   InvalidTypeError,
@@ -273,13 +273,23 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
   if (utils.isObject(Type) && !subSchema) {
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key],
-      ...options,
-      type: Object // i think this could take some improvements
-    };
+    if (globalOptions.options) {
+      switch (globalOptions.options.allowMixed) {
+        default:
+        case Severity.WARN:
+          logger.warn('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key);
+        case Severity.ALLOW:
+          schemas.get(name)[key] = {
+            ...schemas.get(name)[key],
+            ...options,
+            type: mongoose.Schema.Types.Mixed
+          };
 
-    return;
+          return;
+        case Severity.ERROR:
+          throw new TypeError(format('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key));
+      }
+    }
   }
 
   switch (whatis) {

@@ -29,6 +29,8 @@ export * from './optionsProp';
 export { defaultClasses };
 export { DocumentType, Ref, ReturnModelType };
 export { getClassForDocument } from './internal/utils';
+export { Severity, IGlobalOptions, IGlobalOptionsSub } from './internal/data';
+export * from './globalOptions';
 
 /** @deprecated */
 export abstract class Typegoose {
