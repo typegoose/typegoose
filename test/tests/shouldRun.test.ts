@@ -7,6 +7,7 @@ import {
   arrayProp,
   buildSchema,
   DocumentType,
+  getDiscriminatorModelForClass,
   getModelForClass,
   mapProp,
   modelOptions,
@@ -270,5 +271,17 @@ export function suite() {
 
     expect(doc).to.not.be.an('undefined');
     expect(doc.propy).to.be.equal(100);
+  });
+
+  it('"getDiscriminatorModelForClass" should return the same model if already defined', () => {
+    class TestSameModelDicriminator { }
+
+    const model = getModelForClass(TestSameModelDicriminator);
+
+    const dummymodel = mongoose.model('DummyModel', new mongoose.Schema());
+
+    const newmodel = getDiscriminatorModelForClass(dummymodel, TestSameModelDicriminator);
+
+    expect(newmodel).to.deep.equal(model);
   });
 }

@@ -296,4 +296,18 @@ export function suite() {
       expect(err).to.be.an.instanceOf(NoValidClass);
     }
   });
+
+  it('should throw when "addModelToTypegoose" is called twice for the same class [Error]', () => {
+    class TestDouble { }
+
+    const gotmodel = getModelForClass(TestDouble);
+
+    try {
+      addModelToTypegoose(gotmodel, TestDouble);
+      assert.fail('Expected to throw "Error"');
+    } catch (err) {
+      expect(err).to.not.be.an.instanceOf(AssertionError);
+      expect(err).to.be.an.instanceOf(Error);
+    }
+  });
 }

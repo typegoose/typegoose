@@ -2,8 +2,9 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
-import { deprecate, isNullOrUndefined } from 'util';
+import { deprecate, format, isNullOrUndefined } from 'util';
 
+/* istanbul ignore next */
 if (semver.lt(mongoose.version, '5.7.6')) {
   throw new Error('Please use mongoose 5.7.6 or higher');
 }
@@ -185,10 +186,9 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
   const name = getName(cl);
 
   if (constructors.get(name)) {
-    // tslint:disable-next-line:no-console
-    console.error(new Error('It seems like "addModelToTypegoose" got called twice\n'
+    throw new Error(format('It seems like "addModelToTypegoose" got called twice\n'
       + 'Or multiple classes with the same name are used, which currently isnt supported!'
-      + `"Erroring" class is ${name}`));
+      + '(%s)', name));
   }
 
   models.set(name, model);
