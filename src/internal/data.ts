@@ -1,7 +1,7 @@
 import { Model, Schema, SchemaDefinition } from 'mongoose';
 
 import { mongoose } from '../typegoose';
-import { VirtualOptions } from '../types';
+import { ICustomOptions, Severity, VirtualOptions } from '../types';
 
 export interface IPreHook {
   method: string | RegExp;
@@ -24,19 +24,14 @@ export interface IPluginMap {
 
 export interface IGlobalOptions {
   /** Typegoose Options */
-  options?: IGlobalOptionsSub;
+  options?: ICustomOptions;
   /** Schema Options that should get applied to all models */
-  globalSchemaOptions?: mongoose.SchemaOptions;
-}
-export interface IGlobalOptionsSub {
-  /** Allow "mongoose.Schema.Types.Mixed"? */
-  allowMixed: Severity;
-}
-
-export enum Severity {
-  ALLOW,
-  WARN,
-  ERROR
+  schemaOptions?: mongoose.SchemaOptions;
+  /**
+   * Global Options for general Typegoose
+   * (There are currently none)
+   */
+  globalOptions?: {};
 }
 
 /** Schema Map */
@@ -52,8 +47,8 @@ export const plugins: Map<string, IPluginMap[]> = new Map();
 /** Constructors Map */
 export const constructors: Map<string, NewableFunction> = new Map();
 /** Global Options */
-export const globalOptions: IGlobalOptions = new Proxy({
+export const globalOptions: IGlobalOptions = {
   options: {
     allowMixed: Severity.WARN
   }
-}, {});
+};

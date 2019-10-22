@@ -278,25 +278,29 @@ export interface IModelOptions {
   /** An Existing Connection */
   existingConnection?: mongoose.Connection;
   /** Typegoose Custom Options */
-  options?: {
-    /**
-     * Set the modelName of the class
-     *
-     * if "automaticName" is true it sets a *suffix* instead of the whole name
-     * @default schemaOptions.collection
-     */
-    customName?: string;
-    /**
-     * Enable Automatic Name generation of a model
-     * Example:
-     * class with name of "SomeClass"
-     * and option "collection" of "SC"
-     *
-     * will generate the name of "SomeClass_SC"
-     * @default false
-     */
-    automaticName?: boolean;
-  };
+  options?: ICustomOptions;
+}
+
+export interface ICustomOptions {
+  /**
+   * Set the modelName of the class
+   *
+   * if "automaticName" is true it sets a *suffix* instead of the whole name
+   * @default schemaOptions.collection
+   */
+  customName?: string;
+  /**
+   * Enable Automatic Name generation of a model
+   * Example:
+   * class with name of "SomeClass"
+   * and option "collection" of "SC"
+   *
+   * will generate the name of "SomeClass_SC"
+   * @default false
+   */
+  automaticName?: boolean;
+  /** Allow "mongoose.Schema.Types.Mixed"? */
+  allowMixed?: Severity;
 }
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
@@ -319,3 +323,9 @@ export interface DecoratedPropertyMetadata {
   whatis: WhatIsIt;
 }
 export type DecoratedPropertyMetadataMap = Map<string, DecoratedPropertyMetadata>;
+
+export enum Severity {
+  ALLOW,
+  WARN,
+  ERROR
+}

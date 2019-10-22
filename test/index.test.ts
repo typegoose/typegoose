@@ -8,6 +8,7 @@ import { suite as IndexTests } from './tests/dbIndex.test';
 import { suite as DefaultClassesTests } from './tests/dClasses.test';
 import { suite as ErrorTests } from './tests/errors.test';
 import { suite as GCFDTest } from './tests/getClassForDocument.test';
+import { suite as GlobalTest } from './tests/globalOptions.test';
 import { suite as HookTest } from './tests/hooks.test';
 import { suite as Inheritance } from './tests/inheritance.test';
 import { suite as OverwrittenModels } from './tests/overwrittenModel.test';
@@ -32,6 +33,8 @@ use(cap);
 describe('Typegoose', () => {
   before(connect);
   after(disconnect);
+
+  describe('Global Options', GlobalTest.bind(this));
 
   describe('BigUser', BigUserTest.bind(this));
 

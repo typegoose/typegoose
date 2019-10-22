@@ -18,11 +18,11 @@ import { IModelOptions } from './types';
  */
 export function modelOptions(options: IModelOptions) {
   return (target: any) => {
-    if (isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.ModelOptions, target))
-      && typeof globalOptions.globalSchemaOptions === 'object'
-    ) {
+    if (isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.ModelOptions, target))) {
       logger.info('Assigning global Schema Options to "%s"', getName(target));
-      Object.assign(options.schemaOptions, globalOptions.globalSchemaOptions);
+      for (const key of Object.keys(globalOptions)) {
+        options[key] = Object.assign({}, globalOptions[key], options[key]);
+      }
     }
     assignMetadata(DecoratorKeys.ModelOptions, options, target);
   };

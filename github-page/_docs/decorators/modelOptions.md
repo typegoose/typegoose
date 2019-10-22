@@ -77,3 +77,11 @@ expect(model.modelName).to.be.equal('MultiModel_Something');
 ```
 
 Note: on request this was made "opt-in" instead of "opt-out"
+
+#### allowMixed
+
+Set this to a Severity you want
+
+- `ALLOW`: allow the use and execution of "mongoose.Schema.Types.Mixed" if the inferred type cannot be set otherwise
+- `WARN`: Warn for it in the logger, but still allow the use of it
+- `ERROR`: Error out when it comes to it

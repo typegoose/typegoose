@@ -15,7 +15,13 @@ import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import { assignMetadata, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
-import { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
+import {
+  AnyParamConstructor,
+  DocumentType,
+  IModelOptions,
+  Ref,
+  ReturnModelType
+} from './types';
 
 /* exports */
 export { mongoose }; // export the internally used one, to not need to always import it
@@ -28,8 +34,9 @@ export * from './typeguards';
 export * from './optionsProp';
 export { defaultClasses };
 export { DocumentType, Ref, ReturnModelType };
+export { Severity } from './types';
 export { getClassForDocument } from './internal/utils';
-export { Severity, IGlobalOptions, IGlobalOptionsSub } from './internal/data';
+export { IGlobalOptions } from './internal/data';
 export * from './globalOptions';
 
 /** @deprecated */

@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 import { format, isNullOrUndefined } from 'util';
 import { DecoratorKeys } from './internal/constants';
-import { globalOptions, schemas, Severity, virtuals } from './internal/data';
+import { schemas, virtuals } from './internal/data';
 import {
   InvalidPropError,
   InvalidTypeError,
@@ -22,6 +22,7 @@ import {
   MapPropOptions,
   PropOptions,
   PropOptionsWithValidate,
+  Severity,
   WhatIsIt
 } from './types';
 
@@ -273,8 +274,9 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
   if (utils.isObject(Type) && !subSchema) {
-    if (globalOptions.options) {
-      switch (globalOptions.options.allowMixed) {
+    const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, target);
+    if (modelOptions.options) {
+      switch (modelOptions.options.allowMixed) {
         default:
         case Severity.WARN:
           logger.warn('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key);
