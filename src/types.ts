@@ -69,10 +69,16 @@ export interface BasePropOptions {
   index?: boolean;
   /** @link https://docs.mongodb.com/manual/indexes/#sparse-indexes */
   sparse?: boolean;
-  /** when should this property expire?
+  /**
+   * Should this property have an "expires" index?
    * @link https://docs.mongodb.com/manual/tutorial/expire-data
    */
   expires?: string | number;
+  /**
+   * Should this property have an "text" index?
+   * @link https://mongoosejs.com/docs/api.html#schematype_SchemaType-text
+   */
+  text?: boolean;
   /** should subdocuments get their own id?
    * @default true (Implicitly)
    */
