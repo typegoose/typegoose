@@ -22,6 +22,8 @@ redirect_from:
 - adding global options, with `setGlobalOptions`
 - add modelOption `runSyncIndexes`
 - add modelOption `allowMixed`
+- add `text` to PropOptions
+- [IC] typegoose now makes use of "importHelpers"(tsconfig) to save some space
 - [IC] Refactor how "isPrimitive" works, some types like `Buffer` & `Decimal` now work
 - [IC] Added more debug logs to `prop.ts`
 - [IC] Move Decorator Cache to the class itself
