@@ -53,6 +53,8 @@ Hooks got (in 6.0.0-13) a change for the types to comply with the latest mongoos
 for virtual-populates use `@prop({ localField, foreignField })` and no more `overwrite` option is needed, it will auto detect if one of these values is included
 for normal virtuals, just use `get somevalue() { return ''; }` and `set somevalue(val: string) { }` (no more `@prop` needed)
 
+Update: `@staticMethod` & `@instanceMethod` got removed in 6.1.0-1
+
 ## setModelForClass got deprecated
 
 `setModelForClass()` got deprecated, because mongoose would throw an OverwriteModelError if attempted to overwrite a model
