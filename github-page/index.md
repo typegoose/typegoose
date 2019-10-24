@@ -22,7 +22,7 @@ feature_row:
   # - image_path: /assets/images/unkown.png
   - alt: "idk what alt"
     title: "Latest Verions"
-    excerpt: "Built with TypeScript 3.5"
+    excerpt: "Built with TypeScript 3.6"
     url: "/guides/quick-start-guide/"
     btn_class: "btn--primary"
     btn_label: "Learn more"
