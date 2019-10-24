@@ -60,16 +60,40 @@ Options ([look here for more details](https://mongoosejs.com/docs/api/schema.htm
   - `justOne`: Return as One Document(true) or as Array(false) ***[Optional]***
   - `count`: Return the number of Documents found instead of the actual Documents ***[Optional]***
 
-Example:
+Example: for an array
 
 ```ts
-class RefClass {
-  @prop({ required: true, ref: Virtual })
-  public refToName: Ref<Virtual>;
+class Kittens {
+  @prop({ required: true, ref: "Cat" })
+  public parent: Ref<Cat>;
 }
 
-class Name {
-  @prop({ ref: RefClass, foreignField: 'refToName', localField: '_id', justOne: true })
-  public somevalue: Ref<RefClass>;
+class Cat {
+  @arrayProp({
+    ref: "Kittens", // please know for "virtual populate" that "itemsRef" will **not** work here
+    foreignField: 'parent', // compare this value to the local document populate is called on
+    localField: '_id' // compare this to the foreign document's value defined in "foreignField"
+  })
+  public kittens: Ref<Kittens>[];
+}
+```
+
+Example: for only one document
+
+```ts
+// i couldnt think of an real use case example
+class Sub {
+  @prop({ requried: true, ref: "Parent" })
+  public parent: Ref<Parent>;
+}
+
+class Parent {
+  @prop({
+    ref: "Sub",
+    foreignField: 'parent',
+    localField: '_id',
+    justOne: true // please know that when this is not included, mongoose will return an array
+  })
+  public one: Ref<Sub>;
 }
 ```

@@ -32,7 +32,7 @@ Accepts Type: `Class | String` (String of the modelName)
 Same as [`@prop`'s `ref`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#ref)
 
 ```ts
-class Car extends Typegoose {}
+class Car {}
 
 // in another class
 class Something {
@@ -48,11 +48,11 @@ Accepts Type: `string`
 Same as [`@prop`'s `refpath`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#refPath)
 
 ```ts
-class Car extends Typegoose {}
-class Shop extends Typegoose {}
+class Car {}
+class Shop {}
 
 // in another class
-class Another extends Typegoose {
+class Another {
   @prop({ required: true, enum: 'Car' | 'Shop' })
   public which!: string;
 
