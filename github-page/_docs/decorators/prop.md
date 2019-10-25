@@ -1,9 +1,8 @@
 ---
 title: "Prop"
 ---
-<!--TODO: copy all examples from README to here-->
 
-`@prop(options: object)` is used for setting properties in a model (without this set, it is just a type and will **NOT** be in the final model/document)
+`@prop(options: object)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
 
 ## Options
 
@@ -11,13 +10,37 @@ title: "Prop"
 
 Accepts Type: `boolean`
 
-Set if this Property is required (best practice is `public property!: any`, note the `!`)
+Set if this Property is required (best practice is `public property!: any`, note the `!`)  
+For more infomation look at [Mongoose's Documentation](http://mongoosejs.com/docs/api.html#schematype_SchemaType-required)
+
+Example:
+
+```ts
+class Something {
+  @prop({ required: true }) // this is now required in the schema
+  public firstName!: string;
+
+  @prop() // by default, a property is not required
+  public lastName?: string; // using the "?" marks the property as optional
+}
+```
 
 ### index
 
 Accepts Type: `boolean`
 
 Create an Index for this Property
+
+-> it should act the same as in the `@index` class decorator, but without options
+
+Example:
+
+```ts
+class IndexedClass {
+  @prop({ index: true })
+  public indexedField?: string;
+}
+```
 
 ### unique
 
@@ -27,11 +50,14 @@ Create an Index that sets this property to unique
 
 Look at [Mongoose unique](http://mongoosejs.com/docs/api.html#schematype_SchemaType-unique) for more infomation
 
-### enum
+Example:
 
-Accepts Type: `enum | any[]`
-
-Only allow Values from the enum (best practice is to use TypeScript's enum)
+```ts
+class IndexedClass {
+  @prop({ unique: true }) // implicitly has "index: true"
+  public uniqueId?: string;
+}
+```
 
 ### default
 
@@ -39,17 +65,48 @@ Accepts Type: `any`
 
 Set an default always when no value is givin at creation time
 
+Example:
+
+```ts
+class Defaulted {
+  @prop({ default: "hello world" })
+  public upperCase?: string; // mark as optional, because it will be defaulted
+}
+```
+
 ### _id
 
 Accepts Type: `boolean`
 
 Set this to `false` if you want to turn of creating ID's for sub-documents
 
+Example:
+
+```ts
+class Nested {}
+
+class Parent {
+  @prop({ _id: false })
+  public nest: Nested;
+}
+```
+
 ### ref
 
 Accepts Type: `Ref<any>`
 
-Set which class to use for Reference (this cannot be infered by the type)
+Set which class to use for Reference (this cannot be inferred by the type)
+
+Example:
+
+```ts
+class Nested {}
+
+class Parent {
+  @prop({ ref: "Nested" }) // it is a "String" because of reference errors
+  public nest: Ref<Nested>;
+}
+```
 
 ### refPath
 
@@ -57,17 +114,55 @@ Accepts Type: `string`
 
 Set at which path to look for which Class to use
 
+Example:
+
+```ts
+class Car {}
+class Shop {}
+
+// in another class
+class Another {
+  @prop({ required: true, enum: 'Car' | 'Shop' })
+  public which!: string;
+
+  @prop({ refPath: 'which' })
+  public kind?: Ref<Car | Shop>;
+}
+```
+
 ### validate
 
-Accepts Type: `() => boolean`(Functions that returns a boolean)
+Accepts Type: `object` OR `RegExp` OR `(value) => boolean` OR `object[]`
+Required options of the object:
+  - `validator`: `(value) => boolean`
+  - `message`: `String`, the message shows when the validator fails
 
 Set a custom function for validation (must return an boolean)
+
+Example: (For more Examples look at [Mongoose's Documentation](https://mongoosejs.com/docs/api.html#schematype_SchemaType-validate))
+
+```ts
+// "maxlength" already exists as an option, this just shows how to use validate
+class Validated {
+  @prop({ validate: {
+    validator: (v) => {
+      return v.length <= 10;
+    },
+    message: "value is over 10 characters long!"
+  } })
+  public validated?: string;
+}
+```
 
 ### alias
 
 Accepts Type: `string`
 
 Set an Alias for a property (best practice is to add type infomation for it)
+
+-> For more infomation look at [Mongoose's Documentation](https://mongoosejs.com/docs/guide.html#aliases)
+
+Example:
 
 ```ts
 class Dummy {
@@ -84,6 +179,8 @@ Accepts Type: `(input) => output`
 set gets & setters for fields, it is not virtual
 -> both get & set must be defined all the time, even when you just want to use one, we are sorry
 
+Example:
+
 ```ts
 class Dummy {
   @prop({ set: (val: string) => val.toLowerCase(), get: (val: string) => val })
@@ -95,7 +192,10 @@ class Dummy {
 
 Accepts Type: `any`
 
-Override the type that gets saved, used when get/set return different types than set on the prop field:
+This option is mainly used for [get & set](#get--set) to override the inferred type  
+but it can also be used to override the inferred type of any prop  
+
+-> this overwriting is meant as a last resort, please open a new issue if you need to use it
 
 Example: get as `string[]`, save as `string`
 
@@ -106,7 +206,14 @@ class Dummy {
 }
 ```
 
--> only used with [set & get](#get--set)
+Example: Overwrite inferred type as last resort
+
+```ts
+class Dummy {
+  @prop({ type: mongoose.Schema.Types.Mixed }) // used for mongoose / how it is stored to the DB
+  public something: NewableFunction; // used for intellisense / typescript
+}
+```
 
 <!--Below are just the Specific Options-->
 
@@ -118,11 +225,29 @@ Accepts Type: `boolean`
 
 Set this to `true` if the value should always be lowercased
 
+Example:
+
+```ts
+class LowerCased {
+  @prop({ lowercase: true })
+  public lowerCase: string; // "HELLO" -> "hello"
+}
+```
+
 #### uppercase
 
 Accepts Type: `boolean`
 
 Set this to `true` if the value should always be UPPERCASED
+
+Example:
+
+```ts
+class UpperCased {
+  @prop({ uppercase: true })
+  public upperCase: string; // "hello" -> "HELLO"
+}
+```
 
 #### trim
 
@@ -130,7 +255,31 @@ Accepts Type: `boolean`
 
 Set this to `true` if the value should always be trimmed
 
+Example:
+
+```ts
+class Trimmed {
+  @prop({ trim: true })
+  public trim: string; // "   Trim me   " -> "Trim me"
+}
+```
+
 ### String Validation options
+
+#### maxlength
+
+Accepts Type: `number`
+
+Set a maximal length the string can have
+
+Example:
+
+```ts
+class MaxLengthed {
+  @prop({ maxlength: 10 })
+  public maxlengthed?: string; // the string can only be 10 characters long
+}
+```
 
 #### minlength
 
@@ -138,11 +287,34 @@ Accepts Type: `number`
 
 Set a minimal length the string must have (must be above 0)
 
-#### maxlength
+Example:
 
-Accepts Type: `number`
+```ts
+class MinLengthed {
+  @prop({ minlength: 10 })
+  public minlengthed?: string; // the string must be at least 10 characters long
+}
+```
 
-Set a maximal length the string can have
+#### enum
+
+Accepts Type: `enum | any[]`
+
+Only allow Values from the enum (best practice is to use TypeScript's enum)
+
+-> Please know that mongoose only allows enums when the type is a `String`
+
+```ts
+enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+}
+
+class Enumed {
+  @prop({ enum: Gender })
+  public gender?: Gender;
+}
+```
 
 ### Number Validation options
 
@@ -152,14 +324,26 @@ Accepts Type: `number`
 
 Set a highest number the property can have
 
+Example:
+
+```ts
+class Maxed {
+  @prop({ max: 10 })
+  public maxed?: number; // the value can be at maximum of 10
+}
+```
+
 #### min
 
 Accepts Type: `number`
 
 Set a lowest number the property can have
 
-<!--Logical Seperator-->
+Example:
 
-## Virtuals
-
-*no Documentation*
+```ts
+class Mined {
+  @prop({ min: 0 })
+  public mined?: number; // the value must be a minimum of 0
+}
+```

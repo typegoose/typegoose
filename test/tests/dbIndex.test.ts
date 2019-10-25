@@ -9,13 +9,6 @@ import { model as User } from '../models/user';
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as IndexTests } from './index.test'
- * ...
- * describe('Index', IndexTests.bind(this));
- * ...
- * ```
  */
 export function suite() {
   describe('Property Option {select}', () => {

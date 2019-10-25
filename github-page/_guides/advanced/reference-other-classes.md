@@ -18,7 +18,7 @@ class Nested {
 
 class Main {
   @prop({ ref: Nested })
-  public nested: Nested;
+  public nested: Ref<Nested>;
 }
 ```
 
@@ -34,7 +34,7 @@ class Nested {
 
 class Main {
   @prop({ ref: "Nested" })
-  public nested: Nested;
+  public nested: Ref<Nested>;
 }
 ```
 

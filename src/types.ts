@@ -33,13 +33,15 @@ export type Func = (...args: any[]) => any;
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
 
 export type ValidatorFunction = (value: any) => boolean | Promise<boolean>;
+export interface ValidatorOptions {
+  validator: ValidatorFunction;
+  message?: string;
+}
 export type Validator =
   | ValidatorFunction
   | RegExp
-  | {
-    validator: ValidatorFunction;
-    message?: string;
-  };
+  | ValidatorOptions
+  | ValidatorOptions[];
 
 export interface BasePropOptions {
   [key: string]: any;
@@ -67,10 +69,16 @@ export interface BasePropOptions {
   index?: boolean;
   /** @link https://docs.mongodb.com/manual/indexes/#sparse-indexes */
   sparse?: boolean;
-  /** when should this property expire?
+  /**
+   * Should this property have an "expires" index?
    * @link https://docs.mongodb.com/manual/tutorial/expire-data
    */
   expires?: string | number;
+  /**
+   * Should this property have an "text" index?
+   * @link https://mongoosejs.com/docs/api.html#schematype_SchemaType-text
+   */
+  text?: boolean;
   /** should subdocuments get their own id?
    * @default true (Implicitly)
    */
@@ -241,6 +249,24 @@ export interface ArrayPropOptions extends BasePropOptions {
   itemsRefPath?: any;
   /** Same as {@link PropOptions.refType}, only that it is for an array */
   itemsRefType?: RefSchemaType;
+  /**
+   * Use this to define inner-options
+   * Use this if the auto-mapping is not correct or for plugin options
+   *
+   * Please open a new issue if some option is mismatched or not existing / mapped
+   */
+  innerOptions?: {
+    [key: string]: any;
+  };
+  /**
+   * Use this to define outer-options
+   * Use this if the auto-mapping is not correct or for plugin options
+   *
+   * Please open a new issue if some option is mismatched or not existing / mapped
+   */
+  outerOptions?: {
+    [key: string]: any;
+  };
 }
 
 export interface MapPropOptions extends BasePropOptions {
@@ -258,23 +284,56 @@ export interface IModelOptions {
   /** An Existing Connection */
   existingConnection?: mongoose.Connection;
   /** Typegoose Custom Options */
-  options?: {
-    /**
-     * Set the modelName of the class
-     *
-     * if "automaticName" is true it sets a *suffix* instead of the whole name
-     * @default schemaOptions.collection
-     */
-    customName?: string;
-    /**
-     * Enable Automatic Name generation of a model
-     * Example:
-     * class with name of "SomeClass"
-     * and option "collection" of "SC"
-     *
-     * will generate the name of "SomeClass_SC"
-     * @default false
-     */
-    automaticName?: boolean;
-  };
+  options?: ICustomOptions;
+}
+
+export interface ICustomOptions {
+  /**
+   * Set the modelName of the class
+   *
+   * if "automaticName" is true it sets a *suffix* instead of the whole name
+   * @default schemaOptions.collection
+   */
+  customName?: string;
+  /**
+   * Enable Automatic Name generation of a model
+   * Example:
+   * class with name of "SomeClass"
+   * and option "collection" of "SC"
+   *
+   * will generate the name of "SomeClass_SC"
+   * @default false
+   */
+  automaticName?: boolean;
+  /** Allow "mongoose.Schema.Types.Mixed"? */
+  allowMixed?: Severity;
+  /** Run "model.syncIndexes" when model is finished compiling? */
+  runSyncIndexes?: boolean;
+}
+
+/** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
+export enum WhatIsIt {
+  ARRAY,
+  MAP,
+  NONE
+}
+
+export interface DecoratedPropertyMetadata {
+  /** Prop Options */
+  origOptions: any;
+  /** What the Property Type should be */
+  Type: AnyParamConstructor<any>;
+  /** Target Class */
+  target: any;
+  /** Property name */
+  key: string;
+  /** What is it for a prop type? */
+  whatis: WhatIsIt;
+}
+export type DecoratedPropertyMetadataMap = Map<string, DecoratedPropertyMetadata>;
+
+export enum Severity {
+  ALLOW,
+  WARN,
+  ERROR
 }

@@ -23,13 +23,6 @@ import {
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as ShouldAddTest } from './shouldAdd.test'
- * ...
- * describe('Should add', ShouldAddTest.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('should add a language and job using instance methods', async () => {

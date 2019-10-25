@@ -1,5 +1,7 @@
 import { getModelForClass, prop } from '../../src/typegoose';
 
+// Please try to keep this file in sync with ./arrayValidators.ts
+
 export class StringValidators {
   @prop({ maxlength: 3 })
   public maxLength: string;

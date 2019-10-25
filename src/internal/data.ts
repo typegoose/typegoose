@@ -1,6 +1,7 @@
 import { Model, Schema, SchemaDefinition } from 'mongoose';
 
-import { VirtualOptions } from '../types';
+import { mongoose } from '../typegoose';
+import { ICustomOptions, Severity, VirtualOptions } from '../types';
 
 export interface IPreHook {
   method: string | RegExp;
@@ -20,9 +21,17 @@ export interface IPluginMap {
   mongoosePlugin(schema: Schema<any>, options: object): void;
   options: object;
 }
-export interface IDecoratorCacheMap {
-  class: NewableFunction;
-  decorators: Map<string, (...args: any) => void>;
+
+export interface IGlobalOptions {
+  /** Typegoose Options */
+  options?: ICustomOptions;
+  /** Schema Options that should get applied to all models */
+  schemaOptions?: mongoose.SchemaOptions;
+  /**
+   * Global Options for general Typegoose
+   * (There are currently none)
+   */
+  globalOptions?: {};
 }
 
 /** Schema Map */
@@ -37,5 +46,9 @@ export const hooks: Map<string, IHooks> = new Map();
 export const plugins: Map<string, IPluginMap[]> = new Map();
 /** Constructors Map */
 export const constructors: Map<string, NewableFunction> = new Map();
-/** Used to cache (inner-class) decorators (because of execution order) */
-export const decoratorCache: Map<string, IDecoratorCacheMap> = new Map();
+/** Global Options */
+export const globalOptions: IGlobalOptions = {
+  options: {
+    allowMixed: Severity.WARN
+  }
+};

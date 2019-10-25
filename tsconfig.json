@@ -15,6 +15,7 @@
     "outDir": "build",
     "inlineSourceMap": true,
     "incremental": true,
+    "importHelpers": true,
     "tsBuildInfoFile": "./.tsbuildinfo"
   },
   "include": [

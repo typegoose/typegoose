@@ -1,5 +1,6 @@
 import { assert, expect } from 'chai';
 
+import { AssertionError } from 'assert';
 import { model, Schema } from 'mongoose';
 import { pre } from '../../src/hooks';
 import { DecoratorKeys } from '../../src/internal/constants';
@@ -12,9 +13,16 @@ import {
   NoValidClass
 } from '../../src/internal/errors';
 import { _buildSchema } from '../../src/internal/schema';
-import { assignMetadata, mergeSchemaOptions } from '../../src/internal/utils';
+import { assignMetadata, getName, mapArrayOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import { arrayProp, mapProp, prop } from '../../src/prop';
-import { addModelToTypegoose, buildSchema, getModelForClass } from '../../src/typegoose';
+import {
+  addModelToTypegoose,
+  buildSchema,
+  deleteModel,
+  deleteModelWithClass,
+  getModelForClass,
+  modelOptions
+} from '../../src/typegoose';
 
 // disable "no-unused-variable" for this file, because it tests for errors
 // tslint:disable:no-unused-variable
@@ -22,13 +30,6 @@ import { addModelToTypegoose, buildSchema, getModelForClass } from '../../src/ty
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as ErrorTests } from './errors.test'
- * ...
- * describe('Test if the correct errors are returned', ErrorTests.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('should error if type is not string and a transform is supplied [NotStringTypeError]', () => {
@@ -276,9 +277,65 @@ export function suite() {
         @prop()
         public self: TestSelfContained;
       }
+      assert.fail('Expected to throw "Error"');
+    } catch (err) {
+      expect(err).to.not.be.an.instanceOf(AssertionError);
+      expect(err).to.be.an.instanceOf(Error);
+    }
+  });
+
+  it('should throw when "deleteModel" is called with no string [TypeError]', () => {
+    try {
+      // @ts-ignore
+      deleteModel(true);
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should throw when "deleteModelWithClass" is called and its not a valid class [NoValidClass]', () => {
+    try {
+      // @ts-ignore
+      deleteModelWithClass(true);
       assert.fail('Expected to throw "NoValidClass"');
     } catch (err) {
+      expect(err).to.be.an.instanceOf(NoValidClass);
+    }
+  });
+
+  it('should throw when "addModelToTypegoose" is called twice for the same class [Error]', () => {
+    class TestDouble { }
+
+    const gotmodel = getModelForClass(TestDouble);
+
+    try {
+      addModelToTypegoose(gotmodel, TestDouble);
+      assert.fail('Expected to throw "Error"');
+    } catch (err) {
+      expect(err).to.not.be.an.instanceOf(AssertionError);
       expect(err).to.be.an.instanceOf(Error);
+    }
+  });
+
+  it('should throw when "customName" is used, but length <= 0 [TypeError]', () => {
+    try {
+      @modelOptions({ options: { customName: '' } })
+      class TestCustomNameError { }
+      getName(TestCustomNameError);
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
+    try {
+      mapArrayOptions({}, Error);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
     }
   });
 }

@@ -1,5 +1,8 @@
+import { isNullOrUndefined } from 'util';
 import { DecoratorKeys } from './internal/constants';
-import { assignMetadata } from './internal/utils';
+import { globalOptions } from './internal/data';
+import { assignMetadata, getName } from './internal/utils';
+import { logger } from './logSettings';
 import { IModelOptions } from './types';
 
 /**
@@ -15,6 +18,12 @@ import { IModelOptions } from './types';
  */
 export function modelOptions(options: IModelOptions) {
   return (target: any) => {
+    if (isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.ModelOptions, target))) {
+      logger.info('Assigning global Schema Options to "%s"', getName(target));
+      for (const key of Object.keys(globalOptions)) {
+        options[key] = Object.assign({}, globalOptions[key], options[key]);
+      }
+    }
     assignMetadata(DecoratorKeys.ModelOptions, options, target);
   };
 }

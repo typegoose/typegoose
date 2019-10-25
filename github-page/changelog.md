@@ -9,11 +9,37 @@ redirect_from:
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
-## 6.0.4
+## 6.1.0
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+- Completly remove `@staticMethod` & `@instanceMethod`, because they were completly obsolete
+- README now has no documentation anymore
+- `@prop({ validate })` now accepts `{ validator, message }` as an array
+- Add function "deleteModel" & "deleteModelWithClass"
+- allow Prop Option "type" to overwrite the inferred type [look here for an example](https://typegoose.github.io/typegoose/docs/decorators/prop/#type)
+- integrate "Array Validators & Transform" tests {% include gitissue repo="typegoose" num=29 %}
+- adding global options, with `setGlobalOptions`
+- add modelOption `runSyncIndexes`
+- add modelOption `allowMixed`
+- add `text` to PropOptions
+- [IC] typegoose now makes use of "importHelpers"(tsconfig) to save some space
+- [IC] Refactor how "isPrimitive" works, some types like `Buffer` & `Decimal` now work
+- [IC] Added more debug logs to `prop.ts`
+- [IC] Move Decorator Cache to the class itself
+- [IC] "baseProp" now uses one single arguments, whith all the options
+- [IC] "createUniqueID" now returns a boolean instead of the "initname"
+
+## 6.0.4
+
+This Release didnt change anything on the code, it was mostly tests & github-page
 - Update Dependencies
   - Upgrade mongoose from 5.7.1 to 5.7.4
+- Added soft warning when using "ref" in an "arrayProp"
+- Added soft warning when using "refPath" in an "arrayProp"
+- Add missing ")" to a deprecation message
+- [IC] Fixed some Test's types
+- [IC] internal variable renames to better reflect what they are for
 
 ## 6.0.3
 

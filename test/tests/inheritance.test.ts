@@ -1,6 +1,10 @@
 import { expect } from 'chai';
 import { model as inheritanceClass, Skyscraper } from '../models/inheritanceClass';
 
+/**
+ * Function to pass into describe
+ * ->Important: you need to always bind this
+ */
 export function suite() {
   it('should set all direct parent props', async () => {
     const instance = await inheritanceClass.create({});

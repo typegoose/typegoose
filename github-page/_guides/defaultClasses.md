@@ -40,14 +40,23 @@ How to override `_id` type:
 class Something extends Base<mongoose.Schema.Type.String> {} // _id is now of type "String" (from mongoose)
 ```
 
+### FindOrCreate
+
+This class provides all the types supplied be the plugin `mongoose-findOrCreate`
+
+-> This class should only be used if the plugin is used too
+
 ## Extra Infomation
 
 Here you can find extra infomation
 
 ### Use multiple classes together
 
-Because [TimeStamps](#timestamps) dont extend [Base](#base), you can use multiple classes like in this Example:
+Because Typescript & JavaScript dont have functions for multiple inheritance, it can only be achived by the following
 
 ```ts
-class Something extends TimeStamps, Base {}
+interface Something extends Base {} // have the interface to add the types of "Base" to the class
+class Something extends TimeStamps {} // have your class
 ```
+
+Note: This only works because `Base` only has types and does not modify anything

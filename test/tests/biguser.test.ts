@@ -9,13 +9,6 @@ import { model as User } from '../models/user';
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as BigUserTest } from './biguser.test'
- * ...
- * describe('BigUser', BigUserTest.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('should create a User with connections', async () => {

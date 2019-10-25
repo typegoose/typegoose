@@ -15,6 +15,8 @@ docs:
     children:
       - title: 'Index'
         url: /docs
+      - title: 'Virtuals'
+        url: /docs/virtuals
 
   - title: Decorators
     children:
@@ -37,12 +39,18 @@ docs:
     children:
       - title: 'Get Model For Class'
         url: /docs/functions/getModelForClass
+      - title: 'Get Class For Document'
+        url: /docs/functions/getClassForDocument
       - title: 'Build Schema'
         url: /docs/functions/buildSchema
       - title: 'Get Discriminator Model for Class'
         url: /docs/functions/getDiscriminatorModelForClass
       - title: 'Add Model To Typegoose'
         url: /docs/functions/addModelToTypegoose
+      - title: 'Delete Models'
+        url: /docs/functions/deleteModel
+      - title: 'Set Global Options'
+        url: /docs/functions/setGlobalOptions
 
   - title: TypeGuards
     children:
@@ -52,11 +60,13 @@ docs:
   - title: Types
     children:
       - title: 'Document Type'
-        url: /docs/types/document
+        url: /docs/types/documentType
       - title: 'Return Model Type'
         url: /docs/types/returnModelType
       - title: 'Ref'
         url: /docs/types/ref
+      - title: 'Additional Types'
+        url: /docs/types/additional
 
 guides:
   - title: Getting Started

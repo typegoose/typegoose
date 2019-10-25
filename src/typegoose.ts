@@ -1,7 +1,13 @@
 /* imports */
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
-import { deprecate, isNullOrUndefined } from 'util';
+import * as semver from 'semver';
+import { deprecate, format, isNullOrUndefined } from 'util';
+
+/* istanbul ignore next */
+if (semver.lt(mongoose.version, '5.7.6')) {
+  throw new Error('Please use mongoose 5.7.6 or higher');
+}
 
 import * as defaultClasses from './defaultClasses';
 import { DecoratorKeys } from './internal/constants';
@@ -9,12 +15,18 @@ import { constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import { assignMetadata, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
-import { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
+import { logger } from './logSettings';
+import {
+  AnyParamConstructor,
+  DocumentType,
+  IModelOptions,
+  Ref,
+  ReturnModelType
+} from './types';
 
 /* exports */
 export { mongoose }; // export the internally used one, to not need to always import it
 export { setLogLevel, LogLevels } from './logSettings';
-export * from './method';
 export * from './prop';
 export * from './hooks';
 export * from './plugin';
@@ -23,7 +35,10 @@ export * from './typeguards';
 export * from './optionsProp';
 export { defaultClasses };
 export { DocumentType, Ref, ReturnModelType };
+export { Severity } from './types';
 export { getClassForDocument } from './internal/utils';
+export { IGlobalOptions } from './internal/data';
+export * from './globalOptions';
 
 /** @deprecated */
 export abstract class Typegoose {
@@ -88,7 +103,14 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
     model = roptions.existingMongoose.model.bind(roptions.existingMongoose);
   }
 
-  return addModelToTypegoose(model(name, buildSchema(cl, roptions.schemaOptions)), cl);
+  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions));
+  const refetchedOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions || {};
+
+  if (refetchedOptions && refetchedOptions.options && refetchedOptions.options.runSyncIndexes) {
+    compiledmodel.syncIndexes({}); // the "{}" is because @types/mongoose dosnt allow it without ...
+  }
+
+  return addModelToTypegoose(compiledmodel, cl);
 }
 
 /* istanbul ignore next */
@@ -102,7 +124,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
 export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
   return deprecate(
     getModelForClass(cl),
-    'setModelForClass is deprecated, please use getModelForClasse (see README#Migrate to 6.0.0');
+    'setModelForClass is deprecated, please use getModelForClasse (see README#Migrate to 6.0.0)');
 }
 
 /**
@@ -164,16 +186,49 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
   const name = getName(cl);
 
   if (constructors.get(name)) {
-    // tslint:disable-next-line:no-console
-    console.error(new Error('It seems like "addModelToTypegoose" got called twice\n'
+    throw new Error(format('It seems like "addModelToTypegoose" got called twice\n'
       + 'Or multiple classes with the same name are used, which currently isnt supported!'
-      + `"Erroring" class is ${name}`));
+      + '(%s)', name));
   }
 
   models.set(name, model);
   constructors.set(name, cl);
 
   return models.get(name) as ReturnModelType<U, T>;
+}
+
+/**
+ * Deletes an existing model so that it can be overwritten
+ * with another model
+ *
+ * @param key
+ */
+export function deleteModel(name: string) {
+  if (typeof name !== 'string') {
+    throw new TypeError('name is not an string! (deleteModel)');
+  }
+
+  logger.debug('Deleting Model "%s"', name);
+
+  if (!models.has(name)) {
+    throw new Error(`Model "${name}" could not be found`);
+  }
+
+  mongoose.connection.deleteModel(name);
+  models.delete(name);
+  constructors.delete(name);
+}
+
+/**
+ * Delete a model, with the given class
+ * @param cl The Class
+ */
+export function deleteModelWithClass<T, U extends AnyParamConstructor<T>>(cl: U) {
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
+
+  return deleteModel(getName(cl));
 }
 
 /**

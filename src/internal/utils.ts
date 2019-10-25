@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from 'util';
+import { logger } from '../logSettings';
 import {
   AnyParamConstructor,
   IModelOptions,
@@ -9,18 +10,25 @@ import {
   VirtualOptions
 } from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, decoratorCache, schemas } from './data';
+import { constructors, schemas } from './data';
 import { NoValidClass } from './errors';
 
-const primitives = ['String', 'Number', 'Boolean', 'Date', 'Decimal128', 'ObjectID', 'Array'];
-
 /**
- * Returns true, if it includes the Type
+ * Returns true, if the type is included in mongoose.Schema.Types
  * @param Type The Type
  * @returns true, if it includes it
  */
 export function isPrimitive(Type: any): boolean {
-  return primitives.includes(Type.name);
+  if (Type && typeof Type.name === 'string') {
+    // try to match "Type.name" with all the Property Names of "mongoose.Schema.Types"
+    // (like "String" with "mongoose.Schema.Types.String")
+    return Object.getOwnPropertyNames(mongoose.Schema.Types).includes(Type.name)
+      // try to match "Type.name" with all "mongoose.Schema.Types.*.name"
+      // (like "SchemaString" with "mongoose.Schema.Types.String.name")
+      || Object.values(mongoose.Schema.Types).findIndex((v) => v.name === Type.name) >= 0;
+  }
+
+  return false;
 }
 
 /**
@@ -275,18 +283,74 @@ export function isNotDefined(cl: any) {
 
 /**
  * Assign "__uniqueID" to a class
- * (used for the decoratorCache)
  * @param cl
- * @returns the initname to be used as identifier
+ * @returns boolean, true if uniqueID is created, false if already existing
  */
 export function createUniqueID(cl: any) {
   if (isNullOrUndefined(cl.__uniqueID)) {
     cl.__uniqueID = Date.now();
-  }
-  const initname: string = `${cl.constructor.name}_${cl.__uniqueID}`;
-  if (!decoratorCache.get(initname)) {
-    decoratorCache.set(initname, { class: cl.constructor, decorators: new Map() });
+
+    return true;
   }
 
-  return initname;
+  return false;
+}
+
+/**
+ * Map Options to "inner" & "outer"
+ * -> inner: means inner of "type: [{here})"
+ * -> outer: means outer of "type: [{}], here"
+ * @param rawOptions The raw options
+ * @param Type The Type of the array
+ */
+export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>): mongoose.SchemaTypeOpts<any> {
+  if (getName(Type) in mongoose.Schema.Types) {
+    logger.info('Converting "%s" to mongoose Type', getName(Type));
+    Type = mongoose.Schema.Types[getName(Type)];
+
+    /* istanbul ignore next */
+    if (Type === mongoose.Schema.Types.Mixed) {
+      logger.warn('Converted Type to Mixed!');
+    }
+  } else if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
+    throw new TypeError('Type does not have an valid "OptionsConstructor"!');
+  }
+
+  const options = Object.assign({}, rawOptions); // for sanity
+
+  delete options.items;
+
+  const returnObject = {
+    type: [{
+      type: Type
+    }]
+  };
+
+  // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
+  if (Type.prototype.OptionsConstructor.prototype instanceof (mongoose as any).SchemaTypeOptions) {
+    for (const [key, value] of Object.entries(options)) {
+      if (Object.getOwnPropertyNames(Type.prototype.OptionsConstructor.prototype).includes(key)) {
+        returnObject.type[0][key] = value;
+      } else {
+        returnObject[key] = value;
+      }
+    }
+  } else {
+    logger.info('The Type "%s" does not have an OptionsConstructor', getName(Type));
+  }
+
+  if (typeof options.innerOptions === 'object') {
+    for (const [key, value] of Object.entries(options.innerOptions)) {
+      returnObject.type[0][key] = value;
+    }
+  }
+  if (typeof options.outerOptions === 'object') {
+    for (const [key, value] of Object.entries(options.outerOptions)) {
+      returnObject[key] = value;
+    }
+  }
+
+  logger.debug('Final mapped Options for Type "%s"', getName(Type), returnObject);
+
+  return returnObject;
 }

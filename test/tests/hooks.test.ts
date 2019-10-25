@@ -6,13 +6,6 @@ import { model as Dummy } from '../models/hook2';
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as HookTests } from './hooks.test'
- * ...
- * describe('Hooks', HookTests.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('RegEXP tests', async () => {

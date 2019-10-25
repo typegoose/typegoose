@@ -7,6 +7,7 @@ import {
   arrayProp,
   buildSchema,
   DocumentType,
+  getDiscriminatorModelForClass,
   getModelForClass,
   mapProp,
   modelOptions,
@@ -20,13 +21,6 @@ import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discri
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as ShouldRunTests } from './shouldRun.test'
- * ...
- * describe('Should just Run', ShouldRunTests.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('should not error when trying to get model multiple times', () => {
@@ -243,5 +237,51 @@ export function suite() {
     } catch (err) {
       expect(err).to.be.an.instanceOf(mongoose.Error.ValidationError);
     }
+  });
+
+  it('should use type "Buffer" [typegoose#88]', async () => {
+    class TestBuffer {
+      @prop({ required: true })
+      public propy!: Buffer;
+    }
+
+    const model = getModelForClass(TestBuffer);
+
+    expect(model.schema.path('propy')).to.be.an.instanceOf(mongoose.Schema.Types.Buffer);
+
+    const { _id: id } = await model.create({ propy: Buffer.from('Hello') } as TestBuffer);
+
+    const found = await model.findById(id).exec();
+    expect(found).to.not.be.an('undefined');
+    expect(found.propy).to.be.an.instanceOf(Buffer);
+    expect(found.propy.toString()).to.be.equal('Hello');
+  });
+
+  it('should use "type" as a last resort', async () => {
+    class TestPropOptionType {
+      @prop({ type: mongoose.Schema.Types.Number })
+      public propy: string;
+    }
+
+    const model = getModelForClass(TestPropOptionType);
+
+    expect(model.schema.path('propy')).to.be.an.instanceOf(mongoose.Schema.Types.Number);
+
+    const doc = new model({ propy: 100 });
+
+    expect(doc).to.not.be.an('undefined');
+    expect(doc.propy).to.be.equal(100);
+  });
+
+  it('"getDiscriminatorModelForClass" should return the same model if already defined', () => {
+    class TestSameModelDicriminator { }
+
+    const model = getModelForClass(TestSameModelDicriminator);
+
+    const dummymodel = mongoose.model('DummyModel', new mongoose.Schema());
+
+    const newmodel = getDiscriminatorModelForClass(dummymodel, TestSameModelDicriminator);
+
+    expect(newmodel).to.deep.equal(model);
   });
 }

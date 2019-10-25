@@ -13,13 +13,6 @@ import { model as User, User as UserType } from '../models/user';
 /**
  * Function to pass into describe
  * ->Important: you need to always bind this
- * @example
- * ```
- * import { suite as GCFDTest } from './getClassForDocument.test'
- * ...
- * describe('getClassForDocument()', GCFDTest.bind(this));
- * ...
- * ```
  */
 export function suite() {
   it('should return correct class type for document', async () => {
