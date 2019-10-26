@@ -1,5 +1,8 @@
 import { use } from 'chai';
 import * as cap from 'chai-as-promised';
+import 'source-map-support/register';
+
+import { connect, disconnect } from './utils/mongooseConnect';
 
 import { suite as ArrayValidatorTests } from './tests/arrayValidator.test';
 import { suite as BigUserTest } from './tests/biguser.test';
@@ -17,8 +20,6 @@ import { suite as ShouldAddTest } from './tests/shouldAdd.test';
 import { suite as ShouldRunTests } from './tests/shouldRun.test';
 import { suite as StringValidatorTests } from './tests/stringValidator.test';
 import { suite as TypeguardsTest } from './tests/typeguards.test';
-
-import { connect, disconnect } from './utils/mongooseConnect';
 
 /*
  * // use this style

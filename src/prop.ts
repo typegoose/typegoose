@@ -274,7 +274,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
   if (utils.isObject(Type) && !subSchema) {
-    const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, target);
+    const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, target) || {};
     if (modelOptions.options) {
       switch (modelOptions.options.allowMixed) {
         default:
