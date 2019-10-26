@@ -5,8 +5,8 @@ import * as semver from 'semver';
 import { deprecate, format, isNullOrUndefined } from 'util';
 
 /* istanbul ignore next */
-if (semver.lt(mongoose.version, '5.7.6')) {
-  throw new Error('Please use mongoose 5.7.6 or higher');
+if (semver.lt(mongoose.version, '5.7.7')) {
+  throw new Error('Please use mongoose 5.7.7 or higher');
 }
 
 import * as defaultClasses from './defaultClasses';
