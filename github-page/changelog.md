@@ -23,6 +23,9 @@ redirect_from:
 - add modelOption `runSyncIndexes`
 - add modelOption `allowMixed`
 - add `text` to PropOptions
+- deprecate ArrayPropOptions's "itemsRef", "itemsRefPath" & "itemsRefType"
+- [IC] de-duplicate "ref" & "refPath" code
+- [IC] added test for "Custom Types"
 - [IC] typegoose now makes use of "importHelpers"(tsconfig) to save some space
 - [IC] Refactor how "isPrimitive" works, some types like `Buffer` & `Decimal` now work
 - [IC] Added more debug logs to `prop.ts`

@@ -141,18 +141,6 @@ export interface BasePropOptions {
    * ```
    */
   immutable?: boolean;
-}
-
-export interface PropOptions extends BasePropOptions {
-  /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref?: any;
-  /** Take the Path and try to resolve it to a Model */
-  refPath?: string;
-  /**
-   * Override the ref's type
-   * @default ObjectId
-   */
-  refType?: RefSchemaType;
   /**
    * Give the Property an alias in the output
    * Note: you should include the alias as a variable in the class, but not with a prop decorator
@@ -170,6 +158,60 @@ export interface PropOptions extends BasePropOptions {
    * This option as only an effect when the plugin `mongoose-autopopulate` is used
    */
   autopopulate?: boolean;
+  /** Reference an other Document (you should use Ref<T> as Prop type) */
+  ref?: any;
+  /** Take the Path and try to resolve it to a Model */
+  refPath?: string;
+  /**
+   * Override the ref's type
+   * {@link BasePropOptions.type} can be used too
+   * @default ObjectId
+   */
+  refType?: RefSchemaType;
+}
+
+// tslint:disable-next-line:no-empty-interface
+export interface PropOptions extends BasePropOptions { }
+
+export interface ArrayPropOptions extends BasePropOptions {
+  /** What array is it?
+   * {@link BasePropOptions.type} can be used too
+   * Note: this is only needed because Reflect & refelact Metadata cant give an accurate Response for an array
+   */
+  items?: any;
+  /**
+   * Same as {@link PropOptions.ref}, only that it is for an array
+   * @deprecated Please use {@link PropOptions.ref}
+   */
+  itemsRef?: any;
+  /**
+   * Same as {@link PropOptions.refPath}, only that it is for an array
+   * @deprecated Please use {@link PropOptions.refPath}
+   */
+  itemsRefPath?: any;
+  /**
+   * Same as {@link PropOptions.refType}, only that it is for an array
+   * @deprecated Please use {@link PropOptions.refType}
+   */
+  itemsRefType?: RefSchemaType;
+  /**
+   * Use this to define inner-options
+   * Use this if the auto-mapping is not correct or for plugin options
+   *
+   * Please open a new issue if some option is mismatched or not existing / mapped
+   */
+  innerOptions?: {
+    [key: string]: any;
+  };
+  /**
+   * Use this to define outer-options
+   * Use this if the auto-mapping is not correct or for plugin options
+   *
+   * Please open a new issue if some option is mismatched or not existing / mapped
+   */
+  outerOptions?: {
+    [key: string]: any;
+  };
 }
 
 export interface ValidateNumberOptions {
@@ -237,37 +279,6 @@ export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T;
  * An Function type for a function that dosnt have any arguments and dosnt return anything
  */
 export type EmptyVoidFn = () => void;
-
-export interface ArrayPropOptions extends BasePropOptions {
-  /** What array is it?
-   * Note: this is only needed because Reflect & refelact Metadata cant give an accurate Response for an array
-   */
-  items?: any;
-  /** Same as {@link PropOptions.ref}, only that it is for an array */
-  itemsRef?: any;
-  /** Same as {@link PropOptions.refPath}, only that it is for an array */
-  itemsRefPath?: any;
-  /** Same as {@link PropOptions.refType}, only that it is for an array */
-  itemsRefType?: RefSchemaType;
-  /**
-   * Use this to define inner-options
-   * Use this if the auto-mapping is not correct or for plugin options
-   *
-   * Please open a new issue if some option is mismatched or not existing / mapped
-   */
-  innerOptions?: {
-    [key: string]: any;
-  };
-  /**
-   * Use this to define outer-options
-   * Use this if the auto-mapping is not correct or for plugin options
-   *
-   * Please open a new issue if some option is mismatched or not existing / mapped
-   */
-  outerOptions?: {
-    [key: string]: any;
-  };
-}
 
 export interface MapPropOptions extends BasePropOptions {
   /**

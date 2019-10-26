@@ -338,4 +338,50 @@ export function suite() {
       expect(err).to.be.an.instanceOf(TypeError);
     }
   });
+
+  it('should error if "refPath" is not of type string [TypeError]', () => {
+    try {
+      class TestRefPathError {
+        // @ts-ignore
+        @prop({ refPath: 1 })
+        public hello: string;
+      }
+
+      buildSchema(TestRefPathError);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if "ref" is used with @mapProp [TypeError]', () => {
+    try {
+      class TestRefSwitchError {
+        @mapProp({ ref: 'hi' })
+        public hello: string;
+      }
+
+      buildSchema(TestRefSwitchError);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if "refPath" is used with @mapProp [TypeError]', () => {
+    try {
+      class TestRefPathSwitchError {
+        @mapProp({ refPath: 'hi' })
+        public hello: string;
+      }
+
+      buildSchema(TestRefPathSwitchError);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
 }

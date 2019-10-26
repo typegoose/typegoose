@@ -131,67 +131,65 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
 
   const ref = rawOptions.ref;
-  const refType = rawOptions.refType || mongoose.Schema.Types.ObjectId;
+  const refType = rawOptions.refType || rawOptions.type || mongoose.Schema.Types.ObjectId;
   if (ref) {
-    if (whatis === WhatIsIt.ARRAY) {
-      logger.warn('"ref" is used in an arrayProp, which should not be used! (%s, %s)\n'
-        + 'Use "itemsRef"',
-        utils.getName(target), key);
-    }
     delete rawOptions.ref;
     const refName = typeof ref === 'string' ? ref : utils.getName(ref);
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key],
-      type: refType,
-      ref: refName,
-      ...rawOptions
-    };
 
-    return;
-  }
-
-  const itemsRef = rawOptions.itemsRef;
-  const itemsRefType = rawOptions.itemsRefType || mongoose.Schema.Types.ObjectId;
-  if (itemsRef) {
-    const itemsRefName = typeof itemsRef === 'string' ? itemsRef : utils.getName(itemsRef);
-    delete rawOptions.itemsRef;
-    schemas.get(name)[key][0] = {
-      ...schemas.get(name)[key][0],
-      type: itemsRefType,
-      ref: itemsRefName,
-      ...rawOptions
-    };
+    switch (whatis) {
+      case WhatIsIt.ARRAY:
+        schemas.get(name)[key][0] = {
+          ...schemas.get(name)[key][0],
+          type: refType,
+          ref: refName,
+          ...rawOptions
+        };
+        break;
+      case WhatIsIt.NONE:
+        schemas.get(name)[key] = {
+          ...schemas.get(name)[key],
+          type: refType,
+          ref: refName,
+          ...rawOptions
+        };
+        break;
+      default:
+        throw new TypeError(format('"ref" is not supported for "%s"! (%s, %s)',
+          whatis, utils.getName(target), key));
+    }
 
     return;
   }
 
   const refPath = rawOptions.refPath;
-  if (refPath && typeof refPath === 'string') {
-    if (whatis === WhatIsIt.ARRAY) {
-      logger.warn('"refPath" is used in an arrayProp, which should not be used! (%s, %s)\n'
-        + 'Use "itemsRefPath"',
-        utils.getName(target), key);
+  if (refPath) {
+    if (typeof refPath !== 'string') {
+      throw new TypeError(format('"refPath" for "%s, %s" should be of type String!',
+        utils.getName(target), key));
     }
     delete rawOptions.refPath;
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key],
-      type: refType,
-      refPath,
-      ...rawOptions
-    };
 
-    return;
-  }
-
-  const itemsRefPath = rawOptions.itemsRefPath;
-  if (itemsRefPath && typeof itemsRefPath === 'string') {
-    delete rawOptions.itemsRefPath;
-    schemas.get(name)[key][0] = {
-      ...schemas.get(name)[key][0],
-      type: itemsRefType,
-      refPath: itemsRefPath,
-      ...rawOptions
-    };
+    switch (whatis) {
+      case WhatIsIt.ARRAY:
+        schemas.get(name)[key][0] = {
+          ...schemas.get(name)[key][0],
+          type: refType,
+          refPath,
+          ...rawOptions
+        };
+        break;
+      case WhatIsIt.NONE:
+        schemas.get(name)[key] = {
+          ...schemas.get(name)[key],
+          type: refType,
+          refPath,
+          ...rawOptions
+        };
+        break;
+      default:
+        throw new TypeError(format('"refPath" is not supported for "%s"! (%s, %s)',
+          whatis, utils.getName(target), key));
+    }
 
     return;
   }
@@ -349,11 +347,11 @@ export function prop(options: PropOptionsWithValidate = {}) {
     // soft errors
     {
       if ('items' in options) {
-        logger.warn(new Error('You might not want to use option "items" in a @prop'));
+        logger.warn(new Error('You might not want to use option "items" in a @prop, use @arrayProp'));
       }
 
       if ('of' in options) {
-        logger.warn(new Error('You might not want to use option "of" in a @prop'));
+        logger.warn(new Error('You might not want to use option "of" in a @prop, use @mapProp'));
       }
     }
 
@@ -377,7 +375,7 @@ export function mapProp(options: MapPropOptions) {
     const Type = options.of;
 
     if ('items' in options) {
-      logger.warn(new Error('You might not want to use option "items" in a @mapProp'));
+      logger.warn(new Error('You might not want to use option "items" in a @mapProp, use @arrayProp'));
     }
 
     baseProp({
@@ -399,7 +397,23 @@ export function arrayProp(options: ArrayPropOptions) {
     const Type = options.items;
 
     if ('of' in options) {
-      logger.warn(new Error('You might not want to use option "of" in a @arrayProp'));
+      logger.warn(new Error('You might not want to use option "of" in a @arrayProp, use @mapProp'));
+    }
+
+    if ('items' in options) {
+      delete options.items;
+    }
+    if ('itemsRef' in options) {
+      options.ref = options.itemsRef;
+      delete options.itemsRef;
+    }
+    if ('itemsRefPath' in options) {
+      options.refPath = options.itemsRefPath;
+      delete options.itemsRefPath;
+    }
+    if ('itemsRefType' in options) {
+      options.refType = options.itemsRefType;
+      delete options.itemsRefType;
     }
 
     baseProp({
