@@ -284,4 +284,35 @@ export function suite() {
 
     expect(newmodel).to.deep.equal(model);
   });
+
+  it('should run with Custom Types', async () => {
+    // this test is a modified version of https://mongoosejs.com/docs/customschematypes.html
+    class CustomInt extends mongoose.SchemaType {
+      constructor(key: string, options: any) {
+        super(key, options, 'CustomInt');
+      }
+
+      public cast(val) {
+        return Number(val);
+      }
+    }
+    (mongoose.Schema.Types as any).CustomInt = CustomInt;
+
+    class CustomIntClass {
+      @prop({ required: true, type: CustomInt })
+      public num: number;
+    }
+
+    const model = getModelForClass(CustomIntClass);
+
+    const doc = new model({ num: 1 } as CustomIntClass);
+
+    await doc.validate();
+
+    expect(doc).to.not.equal(undefined);
+    const path = doc.schema.path('num');
+    expect(path).to.not.equal(undefined);
+    expect(path).to.not.be.an.instanceOf(mongoose.Schema.Types.Mixed);
+    expect(path).to.be.an.instanceOf(CustomInt);
+  });
 }
