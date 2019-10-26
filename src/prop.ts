@@ -38,7 +38,7 @@ function baseProp(input: DecoratedPropertyMetadata): void {
     target,
     whatis
   } = input;
-  if (Type === target.constructor) {
+  if (Type === target.constructor) { // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
     throw new TypeError('It seems like the type used is the same as the target class, which is currently not supported\n'
       + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`);
   }
@@ -79,9 +79,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
 
   if (utils.isNotDefined(Type) && isNullOrUndefined(rawOptions.type)) {
-    if (Type !== target) { // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
-      buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
-    }
+    buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
   }
   const name: string = utils.getName(target.constructor);
 
