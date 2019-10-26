@@ -1,6 +1,7 @@
 import { expect } from 'chai';
+import { mongoose } from '../../src/typegoose';
 import { DocumentType } from '../../src/types';
-import { Default, DefaultModel, DisciminatedUser, DisciminatedUserModel, ROLE } from '../models/discriminators2';
+import { Default, DefaultModel, DefaultProfile, DisciminatedUser, DisciminatedUserModel, ROLE } from '../models/discriminators2';
 
 /**
  * Function to pass into describe
@@ -8,17 +9,18 @@ import { Default, DefaultModel, DisciminatedUser, DisciminatedUserModel, ROLE } 
  */
 export function suite() {
   it('should set fields based on role disciminator & ignore other fields', async () => {
-    const instance: DocumentType<DisciminatedUser & Default> = await DisciminatedUserModel.create({
+    const instance: DocumentType<DisciminatedUser<DefaultProfile> & Default> = await DisciminatedUserModel.create({
       role: ROLE.DEFAULT,
       visitor: 'sth',
       default: 'sth',
       profile: { test: 'sth', lastName: 'sth' }
-    } as DisciminatedUser & Default);
+    } as DisciminatedUser<DefaultProfile> & Default);
+    console.log('instance', instance);
+    console.log('schema', instance.schema);
+    expect(instance.schema.path('profile')).to.not.be.an.instanceOf(mongoose.Schema.Types.Mixed);
     expect((instance as any).visitor).to.equals(undefined);
-    // why default? this shouldnt exists on the model - at least i cant find it where it would be defined - resolved
     expect(instance.default).to.equals('sth');
     expect((instance.profile as any).test).to.equals(undefined);
-    // same here, "lastName" is not defined on the "Profile" Model, and the "DefaultProfile" was nowhere defined to be used - resolved
     expect(instance.profile.lastName).to.equals('sth');
   });
 
@@ -28,6 +30,7 @@ export function suite() {
       default: 'sth',
       profile: { test: 'sth', lastName: 'sth' }
     } as Default);
+    expect(instance.schema.path('profile')).to.not.be.an.instanceOf(mongoose.Schema.Types.Mixed);
     expect(instance.role).to.equals(ROLE.DEFAULT);
     expect((instance as any).visitor).to.equals(undefined);
     expect(instance.default).to.equals('sth');
