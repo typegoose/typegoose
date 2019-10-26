@@ -27,6 +27,8 @@ class Something {
 
 ### itemsRef
 
+DEPRECATED: use [`@prop`'s `ref`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#ref)
+
 Accepts Type: `Class | String` (String of the modelName)
 
 Same as [`@prop`'s `ref`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#ref)
@@ -43,9 +45,11 @@ class Something {
 
 ### itemsRefPath
 
+DEPRECATED: use [`@prop`'s `refPath`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#refpath)
+
 Accepts Type: `string`
 
-Same as [`@prop`'s `refpath`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#refPath)
+Same as [`@prop`'s `refPath`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#refpath)
 
 ```ts
 class Car {}
@@ -60,6 +64,14 @@ class Another {
   public items?: Ref<Car | Shop>[];
 }
 ```
+
+### itemsRefType
+
+DEPRECATED: use [`@prop`'s `refType`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#reftype)
+
+Accepts Type: `mongoose.Schema.Types.Number` \| `mongoose.Schema.Types.String` \| `mongoose.Schema.Types.Buffer` \| `mongoose.Schema.Types.ObjectId`
+
+Same as [`@prop`'s `refType`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#reftype)
 
 ### innerOptions
 

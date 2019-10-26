@@ -130,6 +130,23 @@ class Another {
 }
 ```
 
+### refType
+
+Accepts Type: `mongoose.Schema.Types.Number` \| `mongoose.Schema.Types.String` \| `mongoose.Schema.Types.Buffer` \| `mongoose.Schema.Types.ObjectId`
+
+Set which Type to use for refs
+
+-> [`@prop`'s `type`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#type) can be used too
+
+```ts
+class Nested {}
+
+class Parent {
+  @prop({ ref: "Nested", refType: mongoose.Schema.Types.ObjectId }) // it is a "String" because of reference errors
+  public nest: Ref<Nested>;
+}
+```
+
 ### validate
 
 Accepts Type: `object` OR `RegExp` OR `(value) => boolean` OR `object[]`
