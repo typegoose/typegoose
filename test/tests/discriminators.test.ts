@@ -2,19 +2,23 @@ import { expect } from 'chai';
 import { DocumentType } from '../../src/types';
 import { Default, DefaultModel, DisciminatedUser, DisciminatedUserModel, ROLE } from '../models/discriminators2';
 
+/**
+ * Function to pass into describe
+ * ->Important: you need to always bind this
+ */
 export function suite() {
   it('should set fields based on role disciminator & ignore other fields', async () => {
-    const instance: DocumentType<DisciminatedUser> = await DisciminatedUserModel.create({
+    const instance: DocumentType<DisciminatedUser & Default> = await DisciminatedUserModel.create({
       role: ROLE.DEFAULT,
       visitor: 'sth',
       default: 'sth',
       profile: { test: 'sth', lastName: 'sth' }
-    } as DisciminatedUser);
+    } as DisciminatedUser & Default);
     expect((instance as any).visitor).to.equals(undefined);
-    // why default? this shouldnt exists on the model - at least i cant find it where it would be defined
+    // why default? this shouldnt exists on the model - at least i cant find it where it would be defined - resolved
     expect(instance.default).to.equals('sth');
     expect((instance.profile as any).test).to.equals(undefined);
-    // same here, "lastName" is not defined on the "Profile" Model, and the "DefaultProfile" was nowhere defined to be used
+    // same here, "lastName" is not defined on the "Profile" Model, and the "DefaultProfile" was nowhere defined to be used - resolved
     expect(instance.profile.lastName).to.equals('sth');
   });
 
