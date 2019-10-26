@@ -21,7 +21,8 @@ import {
   deleteModel,
   deleteModelWithClass,
   getModelForClass,
-  modelOptions
+  modelOptions,
+  setGlobalOptions
 } from '../../src/typegoose';
 
 // disable "no-unused-variable" for this file, because it tests for errors
@@ -378,6 +379,16 @@ export function suite() {
       }
 
       buildSchema(TestRefPathSwitchError);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if the options provide to "setGlobalOptions" are not an object [TypeError]', () => {
+    try {
+      setGlobalOptions(undefined);
 
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {
