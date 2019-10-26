@@ -20,11 +20,11 @@ export class DisciminatedUser<T extends Profile = Profile> {
   @prop({ required: true, enum: ROLE })
   public role?: ROLE; // made optional, because it will be automaticly added
 
-  @prop()
+  @prop({ type: Profile })
   public profile?: T;
 }
 
-export class Visitor {
+export class Visitor extends DisciminatedUser {
   @prop()
   public visitor?: string;
 }
@@ -37,6 +37,9 @@ export class DefaultProfile extends Profile {
 export class Default extends DisciminatedUser<DefaultProfile> {
   @prop()
   public default?: string;
+
+  @prop()
+  public profile?: DefaultProfile;
 }
 
 export const DisciminatedUserModel = getModelForClass(DisciminatedUser);
