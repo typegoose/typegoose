@@ -395,4 +395,19 @@ export function suite() {
       expect(err).to.be.an.instanceOf(TypeError);
     }
   });
+
+  it('should error if trying to use circular classes [TypeError]', () => {
+    try {
+      class TestCircular {
+        @prop()
+        public hello: TestCircular;
+      }
+
+      buildSchema(TestCircular);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
 }
