@@ -4,7 +4,7 @@ import { logger } from '../logSettings';
 import { _buildPropMetadata } from '../prop';
 import { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexArray, IModelOptions } from '../types';
 import { DecoratorKeys } from './constants';
-import { hooks, plugins, schemas, virtuals } from './data';
+import { constructors, hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
 import { getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
@@ -90,6 +90,10 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
       sch.index(index.fields, index.options);
     }
   }
+
+  Object.defineProperty(sch, 'typegooseName', { value: name, writable: true });
+
+  constructors.set(name, cl);
 
   return sch;
 }

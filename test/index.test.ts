@@ -2,7 +2,7 @@ import { use } from 'chai';
 import * as cap from 'chai-as-promised';
 import 'source-map-support/register';
 
-import { setGlobalOptions } from '../src/typegoose';
+import { buildSchema, getModelForClass, prop, setGlobalOptions, setLogLevel } from '../src/typegoose';
 import { connect, disconnect } from './utils/mongooseConnect';
 
 setGlobalOptions({ // to have this initaly set
@@ -11,6 +11,8 @@ setGlobalOptions({ // to have this initaly set
   }
 });
 
+import { schemas } from '../src/internal/data';
+import { getClassForSchema } from '../src/internal/utils';
 import { suite as ArrayValidatorTests } from './tests/arrayValidator.test';
 import { suite as BigUserTest } from './tests/biguser.test';
 import { suite as customNameTests } from './tests/customName.test';
@@ -80,4 +82,25 @@ describe('Typegoose', () => {
   describe('customName', customNameTests.bind(this));
 
   describe('Overwritten Model', OverwrittenModels.bind(this));
+
+  // it.only('TEST', async () => {
+  after(() => {
+    setLogLevel('DEBUG');
+    class Sub {
+      @prop()
+      public test: string;
+    }
+
+    class Parent {
+      @prop()
+      public testy: Sub;
+    }
+
+    const model = getModelForClass(Parent);
+    const doc = new model({ testy: { test: 'hi' } });
+    // console.log()
+    console.log(buildSchema(Parent));
+    console.log(schemas);
+    console.log(getClassForSchema((doc.schema.path('testy') as any).schema));
+  });
 });

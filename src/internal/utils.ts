@@ -107,6 +107,20 @@ export function getClassForDocument(document: mongoose.Document): NewableFunctio
   return constructors.get(modelName);
 }
 
+export function getClassForSchema(schema: mongoose.Schema & { typegooseName: string }): NewableFunction | undefined {
+  if (!(schema instanceof mongoose.Schema)) {
+    throw new TypeError('Given input is not a Schema!');
+  }
+  if (isNullOrUndefined(schema.typegooseName)) {
+    logger.warn('Given Schema does not have a typegooseName!');
+
+    return undefined;
+  }
+  const schemaName: string = (schema as any).typegooseName;
+
+  return constructors.get(schemaName);
+}
+
 /**
  * Return true if there are Options
  * @param options The raw Options
