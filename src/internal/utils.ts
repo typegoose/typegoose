@@ -121,6 +121,12 @@ export function getClassForSchema(schema: mongoose.Schema & { typegooseName: str
   return constructors.get(schemaName);
 }
 
+export function getClassForName(obj: string | { typegooseName: string }): NewableFunction | undefined {
+  const name = typeof obj === 'string' ? obj : !isNullOrUndefined(obj.typegooseName) ? obj.typegooseName : undefined;
+
+  return constructors.get(name);
+}
+
 /**
  * Return true if there are Options
  * @param options The raw Options
