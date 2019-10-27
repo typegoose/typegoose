@@ -8,7 +8,7 @@ import * as mongoose from 'mongoose';
  * class Name {}
  * const NameModel = Name.getModelForClass(Name);
  *
- * const t: InstanceType<Name> = await NameModel.create({} as Partitial<Name>);
+ * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
  * ```
  */
 export type DocumentType<T> = T & mongoose.Document;
