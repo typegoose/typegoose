@@ -1,6 +1,6 @@
-import { Schema } from 'mongoose';
+import { Types } from 'mongoose';
 import { modelOptions } from './optionsProp';
-import { DocumentType } from './types';
+import { DocumentType, RefType } from './types';
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 /**
@@ -14,7 +14,7 @@ export abstract class TimeStamps {
 /**
  * This class provied the basic mongoose document properties
  */
-export abstract class Base<T_ID extends any = Schema.Types.ObjectId> {
+export abstract class Base<T_ID extends RefType = Types.ObjectId> {
   public _id: T_ID;
   // tslint:disable-next-line:variable-name
   public __v: number;

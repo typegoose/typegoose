@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { Base } from './defaultClasses';
 
 /**
  * Get the Type of an instance of a Document with Class properties
@@ -11,7 +12,8 @@ import * as mongoose from 'mongoose';
  * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
  * ```
  */
-export type DocumentType<T> = T & mongoose.Document;
+export type DocumentType<T> = T extends Base ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T;
+// I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
  * @internal
