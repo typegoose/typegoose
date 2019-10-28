@@ -1,7 +1,13 @@
 /* imports */
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
+import * as semver from 'semver';
 import { deprecate, format, isNullOrUndefined } from 'util';
+
+/* istanbul ignore next */
+if (semver.lt(mongoose.version, '5.7.7')) {
+  throw new Error('Please use mongoose 5.7.7 or higher');
+}
 
 import * as defaultClasses from './defaultClasses';
 import { DecoratorKeys } from './internal/constants';
