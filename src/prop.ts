@@ -295,6 +295,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       const virtualSchemaArrayItem = buildSchema(Type, {
         _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true
       });
+      // @ts-ignore
+      virtualSchemaArrayItem.__childClasses = utils.getAllChildren(Type);
       schemas.get(name)[key] = {
         ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
         ...options,
@@ -318,6 +320,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       const virtualSchema = buildSchema(Type, {
         _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true
       });
+      // @ts-ignore
+      virtualSchema.__childClasses = utils.getAllChildren(Type);
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
         ...options,

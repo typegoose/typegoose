@@ -1,9 +1,24 @@
 import { isNullOrUndefined } from 'util';
 import { DecoratorKeys } from './internal/constants';
-import { globalOptions } from './internal/data';
+import { childs, globalOptions } from './internal/data';
 import { assignMetadata, getName } from './internal/utils';
 import { logger } from './logSettings';
 import { IModelOptions } from './types';
+
+function assignToParrentClass(target: any) {
+  const parent = Object.getPrototypeOf(target.prototype).constructor;
+  const parentName = getName(parent);
+  if (!childs.has(parentName)) {
+    childs.set(parentName, []);
+  }
+  const childClasses = childs.get(parentName);
+  if (childClasses.indexOf(target) === -1) {
+    childClasses.push(target);
+  }
+  if (parent !== Object) {
+    assignToParrentClass(parent);
+  }
+}
 
 /**
  * Define Options for the Class
@@ -24,6 +39,7 @@ export function modelOptions(options: IModelOptions) {
         options[key] = Object.assign({}, globalOptions[key], options[key]);
       }
     }
+    assignToParrentClass(target);
     assignMetadata(DecoratorKeys.ModelOptions, options, target);
   };
 }

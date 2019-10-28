@@ -38,6 +38,8 @@ export interface IGlobalOptions {
 export const schemas: Map<string, SchemaDefinition> = new Map();
 /** Models Map */
 export const models: Map<string, Model<any>> = new Map();
+/** Childs Map */
+export const childs: Map<string, (new (...args: unknown[]) => any)[]> = new Map();
 /** Virtuals Map */
 export const virtuals: Map<string, Map<string, VirtualOptions>> = new Map();
 /** Hooks Map */

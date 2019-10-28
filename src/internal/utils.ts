@@ -10,7 +10,7 @@ import {
   VirtualOptions
 } from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, schemas } from './data';
+import { childs, constructors, schemas } from './data';
 import { NoValidClass } from './errors';
 
 /**
@@ -353,4 +353,25 @@ export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>)
   logger.debug('Final mapped Options for Type "%s"', getName(Type), returnObject);
 
   return returnObject;
+}
+
+export function getAllChildren(target: AnyParamConstructor<unknown>): AnyParamConstructor<unknown>[] {
+  const name = getName(target);
+  const children = childs.get(name) || [];
+  const all = children.map((childClass) => getAllChildren(childClass));
+
+  return flatten([...children, all]) as AnyParamConstructor<unknown>[];
+}
+
+// https://gist.github.com/praveenpuglia/cf3a6c5bf8a9c2d60b6a022729ae6e84
+export function flatten(array: any[]): unknown[] {
+  return array.reduce( (acc, e) => {
+    if (Array.isArray(e)) {
+      // if the element is an array, fall flatten on it again and then take the returned value and concat it.
+      return acc.concat(flatten(e));
+    } else {
+      // otherwise just concat the value.
+      return acc.concat(e);
+    }
+  }, [] ) as any[]; // initial value for the accumulator is []
 }

@@ -273,7 +273,7 @@ export function suite() {
     expect(doc.propy).to.be.equal(100);
   });
 
-  it('"getDiscriminatorModelForClass" should return the same model if already defined', () => {
+  it.skip('"getDiscriminatorModelForClass" should return the same model if already defined', () => {
     class TestSameModelDicriminator { }
 
     const model = getModelForClass(TestSameModelDicriminator);

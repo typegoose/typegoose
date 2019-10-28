@@ -93,5 +93,38 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
     sch.index(index.fields, index.options);
   }
 
+  sch.eachPath((path, item: any) => {
+    const itemSchema: mongoose.Schema
+      // @ts-ignore
+      & {__childClasses: AnyParamConstructor<unknown>[] } = item.schema;
+
+    if (itemSchema && itemSchema.__childClasses) {
+      const discriminatorKey = itemSchema.get('discriminatorKey');
+
+      /*tslint:disable-next-line*/
+      const { buildSchema } = require("./../typegoose");
+      if (item.caster && item.caster.discriminators && Object.keys(item.caster.discriminators).length > 0) {
+        return;
+      }
+      itemSchema.__childClasses.forEach((discriminatorClass) => {
+        const discrSchema = buildSchema(discriminatorClass, { discriminatorKey });
+
+        itemSchema.set('discriminatorKey', discriminatorKey);
+
+        // @ts-ignore
+        if (discrSchema.paths[discriminatorKey]) {
+          // @ts-ignore
+
+          discrSchema.paths[discriminatorKey].options.$skipDiscriminatorCheck = true;
+        }
+        const { discriminatorId = null } =
+        Reflect.getMetadata(DecoratorKeys.ModelOptions, discriminatorClass) || {} as IModelOptions;
+
+        // @ts-ignore
+        item.discriminator(discriminatorId ? discriminatorId : getName(discriminatorClass), discrSchema);
+      });
+    }
+  });
+
   return sch;
 }
