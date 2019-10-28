@@ -5,7 +5,7 @@ import { assignMetadata, getName } from './internal/utils';
 import { logger } from './logSettings';
 import { IModelOptions } from './types';
 
-function assignToParrentClass(target: any) {
+function assignToParentClass(target: any) {
   const parent = Object.getPrototypeOf(target.prototype).constructor;
   const parentName = getName(parent);
   if (!childs.has(parentName)) {
@@ -16,7 +16,7 @@ function assignToParrentClass(target: any) {
     childClasses.push(target);
   }
   if (parent !== Object) {
-    assignToParrentClass(parent);
+    assignToParentClass(parent);
   }
 }
 
@@ -39,7 +39,7 @@ export function modelOptions(options: IModelOptions) {
         options[key] = Object.assign({}, globalOptions[key], options[key]);
       }
     }
-    assignToParrentClass(target);
+    assignToParentClass(target);
     assignMetadata(DecoratorKeys.ModelOptions, options, target);
   };
 }
