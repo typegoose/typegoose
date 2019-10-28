@@ -11,7 +11,8 @@ import {
   getModelForClass,
   mapProp,
   modelOptions,
-  prop
+  prop,
+  ReturnModelType
 } from '../../src/typegoose';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 
@@ -314,5 +315,72 @@ export function suite() {
     expect(path).to.not.equal(undefined);
     expect(path).to.not.be.an.instanceOf(mongoose.Schema.Types.Mixed);
     expect(path).to.be.an.instanceOf(CustomInt);
+  });
+
+  it.only('#25 Test', async () => {
+    enum BuildingTypes {
+      Garage = 'Garage',
+      SummerHouse = 'SummerHouse'
+    }
+    @modelOptions({
+      schemaOptions: {
+        discriminatorKey: 'type'
+      }
+    })
+    class Building {
+      @prop({ default: 100 })
+      public width: number;
+
+      @prop({ enum: BuildingTypes })
+      public type: BuildingTypes;
+    }
+    // @modelOptions({
+    //   discriminatorId: BuildingTypes.Garage
+    // })
+    class Garage extends Building {
+      @prop({ default: 10 })
+      public slotsForCars: number;
+    }
+    // @modelOptions({
+    //   discriminatorId: BuildingTypes.SummerHouse
+    // })
+    class SummerHouse extends Building {
+      @prop({ default: 100 })
+      public distanceToLake: number;
+    }
+
+    class Area {
+      @arrayProp({ items: Building/* , discriminatorClasses: [SummerHouse, Garage] */ })
+      public buildings: Building[];
+    }
+
+    const AreaSchema = buildSchema(Area);
+    const docArray: mongoose.Schema.Types.DocumentArray | any = AreaSchema.path('buildings');
+
+    if (!(docArray instanceof mongoose.Schema.Types.DocumentArray)) {
+      throw new Error('Expected "docArray" to be an mongoose.Types.DocumentArray');
+    }
+
+    // console.log('docArray', docArray);
+
+    // const BuildingModel = getModelForClass(Building);
+    const GarageModel = getDiscriminatorModelForClass(docArray, Garage, BuildingTypes.Garage);
+    const SummerHouseModel = getDiscriminatorModelForClass(docArray, SummerHouse, BuildingTypes.SummerHouse);
+
+    const AreaModel = mongoose.model('Area', AreaSchema) as ReturnModelType<typeof Area>;
+    addModelToTypegoose(AreaModel, Area);
+
+    // const sch = new mongoose.Schema({});
+    // (sch.path('') as mongoose.Schema.Types.DocumentArray).discriminator()
+
+    {
+      const area = await AreaModel.create({});
+      area.buildings.push({ type: BuildingTypes.SummerHouse, distanceToLake: 100 } as SummerHouse);
+      area.buildings.push({ type: BuildingTypes.Garage, slotsForCars: 20 } as Garage);
+      await area.save();
+
+      console.log(area);
+      console.log(area.schema.path('buildings'));
+    }
   });
 }

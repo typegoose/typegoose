@@ -16,6 +16,7 @@ import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import { assignMetadata, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
+import { isModel } from './typeguards';
 import {
   AnyParamConstructor,
   DocumentType,
@@ -245,15 +246,24 @@ export function deleteModelWithClass<T, U extends AnyParamConstructor<T>>(cl: U)
  * const C2Model = getDiscriminatorModelForClass(C1Model, C1);
  * ```
  */
+// export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T>>(
+//   from: mongoose.Model<any>,
+//   cl: U,
+//   id?: string
+// );
+// export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T>>(
+//   from: mongoose.Schema.Types.DocumentArray,
+//   cl: U
+// );
 export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T>>(
-  from: mongoose.Model<any>,
+  from: mongoose.Model<any> | mongoose.Schema.Types.DocumentArray,
   cl: U,
   id?: string
 ) {
   const name = getName(cl);
-  if (models.get(name)) {
-    return models.get(name) as ReturnModelType<U, T>;
-  }
+  // if (models.get(name)) {
+  //   return models.get(name) as ReturnModelType<U, T>;
+  // }
   const sch = buildSchema(cl) as mongoose.Schema & { paths: object };
 
   const discriminatorKey = sch.get('discriminatorKey');
@@ -261,7 +271,25 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
     sch.paths[discriminatorKey].options.$skipDiscriminatorCheck = true;
   }
 
-  const model = from.discriminator(name, sch, id ? id : name);
+  let model: mongoose.Model<mongoose.Document>;
+
+  id = id ? id : name;
+
+  // this check exists only for typescript type reasons
+  if (isModel(from)) {
+    model = from.discriminator(name, sch, id);
+  } else if (from instanceof mongoose.Schema.Types.DocumentArray) {
+    model = (from as mongoose.Schema.Types.DocumentArray).discriminator(
+      name,
+      sch,
+      // @ts-ignore - https://github.com/DefinitelyTyped/DefinitelyTyped/pull/39927
+      id
+    );
+
+    return model as ReturnModelType<U, T>;
+  } else {
+    throw new TypeError('Argument "from" is not a Model OR an Schema.Types.DocumentArray!');
+  }
 
   return addModelToTypegoose(model, cl);
 }

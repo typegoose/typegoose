@@ -18,3 +18,12 @@ export function isDocument<T, S extends RefType>(doc: Ref<T, S>): doc is Documen
 export function isDocumentArray<T, S extends RefType>(docs: Ref<T, S>[]): docs is DocumentType<T>[] {
   return Array.isArray(docs) && docs.every((v) => isDocument(v));
 }
+
+/**
+ * Check if the input is a model
+ * @internal
+ * @param model The Value to check
+ */
+export function isModel(model: any): model is mongoose.Model<any> {
+  return model && model.prototype instanceof mongoose.Model;
+}
