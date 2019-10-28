@@ -246,21 +246,13 @@ export function deleteModelWithClass<T, U extends AnyParamConstructor<T>>(cl: U)
  * const C2Model = getDiscriminatorModelForClass(C1Model, C1);
  * ```
  */
-// export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T>>(
-//   from: mongoose.Model<any>,
-//   cl: U,
-//   id?: string
-// );
-// export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T>>(
-//   from: mongoose.Schema.Types.DocumentArray,
-//   cl: U
-// );
 export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T>>(
   from: mongoose.Model<any> | mongoose.Schema.Types.DocumentArray,
   cl: U,
   id?: string
 ) {
   const name = getName(cl);
+  // disabling this for sanity
   // if (models.get(name)) {
   //   return models.get(name) as ReturnModelType<U, T>;
   // }
@@ -279,6 +271,7 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
   if (isModel(from)) {
     model = from.discriminator(name, sch, id);
   } else if (from instanceof mongoose.Schema.Types.DocumentArray) {
+    // This Implementation is a PROTOTYPE, it might change into an own function
     model = (from as mongoose.Schema.Types.DocumentArray).discriminator(
       name,
       sch,

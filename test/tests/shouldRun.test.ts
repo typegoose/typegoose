@@ -322,6 +322,7 @@ export function suite() {
       Garage = 'Garage',
       SummerHouse = 'SummerHouse'
     }
+
     @modelOptions({
       schemaOptions: {
         discriminatorKey: 'type'
@@ -334,23 +335,19 @@ export function suite() {
       @prop({ enum: BuildingTypes })
       public type: BuildingTypes;
     }
-    // @modelOptions({
-    //   discriminatorId: BuildingTypes.Garage
-    // })
+
     class Garage extends Building {
       @prop({ default: 10 })
       public slotsForCars: number;
     }
-    // @modelOptions({
-    //   discriminatorId: BuildingTypes.SummerHouse
-    // })
+
     class SummerHouse extends Building {
       @prop({ default: 100 })
       public distanceToLake: number;
     }
 
     class Area {
-      @arrayProp({ items: Building/* , discriminatorClasses: [SummerHouse, Garage] */ })
+      @arrayProp({ items: Building })
       public buildings: Building[];
     }
 
@@ -361,17 +358,12 @@ export function suite() {
       throw new Error('Expected "docArray" to be an mongoose.Types.DocumentArray');
     }
 
-    // console.log('docArray', docArray);
-
     // const BuildingModel = getModelForClass(Building);
     const GarageModel = getDiscriminatorModelForClass(docArray, Garage, BuildingTypes.Garage);
     const SummerHouseModel = getDiscriminatorModelForClass(docArray, SummerHouse, BuildingTypes.SummerHouse);
 
     const AreaModel = mongoose.model('Area', AreaSchema) as ReturnModelType<typeof Area>;
     addModelToTypegoose(AreaModel, Area);
-
-    // const sch = new mongoose.Schema({});
-    // (sch.path('') as mongoose.Schema.Types.DocumentArray).discriminator()
 
     {
       const area = await AreaModel.create({});
