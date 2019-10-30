@@ -63,8 +63,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   const hook = hooks.get(name);
   if (hook) {
     hook.pre.forEach((obj) => {
-      sch.pre(obj.method as string, obj.func as EmptyVoidFn);
-      // ^ look at https://github.com/DefinitelyTyped/DefinitelyTyped/issues/37333
+      sch.pre(obj.method, obj.func as EmptyVoidFn);
     });
 
     hook.post.forEach((obj) => sch.post(obj.method, obj.func));
