@@ -12,6 +12,7 @@ redirect_from:
 ## 6.1.0
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
+ETA: 5~7th November
 
 - Completly remove `@staticMethod` & `@instanceMethod`, because they were completly obsolete
 - README now has no documentation anymore
@@ -24,6 +25,9 @@ redirect_from:
 - add modelOption `allowMixed`
 - add `text` to PropOptions
 - deprecate ArrayPropOptions's "itemsRef", "itemsRefPath" & "itemsRefType"
+- `DocumentType` will now overwrite the type of `_id` if the class is extending `Base` (in typescript there is currently no other way)
+- add `tslib` as dependencie to minimize generated code
+- [IC] Re-done how `IModelOptions` are merged (thanks to lodash `cloneDeepWith` & `mergeWith`)
 - [IC] de-duplicate "ref" & "refPath" code
 - [IC] added test for "Custom Types"
 - [IC] typegoose now makes use of "importHelpers"(tsconfig) to save some space
