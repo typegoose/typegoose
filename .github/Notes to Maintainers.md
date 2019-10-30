@@ -32,8 +32,6 @@ when a new (major) version comes out, the old version is moved into `old/` for l
   
   when 6.0.0 comes out, the old version (5.9.x) will be moved into (`old/5.x`) and `6/master` merged into master
 
-Note to the v6 release: because the package moved over packages & repositorys, the master branch got detached from version 6, thats why it will probably the force-pushed
-
 ## Versioning
 
 [look at README#Versioning](../README.md#versioning)

@@ -22,22 +22,20 @@ Some Title
 - modify README to include Docs about A
 ```
 
-and please sign your commits if possible
+and please sign commits
 
--> if you make fixing commits (like fixing a typo, fixing travis) use `git commit --fixup` (for autosquash)
+-> if you make "fix" commits (like fixing a typo, fixing travis) use `git commit --fixup` (for autosquash)
 
 *Legend:*
 - add `[#1]` at the end when there is an issue for it (and modify it to the actual number)
 - the title should be a short introduction like (for small fixes)`Add @mapProp for Maps with tests` (for bigger)`Adding TSDoc`[preferably split the commits when they get to large with adding more features]
 - the first word should be "adding" "removing" "moving", expect if it cant be expressed with those
 
-*Note: if you make a Pull Request that dosnt conform with this structure, it will be first rebased and then merged*
-
----
-*this is just the base, changes will occure*
-
 ## Additional Style guidelines
 
 - if you ever see `console.log`, someone messed up, this should never be there
 - dont use `console.error`, the only occurence is in test's config when some error occurs
 - use `@deprecate`(tsdoc) & `util.deprecate` to deprecate a function / class / variable
+
+---
+*this is just the base, changes will occure*
