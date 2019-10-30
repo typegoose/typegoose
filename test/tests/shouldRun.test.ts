@@ -13,6 +13,7 @@ import {
   modelOptions,
   prop
 } from '../../src/typegoose';
+import { IModelOptions } from '../../src/types';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 
 // Note: this file is meant for github issue verification & test adding for these
@@ -314,5 +315,19 @@ export function suite() {
     expect(path).to.not.equal(undefined);
     expect(path).to.not.be.an.instanceOf(mongoose.Schema.Types.Mixed);
     expect(path).to.be.an.instanceOf(CustomInt);
+  });
+
+  it('should not have the same options (modelOptions deep copy) [typegoose/typegoose#100]', () => {
+    @modelOptions({ schemaOptions: { collection: '1' } })
+    class SOBase { }
+
+    @modelOptions({ schemaOptions: { collection: '2' } })
+    class SOInheritedBase extends SOBase { }
+
+    const refSOBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOBase);
+    const refSOInheritedBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOInheritedBase);
+
+    expect(refSOBase.schemaOptions.collection).to.not.equal(refSOInheritedBase.schemaOptions.collection);
+    expect(refSOBase).to.not.deep.equal(refSOInheritedBase);
   });
 }

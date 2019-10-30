@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 
+import { cloneDeepWith, mergeWith } from 'lodash';
 import { isNullOrUndefined } from 'util';
 import { logger } from '../logSettings';
 import {
@@ -196,7 +197,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
  * @param cl The constructor
  * @internal
  */
-export function mergeMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): any {
+export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: new () => {}): T {
   if (typeof key !== 'string') {
     throw new TypeError(`"${key}"(key) is not a string! (assignMetadata)`);
   }
@@ -204,22 +205,27 @@ export function mergeMetadata(key: DecoratorKeys, value: unknown, cl: new () => 
     throw new NoValidClass(cl);
   }
 
-  const current = Object.assign({}, Reflect.getMetadata(key, cl) || {});
+  // Please dont remove the other values from the function, even when unused - it is made to be clear what is what
+  const current = cloneDeepWith(Reflect.getMetadata(key, cl) || {}, (val, ckey, obj, stack) => customMerger(key, val));
 
-  if (isNullOrUndefined(value)) {
-    return current;
+  return mergeWith({}, current, value,
+    (objValue, srcValue, ckey, object, source, stack) => customMerger(key, srcValue));
+}
+
+/**
+ * Used for lodash customizer's (cloneWith, cloneDeepWith, mergeWith)
+ * @param key the key of the current object
+ * @param val the value of the object that should get returned for "existingMongoose" & "existingConnection"
+ */
+function customMerger(key: string | number, val: unknown): any {
+  if (isNullOrUndefined(key) || typeof key !== 'string') {
+    return undefined;
+  }
+  if (/^(existingMongoose|existingConnection)$/.test(key)) {
+    return val;
   }
 
-  // the following checks are needed, so that the new value dosnt override the full options
-  // "deepmerge" cannot be used because of the other options like "existingMongoose"
-  if (isModelOptions(value) && !isNullOrUndefined(current.schemaOptions)) {
-    value.schemaOptions = Object.assign(current.schemaOptions, value.schemaOptions);
-  }
-  if (isModelOptions(value) && !isNullOrUndefined(current.options)) {
-    value.options = Object.assign(current.options, value.options);
-  }
-
-  return Object.assign(current, value);
+  return undefined;
 }
 
 /**
@@ -228,18 +234,7 @@ export function mergeMetadata(key: DecoratorKeys, value: unknown, cl: new () => 
  * @param cl The Class to get the values from
  */
 export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: mongoose.SchemaOptions, cl: U) {
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
-
-  const current = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
-  const evaluated = current && current.schemaOptions ? current.schemaOptions : {};
-
-  if (isNullOrUndefined(value)) {
-    return evaluated;
-  }
-
-  return Object.assign(evaluated, value || {});
+  return mergeMetadata<IModelOptions>(DecoratorKeys.ModelOptions, { schemaOptions: value }, cl).schemaOptions;
 }
 
 /**
