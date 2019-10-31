@@ -8,7 +8,8 @@ import {
   IModelOptions,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
-  VirtualOptions
+  VirtualOptions,
+  Severity
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
@@ -297,14 +298,23 @@ export function createUniqueID(cl: any) {
  * -> outer: means outer of "type: [{}], here"
  * @param rawOptions The raw options
  * @param Type The Type of the array
+ * @param target The Target class
  */
-export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>): mongoose.SchemaTypeOpts<any> {
+export function mapArrayOptions(
+  rawOptions: any,
+  Type: AnyParamConstructor<any>,
+  target: any
+): mongoose.SchemaTypeOpts<any> {
   if (getName(Type) in mongoose.Schema.Types) {
     logger.info('Converting "%s" to mongoose Type', getName(Type));
     Type = mongoose.Schema.Types[getName(Type)];
 
+    const modelOptions: IModelOptions = Object.assign({}, Reflect.getMetadata(DecoratorKeys.ModelOptions, target));
+
     /* istanbul ignore next */
-    if (Type === mongoose.Schema.Types.Mixed) {
+    if (Type === mongoose.Schema.Types.Mixed && modelOptions.options &&
+      (modelOptions.options.allowMixed === Severity.WARN || modelOptions.options.allowMixed === Severity.ERROR)
+    ) {
       logger.warn('Converted Type to Mixed!');
     }
   } else if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
