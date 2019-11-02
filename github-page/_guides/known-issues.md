@@ -6,7 +6,7 @@ redirect_from:
   - /guides/knownIssues
 ---
 
-- ts-jest: some wierd behavior on ts-jest (only) leads to type errors
+- ~~ts-jest: some wierd behavior on ts-jest (only) leads to type errors~~ got fixed in `ts-jest 24.1.0` / `jest 24.9.0`
 - ts-node: never run `ts-node --transpile-only` (seems like ts-node will not fix it)
 - typegoose dosnt work with classes that have the same name [{% include gitissue repo="typegoose" num=23 %}, {% include gitissue repo="typegoose" num=24 %}]
 - `@prop` cannot be applied to `get` & `set` (virtuals), because virtuals do not accept options & schema.loadClass wouldnt load these
