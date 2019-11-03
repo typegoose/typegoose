@@ -14,7 +14,7 @@ import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
-import { assignMetadata, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import { getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
 import {
   AnyParamConstructor,
@@ -51,17 +51,13 @@ export abstract class Typegoose {
   /* istanbul ignore next */
   /** @deprecated */
   public getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
-    assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
-
-    return deprecate(getModelForClass, 'Typegoose Class is Deprecated!')(cl);
+    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!')(cl);
   }
 
   /* istanbul ignore next */
   /** @deprecated */
   public setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
-    assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
-
-    return deprecate(setModelForClass, 'Typegoose Class is Deprecated!')(cl);
+    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!')(cl);
   }
 
   /* istanbul ignore next */
@@ -125,7 +121,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
 export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
   return deprecate(
     getModelForClass.bind(undefined, cl),
-    'setModelForClass is deprecated, please use getModelForClasse (see README#Migrate to 6.0.0)');
+    'setModelForClass is deprecated, please use getModelForClass (see README#Migrate to 6.0.0)');
 }
 
 /**
