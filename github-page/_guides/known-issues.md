@@ -15,6 +15,6 @@ redirect_from:
 - Self-Containing Classes do not work currently (Maximum Class Stack Size Exceeded)
 - Multi-Dimensional Arrays are currently just an `Array` that allows **any** type, for now, trust typescript on this one [{% include gitissue repo="typegoose" num=65 %}]
 - Generic Properties wont work, without specifing what type it will be (otherwise typescript will compile it to "Object" and mongoose translates it to "Mixed")
-- Typegoose (/ Mongoose) currently dosnt work well with `class-transformer`, when you want to get a POJO, use `model.operation.lean()` OR `doc.toJSON()` - but `classToPlain` (or any other method from CT) will not work and map incorrect properties
+- Typegoose (/ Mongoose) currently dosnt work well with `class-transformer`, when you want to get a POJO, use `model.operation.lean()` OR `doc.toJSON()` - but `classToPlain` (or any other method from CT) will not work and map incorrect properties (More info: {% include gitissue repo="typegoose" num=61 %}, [typegoose#9 (comment)](https://github.com/typegoose/typegoose/issues/96#issuecomment-549031131), [class-transformer#227](https://github.com/typestack/class-transformer/issues/227))
 
 [Please look here first, to decide if it is an typegoose/mongoose issue](https://github.com/Automattic/mongoose/issues?utf8=✓&q=is%3Aissue+involves%3Ahasezoey)
