@@ -22,7 +22,6 @@ import {
   MapPropOptions,
   PropOptions,
   PropOptionsWithValidate,
-  Severity,
   WhatIsIt
 } from './types';
 
@@ -237,7 +236,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       case WhatIsIt.ARRAY:
         schemas.get(name)[key] = {
           ...schemas.get(name)[key][0],
-          ...utils.mapArrayOptions(rawOptions, Type, target)
+          ...utils.mapArrayOptions(rawOptions, Type, target, key)
         };
 
         return;
@@ -270,24 +269,14 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
   if (utils.isObject(Type) && !subSchema) {
-    const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, target) || {};
-    if (modelOptions.options) {
-      switch (modelOptions.options.allowMixed) {
-        default:
-        case Severity.WARN:
-          logger.warn('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key);
-        case Severity.ALLOW:
-          schemas.get(name)[key] = {
-            ...schemas.get(name)[key],
-            ...options,
-            type: mongoose.Schema.Types.Mixed
-          };
+    utils.warnMixed(target, key);
+    schemas.get(name)[key] = {
+      ...schemas.get(name)[key],
+      ...options,
+      type: mongoose.Schema.Types.Mixed
+    };
 
-          return;
-        case Severity.ERROR:
-          throw new TypeError(format('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key));
-      }
-    }
+    return;
   }
 
   switch (whatis) {

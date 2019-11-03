@@ -332,7 +332,7 @@ export function suite() {
 
   it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
     try {
-      mapArrayOptions({}, Error, undefined);
+      mapArrayOptions({}, Error, undefined, undefined);
 
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {

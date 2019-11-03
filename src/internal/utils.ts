@@ -1,15 +1,15 @@
 import * as mongoose from 'mongoose';
 
 import { cloneDeepWith, mergeWith } from 'lodash';
-import { isNullOrUndefined } from 'util';
+import { format, isNullOrUndefined } from 'util';
 import { logger } from '../logSettings';
 import {
   AnyParamConstructor,
   IModelOptions,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
-  VirtualOptions,
-  Severity
+  Severity,
+  VirtualOptions
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
@@ -160,18 +160,6 @@ export function includesAllVirtualPOP(options: VirtualOptions): options is Virtu
 }
 
 /**
- * Check if the given value has options of "IModelOptions"
- * @param value The Value to evaulate
- * @internal
- */
-function isModelOptions(value: unknown): value is IModelOptions {
-  return value && (
-    typeof (value as IModelOptions).schemaOptions === 'object' ||
-    typeof (value as IModelOptions).options === 'object'
-  );
-}
-
-/**
  * Merge value & existing Metadata & Save it to the class
  * Difference with "mergeMetadata" is that this one DOES save it to the class
  * @param key Metadata key
@@ -299,23 +287,21 @@ export function createUniqueID(cl: any) {
  * @param rawOptions The raw options
  * @param Type The Type of the array
  * @param target The Target class
+ * @param pkey Key of the Property
  */
 export function mapArrayOptions(
   rawOptions: any,
   Type: AnyParamConstructor<any>,
-  target: any
+  target: any,
+  pkey: string
 ): mongoose.SchemaTypeOpts<any> {
   if (getName(Type) in mongoose.Schema.Types) {
     logger.info('Converting "%s" to mongoose Type', getName(Type));
     Type = mongoose.Schema.Types[getName(Type)];
 
-    const modelOptions: IModelOptions = Object.assign({}, Reflect.getMetadata(DecoratorKeys.ModelOptions, target));
-
     /* istanbul ignore next */
-    if (Type === mongoose.Schema.Types.Mixed && modelOptions.options &&
-      (modelOptions.options.allowMixed === Severity.WARN || modelOptions.options.allowMixed === Severity.ERROR)
-    ) {
-      logger.warn('Converted Type to Mixed!');
+    if (Type === mongoose.Schema.Types.Mixed) {
+      warnMixed(target, pkey);
     }
   } else if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
     throw new TypeError('Type does not have an valid "OptionsConstructor"!');
@@ -358,4 +344,31 @@ export function mapArrayOptions(
   logger.debug('Final mapped Options for Type "%s"', getName(Type), returnObject);
 
   return returnObject;
+}
+
+/**
+ * Warn, Error or Allow if an mixed type is set
+ * -> this function exists for de-duplication
+ * @param target Target Class
+ * @param key Property key
+ */
+export function warnMixed(target: any, key: string | symbol): void | never {
+  const name = getName(target);
+  const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, target) || {};
+
+  if (modelOptions.options) {
+    switch (modelOptions.options.allowMixed) {
+      default:
+      case Severity.WARN:
+        logger.warn('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key);
+
+        return;
+      case Severity.ALLOW:
+        return;
+      case Severity.ERROR:
+        throw new TypeError(format('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key));
+    }
+  }
+
+  return; // always return, if "allowMixed" is not set
 }
