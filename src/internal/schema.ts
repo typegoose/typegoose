@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import { isNullOrUndefined } from 'util';
 import { logger } from '../logSettings';
 import { _buildPropMetadata } from '../prop';
-import { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IModelOptions } from '../types';
+import { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexArray, IModelOptions } from '../types';
 import { DecoratorKeys } from './constants';
 import { hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
@@ -61,7 +61,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   sch.loadClass(cl);
 
   const hook = hooks.get(name);
-  if (hook) {
+  if (!isNullOrUndefined(hook)) {
     hook.pre.forEach((obj) => {
       sch.pre(obj.method, obj.func as EmptyVoidFn);
     });
@@ -78,7 +78,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   /** Simplify the usage */
   const virtualPopulates = virtuals.get(name);
-  if (virtualPopulates) {
+  if (!isNullOrUndefined(virtualPopulates)) {
     for (const [key, options] of virtualPopulates) {
       logger.debug('Applying Virtual Populates:', key, options);
       sch.virtual(key, options);
@@ -86,10 +86,12 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   }
 
   /** Get Metadata for indices */
-  const indices: any[] = Reflect.getMetadata(DecoratorKeys.Index, cl) || [];
-  for (const index of indices) {
-    logger.debug('Applying Index:', index);
-    sch.index(index.fields, index.options);
+  const indices: IIndexArray<any>[] = Reflect.getMetadata(DecoratorKeys.Index, cl) || [];
+  if (!isNullOrUndefined(indices) && Array.isArray(indices)) {
+    for (const index of indices) {
+      logger.debug('Applying Index:', index);
+      sch.index(index.fields, index.options);
+    }
   }
 
   return sch;

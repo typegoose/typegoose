@@ -39,7 +39,7 @@
     ],
     "max-line-length": {
       "severity": "warn",
-      "options": 120
+      "options": 140
     },
     "comment-format": {
       "options": [

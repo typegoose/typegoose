@@ -88,8 +88,9 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
+  options = typeof options === 'object' ? options : {};
 
-  const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options || {}, cl);
+  const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
   const name = getName(cl);
 
   if (models.get(name)) {
@@ -123,7 +124,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
  */
 export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
   return deprecate(
-    getModelForClass(cl),
+    getModelForClass.bind(undefined, cl),
     'setModelForClass is deprecated, please use getModelForClasse (see README#Migrate to 6.0.0)');
 }
 

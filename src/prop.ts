@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-
 import { format, isNullOrUndefined } from 'util';
 import { DecoratorKeys } from './internal/constants';
 import { schemas, virtuals } from './internal/data';
@@ -110,7 +109,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     }
 
     const newType = rawOptions && rawOptions.type ? rawOptions.type : Type;
-    if (rawOptions && rawOptions.type) {
+    if (!isNullOrUndefined(rawOptions && rawOptions.type)) {
       delete rawOptions.type;
     }
     /*
@@ -129,7 +128,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   const ref = rawOptions.ref;
   const refType = rawOptions.refType || rawOptions.type || mongoose.Schema.Types.ObjectId;
-  if (ref) {
+  if (!isNullOrUndefined(ref)) {
     delete rawOptions.ref;
     const refName = typeof ref === 'string' ? ref : utils.getName(ref);
 
@@ -192,7 +191,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
 
   const enumOption = rawOptions.enum;
-  if (enumOption) {
+  if (!isNullOrUndefined(enumOption)) {
     if (!Array.isArray(enumOption)) {
       rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
     }
@@ -206,23 +205,25 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     };
   }
 
-  // check if Type is actually a real working Type
-  if (isNullOrUndefined(Type) || typeof Type !== 'function') {
-    throw new InvalidTypeError(target.constructor.name, key, Type);
-  }
+  {
+    // check if Type is actually a real working Type
+    if (isNullOrUndefined(Type) || typeof Type !== 'function') {
+      throw new InvalidTypeError(target.constructor.name, key, Type);
+    }
 
-  // check for validation inconsistencies
-  if (utils.isWithStringValidate(rawOptions) && !utils.isString(Type)) {
-    throw new NotStringTypeError(key);
-  }
+    // check for validation inconsistencies
+    if (utils.isWithStringValidate(rawOptions) && !utils.isString(Type)) {
+      throw new NotStringTypeError(key);
+    }
 
-  // check for transform inconsistencies
-  if (utils.isWithStringTransform(rawOptions) && !utils.isString(Type)) {
-    throw new NotStringTypeError(key);
-  }
+    // check for transform inconsistencies
+    if (utils.isWithStringTransform(rawOptions) && !utils.isString(Type)) {
+      throw new NotStringTypeError(key);
+    }
 
-  if (utils.isWithNumberValidate(rawOptions) && !utils.isNumber(Type)) {
-    throw new NotNumberTypeError(key);
+    if (utils.isWithNumberValidate(rawOptions) && !utils.isNumber(Type)) {
+      throw new NotNumberTypeError(key);
+    }
   }
 
   const subSchema = schemas.get(utils.getName(Type));
@@ -334,11 +335,15 @@ export function prop(options: PropOptionsWithValidate = {}) {
     // soft errors
     {
       if ('items' in options) {
-        logger.warn(new Error('You might not want to use option "items" in a @prop, use @arrayProp'));
+        logger.warn(new Error(
+          format('You might not want to use option "items" in a @prop, use @arrayProp (%s.%s)', utils.getName(target), key)
+        ));
       }
 
       if ('of' in options) {
-        logger.warn(new Error('You might not want to use option "of" in a @prop, use @mapProp'));
+        logger.warn(new Error(
+          format('You might not want to use option "of" in a @prop, use @mapProp (%s.%s)', utils.getName(target), key)
+        ));
       }
     }
 
@@ -362,7 +367,9 @@ export function mapProp(options: MapPropOptions) {
     const Type = options.of;
 
     if ('items' in options) {
-      logger.warn(new Error('You might not want to use option "items" in a @mapProp, use @arrayProp'));
+      logger.warn(new Error(
+        format('You might not want to use option "items" in a @mapProp, use @arrayProp (%s.%s)', utils.getName(target), key)
+      ));
     }
 
     baseProp({
@@ -384,7 +391,9 @@ export function arrayProp(options: ArrayPropOptions) {
     const Type = options.items;
 
     if ('of' in options) {
-      logger.warn(new Error('You might not want to use option "of" in a @arrayProp, use @mapProp'));
+      logger.warn(new Error(
+        format('You might not want to use option "of" in a @arrayProp, use @mapProp (%s.%s)', utils.getName(target), key)
+      ));
     }
 
     if ('items' in options) {

@@ -1,7 +1,7 @@
 {
     "editor.formatOnSave": true,
-    "prettier.printWidth": 120,
-    "editor.wordWrapColumn": 120,
+    "prettier.printWidth": 140,
+    "editor.wordWrapColumn": 140,
     "editor.tabSize": 2,
     "editor.insertSpaces": true
 }

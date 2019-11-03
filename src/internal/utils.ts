@@ -39,18 +39,19 @@ export function isPrimitive(Type: any): boolean {
  * @returns true, if it is an Object
  */
 export function isObject(Type: any): boolean {
-  let prototype = Type.prototype;
-  let name = Type.name;
-  while (name) {
-    if (name === 'Object') {
-      return true;
+  if (typeof Type.name === 'string') {
+    let prototype = Type.prototype;
+    let name = Type.name;
+    while (name) {
+      if (name === 'Object') {
+        return true;
+      }
+      prototype = Object.getPrototypeOf(prototype);
+      name = prototype ? prototype.constructor.name : null;
     }
-    prototype = Object.getPrototypeOf(prototype);
-    name = prototype ? prototype.constructor.name : null;
   }
 
-  return false; // can this even return false?
-  // return !isNullOrUndefined(Type) && (typeof Type === 'object' || Type.name === 'Object') && !Array.isArray(Type);
+  return false;
 }
 
 /**
