@@ -24,3 +24,9 @@ A: Because of a Repository Switch ([reasons](#is-this-project-still-active)) and
 ### Why @hasezoey/typegoose
 
 A: because the normal `typegoose` is still working, and i dont want to deal with it, `@hasezoey/typegoose` is perfectly fitting (and because of the repo differences)
+
+## Functional
+
+### Why does `new Model({})` dont have types?
+
+A: because typegoose dosnt modify any mongoose code, it is still the same as mongoose's original `new Model()`, you would have to do `new Model({} as Class)` (or sometimes `new Model({} as Partial<Class>)`, because of functions)
