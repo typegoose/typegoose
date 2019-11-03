@@ -21,6 +21,7 @@ export async function connect(): Promise<void> {
       useNewUrlParser: true,
       useFindAndModify: true,
       useCreateIndex: true,
+      useUnifiedTopology: true,
       autoIndex: true
     });
   } else {
