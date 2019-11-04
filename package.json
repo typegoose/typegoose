@@ -71,5 +71,15 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "typegoose",
+    "mongoose",
+    "orm",
+    "mongodb",
+    "class",
+    "model",
+    "schema",
+    "odm"
+  ]
 }
