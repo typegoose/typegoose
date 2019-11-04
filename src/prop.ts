@@ -369,15 +369,11 @@ export function prop(options: PropOptionsWithValidate = {}) {
     // soft errors
     {
       if ('items' in options) {
-        logger.warn(new Error(
-          format('You might not want to use option "items" in a @prop, use @arrayProp (%s.%s)', utils.getName(target), key)
-        ));
+        logger.warn('You might not want to use option "items" in a @prop, use @arrayProp (%s.%s)', utils.getName(target), key);
       }
 
       if ('of' in options) {
-        logger.warn(new Error(
-          format('You might not want to use option "of" in a @prop, use @mapProp (%s.%s)', utils.getName(target), key)
-        ));
+        logger.warn('You might not want to use option "of" in a @prop, use @mapProp (%s.%s)', utils.getName(target), key);
       }
     }
 
@@ -401,9 +397,7 @@ export function mapProp(options: MapPropOptions) {
     const Type = options.of;
 
     if ('items' in options) {
-      logger.warn(new Error(
-        format('You might not want to use option "items" in a @mapProp, use @arrayProp (%s.%s)', utils.getName(target), key)
-      ));
+      logger.warn('You might not want to use option "items" in a @mapProp, use @arrayProp (%s.%s)', utils.getName(target), key);
     }
 
     baseProp({
@@ -425,9 +419,7 @@ export function arrayProp(options: ArrayPropOptions) {
     const Type = options.items;
 
     if ('of' in options) {
-      logger.warn(new Error(
-        format('You might not want to use option "of" in a @arrayProp, use @mapProp (%s.%s)', utils.getName(target), key)
-      ));
+      logger.warn('You might not want to use option "of" in a @arrayProp, use @mapProp (%s.%s)', utils.getName(target), key);
     }
 
     if ('items' in options) {
