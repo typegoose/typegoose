@@ -98,22 +98,49 @@ export function suite() {
     expect(found.test).to.be.deep.equal(new Map([['hello', 'hello']]));
   });
 
-  it('should make array of enum [szokodiakos#380]', async () => {
-    enum TestEnum {
+  it('should make array of enum (string) [szokodiakos#380]', async () => {
+    enum StringEnum {
       HELLO1 = 'Hello 1',
       HELLO2 = 'Hello 2'
     }
     class TestEnumArray {
-      @arrayProp({ items: String, enum: TestEnum })
-      public somevalue: TestEnum[];
+      @arrayProp({ items: String, enum: StringEnum })
+      public somevalue: StringEnum[];
     }
 
     const model = getModelForClass(TestEnumArray);
-    const { _id: id } = await model.create({ somevalue: [TestEnum.HELLO1, TestEnum.HELLO2] } as TestEnumArray);
+    const { _id: id } = await model.create({ somevalue: [StringEnum.HELLO1, StringEnum.HELLO2] } as TestEnumArray);
     const found = await model.findById(id).exec();
 
     expect(found).to.not.be.an('undefined');
     expect(found.somevalue).to.deep.equal(['Hello 1', 'Hello 2']);
+
+    const somevaluePath = model.schema.path('somevalue');
+    expect(somevaluePath).to.be.an.instanceOf(mongoose.Schema.Types.Array);
+
+    const optionEnum: [string, unknown] = (somevaluePath as any).caster.options.enum;
+    expect(optionEnum).to.be.deep.equal(['Hello 1', 'Hello 2']);
+  });
+
+  it('should make array of enum (auto number)', async () => {
+    enum AutoNumberEnum {
+      Hi,
+      Hi2
+    }
+
+    class AutoNumberClass {
+      @prop({ enum: AutoNumberEnum, type: String })
+      public autonumber: AutoNumberEnum;
+    }
+
+    const model = getModelForClass(AutoNumberClass);
+    expect(model).to.not.be.equal(undefined);
+
+    const autoNumberPath = model.schema.path('autonumber');
+    expect(autoNumberPath).to.be.an.instanceOf(mongoose.Schema.Types.String);
+
+    const optionEnum: [string, unknown] = (autoNumberPath as any).options.enum;
+    expect(optionEnum).to.be.deep.equal(['Hi', 'Hi2']);
   });
 
   it('should work with Objects in Class [szokodiakos#54]', async () => {

@@ -410,4 +410,24 @@ export function suite() {
       expect(err).to.be.an.instanceOf(TypeError);
     }
   });
+
+  it('should fail when using an Heterogeneous enum [TypeError]', () => {
+    try {
+      enum HeterogeneousEnum {
+        One = 0,
+        Two = '1'
+      }
+
+      class HeterogeneousClass {
+        @prop({ enum: HeterogeneousEnum })
+        public someEnum: HeterogeneousEnum;
+      }
+
+      getModelForClass(HeterogeneousClass);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
 }

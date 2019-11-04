@@ -328,9 +328,33 @@ enum Gender {
 }
 
 class Enumed {
-  @prop({ enum: Gender })
+  @prop({ enum: Gender, type: String })
   public gender?: Gender;
 }
+```
+
+Typegoose automaticly converts enums to mongoose useable "enums":
+
+```ts
+enum SomeThing {
+  SOMEONE,
+  SOMETHING
+}
+// to
+["SOMEONE", "SOMETHING"]
+```
+
+and when `globalOptions.globalOptions.useNewEnum` is activated, typegoose will convert the following:
+
+```ts
+enum SomeThing {
+  Hi = "Hi SomeOne",
+  Hi2 = "Hi SomeThing"
+}
+// to (only when "useNewEnum" is activated)
+["Hi SomeOne", "Hi SomeThing"]
+// old behaviour
+["Hi", "Hi2"]
 ```
 
 ### Number Validation options

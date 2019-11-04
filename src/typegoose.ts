@@ -35,9 +35,8 @@ export * from './typeguards';
 export * from './optionsProp';
 export { defaultClasses };
 export { DocumentType, Ref, ReturnModelType };
-export { Severity } from './types';
+export { Severity, IGlobalOptions } from './types';
 export { getClassForDocument } from './internal/utils';
-export { IGlobalOptions } from './internal/data';
 export * from './globalOptions';
 
 /** @deprecated */

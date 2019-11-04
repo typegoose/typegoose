@@ -28,6 +28,7 @@ ETA: 5~7th November
 - `DocumentType` will now overwrite the type of `_id` if the class is extending `Base` (in typescript there is currently no other way)
 - add `tslib` as dependencie to minimize generated code
 - fixing typo in (deprecated) `setModelForClass`
+- Remake how Enums are handeled, use `setGlobalOptions({ globalOptions: { useNewEnum: true } })` (to not break existing databases made with the old handling)
 - [IC] adding many sanity `isNullOrUndefined` checks
 - [IC] Re-done how the handling of `Mixed` is done
 - [IC] Re-done how `IModelOptions` are merged (thanks to lodash `cloneDeepWith` & `mergeWith`)

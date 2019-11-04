@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { format, isNullOrUndefined } from 'util';
 import { DecoratorKeys } from './internal/constants';
-import { schemas, virtuals } from './internal/data';
+import { globalOptions, schemas, virtuals } from './internal/data';
 import {
   InvalidPropError,
   InvalidTypeError,
@@ -193,7 +193,41 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   const enumOption = rawOptions.enum;
   if (!isNullOrUndefined(enumOption)) {
     if (!Array.isArray(enumOption)) {
-      rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
+      // the following "if" it to not break existing databases
+      if (globalOptions.globalOptions && globalOptions.globalOptions.useNewEnum) {
+        rawOptions.enum = Object.entries(enumOption) // get all key-value pairs of the enum
+          // filter out the "reverse (value -> name) mappings"
+          // https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings
+          .filter(([enumKey, enumValue]) => {
+            return Number.isNaN(parseInt(enumKey, 10));
+          })
+          .map(([enumKey, enumValue], i, enumArray) => { // convert key-value pairs to mongoose-useable strings
+            // check if the first entry of an enum has an string assinged and the current not
+            if (typeof enumArray[0][1] !== typeof enumValue) {
+              throw new TypeError(format( // when having an edge case of https://www.typescriptlang.org/docs/handbook/enums.html#heterogeneous-enums
+                'While converting "%s.%s"\'s enum the first property didnt match with the current!'
+                + ' (first property (%s): "%s", current property (%s): "%s")',
+                utils.getName(target.constructor),
+                key,
+                enumArray[0][0], typeof enumArray[0][1],
+                enumKey, typeof enumValue
+              ));
+            }
+
+            switch (typeof enumValue) {
+              case 'number':
+                return enumKey;
+              case 'string':
+                return enumValue;
+              default: // sanity check, this should never happen naturally
+                throw new Error(
+                  format('Somehow an type that is not a string or number got into an enum (%s.%s)', utils.getName(target.constructor), key)
+                );
+            }
+          });
+      } else {
+        rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
+      }
     }
   }
 
