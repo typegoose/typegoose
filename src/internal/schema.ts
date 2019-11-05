@@ -1,4 +1,3 @@
-import * as assert from 'assert';
 import * as mongoose from 'mongoose';
 
 import { logger } from '../logSettings';
@@ -23,7 +22,9 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   sch?: mongoose.Schema,
   opt?: mongoose.SchemaOptions
 ) {
-  assert(typeof cl === 'function', new NoValidClass(cl));
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
 
   // Options sanity check
   opt = mergeSchemaOptions((isNullOrUndefined(opt) || typeof opt !== 'object') ? {} : opt, cl);

@@ -1,4 +1,3 @@
-import * as assert from 'assert';
 import { cloneDeepWith, mergeWith } from 'lodash';
 import * as mongoose from 'mongoose';
 import { format } from 'util';
@@ -190,8 +189,12 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
  * @internal
  */
 export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: new () => {}): T {
-  assert(typeof key === 'string', new TypeError(`"${key}"(key) is not a string! (assignMetadata)`));
-  assert(typeof cl === 'function', new NoValidClass(cl));
+  if (typeof key !== 'string') {
+    throw new TypeError(`"${key}"(key) is not a string! (assignMetadata)`);
+  }
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
 
   // Please dont remove the other values from the function, even when unused - it is made to be clear what is what
   const current = cloneDeepWith(Reflect.getMetadata(key, cl) ?? {}, (val, ckey, obj, stack) => customMerger(key, val));
@@ -241,7 +244,9 @@ export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
   }
 
   if (typeof options?.options?.customName === 'string') {
-    assert(options.options.customName.length > 0, new TypeError(`"customName" must be a string AND at least one character ("${cl.name}")`));
+    if (options.options.customName.length <= 0) {
+      throw new TypeError(`"customName" must be a string AND at least one character ("${cl.name}")`);
+    }
 
     return options.options.customName;
   }
@@ -254,17 +259,11 @@ export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
  * @param cl The Type
  */
 export function isNotDefined(cl: any) {
-  try { // this could be simplified to one return, but this is made to make it more readable
-    assert(typeof cl === 'function');
-    assert(!isPrimitive(cl));
-    assert(cl !== Object);
-    assert(cl !== mongoose.Schema.Types.Buffer);
-    assert(!schemas.has(getName(cl)));
-
-    return true;
-  } catch (err) {
-    return false;
-  }
+  return typeof cl === 'function' &&
+    !isPrimitive(cl) &&
+    cl !== Object &&
+    cl !== mongoose.Schema.Types.Buffer &&
+    isNullOrUndefined(schemas.get(getName(cl)));
 }
 
 /**
@@ -307,7 +306,9 @@ export function mapArrayOptions(
     }
   }
 
-  assert(!isNullOrUndefined(Type.prototype.OptionsConstructor), new TypeError('Type does not have an valid "OptionsConstructor"!'));
+  if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
+    throw new TypeError('Type does not have an valid "OptionsConstructor"!');
+  }
 
   const options = Object.assign({}, rawOptions); // for sanity
 

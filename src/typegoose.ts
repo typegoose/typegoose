@@ -1,5 +1,4 @@
 /* imports */
-import * as assert from 'assert';
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
@@ -85,7 +84,9 @@ export abstract class Typegoose {
  * ```
  */
 export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
-  assert(typeof cl === 'function', new NoValidClass(cl));
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
   options = typeof options === 'object' ? options : {};
 
   const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
@@ -129,7 +130,9 @@ export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
  * @returns Returns the Build Schema
  */
 export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?: mongoose.SchemaOptions) {
-  assert(typeof cl === 'function', new NoValidClass(cl));
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
@@ -170,8 +173,12 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
  * ```
  */
 export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: mongoose.Model<any>, cl: U) {
-  assert(model.prototype instanceof mongoose.Model, new TypeError(`"${model}" is not a valid Model!`));
-  assert(typeof cl === 'function', new NoValidClass(cl));
+  if (!(model.prototype instanceof mongoose.Model)) {
+    throw new TypeError(`"${model}" is not a valid Model!`);
+  }
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
 
   const name = getName(cl);
 
@@ -194,8 +201,12 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
  * @param key
  */
 export function deleteModel(name: string) {
-  assert(typeof name === 'string', new TypeError('name is not an string! (deleteModel)'));
-  assert(models.has(name), new Error(`Model "${name}" could not be found`));
+  if (typeof name !== 'string') {
+    throw new TypeError('name is not an string! (deleteModel)');
+  }
+  if (!models.has(name)) {
+    throw new Error(`Model "${name}" could not be found`);
+  }
 
   logger.debug('Deleting Model "%s"', name);
 
@@ -209,7 +220,9 @@ export function deleteModel(name: string) {
  * @param cl The Class
  */
 export function deleteModelWithClass<T, U extends AnyParamConstructor<T>>(cl: U) {
-  assert(typeof cl === 'function', new NoValidClass(cl));
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
 
   return deleteModel(getName(cl));
 }
@@ -233,8 +246,12 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
   cl: U,
   id?: string
 ) {
-  assert(from.prototype instanceof mongoose.Model, new TypeError(`"${from}" is not a valid Model!`));
-  assert(typeof cl === 'function', new NoValidClass(cl));
+  if (!(from.prototype instanceof mongoose.Model)) {
+    throw new TypeError(`"${from}" is not a valid Model!`);
+  }
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
 
   const name = getName(cl);
   if (models.has(name)) {

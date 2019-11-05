@@ -1,4 +1,3 @@
-import * as assert from 'assert';
 import * as mongoose from 'mongoose';
 import { format } from 'util';
 
@@ -38,9 +37,10 @@ function baseProp(input: DecoratedPropertyMetadata): void {
     target,
     whatis
   } = input;
-  assert(Type !== target.constructor, // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
-    new TypeError('It seems like the type used is the same as the target class, which is currently not supported\n'
-      + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`));
+  if (Type === target.constructor) { // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
+    throw new TypeError('It seems like the type used is the same as the target class, which is currently not supported\n'
+      + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`);
+  }
 
   // assign a Unique ID to the target class
   utils.createUniqueID(target);
@@ -87,7 +87,9 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
 
   if (utils.isWithVirtualPOP(rawOptions)) {
-    assert(utils.includesAllVirtualPOP(rawOptions), new NotAllVPOPElementsError(name, key));
+    if (!utils.includesAllVirtualPOP(rawOptions)) {
+      throw new NotAllVPOPElementsError(name, key);
+    }
     virtuals.get(name).set(key, rawOptions);
 
     return;
@@ -96,8 +98,12 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   utils.initProperty(name, key, whatis);
 
   if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
-    assert(typeof rawOptions?.set === 'function', new TypeError(`"${name}.${key}" does not have a set function!`));
-    assert(typeof rawOptions?.get === 'function', new TypeError(`"${name}.${key}" does not have a get function!`));
+    if (typeof rawOptions?.set !== 'function') {
+      throw new TypeError(`"${name}.${key}" does not have a set function!`);
+    }
+    if (typeof rawOptions?.get !== 'function') {
+      throw new TypeError(`"${name}.${key}" does not have a get function!`);
+    }
 
     const newType = rawOptions?.type ? rawOptions.type : Type;
     if (!utils.isNullOrUndefined(rawOptions?.type)) {
@@ -150,8 +156,9 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   const refPath = rawOptions?.refPath;
   if (refPath) {
-    assert(typeof refPath === 'string',
-      new TypeError(format('"refPath" for "%s, %s" should be of type String!', utils.getName(target), key)));
+    if (typeof refPath !== 'string') {
+      throw new TypeError(format('"refPath" for "%s, %s" should be of type String!', utils.getName(target), key));
+    }
     delete rawOptions.refPath;
 
     switch (whatis) {
@@ -192,15 +199,16 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
           })
           .map(([enumKey, enumValue], i, enumArray) => { // convert key-value pairs to mongoose-useable strings
             // check if the first entry of an enum has an string assinged and the current not
-            assert(typeof enumArray[0][1] === typeof enumValue,
-              new TypeError(format( // when having an edge case of https://www.typescriptlang.org/docs/handbook/enums.html#heterogeneous-enums
+            if (typeof enumArray[0][1] !== typeof enumValue) {
+              throw new TypeError(format( // when having an edge case of https://www.typescriptlang.org/docs/handbook/enums.html#heterogeneous-enums
                 'While converting "%s.%s"\'s enum the first property didnt match with the current!'
                 + ' (first property (%s): "%s", current property (%s): "%s")',
                 utils.getName(target.constructor),
                 key,
                 enumArray[0][0], typeof enumArray[0][1],
                 enumKey, typeof enumValue
-              )));
+              ));
+            }
 
             switch (typeof enumValue) {
               case 'number':
@@ -352,7 +360,9 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
     const Type = Reflect.getMetadata(DecoratorKeys.Type, target, key);
-    assert(!utils.isNullOrUndefined(Type), new NoMetadataError(key));
+    if (utils.isNullOrUndefined(Type)) {
+      throw new NoMetadataError(key);
+    }
 
     // soft errors
     {

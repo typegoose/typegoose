@@ -1,4 +1,3 @@
-import * as assert from 'assert';
 import { Query } from 'mongoose';
 
 import { hooks as hooksData, IHooks } from './internal/data';
@@ -98,7 +97,9 @@ function addToHooks(name: string, hookType: 'pre' | 'post', args: any[]) {
 
   // Convert Method to array if only a string is provided
   const methods: QDM[] = Array.isArray(args[0]) ? args[0] : [args[0]];
-  assert(typeof args[1] === 'function', new TypeError(`"${name}.${hookType}.${methods.join(' ')}"'s function is not a function!`));
+  if (typeof args[1] !== 'function') {
+    throw new TypeError(`"${name}.${hookType}.${methods.join(' ')}"'s function is not a function!`);
+  }
   const func: EmptyVoidFn = args[1];
 
   for (const method of methods) {

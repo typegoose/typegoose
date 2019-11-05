@@ -43,7 +43,7 @@
     "@types/lodash": "^4.14.144",
     "@types/mocha": "^5.2.7",
     "@types/mongoose": "^5.5.29",
-    "@types/node": "^12.12.5",
+    "@types/node": "^8.10.53",
     "@types/semver": "^6.2.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
