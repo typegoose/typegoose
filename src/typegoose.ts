@@ -10,6 +10,10 @@ if (semver.lt(mongoose.version, '5.7.7')) {
   throw new Error('Please use mongoose 5.7.7 or higher');
 }
 
+if (semver.lt(process.version.slice(1), '8.10.0')) {
+  logger.warn('You are using a NodeJS Version below 8.10.0, Please Upgrade!');
+}
+
 import * as defaultClasses from './defaultClasses';
 import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';

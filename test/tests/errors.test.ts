@@ -80,7 +80,7 @@ export function suite() {
         public test: undefined;
       }
       getModelForClass(TestNME);
-      assert.fail('Expected to throw "InvalidPropError"');
+      assert.fail('Expected to throw "NoMetadataError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(NoMetadataError);
     }

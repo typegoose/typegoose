@@ -17,7 +17,6 @@ ETA: 5~7th November
 - Update Dependencies
   - Upgrade mongoose from 5.7.1 to 5.7.8
   - [IC] Upgrade Typescript from 3.6.x to 3.7.2
-  - [IC] Upgrade @types/node from 8.10.53 to 12.12.5 (typescript should still compile everything down to Node 8.10+)
 - Completly remove `@staticMethod` & `@instanceMethod`, because they were completly obsolete
 - README now has no documentation anymore
 - `@prop({ validate })` now accepts `{ validator, message }` as an array
