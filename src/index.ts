@@ -13,7 +13,7 @@ import { IIndexArray, IndexOptions } from './types';
  */
 export function index<T = {}>(fields: T, options?: IndexOptions<T>) {
   return (target: any) => {
-    const indices: IIndexArray<any>[] = Reflect.getMetadata(DecoratorKeys.Index, target) || [];
+    const indices: IIndexArray<any>[] = Reflect.getMetadata(DecoratorKeys.Index, target) ?? [];
     indices.push({ fields, options });
     Reflect.defineMetadata(DecoratorKeys.Index, indices, target);
   };

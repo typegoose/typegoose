@@ -3,5 +3,6 @@
     "prettier.printWidth": 140,
     "editor.wordWrapColumn": 140,
     "editor.tabSize": 2,
-    "editor.insertSpaces": true
+    "editor.insertSpaces": true,
+    "typescript.tsdk": "./node_modules/typescript/lib"
 }

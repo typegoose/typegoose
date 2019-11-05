@@ -20,9 +20,9 @@ feature_row:
     btn_class: "btn--primary"
     btn_label: "Learn more"
   # - image_path: /assets/images/unkown.png
-  - alt: "idk what alt"
+  - alt: "Latest Verions"
     title: "Latest Verions"
-    excerpt: "Built with TypeScript 3.6"
+    excerpt: "Built with TypeScript 3.7"
     url: "/guides/quick-start-guide/"
     btn_class: "btn--primary"
     btn_label: "Learn more"

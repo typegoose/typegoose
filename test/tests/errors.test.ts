@@ -1,7 +1,7 @@
-import { assert, expect } from 'chai';
-
 import { AssertionError } from 'assert';
+import { assert, expect } from 'chai';
 import { model, Schema } from 'mongoose';
+
 import { pre } from '../../src/hooks';
 import { DecoratorKeys } from '../../src/internal/constants';
 import {
@@ -20,6 +20,7 @@ import {
   buildSchema,
   deleteModel,
   deleteModelWithClass,
+  getDiscriminatorModelForClass,
   getModelForClass,
   modelOptions,
   setGlobalOptions
@@ -171,7 +172,7 @@ export function suite() {
       try {
         // @ts-ignore
         addModelToTypegoose(model('hello', new Schema()), 'not class');
-        assert.fail('Expected to throw "TypeError"');
+        assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
         expect(err).to.be.an.instanceOf(NoValidClass);
       }
@@ -201,6 +202,36 @@ export function suite() {
       try {
         // @ts-ignore
         getModelForClass('hello');
+        assert.fail('Expected to throw "NoValidClass"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(NoValidClass);
+      }
+    });
+
+    it('should error if no valid class is supplied to "deleteModelWithClass" [NoValidClass]', () => {
+      try {
+        // @ts-ignore
+        deleteModelWithClass(true);
+        assert.fail('Expected to throw "NoValidClass"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(NoValidClass);
+      }
+    });
+
+    it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClass]', () => {
+      try {
+        // @ts-ignore
+        mergeSchemaOptions({}, true);
+        assert.fail('Expected to throw "NoValidClass"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(NoValidClass);
+      }
+    });
+
+    it('should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClass]', () => {
+      try {
+        // @ts-ignore
+        getDiscriminatorModelForClass(model('NoValidClassgetDiscriminatorModelForClass', {}), true);
         assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
         expect(err).to.be.an.instanceOf(NoValidClass);
@@ -262,16 +293,6 @@ export function suite() {
     });
   });
 
-  it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClass]', () => {
-    try {
-      // @ts-ignore
-      mergeSchemaOptions({}, true);
-      assert.fail('Expected to throw "NoValidClass"');
-    } catch (err) {
-      expect(err).to.be.an.instanceOf(NoValidClass);
-    }
-  });
-
   it('should throw an error if a self-contained class is used', () => {
     try {
       class TestSelfContained {
@@ -292,16 +313,6 @@ export function suite() {
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(TypeError);
-    }
-  });
-
-  it('should throw when "deleteModelWithClass" is called and its not a valid class [NoValidClass]', () => {
-    try {
-      // @ts-ignore
-      deleteModelWithClass(true);
-      assert.fail('Expected to throw "NoValidClass"');
-    } catch (err) {
-      expect(err).to.be.an.instanceOf(NoValidClass);
     }
   });
 
@@ -425,6 +436,16 @@ export function suite() {
 
       getModelForClass(HeterogeneousClass);
 
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if no valid model is supplied to "getDiscriminatorModelForClass" [TypeError]', () => {
+    try {
+      // @ts-ignore
+      getDiscriminatorModelForClass(true);
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(TypeError);

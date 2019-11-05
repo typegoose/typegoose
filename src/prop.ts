@@ -1,5 +1,7 @@
+import * as assert from 'assert';
 import * as mongoose from 'mongoose';
 import { format } from 'util';
+
 import { DecoratorKeys } from './internal/constants';
 import { globalOptions, schemas, virtuals } from './internal/data';
 import {
@@ -36,10 +38,9 @@ function baseProp(input: DecoratedPropertyMetadata): void {
     target,
     whatis
   } = input;
-  if (Type === target.constructor) { // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
-    throw new TypeError('It seems like the type used is the same as the target class, which is currently not supported\n'
-      + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`);
-  }
+  assert(Type !== target.constructor, // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
+    new TypeError('It seems like the type used is the same as the target class, which is currently not supported\n'
+      + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`));
 
   // assign a Unique ID to the target class
   utils.createUniqueID(target);
@@ -49,11 +50,11 @@ function baseProp(input: DecoratedPropertyMetadata): void {
     Reflect.defineMetadata(DecoratorKeys.PropCache, new Map<string, DecoratedPropertyMetadata>(), target);
   }
   const mapForTarget = existingMapForTarget
-    || Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
+    ?? Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
 
   mapForTarget.set(key, { origOptions, Type, target, key, whatis });
 
-  logger.debug('Added "%s.%s" to the Decorator Cache', target.constructor.name, key);
+  logger.debug('Added "%s.%s" to the Decorator Cache', utils.getName(target.constructor), key);
 }
 
 /**
@@ -81,35 +82,25 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
   const name: string = utils.getName(target.constructor);
 
-  if (!virtuals.get(name)) {
+  if (!virtuals.has(name)) {
     virtuals.set(name, new Map());
   }
 
   if (utils.isWithVirtualPOP(rawOptions)) {
-    if (!utils.includesAllVirtualPOP(rawOptions)) {
-      throw new NotAllVPOPElementsError(name, key);
-    }
+    assert(utils.includesAllVirtualPOP(rawOptions), new NotAllVPOPElementsError(name, key));
     virtuals.get(name).set(key, rawOptions);
 
     return;
   }
 
-  if (whatis === WhatIsIt.ARRAY) {
-    utils.initAsArray(name, key);
-  } else {
-    utils.initAsObject(name, key);
-  }
+  utils.initProperty(name, key, whatis);
 
   if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
-    if (typeof rawOptions.set !== 'function') {
-      throw new TypeError(`"${name}.${key}" does not have a set function!`);
-    }
-    if (typeof rawOptions.get !== 'function') {
-      throw new TypeError(`"${name}.${key}" does not have a get function!`);
-    }
+    assert(typeof rawOptions?.set === 'function', new TypeError(`"${name}.${key}" does not have a set function!`));
+    assert(typeof rawOptions?.get === 'function', new TypeError(`"${name}.${key}" does not have a get function!`));
 
-    const newType = rawOptions && rawOptions.type ? rawOptions.type : Type;
-    if (!utils.isNullOrUndefined(rawOptions && rawOptions.type)) {
+    const newType = rawOptions?.type ? rawOptions.type : Type;
+    if (!utils.isNullOrUndefined(rawOptions?.type)) {
       delete rawOptions.type;
     }
     /*
@@ -126,8 +117,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     return;
   }
 
-  const ref = rawOptions.ref;
-  const refType = rawOptions.refType || rawOptions.type || mongoose.Schema.Types.ObjectId;
+  const ref = rawOptions?.ref;
+  const refType = rawOptions?.refType ?? rawOptions?.type ?? mongoose.Schema.Types.ObjectId;
   if (!utils.isNullOrUndefined(ref)) {
     delete rawOptions.ref;
     const refName = typeof ref === 'string' ? ref : utils.getName(ref);
@@ -157,12 +148,10 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     return;
   }
 
-  const refPath = rawOptions.refPath;
+  const refPath = rawOptions?.refPath;
   if (refPath) {
-    if (typeof refPath !== 'string') {
-      throw new TypeError(format('"refPath" for "%s, %s" should be of type String!',
-        utils.getName(target), key));
-    }
+    assert(typeof refPath === 'string',
+      new TypeError(format('"refPath" for "%s, %s" should be of type String!', utils.getName(target), key)));
     delete rawOptions.refPath;
 
     switch (whatis) {
@@ -190,11 +179,11 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     return;
   }
 
-  const enumOption = rawOptions.enum;
+  const enumOption = rawOptions?.enum;
   if (!utils.isNullOrUndefined(enumOption)) {
     if (!Array.isArray(enumOption)) {
       // the following "if" it to not break existing databases
-      if (globalOptions.globalOptions && globalOptions.globalOptions.useNewEnum) {
+      if (globalOptions?.globalOptions?.useNewEnum) {
         rawOptions.enum = Object.entries(enumOption) // get all key-value pairs of the enum
           // filter out the "reverse (value -> name) mappings"
           // https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings
@@ -203,16 +192,15 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
           })
           .map(([enumKey, enumValue], i, enumArray) => { // convert key-value pairs to mongoose-useable strings
             // check if the first entry of an enum has an string assinged and the current not
-            if (typeof enumArray[0][1] !== typeof enumValue) {
-              throw new TypeError(format( // when having an edge case of https://www.typescriptlang.org/docs/handbook/enums.html#heterogeneous-enums
+            assert(typeof enumArray[0][1] === typeof enumValue,
+              new TypeError(format( // when having an edge case of https://www.typescriptlang.org/docs/handbook/enums.html#heterogeneous-enums
                 'While converting "%s.%s"\'s enum the first property didnt match with the current!'
                 + ' (first property (%s): "%s", current property (%s): "%s")',
                 utils.getName(target.constructor),
                 key,
                 enumArray[0][0], typeof enumArray[0][1],
                 enumKey, typeof enumValue
-              ));
-            }
+              )));
 
             switch (typeof enumValue) {
               case 'number':
@@ -226,12 +214,14 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
             }
           });
       } else {
+        // old behaviour
+        // TODO: remove in typegoose 7.0
         rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
       }
     }
   }
 
-  const selectOption = rawOptions.select;
+  const selectOption = rawOptions?.select;
   if (typeof selectOption === 'boolean') {
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
@@ -317,7 +307,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   switch (whatis) {
     case WhatIsIt.ARRAY:
       const virtualSchemaArrayItem = buildSchema(Type, {
-        _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true
+        _id: typeof rawOptions?._id === 'boolean' ? rawOptions._id : true
       });
       schemas.get(name)[key] = {
         ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
@@ -340,7 +330,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       return;
     case WhatIsIt.NONE:
       const virtualSchema = buildSchema(Type, {
-        _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true
+        _id: typeof rawOptions?._id === 'boolean' ? rawOptions._id : true
       });
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
@@ -362,9 +352,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
     const Type = Reflect.getMetadata(DecoratorKeys.Type, target, key);
-    if (!Type) {
-      throw new NoMetadataError(key);
-    }
+    assert(!utils.isNullOrUndefined(Type), new NoMetadataError(key));
 
     // soft errors
     {
@@ -394,7 +382,7 @@ export function prop(options: PropOptionsWithValidate = {}) {
  */
 export function mapProp(options: MapPropOptions) {
   return (target: any, key: string) => {
-    const Type = options.of;
+    const Type = options?.of;
 
     if ('items' in options) {
       logger.warn('You might not want to use option "items" in a @mapProp, use @arrayProp (%s.%s)', utils.getName(target), key);
@@ -416,7 +404,7 @@ export function mapProp(options: MapPropOptions) {
  */
 export function arrayProp(options: ArrayPropOptions) {
   return (target: any, key: string) => {
-    const Type = options.items;
+    const Type = options?.items;
 
     if ('of' in options) {
       logger.warn('You might not want to use option "of" in a @arrayProp, use @mapProp (%s.%s)', utils.getName(target), key);

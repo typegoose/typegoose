@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+
 import { model as inheritanceClass, Skyscraper } from '../models/inheritanceClass';
 
 /**
@@ -26,6 +27,7 @@ export function suite() {
       }
     } as Skyscraper;
     const instance = await inheritanceClass.create(input);
+
     expect(instance.mainGarage.slotsForCars).to.equals(3);
     expect(instance.mainGarage.width).to.equals(100);
     // this has an any type assertion, because it shouldnt exists on this type, what is tested here
@@ -39,6 +41,7 @@ export function suite() {
       }]
     } as Skyscraper;
     const instance = await inheritanceClass.create(input);
+
     expect(instance.garagesInArea).to.be.lengthOf(1);
     const firstGarage = instance.garagesInArea.pop();
     expect(firstGarage.slotsForCars).to.equals(2);

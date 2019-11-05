@@ -33,7 +33,7 @@ export async function connect(): Promise<void> {
       dbName: config.DataBase,
       autoIndex: true
     } as mongoose.ConnectionOptions;
-    if (config.Auth.User.length > 0) {
+    if (config?.Auth?.User?.length > 0) {
       Object.assign(options, {
         user: config.Auth.User,
         pass: config.Auth.Passwd,

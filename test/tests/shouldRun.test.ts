@@ -1,5 +1,6 @@
 import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
+
 import { DecoratorKeys } from '../../src/internal/constants';
 import { assignMetadata, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import {
@@ -63,7 +64,6 @@ export function suite() {
   });
 
   it('should make use of addModelToTypegoose', async () => {
-    // addModelToTypegoose
     class TestAMTT {
       @prop({ required: true })
       public somevalue!: string;
@@ -74,6 +74,7 @@ export function suite() {
     schema.add({ somesecondvalue: { type: String, required: true } });
     const model = addModelToTypegoose(mongoose.model(TestAMTT.name, schema), TestAMTT);
     const doc = await model.create({ somevalue: 'hello from SV', somesecondvalue: 'hello from SSV' } as TestAMTT);
+
     expect(doc).to.not.be.an('undefined');
     expect(doc.somevalue).to.equal('hello from SV');
     expect(doc.somesecondvalue).to.equal('hello from SSV');
@@ -153,6 +154,7 @@ export function suite() {
 
     const model = getModelForClass(TESTObject);
     const doc = await model.create({ test: { anotherTest: 'hello' } } as TESTObject);
+
     expect(doc).to.not.be.an('undefined');
     expect(doc.test).to.be.an('object');
     expect(doc.test.anotherTest).to.be.equal('hello');

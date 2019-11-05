@@ -75,7 +75,7 @@ export class User extends defaultClasses.FindOrCreate {
   }
 
   public async incrementAge(this: DocumentType<User>) {
-    const age = this.age || 1;
+    const age = this?.age ?? 1;
     this.age = age + 1;
 
     return this.save();

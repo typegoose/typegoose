@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+
 import { modelOptions } from './optionsProp';
 import { DocumentType, RefType } from './types';
 
