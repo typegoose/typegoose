@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { format, isNullOrUndefined } from 'util';
+import { format } from 'util';
 import { DecoratorKeys } from './internal/constants';
 import { globalOptions, schemas, virtuals } from './internal/data';
 import {
@@ -45,7 +45,7 @@ function baseProp(input: DecoratedPropertyMetadata): void {
   utils.createUniqueID(target);
 
   const existingMapForTarget = Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
-  if (isNullOrUndefined(existingMapForTarget)) {
+  if (utils.isNullOrUndefined(existingMapForTarget)) {
     Reflect.defineMetadata(DecoratorKeys.PropCache, new Map<string, DecoratedPropertyMetadata>(), target);
   }
   const mapForTarget = existingMapForTarget
@@ -71,12 +71,12 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   const rawOptions = Object.assign({}, origOptions);
   logger.debug('Starting to process "%s.%s"', target.constructor.name, key);
 
-  if (!isNullOrUndefined(rawOptions.type)) {
+  if (!utils.isNullOrUndefined(rawOptions.type)) {
     logger.info('Prop Option "type" is set to', rawOptions.type);
     Type = rawOptions.type;
   }
 
-  if (utils.isNotDefined(Type) && isNullOrUndefined(rawOptions.type)) {
+  if (utils.isNotDefined(Type) && utils.isNullOrUndefined(rawOptions.type)) {
     buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
   }
   const name: string = utils.getName(target.constructor);
@@ -100,7 +100,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     utils.initAsObject(name, key);
   }
 
-  if (!isNullOrUndefined(rawOptions.set) || !isNullOrUndefined(rawOptions.get)) {
+  if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
     if (typeof rawOptions.set !== 'function') {
       throw new TypeError(`"${name}.${key}" does not have a set function!`);
     }
@@ -109,7 +109,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     }
 
     const newType = rawOptions && rawOptions.type ? rawOptions.type : Type;
-    if (!isNullOrUndefined(rawOptions && rawOptions.type)) {
+    if (!utils.isNullOrUndefined(rawOptions && rawOptions.type)) {
       delete rawOptions.type;
     }
     /*
@@ -128,7 +128,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   const ref = rawOptions.ref;
   const refType = rawOptions.refType || rawOptions.type || mongoose.Schema.Types.ObjectId;
-  if (!isNullOrUndefined(ref)) {
+  if (!utils.isNullOrUndefined(ref)) {
     delete rawOptions.ref;
     const refName = typeof ref === 'string' ? ref : utils.getName(ref);
 
@@ -191,7 +191,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
 
   const enumOption = rawOptions.enum;
-  if (!isNullOrUndefined(enumOption)) {
+  if (!utils.isNullOrUndefined(enumOption)) {
     if (!Array.isArray(enumOption)) {
       // the following "if" it to not break existing databases
       if (globalOptions.globalOptions && globalOptions.globalOptions.useNewEnum) {
@@ -241,7 +241,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   {
     // check if Type is actually a real working Type
-    if (isNullOrUndefined(Type) || typeof Type !== 'function') {
+    if (utils.isNullOrUndefined(Type) || typeof Type !== 'function') {
       throw new InvalidTypeError(target.constructor.name, key, Type);
     }
 

@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { cloneDeepWith, mergeWith } from 'lodash';
-import { format, isNullOrUndefined } from 'util';
+import { format } from 'util';
 import { logger } from '../logSettings';
 import {
   AnyParamConstructor,
@@ -372,4 +372,12 @@ export function warnMixed(target: any, key: string | symbol): void | never {
   }
 
   return; // always return, if "allowMixed" is not set
+}
+
+/**
+ * Because since node 4.0.0 the internal util.is* functions got deprecated
+ * @param val Any value to test if null or undefined
+ */
+export function isNullOrUndefined(val: unknown): val is null | undefined {
+  return val === null || val === undefined;
 }

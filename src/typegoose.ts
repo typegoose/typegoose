@@ -1,8 +1,9 @@
 /* imports */
+import * as assert from 'assert';
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
-import { deprecate, format, isNullOrUndefined } from 'util';
+import { deprecate, format } from 'util';
 
 /* istanbul ignore next */
 if (semver.lt(mongoose.version, '5.7.7')) {
@@ -14,7 +15,7 @@ import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
-import { getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import { getName, isNullOrUndefined, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
 import {
   AnyParamConstructor,
@@ -80,6 +81,7 @@ export abstract class Typegoose {
  * ```
  */
 export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
+  assert(typeof cl !== 'function', new Error());
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }

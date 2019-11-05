@@ -1,7 +1,6 @@
-import { isNullOrUndefined } from 'util';
 import { DecoratorKeys } from './internal/constants';
 import { globalOptions } from './internal/data';
-import { assignMetadata, getName } from './internal/utils';
+import { assignMetadata, getName, isNullOrUndefined } from './internal/utils';
 import { logger } from './logSettings';
 import { IModelOptions } from './types';
 

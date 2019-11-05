@@ -1,13 +1,12 @@
 import * as mongoose from 'mongoose';
 
-import { isNullOrUndefined } from 'util';
 import { logger } from '../logSettings';
 import { _buildPropMetadata } from '../prop';
 import { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexArray, IModelOptions } from '../types';
 import { DecoratorKeys } from './constants';
 import { hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
-import { getName, mergeSchemaOptions } from './utils';
+import { getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
 /**
  * Private schema builder out of class props

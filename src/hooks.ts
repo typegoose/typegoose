@@ -1,5 +1,4 @@
 import { Query } from 'mongoose';
-import { isArray } from 'util';
 import { hooks as hooksData, IHooks } from './internal/data';
 import { getName } from './internal/utils';
 import { DocumentType } from './typegoose';
@@ -96,7 +95,7 @@ function addToHooks(name: string, hookType: 'pre' | 'post', args: any[]) {
   }
 
   // Convert Method to array if only a string is provided
-  const methods: QDM[] = isArray(args[0]) ? args[0] : [args[0]];
+  const methods: QDM[] = Array.isArray(args[0]) ? args[0] : [args[0]];
   if (typeof args[1] !== 'function') {
     throw new TypeError(`"${name}.${hookType}.${methods.join(' ')}"'s function is not a function!`);
   }
