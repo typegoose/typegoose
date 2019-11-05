@@ -198,28 +198,17 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
             return Number.isNaN(parseInt(enumKey, 10));
           })
           .map(([enumKey, enumValue], i, enumArray) => { // convert key-value pairs to mongoose-useable strings
-            // check if the first entry of an enum has an string assinged and the current not
-            if (typeof enumArray[0][1] !== typeof enumValue) {
-              throw new TypeError(format( // when having an edge case of https://www.typescriptlang.org/docs/handbook/enums.html#heterogeneous-enums
-                'While converting "%s.%s"\'s enum the first property didnt match with the current!'
-                + ' (first property (%s): "%s", current property (%s): "%s")',
+            if (typeof enumValue !== 'string') { // disallow the use of enums that dont have strings associated with them
+              throw new TypeError(format(
+                'All Enums supplied to @prop must have strings associated with them!\n'
+                + 'Encountered at "%s.%s", with property: %s.%s',
                 utils.getName(target.constructor),
                 key,
-                enumArray[0][0], typeof enumArray[0][1],
                 enumKey, typeof enumValue
               ));
             }
 
-            switch (typeof enumValue) {
-              case 'number':
-                return enumKey;
-              case 'string':
-                return enumValue;
-              default: // sanity check, this should never happen naturally
-                throw new Error(
-                  format('Somehow an type that is not a string or number got into an enum (%s.%s)', utils.getName(target.constructor), key)
-                );
-            }
+            return enumValue;
           });
       } else {
         // old behaviour

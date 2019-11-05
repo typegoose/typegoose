@@ -123,32 +123,6 @@ export function suite() {
     expect(optionEnum).to.be.deep.equal(['Hello 1', 'Hello 2']);
   });
 
-  it('should make array of enum (auto number)', async () => {
-    enum AutoNumberEnum {
-      Hi,
-      Hi2
-    }
-
-    class AutoNumberClass {
-      @prop({ enum: AutoNumberEnum, type: String })
-      public autonumber: AutoNumberEnum;
-    }
-
-    const model = getModelForClass(AutoNumberClass);
-    expect(model).to.not.be.equal(undefined);
-
-    const autoNumberPath = model.schema.path('autonumber');
-    expect(autoNumberPath).to.be.an.instanceOf(mongoose.Schema.Types.String);
-
-    const optionEnum: [string, unknown] = (autoNumberPath as any).options.enum;
-    expect(optionEnum).to.be.deep.equal(['Hi', 'Hi2']);
-
-    // TODO: re-enable this
-    // const doc = new model({ autonumber: AutoNumberEnum.Hi2 } as AutoNumberClass);
-    // expect(doc).to.not.be.equal(undefined);
-    // expect(doc.autonumber).to.be.equal('Hi2');
-  });
-
   it('should work with Objects in Class [szokodiakos#54]', async () => {
     class TESTObject {
       @prop()

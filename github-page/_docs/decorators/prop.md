@@ -319,7 +319,7 @@ Accepts Type: `enum | any[]`
 
 Only allow Values from the enum (best practice is to use TypeScript's enum)
 
--> Please know that mongoose only allows enums when the type is a `String`
+-> Please know that mongoose currently only allows enums when the type is a `String`
 
 ```ts
 enum Gender {
@@ -333,15 +333,25 @@ class Enumed {
 }
 ```
 
-Typegoose automaticly converts enums to mongoose useable "enums":
+Typegoose disallows enums that dont have strings associated with them (only with the new behaviour)
+-> Reason, image the following example:
 
 ```ts
-enum SomeThing {
-  SOMEONE,
-  SOMETHING
+// imaginge having this enum
+enum Here {
+  Here1,
+  Here2,
+  Here3
 }
-// to
-["SOMEONE", "SOMETHING"]
+// it would compile down to ["Here1", "Here2", "Here3"] to be mongoose use-able
+class SomeClass {
+  @prop({ enum: Here, type: String })
+  public somestring: Here;
+}
+
+const SomeClassModel = getModelForClass(SomeClass);
+const doc = new SomeClassModel({ somestring: Here.Here2 }) // you would expect to be "Here2" right? wrong, it would use the number 1
+// which *could* be used, BUT it could be very inaccurate OR when chaning an enum, it would invalidate the whole collection
 ```
 
 and when `globalOptions.globalOptions.useNewEnum` is activated, typegoose will convert the following:

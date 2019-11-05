@@ -422,7 +422,7 @@ export function suite() {
     }
   });
 
-  it('should fail when using an Heterogeneous enum [TypeError]', () => {
+  it('should fail when using an enum that has at least one property not with a string associated [TypeError]', () => {
     try {
       enum HeterogeneousEnum {
         One = 0,
