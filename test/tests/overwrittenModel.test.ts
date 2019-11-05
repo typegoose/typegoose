@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+
 import { deleteModel, deleteModelWithClass, getModelForClass } from '../../src/typegoose';
 import { NormalUser, OverwrittenUser } from './../models/overwrittenUser';
 

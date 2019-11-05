@@ -1,6 +1,7 @@
 language: node_js
 node_js: [
   # check Latest
+  13,
   12,
   # check LTS
   10,

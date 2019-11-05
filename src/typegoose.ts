@@ -1,5 +1,4 @@
 /* imports */
-import * as assert from 'assert';
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
@@ -10,12 +9,16 @@ if (semver.lt(mongoose.version, '5.7.7')) {
   throw new Error('Please use mongoose 5.7.7 or higher');
 }
 
+if (semver.lt(process.version.slice(1), '8.10.0')) {
+  logger.warn('You are using a NodeJS Version below 8.10.0, Please Upgrade!');
+}
+
 import * as defaultClasses from './defaultClasses';
 import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
-import { getName, isNullOrUndefined, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import { getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
 import {
   AnyParamConstructor,
@@ -81,7 +84,6 @@ export abstract class Typegoose {
  * ```
  */
 export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
-  assert(typeof cl !== 'function', new Error());
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
@@ -90,22 +92,19 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
   const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
   const name = getName(cl);
 
-  if (models.get(name)) {
+  if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
 
-  let model = mongoose.model.bind(mongoose);
-  if (!isNullOrUndefined(roptions.existingConnection)) {
-    model = roptions.existingConnection.model.bind(roptions.existingConnection);
-  } else if (!isNullOrUndefined(roptions.existingMongoose)) {
-    model = roptions.existingMongoose.model.bind(roptions.existingMongoose);
-  }
+  const model = roptions?.existingConnection?.model.bind(roptions.existingConnection)
+    ?? roptions?.existingMongoose?.model.bind(roptions.existingMongoose)
+    ?? mongoose.model.bind(mongoose);
 
   const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions));
-  const refetchedOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions || {};
+  const refetchedOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions ?? {};
 
-  if (refetchedOptions && refetchedOptions.options && refetchedOptions.options.runSyncIndexes) {
-    compiledmodel.syncIndexes({}); // the "{}" is because @types/mongoose dosnt allow it without ...
+  if (refetchedOptions?.options?.runSyncIndexes) {
+    compiledmodel.syncIndexes();
   }
 
   return addModelToTypegoose(compiledmodel, cl);
@@ -141,7 +140,7 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   // iterate trough all parents
-  while (parentCtor && parentCtor.name !== 'Object') {
+  while (parentCtor?.name !== 'Object') {
     /* istanbul ignore next */
     if (parentCtor.name === 'Typegoose') { // TODO: remove this "if", if the Typegoose class gets removed [DEPRECATION]
       deprecate(() => undefined, 'The Typegoose Class is deprecated, please try to remove it')();
@@ -183,9 +182,9 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
 
   const name = getName(cl);
 
-  if (constructors.get(name)) {
+  if (constructors.has(name)) {
     throw new Error(format('It seems like "addModelToTypegoose" got called twice\n'
-      + 'Or multiple classes with the same name are used, which currently isnt supported!'
+      + 'Or multiple classes with the same name are used, which is not supported!'
       + '(%s)', name));
   }
 
@@ -205,12 +204,11 @@ export function deleteModel(name: string) {
   if (typeof name !== 'string') {
     throw new TypeError('name is not an string! (deleteModel)');
   }
-
-  logger.debug('Deleting Model "%s"', name);
-
   if (!models.has(name)) {
     throw new Error(`Model "${name}" could not be found`);
   }
+
+  logger.debug('Deleting Model "%s"', name);
 
   mongoose.connection.deleteModel(name);
   models.delete(name);
@@ -248,8 +246,15 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
   cl: U,
   id?: string
 ) {
+  if (!(from.prototype instanceof mongoose.Model)) {
+    throw new TypeError(`"${from}" is not a valid Model!`);
+  }
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
+
   const name = getName(cl);
-  if (models.get(name)) {
+  if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
   const sch = buildSchema(cl) as mongoose.Schema & { paths: object };

@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+
 import { globalOptions } from '../../src/internal/data';
 import { setGlobalOptions } from '../../src/typegoose';
 import { Severity } from '../../src/types';

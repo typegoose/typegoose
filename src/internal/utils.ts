@@ -1,7 +1,7 @@
-import * as mongoose from 'mongoose';
-
 import { cloneDeepWith, mergeWith } from 'lodash';
+import * as mongoose from 'mongoose';
 import { format } from 'util';
+
 import { logger } from '../logSettings';
 import {
   AnyParamConstructor,
@@ -9,7 +9,8 @@ import {
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
   Severity,
-  VirtualOptions
+  VirtualOptions,
+  WhatIsIt
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
@@ -39,7 +40,7 @@ export function isPrimitive(Type: any): boolean {
  * @returns true, if it is an Object
  */
 export function isObject(Type: any): boolean {
-  if (typeof Type.name === 'string') {
+  if (typeof Type?.name === 'string') {
     let prototype = Type.prototype;
     let name = Type.name;
     while (name) {
@@ -47,7 +48,7 @@ export function isObject(Type: any): boolean {
         return true;
       }
       prototype = Object.getPrototypeOf(prototype);
-      name = prototype ? prototype.constructor.name : null;
+      name = prototype?.constructor.name;
     }
   }
 
@@ -60,7 +61,7 @@ export function isObject(Type: any): boolean {
  * @returns true, if it is an Number
  */
 export function isNumber(Type: any): Type is number {
-  return Type.name === 'Number';
+  return Type?.name === 'Number';
 }
 
 /**
@@ -69,31 +70,31 @@ export function isNumber(Type: any): Type is number {
  * @returns true, if it is an String
  */
 export function isString(Type: any): Type is string {
-  return Type.name === 'String';
+  return Type?.name === 'String';
 }
 
 /**
- * Initialize as Object
- * @param name The Name of the Schema
- * @param key The Property key to set
+ * Initialize the property in the schemas Map
+ * @param name Name of the current Model/Class
+ * @param key Key of the property
+ * @param whatis What should it be for a type?
  */
-export function initAsObject(name: string, key: string): void {
-  if (!schemas.get(name)) {
+export function initProperty(name: string, key: string, whatis: WhatIsIt) {
+  if (!schemas.has(name)) {
     schemas.set(name, {});
   }
-  schemas.get(name)[key] = {};
-}
 
-/**
- * Initialize as Array
- * @param name The Name of the Schema
- * @param key The Property key to set
- */
-export function initAsArray(name: string, key: string): void {
-  if (!schemas.get(name)) {
-    schemas.set(name, {});
+  switch (whatis) {
+    case WhatIsIt.ARRAY:
+      schemas.get(name)[key] = [{}];
+      break;
+    case WhatIsIt.MAP:
+    case WhatIsIt.NONE:
+      schemas.get(name)[key] = {};
+      break;
+    default:
+      throw new TypeError('"whatis" is not supplied OR dosnt have a case yet!');
   }
-  schemas.get(name)[key] = [{}];
 }
 
 /**
@@ -114,10 +115,10 @@ export function isWithStringValidate(
   options: PropOptionsWithStringValidate
 ): options is PropOptionsWithStringValidate {
   return !isNullOrUndefined(
-    options.match
-    || options.enum
-    || options.minlength
-    || options.maxlength
+    options?.match
+    ?? options?.enum
+    ?? options?.minlength
+    ?? options?.maxlength
   );
 }
 
@@ -128,7 +129,7 @@ export function isWithStringValidate(
 export function isWithStringTransform(
   options: PropOptionsWithStringValidate
 ): options is PropOptionsWithStringValidate {
-  return !isNullOrUndefined(options.lowercase || options.uppercase || options.trim);
+  return !isNullOrUndefined(options.lowercase ?? options.uppercase ?? options.trim);
 }
 
 /**
@@ -136,7 +137,7 @@ export function isWithStringTransform(
  * @param options The raw Options
  */
 export function isWithNumberValidate(options: PropOptionsWithNumberValidate): options is PropOptionsWithNumberValidate {
-  return !isNullOrUndefined(options.min || options.max);
+  return !isNullOrUndefined(options.min ?? options.max);
 }
 
 const virtualOptions = ['localField', 'foreignField'];
@@ -196,7 +197,7 @@ export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: n
   }
 
   // Please dont remove the other values from the function, even when unused - it is made to be clear what is what
-  const current = cloneDeepWith(Reflect.getMetadata(key, cl) || {}, (val, ckey, obj, stack) => customMerger(key, val));
+  const current = cloneDeepWith(Reflect.getMetadata(key, cl) ?? {}, (val, ckey, obj, stack) => customMerger(key, val));
 
   return mergeWith({}, current, value,
     (objValue, srcValue, ckey, object, source, stack) => customMerger(key, srcValue));
@@ -233,17 +234,16 @@ export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: m
  * @param cl The Class
  */
 export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
-  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) ?? {};
   const baseName = cl.name;
 
   if (options.options && options.options.automaticName) {
-    const suffix = (options.options ? options.options.customName : undefined) ||
-      (options.schemaOptions ? options.schemaOptions.collection : undefined);
+    const suffix = options?.options?.customName ?? options?.schemaOptions?.collection;
 
-    return suffix ? `${baseName}_${suffix}` : baseName;
+    return !isNullOrUndefined(suffix) ? `${baseName}_${suffix}` : baseName;
   }
 
-  if (options.options && typeof options.options.customName === 'string') {
+  if (typeof options?.options?.customName === 'string') {
     if (options.options.customName.length <= 0) {
       throw new TypeError(`"customName" must be a string AND at least one character ("${cl.name}")`);
     }
@@ -304,7 +304,9 @@ export function mapArrayOptions(
     if (Type === mongoose.Schema.Types.Mixed) {
       warnMixed(target, pkey);
     }
-  } else if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
+  }
+
+  if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
     throw new TypeError('Type does not have an valid "OptionsConstructor"!');
   }
 
@@ -331,12 +333,12 @@ export function mapArrayOptions(
     logger.info('The Type "%s" does not have an OptionsConstructor', getName(Type));
   }
 
-  if (typeof options.innerOptions === 'object') {
+  if (typeof options?.innerOptions === 'object') {
     for (const [key, value] of Object.entries(options.innerOptions)) {
       returnObject.type[0][key] = value;
     }
   }
-  if (typeof options.outerOptions === 'object') {
+  if (typeof options?.outerOptions === 'object') {
     for (const [key, value] of Object.entries(options.outerOptions)) {
       returnObject[key] = value;
     }
@@ -355,23 +357,21 @@ export function mapArrayOptions(
  */
 export function warnMixed(target: any, key: string | symbol): void | never {
   const name = getName(target);
-  const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, target) || {};
+  const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, target) ?? {};
 
-  if (modelOptions.options) {
-    switch (modelOptions.options.allowMixed) {
-      default:
-      case Severity.WARN:
-        logger.warn('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key);
+  switch (modelOptions?.options?.allowMixed) {
+    default:
+    case Severity.WARN:
+      logger.warn('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key);
 
-        return;
-      case Severity.ALLOW:
-        return;
-      case Severity.ERROR:
-        throw new TypeError(format('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key));
-    }
+      break;
+    case Severity.ALLOW:
+      break;
+    case Severity.ERROR:
+      throw new TypeError(format('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key));
   }
 
-  return; // always return, if "allowMixed" is not set
+  return; // always return, if "allowMixed" is not "ERROR"
 }
 
 /**

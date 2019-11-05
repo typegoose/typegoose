@@ -120,35 +120,33 @@ export function suite() {
   });
 
   it('Should support dynamic references via refPath', async () => {
-    const sprite = new Beverage({
+    const sprite = await Beverage.create({
       isDecaf: true,
       isSugarFree: false
     });
-    await sprite.save();
 
-    await new Beverage({
+    await Beverage.create({
       isDecaf: false,
       isSugarFree: true
-    }).save();
+    });
 
-    const vespa = new Scooter({
+    const vespa = await Scooter.create({
       makeAndModel: 'Vespa'
     });
-    await vespa.save();
 
-    await new Inventory({
+    await Inventory.create({
       refItemPathName: 'Beverage',
       kind: sprite,
       count: 10,
       value: 1.99
-    }).save();
+    });
 
-    await new Inventory({
+    await Inventory.create({
       refItemPathName: 'Scooter',
       kind: vespa,
       count: 1,
       value: 1099.98
-    }).save();
+    });
 
     // I should now have two "inventory" items, with different embedded reference documents.
     const items = await Inventory.find({}).populate('kind').exec();

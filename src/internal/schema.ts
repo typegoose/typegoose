@@ -27,7 +27,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   }
 
   // Options sanity check
-  opt = mergeSchemaOptions(isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt, cl);
+  opt = mergeSchemaOptions((isNullOrUndefined(opt) || typeof opt !== 'object') ? {} : opt, cl);
 
   const name = getName(cl);
 
@@ -35,8 +35,8 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   /** Simplify the usage */
   const Schema = mongoose.Schema;
-  const { schemaOptions: ropt }: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
-  const schemaOptions = Object.assign(ropt || {}, opt);
+  const ropt: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) ?? {};
+  const schemaOptions = Object.assign(ropt?.schemaOptions ?? {}, opt);
 
   const decorators = Reflect.getMetadata(DecoratorKeys.PropCache, cl.prototype) as DecoratedPropertyMetadataMap;
 
@@ -46,7 +46,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
     }
   }
 
-  if (!schemas.get(name)) {
+  if (!schemas.has(name)) {
     schemas.set(name, {});
   }
 
@@ -61,14 +61,12 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   const hook = hooks.get(name);
   if (!isNullOrUndefined(hook)) {
-    hook.pre.forEach((obj) => {
-      sch.pre(obj.method, obj.func as EmptyVoidFn);
-    });
+    hook.pre.forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
 
     hook.post.forEach((obj) => sch.post(obj.method, obj.func));
   }
 
-  if (plugins.get(name)) {
+  if (plugins.has(name)) {
     for (const plugin of plugins.get(name)) {
       logger.debug('Applying Plugin:', plugin);
       sch.plugin(plugin.mongoosePlugin, plugin.options);
@@ -85,8 +83,8 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   }
 
   /** Get Metadata for indices */
-  const indices: IIndexArray<any>[] = Reflect.getMetadata(DecoratorKeys.Index, cl) || [];
-  if (!isNullOrUndefined(indices) && Array.isArray(indices)) {
+  const indices: IIndexArray<any>[] = Reflect.getMetadata(DecoratorKeys.Index, cl);
+  if (Array.isArray(indices)) {
     for (const index of indices) {
       logger.debug('Applying Index:', index);
       sch.index(index.fields, index.options);

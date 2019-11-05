@@ -1,4 +1,5 @@
 import { Query } from 'mongoose';
+
 import { hooks as hooksData, IHooks } from './internal/data';
 import { getName } from './internal/utils';
 import { DocumentType } from './typegoose';
@@ -87,7 +88,7 @@ const hooks: Hooks = {
  * @param args All Arguments, that should be passed-throught
  */
 function addToHooks(name: string, hookType: 'pre' | 'post', args: any[]) {
-  if (!hooksData.get(name)) {
+  if (!hooksData.has(name)) {
     hooksData.set(name, {
       post: [],
       pre: []

@@ -14,21 +14,27 @@ redirect_from:
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 ETA: 5~7th November
 
+- Update Dependencies
+  - Upgrade mongoose from 5.7.1 to 5.7.8
+  - [IC] Upgrade Typescript from 3.6.x to 3.7.2
 - Completly remove `@staticMethod` & `@instanceMethod`, because they were completly obsolete
 - README now has no documentation anymore
 - `@prop({ validate })` now accepts `{ validator, message }` as an array
-- Add function "deleteModel" & "deleteModelWithClass"
+- Add function `deleteModel` & `deleteModelWithClass`
 - allow Prop Option "type" to overwrite the inferred type [look here for an example](https://typegoose.github.io/typegoose/docs/decorators/prop/#type)
 - integrate "Array Validators & Transform" tests {% include gitissue repo="typegoose" num=29 %}
 - adding global options, with `setGlobalOptions`
 - add modelOption `runSyncIndexes`
 - add modelOption `allowMixed`
 - add `text` to PropOptions
-- deprecate ArrayPropOptions's "itemsRef", "itemsRefPath" & "itemsRefType"
+- deprecate ArrayPropOptions's `itemsRef`, `itemsRefPath` & `itemsRefType`
 - `DocumentType` will now overwrite the type of `_id` if the class is extending `Base` (in typescript there is currently no other way)
 - add `tslib` as dependencie to minimize generated code
 - fixing typo in (deprecated) `setModelForClass`
 - Remake how Enums are handeled, use `setGlobalOptions({ globalOptions: { useNewEnum: true } })` (to not break existing databases made with the old handling)
+- [IC] combine `initAsObject` and `initAsArray` into `initProperty`
+- [IC] Use internal "isNullOrUndefined", needed because all "util.is*" functions got deprecated in node 4.0.0
+- [IC] Replace all "isArray" with "Array.isArray", needed because all "util.is*" functions got deprecated in node 4.0.0
 - [IC] adding many sanity `isNullOrUndefined` checks
 - [IC] Re-done how the handling of `Mixed` is done
 - [IC] Re-done how `IModelOptions` are merged (thanks to lodash `cloneDeepWith` & `mergeWith`)

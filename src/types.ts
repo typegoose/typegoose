@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+
 import { Base } from './defaultClasses';
 
 /**

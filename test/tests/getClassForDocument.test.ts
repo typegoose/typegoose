@@ -1,7 +1,7 @@
+import { fail } from 'assert';
 import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { fail } from 'assert';
 import { getClassForDocument } from '../../src/internal/utils';
 import { Genders } from '../enums/genders';
 import { Car as CarType, model as Car } from '../models/car';
