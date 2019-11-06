@@ -213,6 +213,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       } else {
         // old behaviour
         // TODO: remove in typegoose 7.0
+        logger.warn('Old Enum Behaviour is used, please upgrade to the new one');
         rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
       }
     }
