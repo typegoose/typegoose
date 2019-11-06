@@ -32,6 +32,9 @@ ETA: 5~7th November
 - add `tslib` as dependencie to minimize generated code
 - fixing typo in (deprecated) `setModelForClass`
 - Remake how Enums are handeled, use `setGlobalOptions({ globalOptions: { useNewEnum: true } })` (to not break existing databases made with the old handling)
+- add function `getModelWithString`
+- [IC] tsconfig: add option "strictBindCallApply"
+- [IC] tsconfig: add option "strictFunctionTypes"
 - [IC] combine `initAsObject` and `initAsArray` into `initProperty`
 - [IC] Use internal "isNullOrUndefined", needed because all "util.is*" functions got deprecated in node 4.0.0
 - [IC] Replace all "isArray" with "Array.isArray", needed because all "util.is*" functions got deprecated in node 4.0.0

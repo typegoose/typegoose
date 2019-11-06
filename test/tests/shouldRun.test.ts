@@ -10,6 +10,7 @@ import {
   DocumentType,
   getDiscriminatorModelForClass,
   getModelForClass,
+  getModelWithString,
   mapProp,
   modelOptions,
   prop
@@ -337,5 +338,25 @@ export function suite() {
 
     expect(refSOBase.schemaOptions.collection).to.not.equal(refSOInheritedBase.schemaOptions.collection);
     expect(refSOBase).to.not.deep.equal(refSOInheritedBase);
+  });
+
+  it('should return the correct model "getModelWithString"', () => {
+    class GetModelWithStringClass {
+      @prop()
+      public hi: string;
+    }
+
+    const model = getModelForClass(GetModelWithStringClass);
+    const gotModel = getModelWithString<typeof GetModelWithStringClass>(model.modelName);
+
+    expect(model).to.not.be.equal(undefined);
+    expect(gotModel).to.not.be.equal(undefined);
+    expect(gotModel).to.deep.equal(model);
+  });
+
+  it('should return undefined if model does not exists (getModelWithString)', () => {
+    const type = getModelWithString('someTestyString');
+
+    expect(type).to.equal(undefined);
   });
 }

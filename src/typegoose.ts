@@ -54,19 +54,19 @@ export abstract class Typegoose {
   /* istanbul ignore next */
   /** @deprecated */
   public getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
-    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!')(cl);
+    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!');
   }
 
   /* istanbul ignore next */
   /** @deprecated */
   public setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
-    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!')(cl);
+    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!');
   }
 
   /* istanbul ignore next */
   /** @deprecated */
   public buildSchema<T, U extends AnyParamConstructor<T>>(cl: U) {
-    return deprecate(buildSchema, 'Typegoose Class is Deprecated!')(cl);
+    return deprecate(buildSchema.bind(undefined, cl), 'Typegoose Class is Deprecated!');
   }
 }
 
@@ -108,6 +108,18 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
   }
 
   return addModelToTypegoose(compiledmodel, cl);
+}
+
+/**
+ * Get Model from internal cache
+ * @param key ModelName key
+ */
+export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
+  if (typeof key !== 'string') {
+    throw new TypeError(format('Expected "key" to be a string, got "%s"', key));
+  }
+
+  return models.get(key) as any;
 }
 
 /* istanbul ignore next */

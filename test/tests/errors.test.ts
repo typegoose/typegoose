@@ -22,6 +22,7 @@ import {
   deleteModelWithClass,
   getDiscriminatorModelForClass,
   getModelForClass,
+  getModelWithString,
   modelOptions,
   setGlobalOptions
 } from '../../src/typegoose';
@@ -446,6 +447,16 @@ export function suite() {
     try {
       // @ts-ignore
       getDiscriminatorModelForClass(true);
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if no valid key is supplied to "getModelWithString" [TypeError]', () => {
+    try {
+      // @ts-ignore
+      getModelWithString(true);
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(TypeError);
