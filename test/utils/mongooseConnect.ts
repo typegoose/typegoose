@@ -12,27 +12,37 @@ if (config.Memory) {
 
 /** is it the First time connecting in this test run? */
 let isFirst = true;
+
+interface ExtraConnectionConfig {
+  dbName?: string;
+  createNewConnection?: boolean;
+}
+
+// to not duplicate code
+const staticOptions = {
+  useNewUrlParser: true,
+  useFindAndModify: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+  autoIndex: true
+} as mongoose.ConnectionOptions;
+
 /**
  * Make a Connection to MongoDB
  */
-export async function connect(): Promise<void> {
+export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<mongoose.Connection> {
+  let connection: mongoose.Connection;
+
   if (config.Memory) {
-    await mongoose.connect(await instance.getConnectionString(), {
-      useNewUrlParser: true,
-      useFindAndModify: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      autoIndex: true
-    });
+    // use in-memory-engine
+    if (extraConfig.createNewConnection) {
+      connection = mongoose.createConnection(await instance.getConnectionString(extraConfig.dbName), staticOptions);
+    }
+
+    await mongoose.connect(await instance.getConnectionString(extraConfig?.dbName), staticOptions);
   } else {
-    const options = {
-      useNewUrlParser: true,
-      useFindAndModify: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      dbName: config.DataBase,
-      autoIndex: true
-    } as mongoose.ConnectionOptions;
+    // use external already running database
+    const options = Object.assign({}, staticOptions);
     if (config?.Auth?.User?.length > 0) {
       Object.assign(options, {
         user: config.Auth.User,
@@ -40,14 +50,22 @@ export async function connect(): Promise<void> {
         authSource: config.Auth.DB
       });
     }
-    await mongoose.connect(`mongodb://${config.IP}:${config.Port}/`, options);
+
+    // to not duplicate code
+    const connectionString = `mongodb://${config.IP}:${config.Port}/${extraConfig.dbName ?? config.DataBase}`;
+
+    if (extraConfig.createNewConnection) {
+      connection = mongoose.createConnection(connectionString, options);
+    } else {
+      await mongoose.connect(connectionString, options);
+    }
   }
 
   if (isFirst) {
-    return await firstConnect();
+    await firstConnect();
   }
 
-  return;
+  return connection ?? mongoose.connection;
 }
 
 /**
