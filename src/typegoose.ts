@@ -222,7 +222,11 @@ export function deleteModel(name: string) {
 
   logger.debug('Deleting Model "%s"', name);
 
-  mongoose.connection.deleteModel(name);
+  mongoose.connections.forEach((connection) => {
+    if (connection.models[name]) {
+      connection.deleteModel(name);
+    }
+  });
   models.delete(name);
   constructors.delete(name);
 }
