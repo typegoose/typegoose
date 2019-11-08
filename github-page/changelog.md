@@ -9,13 +9,12 @@ redirect_from:
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
-<!--
 ## 6.1.1
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
-- 
--->
+- `deleteModel` now deletes the model from the connection it is on {% include gitissue repo="typegoose" num=119 %}
+- [IC] de-duplicate test code for connecting
 
 ## 6.1.0
 
