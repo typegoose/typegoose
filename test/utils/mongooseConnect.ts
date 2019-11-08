@@ -12,18 +12,35 @@ if (config.Memory) {
 
 /** is it the First time connecting in this test run? */
 let isFirst = true;
+
+interface ExtraConnectionConfig {
+  dbName?: string;
+  createNewConnection?: boolean;
+}
+
 /**
  * Make a Connection to MongoDB
  */
-export async function connect(): Promise<void> {
+export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<mongoose.Connection> {
   if (config.Memory) {
-    await mongoose.connect(await instance.getConnectionString(), {
+    if (extraConfig.createNewConnection) {
+      return mongoose.createConnection(await instance.getConnectionString(extraConfig.dbName), {
+        useNewUrlParser: true,
+        useFindAndModify: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+        autoIndex: true
+      });
+    }
+
+    await mongoose.connect(await instance.getConnectionString(extraConfig.dbName), {
       useNewUrlParser: true,
       useFindAndModify: true,
       useCreateIndex: true,
       useUnifiedTopology: true,
       autoIndex: true
     });
+
   } else {
     const options = {
       useNewUrlParser: true,
@@ -44,10 +61,10 @@ export async function connect(): Promise<void> {
   }
 
   if (isFirst) {
-    return await firstConnect();
+    await firstConnect();
   }
 
-  return;
+  return mongoose.connection;
 }
 
 /**
