@@ -22,9 +22,11 @@ interface ExtraConnectionConfig {
  * Make a Connection to MongoDB
  */
 export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<mongoose.Connection> {
+  let connection;
+
   if (config.Memory) {
     if (extraConfig.createNewConnection) {
-      return mongoose.createConnection(await instance.getConnectionString(extraConfig.dbName), {
+      connection = mongoose.createConnection(await instance.getConnectionString(extraConfig.dbName), {
         useNewUrlParser: true,
         useFindAndModify: true,
         useCreateIndex: true,
@@ -57,14 +59,19 @@ export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<
         authSource: config.Auth.DB
       });
     }
-    await mongoose.connect(`mongodb://${config.IP}:${config.Port}/`, options);
+
+    if (extraConfig.createNewConnection) {
+      connection = mongoose.createConnection(`mongodb://${config.IP}:${config.Port}/${extraConfig.dbName || ''}`, options);
+    } else {
+      await mongoose.connect(`mongodb://${config.IP}:${config.Port}/${extraConfig.dbName || ''}`, options);
+    }
   }
 
   if (isFirst) {
     await firstConnect();
   }
 
-  return mongoose.connection;
+  return connection || mongoose.connection;
 }
 
 /**
