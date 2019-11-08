@@ -91,9 +91,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
     }
   }
 
-  Object.defineProperty(sch, 'typegooseName', { value: name, writable: true });
-
-  sch.virtual('typegooseName').get(() => {
+  sch.method('typegooseName', () => {
     return name;
   });
 

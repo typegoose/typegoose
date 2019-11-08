@@ -6,6 +6,8 @@ import { logger } from '../logSettings';
 import {
   AnyParamConstructor,
   IModelOptions,
+  IObjectWithTypegooseFunction,
+  IObjectWithTypegooseName,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
   Severity,
@@ -107,24 +109,27 @@ export function getClassForDocument(document: mongoose.Document): NewableFunctio
   return constructors.get(modelName);
 }
 
-export function getClassForSchema(schema: mongoose.Schema & { typegooseName: string }): NewableFunction | undefined {
-  if (!(schema instanceof mongoose.Schema)) {
-    throw new TypeError('Given input is not a Schema!');
+/**
+ * Get the Class for a given Schema
+ * @param input
+ */
+export function getClass(
+  input: mongoose.Document & IObjectWithTypegooseFunction
+    | mongoose.Schema.Types.Embedded & IObjectWithTypegooseFunction
+    | string | IObjectWithTypegooseName | any
+): NewableFunction | undefined {
+  if (typeof input === 'string') {
+    return constructors.get(input);
   }
-  if (isNullOrUndefined(schema.typegooseName)) {
-    logger.warn('Given Schema does not have a typegooseName!');
-
-    return undefined;
+  if (typeof input?.typegooseName === 'string') {
+    return constructors.get(input.typegooseName);
   }
-  const schemaName: string = (schema as any).typegooseName;
 
-  return constructors.get(schemaName);
-}
+  if (typeof input?.typegooseName === 'function') {
+    return constructors.get(input.typegooseName());
+  }
 
-export function getClassForName(obj: string | { typegooseName: string }): NewableFunction | undefined {
-  const name = typeof obj === 'string' ? obj : !isNullOrUndefined(obj.typegooseName) ? obj.typegooseName : undefined;
-
-  return constructors.get(name);
+  throw new ReferenceError('Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string');
 }
 
 /**
