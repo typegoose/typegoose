@@ -18,39 +18,31 @@ interface ExtraConnectionConfig {
   createNewConnection?: boolean;
 }
 
+// to not duplicate code
+const staticOptions = {
+  useNewUrlParser: true,
+  useFindAndModify: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+  autoIndex: true
+} as mongoose.ConnectionOptions;
+
 /**
  * Make a Connection to MongoDB
  */
 export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<mongoose.Connection> {
-  let connection;
+  let connection: mongoose.Connection;
 
   if (config.Memory) {
+    // use in-memory-engine
     if (extraConfig.createNewConnection) {
-      connection = mongoose.createConnection(await instance.getConnectionString(extraConfig.dbName), {
-        useNewUrlParser: true,
-        useFindAndModify: true,
-        useCreateIndex: true,
-        useUnifiedTopology: true,
-        autoIndex: true
-      });
+      connection = mongoose.createConnection(await instance.getConnectionString(extraConfig.dbName), staticOptions);
     }
 
-    await mongoose.connect(await instance.getConnectionString(extraConfig.dbName), {
-      useNewUrlParser: true,
-      useFindAndModify: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      autoIndex: true
-    });
+    await mongoose.connect(await instance.getConnectionString(extraConfig?.dbName), staticOptions);
   } else {
-    const options = {
-      useNewUrlParser: true,
-      useFindAndModify: true,
-      useCreateIndex: true,
-      useUnifiedTopology: true,
-      dbName: config.DataBase,
-      autoIndex: true
-    } as mongoose.ConnectionOptions;
+    // use external already running database
+    const options = Object.assign({}, staticOptions);
     if (config?.Auth?.User?.length > 0) {
       Object.assign(options, {
         user: config.Auth.User,
@@ -59,10 +51,13 @@ export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<
       });
     }
 
+    // to not duplicate code
+    const connectionString = `mongodb://${config.IP}:${config.Port}/${extraConfig.dbName ?? config.DataBase}`;
+
     if (extraConfig.createNewConnection) {
-      connection = mongoose.createConnection(`mongodb://${config.IP}:${config.Port}/${extraConfig.dbName || ''}`, options);
+      connection = mongoose.createConnection(connectionString, options);
     } else {
-      await mongoose.connect(`mongodb://${config.IP}:${config.Port}/${extraConfig.dbName || ''}`, options);
+      await mongoose.connect(connectionString, options);
     }
   }
 
@@ -70,7 +65,7 @@ export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<
     await firstConnect();
   }
 
-  return connection || mongoose.connection;
+  return connection ?? mongoose.connection;
 }
 
 /**
