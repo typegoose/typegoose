@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 
 import { deleteModel, deleteModelWithClass, getModelForClass } from '../../src/typegoose';
+import { connect } from '../utils/mongooseConnect';
 import { NormalUser, OverwrittenUser } from './../models/overwrittenUser';
 
 /**
@@ -48,5 +49,14 @@ export function suite() {
     expect(overwrittenUserModel).not.be.equal(model);
 
     deleteModelWithClass(OverwrittenUser);
+  });
+
+  it('Should delete model from different connection', async () => {
+    const connection = await connect({dbName: 'anotherDB', createNewConnection: true});
+    const model = getModelForClass(NormalUser, {existingConnection:connection});
+    expect(model.modelName).to.equal('NormalUser');
+
+    await deleteModelWithClass(NormalUser);
+    expect(connection.models.NormalUser).to.be.undefined;
   });
 }
