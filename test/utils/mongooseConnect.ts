@@ -42,7 +42,6 @@ export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<
       useUnifiedTopology: true,
       autoIndex: true
     });
-
   } else {
     const options = {
       useNewUrlParser: true,

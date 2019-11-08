@@ -52,11 +52,11 @@ export function suite() {
   });
 
   it('Should delete model from different connection', async () => {
-    const connection = await connect({dbName: 'anotherDB', createNewConnection: true});
-    const model = getModelForClass(NormalUser, {existingConnection:connection});
+    const connection = await connect({ dbName: 'anotherDB', createNewConnection: true });
+    const model = getModelForClass(NormalUser, { existingConnection: connection });
     expect(model.modelName).to.equal('NormalUser');
 
-    await deleteModelWithClass(NormalUser);
-    expect(connection.models.NormalUser).to.be.undefined;
+    deleteModelWithClass(NormalUser);
+    expect(connection.models.NormalUser).to.equal(undefined);
   });
 }
