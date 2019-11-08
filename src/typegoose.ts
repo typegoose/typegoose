@@ -222,11 +222,8 @@ export function deleteModel(name: string) {
 
   logger.debug('Deleting Model "%s"', name);
 
-  mongoose.connections.forEach((connection) => {
-    if (connection.models[name]) {
-      connection.deleteModel(name);
-    }
-  });
+  models.get(name).db.deleteModel(name);
+
   models.delete(name);
   constructors.delete(name);
 }
@@ -273,7 +270,7 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
-  const sch = buildSchema(cl) as mongoose.Schema & { paths: object };
+  const sch = buildSchema(cl) as mongoose.Schema & { paths: object; };
 
   const discriminatorKey = sch.get('discriminatorKey');
   if (sch.path(discriminatorKey)) {
