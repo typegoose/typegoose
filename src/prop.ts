@@ -302,15 +302,15 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     return;
   }
 
+  const virtualSchema = buildSchema(Type, {
+    _id: typeof rawOptions?._id === 'boolean' ? rawOptions._id : true
+  });
   switch (whatis) {
     case WhatIsIt.ARRAY:
-      const virtualSchemaArrayItem = buildSchema(Type, {
-        _id: typeof rawOptions?._id === 'boolean' ? rawOptions._id : true
-      });
       schemas.get(name)[key] = {
         ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
         ...options,
-        type: [virtualSchemaArrayItem]
+        type: [virtualSchema]
       };
 
       return;
@@ -318,18 +318,14 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
         type: Map,
-        ...options
-      };
-      (schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of = {
-        ...(schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of,
-        ...subSchema
+        of: {
+          type: virtualSchema,
+          ...options
+        }
       };
 
       return;
     case WhatIsIt.NONE:
-      const virtualSchema = buildSchema(Type, {
-        _id: typeof rawOptions?._id === 'boolean' ? rawOptions._id : true
-      });
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
         ...options,

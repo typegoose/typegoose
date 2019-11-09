@@ -5,7 +5,7 @@ import { arrayProp, buildSchema, isDocumentArray, prop, Ref } from '../../src/ty
 import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
 import { GetSet, GetSetModel } from '../models/getSet';
-import { model as InternetUser } from '../models/internetUser';
+import { InternetUserModel } from '../models/internetUser';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
 import { OptionsClass, OptionsModel } from '../models/options';
 import { model as User } from '../models/user';
@@ -92,7 +92,7 @@ export function suite() {
   });
 
   it(`should add dynamic fields using map`, async () => {
-    const user = await InternetUser.create({
+    const user = await InternetUserModel.create({
       socialNetworks: {
         twitter: 'twitter account',
         facebook: 'facebook account'
@@ -117,6 +117,9 @@ export function suite() {
     expect(user.sideNotes.get('day1')).to.have.property('content', 'day1');
     expect(user.sideNotes.get('day1')).to.have.property('link', 'url');
     expect(user.sideNotes.has('day2')).to.be.equal(true);
+
+    expect(user.sideNotes.get('day1')).to.not.have.property('_id');
+    expect(user.sideNotes.get('day2')).to.not.have.property('_id');
   });
 
   it('Should support dynamic references via refPath', async () => {
