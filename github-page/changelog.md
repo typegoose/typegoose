@@ -19,8 +19,6 @@ redirect_from:
 
 ## 6.1.2
 
-<sub>This Version is not yet released, only changes made until now are listed here</sub>
-
 - Allow setting `_id: false` (and apply it) for `@mapProp`
 - [IC] De-duplicate code for `_id` if subDocument
 
