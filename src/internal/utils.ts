@@ -13,7 +13,7 @@ import {
   WhatIsIt
 } from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, schemas } from './data';
+import { constructors, globalOptions, schemas } from './data';
 import { NoValidClass } from './errors';
 
 /**
@@ -234,18 +234,21 @@ export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: m
  * @param cl The Class
  */
 export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
-  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) ?? {};
+  const options: IModelOptions =
+    Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) ??
+    Reflect.getMetadata(DecoratorKeys.ModelOptions, cl.constructor) ??
+    {};
   const baseName = cl.name ?? cl.constructor.name;
 
-  if (options.options && options.options.automaticName) {
-    const suffix = options?.options?.customName ?? options?.schemaOptions?.collection;
+  if (options.options?.automaticName) {
+    const suffix = options.options?.customName ?? options.schemaOptions?.collection;
 
     return !isNullOrUndefined(suffix) ? `${baseName}_${suffix}` : baseName;
   }
 
-  if (typeof options?.options?.customName === 'string') {
+  if (typeof options.options?.customName === 'string') {
     if (options.options.customName.length <= 0) {
-      throw new TypeError(`"customName" must be a string AND at least one character ("${cl.name}")`);
+      throw new TypeError(`"customName" must be a string AND at least one character ("${baseName}")`);
     }
 
     return options.options.customName;
@@ -380,4 +383,15 @@ export function warnMixed(target: any, key: string | symbol): void | never {
  */
 export function isNullOrUndefined(val: unknown): val is null | undefined {
   return val === null || val === undefined;
+}
+
+/**
+ * Assign Global ModelOptions if not already existing
+ * @param target Target Class
+ */
+export function assignGlobalModelOptions(target: any) {
+  if (isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.ModelOptions, target))) {
+    logger.info('Assigning global Schema Options to "%s"', getName(target));
+    assignMetadata(DecoratorKeys.ModelOptions, { options: globalOptions.options, schemaOptions: globalOptions.schemaOptions }, target);
+  }
 }

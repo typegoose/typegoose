@@ -70,7 +70,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     whatis
   } = input;
   const rawOptions = Object.assign({}, origOptions);
-  logger.debug('Starting to process "%s.%s"', target.constructor.name, key);
+  logger.debug('Starting to process "%s.%s"', utils.getName(target), key);
 
   if (!utils.isNullOrUndefined(rawOptions.type)) {
     logger.info('Prop Option "type" is set to', rawOptions.type);
@@ -81,7 +81,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   if (utils.isNotDefined(Type)) {
     buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
   }
-  const name: string = utils.getName(target.constructor);
+  const name: string = utils.getName(target);
 
   if (!virtuals.has(name)) {
     virtuals.set(name, new Map());
@@ -199,7 +199,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
               throw new TypeError(format(
                 'All Enums supplied to @prop must have strings associated with them!\n'
                 + 'Encountered at "%s.%s", with property: %s.%s',
-                utils.getName(target.constructor),
+                utils.getName(target),
                 key,
                 enumKey, typeof enumValue
               ));
@@ -227,7 +227,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   {
     // check if Type is actually a real working Type
     if (utils.isNullOrUndefined(Type) || typeof Type !== 'function') {
-      throw new InvalidTypeError(target.constructor.name, key, Type);
+      throw new InvalidTypeError(utils.getName(target), key, Type);
     }
 
     // check for validation inconsistencies

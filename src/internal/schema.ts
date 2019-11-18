@@ -6,7 +6,7 @@ import { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexA
 import { DecoratorKeys } from './constants';
 import { hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
-import { getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
+import { assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
 /**
  * Private schema builder out of class props
@@ -25,6 +25,8 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
+
+  assignGlobalModelOptions(cl); // to ensure global options are applied to the current class
 
   // Options sanity check
   opt = mergeSchemaOptions((isNullOrUndefined(opt) || typeof opt !== 'object') ? {} : opt, cl);
