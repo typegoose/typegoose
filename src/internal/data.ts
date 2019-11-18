@@ -1,7 +1,6 @@
 import { Model, Schema, SchemaDefinition } from 'mongoose';
 
-import { mongoose } from '../typegoose';
-import { ICustomOptions, Severity, VirtualOptions } from '../types';
+import { IGlobalOptions, Severity, VirtualOptions } from '../types';
 
 export interface IPreHook {
   method: string | RegExp;
@@ -20,18 +19,6 @@ export interface IHooks {
 export interface IPluginMap {
   mongoosePlugin(schema: Schema<any>, options: object): void;
   options: object;
-}
-
-export interface IGlobalOptions {
-  /** Typegoose Options */
-  options?: ICustomOptions;
-  /** Schema Options that should get applied to all models */
-  schemaOptions?: mongoose.SchemaOptions;
-  /**
-   * Global Options for general Typegoose
-   * (There are currently none)
-   */
-  globalOptions?: {};
 }
 
 /** Schema Map */

@@ -20,7 +20,7 @@ export abstract class PersistentModel {
 
   // define an instanceMethod that is called by the derived class
   public async addCar(this: DocumentType<PersistentModel>, car: Car) {
-    if (!this.cars) {
+    if (!Array.isArray(this.cars)) {
       this.cars = [];
     }
 

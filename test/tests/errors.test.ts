@@ -1,7 +1,7 @@
-import { assert, expect } from 'chai';
-
 import { AssertionError } from 'assert';
+import { assert, expect } from 'chai';
 import { model, Schema } from 'mongoose';
+
 import { pre } from '../../src/hooks';
 import { DecoratorKeys } from '../../src/internal/constants';
 import {
@@ -20,8 +20,11 @@ import {
   buildSchema,
   deleteModel,
   deleteModelWithClass,
+  getDiscriminatorModelForClass,
   getModelForClass,
-  modelOptions
+  getModelWithString,
+  modelOptions,
+  setGlobalOptions
 } from '../../src/typegoose';
 
 // disable "no-unused-variable" for this file, because it tests for errors
@@ -78,7 +81,7 @@ export function suite() {
         public test: undefined;
       }
       getModelForClass(TestNME);
-      assert.fail('Expected to throw "InvalidPropError"');
+      assert.fail('Expected to throw "NoMetadataError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(NoMetadataError);
     }
@@ -170,7 +173,7 @@ export function suite() {
       try {
         // @ts-ignore
         addModelToTypegoose(model('hello', new Schema()), 'not class');
-        assert.fail('Expected to throw "TypeError"');
+        assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
         expect(err).to.be.an.instanceOf(NoValidClass);
       }
@@ -200,6 +203,36 @@ export function suite() {
       try {
         // @ts-ignore
         getModelForClass('hello');
+        assert.fail('Expected to throw "NoValidClass"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(NoValidClass);
+      }
+    });
+
+    it('should error if no valid class is supplied to "deleteModelWithClass" [NoValidClass]', () => {
+      try {
+        // @ts-ignore
+        deleteModelWithClass(true);
+        assert.fail('Expected to throw "NoValidClass"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(NoValidClass);
+      }
+    });
+
+    it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClass]', () => {
+      try {
+        // @ts-ignore
+        mergeSchemaOptions({}, true);
+        assert.fail('Expected to throw "NoValidClass"');
+      } catch (err) {
+        expect(err).to.be.an.instanceOf(NoValidClass);
+      }
+    });
+
+    it('should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClass]', () => {
+      try {
+        // @ts-ignore
+        getDiscriminatorModelForClass(model('NoValidClassgetDiscriminatorModelForClass', {}), true);
         assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
         expect(err).to.be.an.instanceOf(NoValidClass);
@@ -261,16 +294,6 @@ export function suite() {
     });
   });
 
-  it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClass]', () => {
-    try {
-      // @ts-ignore
-      mergeSchemaOptions({}, true);
-      assert.fail('Expected to throw "NoValidClass"');
-    } catch (err) {
-      expect(err).to.be.an.instanceOf(NoValidClass);
-    }
-  });
-
   it('should throw an error if a self-contained class is used', () => {
     try {
       class TestSelfContained {
@@ -291,16 +314,6 @@ export function suite() {
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(TypeError);
-    }
-  });
-
-  it('should throw when "deleteModelWithClass" is called and its not a valid class [NoValidClass]', () => {
-    try {
-      // @ts-ignore
-      deleteModelWithClass(true);
-      assert.fail('Expected to throw "NoValidClass"');
-    } catch (err) {
-      expect(err).to.be.an.instanceOf(NoValidClass);
     }
   });
 
@@ -331,8 +344,119 @@ export function suite() {
 
   it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
     try {
-      mapArrayOptions({}, Error);
+      mapArrayOptions({}, Error, undefined, undefined);
 
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if "refPath" is not of type string [TypeError]', () => {
+    try {
+      class TestRefPathError {
+        // @ts-ignore
+        @prop({ refPath: 1 })
+        public hello: string;
+      }
+
+      buildSchema(TestRefPathError);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if "ref" is used with @mapProp [TypeError]', () => {
+    try {
+      class TestRefSwitchError {
+        @mapProp({ ref: 'hi' })
+        public hello: string;
+      }
+
+      buildSchema(TestRefSwitchError);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if "refPath" is used with @mapProp [TypeError]', () => {
+    try {
+      class TestRefPathSwitchError {
+        @mapProp({ refPath: 'hi' })
+        public hello: string;
+      }
+
+      buildSchema(TestRefPathSwitchError);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if the options provide to "setGlobalOptions" are not an object [TypeError]', () => {
+    try {
+      setGlobalOptions(undefined);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if trying to use circular classes [TypeError]', () => {
+    try {
+      class TestCircular {
+        @prop()
+        public hello: TestCircular;
+      }
+
+      buildSchema(TestCircular);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should fail when using an enum that has at least one property not with a string associated [TypeError]', () => {
+    try {
+      enum HeterogeneousEnum {
+        One = 0,
+        Two = '1'
+      }
+
+      class HeterogeneousClass {
+        @prop({ enum: HeterogeneousEnum })
+        public someEnum: HeterogeneousEnum;
+      }
+
+      getModelForClass(HeterogeneousClass);
+
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if no valid model is supplied to "getDiscriminatorModelForClass" [TypeError]', () => {
+    try {
+      // @ts-ignore
+      getDiscriminatorModelForClass(true);
+      assert.fail('Expected to throw "TypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if no valid key is supplied to "getModelWithString" [TypeError]', () => {
+    try {
+      // @ts-ignore
+      getModelWithString(true);
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(TypeError);

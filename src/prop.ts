@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
+import { format } from 'util';
 
-import { format, isNullOrUndefined } from 'util';
 import { DecoratorKeys } from './internal/constants';
-import { schemas, virtuals } from './internal/data';
+import { globalOptions, schemas, virtuals } from './internal/data';
 import {
   InvalidPropError,
   InvalidTypeError,
@@ -22,7 +22,6 @@ import {
   MapPropOptions,
   PropOptions,
   PropOptionsWithValidate,
-  Severity,
   WhatIsIt
 } from './types';
 
@@ -38,8 +37,8 @@ function baseProp(input: DecoratedPropertyMetadata): void {
     target,
     whatis
   } = input;
-  if (Type === target) {
-    throw new Error('It seems like the type used is the same as the target class, which is currently not supported\n'
+  if (Type === target.constructor) { // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
+    throw new TypeError('It seems like the type used is the same as the target class, which is currently not supported\n'
       + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`);
   }
 
@@ -47,15 +46,15 @@ function baseProp(input: DecoratedPropertyMetadata): void {
   utils.createUniqueID(target);
 
   const existingMapForTarget = Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
-  if (isNullOrUndefined(existingMapForTarget)) {
+  if (utils.isNullOrUndefined(existingMapForTarget)) {
     Reflect.defineMetadata(DecoratorKeys.PropCache, new Map<string, DecoratedPropertyMetadata>(), target);
   }
   const mapForTarget = existingMapForTarget
-    || Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
+    ?? Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
 
   mapForTarget.set(key, { origOptions, Type, target, key, whatis });
 
-  logger.debug('Added "%s.%s" to the Decorator Cache', target.constructor.name, key);
+  logger.debug('Added "%s.%s" to the Decorator Cache', utils.getName(target.constructor), key);
 }
 
 /**
@@ -73,19 +72,17 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   const rawOptions = Object.assign({}, origOptions);
   logger.debug('Starting to process "%s.%s"', target.constructor.name, key);
 
-  if (!isNullOrUndefined(rawOptions.type)) {
+  if (!utils.isNullOrUndefined(rawOptions.type)) {
     logger.info('Prop Option "type" is set to', rawOptions.type);
     Type = rawOptions.type;
   }
 
-  if (utils.isNotDefined(Type) && isNullOrUndefined(rawOptions.type)) {
-    if (Type !== target) { // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
-      buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
-    }
+  if (utils.isNotDefined(Type) && utils.isNullOrUndefined(rawOptions.type)) {
+    buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
   }
   const name: string = utils.getName(target.constructor);
 
-  if (!virtuals.get(name)) {
+  if (!virtuals.has(name)) {
     virtuals.set(name, new Map());
   }
 
@@ -98,22 +95,18 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     return;
   }
 
-  if (whatis === WhatIsIt.ARRAY) {
-    utils.initAsArray(name, key);
-  } else {
-    utils.initAsObject(name, key);
-  }
+  utils.initProperty(name, key, whatis);
 
-  if (!isNullOrUndefined(rawOptions.set) || !isNullOrUndefined(rawOptions.get)) {
-    if (typeof rawOptions.set !== 'function') {
+  if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
+    if (typeof rawOptions?.set !== 'function') {
       throw new TypeError(`"${name}.${key}" does not have a set function!`);
     }
-    if (typeof rawOptions.get !== 'function') {
+    if (typeof rawOptions?.get !== 'function') {
       throw new TypeError(`"${name}.${key}" does not have a get function!`);
     }
 
-    const newType = rawOptions && rawOptions.type ? rawOptions.type : Type;
-    if (rawOptions && rawOptions.type) {
+    const newType = rawOptions?.type ? rawOptions.type : Type;
+    if (!utils.isNullOrUndefined(rawOptions?.type)) {
       delete rawOptions.type;
     }
     /*
@@ -130,80 +123,103 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     return;
   }
 
-  const ref = rawOptions.ref;
-  const refType = rawOptions.refType || mongoose.Schema.Types.ObjectId;
-  if (ref) {
-    if (whatis === WhatIsIt.ARRAY) {
-      logger.warn('"ref" is used in an arrayProp, which should not be used! (%s, %s)\n'
-        + 'Use "itemsRef"',
-        utils.getName(target), key);
-    }
+  const ref = rawOptions?.ref;
+  const refType = rawOptions?.refType ?? rawOptions?.type ?? mongoose.Schema.Types.ObjectId;
+  if (!utils.isNullOrUndefined(ref)) {
     delete rawOptions.ref;
     const refName = typeof ref === 'string' ? ref : utils.getName(ref);
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key],
-      type: refType,
-      ref: refName,
-      ...rawOptions
-    };
+
+    switch (whatis) {
+      case WhatIsIt.ARRAY:
+        schemas.get(name)[key][0] = {
+          ...schemas.get(name)[key][0],
+          type: refType,
+          ref: refName,
+          ...rawOptions
+        };
+        break;
+      case WhatIsIt.NONE:
+        schemas.get(name)[key] = {
+          ...schemas.get(name)[key],
+          type: refType,
+          ref: refName,
+          ...rawOptions
+        };
+        break;
+      default:
+        throw new TypeError(format('"ref" is not supported for "%s"! (%s, %s)',
+          whatis, utils.getName(target), key));
+    }
 
     return;
   }
 
-  const itemsRef = rawOptions.itemsRef;
-  const itemsRefType = rawOptions.itemsRefType || mongoose.Schema.Types.ObjectId;
-  if (itemsRef) {
-    const itemsRefName = typeof itemsRef === 'string' ? itemsRef : utils.getName(itemsRef);
-    delete rawOptions.itemsRef;
-    schemas.get(name)[key][0] = {
-      ...schemas.get(name)[key][0],
-      type: itemsRefType,
-      ref: itemsRefName,
-      ...rawOptions
-    };
-
-    return;
-  }
-
-  const refPath = rawOptions.refPath;
-  if (refPath && typeof refPath === 'string') {
-    if (whatis === WhatIsIt.ARRAY) {
-      logger.warn('"refPath" is used in an arrayProp, which should not be used! (%s, %s)\n'
-        + 'Use "itemsRefPath"',
-        utils.getName(target), key);
+  const refPath = rawOptions?.refPath;
+  if (refPath) {
+    if (typeof refPath !== 'string') {
+      throw new TypeError(format('"refPath" for "%s, %s" should be of type String!', utils.getName(target), key));
     }
     delete rawOptions.refPath;
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key],
-      type: refType,
-      refPath,
-      ...rawOptions
-    };
+
+    switch (whatis) {
+      case WhatIsIt.ARRAY:
+        schemas.get(name)[key][0] = {
+          ...schemas.get(name)[key][0],
+          type: refType,
+          refPath,
+          ...rawOptions
+        };
+        break;
+      case WhatIsIt.NONE:
+        schemas.get(name)[key] = {
+          ...schemas.get(name)[key],
+          type: refType,
+          refPath,
+          ...rawOptions
+        };
+        break;
+      default:
+        throw new TypeError(format('"refPath" is not supported for "%s"! (%s, %s)',
+          whatis, utils.getName(target), key));
+    }
 
     return;
   }
 
-  const itemsRefPath = rawOptions.itemsRefPath;
-  if (itemsRefPath && typeof itemsRefPath === 'string') {
-    delete rawOptions.itemsRefPath;
-    schemas.get(name)[key][0] = {
-      ...schemas.get(name)[key][0],
-      type: itemsRefType,
-      refPath: itemsRefPath,
-      ...rawOptions
-    };
-
-    return;
-  }
-
-  const enumOption = rawOptions.enum;
-  if (enumOption) {
+  const enumOption = rawOptions?.enum;
+  if (!utils.isNullOrUndefined(enumOption)) {
     if (!Array.isArray(enumOption)) {
-      rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
+      // the following "if" it to not break existing databases
+      if (globalOptions?.globalOptions?.useNewEnum) {
+        rawOptions.enum = Object.entries(enumOption) // get all key-value pairs of the enum
+          // filter out the "reverse (value -> name) mappings"
+          // https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings
+          .filter(([enumKey, enumValue]) => {
+            return Number.isNaN(parseInt(enumKey, 10));
+          })
+          .map(([enumKey, enumValue], i, enumArray) => { // convert key-value pairs to mongoose-useable strings
+            if (typeof enumValue !== 'string') { // disallow the use of enums that dont have strings associated with them
+              throw new TypeError(format(
+                'All Enums supplied to @prop must have strings associated with them!\n'
+                + 'Encountered at "%s.%s", with property: %s.%s',
+                utils.getName(target.constructor),
+                key,
+                enumKey, typeof enumValue
+              ));
+            }
+
+            return enumValue;
+          });
+      } else {
+        // old behaviour
+        // TODO: remove in typegoose 7.0
+        logger.warn('Old Enum Behaviour is used, please upgrade to the new one');
+        rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
+      }
     }
   }
 
-  const selectOption = rawOptions.select;
+  const selectOption = rawOptions?.select;
   if (typeof selectOption === 'boolean') {
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
@@ -211,23 +227,25 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     };
   }
 
-  // check if Type is actually a real working Type
-  if (isNullOrUndefined(Type) || typeof Type !== 'function') {
-    throw new InvalidTypeError(target.constructor.name, key, Type);
-  }
+  {
+    // check if Type is actually a real working Type
+    if (utils.isNullOrUndefined(Type) || typeof Type !== 'function') {
+      throw new InvalidTypeError(target.constructor.name, key, Type);
+    }
 
-  // check for validation inconsistencies
-  if (utils.isWithStringValidate(rawOptions) && !utils.isString(Type)) {
-    throw new NotStringTypeError(key);
-  }
+    // check for validation inconsistencies
+    if (utils.isWithStringValidate(rawOptions) && !utils.isString(Type)) {
+      throw new NotStringTypeError(key);
+    }
 
-  // check for transform inconsistencies
-  if (utils.isWithStringTransform(rawOptions) && !utils.isString(Type)) {
-    throw new NotStringTypeError(key);
-  }
+    // check for transform inconsistencies
+    if (utils.isWithStringTransform(rawOptions) && !utils.isString(Type)) {
+      throw new NotStringTypeError(key);
+    }
 
-  if (utils.isWithNumberValidate(rawOptions) && !utils.isNumber(Type)) {
-    throw new NotNumberTypeError(key);
+    if (utils.isWithNumberValidate(rawOptions) && !utils.isNumber(Type)) {
+      throw new NotNumberTypeError(key);
+    }
   }
 
   const subSchema = schemas.get(utils.getName(Type));
@@ -241,7 +259,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       case WhatIsIt.ARRAY:
         schemas.get(name)[key] = {
           ...schemas.get(name)[key][0],
-          ...utils.mapArrayOptions(rawOptions, Type)
+          ...utils.mapArrayOptions(rawOptions, Type, target, key)
         };
 
         return;
@@ -274,35 +292,25 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
   if (utils.isObject(Type) && !subSchema) {
-    const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, target) || {};
-    if (modelOptions.options) {
-      switch (modelOptions.options.allowMixed) {
-        default:
-        case Severity.WARN:
-          logger.warn('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key);
-        case Severity.ALLOW:
-          schemas.get(name)[key] = {
-            ...schemas.get(name)[key],
-            ...options,
-            type: mongoose.Schema.Types.Mixed
-          };
+    utils.warnMixed(target, key);
+    schemas.get(name)[key] = {
+      ...schemas.get(name)[key],
+      ...options,
+      type: mongoose.Schema.Types.Mixed
+    };
 
-          return;
-        case Severity.ERROR:
-          throw new TypeError(format('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key));
-      }
-    }
+    return;
   }
 
+  const virtualSchema = buildSchema(Type, {
+    _id: typeof rawOptions?._id === 'boolean' ? rawOptions._id : true
+  });
   switch (whatis) {
     case WhatIsIt.ARRAY:
-      const virtualSchemaArrayItem = buildSchema(Type, {
-        _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true
-      });
       schemas.get(name)[key] = {
         ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
         ...options,
-        type: [virtualSchemaArrayItem]
+        type: [virtualSchema]
       };
 
       return;
@@ -310,18 +318,14 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
         type: Map,
-        ...options
-      };
-      (schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of = {
-        ...(schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of,
-        ...subSchema
+        of: {
+          type: virtualSchema,
+          ...options
+        }
       };
 
       return;
     case WhatIsIt.NONE:
-      const virtualSchema = buildSchema(Type, {
-        _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true
-      });
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
         ...options,
@@ -342,18 +346,18 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
     const Type = Reflect.getMetadata(DecoratorKeys.Type, target, key);
-    if (!Type) {
+    if (utils.isNullOrUndefined(Type)) {
       throw new NoMetadataError(key);
     }
 
     // soft errors
     {
       if ('items' in options) {
-        logger.warn(new Error('You might not want to use option "items" in a @prop'));
+        logger.warn('You might not want to use option "items" in a @prop, use @arrayProp (%s.%s)', utils.getName(target), key);
       }
 
       if ('of' in options) {
-        logger.warn(new Error('You might not want to use option "of" in a @prop'));
+        logger.warn('You might not want to use option "of" in a @prop, use @mapProp (%s.%s)', utils.getName(target), key);
       }
     }
 
@@ -374,10 +378,10 @@ export function prop(options: PropOptionsWithValidate = {}) {
  */
 export function mapProp(options: MapPropOptions) {
   return (target: any, key: string) => {
-    const Type = options.of;
+    const Type = options?.of;
 
     if ('items' in options) {
-      logger.warn(new Error('You might not want to use option "items" in a @mapProp'));
+      logger.warn('You might not want to use option "items" in a @mapProp, use @arrayProp (%s.%s)', utils.getName(target), key);
     }
 
     baseProp({
@@ -396,10 +400,26 @@ export function mapProp(options: MapPropOptions) {
  */
 export function arrayProp(options: ArrayPropOptions) {
   return (target: any, key: string) => {
-    const Type = options.items;
+    const Type = options?.items;
 
     if ('of' in options) {
-      logger.warn(new Error('You might not want to use option "of" in a @arrayProp'));
+      logger.warn('You might not want to use option "of" in a @arrayProp, use @mapProp (%s.%s)', utils.getName(target), key);
+    }
+
+    if ('items' in options) {
+      delete options.items;
+    }
+    if ('itemsRef' in options) {
+      options.ref = options.itemsRef;
+      delete options.itemsRef;
+    }
+    if ('itemsRefPath' in options) {
+      options.refPath = options.itemsRefPath;
+      delete options.itemsRefPath;
+    }
+    if ('itemsRefType' in options) {
+      options.refType = options.itemsRefType;
+      delete options.itemsRefType;
     }
 
     baseProp({

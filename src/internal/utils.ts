@@ -1,13 +1,16 @@
+import { cloneDeepWith, mergeWith } from 'lodash';
 import * as mongoose from 'mongoose';
+import { format } from 'util';
 
-import { isNullOrUndefined } from 'util';
 import { logger } from '../logSettings';
 import {
   AnyParamConstructor,
   IModelOptions,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
-  VirtualOptions
+  Severity,
+  VirtualOptions,
+  WhatIsIt
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
@@ -37,18 +40,19 @@ export function isPrimitive(Type: any): boolean {
  * @returns true, if it is an Object
  */
 export function isObject(Type: any): boolean {
-  let prototype = Type.prototype;
-  let name = Type.name;
-  while (name) {
-    if (name === 'Object') {
-      return true;
+  if (typeof Type?.name === 'string') {
+    let prototype = Type.prototype;
+    let name = Type.name;
+    while (name) {
+      if (name === 'Object') {
+        return true;
+      }
+      prototype = Object.getPrototypeOf(prototype);
+      name = prototype?.constructor.name;
     }
-    prototype = Object.getPrototypeOf(prototype);
-    name = prototype ? prototype.constructor.name : null;
   }
 
-  return false; // can this even return false?
-  // return !isNullOrUndefined(Type) && (typeof Type === 'object' || Type.name === 'Object') && !Array.isArray(Type);
+  return false;
 }
 
 /**
@@ -57,7 +61,7 @@ export function isObject(Type: any): boolean {
  * @returns true, if it is an Number
  */
 export function isNumber(Type: any): Type is number {
-  return Type.name === 'Number';
+  return Type?.name === 'Number';
 }
 
 /**
@@ -66,31 +70,31 @@ export function isNumber(Type: any): Type is number {
  * @returns true, if it is an String
  */
 export function isString(Type: any): Type is string {
-  return Type.name === 'String';
+  return Type?.name === 'String';
 }
 
 /**
- * Initialize as Object
- * @param name The Name of the Schema
- * @param key The Property key to set
+ * Initialize the property in the schemas Map
+ * @param name Name of the current Model/Class
+ * @param key Key of the property
+ * @param whatis What should it be for a type?
  */
-export function initAsObject(name: string, key: string): void {
-  if (!schemas.get(name)) {
+export function initProperty(name: string, key: string, whatis: WhatIsIt) {
+  if (!schemas.has(name)) {
     schemas.set(name, {});
   }
-  schemas.get(name)[key] = {};
-}
 
-/**
- * Initialize as Array
- * @param name The Name of the Schema
- * @param key The Property key to set
- */
-export function initAsArray(name: string, key: string): void {
-  if (!schemas.get(name)) {
-    schemas.set(name, {});
+  switch (whatis) {
+    case WhatIsIt.ARRAY:
+      schemas.get(name)[key] = [{}];
+      break;
+    case WhatIsIt.MAP:
+    case WhatIsIt.NONE:
+      schemas.get(name)[key] = {};
+      break;
+    default:
+      throw new TypeError('"whatis" is not supplied OR dosnt have a case yet!');
   }
-  schemas.get(name)[key] = [{}];
 }
 
 /**
@@ -111,10 +115,10 @@ export function isWithStringValidate(
   options: PropOptionsWithStringValidate
 ): options is PropOptionsWithStringValidate {
   return !isNullOrUndefined(
-    options.match
-    || options.enum
-    || options.minlength
-    || options.maxlength
+    options?.match
+    ?? options?.enum
+    ?? options?.minlength
+    ?? options?.maxlength
   );
 }
 
@@ -125,7 +129,7 @@ export function isWithStringValidate(
 export function isWithStringTransform(
   options: PropOptionsWithStringValidate
 ): options is PropOptionsWithStringValidate {
-  return !isNullOrUndefined(options.lowercase || options.uppercase || options.trim);
+  return !isNullOrUndefined(options.lowercase ?? options.uppercase ?? options.trim);
 }
 
 /**
@@ -133,7 +137,7 @@ export function isWithStringTransform(
  * @param options The raw Options
  */
 export function isWithNumberValidate(options: PropOptionsWithNumberValidate): options is PropOptionsWithNumberValidate {
-  return !isNullOrUndefined(options.min || options.max);
+  return !isNullOrUndefined(options.min ?? options.max);
 }
 
 const virtualOptions = ['localField', 'foreignField'];
@@ -155,18 +159,6 @@ allVirtualoptions.push('ref');
  */
 export function includesAllVirtualPOP(options: VirtualOptions): options is VirtualOptions {
   return allVirtualoptions.every((v) => Object.keys(options).includes(v));
-}
-
-/**
- * Check if the given value has options of "IModelOptions"
- * @param value The Value to evaulate
- * @internal
- */
-function isModelOptions(value: unknown): value is IModelOptions {
-  return value && (
-    typeof (value as IModelOptions).schemaOptions === 'object' ||
-    typeof (value as IModelOptions).options === 'object'
-  );
 }
 
 /**
@@ -196,7 +188,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
  * @param cl The constructor
  * @internal
  */
-export function mergeMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): any {
+export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: new () => {}): T {
   if (typeof key !== 'string') {
     throw new TypeError(`"${key}"(key) is not a string! (assignMetadata)`);
   }
@@ -204,22 +196,27 @@ export function mergeMetadata(key: DecoratorKeys, value: unknown, cl: new () => 
     throw new NoValidClass(cl);
   }
 
-  const current = Object.assign({}, Reflect.getMetadata(key, cl) || {});
+  // Please dont remove the other values from the function, even when unused - it is made to be clear what is what
+  const current = cloneDeepWith(Reflect.getMetadata(key, cl) ?? {}, (val, ckey, obj, stack) => customMerger(key, val));
 
-  if (isNullOrUndefined(value)) {
-    return current;
+  return mergeWith({}, current, value,
+    (objValue, srcValue, ckey, object, source, stack) => customMerger(key, srcValue));
+}
+
+/**
+ * Used for lodash customizer's (cloneWith, cloneDeepWith, mergeWith)
+ * @param key the key of the current object
+ * @param val the value of the object that should get returned for "existingMongoose" & "existingConnection"
+ */
+function customMerger(key: string | number, val: unknown): any {
+  if (isNullOrUndefined(key) || typeof key !== 'string') {
+    return undefined;
+  }
+  if (/^(existingMongoose|existingConnection)$/.test(key)) {
+    return val;
   }
 
-  // the following checks are needed, so that the new value dosnt override the full options
-  // "deepmerge" cannot be used because of the other options like "existingMongoose"
-  if (isModelOptions(value) && !isNullOrUndefined(current.schemaOptions)) {
-    value.schemaOptions = Object.assign(current.schemaOptions, value.schemaOptions);
-  }
-  if (isModelOptions(value) && !isNullOrUndefined(current.options)) {
-    value.options = Object.assign(current.options, value.options);
-  }
-
-  return Object.assign(current, value);
+  return undefined;
 }
 
 /**
@@ -228,18 +225,7 @@ export function mergeMetadata(key: DecoratorKeys, value: unknown, cl: new () => 
  * @param cl The Class to get the values from
  */
 export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: mongoose.SchemaOptions, cl: U) {
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
-
-  const current = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
-  const evaluated = current && current.schemaOptions ? current.schemaOptions : {};
-
-  if (isNullOrUndefined(value)) {
-    return evaluated;
-  }
-
-  return Object.assign(evaluated, value || {});
+  return mergeMetadata<IModelOptions>(DecoratorKeys.ModelOptions, { schemaOptions: value }, cl).schemaOptions;
 }
 
 /**
@@ -248,17 +234,16 @@ export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: m
  * @param cl The Class
  */
 export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
-  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) || {};
+  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) ?? {};
   const baseName = cl.name;
 
   if (options.options && options.options.automaticName) {
-    const suffix = (options.options ? options.options.customName : undefined) ||
-      (options.schemaOptions ? options.schemaOptions.collection : undefined);
+    const suffix = options?.options?.customName ?? options?.schemaOptions?.collection;
 
-    return suffix ? `${baseName}_${suffix}` : baseName;
+    return !isNullOrUndefined(suffix) ? `${baseName}_${suffix}` : baseName;
   }
 
-  if (options.options && typeof options.options.customName === 'string') {
+  if (typeof options?.options?.customName === 'string') {
     if (options.options.customName.length <= 0) {
       throw new TypeError(`"customName" must be a string AND at least one character ("${cl.name}")`);
     }
@@ -302,17 +287,26 @@ export function createUniqueID(cl: any) {
  * -> outer: means outer of "type: [{}], here"
  * @param rawOptions The raw options
  * @param Type The Type of the array
+ * @param target The Target class
+ * @param pkey Key of the Property
  */
-export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>): mongoose.SchemaTypeOpts<any> {
+export function mapArrayOptions(
+  rawOptions: any,
+  Type: AnyParamConstructor<any>,
+  target: any,
+  pkey: string
+): mongoose.SchemaTypeOpts<any> {
   if (getName(Type) in mongoose.Schema.Types) {
     logger.info('Converting "%s" to mongoose Type', getName(Type));
     Type = mongoose.Schema.Types[getName(Type)];
 
     /* istanbul ignore next */
     if (Type === mongoose.Schema.Types.Mixed) {
-      logger.warn('Converted Type to Mixed!');
+      warnMixed(target, pkey);
     }
-  } else if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
+  }
+
+  if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
     throw new TypeError('Type does not have an valid "OptionsConstructor"!');
   }
 
@@ -339,12 +333,12 @@ export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>)
     logger.info('The Type "%s" does not have an OptionsConstructor', getName(Type));
   }
 
-  if (typeof options.innerOptions === 'object') {
+  if (typeof options?.innerOptions === 'object') {
     for (const [key, value] of Object.entries(options.innerOptions)) {
       returnObject.type[0][key] = value;
     }
   }
-  if (typeof options.outerOptions === 'object') {
+  if (typeof options?.outerOptions === 'object') {
     for (const [key, value] of Object.entries(options.outerOptions)) {
       returnObject[key] = value;
     }
@@ -353,4 +347,37 @@ export function mapArrayOptions(rawOptions: any, Type: AnyParamConstructor<any>)
   logger.debug('Final mapped Options for Type "%s"', getName(Type), returnObject);
 
   return returnObject;
+}
+
+/**
+ * Warn, Error or Allow if an mixed type is set
+ * -> this function exists for de-duplication
+ * @param target Target Class
+ * @param key Property key
+ */
+export function warnMixed(target: any, key: string | symbol): void | never {
+  const name = getName(target);
+  const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, target) ?? {};
+
+  switch (modelOptions?.options?.allowMixed) {
+    default:
+    case Severity.WARN:
+      logger.warn('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key);
+
+      break;
+    case Severity.ALLOW:
+      break;
+    case Severity.ERROR:
+      throw new TypeError(format('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key));
+  }
+
+  return; // always return, if "allowMixed" is not "ERROR"
+}
+
+/**
+ * Because since node 4.0.0 the internal util.is* functions got deprecated
+ * @param val Any value to test if null or undefined
+ */
+export function isNullOrUndefined(val: unknown): val is null | undefined {
+  return val === null || val === undefined;
 }

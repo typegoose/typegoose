@@ -1,5 +1,6 @@
 import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
+
 import { DecoratorKeys } from '../../src/internal/constants';
 import { assignMetadata, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import {
@@ -9,10 +10,12 @@ import {
   DocumentType,
   getDiscriminatorModelForClass,
   getModelForClass,
+  getModelWithString,
   mapProp,
   modelOptions,
   prop
 } from '../../src/typegoose';
+import { IModelOptions } from '../../src/types';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 
 // Note: this file is meant for github issue verification & test adding for these
@@ -62,7 +65,6 @@ export function suite() {
   });
 
   it('should make use of addModelToTypegoose', async () => {
-    // addModelToTypegoose
     class TestAMTT {
       @prop({ required: true })
       public somevalue!: string;
@@ -73,6 +75,7 @@ export function suite() {
     schema.add({ somesecondvalue: { type: String, required: true } });
     const model = addModelToTypegoose(mongoose.model(TestAMTT.name, schema), TestAMTT);
     const doc = await model.create({ somevalue: 'hello from SV', somesecondvalue: 'hello from SSV' } as TestAMTT);
+
     expect(doc).to.not.be.an('undefined');
     expect(doc.somevalue).to.equal('hello from SV');
     expect(doc.somesecondvalue).to.equal('hello from SSV');
@@ -97,22 +100,28 @@ export function suite() {
     expect(found.test).to.be.deep.equal(new Map([['hello', 'hello']]));
   });
 
-  it('should make array of enum [szokodiakos#380]', async () => {
-    enum TestEnum {
+  it('should make array of enum (string) [szokodiakos#380]', async () => {
+    enum StringEnum {
       HELLO1 = 'Hello 1',
       HELLO2 = 'Hello 2'
     }
     class TestEnumArray {
-      @arrayProp({ items: String, enum: TestEnum })
-      public somevalue: TestEnum[];
+      @arrayProp({ items: String, enum: StringEnum })
+      public somevalue: StringEnum[];
     }
 
     const model = getModelForClass(TestEnumArray);
-    const { _id: id } = await model.create({ somevalue: [TestEnum.HELLO1, TestEnum.HELLO2] } as TestEnumArray);
+    const { _id: id } = await model.create({ somevalue: [StringEnum.HELLO1, StringEnum.HELLO2] } as TestEnumArray);
     const found = await model.findById(id).exec();
 
     expect(found).to.not.be.an('undefined');
     expect(found.somevalue).to.deep.equal(['Hello 1', 'Hello 2']);
+
+    const somevaluePath = model.schema.path('somevalue');
+    expect(somevaluePath).to.be.an.instanceOf(mongoose.Schema.Types.Array);
+
+    const optionEnum: [string, unknown] = (somevaluePath as any).caster.options.enum;
+    expect(optionEnum).to.be.deep.equal(['Hello 1', 'Hello 2']);
   });
 
   it('should work with Objects in Class [szokodiakos#54]', async () => {
@@ -125,6 +134,7 @@ export function suite() {
 
     const model = getModelForClass(TESTObject);
     const doc = await model.create({ test: { anotherTest: 'hello' } } as TESTObject);
+
     expect(doc).to.not.be.an('undefined');
     expect(doc.test).to.be.an('object');
     expect(doc.test.anotherTest).to.be.equal('hello');
@@ -283,5 +293,70 @@ export function suite() {
     const newmodel = getDiscriminatorModelForClass(dummymodel, TestSameModelDicriminator);
 
     expect(newmodel).to.deep.equal(model);
+  });
+
+  it('should run with Custom Types', async () => {
+    // this test is a modified version of https://mongoosejs.com/docs/customschematypes.html
+    class CustomInt extends mongoose.SchemaType {
+      constructor(key: string, options: any) {
+        super(key, options, 'CustomInt');
+      }
+
+      public cast(val) {
+        return Number(val);
+      }
+    }
+    (mongoose.Schema.Types as any).CustomInt = CustomInt;
+
+    class CustomIntClass {
+      @prop({ required: true, type: CustomInt })
+      public num: number;
+    }
+
+    const model = getModelForClass(CustomIntClass);
+
+    const doc = new model({ num: 1 } as CustomIntClass);
+
+    await doc.validate();
+
+    expect(doc).to.not.equal(undefined);
+    const path = doc.schema.path('num');
+    expect(path).to.not.equal(undefined);
+    expect(path).to.not.be.an.instanceOf(mongoose.Schema.Types.Mixed);
+    expect(path).to.be.an.instanceOf(CustomInt);
+  });
+
+  it('should not have the same options (modelOptions deep copy) [typegoose/typegoose#100]', () => {
+    @modelOptions({ schemaOptions: { collection: '1' } })
+    class SOBase { }
+
+    @modelOptions({ schemaOptions: { collection: '2' } })
+    class SOInheritedBase extends SOBase { }
+
+    const refSOBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOBase);
+    const refSOInheritedBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOInheritedBase);
+
+    expect(refSOBase.schemaOptions.collection).to.not.equal(refSOInheritedBase.schemaOptions.collection);
+    expect(refSOBase).to.not.deep.equal(refSOInheritedBase);
+  });
+
+  it('should return the correct model "getModelWithString"', () => {
+    class GetModelWithStringClass {
+      @prop()
+      public hi: string;
+    }
+
+    const model = getModelForClass(GetModelWithStringClass);
+    const gotModel = getModelWithString<typeof GetModelWithStringClass>(model.modelName);
+
+    expect(model).to.not.be.equal(undefined);
+    expect(gotModel).to.not.be.equal(undefined);
+    expect(gotModel).to.deep.equal(model);
+  });
+
+  it('should return undefined if model does not exists (getModelWithString)', () => {
+    const type = getModelWithString('someTestyString');
+
+    expect(type).to.equal(undefined);
   });
 }

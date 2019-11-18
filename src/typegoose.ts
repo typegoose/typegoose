@@ -2,11 +2,15 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
-import { deprecate, format, isNullOrUndefined } from 'util';
+import { deprecate, format } from 'util';
 
 /* istanbul ignore next */
-if (semver.lt(mongoose.version, '5.7.6')) {
-  throw new Error('Please use mongoose 5.7.6 or higher');
+if (semver.lt(mongoose.version, '5.7.7')) {
+  throw new Error('Please use mongoose 5.7.7 or higher');
+}
+
+if (semver.lt(process.version.slice(1), '8.10.0')) {
+  logger.warn('You are using a NodeJS Version below 8.10.0, Please Upgrade!');
 }
 
 import * as defaultClasses from './defaultClasses';
@@ -14,7 +18,7 @@ import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
-import { assignMetadata, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import { getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
 import {
   AnyParamConstructor,
@@ -35,9 +39,8 @@ export * from './typeguards';
 export * from './optionsProp';
 export { defaultClasses };
 export { DocumentType, Ref, ReturnModelType };
-export { Severity } from './types';
+export { Severity, IGlobalOptions } from './types';
 export { getClassForDocument } from './internal/utils';
-export { IGlobalOptions } from './internal/data';
 export * from './globalOptions';
 
 /** @deprecated */
@@ -51,23 +54,19 @@ export abstract class Typegoose {
   /* istanbul ignore next */
   /** @deprecated */
   public getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
-    assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
-
-    return deprecate(getModelForClass, 'Typegoose Class is Deprecated!')(cl);
+    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!');
   }
 
   /* istanbul ignore next */
   /** @deprecated */
   public setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
-    assignMetadata(DecoratorKeys.ModelOptions, settings, cl);
-
-    return deprecate(setModelForClass, 'Typegoose Class is Deprecated!')(cl);
+    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!');
   }
 
   /* istanbul ignore next */
   /** @deprecated */
   public buildSchema<T, U extends AnyParamConstructor<T>>(cl: U) {
-    return deprecate(buildSchema, 'Typegoose Class is Deprecated!')(cl);
+    return deprecate(buildSchema.bind(undefined, cl), 'Typegoose Class is Deprecated!');
   }
 }
 
@@ -88,29 +87,39 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
+  options = typeof options === 'object' ? options : {};
 
-  const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options || {}, cl);
+  const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
   const name = getName(cl);
 
-  if (models.get(name)) {
+  if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
 
-  let model = mongoose.model.bind(mongoose);
-  if (!isNullOrUndefined(roptions.existingConnection)) {
-    model = roptions.existingConnection.model.bind(roptions.existingConnection);
-  } else if (!isNullOrUndefined(roptions.existingMongoose)) {
-    model = roptions.existingMongoose.model.bind(roptions.existingMongoose);
-  }
+  const model = roptions?.existingConnection?.model.bind(roptions.existingConnection)
+    ?? roptions?.existingMongoose?.model.bind(roptions.existingMongoose)
+    ?? mongoose.model.bind(mongoose);
 
   const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions));
-  const refetchedOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions || {};
+  const refetchedOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions ?? {};
 
-  if (refetchedOptions && refetchedOptions.options && refetchedOptions.options.runSyncIndexes) {
-    compiledmodel.syncIndexes({}); // the "{}" is because @types/mongoose dosnt allow it without ...
+  if (refetchedOptions?.options?.runSyncIndexes) {
+    compiledmodel.syncIndexes();
   }
 
   return addModelToTypegoose(compiledmodel, cl);
+}
+
+/**
+ * Get Model from internal cache
+ * @param key ModelName key
+ */
+export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
+  if (typeof key !== 'string') {
+    throw new TypeError(format('Expected "key" to be a string, got "%s"', key));
+  }
+
+  return models.get(key) as any;
 }
 
 /* istanbul ignore next */
@@ -123,8 +132,8 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
  */
 export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
   return deprecate(
-    getModelForClass(cl),
-    'setModelForClass is deprecated, please use getModelForClasse (see README#Migrate to 6.0.0)');
+    getModelForClass.bind(undefined, cl),
+    'setModelForClass is deprecated, please use getModelForClass (see README#Migrate to 6.0.0)');
 }
 
 /**
@@ -143,7 +152,7 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   // iterate trough all parents
-  while (parentCtor && parentCtor.name !== 'Object') {
+  while (parentCtor?.name !== 'Object') {
     /* istanbul ignore next */
     if (parentCtor.name === 'Typegoose') { // TODO: remove this "if", if the Typegoose class gets removed [DEPRECATION]
       deprecate(() => undefined, 'The Typegoose Class is deprecated, please try to remove it')();
@@ -185,9 +194,9 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
 
   const name = getName(cl);
 
-  if (constructors.get(name)) {
+  if (constructors.has(name)) {
     throw new Error(format('It seems like "addModelToTypegoose" got called twice\n'
-      + 'Or multiple classes with the same name are used, which currently isnt supported!'
+      + 'Or multiple classes with the same name are used, which is not supported!'
       + '(%s)', name));
   }
 
@@ -207,14 +216,14 @@ export function deleteModel(name: string) {
   if (typeof name !== 'string') {
     throw new TypeError('name is not an string! (deleteModel)');
   }
-
-  logger.debug('Deleting Model "%s"', name);
-
   if (!models.has(name)) {
     throw new Error(`Model "${name}" could not be found`);
   }
 
-  mongoose.connection.deleteModel(name);
+  logger.debug('Deleting Model "%s"', name);
+
+  models.get(name).db.deleteModel(name);
+
   models.delete(name);
   constructors.delete(name);
 }
@@ -250,11 +259,18 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
   cl: U,
   id?: string
 ) {
+  if (!(from.prototype instanceof mongoose.Model)) {
+    throw new TypeError(`"${from}" is not a valid Model!`);
+  }
+  if (typeof cl !== 'function') {
+    throw new NoValidClass(cl);
+  }
+
   const name = getName(cl);
-  if (models.get(name)) {
+  if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
-  const sch = buildSchema(cl) as mongoose.Schema & { paths: object };
+  const sch = buildSchema(cl) as mongoose.Schema & { paths: object; };
 
   const discriminatorKey = sch.get('discriminatorKey');
   if (sch.path(discriminatorKey)) {

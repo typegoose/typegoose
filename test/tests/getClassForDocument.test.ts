@@ -1,11 +1,11 @@
-import { expect } from 'chai';
+import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { fail } from 'assert';
 import { getClassForDocument } from '../../src/internal/utils';
+import { isDocument } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
-import { Car as CarType, model as Car } from '../models/car';
-import { model as InternetUser } from '../models/internetUser';
+import { Car as CarClass, model as Car } from '../models/car';
+import { InternetUserModel } from '../models/internetUser';
 import { AddressNested, AddressNestedModel, PersonNested, PersonNestedModel } from '../models/nestedObject';
 import { model as Person } from '../models/person';
 import { model as User, User as UserType } from '../models/user';
@@ -21,7 +21,7 @@ export function suite() {
       price: mongoose.Types.Decimal128.fromString('50123.25')
     });
     const carReflectedType = getClassForDocument(car);
-    expect(carReflectedType).to.equals(CarType);
+    expect(carReflectedType).to.equals(CarClass);
 
     const user = await User.create({
       firstName: 'John2',
@@ -35,7 +35,7 @@ export function suite() {
 
     // assert negative to be sure (false positive)
     expect(carReflectedType).to.not.equals(UserType);
-    expect(userReflectedType).to.not.equals(CarType);
+    expect(userReflectedType).to.not.equals(CarClass);
   });
 
   it('should use inherited schema', async () => {
@@ -54,8 +54,12 @@ export function suite() {
     expect(user).to.have.property('email', 'my@email.com');
 
     expect(user.cars.length).to.be.above(0);
-    user.cars.map((currentCar: CarType) => {
-      expect(currentCar.model).to.be.an('string');
+    user.cars.forEach((currentCar) => {
+      if (isDocument(currentCar)) {
+        expect(currentCar.model).to.be.an('string');
+      } else {
+        assert.fail('Expected "currentCar" to be populated!');
+      }
     });
 
     // verify methods
@@ -113,7 +117,7 @@ export function suite() {
       await Person.create({
         email: 'email'
       });
-      fail('Validation must fail.');
+      assert.fail('Validation must fail.');
     } catch (e) {
       expect(e).to.be.a.instanceof(mongoose.Error.ValidationError);
       expect(e.message).to.be.equal( // test it specificly, to know that it is not another error
@@ -124,12 +128,12 @@ export function suite() {
 
   it(`should Validate Map`, async () => {
     try {
-      await InternetUser.create({
+      await InternetUserModel.create({
         projects: {
           p1: 'project'
         }
       });
-      fail('Validation should Fail');
+      assert.fail('Validation should Fail');
     } catch (e) {
       expect(e).to.be.a.instanceof(mongoose.Error.ValidationError);
       expect(e.message).to.be.equal( // test it specificly, to know that it is not another error

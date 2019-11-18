@@ -1,5 +1,7 @@
 import * as mongoose from 'mongoose';
 
+import { Base } from './defaultClasses';
+
 /**
  * Get the Type of an instance of a Document with Class properties
  * @public
@@ -8,10 +10,11 @@ import * as mongoose from 'mongoose';
  * class Name {}
  * const NameModel = Name.getModelForClass(Name);
  *
- * const t: InstanceType<Name> = await NameModel.create({} as Partitial<Name>);
+ * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
  * ```
  */
-export type DocumentType<T> = T & mongoose.Document;
+export type DocumentType<T> = T extends Base ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T;
+// I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
  * @internal
@@ -141,18 +144,6 @@ export interface BasePropOptions {
    * ```
    */
   immutable?: boolean;
-}
-
-export interface PropOptions extends BasePropOptions {
-  /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref?: any;
-  /** Take the Path and try to resolve it to a Model */
-  refPath?: string;
-  /**
-   * Override the ref's type
-   * @default ObjectId
-   */
-  refType?: RefSchemaType;
   /**
    * Give the Property an alias in the output
    * Note: you should include the alias as a variable in the class, but not with a prop decorator
@@ -170,6 +161,60 @@ export interface PropOptions extends BasePropOptions {
    * This option as only an effect when the plugin `mongoose-autopopulate` is used
    */
   autopopulate?: boolean;
+  /** Reference an other Document (you should use Ref<T> as Prop type) */
+  ref?: any;
+  /** Take the Path and try to resolve it to a Model */
+  refPath?: string;
+  /**
+   * Override the ref's type
+   * {@link BasePropOptions.type} can be used too
+   * @default ObjectId
+   */
+  refType?: RefSchemaType;
+}
+
+// tslint:disable-next-line:no-empty-interface
+export interface PropOptions extends BasePropOptions { }
+
+export interface ArrayPropOptions extends BasePropOptions {
+  /** What array is it?
+   * {@link BasePropOptions.type} can be used too
+   * Note: this is only needed because Reflect & refelact Metadata cant give an accurate Response for an array
+   */
+  items?: any;
+  /**
+   * Same as {@link PropOptions.ref}, only that it is for an array
+   * @deprecated Please use {@link PropOptions.ref}
+   */
+  itemsRef?: any;
+  /**
+   * Same as {@link PropOptions.refPath}, only that it is for an array
+   * @deprecated Please use {@link PropOptions.refPath}
+   */
+  itemsRefPath?: any;
+  /**
+   * Same as {@link PropOptions.refType}, only that it is for an array
+   * @deprecated Please use {@link PropOptions.refType}
+   */
+  itemsRefType?: RefSchemaType;
+  /**
+   * Use this to define inner-options
+   * Use this if the auto-mapping is not correct or for plugin options
+   *
+   * Please open a new issue if some option is mismatched or not existing / mapped
+   */
+  innerOptions?: {
+    [key: string]: any;
+  };
+  /**
+   * Use this to define outer-options
+   * Use this if the auto-mapping is not correct or for plugin options
+   *
+   * Please open a new issue if some option is mismatched or not existing / mapped
+   */
+  outerOptions?: {
+    [key: string]: any;
+  };
 }
 
 export interface ValidateNumberOptions {
@@ -238,37 +283,6 @@ export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T;
  */
 export type EmptyVoidFn = () => void;
 
-export interface ArrayPropOptions extends BasePropOptions {
-  /** What array is it?
-   * Note: this is only needed because Reflect & refelact Metadata cant give an accurate Response for an array
-   */
-  items?: any;
-  /** Same as {@link PropOptions.ref}, only that it is for an array */
-  itemsRef?: any;
-  /** Same as {@link PropOptions.refPath}, only that it is for an array */
-  itemsRefPath?: any;
-  /** Same as {@link PropOptions.refType}, only that it is for an array */
-  itemsRefType?: RefSchemaType;
-  /**
-   * Use this to define inner-options
-   * Use this if the auto-mapping is not correct or for plugin options
-   *
-   * Please open a new issue if some option is mismatched or not existing / mapped
-   */
-  innerOptions?: {
-    [key: string]: any;
-  };
-  /**
-   * Use this to define outer-options
-   * Use this if the auto-mapping is not correct or for plugin options
-   *
-   * Please open a new issue if some option is mismatched or not existing / mapped
-   */
-  outerOptions?: {
-    [key: string]: any;
-  };
-}
-
 export interface MapPropOptions extends BasePropOptions {
   /**
    * The type of the Map (Map<string, THIS>)
@@ -336,4 +350,101 @@ export enum Severity {
   ALLOW,
   WARN,
   ERROR
+}
+
+/*
+ copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
+ */
+
+export interface IndexOptions<T> {
+  /**
+   * Mongoose-specific syntactic sugar, uses ms to convert
+   * expires option into seconds for the expireAfterSeconds in the above link.
+   */
+  expires?: string;
+  /**
+   * Creates an unique index.
+   */
+  unique?: boolean;
+  /**
+   * Creates a sparse index.
+   */
+  sparse?: boolean;
+  /**
+   * Creates the index in the background, yielding whenever possible.
+   */
+  background?: boolean;
+  /**
+   * A unique index cannot be created on a key that has pre-existing duplicate values.
+   * If you would like to create the index anyway, keeping the first document the database indexes and
+   * deleting all subsequent documents that have duplicate value
+   */
+  dropDups?: boolean;
+  /**
+   * For geo spatial indexes set the lower bound for the co-ordinates.
+   */
+  min?: number;
+  /**
+   * For geo spatial indexes set the high bound for the co-ordinates.
+   */
+  max?: number;
+  /**
+   * Specify the format version of the indexes.
+   */
+  v?: number;
+  /**
+   * Allows you to expire data on indexes applied to a data (MongoDB 2.2 or higher)
+   */
+  expireAfterSeconds?: number;
+  /**
+   * Override the auto generated index name (useful if the resulting name is larger than 128 bytes)
+   */
+  name?: string;
+  /**
+   * Creates a partial index based on the given filter object (MongoDB 3.2 or higher)
+   */
+  partialFilterExpression?: any;
+  collation?: object;
+  default_language?: string;
+
+  lowercase?: boolean; // whether to always call .toLowerCase() on the value
+  uppercase?: boolean; // whether to always call .toUpperCase() on the value
+  trim?: boolean; // whether to always call .trim() on the value
+
+  weights?: {
+    [P in keyof Partial<T>]: number;
+  };
+}
+
+/**
+ * Used as a Type for the return of getMetadata
+ * @example
+ * ```ts
+ * const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, target) || [];
+ * ```
+ */
+export interface IIndexArray<T> {
+  fields: {
+    [key: string]: any
+  };
+  options: IndexOptions<T>;
+}
+
+export interface IGlobalOptions {
+  /** Typegoose Options */
+  options?: ICustomOptions;
+  /** Schema Options that should get applied to all models */
+  schemaOptions?: mongoose.SchemaOptions;
+  /**
+   * Global Options for general Typegoose
+   * (There are currently none)
+   */
+  globalOptions?: {
+    /**
+     * Use the new Enum code generating code
+     * -> this is for not breaking existing databases
+     * @default false
+     */
+    useNewEnum: boolean;
+  };
 }

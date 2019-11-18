@@ -14,9 +14,9 @@
     "allowJs": false,
     "outDir": "build",
     "inlineSourceMap": true,
-    "incremental": true,
     "importHelpers": true,
-    "tsBuildInfoFile": "./.tsbuildinfo"
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true
   },
   "include": [
     "src/**/*.ts",

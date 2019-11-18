@@ -130,6 +130,23 @@ class Another {
 }
 ```
 
+### refType
+
+Accepts Type: `mongoose.Schema.Types.Number` \| `mongoose.Schema.Types.String` \| `mongoose.Schema.Types.Buffer` \| `mongoose.Schema.Types.ObjectId`
+
+Set which Type to use for refs
+
+-> [`@prop`'s `type`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#type) can be used too
+
+```ts
+class Nested {}
+
+class Parent {
+  @prop({ ref: "Nested", refType: mongoose.Schema.Types.ObjectId }) // it is a "String" because of reference errors
+  public nest: Ref<Nested>;
+}
+```
+
 ### validate
 
 Accepts Type: `object` OR `RegExp` OR `(value) => boolean` OR `object[]`
@@ -302,7 +319,7 @@ Accepts Type: `enum | any[]`
 
 Only allow Values from the enum (best practice is to use TypeScript's enum)
 
--> Please know that mongoose only allows enums when the type is a `String`
+-> Please know that mongoose currently only allows enums when the type is a `String`
 
 ```ts
 enum Gender {
@@ -311,9 +328,50 @@ enum Gender {
 }
 
 class Enumed {
-  @prop({ enum: Gender })
+  @prop({ enum: Gender, type: String })
   public gender?: Gender;
 }
+```
+
+Typegoose disallows enums that dont have strings associated with them (only with the new behaviour)
+-> Reason, image the following example:
+
+```ts
+// imaginge having this enum
+enum Here {
+  Here1,
+  Here2,
+  Here3
+}
+// it would compile down to ["Here1", "Here2", "Here3", 0, 1, 2] to be mongoose use-able
+class SomeClass {
+  @prop({ enum: Here, type: String })
+  public somestring: Here;
+}
+
+const SomeClassModel = getModelForClass(SomeClass);
+const doc = new SomeClassModel({ somestring: Here.Here2 }) // you would expect to be "Here2" right? wrong, it would use the number 1
+// which *could* be used, BUT it could be very inaccurate OR when chaning an enum, it would invalidate the whole collection
+```
+
+and when `globalOptions.globalOptions.useNewEnum` is activated, typegoose will convert the following:
+
+```ts
+enum SomeThing {
+  Hi = "Hi SomeOne",
+  Hi2 = "Hi SomeThing"
+}
+// both behaviors
+["Hi SomeOne", "Hi SomeThing"]
+
+enum SomeOtherThing {
+  Hi,
+  Hi2 = "something"
+}
+// new behavior
+Error // all values need to have a string
+// old behavior
+["Hi", 0, "something"]
 ```
 
 ### Number Validation options

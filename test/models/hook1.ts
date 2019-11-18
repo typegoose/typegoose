@@ -1,4 +1,3 @@
-import { isArray } from 'util';
 import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
 
 @pre<Hook>('save', function () {
@@ -9,14 +8,14 @@ import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../
   }
 })
 @pre<Hook>(/^update/, function () {
-  if (isArray(this)) {
+  if (Array.isArray(this)) {
     this.forEach(async (v) => await v.update({ shape: 'REGEXP_PRE' })); // i know this is inefficient
   } else {
     this.update({ shape: 'REGEXP_PRE' });
   }
 })
 @post<Hook>(/^find/, (doc) => {
-  if (isArray(doc)) {
+  if (Array.isArray(doc)) {
     doc.forEach((v) => v.material = 'REGEXP_POST');
   } else if (isDocument(doc)) {
     doc.material = 'REGEXP_POST';
@@ -31,7 +30,7 @@ export class Hook {
 }
 
 @post<HookArray>(['find', 'findOne'], async (docs) => {
-  if (isArray(docs)) {
+  if (Array.isArray(docs)) {
     await Promise.all(docs.map(async (v) => {
       v.testArray.push('hello');
       await v.save();

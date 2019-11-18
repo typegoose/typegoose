@@ -1,5 +1,6 @@
-import { globalOptions, IGlobalOptions } from './internal/data';
+import { globalOptions } from './internal/data';
 import { logger } from './logSettings';
+import { IGlobalOptions } from './types';
 
 /**
  * Set Typegoose's global Options
@@ -12,8 +13,6 @@ export function setGlobalOptions(options: IGlobalOptions) {
   logger.info('"setGlobalOptions" got called with', options);
 
   for (const key of Object.keys(options)) {
-    if (key !== 'globalOptions') {
-      globalOptions[key] = Object.assign({}, globalOptions[key], options[key]);
-    }
+    globalOptions[key] = Object.assign({}, globalOptions[key], options[key]);
   }
 }

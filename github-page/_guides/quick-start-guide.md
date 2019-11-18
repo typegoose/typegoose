@@ -79,9 +79,9 @@ class User {
 
 ### Requirements
 
-- TypeScript 3.2+
+- TypeScript 3.7+
 - NodeJS 8.10.0+
-- Mongoose 5.6.9+
+- Mongoose 5.7.7+
 - An IDE that supports TypeScript linting (VSCode is recommendet)
 - This Guide expect you to know how mongoose (at least its models) work
 
@@ -125,4 +125,4 @@ Please note that `new Kitten({})` & `await Kitten.create({})` has no types of Ki
 - Decorated schema configuration classes (like KittenClass above) must use explicit type declaration
 instead of type inference for their types.  Otherwise, a property's type will become Mixed!  This is
 because Typegoose uses emitDecoratorMetadata to determine types, and by design, emitDecorator emits the
-explicit type instead of what's inferred (see [microsoft/Typegoose#18995](https://github.com/microsoft/TypeScript/issues/18995)).
+explicit type instead of what's inferred (see [microsoft/TypeScript#18995](https://github.com/microsoft/TypeScript/issues/18995)).

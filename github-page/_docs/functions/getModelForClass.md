@@ -14,4 +14,6 @@ class Kitten {
   @prop()
   public name?: string;
 }
+
+const KittenModel = getModelForClass(Kitten);
 ```

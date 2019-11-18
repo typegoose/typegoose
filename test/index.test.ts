@@ -2,7 +2,14 @@ import { use } from 'chai';
 import * as cap from 'chai-as-promised';
 import 'source-map-support/register';
 
+import { setGlobalOptions } from '../src/typegoose';
 import { connect, disconnect } from './utils/mongooseConnect';
+
+setGlobalOptions({ // to have this initaly set
+  globalOptions: {
+    useNewEnum: true
+  }
+});
 
 import { suite as ArrayValidatorTests } from './tests/arrayValidator.test';
 import { suite as BigUserTest } from './tests/biguser.test';
@@ -35,6 +42,13 @@ use(cap);
 describe('Typegoose', () => {
   before(connect);
   after(disconnect);
+  beforeEach(() => {
+    setGlobalOptions({ // to always have this option & to overwrite what "setGlobalOptions" tests set
+      globalOptions: {
+        useNewEnum: true
+      }
+    });
+  });
 
   describe('Global Options', GlobalTest.bind(this));
 

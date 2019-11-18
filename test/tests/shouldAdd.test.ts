@@ -5,7 +5,7 @@ import { arrayProp, buildSchema, isDocumentArray, prop, Ref } from '../../src/ty
 import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
 import { GetSet, GetSetModel } from '../models/getSet';
-import { model as InternetUser } from '../models/internetUser';
+import { InternetUserModel } from '../models/internetUser';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
 import { OptionsClass, OptionsModel } from '../models/options';
 import { model as User } from '../models/user';
@@ -92,7 +92,7 @@ export function suite() {
   });
 
   it(`should add dynamic fields using map`, async () => {
-    const user = await InternetUser.create({
+    const user = await InternetUserModel.create({
       socialNetworks: {
         twitter: 'twitter account',
         facebook: 'facebook account'
@@ -117,38 +117,39 @@ export function suite() {
     expect(user.sideNotes.get('day1')).to.have.property('content', 'day1');
     expect(user.sideNotes.get('day1')).to.have.property('link', 'url');
     expect(user.sideNotes.has('day2')).to.be.equal(true);
+
+    expect(user.sideNotes.get('day1')).to.not.have.property('_id');
+    expect(user.sideNotes.get('day2')).to.not.have.property('_id');
   });
 
   it('Should support dynamic references via refPath', async () => {
-    const sprite = new Beverage({
+    const sprite = await Beverage.create({
       isDecaf: true,
       isSugarFree: false
     });
-    await sprite.save();
 
-    await new Beverage({
+    await Beverage.create({
       isDecaf: false,
       isSugarFree: true
-    }).save();
+    });
 
-    const vespa = new Scooter({
+    const vespa = await Scooter.create({
       makeAndModel: 'Vespa'
     });
-    await vespa.save();
 
-    await new Inventory({
+    await Inventory.create({
       refItemPathName: 'Beverage',
       kind: sprite,
       count: 10,
       value: 1.99
-    }).save();
+    });
 
-    await new Inventory({
+    await Inventory.create({
       refItemPathName: 'Scooter',
       kind: vespa,
       count: 1,
       value: 1099.98
-    }).save();
+    });
 
     // I should now have two "inventory" items, with different embedded reference documents.
     const items = await Inventory.find({}).populate('kind').exec();
