@@ -75,9 +75,10 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   if (!utils.isNullOrUndefined(rawOptions.type)) {
     logger.info('Prop Option "type" is set to', rawOptions.type);
     Type = rawOptions.type;
+    delete rawOptions.type;
   }
 
-  if (utils.isNotDefined(Type) && utils.isNullOrUndefined(rawOptions.type)) {
+  if (utils.isNotDefined(Type)) {
     buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
   }
   const name: string = utils.getName(target.constructor);
@@ -105,10 +106,6 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       throw new TypeError(`"${name}.${key}" does not have a get function!`);
     }
 
-    const newType = rawOptions?.type ? rawOptions.type : Type;
-    if (!utils.isNullOrUndefined(rawOptions?.type)) {
-      delete rawOptions.type;
-    }
     /*
      * Note:
      * this dosnt have a check if prop & returntype of the function is the same,
@@ -116,7 +113,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
      */
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
-      type: newType,
+      type: Type,
       ...rawOptions
     };
 
@@ -248,8 +245,9 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     }
   }
 
-  const subSchema = schemas.get(utils.getName(Type));
-  if (!subSchema && !utils.isPrimitive(Type) && !utils.isObject(Type)) {
+  /** Is this Type (/Class) in the schemas Map? */
+  const isInSchemas = schemas.has(utils.getName(Type));
+  if (!isInSchemas && !utils.isPrimitive(Type) && !utils.isObject(Type)) {
     throw new InvalidPropError(Type.name, key); // This seems to be never thrown!
   }
 
@@ -291,7 +289,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
-  if (utils.isObject(Type) && !subSchema) {
+  if (utils.isObject(Type) && !isInSchemas) {
     utils.warnMixed(target, key);
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],

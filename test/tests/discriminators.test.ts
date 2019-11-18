@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { mongoose } from '../../src/typegoose';
 import { DocumentType } from '../../src/types';
-import { Default, DefaultModel, DefaultProfile, DisciminatedUser, DisciminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminators2';
+import { Default, DefaultModel, DisciminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminatorsWithGenerics';
 
 /**
  * Function to pass into describe
@@ -15,9 +15,6 @@ export function suite() {
       default: 'sth',
       profile: { test: 'sth', lastName: 'sth' }
     } as Default);
-    // console.log('instance', instance);
-    // console.log('schema', instance.schema);
-    // console.log('modelName1', instance.constructor);
     expect(instance.constructor).to.equal(DefaultModel);
     expect(instance.schema.path('profile')).to.not.be.an.instanceOf(mongoose.Schema.Types.Mixed);
     expect((instance as any).visitor).to.equals(undefined);
@@ -34,7 +31,6 @@ export function suite() {
     } as Default);
     expect(instance.constructor).to.equal(DefaultModel);
     expect(instance.schema.path('profile')).to.not.be.an.instanceOf(mongoose.Schema.Types.Mixed);
-    // console.log('modelName2', instance.constructor);
     expect(instance.role).to.equals(ROLE.DEFAULT);
     expect((instance as any).visitor).to.equals(undefined);
     expect(instance.default).to.equals('sth');
@@ -51,7 +47,6 @@ export function suite() {
     } as Visitor);
     expect(instance.constructor).to.equal(VisitorModel);
     expect(instance.schema.path('profile')).to.not.be.an.instanceOf(mongoose.Schema.Types.Mixed);
-    // console.log('modelName3', instance.constructor);
     expect(instance.role).to.equals(ROLE.VISITOR);
     expect(instance.visitor).to.equals('sth');
     expect((instance as any).default).to.equals(undefined);
