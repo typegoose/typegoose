@@ -8,7 +8,6 @@ import {
   arrayProp,
   buildSchema,
   DocumentType,
-  getDiscriminatorModelForClass,
   getModelForClass,
   getModelWithString,
   mapProp,
@@ -16,7 +15,6 @@ import {
   prop
 } from '../../src/typegoose';
 import { IModelOptions } from '../../src/types';
-import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -48,20 +46,6 @@ export function suite() {
     @modelOptions({ existingConnection: mongoose.connection })
     class TESTexistingConnection { }
     expect(getModelForClass(TESTexistingConnection)).to.not.be.an('undefined');
-  });
-
-  it('should make use of discriminators', async () => {
-    const disMainDoc = await DisMainModel.create({ main1: 'hello DMM' } as DisMain);
-    const disAboveDoc = await DisAboveModel.create({ main1: 'hello DAM', above1: 'hello DAM' } as DisAbove);
-    expect(disMainDoc).to.not.be.an('undefined');
-    expect(disMainDoc.main1).to.equals('hello DMM');
-    expect(disMainDoc).to.not.have.property('above1');
-    expect(disMainDoc.__t).to.be.an('undefined');
-
-    expect(disAboveDoc).to.not.be.an('undefined');
-    expect(disAboveDoc.main1).to.equals('hello DAM');
-    expect(disAboveDoc.above1).to.equals('hello DAM');
-    expect(disAboveDoc.__t).to.equals('DisAbove');
   });
 
   it('should make use of addModelToTypegoose', async () => {
@@ -281,18 +265,6 @@ export function suite() {
 
     expect(doc).to.not.be.an('undefined');
     expect(doc.propy).to.be.equal(100);
-  });
-
-  it('"getDiscriminatorModelForClass" should return the same model if already defined', () => {
-    class TestSameModelDicriminator { }
-
-    const model = getModelForClass(TestSameModelDicriminator);
-
-    const dummymodel = mongoose.model('DummyModel', new mongoose.Schema());
-
-    const newmodel = getDiscriminatorModelForClass(dummymodel, TestSameModelDicriminator);
-
-    expect(newmodel).to.deep.equal(model);
   });
 
   it('should run with Custom Types', async () => {

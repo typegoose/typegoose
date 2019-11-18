@@ -235,7 +235,7 @@ export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: m
  */
 export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) ?? {};
-  const baseName = cl.name;
+  const baseName = cl.name ?? cl.constructor.name;
 
   if (options.options && options.options.automaticName) {
     const suffix = options?.options?.customName ?? options?.schemaOptions?.collection;
@@ -263,7 +263,7 @@ export function isNotDefined(cl: any) {
     !isPrimitive(cl) &&
     cl !== Object &&
     cl !== mongoose.Schema.Types.Buffer &&
-    isNullOrUndefined(schemas.get(getName(cl)));
+    !schemas.has(getName(cl));
 }
 
 /**

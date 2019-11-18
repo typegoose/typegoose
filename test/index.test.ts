@@ -16,6 +16,7 @@ import { suite as BigUserTest } from './tests/biguser.test';
 import { suite as customNameTests } from './tests/customName.test';
 import { suite as IndexTests } from './tests/dbIndex.test';
 import { suite as DefaultClassesTests } from './tests/dClasses.test';
+import { suite as DiscriminatorTests } from './tests/discriminators.test';
 import { suite as ErrorTests } from './tests/errors.test';
 import { suite as GCFDTest } from './tests/getClassForDocument.test';
 import { suite as GlobalTest } from './tests/globalOptions.test';
@@ -80,4 +81,6 @@ describe('Typegoose', () => {
   describe('customName', customNameTests.bind(this));
 
   describe('Overwritten Model', OverwrittenModels.bind(this));
+
+  describe('Discriminators', DiscriminatorTests.bind(this));
 });
