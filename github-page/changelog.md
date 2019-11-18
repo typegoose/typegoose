@@ -10,12 +10,17 @@ redirect_from:
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
 <!-- 
-## 6.1.4
+## 6.1.5
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Add here
 -->
+
+## 6.1.4
+
+- Apply Global Options without needing @modelOptions
+- [IC] add function "utils.assignGlobalModelOptions"
 
 ## 6.1.3
 
