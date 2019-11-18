@@ -10,12 +10,17 @@ redirect_from:
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
 <!-- 
-## 6.1.3
+## 6.1.4
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Add here
 -->
+
+## 6.1.3
+
+- fix bug when "buildSchema" didnt get called when overwriting the type in `@prop`
+- [IC] add tests for Generic Discriminators
 
 ## 6.1.2
 
