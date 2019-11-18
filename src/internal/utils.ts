@@ -1,4 +1,4 @@
-import { cloneDeepWith, mergeWith } from 'lodash';
+import { mergeWith, omit } from 'lodash';
 import * as mongoose from 'mongoose';
 import { format } from 'util';
 
@@ -197,10 +197,10 @@ export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: n
   }
 
   // Please dont remove the other values from the function, even when unused - it is made to be clear what is what
-  const current = cloneDeepWith(Reflect.getMetadata(key, cl) ?? {}, (val, ckey, obj, stack) => customMerger(key, val));
-
-  return mergeWith({}, current, value,
-    (objValue, srcValue, ckey, object, source, stack) => customMerger(key, srcValue));
+  return mergeWith({},
+    Reflect.getMetadata(key, cl),
+    value,
+    (objValue, srcValue, ckey, object, source, stack) => customMerger(ckey, srcValue));
 }
 
 /**
@@ -392,6 +392,6 @@ export function isNullOrUndefined(val: unknown): val is null | undefined {
 export function assignGlobalModelOptions(target: any) {
   if (isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.ModelOptions, target))) {
     logger.info('Assigning global Schema Options to "%s"', getName(target));
-    assignMetadata(DecoratorKeys.ModelOptions, { options: globalOptions.options, schemaOptions: globalOptions.schemaOptions }, target);
+    assignMetadata(DecoratorKeys.ModelOptions, omit(globalOptions, 'globalOptions'), target);
   }
 }

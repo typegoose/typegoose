@@ -42,13 +42,6 @@ use(cap);
 describe('Typegoose', () => {
   before(connect);
   after(disconnect);
-  beforeEach(() => {
-    setGlobalOptions({ // to always have this option & to overwrite what "setGlobalOptions" tests set
-      globalOptions: {
-        useNewEnum: true
-      }
-    });
-  });
 
   describe('Global Options', GlobalTest.bind(this));
 

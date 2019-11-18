@@ -1,7 +1,9 @@
 import { assert, expect } from 'chai';
+import { omit } from 'lodash';
 import * as mongoose from 'mongoose';
 
 import { DecoratorKeys } from '../../src/internal/constants';
+import { globalOptions } from '../../src/internal/data';
 import { assignMetadata, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import {
   addModelToTypegoose,
@@ -330,5 +332,15 @@ export function suite() {
     const type = getModelWithString('someTestyString');
 
     expect(type).to.equal(undefined);
+  });
+
+  it('should merge existingConnection correctly (overwrite)', () => {
+    // @ts-ignore ignore that "existingConnection" is not of type connection
+    @modelOptions({ existingConnection: { hello: 1 } })
+    class Dummy { }
+
+    const out = mergeMetadata(DecoratorKeys.ModelOptions, { existingConnection: { hi: 1 } }, Dummy);
+
+    expect(out).to.deep.equal(Object.assign({}, omit(globalOptions, 'globalOptions'), { existingConnection: { hi: 1 } }));
   });
 }

@@ -17,6 +17,12 @@ redirect_from:
 - Add here
 -->
 
+## 6.1.5
+
+- Option merging is now properly done
+- [IC] fix giving wrong key to customMerger
+- [IC] remove the need to use "cloneDeepWith"
+
 ## 6.1.4
 
 - Apply Global Options without needing @modelOptions
