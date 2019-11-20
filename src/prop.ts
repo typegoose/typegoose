@@ -70,17 +70,18 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     whatis
   } = input;
   const rawOptions = Object.assign({}, origOptions);
-  logger.debug('Starting to process "%s.%s"', target.constructor.name, key);
+  logger.debug('Starting to process "%s.%s"', utils.getName(target), key);
 
   if (!utils.isNullOrUndefined(rawOptions.type)) {
     logger.info('Prop Option "type" is set to', rawOptions.type);
     Type = rawOptions.type;
+    delete rawOptions.type;
   }
 
-  if (utils.isNotDefined(Type) && utils.isNullOrUndefined(rawOptions.type)) {
+  if (utils.isNotDefined(Type)) {
     buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
   }
-  const name: string = utils.getName(target.constructor);
+  const name: string = utils.getName(target);
 
   if (!virtuals.has(name)) {
     virtuals.set(name, new Map());
@@ -105,10 +106,6 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       throw new TypeError(`"${name}.${key}" does not have a get function!`);
     }
 
-    const newType = rawOptions?.type ? rawOptions.type : Type;
-    if (!utils.isNullOrUndefined(rawOptions?.type)) {
-      delete rawOptions.type;
-    }
     /*
      * Note:
      * this dosnt have a check if prop & returntype of the function is the same,
@@ -116,7 +113,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
      */
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
-      type: newType,
+      type: Type,
       ...rawOptions
     };
 
@@ -202,7 +199,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
               throw new TypeError(format(
                 'All Enums supplied to @prop must have strings associated with them!\n'
                 + 'Encountered at "%s.%s", with property: %s.%s',
-                utils.getName(target.constructor),
+                utils.getName(target),
                 key,
                 enumKey, typeof enumValue
               ));
@@ -230,7 +227,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   {
     // check if Type is actually a real working Type
     if (utils.isNullOrUndefined(Type) || typeof Type !== 'function') {
-      throw new InvalidTypeError(target.constructor.name, key, Type);
+      throw new InvalidTypeError(utils.getName(target), key, Type);
     }
 
     // check for validation inconsistencies
@@ -248,8 +245,9 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     }
   }
 
-  const subSchema = schemas.get(utils.getName(Type));
-  if (!subSchema && !utils.isPrimitive(Type) && !utils.isObject(Type)) {
+  /** Is this Type (/Class) in the schemas Map? */
+  const isInSchemas = schemas.has(utils.getName(Type));
+  if (!isInSchemas && !utils.isPrimitive(Type) && !utils.isObject(Type)) {
     throw new InvalidPropError(Type.name, key); // This seems to be never thrown!
   }
 
@@ -291,7 +289,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
-  if (utils.isObject(Type) && !subSchema) {
+  if (utils.isObject(Type) && !isInSchemas) {
     utils.warnMixed(target, key);
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
@@ -302,15 +300,15 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     return;
   }
 
+  const virtualSchema = buildSchema(Type, {
+    _id: typeof rawOptions?._id === 'boolean' ? rawOptions._id : true
+  });
   switch (whatis) {
     case WhatIsIt.ARRAY:
-      const virtualSchemaArrayItem = buildSchema(Type, {
-        _id: typeof rawOptions?._id === 'boolean' ? rawOptions._id : true
-      });
       schemas.get(name)[key] = {
         ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
         ...options,
-        type: [virtualSchemaArrayItem]
+        type: [virtualSchema]
       };
 
       return;
@@ -318,18 +316,14 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
         type: Map,
-        ...options
-      };
-      (schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of = {
-        ...(schemas.get(name)[key] as mongoose.SchemaTypeOpts<Map<any, any>>).of,
-        ...subSchema
+        of: {
+          type: virtualSchema,
+          ...options
+        }
       };
 
       return;
     case WhatIsIt.NONE:
-      const virtualSchema = buildSchema(Type, {
-        _id: typeof rawOptions?._id === 'boolean' ? rawOptions._id : true
-      });
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
         ...options,

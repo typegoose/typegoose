@@ -9,9 +9,36 @@ redirect_from:
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
-## 6.1.1
+<!-- 
+## 6.1.5
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+- Add here
+-->
+
+## 6.1.5
+
+- Option merging is now properly done
+- [IC] fix giving wrong key to customMerger
+- [IC] remove the need to use "cloneDeepWith"
+
+## 6.1.4
+
+- Apply Global Options without needing @modelOptions
+- [IC] add function "utils.assignGlobalModelOptions"
+
+## 6.1.3
+
+- fix bug when "buildSchema" didnt get called when overwriting the type in `@prop`
+- [IC] add tests for Generic Discriminators
+
+## 6.1.2
+
+- Allow setting `_id: false` (and apply it) for `@mapProp`
+- [IC] De-duplicate code for `_id` if subDocument
+
+## 6.1.1
 
 - `deleteModel` now deletes the model from the connection it is on {% include gitissue repo="typegoose" num=119 %}
 - [IC] de-duplicate test code for connecting

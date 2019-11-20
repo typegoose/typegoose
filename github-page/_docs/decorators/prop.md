@@ -343,7 +343,7 @@ enum Here {
   Here2,
   Here3
 }
-// it would compile down to ["Here1", "Here2", "Here3"] to be mongoose use-able
+// it would compile down to ["Here1", "Here2", "Here3", 0, 1, 2] to be mongoose use-able
 class SomeClass {
   @prop({ enum: Here, type: String })
   public somestring: Here;
@@ -361,10 +361,17 @@ enum SomeThing {
   Hi = "Hi SomeOne",
   Hi2 = "Hi SomeThing"
 }
-// to (only when "useNewEnum" is activated)
+// both behaviors
 ["Hi SomeOne", "Hi SomeThing"]
-// old behaviour
-["Hi", "Hi2"]
+
+enum SomeOtherThing {
+  Hi,
+  Hi2 = "something"
+}
+// new behavior
+Error // all values need to have a string
+// old behavior
+["Hi", 0, "something"]
 ```
 
 ### Number Validation options

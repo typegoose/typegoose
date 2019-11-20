@@ -18,11 +18,11 @@ class InternetUser {
   @mapProp({ of: String, default: {} })
   public socialNetworks?: Map<string, string>;
 
-  @mapProp({ of: SideNote })
+  @mapProp({ of: SideNote, _id: false })
   public sideNotes?: Map<string, SideNote>;
 
   @mapProp({ of: String, enum: ProjectValue })
   public projects: Map<string, ProjectValue>;
 }
 
-export const model = getModelForClass(InternetUser);
+export const InternetUserModel = getModelForClass(InternetUser);

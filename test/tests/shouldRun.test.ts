@@ -1,14 +1,15 @@
 import { assert, expect } from 'chai';
+import { omit } from 'lodash';
 import * as mongoose from 'mongoose';
 
 import { DecoratorKeys } from '../../src/internal/constants';
+import { globalOptions } from '../../src/internal/data';
 import { assignMetadata, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import {
   addModelToTypegoose,
   arrayProp,
   buildSchema,
   DocumentType,
-  getDiscriminatorModelForClass,
   getModelForClass,
   getModelWithString,
   mapProp,
@@ -16,7 +17,6 @@ import {
   prop
 } from '../../src/typegoose';
 import { IModelOptions } from '../../src/types';
-import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -48,20 +48,6 @@ export function suite() {
     @modelOptions({ existingConnection: mongoose.connection })
     class TESTexistingConnection { }
     expect(getModelForClass(TESTexistingConnection)).to.not.be.an('undefined');
-  });
-
-  it('should make use of discriminators', async () => {
-    const disMainDoc = await DisMainModel.create({ main1: 'hello DMM' } as DisMain);
-    const disAboveDoc = await DisAboveModel.create({ main1: 'hello DAM', above1: 'hello DAM' } as DisAbove);
-    expect(disMainDoc).to.not.be.an('undefined');
-    expect(disMainDoc.main1).to.equals('hello DMM');
-    expect(disMainDoc).to.not.have.property('above1');
-    expect(disMainDoc.__t).to.be.an('undefined');
-
-    expect(disAboveDoc).to.not.be.an('undefined');
-    expect(disAboveDoc.main1).to.equals('hello DAM');
-    expect(disAboveDoc.above1).to.equals('hello DAM');
-    expect(disAboveDoc.__t).to.equals('DisAbove');
   });
 
   it('should make use of addModelToTypegoose', async () => {
@@ -283,18 +269,6 @@ export function suite() {
     expect(doc.propy).to.be.equal(100);
   });
 
-  it('"getDiscriminatorModelForClass" should return the same model if already defined', () => {
-    class TestSameModelDicriminator { }
-
-    const model = getModelForClass(TestSameModelDicriminator);
-
-    const dummymodel = mongoose.model('DummyModel', new mongoose.Schema());
-
-    const newmodel = getDiscriminatorModelForClass(dummymodel, TestSameModelDicriminator);
-
-    expect(newmodel).to.deep.equal(model);
-  });
-
   it('should run with Custom Types', async () => {
     // this test is a modified version of https://mongoosejs.com/docs/customschematypes.html
     class CustomInt extends mongoose.SchemaType {
@@ -358,5 +332,15 @@ export function suite() {
     const type = getModelWithString('someTestyString');
 
     expect(type).to.equal(undefined);
+  });
+
+  it('should merge existingConnection correctly (overwrite)', () => {
+    // @ts-ignore ignore that "existingConnection" is not of type connection
+    @modelOptions({ existingConnection: { hello: 1 } })
+    class Dummy { }
+
+    const out = mergeMetadata(DecoratorKeys.ModelOptions, { existingConnection: { hi: 1 } }, Dummy);
+
+    expect(out).to.deep.equal(Object.assign({}, omit(globalOptions, 'globalOptions'), { existingConnection: { hi: 1 } }));
   });
 }

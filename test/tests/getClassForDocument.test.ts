@@ -5,7 +5,7 @@ import { getClassForDocument } from '../../src/internal/utils';
 import { isDocument } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Car as CarClass, model as Car } from '../models/car';
-import { model as InternetUser } from '../models/internetUser';
+import { InternetUserModel } from '../models/internetUser';
 import { AddressNested, AddressNestedModel, PersonNested, PersonNestedModel } from '../models/nestedObject';
 import { model as Person } from '../models/person';
 import { model as User, User as UserType } from '../models/user';
@@ -128,7 +128,7 @@ export function suite() {
 
   it(`should Validate Map`, async () => {
     try {
-      await InternetUser.create({
+      await InternetUserModel.create({
         projects: {
           p1: 'project'
         }
