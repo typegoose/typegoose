@@ -395,3 +395,21 @@ export function assignGlobalModelOptions(target: any) {
     assignMetadata(DecoratorKeys.ModelOptions, omit(globalOptions, 'globalOptions'), target);
   }
 }
+
+/**
+ * Get the statuse of "_id"
+ * @param Type The Class to check on
+ * @param rawOptions baseProp's rawOptions
+ */
+export function get_idStatus(Type: any, rawOptions: any): boolean {
+  if (typeof rawOptions?._id === 'boolean') {
+    return rawOptions._id;
+  }
+
+  const TypeModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, Type);
+  if (typeof TypeModelOptions?.schemaOptions?._id === 'boolean') {
+    return TypeModelOptions.schemaOptions._id;
+  }
+
+  return true;
+}

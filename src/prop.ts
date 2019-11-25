@@ -79,7 +79,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
 
   if (utils.isNotDefined(Type)) {
-    buildSchema(Type, { _id: typeof rawOptions._id === 'boolean' ? rawOptions._id : true });
+    buildSchema(Type, { _id: utils.get_idStatus(Type, rawOptions) });
   }
   const name: string = utils.getName(target);
 
@@ -301,7 +301,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
 
   const virtualSchema = buildSchema(Type, {
-    _id: typeof rawOptions?._id === 'boolean' ? rawOptions._id : true
+    _id: utils.get_idStatus(Type, rawOptions)
   });
   switch (whatis) {
     case WhatIsIt.ARRAY:
