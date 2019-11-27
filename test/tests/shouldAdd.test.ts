@@ -1,6 +1,7 @@
 import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
 
+import { getName } from '../../src/internal/utils';
 import { arrayProp, buildSchema, isDocumentArray, prop, Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
@@ -295,5 +296,23 @@ export function suite() {
       expect(doc.actualProp).to.equal('hello2');
       expect(doc.some).to.equal('hello2');
     }
+  });
+
+  it('should add schema paths when there is a virtual called `name`', () => {
+    class TestName {
+      @prop()
+      public something: string;
+
+      public get name() {
+        return 'TestNameNOT';
+      }
+    }
+
+    const schema = buildSchema(TestName);
+    const someprop = schema.path('something');
+
+    expect(getName(TestName)).to.equal('TestName');
+    expect(schema).to.not.be.an('undefined');
+    expect(someprop).to.not.be.an('undefined');
   });
 }
