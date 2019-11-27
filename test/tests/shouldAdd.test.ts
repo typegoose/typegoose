@@ -296,4 +296,21 @@ export function suite() {
       expect(doc.some).to.equal('hello2');
     }
   });
+
+  it('should add schema paths when there is a virtual called `name`', () => {
+    class T {
+      @prop()
+      public something: string;
+
+      public get name() {
+        return '';
+      }
+    }
+
+    const schema = buildSchema(T);
+    const someprop = schema.path('something');
+    expect(schema).to.not.be.an('undefined');
+    expect(someprop).to.not.be.an('undefined');
+  });
+
 }

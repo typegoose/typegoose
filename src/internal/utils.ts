@@ -238,7 +238,10 @@ export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
     Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) ??
     Reflect.getMetadata(DecoratorKeys.ModelOptions, cl.constructor) ??
     {};
-  const baseName = cl.name ?? cl.constructor.name;
+
+  const baseName = (isNullOrUndefined(cl.name) || isGetter(cl, 'name'))
+    ? cl.constructor.name
+    : cl.name;
 
   if (options.options?.automaticName) {
     const suffix = options.options?.customName ?? options.schemaOptions?.collection;
@@ -383,6 +386,12 @@ export function warnMixed(target: any, key: string | symbol): void | never {
  */
 export function isNullOrUndefined(val: unknown): val is null | undefined {
   return val === null || val === undefined;
+}
+
+export function isGetter(object: any, key: PropertyKey) {
+  const desc = Object.getOwnPropertyDescriptor(object, key);
+
+  return desc && (typeof desc.get === 'function') && (typeof desc.set === 'undefined');
 }
 
 /**
