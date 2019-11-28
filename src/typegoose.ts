@@ -40,7 +40,7 @@ export * from './optionsProp';
 export { defaultClasses };
 export { DocumentType, Ref, ReturnModelType };
 export { Severity, IGlobalOptions } from './types';
-export { getClassForDocument } from './internal/utils';
+export { getClassForDocument, getClass } from './internal/utils';
 export * from './globalOptions';
 
 /** @deprecated */
