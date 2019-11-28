@@ -93,9 +93,11 @@ class Parent {
 
 ### ref
 
-Accepts Type: `Ref<any>`
+Accepts Type: `Class | string`
 
 Set which class to use for Reference (this cannot be inferred by the type)
+
+[->look here where `Class` cannot be used]({{ site.baseurl }}{% link _guides/advanced/reference-other-classes.md%}#common-problems)
 
 Example:
 
@@ -103,7 +105,10 @@ Example:
 class Nested {}
 
 class Parent {
-  @prop({ ref: "Nested" }) // it is a "String" because of reference errors
+  @prop({ ref: Nested })
+  public nest: Ref<Nested>;
+  // or
+  @prop({ ref: "Nested" })
   public nest: Ref<Nested>;
 }
 ```
