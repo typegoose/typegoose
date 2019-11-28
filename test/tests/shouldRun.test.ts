@@ -343,4 +343,24 @@ export function suite() {
 
     expect(out).to.deep.equal(Object.assign({}, omit(globalOptions, 'globalOptions'), { existingConnection: { hi: 1 } }));
   });
+
+  it('should use "_id" from ModelOptions if not in @prop options [typegoose/typegoose#133]', () => {
+    @modelOptions({ schemaOptions: { _id: false } })
+    class SubID {
+      @prop()
+      public someprop: string;
+    }
+
+    class ParentID {
+      @prop()
+      public key: SubID;
+    }
+
+    const model = getModelForClass(ParentID);
+    const doc = new model({ key: {} });
+
+    expect(doc).to.not.equal(undefined);
+    expect(doc.key).to.not.equal(undefined);
+    expect(doc.key).to.not.have.property('_id');
+  });
 }
