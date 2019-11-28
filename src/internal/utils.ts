@@ -397,7 +397,8 @@ export function assignGlobalModelOptions(target: any) {
 }
 
 /**
- * Get the statuse of "_id"
+ * Get the status of "_id"
+ * -> Check if _id should be present, or not
  * @param Type The Class to check on
  * @param rawOptions baseProp's rawOptions
  */
