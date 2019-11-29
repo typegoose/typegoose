@@ -299,6 +299,24 @@ export function suite() {
     }
   });
 
+  it('should add schema paths when there is a virtual called `name`', () => {
+    class TestName {
+      @prop()
+      public something: string;
+
+      public get name() {
+        return 'TestNameNOT';
+      }
+    }
+
+    const schema = buildSchema(TestName);
+    const someprop = schema.path('something');
+
+    expect(getName(TestName)).to.equal('TestName');
+    expect(schema).to.not.be.an('undefined');
+    expect(someprop).to.not.be.an('undefined');
+  });
+
   describe('utils.getClass', () => {
     it('should get class by string', () => {
       const doc = new GetClassTestParentModel({ testy: { test: 'hi' } });
