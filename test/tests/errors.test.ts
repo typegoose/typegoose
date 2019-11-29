@@ -13,7 +13,7 @@ import {
   NoValidClass
 } from '../../src/internal/errors';
 import { _buildSchema } from '../../src/internal/schema';
-import { assignMetadata, getName, mapArrayOptions, mergeSchemaOptions } from '../../src/internal/utils';
+import { assignMetadata, getClass, getName, mapArrayOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import { arrayProp, mapProp, prop } from '../../src/prop';
 import {
   addModelToTypegoose,
@@ -460,6 +460,16 @@ export function suite() {
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(TypeError);
+    }
+  });
+
+  it('should error if a non-valid object is passed to "getClass" [ReferenceError]', () => {
+    try {
+      getClass(undefined);
+
+      assert.fail('Expected to throw "ReferenceError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(ReferenceError);
     }
   });
 }
