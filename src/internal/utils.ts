@@ -260,11 +260,8 @@ export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: m
  */
 export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
   const ctor: any = cl.constructor?.name === 'Function' ? cl : cl.constructor;
-  const options: IModelOptions =
-    Reflect.getMetadata(DecoratorKeys.ModelOptions, /* cl */ctor) ??
-    // Reflect.getMetadata(DecoratorKeys.ModelOptions, cl.constructor) ??
-    {};
-  const baseName: string = /* cl.name ?? cl.constructor.name */ctor.name;
+  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
+  const baseName: string = ctor.name;
 
   if (options.options?.automaticName) {
     const suffix = options.options?.customName ?? options.schemaOptions?.collection;
