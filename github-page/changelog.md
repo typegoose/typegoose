@@ -17,6 +17,12 @@ redirect_from:
 - Add here
 -->
 
+## 6.1.6
+
+- handle `_id: false/true`  better
+- add function `getClass`
+- [IC] fix using "name"-getter in `getName`
+
 ## 6.1.5
 
 - Option merging is now properly done
