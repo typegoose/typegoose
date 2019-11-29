@@ -41,6 +41,8 @@ docs:
         url: /docs/functions/getModelForClass
       - title: 'Get Class For Document'
         url: /docs/functions/getClassForDocument
+      - title: 'Get Class'
+        url: /docs/functions/getClass
       - title: 'Build Schema'
         url: /docs/functions/buildSchema
       - title: 'Get Discriminator Model for Class'
