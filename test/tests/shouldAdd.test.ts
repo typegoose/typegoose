@@ -1,10 +1,11 @@
 import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { getName } from '../../src/internal/utils';
+import { getClass, getName } from '../../src/internal/utils';
 import { arrayProp, buildSchema, isDocumentArray, prop, Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
+import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
 import { GetSet, GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
@@ -314,5 +315,28 @@ export function suite() {
     expect(getName(TestName)).to.equal('TestName');
     expect(schema).to.not.be.an('undefined');
     expect(someprop).to.not.be.an('undefined');
+  });
+
+  describe('utils.getClass', () => {
+    it('should get class by string', () => {
+      const doc = new GetClassTestParentModel({ testy: { test: 'hi' } });
+
+      expect(getClass(doc.typegooseName())).to.equal(GetClassTestParent);
+      expect(getClass((doc.testy as any).typegooseName())).to.equal(GetClassTestSub);
+    });
+
+    it('should get class by Document / Embedded', () => {
+      const doc = new GetClassTestParentModel({ testy: { test: 'hi' } });
+
+      expect(getClass(doc)).to.equal(GetClassTestParent);
+      expect(getClass(doc.testy)).to.equal(GetClassTestSub);
+    });
+
+    it('should get class by typegooseString', () => {
+      const doc = { typegooseName: getName(GetClassTestParent), testy: { typegooseName: getName(GetClassTestSub) } };
+
+      expect(getClass(doc)).to.equal(GetClassTestParent);
+      expect(getClass(doc.testy)).to.equal(GetClassTestSub);
+    });
   });
 }

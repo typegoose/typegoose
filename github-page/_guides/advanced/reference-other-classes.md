@@ -4,8 +4,6 @@ description: >
   Reference other Classes as a Property of an class
 ---
 
-*This is just a base Documentation, making it cleaner would be appreciated*
-
 ## Referencing other Classes
 
 Referencing other Classes is easy as the following:

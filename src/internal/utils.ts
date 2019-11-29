@@ -6,6 +6,8 @@ import { logger } from '../logSettings';
 import {
   AnyParamConstructor,
   IModelOptions,
+  IObjectWithTypegooseFunction,
+  IObjectWithTypegooseName,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
   Severity,
@@ -105,6 +107,29 @@ export function getClassForDocument(document: mongoose.Document): NewableFunctio
   const modelName = (document.constructor as mongoose.Model<typeof document>).modelName;
 
   return constructors.get(modelName);
+}
+
+/**
+ * Get the Class for a given Schema
+ * @param input
+ */
+export function getClass(
+  input: mongoose.Document & IObjectWithTypegooseFunction
+    | mongoose.Schema.Types.Embedded & IObjectWithTypegooseFunction
+    | string | IObjectWithTypegooseName | any
+): NewableFunction | undefined {
+  if (typeof input === 'string') {
+    return constructors.get(input);
+  }
+  if (typeof input?.typegooseName === 'string') {
+    return constructors.get(input.typegooseName);
+  }
+
+  if (typeof input?.typegooseName === 'function') {
+    return constructors.get(input.typegooseName());
+  }
+
+  throw new ReferenceError('Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string');
 }
 
 /**
@@ -398,7 +423,8 @@ export function assignGlobalModelOptions(target: any) {
 }
 
 /**
- * Get the statuse of "_id"
+ * Get the status of "_id"
+ * -> Check if _id should be present, or not
  * @param Type The Class to check on
  * @param rawOptions baseProp's rawOptions
  */

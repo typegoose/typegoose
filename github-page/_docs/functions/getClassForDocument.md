@@ -1,7 +1,7 @@
 ---
-title: "Get Model For Class"
+title: "Get Class for Document"
 redirect_from:
-  - /docs/functions/getmodelforclass
+  - /docs/functions/getclassfordocument
 ---
 
 `getClassForDocument(doc: DocumentType<any>)` is used to get the Class used in the model creation

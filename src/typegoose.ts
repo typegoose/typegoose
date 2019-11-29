@@ -40,7 +40,7 @@ export * from './optionsProp';
 export { defaultClasses };
 export { DocumentType, Ref, ReturnModelType };
 export { Severity, IGlobalOptions } from './types';
-export { getClassForDocument } from './internal/utils';
+export { getClassForDocument, getClass } from './internal/utils';
 export * from './globalOptions';
 
 /** @deprecated */
@@ -194,10 +194,13 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
 
   const name = getName(cl);
 
-  if (constructors.has(name)) {
+  if (models.has(name)) {
     throw new Error(format('It seems like "addModelToTypegoose" got called twice\n'
       + 'Or multiple classes with the same name are used, which is not supported!'
       + '(%s)', name));
+  }
+  if (constructors.get(name)) {
+    logger.info('Class "%s" already existed in the constructors Map', name);
   }
 
   models.set(name, model);

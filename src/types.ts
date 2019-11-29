@@ -13,7 +13,7 @@ import { Base } from './defaultClasses';
  * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
  * ```
  */
-export type DocumentType<T> = T extends Base ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T;
+export type DocumentType<T> = (T extends Base ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T) & IObjectWithTypegooseFunction;
 // I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
@@ -425,7 +425,7 @@ export interface IndexOptions<T> {
  */
 export interface IIndexArray<T> {
   fields: {
-    [key: string]: any
+    [key: string]: any;
   };
   options: IndexOptions<T>;
 }
@@ -447,4 +447,12 @@ export interface IGlobalOptions {
      */
     useNewEnum: boolean;
   };
+}
+
+export interface IObjectWithTypegooseFunction {
+  typegooseName(): string;
+}
+
+export interface IObjectWithTypegooseName {
+  typegooseName: string;
 }
