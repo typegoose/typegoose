@@ -10,12 +10,19 @@ redirect_from:
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
 <!-- 
-## 6.1.5
+## 6.1.8
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Add here
 -->
+
+## 6.1.7
+
+<sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+- [IC] `warnMixed` now uses the right `target`
+- [IC] add function `utils.getRightTarget`
 
 ## 6.1.6
 

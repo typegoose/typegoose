@@ -254,12 +254,21 @@ export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: m
 }
 
 /**
+ * Tries to return the right target
+ * if target.constructor.name is "Function", return target, otherwise target.constructor
+ * @param target The target to determine
+ */
+export function getRightTarget(target: any): any {
+  return target.constructor?.name === 'Function' ? target : target.constructor;
+}
+
+/**
  * Get the correct name of the class's model
  * (with suffix)
  * @param cl The Class
  */
 export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
-  const ctor: any = cl.constructor?.name === 'Function' ? cl : cl.constructor;
+  const ctor: any = getRightTarget(cl);
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
   const baseName: string = ctor.name;
 
@@ -383,7 +392,7 @@ export function mapArrayOptions(
  */
 export function warnMixed(target: any, key: string | symbol): void | never {
   const name = getName(target);
-  const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, target) ?? {};
+  const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, getRightTarget(target)) ?? {};
 
   switch (modelOptions?.options?.allowMixed) {
     default:
