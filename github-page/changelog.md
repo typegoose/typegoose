@@ -19,8 +19,7 @@ redirect_from:
 
 ## 6.1.7
 
-<sub>This Version is not yet released, only changes made until now are listed here</sub>
-
+- add support for environment variables [here the new documentation](https://typegoose.github.io/typegoose/docs/environment)
 - [IC] `warnMixed` now uses the right `target`
 - [IC] add function `utils.getRightTarget`
 
