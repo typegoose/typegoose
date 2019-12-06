@@ -14,6 +14,7 @@ if (semver.lt(process.version.slice(1), '8.10.0')) {
 }
 
 import * as defaultClasses from './defaultClasses';
+import { parseENV, setGlobalOptions } from './globalOptions';
 import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { NoValidClass } from './internal/errors';
@@ -29,7 +30,7 @@ import {
 } from './types';
 
 /* exports */
-export { mongoose }; // export the internally used one, to not need to always import it
+export { mongoose, setGlobalOptions }; // export the internally used one, to not need to always import it
 export { setLogLevel, LogLevels } from './logSettings';
 export * from './prop';
 export * from './hooks';
@@ -41,7 +42,8 @@ export { defaultClasses };
 export { DocumentType, Ref, ReturnModelType };
 export { Severity, IGlobalOptions } from './types';
 export { getClassForDocument, getClass } from './internal/utils';
-export * from './globalOptions';
+
+parseENV(); // call this before anything to ensure they are applied
 
 /** @deprecated */
 export abstract class Typegoose {

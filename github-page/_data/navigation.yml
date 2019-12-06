@@ -17,6 +17,8 @@ docs:
         url: /docs
       - title: 'Virtuals'
         url: /docs/virtuals
+      - title: 'Environment Variables'
+        url: /docs/environment
 
   - title: Decorators
     children:
