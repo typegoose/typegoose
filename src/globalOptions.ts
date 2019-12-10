@@ -1,5 +1,5 @@
 import { globalOptions } from './internal/data';
-import { logger, setLogLevel } from './logSettings';
+import { logger } from './logSettings';
 import { IGlobalOptions, Severity } from './types';
 
 /**

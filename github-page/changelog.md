@@ -17,6 +17,15 @@ redirect_from:
 - Add here
 -->
 
+## 6.2.0
+
+<sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+- Update Dependencies
+  - Upgrade mongoose from 5.7.7 to 5.8.0
+  - Upgrade @types/mongoose from 5.5.30 to 5.5.32
+  - [IC] Upgrade Typescript from 3.7.2 to 3.7.3
+
 ## 6.1.7
 
 - add support for environment variables [here the new documentation](https://typegoose.github.io/typegoose/docs/environment)

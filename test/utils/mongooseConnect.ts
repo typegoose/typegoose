@@ -1,5 +1,6 @@
-import { MongoMemoryServer } from 'mongodb-memory-server-global';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as mongoose from 'mongoose';
+import { isNullOrUndefined } from '../../src/internal/utils';
 import { config } from './config';
 
 /** its needed in global space, because we dont want to create a new instance everytime */
@@ -74,7 +75,7 @@ export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<
  */
 export async function disconnect(): Promise<void> {
   await mongoose.disconnect();
-  if (config.Memory) {
+  if (config.Memory || !isNullOrUndefined(instance)) {
     await instance.stop();
   }
 
