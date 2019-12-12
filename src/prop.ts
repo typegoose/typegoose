@@ -20,7 +20,6 @@ import {
   DecoratedPropertyMetadata,
   DecoratedPropertyMetadataMap,
   MapPropOptions,
-  PropOptions,
   PropOptionsWithValidate,
   WhatIsIt
 } from './types';
@@ -273,15 +272,13 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
         return;
       case WhatIsIt.MAP:
-        // "default" is a reserved keyword, thats why "_default" is used
-        const { default: _default }: PropOptions = options;
-        delete options.default;
-        delete options.of;
+        const mapped = utils.mapOptions(rawOptions, Type, target, key, true);
+
         schemas.get(name)[key] = {
           ...schemas.get(name)[key],
+          ...mapped.outer,
           type: Map,
-          default: _default,
-          of: { type: Type, ...options }
+          of: { type: Type, ...mapped.inner }
         };
 
         return;
@@ -324,13 +321,13 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
       return;
     case WhatIsIt.MAP:
+      const mapped = utils.mapOptions(rawOptions, Type, target, key, false);
+
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
+        ...mapped.outer,
         type: Map,
-        of: {
-          type: virtualSchema,
-          ...options
-        }
+        of: { type: virtualSchema, ...mapped.inner }
       };
 
       return;
@@ -388,6 +385,7 @@ export function prop(options: PropOptionsWithValidate = {}) {
 export function mapProp(options: MapPropOptions) {
   return (target: any, key: string) => {
     const Type = options?.of;
+    delete options.of;
 
     if ('items' in options) {
       logger.warn('You might not want to use option "items" in a @mapProp, use @arrayProp (%s.%s)', utils.getName(target), key);

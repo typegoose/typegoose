@@ -319,6 +319,8 @@ export function createUniqueID(cl: any) {
  * Map Options to "inner" & "outer"
  * -> inner: means inner of "type: [{here})"
  * -> outer: means outer of "type: [{}], here"
+ *
+ * Specific to Arrays
  * @param rawOptions The raw options
  * @param Type The Type of the array
  * @param target The Target class
@@ -330,42 +332,19 @@ export function mapArrayOptions(
   target: any,
   pkey: string
 ): mongoose.SchemaTypeOpts<any> {
-  if (getName(Type) in mongoose.Schema.Types) {
-    logger.info('Converting "%s" to mongoose Type', getName(Type));
-    Type = mongoose.Schema.Types[getName(Type)];
-
-    /* istanbul ignore next */
-    if (Type === mongoose.Schema.Types.Mixed) {
-      warnMixed(target, pkey);
-    }
-  }
-
-  if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
-    throw new TypeError('Type does not have an valid "OptionsConstructor"!');
-  }
+  logger.debug('mapArrayOptions called');
 
   const options = Object.assign({}, rawOptions); // for sanity
+  const mapped = mapOptions(rawOptions, Type, target, pkey);
 
-  delete options.items;
-
+  /** The Object that gets returned */
   const returnObject = {
+    ...mapped.outer,
     type: [{
-      type: Type
+      type: Type,
+      ...mapped.inner
     }]
   };
-
-  // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
-  if (Type.prototype.OptionsConstructor.prototype instanceof (mongoose as any).SchemaTypeOptions) {
-    for (const [key, value] of Object.entries(options)) {
-      if (Object.getOwnPropertyNames(Type.prototype.OptionsConstructor.prototype).includes(key)) {
-        returnObject.type[0][key] = value;
-      } else {
-        returnObject[key] = value;
-      }
-    }
-  } else {
-    logger.info('The Type "%s" does not have an OptionsConstructor', getName(Type));
-  }
 
   if (typeof options?.innerOptions === 'object') {
     for (const [key, value] of Object.entries(options.innerOptions)) {
@@ -378,9 +357,70 @@ export function mapArrayOptions(
     }
   }
 
-  logger.debug('Final mapped Options for Type "%s"', getName(Type), returnObject);
+  logger.debug('(Array) Final mapped Options for Type "%s"', getName(Type), returnObject);
 
   return returnObject;
+}
+
+/**
+ * Map Options to "inner" & "outer"
+ * @param rawOptions The raw options
+ * @param Type The Type of the array
+ * @param target The Target class
+ * @param pkey Key of the Property
+ */
+export function mapOptions(
+  rawOptions: any,
+  Type: AnyParamConstructor<any>,
+  target: any,
+  pkey: string,
+  errorOC: boolean = true
+) {
+  logger.debug('mapOptions called');
+
+  /** The Object that gets returned */
+  const ret = {
+    inner: {},
+    outer: {}
+  };
+
+  if (getName(Type) in mongoose.Schema.Types) {
+    logger.info('Converting "%s" to mongoose Type', getName(Type));
+    Type = mongoose.Schema.Types[getName(Type)];
+
+    /* istanbul ignore next */
+    if (Type === mongoose.Schema.Types.Mixed) {
+      warnMixed(target, pkey);
+    }
+  }
+
+  if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
+    if (errorOC) {
+      throw new TypeError(`Type does not have an valid "OptionsConstructor"! (${Type} on ${getName(target)})`);
+    } else {
+      return ret;
+    }
+  }
+
+  const options = Object.assign({}, rawOptions); // for sanity
+  delete options.items;
+
+  // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
+  if (Type.prototype.OptionsConstructor.prototype instanceof (mongoose as any).SchemaTypeOptions) {
+    for (const [key, value] of Object.entries(options)) {
+      if (Object.getOwnPropertyNames(Type.prototype.OptionsConstructor.prototype).includes(key)) {
+        ret.inner[key] = value;
+      } else {
+        ret.outer[key] = value;
+      }
+    }
+  } else {
+    logger.info('The Type "%s" does not have an OptionsConstructor', getName(Type));
+  }
+
+  logger.debug('Final mapped Options for Type "%s"', getName(Type), ret);
+
+  return ret;
 }
 
 /**
