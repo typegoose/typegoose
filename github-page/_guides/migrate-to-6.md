@@ -60,6 +60,10 @@ Update: `@staticMethod` & `@instanceMethod` got removed in 6.1.0-1
 `setModelForClass()` got deprecated, because mongoose would throw an OverwriteModelError if attempted to overwrite a model
 -> use `getModelForClass()`
 
+## ModelType got abstracted
+
+The type `ModelType` got abstracted to `ReturnModelType<typeof Class>` with documentation, but if for any reason `ModelType` is needed, it needs to be imported from `@typegoose/typegoose/lib/types`
+
 ## (ic) data.ts collections are now Map<T, S>
 
 data.ts's collections got refactored to use ES6 Maps
