@@ -45,7 +45,7 @@ export class ArrayValidators {
   @arrayProp({ items: String, enum: ArrayValidatorEnumString })
   public enumedString: ArrayValidatorEnumString[];
 
-  // @arrayProp({ items: Number, enum: ArrayValidatorEnumNumber })
+  @arrayProp({ items: Number, enum: ArrayValidatorEnumNumber })
   public enumedNumber: ArrayValidatorEnumNumber[];
 }
 

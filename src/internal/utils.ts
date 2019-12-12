@@ -140,10 +140,9 @@ export function isWithStringValidate(
   options: PropOptionsWithStringValidate
 ): options is PropOptionsWithStringValidate {
   return !isNullOrUndefined(
-    options?.match
-    ?? options?.enum
-    ?? options?.minlength
-    ?? options?.maxlength
+    options.match
+    ?? options.minlength
+    ?? options.maxlength
   );
 }
 

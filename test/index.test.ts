@@ -7,7 +7,7 @@ import { connect, disconnect } from './utils/mongooseConnect';
 
 setGlobalOptions({ // to have this initaly set
   globalOptions: {
-    useNewEnum: true
+    // useNewEnum: true
   }
 });
 

@@ -25,6 +25,9 @@ redirect_from:
   - Upgrade mongoose from 5.7.7 to 5.8.0
   - Upgrade @types/mongoose from 5.5.30 to 5.5.32
   - [IC] Upgrade Typescript from 3.7.2 to 3.7.3
+- The option `useNewEnum` (and `TG_USE_NEW_ENUM`) got removed, because it would interfer with the number-enums
+- Added the ability to use number-enums on number-type props
+- changed behaviour of string-enums on string-type props
 
 ## 6.1.7
 

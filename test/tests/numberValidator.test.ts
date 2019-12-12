@@ -22,7 +22,7 @@ export function suite() {
     })).to.eventually.rejectedWith(mongoose.Error.ValidationError).and.notify(done);
   });
 
-  it.skip('should respect enum', async () => {
+  it('should respect enum', async () => {
     try {
       await NumberValidatorsModel.create({
         enumed: 5 // number not in the enum

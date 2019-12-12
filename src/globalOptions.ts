@@ -25,9 +25,13 @@ export function setGlobalOptions(options: IGlobalOptions) {
 export function parseENV(): void {
   logger.info('"parseENV" got called');
 
+  if (process.env.TG_USE_NEW_ENUM?.length > 0) {
+    logger.warn('TG_USE_NEW_ENUM & useNewEnum got deprecated, see changelog 6.2 for more');
+  }
+
   const options: IGlobalOptions = {
     globalOptions: {
-      useNewEnum: process.env.TG_USE_NEW_ENUM?.length > 0
+      // useNewEnum: process.env.TG_USE_NEW_ENUM?.length > 0
     },
     options: {
       allowMixed: process.env.TG_ALLOW_MIXED in Severity ? mapValueToSeverity(process.env.TG_ALLOW_MIXED) : globalOptions.options.allowMixed

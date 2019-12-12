@@ -30,6 +30,4 @@ Global Options that will be applied nowhere, only globally
 
 #### useNewEnum
 
-Use the new Enum code generating code
--> this is for not breaking existing databases
-(default: false (implicitly))
+Removed, [Please look here for more info]({{ site.baseurl }}{% link changelog.md%}#620)

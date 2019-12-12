@@ -441,11 +441,10 @@ export interface IGlobalOptions {
    */
   globalOptions?: {
     /**
-     * Use the new Enum code generating code
-     * -> this is for not breaking existing databases
-     * @default false
+     * This Options got removed because it would interfer with mongoose-number-enums
+     * @deprecated
      */
-    useNewEnum: boolean;
+    useNewEnum?: boolean;
   };
 }
 

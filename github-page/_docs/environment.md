@@ -8,7 +8,7 @@ Typegoose allow the use of some Environment variables to set global options
 
 ### TG_USE_NEW_ENUM
 
-Set's the global options [`globalOptions.useNewEnum`]({{ site.baseurl }}{% link _docs/functions/setGlobalOptions.md%}#usenewenum) to `true`
+Removed, [Please look here for more info]({{ site.baseurl }}{% link changelog.md%}#620)
 
 ### TG_ALLOW_MIXED
 
@@ -19,12 +19,6 @@ Accepts:
 - strings, in the range of `Severity`
 
 ## Examples
-
-```sh
-TG_USE_NEW_ENUM=1 npm run script # result: "globalOptions.useNewEnum" is now true
-
-TG_USE_NEW_ENUM= npm run script # result: "globalOptions.useNewEnum" is now false
-```
 
 ```sh
 TG_ALLOW_MIXED=ALLOW npm run script # result: "options.allowMixed" is now "ALLOW" (actual: 0)

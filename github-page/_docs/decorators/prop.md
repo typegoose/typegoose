@@ -237,6 +237,43 @@ class Dummy {
 }
 ```
 
+#### enum
+
+Accepts Type: `enum | any[]`
+
+Only allow Values from the enum (best practice is to use TypeScript's enum)
+
+Note: `design:type` will be set to `String` if the enum is full of Strings, and `Number` if full of Numbers, and `Object` if the enum contains both
+
+Example for String-Enums:
+
+```ts
+enum Gender {
+  MALE = 'male',
+  FEMALE = 'female',
+}
+
+class Enumed {
+  @prop({ enum: Gender })
+  public gender?: Gender;
+}
+```
+
+Example for Number-Enums:
+(since mongoose 5.8 and typegoose 6.2)
+
+```ts
+enum Gender {
+  MALE, // equal to "= 0"
+  FEMALE, // equal to "= 1"
+}
+
+class Enumed {
+  @prop({ enum: Gender })
+  public gender?: Gender;
+}
+```
+
 <!--Below are just the Specific Options-->
 
 ### String Transform options
@@ -316,67 +353,6 @@ class MinLengthed {
   @prop({ minlength: 10 })
   public minlengthed?: string; // the string must be at least 10 characters long
 }
-```
-
-#### enum
-
-Accepts Type: `enum | any[]`
-
-Only allow Values from the enum (best practice is to use TypeScript's enum)
-
--> Please know that mongoose currently only allows enums when the type is a `String`
-
-```ts
-enum Gender {
-  MALE = 'male',
-  FEMALE = 'female',
-}
-
-class Enumed {
-  @prop({ enum: Gender, type: String })
-  public gender?: Gender;
-}
-```
-
-Typegoose disallows enums that dont have strings associated with them (only with the new behaviour)
--> Reason, image the following example:
-
-```ts
-// imaginge having this enum
-enum Here {
-  Here1,
-  Here2,
-  Here3
-}
-// it would compile down to ["Here1", "Here2", "Here3", 0, 1, 2] to be mongoose use-able
-class SomeClass {
-  @prop({ enum: Here, type: String })
-  public somestring: Here;
-}
-
-const SomeClassModel = getModelForClass(SomeClass);
-const doc = new SomeClassModel({ somestring: Here.Here2 }) // you would expect to be "Here2" right? wrong, it would use the number 1
-// which *could* be used, BUT it could be very inaccurate OR when chaning an enum, it would invalidate the whole collection
-```
-
-and when `globalOptions.globalOptions.useNewEnum` is activated, typegoose will convert the following:
-
-```ts
-enum SomeThing {
-  Hi = "Hi SomeOne",
-  Hi2 = "Hi SomeThing"
-}
-// both behaviors
-["Hi SomeOne", "Hi SomeThing"]
-
-enum SomeOtherThing {
-  Hi,
-  Hi2 = "something"
-}
-// new behavior
-Error // all values need to have a string
-// old behavior
-["Hi", 0, "something"]
 ```
 
 ### Number Validation options

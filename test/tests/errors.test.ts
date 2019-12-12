@@ -423,23 +423,43 @@ export function suite() {
     }
   });
 
-  it('should fail when using an enum that has at least one property not with a string associated [TypeError]', () => {
+  it('should fail when using Number-Enum on an String Type [NotStringTypeError]', () => {
     try {
-      enum HeterogeneousEnum {
+      enum NumberEnum {
         One = 0,
-        Two = '1'
+        Two = 1
       }
 
-      class HeterogeneousClass {
-        @prop({ enum: HeterogeneousEnum })
-        public someEnum: HeterogeneousEnum;
+      class NumberEnumOnStringType {
+        @prop({ enum: NumberEnum })
+        public someEnum: string;
       }
 
-      getModelForClass(HeterogeneousClass);
+      getModelForClass(NumberEnumOnStringType);
 
-      assert.fail('Expected to throw "TypeError"');
+      assert.fail('Expected to throw "NotStringTypeError"');
     } catch (err) {
-      expect(err).to.be.an.instanceOf(TypeError);
+      expect(err).to.be.an.instanceOf(NotStringTypeError);
+    }
+  });
+
+  it('should fail when using String-Enum on an Number Type [NotNumberTypeError]', () => {
+    try {
+      enum StringEnum {
+        One = 'hi1',
+        Two = 'hi2'
+      }
+
+      class NumberEnumOnStringType {
+        @prop({ enum: StringEnum })
+        public someEnum: number;
+      }
+
+      getModelForClass(NumberEnumOnStringType);
+
+      assert.fail('Expected to throw "NotNumberTypeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(NotNumberTypeError);
     }
   });
 

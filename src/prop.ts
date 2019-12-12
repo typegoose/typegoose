@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import { format } from 'util';
 
 import { DecoratorKeys } from './internal/constants';
-import { globalOptions, schemas, virtuals } from './internal/data';
+import { schemas, virtuals } from './internal/data';
 import {
   InvalidPropError,
   InvalidTypeError,
@@ -185,33 +185,44 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   const enumOption = rawOptions?.enum;
   if (!utils.isNullOrUndefined(enumOption)) {
+    // check if the supplied value is already "mongoose-consumeable"
     if (!Array.isArray(enumOption)) {
-      // the following "if" it to not break existing databases
-      if (globalOptions?.globalOptions?.useNewEnum) {
+      if (Type === String) {
+        rawOptions.enum = Object.entries(enumOption) // get all key-value pairs of the enum
+          // no reverse-filtering because if it is full of strings, there is no reverse mapping
+          .map(([enumKey, enumValue]) => { // convert key-value pairs to mongoose-useable strings
+            // safeguard, this should never happen because typescript only sets "design:type" to "String"
+            // if the enum is full of strings
+            if (typeof enumValue !== 'string') {
+              throw new NotStringTypeError(name, key, enumKey, typeof enumValue);
+            }
+
+            return enumValue;
+          });
+      } else if (Type === Number) {
         rawOptions.enum = Object.entries(enumOption) // get all key-value pairs of the enum
           // filter out the "reverse (value -> name) mappings"
           // https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings
-          .filter(([enumKey, enumValue]) => {
-            return Number.isNaN(parseInt(enumKey, 10));
+          .filter(([enumKey, enumValue], i, arr) => {
+            // safeguard, this should never happen because typescript only sets "design:type" to "Number"
+            // if the enum is full of numbers
+            if (utils.isNullOrUndefined(enumValue) || arr.findIndex(([k, v]) => k === enumValue.toString()) <= -1) {
+              // if there is no reverse mapping, throw an error
+              throw new NotNumberTypeError(name, key, enumKey, typeof enumValue);
+            }
+
+            return typeof enumValue === 'number';
           })
-          .map(([enumKey, enumValue], i, enumArray) => { // convert key-value pairs to mongoose-useable strings
-            if (typeof enumValue !== 'string') { // disallow the use of enums that dont have strings associated with them
-              throw new TypeError(format(
-                'All Enums supplied to @prop must have strings associated with them!\n'
-                + 'Encountered at "%s.%s", with property: %s.%s',
-                utils.getName(target),
-                key,
-                enumKey, typeof enumValue
-              ));
+          .map(([enumKey, enumValue]) => { // convert key-value pairs to mongoose-useable strings
+            if (typeof enumValue !== 'number') {
+              throw new NotNumberTypeError(name, key, enumKey, typeof enumValue);
             }
 
             return enumValue;
           });
       } else {
-        // old behaviour
-        // TODO: remove in typegoose 7.0
-        logger.warn('Old Enum Behaviour is used, please upgrade to the new one');
-        rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
+        // this will happen if the enum contains both types ("design:type" will be "Object")
+        throw new Error(`Invalid type used for map!, got: "${Type}" (${name}.${key})`);
       }
     }
   }
@@ -232,16 +243,16 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
     // check for validation inconsistencies
     if (utils.isWithStringValidate(rawOptions) && !utils.isString(Type)) {
-      throw new NotStringTypeError(key);
+      throw new NotStringTypeError(name, key);
     }
 
     // check for transform inconsistencies
     if (utils.isWithStringTransform(rawOptions) && !utils.isString(Type)) {
-      throw new NotStringTypeError(key);
+      throw new NotStringTypeError(name, key);
     }
 
     if (utils.isWithNumberValidate(rawOptions) && !utils.isNumber(Type)) {
-      throw new NotNumberTypeError(key);
+      throw new NotNumberTypeError(name, key);
     }
   }
 

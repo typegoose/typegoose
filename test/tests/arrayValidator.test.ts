@@ -84,7 +84,7 @@ export function suite() {
     expect(found.enumedString).to.deep.equal([ArrayValidatorEnumString.OPT1, ArrayValidatorEnumString.OPT2]);
   });
 
-  it.skip('should respect enum [Number]', async () => {
+  it('should respect enum [Number]', async () => {
     try {
       await ArrayValidatorsModel.create({
         enumedNumber: 5 // number not in the enum
