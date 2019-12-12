@@ -2,6 +2,12 @@ import { getModelForClass, prop } from '../../src/typegoose';
 
 // Please try to keep this file in sync with ./arrayValidators.ts
 
+export enum StringValidatorEnum {
+  OPT1 = 'one',
+  OPT2 = 'two',
+  OPT3 = 'three'
+}
+
 export class StringValidators {
   @prop({ maxlength: 3 })
   public maxLength: string;
@@ -18,8 +24,8 @@ export class StringValidators {
   @prop({ lowercase: true })
   public lowercased: string;
 
-  @prop({ enum: ['one', 'two', 'three'] })
+  @prop({ enum: StringValidatorEnum })
   public enumed: string;
 }
 
-export const model = getModelForClass(StringValidators);
+export const StringValidatorsModel = getModelForClass(StringValidators);

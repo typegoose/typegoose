@@ -7,7 +7,6 @@ import { globalOptions } from '../../src/internal/data';
 import { assignMetadata, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import {
   addModelToTypegoose,
-  arrayProp,
   buildSchema,
   DocumentType,
   getModelForClass,
@@ -84,30 +83,6 @@ export function suite() {
     expect(found.someother).to.be.equal('hi');
     expect(found.test).to.be.an('map');
     expect(found.test).to.be.deep.equal(new Map([['hello', 'hello']]));
-  });
-
-  it('should make array of enum (string) [szokodiakos#380]', async () => {
-    enum StringEnum {
-      HELLO1 = 'Hello 1',
-      HELLO2 = 'Hello 2'
-    }
-    class TestEnumArray {
-      @arrayProp({ items: String, enum: StringEnum })
-      public somevalue: StringEnum[];
-    }
-
-    const model = getModelForClass(TestEnumArray);
-    const { _id: id } = await model.create({ somevalue: [StringEnum.HELLO1, StringEnum.HELLO2] } as TestEnumArray);
-    const found = await model.findById(id).exec();
-
-    expect(found).to.not.be.an('undefined');
-    expect(found.somevalue).to.deep.equal(['Hello 1', 'Hello 2']);
-
-    const somevaluePath = model.schema.path('somevalue');
-    expect(somevaluePath).to.be.an.instanceOf(mongoose.Schema.Types.Array);
-
-    const optionEnum: [string, unknown] = (somevaluePath as any).caster.options.enum;
-    expect(optionEnum).to.be.deep.equal(['Hello 1', 'Hello 2']);
   });
 
   it('should work with Objects in Class [szokodiakos#54]', async () => {

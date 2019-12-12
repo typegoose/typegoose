@@ -22,6 +22,7 @@ import { suite as GCFDTest } from './tests/getClassForDocument.test';
 import { suite as GlobalTest } from './tests/globalOptions.test';
 import { suite as HookTest } from './tests/hooks.test';
 import { suite as Inheritance } from './tests/inheritance.test';
+import { suite as NumberValidatorTests } from './tests/numberValidator.test';
 import { suite as OverwrittenModels } from './tests/overwrittenModel.test';
 import { suite as RefTest } from './tests/ref.test';
 import { suite as ShouldAddTest } from './tests/shouldAdd.test';
@@ -56,6 +57,8 @@ describe('Typegoose', () => {
   describe('Indexes', IndexTests.bind(this));
 
   describe('String Validators', StringValidatorTests.bind(this));
+
+  describe('Number Validators', NumberValidatorTests.bind(this));
 
   describe('Array Validators', ArrayValidatorTests.bind(this));
 
