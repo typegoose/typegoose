@@ -137,7 +137,7 @@ To ask questions or just talk with us [join our Discord Server](https://discord.
 ## Documentation
 
 [Here is the Documentation](https://typegoose.github.io/typegoose/docs)  
-[Here are Guides](https://typegoose.github.io/typegoose/guides)  
+[Here are the Guides](https://typegoose.github.io/typegoose/guides/quick-start-guide/)  
 
 ## Migrate to 6.0.0
 
