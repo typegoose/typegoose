@@ -17,6 +17,13 @@ redirect_from:
 - Add here
 -->
 
+## 6.1.8
+
+- backport for:
+  - fixes {% include gitissue repo="typegoose" num=160 %}
+  - [IC] `mapArrayOptions` now uses `mapOptions`
+  - [IC] adding function `mapOptions`
+
 ## 6.1.7
 
 - add support for environment variables [here the new documentation](https://typegoose.github.io/typegoose/docs/environment)
