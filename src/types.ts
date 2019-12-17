@@ -160,7 +160,8 @@ export interface BasePropOptions {
   /**
    * This option as only an effect when the plugin `mongoose-autopopulate` is used
    */
-  autopopulate?: boolean;
+  // tslint:disable-next-line:ban-types
+  autopopulate?: boolean | Function | { [key: string]: any; };
   /** Reference an other Document (you should use Ref<T> as Prop type) */
   ref?: any;
   /** Take the Path and try to resolve it to a Model */
