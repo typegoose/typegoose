@@ -32,6 +32,9 @@ export function suite() {
     expect(instance.mainGarage.width).to.equals(100);
     // this has an any type assertion, because it shouldnt exists on this type, what is tested here
     expect((instance.mainGarage as any).doors).to.equals(undefined);
+
+    // sanity check
+    expect(instance.mainGarage).to.not.have.property('_id');
   });
 
   it('should set all parent props for nested array items', async () => {
@@ -48,5 +51,8 @@ export function suite() {
     expect(firstGarage.width).to.equals(100);
     // this has an any type assertion, because it shouldnt exists on this type, what is tested here
     expect((firstGarage as any).doors).to.be.equals(undefined);
+
+    // sanity check
+    expect(firstGarage).to.not.have.property('_id');
   });
 }

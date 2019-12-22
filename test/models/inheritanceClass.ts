@@ -31,10 +31,10 @@ export class Skyscraper extends OfficeBuilding {
   @prop({ default: 'Some cool string' })
   public name: string;
 
-  @prop()
+  @prop({ _id: false })
   public mainGarage: Garage;
 
-  @arrayProp({ items: Garage })
+  @arrayProp({ items: Garage, _id: false })
   public garagesInArea: Garage[];
 }
 

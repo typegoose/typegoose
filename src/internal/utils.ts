@@ -8,6 +8,7 @@ import {
   IModelOptions,
   IObjectWithTypegooseFunction,
   IObjectWithTypegooseName,
+  IPrototype,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
   Severity,
@@ -328,14 +329,19 @@ export function createUniqueID(cl: any) {
  */
 export function mapArrayOptions(
   rawOptions: any,
-  Type: AnyParamConstructor<any>,
+  Type: AnyParamConstructor<any> | mongoose.Schema,
   target: any,
-  pkey: string
+  pkey: string,
+  loggerType?: AnyParamConstructor<any>
 ): mongoose.SchemaTypeOpts<any> {
   logger.debug('mapArrayOptions called');
 
+  if (!(Type instanceof mongoose.Schema)) {
+    loggerType = Type;
+  }
+
   const options = Object.assign({}, rawOptions); // for sanity
-  const mapped = mapOptions(rawOptions, Type, target, pkey);
+  const mapped = mapOptions(rawOptions, Type, target, pkey, false, loggerType);
 
   /** The Object that gets returned */
   const returnObject = {
@@ -357,7 +363,7 @@ export function mapArrayOptions(
     }
   }
 
-  logger.debug('(Array) Final mapped Options for Type "%s"', getName(Type), returnObject);
+  logger.debug('(Array) Final mapped Options for Type "%s"', getName(loggerType), returnObject);
 
   return returnObject;
 }
@@ -371,10 +377,11 @@ export function mapArrayOptions(
  */
 export function mapOptions(
   rawOptions: any,
-  Type: AnyParamConstructor<any>,
+  Type: AnyParamConstructor<any> | mongoose.Schema & IPrototype,
   target: any,
   pkey: string,
-  errorOC: boolean = true
+  errorOC: boolean = true,
+  loggerType?: AnyParamConstructor<any>
 ) {
   logger.debug('mapOptions called');
 
@@ -384,19 +391,31 @@ export function mapOptions(
     outer: {}
   };
 
-  if (getName(Type) in mongoose.Schema.Types) {
-    logger.info('Converting "%s" to mongoose Type', getName(Type));
-    Type = mongoose.Schema.Types[getName(Type)];
+  if (!(Type instanceof mongoose.Schema)) {
+    loggerType = Type;
+    if (getName(loggerType) in mongoose.Schema.Types) {
+      logger.info('Converting "%s" to mongoose Type', getName(loggerType));
+      Type = mongoose.Schema.Types[getName(loggerType)];
 
-    /* istanbul ignore next */
-    if (Type === mongoose.Schema.Types.Mixed) {
-      warnMixed(target, pkey);
+      /* istanbul ignore next */
+      if (Type === mongoose.Schema.Types.Mixed) {
+        warnMixed(target, pkey);
+      }
     }
   }
 
-  if (isNullOrUndefined(Type.prototype.OptionsConstructor)) {
+  /** The OptionsConstructor to use */
+  let OptionsCTOR: undefined | AnyParamConstructor<any> = Type?.prototype?.OptionsConstructor;
+
+  // Fix because "Schema" is not a valid type and dosnt have a ".prototype.OptionsConstructor"
+  if (Type instanceof mongoose.Schema) {
+    // TODO: remove "as any" cast if "OptionsConstructor" is implemented in @types/mongoose
+    OptionsCTOR = (mongoose as any).Schema.Types.Embedded.prototype.OptionsConstructor;
+  }
+
+  if (isNullOrUndefined(OptionsCTOR)) {
     if (errorOC) {
-      throw new TypeError(`Type does not have an valid "OptionsConstructor"! (${Type} on ${getName(target)})`);
+      throw new TypeError(`Type does not have an valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey})`);
     } else {
       return ret;
     }
@@ -406,19 +425,21 @@ export function mapOptions(
   delete options.items;
 
   // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
-  if (Type.prototype.OptionsConstructor.prototype instanceof (mongoose as any).SchemaTypeOptions) {
+  // TODO: remove "as any" cast if "OptionsConstructor" is implemented in @types/mongoose
+  if (OptionsCTOR.prototype instanceof (mongoose as any).SchemaTypeOptions) {
+    // console.log("test2", target, pkey, Type, OptionsCTR.prototype);
     for (const [key, value] of Object.entries(options)) {
-      if (Object.getOwnPropertyNames(Type.prototype.OptionsConstructor.prototype).includes(key)) {
+      if (Object.getOwnPropertyNames(OptionsCTOR.prototype).includes(key)) {
         ret.inner[key] = value;
       } else {
         ret.outer[key] = value;
       }
     }
   } else {
-    logger.info('The Type "%s" does not have an OptionsConstructor', getName(Type));
+    logger.info('The Type "%s" has a property "OptionsConstructor" but it does not extend "SchemaTypeOptions', getName(loggerType));
   }
 
-  logger.debug('Final mapped Options for Type "%s"', getName(Type), ret);
+  logger.debug('Final mapped Options for Type "%s"', getName(loggerType), ret);
 
   return ret;
 }

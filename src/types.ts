@@ -456,3 +456,8 @@ export interface IObjectWithTypegooseFunction {
 export interface IObjectWithTypegooseName {
   typegooseName: string;
 }
+
+/** For the types that error that seemingly dont have a prototype */
+export interface IPrototype {
+  prototype?: any;
+}

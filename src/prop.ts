@@ -78,7 +78,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
 
   if (utils.isNotDefined(Type)) {
-    buildSchema(Type, { _id: utils.get_idStatus(Type, rawOptions) });
+    buildSchema(Type);
   }
   const name: string = utils.getName(target);
 
@@ -261,7 +261,6 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     throw new InvalidPropError(Type.name, key); // This seems to be never thrown!
   }
 
-  const { ['items']: items, ...options } = rawOptions;
   if (utils.isPrimitive(Type)) {
     switch (whatis) {
       case WhatIsIt.ARRAY:
@@ -285,7 +284,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       case WhatIsIt.NONE:
         schemas.get(name)[key] = {
           ...schemas.get(name)[key],
-          ...options,
+          ...rawOptions,
           type: Type
         };
 
@@ -301,27 +300,24 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     utils.warnMixed(target, key);
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
-      ...options,
+      ...rawOptions,
       type: mongoose.Schema.Types.Mixed
     };
 
     return;
   }
 
-  const virtualSchema = buildSchema(Type, {
-    _id: utils.get_idStatus(Type, rawOptions)
-  });
+  const virtualSchema = buildSchema(Type);
   switch (whatis) {
     case WhatIsIt.ARRAY:
       schemas.get(name)[key] = {
         ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
-        ...options,
-        type: [virtualSchema]
+        ...utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type)
       };
 
       return;
     case WhatIsIt.MAP:
-      const mapped = utils.mapOptions(rawOptions, Type, target, key, false);
+      const mapped = utils.mapOptions(rawOptions, virtualSchema, target, key, false, Type);
 
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
@@ -334,7 +330,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     case WhatIsIt.NONE:
       schemas.get(name)[key] = {
         ...schemas.get(name)[key],
-        ...options,
+        ...rawOptions,
         type: virtualSchema
       };
 

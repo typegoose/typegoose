@@ -13,7 +13,7 @@ import {
   NoValidClass
 } from '../../src/internal/errors';
 import { _buildSchema } from '../../src/internal/schema';
-import { assignMetadata, getClass, getName, mapArrayOptions, mergeSchemaOptions } from '../../src/internal/utils';
+import { assignMetadata, getClass, getName, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import { arrayProp, mapProp, prop } from '../../src/prop';
 import {
   addModelToTypegoose,
@@ -344,7 +344,7 @@ export function suite() {
 
   it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
     try {
-      mapArrayOptions({}, Error, undefined, undefined);
+      mapOptions({}, Error, undefined, undefined, true);
 
       assert.fail('Expected to throw "TypeError"');
     } catch (err) {

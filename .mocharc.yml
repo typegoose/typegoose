@@ -8,5 +8,5 @@ extension:
 ui: 'bdd'
 check-leaks: true
 fullStackTrace: true
-exit: true # https://github.com/Automattic/mongoose/issues/8419
+# exit: true # https://github.com/Automattic/mongoose/issues/8419
 timeout: 15000
