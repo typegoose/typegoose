@@ -22,12 +22,17 @@ redirect_from:
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Update Dependencies
-  - Upgrade mongoose from 5.7.7 to 5.8.0
-  - Upgrade @types/mongoose from 5.5.30 to 5.5.32
-  - [IC] Upgrade Typescript from 3.7.2 to 3.7.3
+  - Upgrade mongoose from 5.7.7 to 5.8.3
+  - Upgrade @types/mongoose from 5.5.30 to 5.5.35
+  - [IC] Upgrade Typescript from 3.7.2 to 3.7.4
+  - [IC] Upgrade NYC from 14.1.1 to 15.0.0
 - The option `useNewEnum` (and `TG_USE_NEW_ENUM`) got removed, because it would interfer with the number-enums
 - Added the ability to use number-enums on number-type props
-- changed behaviour of string-enums on string-type props
+- Changed behaviour of string-enums to only work on string-type props
+- Fix `PropOptions` type for `autopopulate`
+- [IC] When the type is a `Schema`, it is now handled by `mapOptions` & `mapArrayOptions`
+- [IC] fix tests not exiting after completion
+- [IC] add tslint-plugin `tslint-consistent-codestyle`
 
 ## 6.1.8
 
