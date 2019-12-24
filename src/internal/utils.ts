@@ -47,7 +47,7 @@ export function isObject(Type: any): boolean {
     let prototype = Type.prototype;
     let name = Type.name;
     while (name) {
-      if (name === 'Object') {
+      if (name === 'Object' || name === 'Mixed') {
         return true;
       }
       prototype = Object.getPrototypeOf(prototype);
