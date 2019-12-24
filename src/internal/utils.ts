@@ -225,7 +225,7 @@ export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: n
   return mergeWith({},
     Reflect.getMetadata(key, cl),
     value,
-    (objValue, srcValue, ckey, object, source, stack) => customMerger(ckey, srcValue));
+    (_objValue, srcValue, ckey, _object, _source, _stack) => customMerger(ckey, srcValue));
 }
 
 /**
@@ -416,9 +416,9 @@ export function mapOptions(
   if (isNullOrUndefined(OptionsCTOR)) {
     if (errorOC) {
       throw new TypeError(`Type does not have an valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey})`);
-    } else {
-      return ret;
     }
+
+    return ret;
   }
 
   const options = Object.assign({}, rawOptions); // for sanity

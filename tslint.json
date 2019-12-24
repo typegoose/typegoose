@@ -1,12 +1,16 @@
 {
   "defaultSeverity": "error",
   "extends": [
-    "tslint:recommended"
+    "tslint:recommended",
+    "tslint-consistent-codestyle"
   ],
   "rulesDirectory": [
     "node_modules/tslint-eslint-rules/dist/rules"
   ],
   "rules": {
+    "no-unused": {
+      "severity": "warn"
+    },
     "quotemark": {
       "severity": "warn",
       "options": [
@@ -93,9 +97,6 @@
       "severity": "warn",
       "options": "never"
     },
-    "no-unused-variable": {
-      "severity": "warn"
-    },
     "no-unused-expression": {
       "severity": "warn"
     },
@@ -118,6 +119,12 @@
     "deprecation": {
       "severity": "warn"
     },
+    "curly": {
+      "severity": "warn"
+    },
+    "no-unnecessary-else": {
+      "severity": "warn"
+    },
     "space-before-function-paren": false,
     "encoding": true,
     "no-invalid-template-strings": true,
@@ -137,6 +144,7 @@
     "return-undefined": true,
     "newline-before-return": true,
     "number-literal-format": true,
-    "unified-signatures": false
+    "unified-signatures": false,
+    "no-accessor-recursion": true
   }
 }

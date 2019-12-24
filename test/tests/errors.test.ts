@@ -27,8 +27,8 @@ import {
   setGlobalOptions
 } from '../../src/typegoose';
 
-// disable "no-unused-variable" for this file, because it tests for errors
-// tslint:disable:no-unused-variable
+// disable "no-unused" for this file, because it tests for errors
+// tslint:disable:no-unused
 
 /**
  * Function to pass into describe

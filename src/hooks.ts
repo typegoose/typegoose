@@ -1,3 +1,5 @@
+// disable "no-unused" for this file, to keep hooks consitent
+// tslint:disable:no-unused
 import { Query } from 'mongoose';
 
 import { hooks as hooksData, IHooks } from './internal/data';

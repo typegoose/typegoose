@@ -11,7 +11,6 @@ import {
   NotNumberTypeError,
   NotStringTypeError
 } from './internal/errors';
-import { _buildSchema } from './internal/schema';
 import * as utils from './internal/utils';
 import { logger } from './logSettings';
 import { buildSchema } from './typegoose';
@@ -202,10 +201,10 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
         rawOptions.enum = Object.entries(enumOption) // get all key-value pairs of the enum
           // filter out the "reverse (value -> name) mappings"
           // https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings
-          .filter(([enumKey, enumValue], i, arr) => {
+          .filter(([enumKey, enumValue], _i, arr) => {
             // safeguard, this should never happen because typescript only sets "design:type" to "Number"
             // if the enum is full of numbers
-            if (utils.isNullOrUndefined(enumValue) || arr.findIndex(([k, v]) => k === enumValue.toString()) <= -1) {
+            if (utils.isNullOrUndefined(enumValue) || arr.findIndex(([k]) => k === enumValue.toString()) <= -1) {
               // if there is no reverse mapping, throw an error
               throw new NotNumberTypeError(name, key, enumKey, typeof enumValue);
             }
