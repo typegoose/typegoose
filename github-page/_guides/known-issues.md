@@ -17,3 +17,24 @@ redirect_from:
 - when `@prop` is used on `public _id: any`, it will error out - this is intendet mongoose behaviour
 
 [Please look here first, to decide if it is an typegoose/mongoose issue](https://github.com/Automattic/mongoose/issues?utf8=✓&q=is%3Aissue+involves%3Ahasezoey)
+
+## Known Mongoose incompatibilities
+
+## typePojoToMixed
+
+This option will **NOT** work because there is no neat / simple way of defining such thing in the same class
+
+Workaround:
+Create multiple classes:
+
+```ts
+class Sub {
+  @prop()
+  public name: string;
+}
+
+class Parent {
+  @prop()
+  public subDoc: Sub;
+}
+```
