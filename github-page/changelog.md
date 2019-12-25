@@ -19,8 +19,7 @@ redirect_from:
 
 ## 6.2.0
 
-<sub>This Version is not yet released, only changes made until now are listed here</sub>
-This Update may break some code (mongoose upgrade, `_id` inline change, `enum` changes)
+This Update may break some code (mongoose upgrade, inline `_id` change, `enum` changes)
 
 - Update Dependencies
   - Upgrade mongoose from 5.7.7 to 5.8.3
