@@ -10,12 +10,16 @@ redirect_from:
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
 <!-- 
-## 6.1.8
+## 6.2.x
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Add here
 -->
+
+## 6.2.1
+
+- Fix functions `isString` and `isNumber` to check against their `mongoose.Schema.Types.*.name` equivalent (fixes {% include gitissue repo="typegoose" num=149 %})
 
 ## 6.2.0
 
