@@ -64,7 +64,9 @@ export function isObject(Type: any): boolean {
  * @returns true, if it is an Number
  */
 export function isNumber(Type: any): Type is number {
-  return Type?.name === 'Number';
+  const name = Type?.name ?? '';
+
+  return name === 'Number' || name === mongoose.Schema.Types.Number.name;
 }
 
 /**
@@ -73,7 +75,9 @@ export function isNumber(Type: any): Type is number {
  * @returns true, if it is an String
  */
 export function isString(Type: any): Type is string {
-  return Type?.name === 'String';
+  const name = Type?.name ?? '';
+
+  return name === 'String' || name === mongoose.Schema.Types.String.name;
 }
 
 /**
