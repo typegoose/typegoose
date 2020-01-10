@@ -10,7 +10,7 @@ title: "Prop"
 
 Accepts Type: `boolean`
 
-Set if this Property is required (best practice is `public property!: any`, note the `!`)  
+Set if this Property is required (best practice is `public property!: any`, note the `!`)
 For more infomation look at [Mongoose's Documentation](http://mongoosejs.com/docs/api.html#schematype_SchemaType-required)
 
 Example:
@@ -194,6 +194,25 @@ class Dummy {
 }
 ```
 
+### select
+
+Accepts Type: `boolean`
+
+Set it to `false` if you want to retrieve data without this property
+
+```ts
+class Dummy {
+   @prop({ select: false })
+   public hello: string;
+}
+```
+
+In order to retrieve a prop marked as `select: false`, you must explicit ask for it:
+```ts
+const dummies = await DummyModel.find().select('+hello') // all dummies have hello property
+```
+Remember: `select` function accepts an array as well
+
 ### get & set
 
 Accepts Type: `(input) => output`
@@ -214,8 +233,8 @@ class Dummy {
 
 Accepts Type: `any`
 
-This option is mainly used for [get & set](#get--set) to override the inferred type  
-but it can also be used to override the inferred type of any prop  
+This option is mainly used for [get & set](#get--set) to override the inferred type
+but it can also be used to override the inferred type of any prop
 
 -> this overwriting is meant as a last resort, please open a new issue if you need to use it
 

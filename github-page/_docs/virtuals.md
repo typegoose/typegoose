@@ -46,8 +46,8 @@ Resulting Document in MongoDB:
 
 *This shows the difference between [`@prop`'s get & set]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#get--set) and [this one]({{ site.baseurl }}{% link _docs/virtuals.md %}#get--set)*
 
-The difference between `@prop`'s and this one is simple, `@prop`'s get & set are ***actual properties*** that get saved to the database, only with a conversion layer  
-The get & set of *getter's & setter's* are absolutly virtual  
+The difference between `@prop`'s and this one is simple, `@prop`'s get & set are ***actual properties*** that get saved to the database, only with a conversion layer
+The get & set of *getter's & setter's* are absolutly virtual
 
 ## Virtual Populate
 
@@ -97,3 +97,27 @@ class Parent {
   public one: Ref<Sub>;
 }
 ```
+
+Note: by default Mongoose doesn't retrieve virtuals props in JSON, in order to achieve that add these `schemaOptions` on class.
+
+Example:
+
+```ts
+@modelOptions({
+  schemaOptions: {
+    toJSON: {virtuals: true},
+    toObject: {virtuals: true},
+  },
+})
+class Parent {
+  @prop({
+    ref: "Sub",
+    foreignField: 'parent',
+    localField: '_id',
+    justOne: true // please know that when this is not included, mongoose will return an array
+  })
+  public one: Ref<Sub>;
+}
+```
+
+If you want this behavior for more classes, the inhenritance is available.
