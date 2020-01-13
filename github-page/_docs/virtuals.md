@@ -97,3 +97,33 @@ class Parent {
   public one: Ref<Sub>;
 }
 ```
+
+## Extra Notes
+
+### Why is my virtual not included in the output?
+
+By default mongoose dosnt output virtuals, to archive this you need to add `toObject` and(/or) `toObject` to `schemaOptions` in `@modelOptions`
+
+Note: it can be set in `@modelOptions`, but it can be set in `getModelForClass` too (and in the `doc.toJSON()`/`doc.toObject()` functions)
+
+Example:
+
+```ts
+@modelOptions({
+  schemaOptions: {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
+})
+class Parent {
+  @prop({
+    ref: "Sub",
+    foreignField: 'parent',
+    localField: '_id',
+    justOne: true // please know that when this is not included, mongoose will return an array
+  })
+  public one: Ref<Sub>;
+}
+```
+
+Note: these options will be applied to all classes that inherit the class that got the options applied

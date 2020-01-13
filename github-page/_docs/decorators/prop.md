@@ -194,6 +194,30 @@ class Dummy {
 }
 ```
 
+### select
+
+Accepts Type: `boolean`
+
+Set it to `false` if you want to retrieve data without this property by default  
+-> [Read more in mongoose's offical documentation](https://mongoosejs.com/docs/api.html#schematype_SchemaType-select)
+
+```ts
+class Dummy {
+   @prop({ select: false })
+   public hello: string;
+}
+```
+
+In order to retrieve a prop marked as `select: false`, you must explicit ask for it:
+
+```ts
+// find all in the collection and have the "hello" property selected
+const dummies = await DummyModel.find().select('+hello').exec();
+```
+
+Note: `select()` accepts an array as well
+Note: `select()` accepts an long string with space as an seperator
+
 ### get & set
 
 Accepts Type: `(input) => output`
@@ -214,8 +238,8 @@ class Dummy {
 
 Accepts Type: `any`
 
-This option is mainly used for [get & set](#get--set) to override the inferred type  
-but it can also be used to override the inferred type of any prop  
+This option is mainly used for [get & set](#get--set) to override the inferred type
+but it can also be used to override the inferred type of any prop
 
 -> this overwriting is meant as a last resort, please open a new issue if you need to use it
 
