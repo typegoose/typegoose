@@ -46,8 +46,8 @@ Resulting Document in MongoDB:
 
 *This shows the difference between [`@prop`'s get & set]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#get--set) and [this one]({{ site.baseurl }}{% link _docs/virtuals.md %}#get--set)*
 
-The difference between `@prop`'s and this one is simple, `@prop`'s get & set are ***actual properties*** that get saved to the database, only with a conversion layer
-The get & set of *getter's & setter's* are absolutly virtual
+The difference between `@prop`'s and this one is simple, `@prop`'s get & set are ***actual properties*** that get saved to the database, only with a conversion layer  
+The get & set of *getter's & setter's* are absolutly virtual  
 
 ## Virtual Populate
 
@@ -98,15 +98,21 @@ class Parent {
 }
 ```
 
-Note: by default Mongoose doesn't retrieve virtuals props in JSON, in order to achieve that add these `schemaOptions` on class.
+## Extra Notes
+
+### Why is my virtual not included in the output?
+
+By default mongoose dosnt output virtuals, to archive this you need to add `toObject` and(/or) `toObject` to `schemaOptions` in `@modelOptions`
+
+Note: it can be set in `@modelOptions`, but it can be set in `getModelForClass` too (and in the `doc.toJSON()`/`doc.toObject()` functions)
 
 Example:
 
 ```ts
 @modelOptions({
   schemaOptions: {
-    toJSON: {virtuals: true},
-    toObject: {virtuals: true},
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 })
 class Parent {
@@ -120,4 +126,4 @@ class Parent {
 }
 ```
 
-If you want this behavior for more classes, the inhenritance is available.
+Note: these options will be applied to all classes that inherit the class that got the options applied

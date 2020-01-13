@@ -10,7 +10,7 @@ title: "Prop"
 
 Accepts Type: `boolean`
 
-Set if this Property is required (best practice is `public property!: any`, note the `!`)
+Set if this Property is required (best practice is `public property!: any`, note the `!`)  
 For more infomation look at [Mongoose's Documentation](http://mongoosejs.com/docs/api.html#schematype_SchemaType-required)
 
 Example:
@@ -198,7 +198,8 @@ class Dummy {
 
 Accepts Type: `boolean`
 
-Set it to `false` if you want to retrieve data without this property
+Set it to `false` if you want to retrieve data without this property by default  
+-> [Read more in mongoose's offical documentation](https://mongoosejs.com/docs/api.html#schematype_SchemaType-select)
 
 ```ts
 class Dummy {
@@ -208,10 +209,14 @@ class Dummy {
 ```
 
 In order to retrieve a prop marked as `select: false`, you must explicit ask for it:
+
 ```ts
-const dummies = await DummyModel.find().select('+hello') // all dummies have hello property
+// find all in the collection and have the "hello" property selected
+const dummies = await DummyModel.find().select('+hello').exec();
 ```
-Remember: `select` function accepts an array as well
+
+Note: `select()` accepts an array as well
+Note: `select()` accepts an long string with space as an seperator
 
 ### get & set
 
