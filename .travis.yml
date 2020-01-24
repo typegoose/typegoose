@@ -1,15 +1,15 @@
 language: node_js
 node_js: [
-  # check Latest
-  13,
-  12,
-  # check LTS
-  10,
-  # check against oldest supported
-  8,
-]
+    # check Latest
+    13,
+    12,
+    # check LTS
+    10,
+    # check against oldest supported
+    8,
+  ]
 script: | # this has to be used, otherwise it executes the tests twice (because of "default build script")
-  npm run mocha
+  npm run mocha-ci
   if [ $? -ne 0 ]; then exit 1; fi # this is added because sometimes it fails and exists with 0 in travis
   if [ $TRAVIS_NODE_VERSION == "12" ]; then echo "Running Coverage" && npm run coverage; fi
 stages:
