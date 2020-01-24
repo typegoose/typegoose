@@ -37,9 +37,9 @@ export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<
   if (config.Memory) {
     // use in-memory-engine
     if (extraConfig.createNewConnection) {
-      connection = mongoose.createConnection(await instance.getConnectionString(extraConfig.dbName), staticOptions);
+      connection = mongoose.createConnection(await instance.getUri(extraConfig.dbName), staticOptions);
     } else {
-      await mongoose.connect(await instance.getConnectionString(extraConfig?.dbName), staticOptions);
+      await mongoose.connect(await instance.getUri(extraConfig?.dbName), staticOptions);
     }
   } else {
     // use external already running database
