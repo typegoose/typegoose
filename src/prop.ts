@@ -119,7 +119,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
 
   const ref = rawOptions?.ref;
-  const refType = rawOptions?.refType ?? rawOptions?.type ?? mongoose.Schema.Types.ObjectId;
+  // use "rawOptions.refType" if set, otherwise "Type" if it is an suitable ref-type, otherwise default back to "ObjectId"
+  const refType = rawOptions?.refType ?? (utils.isRefType(Type) ? Type : undefined) ?? mongoose.Schema.Types.ObjectId;
   if (!utils.isNullOrUndefined(ref)) {
     delete rawOptions.ref;
     const refName = typeof ref === 'string' ? ref : utils.getName(ref);

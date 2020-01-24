@@ -25,10 +25,39 @@ import { NoValidClass } from './errors';
  * @returns true, if it includes it
  */
 export function isPrimitive(Type: any): boolean {
-  if (Type && typeof Type.name === 'string') {
+  if (typeof Type?.name === 'string') {
     // try to match "Type.name" with all the Property Names of "mongoose.Schema.Types"
     // (like "String" with "mongoose.Schema.Types.String")
     return Object.getOwnPropertyNames(mongoose.Schema.Types).includes(Type.name)
+      // try to match "Type.name" with all "mongoose.Schema.Types.*.name"
+      // (like "SchemaString" with "mongoose.Schema.Types.String.name")
+      || Object.values(mongoose.Schema.Types).findIndex((v) => v.name === Type.name) >= 0;
+  }
+
+  return false;
+}
+
+/**
+ * Returns true, if the type is included in mongoose.Schema.Types except the aliases
+ * @param Type The Type
+ * @returns true, if it includes it
+ */
+export function isRefType(Type: any): boolean {
+  if (typeof Type?.name === 'string') {
+    const tmp = Object.getOwnPropertyNames(mongoose.Schema.Types).filter(x => {
+      switch (x) {
+        case 'Oid':
+        case 'Bool':
+        case 'Object':
+          return false;
+        default:
+          return true;
+      }
+    });
+
+    // try to match "Type.name" with all the Property Names of "mongoose.Schema.Types" except the ones with aliases
+    // (like "String" with "mongoose.Schema.Types.String")
+    return tmp.includes(Type.name)
       // try to match "Type.name" with all "mongoose.Schema.Types.*.name"
       // (like "SchemaString" with "mongoose.Schema.Types.String.name")
       || Object.values(mongoose.Schema.Types).findIndex((v) => v.name === Type.name) >= 0;

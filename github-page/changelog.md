@@ -17,6 +17,10 @@ redirect_from:
 - Add here
 -->
 
+## 6.2.2
+
+- Fix use of "rawOptions.type" after deletion (fixes {% include gitissue repo="typegoose" num=178 %})
+
 ## 6.2.1
 
 - Fix functions `isString` and `isNumber` to check against their `mongoose.Schema.Types.*.name` equivalent (fixes {% include gitissue repo="typegoose" num=149 %})
