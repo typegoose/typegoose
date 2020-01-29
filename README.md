@@ -115,6 +115,7 @@ class User {
 ## Install
 
 `npm i -s @typegoose/typegoose`
+`npm i --save-dev @types/mongoose`
 
 You also need to install `mongoose`, since version 5 it is listed as a peer-dependency
 
