@@ -38,10 +38,10 @@ export class RefTest {
 
   // ref string
   @prop({ ref: RefTestString, refType: mongoose.Schema.Types.String })
-  public refFieldString?: Ref<RefTestString, string>;
+  public refFieldString?: Ref<RefTestString/* , string */>; // RefType not set, to know if automatic Ref is brocken
 
   @prop({ ref: 'RefTestString', refType: mongoose.Schema.Types.String })
-  public refFieldString2?: Ref<RefTestString, string>;
+  public refFieldString2?: Ref<RefTestString/* , string */>; // RefType not set, to know if automatic Ref is brocken
 
   // ref string array
   @arrayProp({ itemsRef: RefTestString, itemsRefType: mongoose.Schema.Types.String })

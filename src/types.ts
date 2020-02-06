@@ -277,7 +277,8 @@ export type RefSchemaType = typeof mongoose.Schema.Types.Number |
  * Reference another Model
  * @public
  */
-export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T;
+// export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
+export type Ref<R, T extends RefType = R extends { _id?: RefType; } ? R['_id'] : mongoose.Types.ObjectId> = R | T;
 
 /**
  * An Function type for a function that dosnt have any arguments and dosnt return anything

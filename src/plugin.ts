@@ -7,11 +7,10 @@ import { Func } from './types';
  * @param mongoosePlugin The Plugin to plug-in
  * @param options Options for the Plugin, if any
  */
-export function plugin(mongoosePlugin: Func, options?: any) {
+export function plugin<T extends any[] | any>(mongoosePlugin: Func, options?: T) {
+  // dont check if options is an object, because any plugin could make it anything
   return (target: any) => {
     const name: string = getName(target);
-
-    options = typeof options !== 'object' ? {} : options; // ensure it is an object, even if empty
 
     /* istanbul ignore else */
     if (!plugins.has(name)) {

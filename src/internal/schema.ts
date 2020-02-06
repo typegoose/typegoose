@@ -61,8 +61,8 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   sch.loadClass(cl);
 
-  const hook = hooks.get(name);
-  if (!isNullOrUndefined(hook)) {
+  if (hooks.has(name)) {
+    const hook = hooks.get(name);
     hook.pre.forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
 
     hook.post.forEach((obj) => sch.post(obj.method, obj.func));
@@ -76,9 +76,8 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   }
 
   /** Simplify the usage */
-  const virtualPopulates = virtuals.get(name);
-  if (!isNullOrUndefined(virtualPopulates)) {
-    for (const [key, options] of virtualPopulates) {
+  if (virtuals.has(name)) {
+    for (const [key, options] of virtuals.get(name)) {
       logger.debug('Applying Virtual Populates:', key, options);
       sch.virtual(key, options);
     }
@@ -93,10 +92,12 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
     }
   }
 
+  // this method is to get the typegoose name of the model/class if it is user-handled (like buildSchema, then manually mongoose.model)
   sch.method('typegooseName', () => {
     return name;
   });
 
+  // add the class to the constructors map
   constructors.set(name, cl);
 
   return sch;

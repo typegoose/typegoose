@@ -18,7 +18,7 @@ export interface IHooks {
 }
 export interface IPluginMap {
   mongoosePlugin(schema: Schema<any>, options: object): void;
-  options: object;
+  options: any;
 }
 
 /** Schema Map */
