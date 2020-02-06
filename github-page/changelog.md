@@ -17,6 +17,18 @@ redirect_from:
 - Add here
 -->
 
+## 6.3.0
+
+<sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+- Update Dependencies
+  - `mongoose` to 5.8.11
+  - `@types/mongoose` to 5.7.0
+  - `semver` to 7.1.2
+- Add `@types/mongoose` to `peerDependencies`
+- Add generic type to `@plugin` to set the type for the options
+- Use a modified `Ref`-Type to automaticly get the type (if the Ref'd type has `string` as `_id`, it automaticly sets the `RefType` to `string`)
+
 ## 6.2.2
 
 - Fix use of "rawOptions.type" after deletion (fixes {% include gitissue repo="typegoose" num=178 %})
