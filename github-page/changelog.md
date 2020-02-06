@@ -17,6 +17,10 @@ redirect_from:
 - Add here
 -->
 
+## 6.3.1
+
+- Hopefully fix the Strictmode error of the new Ref-Type
+
 ## 6.3.0
 
 - Update Dependencies
