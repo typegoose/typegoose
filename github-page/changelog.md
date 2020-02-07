@@ -17,6 +17,10 @@ redirect_from:
 - Add here
 -->
 
+## 6.3.2
+
+- Indexes: clone array instead of re-using it (fixes {% include gitissue repo="typegoose" num=194 %})
+
 ## 6.3.1
 
 - Hopefully fix the Strictmode error of the new Ref-Type

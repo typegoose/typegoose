@@ -1,4 +1,6 @@
 import { DecoratorKeys } from './internal/constants';
+import { getName } from './internal/utils';
+import { logger } from './logSettings';
 import { IIndexArray, IndexOptions } from './types';
 
 /**
@@ -13,7 +15,8 @@ import { IIndexArray, IndexOptions } from './types';
  */
 export function index<T = {}>(fields: T, options?: IndexOptions<T>) {
   return (target: any) => {
-    const indices: IIndexArray<any>[] = Reflect.getMetadata(DecoratorKeys.Index, target) ?? [];
+    logger.info('Adding "%o" Indexes to %s', { fields, options }, getName(target));
+    const indices: IIndexArray<any>[] = Array.from(Reflect.getMetadata(DecoratorKeys.Index, target) ?? []);
     indices.push({ fields, options });
     Reflect.defineMetadata(DecoratorKeys.Index, indices, target);
   };
