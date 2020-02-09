@@ -35,9 +35,10 @@ type PostArrayWithError<T> = (error: Error, result: NDA<T>, next: EmptyVoidFn) =
 type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
 type NumberMethod = 'count';
 type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | DocumentMethod;
-type MultipleMethod = 'find' | 'update';
+type MultipleMethod = 'find' | 'update' | 'pagiante';
 type QueryMethod =
   | 'count'
+  | 'paginate'
   | 'find'
   | 'findOne'
   | 'findOneAndRemove'
