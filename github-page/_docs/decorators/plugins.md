@@ -20,3 +20,7 @@ class User extends FindOrCreate {}
 const UserModel = getModelForClass(User);
 const result = await UserModel.findOrCreate({ ... });
 ```
+
+## Typegoose plugins
+
+- [Auto-Increment](https://github.com/typegoose/auto-increment/)
