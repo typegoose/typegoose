@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
 import { isDocument, isDocumentArray } from '../../src/typeguards';
-import { model as RefTestModel, RefTestBufferModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
+import { RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
 
 /**
  * Function to pass into describe

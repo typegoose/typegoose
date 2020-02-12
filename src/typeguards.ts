@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 
+import { isNullOrUndefined } from './internal/utils';
 import { DocumentType, Ref } from './typegoose';
 import { RefType } from './types';
 
@@ -17,4 +18,20 @@ export function isDocument<T, S extends RefType>(doc: Ref<T, S>): doc is Documen
  */
 export function isDocumentArray<T, S extends RefType>(docs: Ref<T, S>[]): docs is DocumentType<T>[] {
   return Array.isArray(docs) && docs.every((v) => isDocument(v));
+}
+
+/**
+ * Check if the document is not undefined/null and is not an document
+ * @param doc The Ref with uncretain type
+ */
+export function isRefType<T, S extends RefType>(doc: Ref<T, S>): doc is S {
+  return !isNullOrUndefined(doc) && !isDocument(doc);
+}
+
+/**
+ * Check if the document is not undefined/null and is not an document
+ * @param docs The Ref with uncretain type
+ */
+export function isRefTypeArray<T, S extends RefType>(docs: Ref<T, S>[]): docs is S[] {
+  return Array.isArray(docs) && docs.every((v) => isRefType(v));
 }

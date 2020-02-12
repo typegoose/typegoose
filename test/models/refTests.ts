@@ -79,4 +79,4 @@ export class RefTest {
   public refArrayBuffer2?: Ref<RefTestBuffer, Buffer>[];
 }
 
-export const model = getModelForClass(RefTest);
+export const RefTestModel = getModelForClass(RefTest);

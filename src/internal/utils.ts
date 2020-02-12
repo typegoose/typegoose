@@ -42,7 +42,7 @@ export function isPrimitive(Type: any): boolean {
  * @param Type The Type
  * @returns true, if it includes it
  */
-export function isRefType(Type: any): boolean {
+export function isAnRefType(Type: any): boolean {
   if (typeof Type?.name === 'string') {
     const tmp = Object.getOwnPropertyNames(mongoose.Schema.Types).filter(x => {
       switch (x) {

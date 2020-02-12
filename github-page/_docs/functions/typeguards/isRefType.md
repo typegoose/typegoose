@@ -1,12 +1,12 @@
 ---
-title: "Is Document"
+title: "Is RefType"
 redirect_from:
   - /docs/functions/typeguards/isdocument
 ---
 
-## isDocument
+## isRefType
 
-`isDocument(doc: any)`: Check if the supplied value is a valid Model(/Document) (mainly for `Ref<T>` fields)
+`isRefType(doc: any)`: Check if the supplied value is not an document and is not undefined/null (mainly for `Ref<T>` fields)
 
 Example:
 
@@ -16,8 +16,8 @@ class Cat {
   public partner: Ref<Cat>;
 
   public hasPartner(): boolean {
-    if (isDocument(this.partner)) {
-      // "this.partner" now has the type of "Cat"
+    if (isRefType(this.partner)) {
+      // "this.partner" now has the type of "Cat._id"'s RefType (This case ObjectId)
       return true;
     } else {
       return false;
@@ -28,9 +28,9 @@ class Cat {
 
 -> this could be minified, but for demonstration purposes this will stay the long version
 
-## isDocumentArray
+## isRefTypeArray
 
-`isDocumentArray(doc: any[])` is the same as `isDocument`, only that it checks if it is an array **AND** all of the items are a Document
+`isRefTypeArray(doc: any[])` is the same as `isRefType`, only that it checks if it is an array **AND** all of the items are a not undefined/null and not an document
 
 Example:
 
@@ -41,7 +41,7 @@ class Cat {
 
   public areAllKittensExisting(): boolean {
     if (isDocumentArray(this.kittens)) {
-      // "this.kittens" now has the type of "Cat"
+      // "this.kittens" now has the type of "Cat._id"'s RefType (This case ObjectId)
       return true;
     } else {
       return false;
