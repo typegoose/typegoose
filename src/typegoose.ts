@@ -2,7 +2,7 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
-import { deprecate, format } from 'util';
+import { format } from 'util';
 
 /* istanbul ignore next */
 if (semver.lt(mongoose.version, '5.9.2')) {
@@ -45,33 +45,6 @@ export { getClassForDocument, getClass, getName } from './internal/utils';
 export { Severity } from './internal/constants';
 
 parseENV(); // call this before anything to ensure they are applied
-
-/** @deprecated */
-export abstract class Typegoose {
-  /* istanbul ignore next */
-  constructor() {
-    // tslint:disable-next-line:no-empty
-    deprecate(() => { }, 'Typegoose Class is Deprecated!')();
-  }
-
-  /* istanbul ignore next */
-  /** @deprecated */
-  public getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
-    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!');
-  }
-
-  /* istanbul ignore next */
-  /** @deprecated */
-  public setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
-    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!');
-  }
-
-  /* istanbul ignore next */
-  /** @deprecated */
-  public buildSchema<T, U extends AnyParamConstructor<T>>(cl: U) {
-    return deprecate(buildSchema.bind(undefined, cl), 'Typegoose Class is Deprecated!');
-  }
-}
 
 /**
  * Get a Model for a Class
@@ -125,20 +98,6 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
   return models.get(key) as any;
 }
 
-/* istanbul ignore next */
-/**
- * Builds the Schema & The Model
- * DEPRECTAED: use getModelForClass
- * @param cl The uninitialized Class
- * @returns The Model
- * @deprecated
- */
-export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
-  return deprecate(
-    getModelForClass.bind(undefined, cl),
-    'setModelForClass is deprecated, please use getModelForClass (see README#Migrate to 6.0.0)');
-}
-
 /**
  * Generates a Mongoose schema out of class props, iterating through all parents
  * @param cl The not initialized Class
@@ -156,12 +115,6 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
-    /* istanbul ignore next */
-    if (parentCtor.name === 'Typegoose') { // TODO: remove this "if", if the Typegoose class gets removed [DEPRECATION]
-      deprecate(() => undefined, 'The Typegoose Class is deprecated, please try to remove it')();
-
-      break;
-    }
     // extend schema
     sch = _buildSchema(parentCtor, sch, mergedOptions);
     // set next parent
