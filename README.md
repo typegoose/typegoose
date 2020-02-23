@@ -109,7 +109,7 @@ class User {
 
 * TypeScript 3.7+
 * Node 8.10+
-* mongoose ^5.8.3
+* mongoose ^5.9.2
 * `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
 
 ## Install
