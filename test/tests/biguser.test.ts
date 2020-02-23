@@ -3,8 +3,8 @@ import * as mongoose from 'mongoose';
 
 import { Genders } from '../enums/genders';
 import { Role } from '../enums/role';
-import { model as Car } from '../models/car';
-import { model as User } from '../models/user';
+import { CarModel } from '../models/car';
+import { UserModel } from '../models/user';
 
 /**
  * Function to pass into describe
@@ -12,7 +12,7 @@ import { model as User } from '../models/user';
  */
 export function suite() {
   it('should create a User with connections', async () => {
-    const [tesla, trabant, zastava] = await Car.create([{
+    const [tesla, trabant, zastava] = await CarModel.create([{
       model: 'Tesla',
       version: 'ModelS',
       price: mongoose.Types.Decimal128.fromString('50123.25')
@@ -24,7 +24,7 @@ export function suite() {
       price: mongoose.Types.Decimal128.fromString('1234.25')
     }]);
 
-    const user = await User.create({
+    const user = await UserModel.create({
       _id: mongoose.Types.ObjectId(),
       firstName: 'John',
       lastName: 'Doe',
@@ -51,7 +51,7 @@ export function suite() {
     });
 
     {
-      const foundUser = await User
+      const foundUser = await UserModel
         .findById(user.id)
         .populate('car previousCars')
         .exec();
@@ -102,14 +102,14 @@ export function suite() {
     }
 
     {
-      const foundUser = await User.findByAge(21);
+      const foundUser = await UserModel.findByAge(21);
       expect(foundUser).to.have.property('firstName', 'Sherlock');
       expect(foundUser).to.have.property('lastName', 'Holmes');
     }
   });
 
   it('should create a user with [Plugin].findOrCreate', async () => {
-    const createdUser = await User.findOrCreate({
+    const createdUser = await UserModel.findOrCreate({
       firstName: 'Jane',
       lastName: 'Doe',
       gender: Genders.FEMALE
@@ -121,7 +121,7 @@ export function suite() {
     expect(createdUser).to.have.property('doc');
     expect(createdUser.doc).to.have.property('firstName', 'Jane');
 
-    const foundUser = await User.findOrCreate({
+    const foundUser = await UserModel.findOrCreate({
       firstName: 'Jane',
       lastName: 'Doe'
     });
@@ -133,7 +133,7 @@ export function suite() {
     expect(foundUser.doc).to.have.property('firstName', 'Jane');
 
     try {
-      await User.create({
+      await UserModel.create({
         _id: mongoose.Types.ObjectId(),
         firstName: 'John',
         lastName: 'Doe',

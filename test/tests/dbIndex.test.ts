@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 
-import { model as Car } from '../models/car';
-import { IndexWeights, model as IndexWeightsModel } from '../models/indexweigths';
-import { model as Rating } from '../models/rating';
-import { model as Select, SelectStrings } from '../models/select';
-import { model as User } from '../models/user';
+import { CarModel } from '../models/car';
+import { IndexWeights, IndexWeightsModel } from '../models/indexweigths';
+import { RatingModel } from '../models/rating';
+import { SelectModel, SelectStrings } from '../models/select';
+import { UserModel } from '../models/user';
 
 /**
  * Function to pass into describe
@@ -13,13 +13,13 @@ import { model as User } from '../models/user';
 export function suite() {
   describe('Property Option {select}', () => {
     before(async () => {
-      const selecttest = new Select();
+      const selecttest = new SelectModel();
       await selecttest.save();
     });
 
     it('should only return default selected properties', async () => {
       /** variable name long: foundSelectDefault */
-      const fSDefault = (await Select.findOne({}).exec()).toObject();
+      const fSDefault = (await SelectModel.findOne({}).exec()).toObject();
 
       expect(fSDefault).to.not.have.property('test1');
       expect(fSDefault).to.have.property('test2', SelectStrings.test2);
@@ -28,7 +28,7 @@ export function suite() {
 
     it('should only return specificly selected properties', async () => {
       /** variable name long: foundSelectExtra */
-      const fSExtra = (await Select.findOne({}).select(['+test1', '+test3', '-test2']).exec()).toObject();
+      const fSExtra = (await SelectModel.findOne({}).select(['+test1', '+test3', '-test2']).exec()).toObject();
 
       expect(fSExtra).to.have.property('test1', SelectStrings.test1);
       expect(fSExtra).to.not.have.property('test2');
@@ -68,14 +68,14 @@ export function suite() {
   });
 
   it('should add compound index', async () => {
-    const user = await User.findOne().exec();
-    const car = await Car.findOne().exec();
+    const user = await UserModel.findOne().exec();
+    const car = await CarModel.findOne().exec();
 
-    await Rating.create({ user, car, stars: 4 });
+    await RatingModel.create({ user, car, stars: 4 });
 
     // should fail, because user and car should be unique
     try {
-      await Rating.create({ user, car, stars: 5 });
+      await RatingModel.create({ user, car, stars: 5 });
     } catch (err) {
       expect(err).to.have.property('code', 11000);
     }

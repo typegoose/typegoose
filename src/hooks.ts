@@ -1,11 +1,10 @@
 // disable "no-unused" for this file, to keep hooks consitent
 // tslint:disable:no-unused
-import { Query } from 'mongoose';
+import type { Query } from 'mongoose';
 
 import { hooks as hooksData, IHooks } from './internal/data';
 import { getName } from './internal/utils';
-import { DocumentType } from './typegoose';
-import { EmptyVoidFn } from './types';
+import type { DocumentType, EmptyVoidFn } from './types';
 
 type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 

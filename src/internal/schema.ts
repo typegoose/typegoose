@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 import { logger } from '../logSettings';
 import { _buildPropMetadata } from '../prop';
-import { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexArray, IModelOptions } from '../types';
+import type { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexArray, IModelOptions } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';

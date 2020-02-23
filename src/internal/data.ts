@@ -1,6 +1,7 @@
-import { Model, Schema, SchemaDefinition } from 'mongoose';
+import type { Model, Schema, SchemaDefinition } from 'mongoose';
 
-import { IGlobalOptions, Severity, VirtualOptions } from '../types';
+import type { IGlobalOptions, VirtualOptions } from '../types';
+import { Severity } from './constants';
 
 export interface IPreHook {
   method: string | RegExp;

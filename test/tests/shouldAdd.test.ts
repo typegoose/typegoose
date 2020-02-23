@@ -1,8 +1,7 @@
 import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { getClass, getName } from '../../src/internal/utils';
-import { arrayProp, buildSchema, isDocumentArray, prop, Ref } from '../../src/typegoose';
+import { arrayProp, buildSchema, getClass, getName, isDocumentArray, prop, Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, model as AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
@@ -10,7 +9,7 @@ import { GetSet, GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
 import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
 import { OptionsClass, OptionsModel } from '../models/options';
-import { model as User } from '../models/user';
+import { UserModel } from '../models/user';
 import {
   NonVirtual,
   NonVirtualGS,
@@ -28,7 +27,7 @@ import {
  */
 export function suite() {
   it('should add a language and job using instance methods', async () => {
-    const user = await User.create({
+    const user = await UserModel.create({
       firstName: 'harry',
       lastName: 'potter',
       gender: Genders.MALE,

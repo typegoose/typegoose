@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
-import { Base } from './defaultClasses';
+import type { Base } from './defaultClasses';
+import type { Severity, WhatIsIt } from './internal/constants';
 
 /**
  * Get the Type of an instance of a Document with Class properties
@@ -327,13 +328,6 @@ export interface ICustomOptions {
   runSyncIndexes?: boolean;
 }
 
-/** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
-export enum WhatIsIt {
-  ARRAY,
-  MAP,
-  NONE
-}
-
 export interface DecoratedPropertyMetadata {
   /** Prop Options */
   origOptions: any;
@@ -347,12 +341,6 @@ export interface DecoratedPropertyMetadata {
   whatis: WhatIsIt;
 }
 export type DecoratedPropertyMetadataMap = Map<string, DecoratedPropertyMetadata>;
-
-export enum Severity {
-  ALLOW,
-  WARN,
-  ERROR
-}
 
 /*
  copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
@@ -441,13 +429,7 @@ export interface IGlobalOptions {
    * Global Options for general Typegoose
    * (There are currently none)
    */
-  globalOptions?: {
-    /**
-     * This Options got removed because it would interfer with mongoose-number-enums
-     * @deprecated
-     */
-    useNewEnum?: boolean;
-  };
+  globalOptions?: {};
 }
 
 export interface IObjectWithTypegooseFunction {

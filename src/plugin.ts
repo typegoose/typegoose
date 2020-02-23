@@ -1,6 +1,6 @@
 import { plugins } from './internal/data';
 import { getName } from './internal/utils';
-import { Func } from './types';
+import type { Func } from './types';
 
 /**
  * Add a Middleware-Plugin

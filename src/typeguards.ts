@@ -1,8 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { isNullOrUndefined } from './internal/utils';
-import { DocumentType, Ref } from './typegoose';
-import { RefType } from './types';
+import type { DocumentType, Ref, RefType } from './types';
 
 /**
  * Check if the given document is already populated

@@ -20,3 +20,16 @@ export enum DecoratorKeys {
    */
   Index = 'typegoose:indexes'
 }
+
+/** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
+export enum WhatIsIt {
+  ARRAY,
+  MAP,
+  NONE
+}
+
+export enum Severity {
+  ALLOW,
+  WARN,
+  ERROR
+}

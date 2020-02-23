@@ -18,4 +18,4 @@ export class Rating {
   public location: [[number]];
 }
 
-export const model = getModelForClass(Rating);
+export const RatingModel = getModelForClass(Rating);

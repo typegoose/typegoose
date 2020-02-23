@@ -19,4 +19,4 @@ export class IndexWeights {
   public keywords: string[];
 }
 
-export const model = getModelForClass(IndexWeights);
+export const IndexWeightsModel = getModelForClass(IndexWeights);

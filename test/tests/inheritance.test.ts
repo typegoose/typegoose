@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { model as inheritanceClass, Skyscraper } from '../models/inheritanceClass';
+import { Skyscraper, SkyscraperModel } from '../models/inheritanceClass';
 
 /**
  * Function to pass into describe
@@ -8,14 +8,14 @@ import { model as inheritanceClass, Skyscraper } from '../models/inheritanceClas
  */
 export function suite() {
   it('should set all direct parent props', async () => {
-    const instance = await inheritanceClass.create({});
+    const instance = await SkyscraperModel.create({});
     expect(instance.name).to.equals('Some cool string');
     expect(instance.doors).to.equals(4);
     expect(instance.width).to.equals(100);
   });
 
   it('should merge all parent schema options', async () => {
-    const instance = await inheritanceClass.create({});
+    const instance = await SkyscraperModel.create({});
     expect(instance.schema.get('collection')).to.equals('skyscrapers');
     expect(instance.schema.get('discriminatorKey')).to.equals('width');
   });
@@ -26,7 +26,7 @@ export function suite() {
         slotsForCars: 3
       }
     } as Skyscraper;
-    const instance = await inheritanceClass.create(input);
+    const instance = await SkyscraperModel.create(input);
 
     expect(instance.mainGarage.slotsForCars).to.equals(3);
     expect(instance.mainGarage.width).to.equals(100);
@@ -43,7 +43,7 @@ export function suite() {
         slotsForCars: 2
       }]
     } as Skyscraper;
-    const instance = await inheritanceClass.create(input);
+    const instance = await SkyscraperModel.create(input);
 
     expect(instance.garagesInArea).to.be.lengthOf(1);
     const firstGarage = instance.garagesInArea.pop();

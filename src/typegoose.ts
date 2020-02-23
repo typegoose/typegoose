@@ -13,7 +13,6 @@ if (semver.lt(process.version.slice(1), '10.15.0')) {
   logger.warn('You are using a NodeJS Version below 10.15.0, Please Upgrade!');
 }
 
-import * as defaultClasses from './defaultClasses';
 import { parseENV, setGlobalOptions } from './globalOptions';
 import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
@@ -21,7 +20,7 @@ import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
 import { getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
-import {
+import type {
   AnyParamConstructor,
   DocumentType,
   IModelOptions,
@@ -35,13 +34,15 @@ export { setLogLevel, LogLevels } from './logSettings';
 export * from './prop';
 export * from './hooks';
 export * from './plugin';
-export * from '.';
+export * from './index';
 export * from './typeguards';
 export * from './optionsProp';
-export { defaultClasses };
+export * as defaultClasses from './defaultClasses';
+export * as errors from './internal/errors';
+export type * as types from './types';
 export { DocumentType, Ref, ReturnModelType };
-export { Severity, IGlobalOptions } from './types';
-export { getClassForDocument, getClass } from './internal/utils';
+export { getClassForDocument, getClass, getName } from './internal/utils';
+export { Severity } from './internal/constants';
 
 parseENV(); // call this before anything to ensure they are applied
 

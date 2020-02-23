@@ -94,4 +94,4 @@ export class User extends defaultClasses.FindOrCreate {
   }
 }
 
-export const model = getModelForClass(User);
+export const UserModel = getModelForClass(User);

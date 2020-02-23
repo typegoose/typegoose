@@ -1,14 +1,13 @@
 import { assert, expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { getClassForDocument } from '../../src/internal/utils';
-import { isDocument } from '../../src/typegoose';
+import { getClassForDocument, isDocument } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
-import { Car as CarClass, model as Car } from '../models/car';
+import { Car as CarClass, CarModel as Car } from '../models/car';
 import { InternetUserModel } from '../models/internetUser';
 import { AddressNested, AddressNestedModel, PersonNested, PersonNestedModel } from '../models/nestedObject';
 import { model as Person } from '../models/person';
-import { model as User, User as UserType } from '../models/user';
+import { User, UserModel } from '../models/user';
 
 /**
  * Function to pass into describe
@@ -23,7 +22,7 @@ export function suite() {
     const carReflectedType = getClassForDocument(car);
     expect(carReflectedType).to.equals(CarClass);
 
-    const user = await User.create({
+    const user = await UserModel.create({
       firstName: 'John2',
       lastName: 'Doe2',
       gender: Genders.MALE,
@@ -31,10 +30,10 @@ export function suite() {
       uniqueId: 'not-needed'
     });
     const userReflectedType = getClassForDocument(user);
-    expect(userReflectedType).to.equals(UserType);
+    expect(userReflectedType).to.equals(User);
 
     // assert negative to be sure (false positive)
-    expect(carReflectedType).to.not.equals(UserType);
+    expect(carReflectedType).to.not.equals(User);
     expect(userReflectedType).to.not.equals(CarClass);
   });
 

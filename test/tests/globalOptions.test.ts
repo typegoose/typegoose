@@ -2,8 +2,8 @@ import { expect } from 'chai';
 
 import { DecoratorKeys } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
-import { buildSchema, prop, setGlobalOptions } from '../../src/typegoose';
-import { IModelOptions, Severity } from '../../src/types';
+import { buildSchema, prop, setGlobalOptions, Severity } from '../../src/typegoose';
+import type { IModelOptions } from '../../src/types';
 
 /**
  * Function to pass into describe

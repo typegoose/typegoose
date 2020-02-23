@@ -1,7 +1,6 @@
 import { assert, expect } from 'chai';
 
-import { mongoose } from '../../src/typegoose';
-import { isDocument, isDocumentArray, isRefType } from '../../src/typeguards';
+import { isDocument, isDocumentArray, isRefType, mongoose } from '../../src/typegoose';
 import { IsRefType, IsRefTypeModel, IsRefTypeNestedObjectIdModel, IsRefTypeNestedStringModel } from '../models/isRefType';
 import { UserRefModel } from '../models/userRefs';
 

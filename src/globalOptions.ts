@@ -1,6 +1,7 @@
+import { Severity } from './internal/constants';
 import { globalOptions } from './internal/data';
 import { logger } from './logSettings';
-import { IGlobalOptions, Severity } from './types';
+import type { IGlobalOptions } from './types';
 
 /**
  * Set Typegoose's global Options

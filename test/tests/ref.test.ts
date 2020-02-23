@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { isDocument, isDocumentArray } from '../../src/typeguards';
+import { isDocument, isDocumentArray } from '../../src/typegoose';
 import { RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
 
 /**

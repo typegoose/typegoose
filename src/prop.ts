@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { format } from 'util';
 
-import { DecoratorKeys } from './internal/constants';
+import { DecoratorKeys, WhatIsIt } from './internal/constants';
 import { schemas, virtuals } from './internal/data';
 import {
   InvalidPropError,
@@ -14,13 +14,12 @@ import {
 import * as utils from './internal/utils';
 import { logger } from './logSettings';
 import { buildSchema } from './typegoose';
-import {
+import type {
   ArrayPropOptions,
   DecoratedPropertyMetadata,
   DecoratedPropertyMetadataMap,
   MapPropOptions,
-  PropOptionsWithValidate,
-  WhatIsIt
+  PropOptionsWithValidate
 } from './types';
 
 /**

@@ -1,6 +1,6 @@
 import { DecoratorKeys } from './internal/constants';
 import { assignGlobalModelOptions, assignMetadata } from './internal/utils';
-import { IModelOptions } from './types';
+import type { IModelOptions } from './types';
 
 /**
  * Define Options for the Class

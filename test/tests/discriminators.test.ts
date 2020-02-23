@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { getDiscriminatorModelForClass, getModelForClass, mongoose } from '../../src/typegoose';
-import { DocumentType } from '../../src/types';
+
+import { DocumentType, getDiscriminatorModelForClass, getModelForClass, mongoose } from '../../src/typegoose';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 import { Default, DefaultModel, DisciminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminatorsWithGenerics';
 

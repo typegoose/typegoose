@@ -15,7 +15,7 @@ import {
   modelOptions,
   prop
 } from '../../src/typegoose';
-import { IModelOptions } from '../../src/types';
+import type { IModelOptions } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed

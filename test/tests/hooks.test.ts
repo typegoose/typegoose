@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
-import { model as Dummy } from '../models/hook2';
+import { Hook2Model } from '../models/hook2';
 
 /**
  * Function to pass into describe
@@ -31,17 +31,17 @@ export function suite() {
   });
 
   it('should test findOne post hook', async () => {
-    await Dummy.create({ text: 'initial' });
+    await Hook2Model.create({ text: 'initial' });
 
     // text is changed in pre save hook
-    const dummyFromDb = await Dummy.findOne({ text: 'saved' }).exec();
+    const dummyFromDb = await Hook2Model.findOne({ text: 'saved' }).exec();
     expect(dummyFromDb).to.have.property('text', 'changed in post findOne hook');
   });
 
   it('should find the unexpected dummies because of pre and post hooks', async () => {
-    await Dummy.create([{ text: 'whatever' }, { text: 'whatever' }]);
+    await Hook2Model.create([{ text: 'whatever' }, { text: 'whatever' }]);
 
-    const foundDummies = await Dummy.find({ text: 'saved' }).exec();
+    const foundDummies = await Hook2Model.find({ text: 'saved' }).exec();
 
     // pre-save-hook changed text to saved
     expect(foundDummies.length).to.be.above(2);
@@ -50,11 +50,11 @@ export function suite() {
   });
 
   it('should test the updateMany hook', async () => {
-    await Dummy.insertMany([{ text: 'foobar42' }, { text: 'foobar42' }]);
+    await Hook2Model.insertMany([{ text: 'foobar42' }, { text: 'foobar42' }]);
 
-    await Dummy.updateMany({ text: 'foobar42' }, { text: 'lorem ipsum' }).exec();
+    await Hook2Model.updateMany({ text: 'foobar42' }, { text: 'lorem ipsum' }).exec();
 
-    const foundUpdatedDummies = await Dummy.find({ text: 'updateManied' }).exec();
+    const foundUpdatedDummies = await Hook2Model.find({ text: 'updateManied' }).exec();
 
     // pre-updateMany-hook changed text to 'updateManied'
     expect(foundUpdatedDummies).to.be.lengthOf(2);

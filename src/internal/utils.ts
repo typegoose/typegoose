@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import { format } from 'util';
 
 import { logger } from '../logSettings';
-import {
+import type {
   AnyParamConstructor,
   IModelOptions,
   IObjectWithTypegooseFunction,
@@ -11,11 +11,9 @@ import {
   IPrototype,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
-  Severity,
-  VirtualOptions,
-  WhatIsIt
+  VirtualOptions
 } from '../types';
-import { DecoratorKeys } from './constants';
+import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
 import { NoValidClass } from './errors';
 

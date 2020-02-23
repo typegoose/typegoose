@@ -2,28 +2,25 @@ import { AssertionError } from 'assert';
 import { assert, expect } from 'chai';
 import { model, Schema } from 'mongoose';
 
-import { pre } from '../../src/hooks';
 import { DecoratorKeys } from '../../src/internal/constants';
-import {
-  InvalidTypeError,
-  NoMetadataError,
-  NotAllVPOPElementsError,
-  NotNumberTypeError,
-  NotStringTypeError,
-  NoValidClass
-} from '../../src/internal/errors';
 import { _buildSchema } from '../../src/internal/schema';
-import { assignMetadata, getClass, getName, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
-import { arrayProp, mapProp, prop } from '../../src/prop';
+import { assignMetadata, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import {
   addModelToTypegoose,
+  arrayProp,
   buildSchema,
   deleteModel,
   deleteModelWithClass,
+  errors,
+  getClass,
   getDiscriminatorModelForClass,
   getModelForClass,
   getModelWithString,
+  getName,
+  mapProp,
   modelOptions,
+  pre,
+  prop,
   setGlobalOptions
 } from '../../src/typegoose';
 
@@ -44,7 +41,7 @@ export function suite() {
       getModelForClass(TestNSTETransform);
       assert.fail('Expected to throw "NotStringTypeError"');
     } catch (err) {
-      expect(err).to.be.an.instanceOf(NotStringTypeError);
+      expect(err).to.be.an.instanceOf(errors.NotStringTypeError);
     }
   });
 
@@ -57,7 +54,7 @@ export function suite() {
       getModelForClass(TestNSTEValidate);
       assert.fail('Expected to throw "NotStringTypeError"');
     } catch (err) {
-      expect(err).to.be.an.instanceOf(NotStringTypeError);
+      expect(err).to.be.an.instanceOf(errors.NotStringTypeError);
     }
   });
 
@@ -70,7 +67,7 @@ export function suite() {
       getModelForClass(TestNNTEValidate);
       assert.fail('Expected to throw "NotNumberTypeError"');
     } catch (err) {
-      expect(err).to.be.an.instanceOf(NotNumberTypeError);
+      expect(err).to.be.an.instanceOf(errors.NotNumberTypeError);
     }
   });
 
@@ -83,7 +80,7 @@ export function suite() {
       getModelForClass(TestNME);
       assert.fail('Expected to throw "NoMetadataError"');
     } catch (err) {
-      expect(err).to.be.an.instanceOf(NoMetadataError);
+      expect(err).to.be.an.instanceOf(errors.NoMetadataError);
     }
   });
 
@@ -140,7 +137,7 @@ export function suite() {
       getModelForClass(TestNAEEVirtualPopulate);
       assert.fail('Expected to throw "NotAllElementsError"');
     } catch (err) {
-      expect(err).to.be.an.instanceOf(NotAllVPOPElementsError);
+      expect(err).to.be.an.instanceOf(errors.NotAllVPOPElementsError);
     }
   });
 
@@ -175,7 +172,7 @@ export function suite() {
         addModelToTypegoose(model('hello', new Schema()), 'not class');
         assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
-        expect(err).to.be.an.instanceOf(NoValidClass);
+        expect(err).to.be.an.instanceOf(errors.NoValidClass);
       }
     });
 
@@ -185,7 +182,7 @@ export function suite() {
         buildSchema('hello');
         assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
-        expect(err).to.be.an.instanceOf(NoValidClass);
+        expect(err).to.be.an.instanceOf(errors.NoValidClass);
       }
     });
 
@@ -195,7 +192,7 @@ export function suite() {
         _buildSchema('hello');
         assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
-        expect(err).to.be.an.instanceOf(NoValidClass);
+        expect(err).to.be.an.instanceOf(errors.NoValidClass);
       }
     });
 
@@ -205,7 +202,7 @@ export function suite() {
         getModelForClass('hello');
         assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
-        expect(err).to.be.an.instanceOf(NoValidClass);
+        expect(err).to.be.an.instanceOf(errors.NoValidClass);
       }
     });
 
@@ -215,7 +212,7 @@ export function suite() {
         deleteModelWithClass(true);
         assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
-        expect(err).to.be.an.instanceOf(NoValidClass);
+        expect(err).to.be.an.instanceOf(errors.NoValidClass);
       }
     });
 
@@ -225,7 +222,7 @@ export function suite() {
         mergeSchemaOptions({}, true);
         assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
-        expect(err).to.be.an.instanceOf(NoValidClass);
+        expect(err).to.be.an.instanceOf(errors.NoValidClass);
       }
     });
 
@@ -235,7 +232,7 @@ export function suite() {
         getDiscriminatorModelForClass(model('NoValidClassgetDiscriminatorModelForClass', {}), true);
         assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
-        expect(err).to.be.an.instanceOf(NoValidClass);
+        expect(err).to.be.an.instanceOf(errors.NoValidClass);
       }
     });
   });
@@ -252,7 +249,7 @@ export function suite() {
         getModelForClass(TestInvalidTypeErrorAP);
         assert.fail('Expected to throw "InvalidTypeError"');
       } catch (err) {
-        expect(err).to.be.an.instanceOf(InvalidTypeError);
+        expect(err).to.be.an.instanceOf(errors.InvalidTypeError);
       }
     });
 
@@ -265,7 +262,7 @@ export function suite() {
         getModelForClass(TestInvalidTypeErrorMP);
         assert.fail('Expected to throw "InvalidTypeError"');
       } catch (err) {
-        expect(err).to.be.an.instanceOf(InvalidTypeError);
+        expect(err).to.be.an.instanceOf(errors.InvalidTypeError);
       }
     });
   });
@@ -289,7 +286,7 @@ export function suite() {
         assignMetadata(DecoratorKeys.Index, {}, true);
         assert.fail('Expected to throw "NoValidClass"');
       } catch (err) {
-        expect(err).to.be.an.instanceOf(NoValidClass);
+        expect(err).to.be.an.instanceOf(errors.NoValidClass);
       }
     });
   });
@@ -439,7 +436,7 @@ export function suite() {
 
       assert.fail('Expected to throw "NotStringTypeError"');
     } catch (err) {
-      expect(err).to.be.an.instanceOf(NotStringTypeError);
+      expect(err).to.be.an.instanceOf(errors.NotStringTypeError);
     }
   });
 
@@ -459,7 +456,7 @@ export function suite() {
 
       assert.fail('Expected to throw "NotNumberTypeError"');
     } catch (err) {
-      expect(err).to.be.an.instanceOf(NotNumberTypeError);
+      expect(err).to.be.an.instanceOf(errors.NotNumberTypeError);
     }
   });
 
