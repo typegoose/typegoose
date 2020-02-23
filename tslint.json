@@ -51,16 +51,6 @@
       ],
       "severity": "warn"
     },
-    "whitespace": {
-      "options": [
-        "check-branch",
-        "check-operator",
-        "check-separator",
-        "check-preblock",
-        "check-branch",
-        "check-module"
-      ]
-    },
     "variable-name": [
       true,
       "ban-keywords",
