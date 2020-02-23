@@ -335,21 +335,6 @@ export function isNotDefined(cl: any) {
 }
 
 /**
- * Assign "__uniqueID" to a class
- * @param cl
- * @returns boolean, true if uniqueID is created, false if already existing
- */
-export function createUniqueID(cl: any) {
-  if (isNullOrUndefined(cl.__uniqueID)) {
-    cl.__uniqueID = Date.now();
-
-    return true;
-  }
-
-  return false;
-}
-
-/**
  * Map Options to "inner" & "outer"
  * -> inner: means inner of "type: [{here})"
  * -> outer: means outer of "type: [{}], here"

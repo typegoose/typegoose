@@ -40,9 +40,6 @@ function baseProp(input: DecoratedPropertyMetadata): void {
       + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`);
   }
 
-  // assign a Unique ID to the target class
-  utils.createUniqueID(target);
-
   const existingMapForTarget = Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
   if (utils.isNullOrUndefined(existingMapForTarget)) {
     Reflect.defineMetadata(DecoratorKeys.PropCache, new Map<string, DecoratedPropertyMetadata>(), target);
