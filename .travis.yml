@@ -1,4 +1,5 @@
 language: node_js
+os: linux
 node_js: [
     # check Latest
     13,
@@ -41,8 +42,9 @@ jobs:
       script: bash ./ghPagesPre.sh
       deploy:
         provider: pages
-        skip_cleanup: true
-        github_token: $GITHUB_GH_PAGES
+        skip_cleanup: true # while using deployment v1
+        cleanup: false # when switching to deployment v2
+        token: $GITHUB_GH_PAGES
         keep_history: false
         target_branch: gh-pages # i know this the default, but just to be sure
         on:
