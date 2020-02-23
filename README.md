@@ -108,17 +108,18 @@ class User {
 ## Requirements
 
 * TypeScript 3.7+
-* Node 8.10+
+* Node 10.15+
 * mongoose ^5.9.2
 * `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
 
 ## Install
 
-`npm i -s @typegoose/typegoose`
+```sh
+npm i -s @typegoose/typegoose # install typegoose itself
 
-You also need to install `mongoose`, since version 5 it is listed as a peer-dependency
-
-`npm i -s mongoose`
+npm i -s mongoose # install peer-dependencie mongoose
+npm i -D @types/mongoose # install all types for mongoose - this is required for typegoose to work in typescript
+```
 
 ## Testing
 

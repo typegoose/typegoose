@@ -9,8 +9,8 @@ if (semver.lt(mongoose.version, '5.9.2')) {
   throw new Error('Please use mongoose 5.9.2 or higher');
 }
 
-if (semver.lt(process.version.slice(1), '8.10.0')) {
-  logger.warn('You are using a NodeJS Version below 8.10.0, Please Upgrade!');
+if (semver.lt(process.version.slice(1), '10.15.0')) {
+  logger.warn('You are using a NodeJS Version below 10.15.0, Please Upgrade!');
 }
 
 import * as defaultClasses from './defaultClasses';

@@ -2,11 +2,10 @@ language: node_js
 node_js: [
     # check Latest
     13,
+    # check current & LTS
     12,
-    # check LTS
-    10,
     # check against oldest supported
-    8,
+    10,
   ]
 script: | # this has to be used, otherwise it executes the tests twice (because of "default build script")
   npm run mocha-ci
