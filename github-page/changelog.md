@@ -10,12 +10,22 @@ redirect_from:
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
 <!-- 
-## 6.2.x
+## 6.5.x
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Add here
 -->
+
+## 6.4.0
+
+- Update Dependencies
+  - `mongoose` to 5.9.2
+  - `@types/mongoose` to 5.7.1
+  - `semver` to 7.1.3
+  - `loglevel` to 1.6.7
+  - `tslib` to 1.11.0
+- Completly remove `__uniqueID`, because it was not used internally anymore
 
 ## 6.3.2
 
