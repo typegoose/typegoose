@@ -5,7 +5,7 @@ export abstract class PersistentModel {
   @prop()
   public createdAt: Date;
 
-  @arrayProp({ itemsRef: Car })
+  @arrayProp({ ref: Car })
   public cars?: Ref<Car>[];
 
   // define an 'instanceMethod' that will be overwritten

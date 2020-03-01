@@ -7,6 +7,7 @@ import { globalOptions } from '../../src/internal/data';
 import { assignMetadata, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import {
   addModelToTypegoose,
+  arrayProp,
   buildSchema,
   DocumentType,
   getModelForClass,
@@ -337,5 +338,17 @@ export function suite() {
     expect(doc).to.not.equal(undefined);
     expect(doc.key).to.not.equal(undefined);
     expect(doc.key).to.not.have.property('_id');
+  });
+
+  it('should also allow "mongoose.Types.Array<string>" as possible type', () => {
+    class TypesArray {
+      @arrayProp({ items: String })
+      public someString: mongoose.Types.Array<string>;
+    }
+
+    const schema = buildSchema(TypesArray);
+
+    expect(schema.path('someString')).to.be.an.instanceOf(mongoose.Schema.Types.Array);
+    expect((schema.path('someString') as any).caster).to.be.an.instanceOf(mongoose.Schema.Types.String);
   });
 }

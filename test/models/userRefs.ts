@@ -4,7 +4,7 @@ export class UserRef {
   @prop({ ref: UserRef, default: null })
   public master?: Ref<UserRef>;
 
-  @arrayProp({ itemsRef: UserRef, default: [] })
+  @arrayProp({ ref: UserRef, default: [] })
   public subAccounts!: Ref<UserRef>[];
 
   @prop({ required: true })

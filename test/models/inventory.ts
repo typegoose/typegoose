@@ -30,7 +30,7 @@ export class Inventory {
   @prop({ required: true, refPath: 'refItemPathName' })
   public kind!: Ref<Beverage | Scooter>;
 
-  @arrayProp({ required: true, itemsRefPath: 'refItemPathName' })
+  @arrayProp({ required: true, refPath: 'refItemPathName' })
   public irp!: Ref<Beverage | Scooter>[];
 }
 
@@ -38,7 +38,7 @@ export class TestIRPbyString {
   @prop({ required: true })
   public normalProp!: string;
 
-  @arrayProp({ required: true, itemsRef: 'Beverage' })
+  @arrayProp({ required: true, ref: 'Beverage' })
   public bev!: Ref<Beverage>[];
 }
 
