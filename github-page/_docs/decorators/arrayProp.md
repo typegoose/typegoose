@@ -25,6 +25,15 @@ class Something {
 }
 ```
 
+Note: `mongoose.Types.Array<>` can also be used, but most of the time `[]` is more convenient and enough
+
+```ts
+class Something {
+  @arrayProp({ items: String })
+  public languages?: mongoose.Types.Array<string>[];
+}
+```
+
 ### itemsRef
 
 DEPRECATED: use [`@prop`'s `ref`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#ref)
