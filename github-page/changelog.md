@@ -17,6 +17,13 @@ redirect_from:
 - Add here
 -->
 
+## 6.5.0
+
+<sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+- Remove `useNewEnum` type from `types`
+- [IC] Replace deprecated arrayProp options with proper ones in all tests & test-models
+
 ## 6.4.0
 
 - Update Dependencies
