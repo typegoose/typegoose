@@ -245,14 +245,14 @@ export function suite() {
     expect(opt).to.have.property('customoption', 'custom');
   });
 
-  it('should add options to itemsRef [szokodiakos#379]', () => {
+  it('should add options to array-ref [szokodiakos#379]', () => {
     class T { }
-    class TestItemsRef {
-      @arrayProp({ itemsRef: T, customoption: 'custom' })
+    class TestArrayRef {
+      @arrayProp({ ref: T, customoption: 'custom' })
       public someprop: Ref<T>[];
     }
 
-    const schema = buildSchema(TestItemsRef);
+    const schema = buildSchema(TestArrayRef);
     const someprop = schema.path('someprop');
     expect(schema).to.not.be.an('undefined');
     expect(someprop).to.not.be.an('undefined');
@@ -263,17 +263,17 @@ export function suite() {
     expect(opt).to.have.property('customoption', 'custom');
   });
 
-  it('should add options to itemsRefPath [szokodiakos#379]', () => {
+  it('should add options to array-refPath [szokodiakos#379]', () => {
     class T { }
-    class TestItemsRefPath {
+    class TestArrayRefPath {
       @prop({ default: 'T' })
       public something: string;
 
-      @arrayProp({ itemsRefPath: 'something', customoption: 'custom' })
+      @arrayProp({ refPath: 'something', customoption: 'custom' })
       public someprop: Ref<T>;
     }
 
-    const schema = buildSchema(TestItemsRefPath);
+    const schema = buildSchema(TestArrayRefPath);
     const someprop = schema.path('someprop');
     expect(schema).to.not.be.an('undefined');
     expect(someprop).to.not.be.an('undefined');

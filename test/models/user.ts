@@ -67,7 +67,7 @@ export class User extends defaultClasses.FindOrCreate {
   @arrayProp({ items: Job, _id: false })
   public previousJobs?: Job[];
 
-  @arrayProp({ itemsRef: Car })
+  @arrayProp({ ref: Car })
   public previousCars?: Ref<Car>[];
 
   public static async findByAge(this: ReturnModelType<typeof User>, age: number) {
