@@ -25,54 +25,6 @@ class Something {
 }
 ```
 
-### itemsRef
-
-DEPRECATED: use [`@prop`'s `ref`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#ref)
-
-Accepts Type: `Class | String` (String of the modelName)
-
-Same as [`@prop`'s `ref`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#ref)
-
-```ts
-class Car {}
-
-// in another class
-class Something {
-  @arrayProp({ itemsRef: Car })
-  public previousCars?: Ref<Car>[];
-}
-```
-
-### itemsRefPath
-
-DEPRECATED: use [`@prop`'s `refPath`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#refpath)
-
-Accepts Type: `string`
-
-Same as [`@prop`'s `refPath`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#refpath)
-
-```ts
-class Car {}
-class Shop {}
-
-// in another class
-class Another {
-  @prop({ required: true, enum: 'Car' | 'Shop' })
-  public which!: string;
-
-  @arrayProp({ itemsRefPath: 'which' })
-  public items?: Ref<Car | Shop>[];
-}
-```
-
-### itemsRefType
-
-DEPRECATED: use [`@prop`'s `refType`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#reftype)
-
-Accepts Type: `mongoose.Schema.Types.Number` \| `mongoose.Schema.Types.String` \| `mongoose.Schema.Types.Buffer` \| `mongoose.Schema.Types.ObjectId`
-
-Same as [`@prop`'s `refType`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#reftype)
-
 ### innerOptions
 
 `innerOptions` is used to overwrite here the options in this object go

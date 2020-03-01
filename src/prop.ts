@@ -405,20 +405,9 @@ export function arrayProp(options: ArrayPropOptions) {
       logger.warn('You might not want to use option "of" in a @arrayProp, use @mapProp (%s.%s)', utils.getName(target), key);
     }
 
+    // Delete the "items" option from options because it got set as "Type"
     if ('items' in options) {
       delete options.items;
-    }
-    if ('itemsRef' in options) {
-      options.ref = options.itemsRef;
-      delete options.itemsRef;
-    }
-    if ('itemsRefPath' in options) {
-      options.refPath = options.itemsRefPath;
-      delete options.itemsRefPath;
-    }
-    if ('itemsRefType' in options) {
-      options.refType = options.itemsRefType;
-      delete options.itemsRefType;
     }
 
     baseProp({
