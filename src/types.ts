@@ -441,13 +441,7 @@ export interface IGlobalOptions {
    * Global Options for general Typegoose
    * (There are currently none)
    */
-  globalOptions?: {
-    /**
-     * This Options got removed because it would interfer with mongoose-number-enums
-     * @deprecated
-     */
-    useNewEnum?: boolean;
-  };
+  globalOptions?: {};
 }
 
 export interface IObjectWithTypegooseFunction {

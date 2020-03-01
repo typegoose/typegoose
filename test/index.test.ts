@@ -6,9 +6,7 @@ import { setGlobalOptions } from '../src/typegoose';
 import { connect, disconnect } from './utils/mongooseConnect';
 
 setGlobalOptions({ // to have this initaly set
-  globalOptions: {
-    // useNewEnum: true
-  }
+  globalOptions: {}
 });
 
 import { suite as ArrayValidatorTests } from './tests/arrayValidator.test';

@@ -30,9 +30,7 @@ export function parseENV(): void {
   }
 
   const options: IGlobalOptions = {
-    globalOptions: {
-      // useNewEnum: process.env.TG_USE_NEW_ENUM?.length > 0
-    },
+    globalOptions: {},
     options: {
       allowMixed: process.env.TG_ALLOW_MIXED in Severity ? mapValueToSeverity(process.env.TG_ALLOW_MIXED) : globalOptions.options.allowMixed
     }
