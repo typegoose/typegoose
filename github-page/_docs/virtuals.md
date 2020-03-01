@@ -70,7 +70,7 @@ class Kittens {
 
 class Cat {
   @arrayProp({
-    ref: "Kittens", // please know for "virtual populate" that "itemsRef" will **not** work here
+    ref: "Kittens", // please know for "virtual populate" that "ref" will **not** work here
     foreignField: 'parent', // compare this value to the local document populate is called on
     localField: '_id' // compare this to the foreign document's value defined in "foreignField"
   })

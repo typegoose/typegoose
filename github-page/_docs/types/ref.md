@@ -20,8 +20,8 @@ class Cat {
   @prop()
   public name: string;
 
-  // Use `itemsRef` for arrays
-  @arrayProp({ itemsRef: 'Kitten' })
+  // Use `ref` for arrays too
+  @arrayProp({ ref: 'Kitten' })
   public babies?: Ref<Kitten>[];
 }
 ```

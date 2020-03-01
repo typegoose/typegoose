@@ -143,15 +143,3 @@ class Something {
   maxlength: 1
 }
 ```
-
-## Options from @prop that do **NOT** work on @arrayProp
-
-- `ref` does not work, instead use `itemsRef` (please let us know if you are interested in combining them into one)
-- `refPath` does not work, instead use `itemsRefPath` (please let us know if you are interested in combining them into one)
-
-<!--Logical Seperator-->
-
-## Options that currently **NOT** work
-
-- All String-Validate & Transfrom options [look here why](https://github.com/Automattic/mongoose/issues/8012)
-- All Number-Validate options [look here why](https://github.com/Automattic/mongoose/issues/8012)
