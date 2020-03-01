@@ -17,6 +17,24 @@ redirect_from:
 - Add here
 -->
 
+## 7.0.0
+
+<sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+- Minimal NodeJS version is now 10.15
+- Minimal Typescript version is now 3.8.2
+- Typegoose class got completly removed
+- All Deprecated `arrayProp` options got remove
+  - `itemsRef` replaced with plain `ref`
+  - `itemsRefPath` replaced with plain `refPath`
+  - `itemsRefType` replaced with plain `refType`
+- All enums got moved from `src/types` to `src/internal/constants`
+- All things from `src/types` now get exported as `type`
+- All Errors now get exported as `errors`
+- All non-essentail types get exported as `types`
+- `utils`'s `getName` function now gets exported
+- [IC] All remaining test's models now get exported with an name (not being exported as `model` anymore)
+
 ## 6.4.0
 
 - Update Dependencies
