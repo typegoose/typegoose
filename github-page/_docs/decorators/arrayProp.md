@@ -30,7 +30,7 @@ Note: `mongoose.Types.Array<>` can also be used, but most of the time `[]` is mo
 ```ts
 class Something {
   @arrayProp({ items: String })
-  public languages?: mongoose.Types.Array<string>[];
+  public languages?: mongoose.Types.Array<string>;
 }
 ```
 
