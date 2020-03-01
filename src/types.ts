@@ -185,21 +185,6 @@ export interface ArrayPropOptions extends BasePropOptions {
    */
   items?: any;
   /**
-   * Same as {@link PropOptions.ref}, only that it is for an array
-   * @deprecated Please use {@link PropOptions.ref}
-   */
-  itemsRef?: any;
-  /**
-   * Same as {@link PropOptions.refPath}, only that it is for an array
-   * @deprecated Please use {@link PropOptions.refPath}
-   */
-  itemsRefPath?: any;
-  /**
-   * Same as {@link PropOptions.refType}, only that it is for an array
-   * @deprecated Please use {@link PropOptions.refType}
-   */
-  itemsRefType?: RefSchemaType;
-  /**
    * Use this to define inner-options
    * Use this if the auto-mapping is not correct or for plugin options
    *
