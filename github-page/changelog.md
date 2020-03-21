@@ -35,6 +35,14 @@ redirect_from:
 - `utils`'s `getName` function now gets exported
 - [IC] All remaining test's models now get exported with an name (not being exported as `model` anymore)
 
+## 6.5.0
+
+<sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+- Remove `useNewEnum` type from `types`
+- Add warning when value is an primitive and will result in an `Mixed` (fixes {% include gitissue repo="typegoose" num=152 %})
+- [IC] Replace deprecated arrayProp options with proper ones in all tests & test-models
+
 ## 6.4.0
 
 - Update Dependencies

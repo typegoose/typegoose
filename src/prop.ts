@@ -258,6 +258,9 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
 
   if (utils.isPrimitive(Type)) {
+    if (utils.isObject(Type, true)) {
+      utils.warnMixed(target, key);
+    }
     switch (whatis) {
       case WhatIsIt.ARRAY:
         schemas.get(name)[key] = {

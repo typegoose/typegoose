@@ -67,15 +67,19 @@ export function isAnRefType(Type: any): boolean {
 /**
  * Returns true, if it is an Object
  * @param Type The Type
+ * @param once Just run it once?
  * @returns true, if it is an Object
  */
-export function isObject(Type: any): boolean {
+export function isObject(Type: any, once: boolean = false): boolean {
   if (typeof Type?.name === 'string') {
     let prototype = Type.prototype;
     let name = Type.name;
     while (name) {
       if (name === 'Object' || name === 'Mixed') {
         return true;
+      }
+      if (once) {
+        break;
       }
       prototype = Object.getPrototypeOf(prototype);
       name = prototype?.constructor.name;
