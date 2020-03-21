@@ -5,8 +5,8 @@ import * as semver from 'semver';
 import { format } from 'util';
 
 /* istanbul ignore next */
-if (semver.lt(mongoose.version, '5.9.2')) {
-  throw new Error('Please use mongoose 5.9.2 or higher');
+if (semver.lt(mongoose.version, '5.9.5')) {
+  throw new Error('Please use mongoose 5.9.5 or higher');
 }
 
 if (semver.lt(process.version.slice(1), '10.15.0')) {
@@ -39,7 +39,7 @@ export * from './typeguards';
 export * from './optionsProp';
 export * as defaultClasses from './defaultClasses';
 export * as errors from './internal/errors';
-export type * as types from './types';
+export * as types from './types';
 export { DocumentType, Ref, ReturnModelType };
 export { getClassForDocument, getClass, getName } from './internal/utils';
 export { Severity } from './internal/constants';
@@ -229,7 +229,7 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
-  const sch = buildSchema(cl) as mongoose.Schema & { paths: object; };
+  const sch = buildSchema(cl) as mongoose.Schema & { paths: any; };
 
   const discriminatorKey = sch.get('discriminatorKey');
   if (sch.path(discriminatorKey)) {

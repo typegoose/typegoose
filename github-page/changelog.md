@@ -22,7 +22,7 @@ redirect_from:
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Minimal NodeJS version is now 10.15
-- Minimal Typescript version is now 3.8.2
+- Minimal Typescript version is now 3.8.3
 - Typegoose class got completly removed
 - All Deprecated `arrayProp` options got remove
   - `itemsRef` replaced with plain `ref`
@@ -34,6 +34,10 @@ redirect_from:
 - All non-essentail types get exported as `types`
 - `utils`'s `getName` function now gets exported
 - [IC] All remaining test's models now get exported with an name (not being exported as `model` anymore)
+- Update Dependencies
+  - `mongoose` to 5.9.5
+  - `@types/mongoose` to 5.7.7
+  - `tslib` to 1.11.1
 
 ## 6.5.0
 
