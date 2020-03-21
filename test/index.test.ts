@@ -9,6 +9,8 @@ setGlobalOptions({ // to have this initaly set
   globalOptions: {}
 });
 
+use(cap);
+
 import { suite as ArrayValidatorTests } from './tests/arrayValidator.test';
 import { suite as BigUserTest } from './tests/biguser.test';
 import { suite as customNameTests } from './tests/customName.test';
@@ -35,8 +37,6 @@ import { suite as TypeguardsTest } from './tests/typeguards.test';
  * describe('Should add', ShouldAddTest.bind(this));
  * ...
  */
-
-use(cap);
 
 describe('Typegoose', () => {
   before(connect);

@@ -87,6 +87,7 @@ export function suite() {
   });
 
   it('should work with Objects in Class [szokodiakos#54]', async () => {
+    // TODO: refactor this test when moving to jest to use spies
     class TESTObject {
       @prop()
       public test: {
@@ -350,5 +351,16 @@ export function suite() {
 
     expect(schema.path('someString')).to.be.an.instanceOf(mongoose.Schema.Types.Array);
     expect((schema.path('someString') as any).caster).to.be.an.instanceOf(mongoose.Schema.Types.String);
+  });
+
+  // TODO: re-do this test when moving to jest
+  it('should give a warning [typegoose/typegoose#152]', () => {
+    class TestANY {
+      @prop()
+      public someANY: any;
+    }
+
+    const schema = buildSchema(TestANY);
+    expect(schema.path('someANY')).to.be.an.instanceOf(mongoose.Schema.Types.Mixed);
   });
 }
