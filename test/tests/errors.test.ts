@@ -4,7 +4,7 @@ import { model, Schema } from 'mongoose';
 
 import { DecoratorKeys } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
-import { assignMetadata, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
+import { assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import {
   addModelToTypegoose,
   arrayProp,
@@ -487,6 +487,24 @@ export function suite() {
       assert.fail('Expected to throw "ReferenceError"');
     } catch (err) {
       expect(err).to.be.an.instanceOf(ReferenceError);
+    }
+  });
+
+  it('should error if 0 or less dimensions are given (createArrayFromDimensions) [RangeError]', () => {
+    try {
+      createArrayFromDimensions({ dim: 0 }, { someThing: true }, '', '');
+
+      assert.fail('Expected to throw "RangeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(RangeError);
+    }
+
+    try {
+      createArrayFromDimensions({ dim: -100 }, { someThing: true }, '', '');
+
+      assert.fail('Expected to throw "RangeError"');
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(RangeError);
     }
   });
 }

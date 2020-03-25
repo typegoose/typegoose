@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 
 import { DecoratorKeys } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
-import { assignMetadata, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
+import { assignMetadata, createArrayFromDimensions, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import {
   addModelToTypegoose,
   arrayProp,
@@ -362,5 +362,20 @@ export function suite() {
 
     const schema = buildSchema(TestANY);
     expect(schema.path('someANY')).to.be.an.instanceOf(mongoose.Schema.Types.Mixed);
+  });
+
+  it('should create 1D Array (createArrayFromDimensions)', () => {
+    const should = [{ someThing: true }];
+    expect(createArrayFromDimensions({}, { someThing: true }, '', '')).to.deep.equal(should);
+  });
+
+  it('should create 5D Array (createArrayFromDimensions)', () => {
+    const should = [[[[[{ someThing: true }]]]]];
+    expect(createArrayFromDimensions({ dim: 5 }, { someThing: true }, '', '')).to.deep.equal(should);
+  });
+
+  it('should not add another array if "extra" is already an array (createArrayFromDimensions)', () => {
+    const should = [{ someThing: true }];
+    expect(createArrayFromDimensions({}, [{ someThing: true }], '', '')).to.deep.equal(should);
   });
 }

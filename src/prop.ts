@@ -123,12 +123,12 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
     switch (whatis) {
       case WhatIsIt.ARRAY:
-        schemas.get(name)[key][0] = {
+        schemas.get(name)[key] = utils.createArrayFromDimensions(rawOptions, {
           ...schemas.get(name)[key][0],
           type: refType,
           ref: refName,
           ...rawOptions
-        };
+        }, name, key);
         break;
       case WhatIsIt.NONE:
         schemas.get(name)[key] = {
@@ -155,12 +155,12 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
     switch (whatis) {
       case WhatIsIt.ARRAY:
-        schemas.get(name)[key][0] = {
+        schemas.get(name)[key] = utils.createArrayFromDimensions(rawOptions, {
           ...schemas.get(name)[key][0],
           type: refType,
           refPath,
           ...rawOptions
-        };
+        }, name, key);
         break;
       case WhatIsIt.NONE:
         schemas.get(name)[key] = {

@@ -35,7 +35,7 @@ Example:
 ```ts
 class Something {
   @arrayProp({ required: true })
-  public propy: string;
+  public propy: string[];
 }
 
 // This would be mapped to
@@ -47,7 +47,7 @@ class Something {
 // when using the overwrite
 class Something {
   @arrayProp({ innerOptions: { required: true } })
-  public propy: string;
+  public propy: string[];
 }
 
 // This would be mapped to
@@ -66,7 +66,7 @@ Example:
 ```ts
 class Something {
   @arrayProp({ maxlength: 1 })
-  public propy: string;
+  public propy: string[];
 }
 
 // This would be mapped to
@@ -77,12 +77,31 @@ class Something {
 // when using the overwrite
 class Something {
   @arrayProp({ outerOptions: { maxlength: 1 } })
-  public propy: string;
+  public propy: string[];
 }
 
 // This would be mapped to
 {
   type: [{ type: String }],
   maxlength: 1
+}
+```
+
+### dim
+
+`dim` is used to set the Dimensions this array should have (for something like an matrix)
+-> needs to be higher than 0
+
+Example:
+
+```ts
+class Something {
+  @arrayProp({ dim: 3 })
+  public propy: string[][][];
+}
+
+// This would be mapped to
+{
+  type: [[[{ type: String }]]]
 }
 ```

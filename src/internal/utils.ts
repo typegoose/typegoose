@@ -383,6 +383,8 @@ export function mapArrayOptions(
     }
   }
 
+  returnObject.type = createArrayFromDimensions(rawOptions, returnObject.type, getName(target), pkey);
+
   logger.debug('(Array) Final mapped Options for Type "%s"', getName(loggerType), returnObject);
 
   return returnObject;
@@ -525,4 +527,29 @@ export function get_idStatus(Type: any, rawOptions: any): boolean {
   }
 
   return true;
+}
+
+/**
+ * Loop over "dimensions" and create an array from that
+ * @param rawOptions baseProp's rawOptions
+ * @param extra What is actually in the deepest array
+ * @param name name of the target for better error logging
+ * @param key key of target-key for better error logging
+ */
+export function createArrayFromDimensions(rawOptions: any, extra: any, name: string, key: string) {
+  // dimensions start at 1 (not 0)
+  const dim = typeof rawOptions.dim === 'number' ? rawOptions.dim : 1;
+  if (dim < 1) {
+    throw new RangeError(format('"dim" needs to be higher than 0 (%s.%s)', name, key));
+  }
+  delete rawOptions.dim; // delete this property to not actually put it as an option
+  logger.info('createArrayFromDimensions called with %d dimensions', dim);
+
+  let retArray: any[] = Array.isArray(extra) ? extra : [extra];
+  // index starts at 1 because "retArray" is already once wrapped in an array
+  for (let index = 1; index < dim; index++) {
+    retArray = [retArray];
+  }
+
+  return retArray as any[];
 }

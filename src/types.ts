@@ -202,6 +202,12 @@ export interface ArrayPropOptions extends BasePropOptions {
   outerOptions?: {
     [key: string]: any;
   };
+  /**
+   * How many dimensions this Array should have
+   * (needs to be higher than 0)
+   * @default 1
+   */
+  dim?: number;
 }
 
 export interface ValidateNumberOptions {
