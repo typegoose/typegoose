@@ -26,7 +26,7 @@ class SomeChangedIDBase extends Base<string> {
 }
 ```
 
-Note: it needs to be duplicated, because the `Base` class only provides *types* and dosnt actuall change anything runtime
+Note: it needs to be duplicated, because the `Base` class only provides *types* and doesn't actuall change anything runtime
 
 Note: to have `_id` not be `any`, the project needs to have either `noImplicitAny` or `strict` active in the `tsconfig`
 

@@ -23,7 +23,7 @@ class MultiModel { }
 const model = getModelForClass(MultiModel);
 ```
 
-Please note that using `{ schemaOptions: { collection } }` automaticly adds a suffix of the collection to the model's name
+Please note that using `{ schemaOptions: { collection } }` automatically adds a suffix of the collection to the model's name
 
 ```ts
 @modelOptions({ schemaOptions: { collection: 'Something' } })

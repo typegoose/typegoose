@@ -1,4 +1,4 @@
-// disable "no-unused" for this file, to keep hooks consitent
+// disable "no-unused" for this file, to keep hooks consistent
 // tslint:disable:no-unused
 import { Query } from 'mongoose';
 
@@ -73,7 +73,7 @@ interface Hooks {
   post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>): ClassDecorator;
 }
 
-// Note: Documentation for the hooks cant be added without adding it to *every* overload
+// Note: Documentation for the hooks can't be added without adding it to *every* overload
 const hooks: Hooks = {
   pre(...args) {
     return (target: any) => addToHooks(getName(target), 'pre', args);

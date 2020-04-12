@@ -85,7 +85,7 @@ Same as [`@prop`'s `refType`]({{ site.baseurl }}{% link _docs/decorators/prop.md
 ### innerOptions
 
 `innerOptions` is used to overwrite here the options in this object go
--> Use this only when absolutly needed and please open a new issue about it - or for plugins
+-> Use this only when absolutely needed and please open a new issue about it - or for plugins
 
 Example:
 
@@ -116,7 +116,7 @@ class Something {
 ### outerOptions
 
 `outerOptions` is used to overwrite here the options in this object go
--> Use this only when absolutly needed and please open a new issue about it - or for plugins
+-> Use this only when absolutely needed and please open a new issue about it - or for plugins
 
 Example:
 

@@ -133,7 +133,7 @@ export function initProperty(name: string, key: string, whatis: WhatIsIt) {
       schemas.get(name)[key] = {};
       break;
     default:
-      throw new TypeError('"whatis" is not supplied OR dosnt have a case yet!');
+      throw new TypeError('"whatis" is not supplied OR doesn't have a case yet!');
   }
 }
 
@@ -258,7 +258,7 @@ export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: n
     throw new NoValidClass(cl);
   }
 
-  // Please dont remove the other values from the function, even when unused - it is made to be clear what is what
+  // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
   return mergeWith({},
     Reflect.getMetadata(key, cl),
     value,
@@ -429,7 +429,7 @@ export function mapOptions(
   /** The OptionsConstructor to use */
   let OptionsCTOR: undefined | AnyParamConstructor<any> = Type?.prototype?.OptionsConstructor;
 
-  // Fix because "Schema" is not a valid type and dosnt have a ".prototype.OptionsConstructor"
+  // Fix because "Schema" is not a valid type and doesn't have a ".prototype.OptionsConstructor"
   if (Type instanceof mongoose.Schema) {
     // TODO: remove "as any" cast if "OptionsConstructor" is implemented in @types/mongoose
     OptionsCTOR = (mongoose as any).Schema.Types.Embedded.prototype.OptionsConstructor;

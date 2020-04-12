@@ -8,7 +8,7 @@ Mongoose gives developers the option to create [virtual properties](http://mongo
 
 *Please do not confuse this "get & set" with [`@prop`'s get & set]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#get--set)*
 
-**Please know that no decorator can be used for the getter's & setter's!** *(Mongoose dosnt allow setting options for virtuals)*
+**Please know that no decorator can be used for the getter's & setter's!** *(Mongoose doesn't allow setting options for virtuals)*
 
 Example:
 
@@ -47,7 +47,7 @@ Resulting Document in MongoDB:
 *This shows the difference between [`@prop`'s get & set]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#get--set) and [this one]({{ site.baseurl }}{% link _docs/virtuals.md %}#get--set)*
 
 The difference between `@prop`'s and this one is simple, `@prop`'s get & set are ***actual properties*** that get saved to the database, only with a conversion layer  
-The get & set of *getter's & setter's* are absolutly virtual  
+The get & set of *getter's & setter's* are absolutely virtual  
 
 ## Virtual Populate
 
@@ -102,7 +102,7 @@ class Parent {
 
 ### Why is my virtual not included in the output?
 
-By default mongoose dosnt output virtuals, to archive this you need to add `toObject` and(/or) `toObject` to `schemaOptions` in `@modelOptions`
+By default mongoose doesn't output virtuals, to archive this you need to add `toObject` and(/or) `toObject` to `schemaOptions` in `@modelOptions`
 
 Note: it can be set in `@modelOptions`, but it can be set in `getModelForClass` too (and in the `doc.toJSON()`/`doc.toObject()` functions)
 

@@ -4,9 +4,9 @@ redirect_from:
   - /docs/functions/getclassfordocument
 ---
 
-`getClassForDocument(doc: DocumentType<any>)` is used to get the Class used in the model creation
+`getClassForDocument(doc: DocumentType<any>)` gets the Class used in the model creation.
 
-Note: only works if the class / model were created with typegoose OR added with [`addModelToTypegoose`]({{ site.baseurl }}{% link _docs/functions/addModelToTypegoose.md%})
+Note: only works if the class / model was created with typegoose OR added with [`addModelToTypegoose`]({{ site.baseurl }}{% link _docs/functions/addModelToTypegoose.md%}).
 
 ## Example
 
