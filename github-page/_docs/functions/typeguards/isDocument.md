@@ -6,7 +6,7 @@ redirect_from:
 
 ## isDocument
 
-`isDocument(doc: any)`: Check if the supplied value is a valid Model(/Document) (mainly for `Ref<T>` fields)
+`isDocument(doc: any)`: Check if the supplied value is a valid Model(/Document) (mainly for `Ref<T>` fields).
 
 Example:
 

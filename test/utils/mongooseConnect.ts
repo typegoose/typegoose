@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import { isNullOrUndefined } from '../../src/internal/utils';
 import { config } from './config';
 
-/** its needed in global space, because we dont want to create a new instance everytime */
+/** it's needed in global space, because we don't want to create a new instance every time */
 let instance: MongoMemoryServer = null;
 
 if (config.Memory) {

@@ -10,4 +10,4 @@ Under the hood it uses the Reflect & [reflect-metadata](https://github.com/rbuck
 
 ---
 
-If you want better & offical Typescript .d.ts files, [please push this issue](https://github.com/Automattic/mongoose/issues/8108)
+If you want better & official Typescript .d.ts files, [please push this issue](https://github.com/Automattic/mongoose/issues/8108)

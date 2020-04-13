@@ -6,7 +6,7 @@ redirect_from:
 
 ## isRefType
 
-`isRefType(doc: any)`: Check if the supplied value is not an document and is not undefined/null (mainly for `Ref<T>` fields)
+`isRefType(doc: any)`: Check if the supplied value is not a document and is not undefined/null (mainly for `Ref<T>` fields).
 
 Example:
 

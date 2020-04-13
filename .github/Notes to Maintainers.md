@@ -15,13 +15,13 @@
 
 * If a release branch (like 6.0.0) gets merged into master, make a Major Version
 * If a collection of "should-not-break" commits, make a minor version
-* If a hotfix | fix, that dosnt break anything make a patch version
+* If a hotfix | fix, that doesn't break anything make a patch version
 * If a fix, that can potentially break something, make a minor version
 * ([Advanced](https://semver.org))
 
 ## Branch structure
 
-*This will take place when verion 6.0.0 will release*
+*This will take place when version 6.0.0 will release*
 
 branch `master` will be the current version, where all the feature branches are based on (for the current version)
 branches in `old/` are legacy versions (like `5.x`) which are used to backport / fix version specific things

@@ -2,7 +2,7 @@
 title: "Environment Variables"
 ---
 
-Typegoose allow the use of some Environment variables to set global options
+Typegoose allows the use of some environment variables to set global options.
 
 ## Variables
 
@@ -12,7 +12,7 @@ Removed, [Please look here for more info]({{ site.baseurl }}{% link changelog.md
 
 ### TG_ALLOW_MIXED
 
-Set's the options [`options.allowMixed`]({{ site.baseurl }}{% link _docs/decorators/modelOptions.md%}#allowmixed) to the given Severity
+Sets the options [`options.allowMixed`]({{ site.baseurl }}{% link _docs/decorators/modelOptions.md%}#allowmixed) to the given Severity
 
 Accepts:
 - numbers, in the range of `Severity`

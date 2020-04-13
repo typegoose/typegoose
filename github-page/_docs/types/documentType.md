@@ -21,7 +21,7 @@ class Kitten {
   public name?: string;
 
   public getName(this: DocumentType<Kitten>) { // this is an Instance Method
-    return this.name; // thanks to "DocumentType" "this" has type infomation
+    return this.name; // thanks to "DocumentType" "this" has type information
   }
 }
 ```

@@ -12,6 +12,6 @@ assignees: ''
 - Make sure you read [Mastering-Markdown](https://guides.github.com/features/mastering-markdown/), thanks
 
 - If it is about missing documentation, please add which feature (when possible add an code link)
-- If it is about somthing different, please provide all infomation that could be useful
+- If it is about somthing different, please provide all information that could be useful
 
 -->

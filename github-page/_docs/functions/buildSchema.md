@@ -4,9 +4,9 @@ redirect_from:
   - /docs/functions/buildschema
 ---
 
-`buildSchema(class)` is used to get the schema from a class to modify the schema before making the model
+`buildSchema(class)` gets the schema from a class to modify the schema before making the model.
 
-A compiled model can be re-added with [`addModelToTypegoose`]({{ site.baseurl }}{% link _docs/functions/addModelToTypegoose.md %})
+A compiled model can be re-added with [`addModelToTypegoose`]({{ site.baseurl }}{% link _docs/functions/addModelToTypegoose.md %}).
 
 ## Example
 

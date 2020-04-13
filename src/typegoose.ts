@@ -74,7 +74,7 @@ export abstract class Typegoose {
 
 /**
  * Get a Model for a Class
- * Executes .setModelForClass if it cant find it already
+ * Executes .setModelForClass if it can't find it already
  * @param cl The uninitialized Class
  * @returns The Model
  * @public
@@ -173,8 +173,8 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
 }
 
 /**
- * This can be used to add custom Models to Typegoose, with the type infomation of cl
- * Note: no gurantee that the type infomation is fully correct
+ * This can be used to add custom Models to Typegoose, with the type information of cl
+ * Note: no gurantee that the type information is fully correct
  * @param model The model to store
  * @param cl The Class to store
  * @example
