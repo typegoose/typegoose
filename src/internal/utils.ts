@@ -133,7 +133,7 @@ export function initProperty(name: string, key: string, whatis: WhatIsIt) {
       schemas.get(name)[key] = {};
       break;
     default:
-      throw new TypeError('"whatis" is not supplied OR doesn't have a case yet!');
+      throw new TypeError('"whatis" is not supplied OR doesn\'t have a case yet!');
   }
 }
 
