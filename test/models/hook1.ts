@@ -1,4 +1,4 @@
-import { defaultClasses, arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
+import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
 import { InheritanceHook as HookClassToInherit } from './hook2';
 
 @pre<Hook>('save', function () {

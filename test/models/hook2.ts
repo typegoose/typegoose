@@ -1,4 +1,4 @@
-import { getModelForClass, post, pre, prop, arrayProp } from '../../src/typegoose';
+import { arrayProp, getModelForClass, post, pre, prop } from '../../src/typegoose';
 
 @pre<Dummy>('save', function (next) {
   this.text = 'saved';
@@ -23,7 +23,6 @@ export class Dummy {
 export const model = getModelForClass(Dummy);
 
 @pre<InheritanceHook>('save', function (next) {
-  console.log('[H] base hook');
   this.hooksMessages.push('Base');
   next();
 })
