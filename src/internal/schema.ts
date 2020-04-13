@@ -61,7 +61,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, sch?: m
     const hook = hooks.get(name);
     hook.pre.forEach(obj => {
       const schemaHooks = ((sch as any).s.hooks._pres.get(obj.method) ?? []) as ISchemaHook[];
-      if (schemaHooks.find(({ fn }) => fn == obj.func)) {
+      if (schemaHooks.find(({ fn }) => fn === obj.func)) {
         return;
       }
       sch.pre(obj.method, obj.func as EmptyVoidFn);
@@ -69,7 +69,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, sch?: m
 
     hook.post.forEach(obj => {
       const schemaHooks = ((sch as any).s.hooks._posts.get(obj.method) ?? []) as ISchemaHook[];
-      if (schemaHooks.find(({ fn }) => fn == obj.func)) {
+      if (schemaHooks.find(({ fn }) => fn === obj.func)) {
         return;
       }
       sch.post(obj.method, obj.func);
