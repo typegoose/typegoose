@@ -1,4 +1,5 @@
-import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
+import { defaultClasses, arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
+import { InheritanceHook as HookClassToInherit } from './hook2';
 
 @pre<Hook>('save', function () {
   if (this.isModified('shape')) {
@@ -45,5 +46,16 @@ export class HookArray {
   public testArray: string[];
 }
 
+@pre<InheritanceHook>('save', function (next) {
+  this.hooksMessages.push('Actual');
+  next();
+})
+@post<InheritanceHook>('findOne', async (doc, next) => {
+  doc.hooksMessages.push('Post Actual');
+  next();
+})
+class InheritanceHook extends HookClassToInherit { }
+
 export const HookModel = getModelForClass(Hook);
 export const HookArrayModel = getModelForClass(HookArray);
+export const InheritedHookModel = getModelForClass(InheritanceHook);

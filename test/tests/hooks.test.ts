@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
+import { Hook, HookArray, HookArrayModel, HookModel, InheritedHookModel } from '../models/hook1';
 import { model as Dummy } from '../models/hook2';
 
 /**
@@ -70,5 +70,21 @@ export function suite() {
     expect(found.testArray).to.be.an('array');
     expect(found.testArray).to.be.lengthOf(3);
     expect(found.testArray).to.deep.equal(['hello', 'hello', 'hello']);
+  });
+
+  it('should execute pre hooks only twice in case inheritance is used with the same class name', async () => {
+    const doc = new InheritedHookModel();
+    doc.hooksMessages = [];
+    await doc.save();
+    expect(doc.hooksMessages.length).to.be.eq(2);
+  });
+
+  it('should execute post hooks only twice in case inheritance is used with the same class name', async () => {
+    const doc = new InheritedHookModel();
+    doc.hooksMessages = [];
+    await doc.save();
+
+    const docFromDb = await InheritedHookModel.findOne({ _id: doc._id }).exec();
+    expect(docFromDb.hooksMessages.length).to.be.eq(4);
   });
 }
