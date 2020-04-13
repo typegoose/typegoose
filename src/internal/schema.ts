@@ -17,7 +17,11 @@ import { assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOption
  * @returns Returns the Build Schema
  * @private
  */
-export function _buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, sch?: mongoose.Schema, opt?: mongoose.SchemaOptions) {
+export function _buildSchema<T, U extends AnyParamConstructor<T>>(
+  cl: U,
+  sch?: mongoose.Schema,
+  opt?: mongoose.SchemaOptions
+) {
   if (typeof cl !== 'function') {
     throw new NoValidClass(cl);
   }
@@ -25,7 +29,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, sch?: m
   assignGlobalModelOptions(cl); // to ensure global options are applied to the current class
 
   // Options sanity check
-  opt = mergeSchemaOptions(isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt, cl);
+  opt = mergeSchemaOptions((isNullOrUndefined(opt) || typeof opt !== 'object') ? {} : opt, cl);
 
   const name = getName(cl);
 
