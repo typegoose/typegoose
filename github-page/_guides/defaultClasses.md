@@ -15,19 +15,21 @@ This Guide contains all default classes typegoose provides
 Example of using all of them:
 
 ```ts
+import { TimeStamps, Base } from '@typegoose/typegoose/lib/defaultClasses';
+
 class SomeClass extends TimeStamps, Base {} // this class now has the types of "TimeStamps" & "Base"
 ```
 
 ### TimeStamps
 
-The Time Stamps Class provides the following types:
+The `TimeStamps` class provides the following fields:
 
 - `createdAt`: Date
 - `updatedAt`: Date
 
 ### Base
 
-The Base Class provides the following types:
+The Base Class provides the following fields:
 
 - `_id`: ObjectId
 - `__v`: number
