@@ -2,7 +2,7 @@
 title: 'Ref'
 ---
 
-The Type `Ref<T>` is the type used for References
+The Type `Ref<T>` is the type used for [References](https://mongoosejs.com/docs/populate.html).
 
 There are [typeguards]({{ site.baseurl }}{% link _docs/functions/typeguards/isDocument.md %}) to check if an Reference is populated
 

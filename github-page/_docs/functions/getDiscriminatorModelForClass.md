@@ -4,10 +4,10 @@ redirect_from:
   - /docs/functions/getdiscriminatormodelforclass
 ---
 
-`getDiscriminatorModelForClass(from: mongoose.model<any>, class, discriminator?: string)` is used to get a model for a given discriminator
+`getDiscriminatorModelForClass(from: mongoose.model<any>, class, discriminator?: string)` gets a model for a given discriminator
   - `from`: which is the base model
   - `class`: the class to use for the *new* model
-  - `discriminator` [optional]: set an custom discriminator id (defaults to `class`'s name)
+  - `discriminator` [optional]: set a custom discriminator id (defaults to `class`'s name)
 
 ## Example
 

@@ -4,8 +4,8 @@ redirect_from:
   - /docs/functions/addmodeltotypegoose
 ---
 
-`addModelToTypegoose(model: mongoose.model<any>, class)` is used to get a model with typescript type infomation & to have `getClassForDocument` working
-this functions is mainly used after `buildSchema` to add a modified model to typegoose and still get type infomation from the typegoose class
+`addModelToTypegoose(model: mongoose.model<any>, class)` is used to get a model with TypeScript type information & to have `getClassForDocument` working
+this functions is mainly used after `buildSchema` to add a modified model to typegoose and still get type information from the typegoose class
 
 ## Example
 

@@ -26,7 +26,7 @@ export function suite() {
       expect(fSDefault).to.not.have.property('test3');
     });
 
-    it('should only return specificly selected properties', async () => {
+    it('should only return specifically selected properties', async () => {
       /** variable name long: foundSelectExtra */
       const fSExtra = (await Select.findOne({}).select(['+test1', '+test3', '-test2']).exec()).toObject();
 

@@ -4,7 +4,7 @@ title: "Delete Models"
 
 ## deleteModel
 
-`deleteModel(name: string)`: Delete models from the typegoose cache & call `mongoose.connection.deleteModel`
+`deleteModel(name: string)`: Delete models from the typegoose cache & call `mongoose.connection.deleteModel`.
 
 ```ts
 class SomeUser {}

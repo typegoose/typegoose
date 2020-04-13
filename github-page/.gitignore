@@ -1,4 +1,4 @@
-# Please dont forget to modify "travis-.gitignore" too!
+# Please don't forget to modify "travis-.gitignore" too!
 
 _site/
 .sass-cache/

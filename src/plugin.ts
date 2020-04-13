@@ -8,7 +8,7 @@ import { Func } from './types';
  * @param options Options for the Plugin, if any
  */
 export function plugin<T = any>(mongoosePlugin: Func, options?: T) {
-  // dont check if options is an object, because any plugin could make it anything
+  // don't check if options is an object, because any plugin could make it anything
   return (target: any) => {
     const name: string = getName(target);
 

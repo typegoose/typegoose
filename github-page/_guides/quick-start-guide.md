@@ -120,7 +120,7 @@ Please note that `new Kitten({})` & `await Kitten.create({})` has no types of Ki
 
 - Typegoose is a wrapper for mongoose's models
 - Typegoose aims to not modify any functions of mongoose
-- Typegoose aims to get mongoose's models to be stable through type-infomation
+- Typegoose aims to get mongoose's models to be stable through type-information
 - Typegoose aims to make mongoose more usable by making the models more type-rich (thanks to TypeScript)
 - Decorated schema configuration classes (like KittenClass above) must use explicit type declaration
 instead of type inference for their types.  Otherwise, a property's type will become Mixed!  This is
