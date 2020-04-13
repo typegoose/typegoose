@@ -16,7 +16,7 @@ Please note that arrayProp (by mongoose default) initializes the array with `[]`
 
 Accepts Type: `any`
 
-This will tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
+This will tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or other primitive types are given) or this is an array which consists of subdocuments.
 
 ```ts
 class Something {
