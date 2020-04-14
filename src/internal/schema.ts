@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 import { logger } from '../logSettings';
 import { _buildPropMetadata } from '../prop';
-import { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexArray, IModelOptions, ISchemaHook } from '../types';
+import { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexArray, IModelOptions } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, hooks, plugins, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
@@ -63,21 +63,9 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   if (hooks.has(name)) {
     const hook = hooks.get(name);
-    hook.pre.forEach(obj => {
-      const schemaHooks = ((sch as any).s.hooks._pres.get(obj.method) ?? []) as ISchemaHook[];
-      if (schemaHooks.find(({ fn }) => fn === obj.func)) {
-        return;
-      }
-      sch.pre(obj.method, obj.func as EmptyVoidFn);
-    });
+    hook.pre.forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
 
-    hook.post.forEach(obj => {
-      const schemaHooks = ((sch as any).s.hooks._posts.get(obj.method) ?? []) as ISchemaHook[];
-      if (schemaHooks.find(({ fn }) => fn === obj.func)) {
-        return;
-      }
-      sch.post(obj.method, obj.func);
-    });
+    hook.post.forEach((obj) => sch.post(obj.method, obj.func));
   }
 
   if (plugins.has(name)) {

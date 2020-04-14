@@ -456,8 +456,3 @@ export interface IObjectWithTypegooseName {
 export interface IPrototype {
   prototype?: any;
 }
-
-export interface ISchemaHook {
-  fn(error?: Error): void;
-  isAsync: boolean;
-}
