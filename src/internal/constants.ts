@@ -33,7 +33,12 @@ export enum DecoratorKeys {
    * Storage location for Post-Hooks
    * -> Use only for a class
    */
-  HooksPost = 'typegoose:hooksPost'
+  HooksPost = 'typegoose:hooksPost',
+  /**
+   * Storage location for Virtual Populates
+   * -> Use only for a class
+   */
+  VirtualPopulate = 'typegoose:virtualPopulate'
 }
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */

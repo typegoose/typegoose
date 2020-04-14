@@ -34,6 +34,8 @@ redirect_from:
 - All Errors now get exported as `errors`
 - All non-essentail types get exported as `types`
 - `utils`'s `getName` function now gets exported
+- Remove Deprecated value `overwrite` for `VirtualOptions`
+- [IC] Move VirtualPopulate cache to Reflection
 - [IC] Move Plugins cache to Reflection
 - [IC] Move Hooks cache to Reflection
 - [IC] All remaining test's models now get exported with an name (not being exported as `model` anymore)

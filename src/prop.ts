@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 import { format } from 'util';
 
 import { DecoratorKeys, WhatIsIt } from './internal/constants';
-import { schemas, virtuals } from './internal/data';
+import { schemas } from './internal/data';
 import {
   InvalidPropError,
   InvalidTypeError,
@@ -19,7 +19,8 @@ import type {
   DecoratedPropertyMetadata,
   DecoratedPropertyMetadataMap,
   MapPropOptions,
-  PropOptionsWithValidate
+  PropOptionsWithValidate,
+  VirtualPopulateMap
 } from './types';
 
 /**
@@ -77,15 +78,14 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
   const name: string = utils.getName(target);
 
-  if (!virtuals.has(name)) {
-    virtuals.set(name, new Map());
-  }
-
   if (utils.isWithVirtualPOP(rawOptions)) {
     if (!utils.includesAllVirtualPOP(rawOptions)) {
       throw new NotAllVPOPElementsError(name, key);
     }
-    virtuals.get(name).set(key, rawOptions);
+
+    const virtuals: VirtualPopulateMap = new Map(Reflect.getMetadata(DecoratorKeys.VirtualPopulate, target.constructor) ?? []);
+    virtuals.set(key, rawOptions);
+    Reflect.defineMetadata(DecoratorKeys.VirtualPopulate, virtuals, target.constructor);
 
     return;
   }

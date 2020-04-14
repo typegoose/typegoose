@@ -248,11 +248,6 @@ export interface VirtualOptions {
   justOne?: boolean;
   /** Return the number of Documents found instead of the actual Documents */
   count?: boolean;
-  /**
-   * DEPRECATED (see README#Migrate to 6.0.0)
-   * @deprecated
-   */
-  overwrite: boolean;
 }
 
 export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
@@ -422,6 +417,8 @@ export interface IPluginsArray<T> {
   mongoosePlugin: Func;
   options: T;
 }
+
+export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
 
 /**
  * Used for the Reflection of Hooks

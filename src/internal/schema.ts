@@ -2,9 +2,18 @@ import * as mongoose from 'mongoose';
 
 import { logger } from '../logSettings';
 import { _buildPropMetadata } from '../prop';
-import type { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IHooksArray, IIndexArray, IModelOptions, IPluginsArray } from '../types';
+import type {
+  AnyParamConstructor,
+  DecoratedPropertyMetadataMap,
+  EmptyVoidFn,
+  IHooksArray,
+  IIndexArray,
+  IModelOptions,
+  IPluginsArray,
+  VirtualPopulateMap
+} from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, schemas, virtuals } from './data';
+import { constructors, schemas } from './data';
 import { NoValidClass } from './errors';
 import { assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
@@ -85,9 +94,11 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
     }
   }
 
+  /** Get Metadata for indices */
+  const virtuals: VirtualPopulateMap = Reflect.getMetadata(DecoratorKeys.VirtualPopulate, cl);
   /** Simplify the usage */
-  if (virtuals.has(name)) {
-    for (const [key, options] of virtuals.get(name)) {
+  if (virtuals instanceof Map) {
+    for (const [key, options] of virtuals) {
       logger.debug('Applying Virtual Populates:', key, options);
       sch.virtual(key, options);
     }
