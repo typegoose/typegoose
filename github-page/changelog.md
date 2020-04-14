@@ -35,9 +35,11 @@ redirect_from:
 - `utils`'s `getName` function now gets exported
 - [IC] All remaining test's models now get exported with an name (not being exported as `model` anymore)
 - Update Dependencies
-  - `mongoose` to 5.9.5
-  - `@types/mongoose` to 5.7.7
+  - `mongoose` to 5.9.9
+  - `@types/mongoose` to 5.7.10
   - `tslib` to 1.11.1
+  - `loglevel` to 1.6.8
+  - `semver` to 7.3.0
 
 ## 6.5.0
 
