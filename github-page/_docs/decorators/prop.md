@@ -11,7 +11,7 @@ title: "Prop"
 Accepts Type: `boolean`
 
 Set if this Property is required (best practice is `public property!: any`, note the `!`)  
-For more infomation look at [Mongoose's Documentation](http://mongoosejs.com/docs/api.html#schematype_SchemaType-required)
+For more information see the [mongoose documentation](http://mongoosejs.com/docs/api.html#schematype_SchemaType-required)
 
 Example:
 
@@ -29,9 +29,7 @@ class Something {
 
 Accepts Type: `boolean`
 
-Create an Index for this Property
-
--> it should act the same as in the `@index` class decorator, but without options
+Create an Index for this Property. Should act like the `@index` class decorator, but without options.
 
 Example:
 
@@ -46,9 +44,7 @@ class IndexedClass {
 
 Accepts Type: `boolean`
 
-Create an Index that sets this property to unique
-
-Look at [Mongoose unique](http://mongoosejs.com/docs/api.html#schematype_SchemaType-unique) for more infomation
+Create an Index that sets this property to be [unique](http://mongoosejs.com/docs/api.html#schematype_SchemaType-unique).
 
 Example:
 
@@ -63,7 +59,7 @@ class IndexedClass {
 
 Accepts Type: `any`
 
-Set an default always when no value is givin at creation time
+Set a default when no value is given at creation time.
 
 Example:
 
@@ -78,7 +74,7 @@ class Defaulted {
 
 Accepts Type: `boolean`
 
-Set this to `false` if you want to turn of creating ID's for sub-documents
+Set this to `false` if you want to turn of creating IDs for sub-documents.
 
 Example:
 
@@ -95,7 +91,7 @@ class Parent {
 
 Accepts Type: `Class | string`
 
-Set which class to use for Reference (this cannot be inferred by the type)
+Set which class to use for Reference (this cannot be inferred by the type).
 
 [->look here where `Class` cannot be used]({{ site.baseurl }}{% link _guides/advanced/reference-other-classes.md%}#common-problems)
 
@@ -117,7 +113,7 @@ class Parent {
 
 Accepts Type: `string`
 
-Set at which path to look for which Class to use
+Set at which path to look for which Class to use.
 
 Example:
 
@@ -139,7 +135,7 @@ class Another {
 
 Accepts Type: `mongoose.Schema.Types.Number` \| `mongoose.Schema.Types.String` \| `mongoose.Schema.Types.Buffer` \| `mongoose.Schema.Types.ObjectId`
 
-Set which Type to use for refs
+Set which Type to use for refs.
 
 -> [`@prop`'s `type`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#type) can be used too
 
@@ -159,7 +155,7 @@ Required options of the object:
   - `validator`: `(value) => boolean`
   - `message`: `String`, the message shows when the validator fails
 
-Set a custom function for validation (must return an boolean)
+Set a custom function for validation (must return a boolean).
 
 Example: (For more Examples look at [Mongoose's Documentation](https://mongoosejs.com/docs/api.html#schematype_SchemaType-validate))
 
@@ -180,9 +176,9 @@ class Validated {
 
 Accepts Type: `string`
 
-Set an Alias for a property (best practice is to add type infomation for it)
+Set an Alias for a property (best practice is to add type information for it).
 
--> For more infomation look at [Mongoose's Documentation](https://mongoosejs.com/docs/guide.html#aliases)
+-> For more information see the [mongoose documentation](https://mongoosejs.com/docs/guide.html#aliases)
 
 Example:
 
@@ -208,15 +204,15 @@ class Dummy {
 }
 ```
 
-In order to retrieve a prop marked as `select: false`, you must explicit ask for it:
+In order to retrieve a prop marked as `select: false`, you must explicitly ask for it:
 
 ```ts
 // find all in the collection and have the "hello" property selected
 const dummies = await DummyModel.find().select('+hello').exec();
 ```
 
-Note: `select()` accepts an array as well
-Note: `select()` accepts an long string with space as an seperator
+Note: `select()` accepts an array as well  
+Note: `select()` accepts a long string with space as a separator
 
 ### get & set
 
@@ -238,8 +234,8 @@ class Dummy {
 
 Accepts Type: `any`
 
-This option is mainly used for [get & set](#get--set) to override the inferred type
-but it can also be used to override the inferred type of any prop
+This option is mainly used for [get & set](#get--set) to override the inferred type,
+but it can also be used to override the inferred type of any prop.
 
 -> this overwriting is meant as a last resort, please open a new issue if you need to use it
 
@@ -257,7 +253,7 @@ Example: Overwrite inferred type as last resort
 ```ts
 class Dummy {
   @prop({ type: mongoose.Schema.Types.Mixed }) // used for mongoose / how it is stored to the DB
-  public something: NewableFunction; // used for intellisense / typescript
+  public something: NewableFunction; // used for intellisense / TypeScript
 }
 ```
 
@@ -265,9 +261,9 @@ class Dummy {
 
 Accepts Type: `enum | any[]`
 
-Only allow Values from the enum (best practice is to use TypeScript's enum)
+Only allow Values from the enum (best practice is to use TypeScript's enum).
 
-Note: `design:type` will be set to `String` if the enum is full of Strings, and `Number` if full of Numbers, and `Object` if the enum contains both
+Note: `design:type` will be set to `String` if the enum is full of Strings, and `Number` if full of Numbers, and `Object` if the enum contains both.
 
 Example for String-Enums:
 
@@ -306,7 +302,7 @@ class Enumed {
 
 Accepts Type: `boolean`
 
-Set this to `true` if the value should always be lowercased
+Set this to `true` if the value should always be lowercased.
 
 Example:
 
@@ -321,7 +317,7 @@ class LowerCased {
 
 Accepts Type: `boolean`
 
-Set this to `true` if the value should always be UPPERCASED
+Set this to `true` if the value should always be UPPERCASED.
 
 Example:
 
@@ -336,7 +332,7 @@ class UpperCased {
 
 Accepts Type: `boolean`
 
-Set this to `true` if the value should always be trimmed
+Set this to `true` if the value should always be trimmed.
 
 Example:
 
@@ -353,7 +349,7 @@ class Trimmed {
 
 Accepts Type: `number`
 
-Set a maximal length the string can have
+Set the maximum length the string can have.
 
 Example:
 
@@ -368,7 +364,7 @@ class MaxLengthed {
 
 Accepts Type: `number`
 
-Set a minimal length the string must have (must be above 0)
+Set the minimum length the string must have (must be above 0).
 
 Example:
 
@@ -385,14 +381,14 @@ class MinLengthed {
 
 Accepts Type: `number`
 
-Set a highest number the property can have
+Set the maximum value the property can have.
 
 Example:
 
 ```ts
 class Maxed {
   @prop({ max: 10 })
-  public maxed?: number; // the value can be at maximum of 10
+  public maxed?: number; // the value can be at most 10
 }
 ```
 
@@ -400,13 +396,13 @@ class Maxed {
 
 Accepts Type: `number`
 
-Set a lowest number the property can have
+Set the minimum value the property can have.
 
 Example:
 
 ```ts
 class Mined {
   @prop({ min: 0 })
-  public mined?: number; // the value must be a minimum of 0
+  public mined?: number; // the value must be at least 0
 }
 ```

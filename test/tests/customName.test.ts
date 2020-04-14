@@ -18,7 +18,7 @@ export function suite() {
     expect(gotClass).to.equals(NormalOptions);
   });
 
-  it('expect if collection is defined to be automaticly used with automaticName', () => {
+  it('expect if collection is defined to be automatically used with automaticName', () => {
     @modelOptions({ schemaOptions: { collection: 'Something' }, options: { automaticName: true } })
     class CollectionOption { }
 

@@ -36,7 +36,7 @@ function baseProp(input: DecoratedPropertyMetadata): void {
   } = input;
   if (Type === target.constructor) { // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
     throw new TypeError('It seems like the type used is the same as the target class, which is currently not supported\n'
-      + `Please look at https://github.com/typegoose/typegoose/issues/42 for more infomation, for now please avoid using it!`);
+      + `Please look at https://github.com/typegoose/typegoose/issues/42 for more information, for now please avoid using it!`);
   }
 
   const existingMapForTarget = Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
@@ -102,8 +102,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
     /*
      * Note:
-     * this dosnt have a check if prop & returntype of the function is the same,
-     * because it cant be accessed at runtime
+     * this doesn't have a check if prop & returntype of the function is the same,
+     * because it can't be accessed at runtime
      */
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
@@ -185,8 +185,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       if (Type === String) {
         rawOptions.enum = Object.entries(enumOption) // get all key-value pairs of the enum
           // no reverse-filtering because if it is full of strings, there is no reverse mapping
-          .map(([enumKey, enumValue]) => { // convert key-value pairs to mongoose-useable strings
-            // safeguard, this should never happen because typescript only sets "design:type" to "String"
+          .map(([enumKey, enumValue]) => { // convert key-value pairs to mongoose-usable strings
+            // safeguard, this should never happen because TypeScript only sets "design:type" to "String"
             // if the enum is full of strings
             if (typeof enumValue !== 'string') {
               throw new NotStringTypeError(name, key, enumKey, typeof enumValue);

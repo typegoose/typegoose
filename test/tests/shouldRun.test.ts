@@ -148,7 +148,7 @@ export function suite() {
     const model = getModelForClass(TestAssignMetadata, {
       schemaOptions: {
         _id: true,
-        // @ts-ignore because it is only there for tests and dosnt exists on type "SchemaOptions" (from mongoose)
+        // @ts-ignore because it is only there for tests and doesn't exists on type "SchemaOptions" (from mongoose)
         testOption: 'hello'
       }
     });

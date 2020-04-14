@@ -15,19 +15,21 @@ This Guide contains all default classes typegoose provides
 Example of using all of them:
 
 ```ts
+import { TimeStamps, Base } from '@typegoose/typegoose/lib/defaultClasses';
+
 class SomeClass extends TimeStamps, Base {} // this class now has the types of "TimeStamps" & "Base"
 ```
 
 ### TimeStamps
 
-The Time Stamps Class provides the following types:
+The `TimeStamps` class provides the following fields:
 
 - `createdAt`: Date
 - `updatedAt`: Date
 
 ### Base
 
-The Base Class provides the following types:
+The Base Class provides the following fields:
 
 - `_id`: ObjectId
 - `__v`: number
@@ -46,13 +48,13 @@ This class provides all the types supplied be the plugin `mongoose-findOrCreate`
 
 -> This class should only be used if the plugin is used too
 
-## Extra Infomation
+## Extra information
 
-Here you can find extra infomation
+Here you can find extra information
 
 ### Use multiple classes together
 
-Because Typescript & JavaScript dont have functions for multiple inheritance, it can only be achived by the following
+Because Typescript & JavaScript don't have functions for multiple inheritance, it can only be achieved by the following
 
 ```ts
 interface Something extends Base {} // have the interface to add the types of "Base" to the class

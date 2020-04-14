@@ -11,7 +11,7 @@ export function suite() {
   it('RegEXP tests', async () => {
     const doc = new HookModel({ material: 'iron' } as Hook);
     await doc.save();
-    await doc.updateOne(doc).exec(); // to run the update hook with regexp, find dosnt work (it dosnt get applied)
+    await doc.updateOne(doc).exec(); // to run the update hook with regexp, find doesn't work (it doesn't get applied)
 
     const found = await HookModel.findById(doc.id).exec();
     expect(found).to.not.be.an('undefined');

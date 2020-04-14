@@ -181,7 +181,7 @@ export interface PropOptions extends BasePropOptions { }
 export interface ArrayPropOptions extends BasePropOptions {
   /** What array is it?
    * {@link BasePropOptions.type} can be used too
-   * Note: this is only needed because Reflect & refelact Metadata cant give an accurate Response for an array
+   * Note: this is only needed because Reflect & refelact Metadata can't give an accurate Response for an array
    */
   items?: any;
   /**
@@ -273,7 +273,7 @@ export type RefSchemaType = typeof mongoose.Schema.Types.Number |
 export type Ref<R, T extends RefType = R extends { _id: RefType; } ? R['_id'] : mongoose.Types.ObjectId> = R | T;
 
 /**
- * An Function type for a function that dosnt have any arguments and dosnt return anything
+ * An Function type for a function that doesn't have any arguments and doesn't return anything
  */
 export type EmptyVoidFn = () => void;
 

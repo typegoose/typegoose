@@ -34,7 +34,7 @@ const UserModel = getModelForClass(User); // UserModel is a regular Mongoose Mod
 
 A common problem when using Mongoose with TypeScript is that you have to define both the Mongoose model and the TypeScript interface. If the model changes, you also have to keep the TypeScript interface file in sync or the TypeScript interface would not represent the real data structure of the model.
 
-Typegoose aims to solve this problem by defining only a TypeScript interface (class) which need to be enhanced with special Typegoose decorators.
+Typegoose aims to solve this problem by defining only a TypeScript interface (class), which needs to be enhanced with special Typegoose decorators (like `@prop`).
 
 Under the hood it uses the Reflect & [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the properties, so redundancy can be significantly reduced.
 
@@ -123,22 +123,24 @@ npm i -D @types/mongoose # install all types for mongoose - this is required for
 
 ## Testing
 
-`npm run test`
-Run our tests after running `npm i -D`
+```sh
+npm i -D
+npm test
+```
 
 ## Versioning
 
-`Major.Minor.Fix` (or how npm expresses it `Major.Minor.Patch`)  
-(This Project should comply with [Semver](https://semver.org))
+This Project should comply with [Semver](https://semver.org). It uses the `Major.Minor.Fix` standard (or in NPM terms, `Major.Minor.Patch`).
+
 
 ## Join Our Discord Server
 
-To ask questions or just talk with us [join our Discord Server](https://discord.gg/BpGjTTD)
+To ask questions or just talk with us, [join our Discord Server](https://discord.gg/BpGjTTD).
 
 ## Documentation
 
-[Here is the Documentation](https://typegoose.github.io/typegoose/docs)  
-[Here are the Guides](https://typegoose.github.io/typegoose/guides/quick-start-guide/)  
+* [Typegoose Documentation](https://typegoose.github.io/typegoose/docs)
+* [Quick start guide](https://typegoose.github.io/typegoose/guides/quick-start-guide/)  
 
 ## Migrate to 6.0.0
 
@@ -154,6 +156,6 @@ To ask questions or just talk with us [join our Discord Server](https://discord.
 
 ## Notes
 
-* Please dont add comments with `+1` or something like that, use the Reactions
-* `npm run doc` generates all documentation for all files that can be used as modules (is used for github-pages)
+* Please don't add `+1` or similar comments to issues. Use the reactions instead.
+* `npm run doc` generates all documentation for all files that can be used as modules (and is used for GitHub Pages)
 * `npm run doc:all` generates documentation even for internal modules

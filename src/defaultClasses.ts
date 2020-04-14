@@ -5,7 +5,7 @@ import type { DocumentType, RefType } from './types';
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 /**
- * This class can be used for already existing type infomation for the Timestamps
+ * This class can be used for already existing type information for the Timestamps
  */
 export abstract class TimeStamps {
   public createdAt!: Readonly<Date>;

@@ -42,7 +42,7 @@ export function parseENV(): void {
 
 /**
  * Maps strings to the number
- * -> This function is specificly build for "Severity"-Enum
+ * -> This function is specifically build for "Severity"-Enum
  * @throws {Error} if not in range of the "Severity"-Enum
  * @example
  * ```ts

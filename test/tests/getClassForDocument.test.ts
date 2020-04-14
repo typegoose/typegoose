@@ -119,7 +119,7 @@ export function suite() {
       assert.fail('Validation must fail.');
     } catch (e) {
       expect(e).to.be.a.instanceof(mongoose.Error.ValidationError);
-      expect(e.message).to.be.equal( // test it specificly, to know that it is not another error
+      expect(e.message).to.be.equal( // test it specifically, to know that it is not another error
         'Person validation failed: email: Validator failed for path `email` with value `email`'
       );
     }
@@ -135,7 +135,7 @@ export function suite() {
       assert.fail('Validation should Fail');
     } catch (e) {
       expect(e).to.be.a.instanceof(mongoose.Error.ValidationError);
-      expect(e.message).to.be.equal( // test it specificly, to know that it is not another error
+      expect(e.message).to.be.equal( // test it specifically, to know that it is not another error
         'InternetUser validation failed: projects.p1: `project` is not a valid enum value for path `projects.p1`.'
       );
     }

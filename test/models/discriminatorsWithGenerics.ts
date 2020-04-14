@@ -18,7 +18,7 @@ export class Profile {
 })
 export class DisciminatedUser<T extends Profile = Profile> {
   @prop({ required: true, enum: ROLE })
-  public role?: ROLE; // optional because it will be automaticly added
+  public role?: ROLE; // optional because it will be automatically added
 
   @prop({ type: Profile })
   public profile?: T;

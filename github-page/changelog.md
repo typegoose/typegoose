@@ -75,7 +75,7 @@ redirect_from:
   - `semver` to 7.1.2
 - Add `@types/mongoose` to `peerDependencies`
 - Add generic type to `@plugin` to set the type for the options
-- Use a modified `Ref`-Type to automaticly get the type (if the Ref'd type has `string` as `_id`, it automaticly sets the `RefType` to `string`)
+- Use a modified `Ref`-Type to automatically get the type (if the Ref'd type has `string` as `_id`, it automaticly sets the `RefType` to `string`)
 
 ## 6.2.2
 
@@ -163,10 +163,10 @@ This Update may break some code (mongoose upgrade, inline `_id` change, `enum` c
 - add modelOption `allowMixed`
 - add `text` to PropOptions
 - deprecate ArrayPropOptions's `itemsRef`, `itemsRefPath` & `itemsRefType`
-- `DocumentType` will now overwrite the type of `_id` if the class is extending `Base` (in typescript there is currently no other way)
-- add `tslib` as dependencie to minimize generated code
+- `DocumentType` will now overwrite the type of `_id` if the class is extending `Base` (in TypeScript there is currently no other way)
+- add `tslib` as dependency to minimize generated code
 - fixing typo in (deprecated) `setModelForClass`
-- Remake how Enums are handeled, use `setGlobalOptions({ globalOptions: { useNewEnum: true } })` (to not break existing databases made with the old handling)
+- Remake how Enums are handled, use `setGlobalOptions({ globalOptions: { useNewEnum: true } })` (to not break existing databases made with the old handling)
 - add function `getModelWithString`
 - [IC] tsconfig: add option "strictBindCallApply"
 - [IC] tsconfig: add option "strictFunctionTypes"
@@ -279,7 +279,7 @@ This Release did not change anything in the code, it is just there to update the
 
 - fix accidentally added typeguards
 - add a note that typegoose uses mongoose's strict by default
-- add note that typegoose dosnt work with classes with the same name (at least in 5.x, working on it in 6.x)
+- add note that typegoose doesn't work with classes with the same name (at least in 5.x, working on it in 6.x)
 - implemented a hack for ObjectId / ObjectID (mongoose some version fixed this)
 
 ## 5.9.0
@@ -295,7 +295,7 @@ This Release did not change anything in the code, it is just there to update the
 - Updated Dependencies
   Note worthy are:
   - mongoose 5.6 is now required instead of 5.5
-  - this project should be used with typescript 3.5+
+  - this project should be used with TypeScript 3.5+
 - `@mapProp()` is now implemented
 - Fix for `@prop({ select })`
 - A public version of `buildSchema` is now available

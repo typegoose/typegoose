@@ -10,7 +10,7 @@ import type { IModelOptions } from './types';
  *  @modelOptions({ schemaOptions: { timestamps: true } })
  *  class Name {}
  *
- *  // Note: The default Class "TimeStamps" can be used for type infomation and options already set
+ *  // Note: The default Class "TimeStamps" can be used for type information and options already set
  * ```
  */
 export function modelOptions(options: IModelOptions) {

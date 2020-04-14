@@ -156,7 +156,7 @@ export function suite() {
     const items = await Inventory.find({}).populate('kind').exec();
     expect((items[0].kind as typeof Beverage).isDecaf).to.be.equals(true);
 
-    // wrong type to make typescript happy
+    // wrong type to make TypeScript happy
     expect((items[1].kind as typeof Beverage).isDecaf).to.be.an('undefined');
   });
 

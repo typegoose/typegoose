@@ -29,12 +29,12 @@ and please sign commits
 *Legend:*
 - add `[#1]` at the end when there is an issue for it (and modify it to the actual number)
 - the title should be a short introduction like (for small fixes)`Add @mapProp for Maps with tests` (for bigger)`Adding TSDoc`[preferably split the commits when they get to large with adding more features]
-- the first word should be "adding" "removing" "moving", except if it cant be expressed with those
+- the first word should be "adding" "removing" "moving", except if it can't be expressed with those
 
 ## Additional Style guidelines
 
 - if you ever see `console.log`, someone messed up, this should never be there
-- dont use `console.error`, the only occurence is in test's config when some error occurs
+- don't use `console.error`, the only occurrence is in test's config when some error occurs
 - use `@deprecate`(tsdoc) & `util.deprecate` to deprecate a function / class / variable
 
 ---

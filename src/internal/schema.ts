@@ -10,7 +10,7 @@ import { assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOption
 
 /**
  * Private schema builder out of class props
- * -> If you discover this, dont use this function, use Typegoose.buildSchema!
+ * -> If you discover this, don't use this function, use Typegoose.buildSchema!
  * @param cl The not initialized Class
  * @param sch Already Existing Schema?
  * @param opt Options to override

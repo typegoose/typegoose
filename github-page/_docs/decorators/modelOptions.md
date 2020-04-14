@@ -61,7 +61,7 @@ expect(model.modelName).to.be.equal('MultiModel_Something');
 
 #### automaticName
 
-`automaticName` can be used to automaticly generate custom model names based on `{ schemaOptions: { collection } }` or `{ options: { customName } }`
+`automaticName` can be used to automatically generate custom model names based on `{ schemaOptions: { collection } }` or `{ options: { customName } }`
 -> `customName` will be prioritzed over `collection`
 -> only if `automaticName` is true, `customName` will be a *suffix* of the base class name
 
