@@ -132,7 +132,6 @@ npm test
 
 This Project should comply with [Semver](https://semver.org). It uses the `Major.Minor.Fix` standard (or in NPM terms, `Major.Minor.Patch`).
 
-
 ## Join Our Discord Server
 
 To ask questions or just talk with us, [join our Discord Server](https://discord.gg/BpGjTTD).
