@@ -398,10 +398,10 @@ export interface IndexOptions<T> {
 }
 
 /**
- * Used as a Type for the return of getMetadata
+ * Used for the Reflection of Indexes
  * @example
  * ```ts
- * const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, target) || [];
+ * const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, target) || []);
  * ```
  */
 export interface IIndexArray<T> {
@@ -409,6 +409,18 @@ export interface IIndexArray<T> {
     [key: string]: any;
   };
   options: IndexOptions<T>;
+}
+
+/**
+ * Used for the Reflection of Plugins
+ * @example
+ * ```ts
+ * const plugins: IPluginsArray<any>[] = Array.from(Reflect.getMetadata(DecoratorKeys.Plugins, target) ?? []);
+ * ```
+ */
+export interface IPluginsArray<T> {
+  mongoosePlugin: Func;
+  options: T;
 }
 
 export interface IGlobalOptions {

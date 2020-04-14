@@ -2,9 +2,9 @@ import * as mongoose from 'mongoose';
 
 import { logger } from '../logSettings';
 import { _buildPropMetadata } from '../prop';
-import type { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexArray, IModelOptions } from '../types';
+import type { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexArray, IModelOptions, IPluginsArray } from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, hooks, plugins, schemas, virtuals } from './data';
+import { constructors, hooks, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
 import { assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
@@ -68,8 +68,10 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
     hook.post.forEach((obj) => sch.post(obj.method, obj.func));
   }
 
-  if (plugins.has(name)) {
-    for (const plugin of plugins.get(name)) {
+  /** Get Metadata for indices */
+  const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
+  if (Array.isArray(plugins)) {
+    for (const plugin of plugins) {
       logger.debug('Applying Plugin:', plugin);
       sch.plugin(plugin.mongoosePlugin, plugin.options);
     }

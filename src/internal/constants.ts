@@ -18,7 +18,12 @@ export enum DecoratorKeys {
    * Storage location for Indexes
    * -> Use only for a class
    */
-  Index = 'typegoose:indexes'
+  Index = 'typegoose:indexes',
+  /**
+   * Storage location for Plugins
+   * -> Use only for a class
+   */
+  Plugins = 'typegoose:plugins'
 }
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */

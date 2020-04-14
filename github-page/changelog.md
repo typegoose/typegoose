@@ -16,6 +16,7 @@ redirect_from:
 
 - Add here
 -->
+*`[IC]` means `Internal Change`*
 
 ## 7.0.0
 
@@ -33,6 +34,7 @@ redirect_from:
 - All Errors now get exported as `errors`
 - All non-essentail types get exported as `types`
 - `utils`'s `getName` function now gets exported
+- [IC] Move Plugins cache to Reflection
 - [IC] All remaining test's models now get exported with an name (not being exported as `model` anymore)
 - Update Dependencies
   - `mongoose` to 5.9.9

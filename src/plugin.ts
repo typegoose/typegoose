@@ -1,6 +1,7 @@
-import { plugins } from './internal/data';
+import { DecoratorKeys } from './internal/constants';
 import { getName } from './internal/utils';
-import type { Func } from './types';
+import { logger } from './logSettings';
+import type { Func, IPluginsArray } from './types';
 
 /**
  * Add a Middleware-Plugin
@@ -10,12 +11,16 @@ import type { Func } from './types';
 export function plugin<T = any>(mongoosePlugin: Func, options?: T) {
   // don't check if options is an object, because any plugin could make it anything
   return (target: any) => {
-    const name: string = getName(target);
+    // const name: string = getName(target);
 
-    /* istanbul ignore else */
-    if (!plugins.has(name)) {
-      plugins.set(name, []);
-    }
-    plugins.get(name).push({ mongoosePlugin, options });
+    // /* istanbul ignore else */
+    // if (!plugins.has(name)) {
+    //   plugins.set(name, []);
+    // }
+    // plugins.get(name).push({ mongoosePlugin, options });
+    logger.info('Adding plugin "%s" to "%s" with options: "%o"', mongoosePlugin.name, getName(target), options);
+    const plugins: IPluginsArray<any>[] = Array.from(Reflect.getMetadata(DecoratorKeys.Plugins, target) ?? []);
+    plugins.push({ mongoosePlugin, options });
+    Reflect.defineMetadata(DecoratorKeys.Plugins, plugins, target);
   };
 }
