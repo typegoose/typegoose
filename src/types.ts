@@ -423,6 +423,18 @@ export interface IPluginsArray<T> {
   options: T;
 }
 
+/**
+ * Used for the Reflection of Hooks
+ * @example
+ * ```ts
+ * const postHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPost, target) ?? []);
+ * ```
+ */
+export interface IHooksArray {
+  func: Func;
+  method: string | RegExp;
+}
+
 export interface IGlobalOptions {
   /** Typegoose Options */
   options?: ICustomOptions;

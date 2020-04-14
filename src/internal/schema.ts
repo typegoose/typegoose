@@ -2,9 +2,9 @@ import * as mongoose from 'mongoose';
 
 import { logger } from '../logSettings';
 import { _buildPropMetadata } from '../prop';
-import type { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexArray, IModelOptions, IPluginsArray } from '../types';
+import type { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IHooksArray, IIndexArray, IModelOptions, IPluginsArray } from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, hooks, schemas, virtuals } from './data';
+import { constructors, schemas, virtuals } from './data';
 import { NoValidClass } from './errors';
 import { assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
@@ -61,11 +61,19 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   sch.loadClass(cl);
 
-  if (hooks.has(name)) {
-    const hook = hooks.get(name);
-    hook.pre.forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
+  // Hooks
+  {
+    /** Get Metadata for PreHooks */
+    const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
+    if (Array.isArray(preHooks)) {
+      preHooks.forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
+    }
 
-    hook.post.forEach((obj) => sch.post(obj.method, obj.func));
+    /** Get Metadata for PreHooks */
+    const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
+    if (Array.isArray(postHooks)) {
+      postHooks.forEach((obj) => sch.post(obj.method, obj.func));
+    }
   }
 
   /** Get Metadata for indices */

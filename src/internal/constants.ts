@@ -23,7 +23,17 @@ export enum DecoratorKeys {
    * Storage location for Plugins
    * -> Use only for a class
    */
-  Plugins = 'typegoose:plugins'
+  Plugins = 'typegoose:plugins',
+  /**
+   * Storage location for Pre-Hooks
+   * -> Use only for a class
+   */
+  HooksPre = 'typegoose:hooksPre',
+  /**
+   * Storage location for Post-Hooks
+   * -> Use only for a class
+   */
+  HooksPost = 'typegoose:hooksPost'
 }
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
