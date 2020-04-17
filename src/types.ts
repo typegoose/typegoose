@@ -19,7 +19,7 @@ export type DocumentType<T> = (T extends Base ? Omit<mongoose.Document, '_id'> &
  * Used Internally for ModelTypes
  * @internal
  */
-export type ModelType<T> = mongoose.Model<DocumentType<T>> & T;
+export type ModelType<T> = mongoose.Model<DocumentType<T>>;
 /**
  * Any-param Constructor
  * @internal
