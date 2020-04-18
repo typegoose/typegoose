@@ -6,7 +6,7 @@ import { Alias, model as AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
 import { GetSet, GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
-import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter } from '../models/inventory';
+import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter, Beverage as BeverageClass } from '../models/inventory';
 import { OptionsClass, OptionsModel } from '../models/options';
 import { UserModel } from '../models/user';
 import {
@@ -150,10 +150,10 @@ it('Should support dynamic references via refPath', async () => {
 
   // I should now have two "inventory" items, with different embedded reference documents.
   const items = await Inventory.find({}).populate('kind').exec();
-  expect((items[0].kind as typeof Beverage).isDecaf).toEqual(true);
+  expect((items[0].kind as BeverageClass).isDecaf).toEqual(true);
 
   // wrong type to make TypeScript happy
-  expect((items[1].kind as typeof Beverage).isDecaf).toEqual(undefined);
+  expect((items[1].kind as BeverageClass).isDecaf).toEqual(undefined);
 });
 
 it('it should alias correctly', () => {
