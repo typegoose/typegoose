@@ -19,14 +19,18 @@ Accepts Type: `any`
 Tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or another primitive type is given) or of subdocuments, if a class is given.
 
 ```ts
+// Array of Primitives
 class Something {
   @arrayProp({ items: String })
   public languages?: string[];
 }
 
-// Array of subdocuments:
+// Array of subdocuments
 class Link {
+  @prop()
   url: string;
+
+  @prop()
   text: string;
 }
 
