@@ -64,48 +64,6 @@ const SomeClassModel = getModelForClass(SomeClass);
 })();
 ```
 
-## @typegoose/auto-increment
-
-The Typegoose project provides an [`auto-increment` plugin](https://github.com/typegoose/auto-increment) for mongoose, here is how to use it:
-
-### AutoIncrementSimple
-
-Always increments the field on each save
-
-```ts
-@plugin<AutoIncrementSimplePluginOptions>(AutoIncrementSimple, [{ field: "someIncrementedField" }])
-class SomeClass {
-  @prop() // does not need to be empty
-  public someIncrementedField: number;
-}
-
-const SomeModel = getModelForClass(SomeClass);
-
-const doc = await SomeModel.create({ someIncrementedField: 10 });
-
-await doc.save(); // someIncrementedField will be 11
-```
-
-### AutoIncrementID
-
-Only increases the field if the document is *new* and the counter is stored in an counter-collection
-(default field: `_id`)
-
-```ts
-@plugin<AutoIncrementOptionsID>(AutoIncrementID, {})
-class SomeClass {
-  @prop()
-  public _id: number;
-
-  @prop() // does not need to be empty
-  public someIncrementedField: number;
-}
-
-const SomeModel = getModelForClass(SomeClass);
-
-const doc = await SomeModel.create({ someIncrementedField: 10 }); // _id will be 1
-```
-
 ---
 
 Please note that some or all of the listed plugins might not have an `@types` package, so you mostly have to declare it as a model
