@@ -111,6 +111,11 @@ class User {
 * Node 8.10+
 * mongoose ^5.9.2
 * `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
+  * if you use Babel (e.g. with Jest), it will need the corresponding plugins to complement the [typescript preset](https://babeljs.io/docs/en/babel-preset-typescript):
+  
+        ['@babel/plugin-proposal-decorators', { legacy: true }],
+        'babel-plugin-transform-typescript-metadata',
+
 
 ## Install
 
