@@ -1,5 +1,5 @@
-import { isDocument, isDocumentArray, isRefType, mongoose } from '../../src/typegoose';
-import { IsRefType, IsRefTypeModel, IsRefTypeNestedObjectIdModel, IsRefTypeNestedStringModel } from '../models/isRefType';
+import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose';
+import { IsRefType, IsRefTypeArray, IsRefTypeArrayModel, IsRefTypeModel, IsRefTypeNestedObjectIdModel, IsRefTypeNestedStringModel } from '../models/isRefType';
 import { UserRefModel } from '../models/userRefs';
 
 describe('isDocument / isDocumentArray', () => {
@@ -147,33 +147,69 @@ describe('isDocument / isDocumentArray', () => {
 });
 
 describe('isRefType / isRefTypeArray', () => {
-  it('should guarantee the RefType - String', async () => {
-    const doc = await IsRefTypeModel.create({
-      nestedString: await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType' })
-    } as IsRefType);
-    doc.depopulate('nestedString');
+  describe('isRefType', () => {
+    it('should guarantee the RefType - String', async () => {
+      const doc = await IsRefTypeModel.create({
+        nestedString: await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType' })
+      } as IsRefType);
+      doc.depopulate('nestedString');
 
-    expect(doc.nestedString).not.toEqual(undefined);
+      expect(doc.nestedString).not.toEqual(undefined);
 
-    if (isRefType(doc.nestedString)) {
-      expect(typeof doc.nestedString).toBe('string');
-    } else {
-      fail('Expected isRefType to be returning true');
-    }
+      if (isRefType(doc.nestedString)) {
+        expect(typeof doc.nestedString).toBe('string');
+      } else {
+        fail('Expected isRefType to be returning true');
+      }
+    });
+
+    it('should guarantee the RefType - ObjectId', async () => {
+      const doc = await IsRefTypeModel.create({
+        nestedObjectId: await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() })
+      } as IsRefType);
+      doc.depopulate('nestedObjectId');
+
+      expect(doc.nestedObjectId).not.toEqual(undefined);
+
+      if (isRefType(doc.nestedObjectId)) {
+        expect(doc.nestedObjectId).toBeInstanceOf(mongoose.Types.ObjectId);
+      } else {
+        fail('Expected isRefType to be returning true');
+      }
+    });
   });
 
-  it('should guarantee the RefType - ObjectId', async () => {
-    const doc = await IsRefTypeModel.create({
-      nestedObjectId: await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() })
-    } as IsRefType);
-    doc.depopulate('nestedObjectId');
+  describe('isRefTypeArray', () => {
+    it('should guarantee the RefType - String', async () => {
+      const doc = await IsRefTypeArrayModel.create({
+        nestedString: [await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType - Array' })]
+      } as IsRefTypeArray);
+      doc.depopulate('nestedString');
 
-    expect(doc.nestedObjectId).not.toEqual(undefined);
+      expect(doc.nestedString).not.toEqual(undefined);
 
-    if (isRefType(doc.nestedObjectId)) {
-      expect(doc.nestedObjectId).toBeInstanceOf(mongoose.Types.ObjectId);
-    } else {
-      fail('Expected isRefType to be returning true');
-    }
+      if (isRefTypeArray(doc.nestedString)) {
+        expect(Array.isArray(doc.nestedString)).toBe(true);
+        expect(typeof doc.nestedString[0]).toBe('string');
+      } else {
+        fail('Expected isRefTypeArray to be returning true');
+      }
+    });
+
+    it('should guarantee the RefType - ObjectId', async () => {
+      const doc = await IsRefTypeArrayModel.create({
+        nestedObjectId: [await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() })]
+      } as IsRefTypeArray);
+      doc.depopulate('nestedObjectId');
+
+      expect(doc.nestedObjectId).not.toEqual(undefined);
+
+      if (isRefTypeArray(doc.nestedObjectId)) {
+        expect(Array.isArray(doc.nestedString)).toBe(true);
+        expect(doc.nestedObjectId[0]).toBeInstanceOf(mongoose.Types.ObjectId);
+      } else {
+        fail('Expected isRefTypeArray to be returning true');
+      }
+    });
   });
 });
