@@ -6,7 +6,7 @@ import { Alias, model as AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
 import { GetSet, GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
-import { BeverageModel as Beverage, InventoryModel as Inventory, ScooterModel as Scooter, Beverage as BeverageClass } from '../models/inventory';
+import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models/inventory';
 import { OptionsClass, OptionsModel } from '../models/options';
 import { UserModel } from '../models/user';
 import {
@@ -120,28 +120,28 @@ it(`should add dynamic fields using map`, async () => {
 });
 
 it('Should support dynamic references via refPath', async () => {
-  const sprite = await Beverage.create({
+  const sprite = await BeverageModel.create({
     isDecaf: true,
     isSugarFree: false
   });
 
-  await Beverage.create({
+  await BeverageModel.create({
     isDecaf: false,
     isSugarFree: true
   });
 
-  const vespa = await Scooter.create({
+  const vespa = await ScooterModel.create({
     makeAndModel: 'Vespa'
   });
 
-  await Inventory.create({
+  await InventoryModel.create({
     refItemPathName: 'Beverage',
     kind: sprite,
     count: 10,
     value: 1.99
   });
 
-  await Inventory.create({
+  await InventoryModel.create({
     refItemPathName: 'Scooter',
     kind: vespa,
     count: 1,
@@ -149,11 +149,11 @@ it('Should support dynamic references via refPath', async () => {
   });
 
   // I should now have two "inventory" items, with different embedded reference documents.
-  const items = await Inventory.find({}).populate('kind').exec();
-  expect((items[0].kind as BeverageClass).isDecaf).toEqual(true);
+  const items = await InventoryModel.find({}).populate('kind').exec();
+  expect((items[0].kind as Beverage).isDecaf).toEqual(true);
 
   // wrong type to make TypeScript happy
-  expect((items[1].kind as BeverageClass).isDecaf).toEqual(undefined);
+  expect((items[1].kind as Beverage).isDecaf).toEqual(undefined);
 });
 
 it('it should alias correctly', () => {
