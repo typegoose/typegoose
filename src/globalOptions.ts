@@ -1,5 +1,6 @@
 import { Severity } from './internal/constants';
 import { globalOptions } from './internal/data';
+import { assertion } from './internal/utils';
 import { logger } from './logSettings';
 import type { IGlobalOptions } from './types';
 
@@ -7,9 +8,7 @@ import type { IGlobalOptions } from './types';
  * Set Typegoose's global Options
  */
 export function setGlobalOptions(options: IGlobalOptions) {
-  if (typeof options !== 'object') {
-    throw new TypeError('"options" argument needs to be an object!');
-  }
+  assertion(typeof options === 'object', new TypeError('"options" argument needs to be an object!'));
 
   logger.info('"setGlobalOptions" got called with', options);
 
@@ -54,9 +53,7 @@ export function parseENV(): void {
  * @param value The value to check for
  */
 function mapValueToSeverity(value: string | number): Severity {
-  if (!(value in Severity)) {
-    throw new Error(`"value" is not in range of "Severity"! (got: ${value})`);
-  }
+  assertion(value in Severity, new Error(`"value" is not in range of "Severity"! (got: ${value})`));
   if (typeof value === 'number') {
     return value;
   }

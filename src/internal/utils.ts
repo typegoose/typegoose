@@ -5,6 +5,7 @@ import { format } from 'util';
 import { logger } from '../logSettings';
 import type {
   AnyParamConstructor,
+  Func,
   IModelOptions,
   IObjectWithTypegooseFunction,
   IObjectWithTypegooseName,
@@ -249,12 +250,8 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
  * @internal
  */
 export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: new () => {}): T {
-  if (typeof key !== 'string') {
-    throw new TypeError(`"${key}"(key) is not a string! (assignMetadata)`);
-  }
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertion(typeof key === 'string', new TypeError(`"${key}"(key) is not a string! (assignMetadata)`));
+  assertionIsClass(cl);
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
   return mergeWith({},
@@ -552,4 +549,24 @@ export function createArrayFromDimensions(rawOptions: any, extra: any, name: str
   }
 
   return retArray as any[];
+}
+
+/**
+ * Assert an condition, if "false" throw error
+ * Note: it is not named "assert" to differentiate between node and jest types
+ * @param cond The Condition to throw
+ * @param error An Custom Error to throw
+ */
+export function assertion(cond: any, error?: Error): asserts cond {
+  if (!cond) {
+    throw error ?? new Error('Assert failed - no custom error');
+  }
+}
+
+/**
+ * Assert if val is an function (constructor for classes)
+ * @param val Value to test
+ */
+export function assertionIsClass(val: any): asserts val is Func {
+  assertion(typeof val === 'function', new NoValidClass(val));
 }

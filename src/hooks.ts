@@ -3,7 +3,7 @@
 import type { Query } from 'mongoose';
 
 import { DecoratorKeys } from './internal/constants';
-import { getName } from './internal/utils';
+import { assertion, getName } from './internal/utils';
 import { logger } from './logSettings';
 import type { DocumentType, EmptyVoidFn, IHooksArray } from './types';
 
@@ -92,9 +92,7 @@ const hooks: Hooks = {
 function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]) {
   // Convert Method to array if only a string is provided
   const methods: QDM[] = Array.isArray(args[0]) ? args[0] : [args[0]];
-  if (typeof args[1] !== 'function') {
-    throw new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s function is not a function!`);
-  }
+  assertion(typeof args[1] === 'function', new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s function is not a function!`));
   const func: EmptyVoidFn = args[1];
 
   logger.info('Adding hooks for "[%s]" to "%s" as type "%s"', methods.join(','), getName(target), hookType);

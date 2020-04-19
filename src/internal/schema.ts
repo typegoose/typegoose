@@ -14,8 +14,7 @@ import type {
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
-import { NoValidClass } from './errors';
-import { assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
+import { assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
 /**
  * Private schema builder out of class props
@@ -31,9 +30,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   sch?: mongoose.Schema,
   opt?: mongoose.SchemaOptions
 ) {
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertionIsClass(cl);
 
   assignGlobalModelOptions(cl); // to ensure global options are applied to the current class
 

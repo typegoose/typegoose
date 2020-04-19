@@ -93,12 +93,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   utils.initProperty(name, key, whatis);
 
   if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
-    if (typeof rawOptions?.set !== 'function') {
-      throw new TypeError(`"${name}.${key}" does not have a set function!`);
-    }
-    if (typeof rawOptions?.get !== 'function') {
-      throw new TypeError(`"${name}.${key}" does not have a get function!`);
-    }
+    utils.assertion(typeof rawOptions?.set === 'function', new TypeError(`"${name}.${key}" does not have a set function!`));
+    utils.assertion(typeof rawOptions?.get === 'function', new TypeError(`"${name}.${key}" does not have a get function!`));
 
     /*
      * Note:
@@ -148,9 +144,9 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   const refPath = rawOptions?.refPath;
   if (refPath) {
-    if (typeof refPath !== 'string') {
-      throw new TypeError(format('"refPath" for "%s, %s" should be of type String!', utils.getName(target), key));
-    }
+    utils.assertion(typeof refPath === 'string',
+      new TypeError(format('"refPath" for "%s, %s" should be of type String!', utils.getName(target), key)));
+
     delete rawOptions.refPath;
 
     switch (whatis) {
@@ -347,9 +343,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
     const Type = Reflect.getMetadata(DecoratorKeys.Type, target, key);
-    if (utils.isNullOrUndefined(Type)) {
-      throw new NoMetadataError(key);
-    }
+    utils.assertion(!utils.isNullOrUndefined(Type), new NoMetadataError(key));
 
     // soft errors
     {

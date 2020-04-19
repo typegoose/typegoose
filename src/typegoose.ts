@@ -16,9 +16,8 @@ if (semver.lt(process.version.slice(1), '10.15.0')) {
 import { parseENV, setGlobalOptions } from './globalOptions';
 import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
-import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
-import { getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import { assertion, assertionIsClass, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
 import type {
   AnyParamConstructor,
@@ -60,9 +59,7 @@ parseENV(); // call this before anything to ensure they are applied
  * ```
  */
 export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertionIsClass(cl);
   options = typeof options === 'object' ? options : {};
 
   const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
@@ -91,9 +88,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
  * @param key ModelName key
  */
 export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
-  if (typeof key !== 'string') {
-    throw new TypeError(format('Expected "key" to be a string, got "%s"', key));
-  }
+  assertion(typeof key === 'string', TypeError(format('Expected "key" to be a string, got "%s"', key)));
 
   return models.get(key) as any;
 }
@@ -104,9 +99,7 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
  * @returns Returns the Build Schema
  */
 export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?: mongoose.SchemaOptions) {
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertionIsClass(cl);
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
@@ -141,12 +134,8 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
  * ```
  */
 export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: mongoose.Model<any>, cl: U) {
-  if (!(model.prototype instanceof mongoose.Model)) {
-    throw new TypeError(`"${model}" is not a valid Model!`);
-  }
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertion(model.prototype instanceof mongoose.Model, new TypeError(`"${model}" is not a valid Model!`));
+  assertionIsClass(cl);
 
   const name = getName(cl);
 
@@ -172,12 +161,8 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
  * @param key
  */
 export function deleteModel(name: string) {
-  if (typeof name !== 'string') {
-    throw new TypeError('name is not an string! (deleteModel)');
-  }
-  if (!models.has(name)) {
-    throw new Error(`Model "${name}" could not be found`);
-  }
+  assertion(typeof name === 'string', new TypeError('name is not an string! (deleteModel)'));
+  assertion(models.has(name), new Error(`Model "${name}" could not be found`));
 
   logger.debug('Deleting Model "%s"', name);
 
@@ -192,9 +177,7 @@ export function deleteModel(name: string) {
  * @param cl The Class
  */
 export function deleteModelWithClass<T, U extends AnyParamConstructor<T>>(cl: U) {
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertionIsClass(cl);
 
   return deleteModel(getName(cl));
 }
@@ -218,12 +201,8 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
   cl: U,
   id?: string
 ) {
-  if (!(from.prototype instanceof mongoose.Model)) {
-    throw new TypeError(`"${from}" is not a valid Model!`);
-  }
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertion(from.prototype instanceof mongoose.Model, new TypeError(`"${from}" is not a valid Model!`));
+  assertionIsClass(cl);
 
   const name = getName(cl);
   if (models.has(name)) {
