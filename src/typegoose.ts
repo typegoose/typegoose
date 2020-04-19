@@ -9,6 +9,7 @@ if (semver.lt(mongoose.version, '5.9.9')) {
   throw new Error('Please use mongoose 5.9.9 or higher');
 }
 
+/* istanbul ignore next */
 if (semver.lt(process.version.slice(1), '10.15.0')) {
   logger.warn('You are using a NodeJS Version below 10.15.0, Please Upgrade!');
 }

@@ -293,6 +293,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   // so that mongoose can store it as nested document
   if (utils.isObject(Type) && !isInSchemas) {
     utils.warnMixed(target, key);
+    logger.warn('if someone can see this message, please open an new issue at https://github.com/typegoose/typegoose/issues with reproduction code for tests');
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       ...rawOptions,

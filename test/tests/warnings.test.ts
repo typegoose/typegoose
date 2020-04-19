@@ -50,15 +50,4 @@ describe('prop.ts', () => {
       expect((logger.warn as any).mock.calls.length).toEqual(1);
     });
   });
-
-  describe('prop function', () => {
-    it('warnMixed if not in schemas and not primitve', () => {
-      class TestPropFunctionWarnMixed {
-        @prop()
-        public test: any;
-      }
-      buildSchema(TestPropFunctionWarnMixed);
-      expect((logger.warn as any).mock.calls.length).toEqual(1);
-    });
-  });
 });
