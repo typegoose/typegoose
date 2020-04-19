@@ -23,7 +23,7 @@ import {
 import { DecoratorKeys } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import { assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
-import { logger } from "../../src/logSettings";
+import { logger } from '../../src/logSettings';
 
 // disable "no-unused" for this file, because it tests for errors
 // tslint:disable:no-unused

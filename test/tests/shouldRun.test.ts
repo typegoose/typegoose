@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose';
 import { DecoratorKeys } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
 import { assignMetadata, createArrayFromDimensions, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
+import { logger } from '../../src/logSettings';
 import {
   addModelToTypegoose,
   arrayProp,
@@ -16,7 +17,6 @@ import {
   prop
 } from '../../src/typegoose';
 import type { IModelOptions } from '../../src/types';
-import { logger } from "../../src/logSettings";
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed

@@ -6,22 +6,37 @@ redirect_from:
 
 `@arrayProp(options: object)` is almost the same as `@prop`, here are just the differences listed
 
-Please note that arrayProp (by mongoose default) initializes the array with `[]` instead of an `null` / `undefined`
+Please note that mongoose initializes arrayProp arrays with `[]` instead of `null` / `undefined`.
 
 ## Options
 
-*All options from [`@prop`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#options) are valid, except the ones [listed on the bottom](#options-from-prop-that-do-not-work-on-arrayprop)*
+*All options from [`@prop`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#options) are valid, except the ones [listed at the bottom](#options-from-prop-that-do-not-work-on-arrayprop)*.
 
 ### items
 
 Accepts Type: `any`
 
-This will tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or other primitive types are given) or this is an array which consists of subdocuments.
+Tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or another primitive type is given) or of subdocuments, if a class is given.
 
 ```ts
+// Array of Primitives
 class Something {
   @arrayProp({ items: String })
   public languages?: string[];
+}
+
+// Array of subdocuments
+class Link {
+  @prop()
+  url: string;
+
+  @prop()
+  text: string;
+}
+
+class Something {
+  @arrayProp({ items: Link })
+  public links?: Link[];
 }
 ```
 
