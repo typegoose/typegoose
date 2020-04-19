@@ -35,6 +35,7 @@ redirect_from:
 - All non-essentail types get exported as `types`
 - `utils`'s `getName` function now gets exported
 - Remove Deprecated value `overwrite` for `VirtualOptions`
+- Remove instance properties from Model type (remove `& T` from `ModelType`)
 - [IC] Move VirtualPopulate cache to Reflection
 - [IC] Move Plugins cache to Reflection
 - [IC] Move Hooks cache to Reflection
