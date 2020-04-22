@@ -62,6 +62,8 @@ docs:
     children:
       - title: 'Is Document'
         url: /docs/functions/typeguards/isDocument
+      - title: 'Is Ref-Type'
+        url: /docs/functions/typeguards/isRefType
 
   - title: Types
     children:

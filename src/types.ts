@@ -384,6 +384,7 @@ export interface IndexOptions<T> {
   partialFilterExpression?: any;
   collation?: object;
   default_language?: string;
+  language_override?: string;
 
   lowercase?: boolean; // whether to always call .toLowerCase() on the value
   uppercase?: boolean; // whether to always call .toUpperCase() on the value
