@@ -26,9 +26,6 @@ redirect_from:
 - Update Dependencies
   - `mongoose` to 5.9.10
   - `@types/mongoose` to 5.7.12
-  - `tslib` to 1.11.1
-  - `loglevel` to 1.6.8
-  - `semver` to 7.3.2
 - Minimal NodeJS version is now 10.15
 - Minimal Typescript version is now 3.8.3
 - Typegoose class got completly removed
