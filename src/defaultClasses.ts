@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose';
 
-import { modelOptions } from './optionsProp';
+import { modelOptions } from './modelOptions';
 import type { DocumentType, RefType } from './types';
 
 @modelOptions({ schemaOptions: { timestamps: true } })

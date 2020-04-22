@@ -10,6 +10,7 @@ import type {
   IIndexArray,
   IModelOptions,
   IPluginsArray,
+  QueryMethodMap,
   VirtualPopulateMap
 } from '../types';
 import { DecoratorKeys } from './constants';
@@ -91,7 +92,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
     }
   }
 
-  /** Get Metadata for indices */
+  /** Get Metadata for Virtual Populates */
   const virtuals: VirtualPopulateMap = Reflect.getMetadata(DecoratorKeys.VirtualPopulate, cl);
   /** Simplify the usage */
   if (virtuals instanceof Map) {
@@ -107,6 +108,15 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
     for (const index of indices) {
       logger.debug('Applying Index:', index);
       sch.index(index.fields, index.options);
+    }
+  }
+
+  /** Get Metadata for Query Methods */
+  const queryMethods: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, cl);
+  if (queryMethods instanceof Map) {
+    for (const [funcName, func] of queryMethods) {
+      logger.debug('Applying Query Method:', funcName, func);
+      sch.query[funcName] = func;
     }
   }
 

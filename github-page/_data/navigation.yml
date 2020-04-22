@@ -36,6 +36,8 @@ docs:
         url: /docs/decorators/indexes
       - title: 'Plugins'
         url: /docs/decorators/plugins
+      - title: 'Query Methods'
+        url: /docs/decorators/queryMethod
 
   - title: Functions
     children:

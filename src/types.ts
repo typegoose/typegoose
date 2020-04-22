@@ -420,7 +420,23 @@ export interface IPluginsArray<T> {
   options: T;
 }
 
+/**
+ * Used for the Reflection of Virtual Populates
+ * @example
+ * ```ts
+ * const virtuals: VirtualPopulateMap = new Map(Reflect.getMetadata(DecoratorKeys.VirtualPopulate, target.constructor) ?? []);
+ * ```
+ */
 export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
+
+/**
+ * Used for the Reflection of Query Methods
+ * @example
+ * ```ts
+ * const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target.constructor) ?? []);
+ * ```
+ */
+export type QueryMethodMap = Map<string, Func>;
 
 /**
  * Used for the Reflection of Hooks

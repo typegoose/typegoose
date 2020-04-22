@@ -3,8 +3,9 @@ import * as mongoose from 'mongoose';
 
 import { DecoratorKeys } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
-import { assignMetadata, createArrayFromDimensions, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
+import { assertion, assignMetadata, createArrayFromDimensions, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
+import { queryMethod } from '../../src/queryMethod';
 import {
   addModelToTypegoose,
   arrayProp,
@@ -12,11 +13,12 @@ import {
   DocumentType,
   getModelForClass,
   getModelWithString,
+  isDocumentArray,
   mapProp,
   modelOptions,
   prop
 } from '../../src/typegoose';
-import type { IModelOptions } from '../../src/types';
+import type { IModelOptions, QueryMethodMap, ReturnModelType } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -400,4 +402,25 @@ it('should add "null" to the enum (addNullToEnum)', async () => {
   const path: any = AddNullToEnumModel.schema.path('value');
   expect(path).toBeInstanceOf(mongoose.Schema.Types.Number);
   expect(path.options.enum).toEqual([1, 2, 3, null]);
+});
+
+it('should add query Methods', async () => {
+  function findByName(this: ReturnModelType<typeof QueryMethods>, name: string) {
+    return this.find({ name }); // important to not do an "await" and ".exec"
+  }
+  @queryMethod(findByName)
+  class QueryMethods {
+    @prop({ required: true })
+    public name: string;
+  }
+
+  const QueryMethodsModel = getModelForClass(QueryMethods);
+  const doc = await QueryMethodsModel.create({ name: 'hello' });
+
+  const found: DocumentType<QueryMethods>[] | null = await (QueryMethodsModel.find() as any).findByName('hello').exec();
+  assertion(isDocumentArray(found), new Error('Found is not an document array'));
+  expect(found[0].toObject()).toEqual(doc.toObject());
+
+  const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethods);
+  expect(Array.from(metadata)).toEqual([['findByName', findByName]]);
 });

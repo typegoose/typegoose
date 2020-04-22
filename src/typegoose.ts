@@ -36,7 +36,7 @@ export * from './hooks';
 export * from './plugin';
 export * from './index';
 export * from './typeguards';
-export * from './optionsProp';
+export * from './modelOptions';
 export * as defaultClasses from './defaultClasses';
 export * as errors from './internal/errors';
 export * as types from './types';
