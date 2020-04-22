@@ -294,6 +294,34 @@ class Enumed {
 }
 ```
 
+#### addNullToEnum
+
+Accepts Type: `boolean`
+
+Add "null" to the enum array
+
+Note: dosnt work if the value is `required`
+
+Example:
+
+```ts
+enum SomeNumberEnum {
+  one = 1,
+  two = 2
+}
+class AddNullToEnum {
+  @prop({ enum: SomeNumberEnum, addNullToEnum: true })
+  public value?: SomeNumberEnum;
+}
+
+const AddNullToEnumModel = getModelForClass(AddNullToEnum);
+
+AddNullToEnumModel.schema.path('value').options.enum === [1, 2, null]; // true
+
+// this allows to do the following without an validation error
+new AddNullToEnumModel({ value: null } as AddNullToEnum);
+```
+
 <!--Below are just the Specific Options-->
 
 ### String Transform options

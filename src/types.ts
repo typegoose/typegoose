@@ -59,6 +59,8 @@ export interface BasePropOptions {
   required?: RequiredType;
   /** Only accept Values from the Enum(|Array) */
   enum?: string[] | object;
+  /** Add "null" to the enum array */
+  addNullToEnum?: boolean;
   /** Give the Property a default Value */
   default?: any;
   /** Give an Validator RegExp or Function */

@@ -218,6 +218,12 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     }
   }
 
+  if (!utils.isNullOrUndefined(rawOptions.addNullToEnum)) {
+    rawOptions.enum = Array.isArray(rawOptions.enum) ? rawOptions.enum : [];
+    rawOptions.enum.push(null);
+    delete rawOptions.addNullToEnum;
+  }
+
   const selectOption = rawOptions?.select;
   if (typeof selectOption === 'boolean') {
     schemas.get(name)[key] = {

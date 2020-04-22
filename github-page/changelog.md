@@ -34,6 +34,7 @@ redirect_from:
 - All Errors now get exported as `errors`
 - All non-essentail types get exported as `types`
 - `utils`'s `getName` function now gets exported
+- Add PropOption `addNullToEnum`
 - Remove Deprecated value `overwrite` for `VirtualOptions`
 - Remove instance properties from Model type (remove `& T` from `ModelType`)
 - [IC] Replace mocha & chai with jest

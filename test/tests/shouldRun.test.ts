@@ -381,3 +381,23 @@ it('should not add another array if "extra" is already an array (createArrayFrom
   const should = [{ someThing: true }];
   expect(createArrayFromDimensions({}, [{ someThing: true }], '', '')).toEqual(should);
 });
+
+it('should add "null" to the enum (addNullToEnum)', async () => {
+  enum SomeNumberEnum {
+    one = 1,
+    two = 2,
+    three = 3
+  }
+  class AddNullToEnum {
+    @prop({ enum: SomeNumberEnum, addNullToEnum: true })
+    public value?: SomeNumberEnum;
+  }
+  const AddNullToEnumModel = getModelForClass(AddNullToEnum);
+
+  const doc = new AddNullToEnumModel({ value: null } as AddNullToEnum);
+  await doc.validate();
+
+  const path: any = AddNullToEnumModel.schema.path('value');
+  expect(path).toBeInstanceOf(mongoose.Schema.Types.Number);
+  expect(path.options.enum).toEqual([1, 2, 3, null]);
+});
