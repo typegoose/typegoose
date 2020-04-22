@@ -5,6 +5,7 @@ classes: wide
 toc: true
 redirect_from:
   - /CHANGELOG
+  - /Changelog
 ---
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
@@ -21,8 +22,14 @@ redirect_from:
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
+- Update Dependencies
+  - `semver` to 7.3.2
+  - `tslib` to 1.11.1
+  - `loglevel` to 1.6.8
 - Remove `useNewEnum` type from `types`
 - Add warning when value is an primitive and will result in an `Mixed` (fixes {% include gitissue repo="typegoose" num=152 %})
+- Add option `language_override` to `IndexOptions`
+- Fix spelling errors in documentation
 - [IC] Replace deprecated arrayProp options with proper ones in all tests & test-models
 
 ## 6.4.0
