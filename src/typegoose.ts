@@ -5,8 +5,8 @@ import * as semver from 'semver';
 import { format } from 'util';
 
 /* istanbul ignore next */
-if (semver.lt(mongoose.version, '5.9.9')) {
-  throw new Error('Please use mongoose 5.9.9 or higher');
+if (semver.lt(mongoose.version, '5.9.10')) {
+  throw new Error('Please use mongoose 5.9.10 or higher');
 }
 
 /* istanbul ignore next */
