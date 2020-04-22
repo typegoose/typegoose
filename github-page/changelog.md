@@ -20,8 +20,6 @@ redirect_from:
 
 ## 6.5.0
 
-<sub>This Version is not yet released, only changes made until now are listed here</sub>
-
 - Update Dependencies
   - `semver` to 7.3.2
   - `tslib` to 1.11.1
