@@ -55,6 +55,8 @@ docs:
         url: /docs/functions/deleteModel
       - title: 'Set Global Options'
         url: /docs/functions/setGlobalOptions
+      - title: 'Get Model With String'
+        url: /docs/functions/getModelWithString
 
   - title: TypeGuards
     children:
