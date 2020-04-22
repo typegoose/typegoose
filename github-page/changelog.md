@@ -11,7 +11,7 @@ redirect_from:
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
 <!-- 
-## 6.5.x
+## 7.1.x
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
@@ -20,8 +20,6 @@ redirect_from:
 *`[IC]` means `Internal Change`*
 
 ## 7.0.0
-
-<sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Update Dependencies
   - `mongoose` to 5.9.10
