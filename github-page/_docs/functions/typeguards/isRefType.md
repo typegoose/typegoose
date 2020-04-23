@@ -1,7 +1,7 @@
 ---
-title: "Is RefType"
+title: "Is Ref-Type"
 redirect_from:
-  - /docs/functions/typeguards/isdocument
+  - /docs/functions/typeguards/isreftype
 ---
 
 ## isRefType

@@ -18,4 +18,4 @@ export class Select {
   public test3!: string;
 }
 
-export const model = getModelForClass(Select);
+export const SelectModel = getModelForClass(Select);

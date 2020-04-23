@@ -1,11 +1,11 @@
 {
   "name": "@typegoose/typegoose",
-  "version": "6.4.0",
+  "version": "7.0.0",
   "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
   "types": "lib/typegoose.d.ts",
   "engines": {
-    "node": ">=8.10.0"
+    "node": ">=10.15.0"
   },
   "files": [
     "lib/**/*.js",
@@ -15,13 +15,14 @@
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "npm run lint && tsc -p tsconfig.build.json",
     "buildtests": "npm run lint && tsc -p tsconfig.json",
-    "watch": "tsc -w -p tsconfig.json",
     "lint": "tslint --project tsconfig.json",
-    "test": "npm run buildtests && npm run mocha",
-    "mocha": "mocha \"./test/index.test.ts\"",
-    "mocha-ci": "nyc mocha \"./test/index.test.ts\"",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "clean": "rimraf lib .tsbuildinfo .nyc_output coverage doc build",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:coverage": "jest --collectCoverage",
+    "test:watchCoverage": "jest --collectCoverage --watchAll",
+    "watch": "tsc -w -p tsconfig.json",
+    "coverage": "cat ./coverage/lcov.info | coveralls",
+    "clean": "rimraf lib .tsbuildinfo coverage doc build",
     "doc": "typedoc --out ./doc ./src --mode modules --exclude \"**/internal/*\"",
     "doc:all": "typedoc --out ./doc ./src --mode modules",
     "prepare": "npm run build",
@@ -38,42 +39,37 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "^5.9.2",
-    "@types/mongoose": "^5.7.1"
+    "mongoose": "^5.9.10",
+    "@types/mongoose": "^5.7.12"
   },
   "devDependencies": {
-    "@istanbuljs/nyc-config-typescript": "^1.0.1",
-    "@types/chai": "^4.2.9",
-    "@types/chai-as-promised": "^7.1.2",
-    "@types/lodash": "^4.14.149",
-    "@types/mocha": "^7.0.1",
-    "@types/mongoose": "^5.7.1",
-    "@types/node": "^8.10.53",
+    "@types/jest": "^25.2.1",
+    "@types/lodash": "^4.14.150",
+    "@types/mongoose": "^5.7.12",
+    "@types/node": "^10.17.16",
     "@types/semver": "^7.1.0",
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
-    "coveralls": "^3.0.9",
-    "mocha": "^7.0.1",
-    "mongodb-memory-server": "^6.2.4",
-    "mongoose": "^5.9.2",
+    "coveralls": "^3.0.13",
+    "jest": "^25.4.0",
+    "mongodb-memory-server": "^6.5.2",
+    "mongoose": "^5.9.10",
     "mongoose-findorcreate": "^3.0.0",
-    "nyc": "^15.0.0",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.5",
     "rimraf": "3.0.2",
-    "source-map-support": "^0.5.16",
-    "ts-node": "^8.6.2",
-    "tslint": "^6.0.0",
+    "source-map-support": "^0.5.18",
+    "ts-jest": "^25.4.0",
+    "ts-node": "^8.9.0",
+    "tslint": "^6.1.1",
     "tslint-consistent-codestyle": "^1.16.0",
     "tslint-eslint-rules": "*5.4.0",
-    "typedoc": "0.16.10",
-    "typescript": "3.7.5"
+    "typedoc": "0.17.4",
+    "typescript": "3.8.3"
   },
   "dependencies": {
     "lodash": "^4.17.15",
-    "loglevel": "^1.6.7",
+    "loglevel": "^1.6.8",
     "reflect-metadata": "^0.1.13",
-    "semver": "^7.1.3",
-    "tslib": "^1.11.0"
+    "semver": "^7.3.2",
+    "tslib": "^1.11.1"
   },
   "publishConfig": {
     "access": "public"
@@ -91,5 +87,5 @@
   "bugs": {
     "url": "https://github.com/typegoose/typegoose/issues"
   },
-  "homepage": "https://github.com/typegoose/typegoose"
+  "homepage": "https://typegoose.github.io/typegoose/"
 }

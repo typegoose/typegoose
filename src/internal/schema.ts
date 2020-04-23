@@ -2,11 +2,20 @@ import * as mongoose from 'mongoose';
 
 import { logger } from '../logSettings';
 import { _buildPropMetadata } from '../prop';
-import { AnyParamConstructor, DecoratedPropertyMetadataMap, EmptyVoidFn, IIndexArray, IModelOptions } from '../types';
+import type {
+  AnyParamConstructor,
+  DecoratedPropertyMetadataMap,
+  EmptyVoidFn,
+  IHooksArray,
+  IIndexArray,
+  IModelOptions,
+  IPluginsArray,
+  QueryMethodMap,
+  VirtualPopulateMap
+} from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, hooks, plugins, schemas, virtuals } from './data';
-import { NoValidClass } from './errors';
-import { assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
+import { constructors, schemas } from './data';
+import { assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
 /**
  * Private schema builder out of class props
@@ -22,9 +31,7 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   sch?: mongoose.Schema,
   opt?: mongoose.SchemaOptions
 ) {
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertionIsClass(cl);
 
   assignGlobalModelOptions(cl); // to ensure global options are applied to the current class
 
@@ -61,23 +68,35 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   sch.loadClass(cl);
 
-  if (hooks.has(name)) {
-    const hook = hooks.get(name);
-    hook.pre.forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
+  // Hooks
+  {
+    /** Get Metadata for PreHooks */
+    const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
+    if (Array.isArray(preHooks)) {
+      preHooks.forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
+    }
 
-    hook.post.forEach((obj) => sch.post(obj.method, obj.func));
+    /** Get Metadata for PreHooks */
+    const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
+    if (Array.isArray(postHooks)) {
+      postHooks.forEach((obj) => sch.post(obj.method, obj.func));
+    }
   }
 
-  if (plugins.has(name)) {
-    for (const plugin of plugins.get(name)) {
+  /** Get Metadata for indices */
+  const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
+  if (Array.isArray(plugins)) {
+    for (const plugin of plugins) {
       logger.debug('Applying Plugin:', plugin);
       sch.plugin(plugin.mongoosePlugin, plugin.options);
     }
   }
 
+  /** Get Metadata for Virtual Populates */
+  const virtuals: VirtualPopulateMap = Reflect.getMetadata(DecoratorKeys.VirtualPopulate, cl);
   /** Simplify the usage */
-  if (virtuals.has(name)) {
-    for (const [key, options] of virtuals.get(name)) {
+  if (virtuals instanceof Map) {
+    for (const [key, options] of virtuals) {
       logger.debug('Applying Virtual Populates:', key, options);
       sch.virtual(key, options);
     }
@@ -89,6 +108,15 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
     for (const index of indices) {
       logger.debug('Applying Index:', index);
       sch.index(index.fields, index.options);
+    }
+  }
+
+  /** Get Metadata for Query Methods */
+  const queryMethods: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, cl);
+  if (queryMethods instanceof Map) {
+    for (const [funcName, func] of queryMethods) {
+      logger.debug('Applying Query Method:', funcName, func);
+      sch.query[funcName] = func;
     }
   }
 

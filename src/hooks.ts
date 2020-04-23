@@ -1,11 +1,11 @@
 // disable "no-unused" for this file, to keep hooks consistent
 // tslint:disable:no-unused
-import { Query } from 'mongoose';
+import type { Query } from 'mongoose';
 
-import { hooks as hooksData, IHooks } from './internal/data';
-import { getName } from './internal/utils';
-import { DocumentType } from './typegoose';
-import { EmptyVoidFn } from './types';
+import { DecoratorKeys } from './internal/constants';
+import { assertion, getName } from './internal/utils';
+import { logger } from './logSettings';
+import type { DocumentType, EmptyVoidFn, IHooksArray } from './types';
 
 type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 
@@ -76,41 +76,38 @@ interface Hooks {
 // Note: Documentation for the hooks can't be added without adding it to *every* overload
 const hooks: Hooks = {
   pre(...args) {
-    return (target: any) => addToHooks(getName(target), 'pre', args);
+    return (target: any) => addToHooks(target, 'pre', args);
   },
   post(...args) {
-    return (target: any) => addToHooks(getName(target), 'post', args);
+    return (target: any) => addToHooks(target, 'post', args);
   }
 };
 
 /**
  * Add a hook to the hooks Array
- * @param name With wich name should they be registered
+ * @param target Target Class
  * @param hookType What type is it
  * @param args All Arguments, that should be passed-throught
  */
-function addToHooks(name: string, hookType: 'pre' | 'post', args: any[]) {
-  if (!hooksData.has(name)) {
-    hooksData.set(name, {
-      post: [],
-      pre: []
-    } as IHooks);
-  }
-
+function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]) {
   // Convert Method to array if only a string is provided
   const methods: QDM[] = Array.isArray(args[0]) ? args[0] : [args[0]];
-  if (typeof args[1] !== 'function') {
-    throw new TypeError(`"${name}.${hookType}.${methods.join(' ')}"'s function is not a function!`);
-  }
+  assertion(typeof args[1] === 'function', new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s function is not a function!`));
   const func: EmptyVoidFn = args[1];
+
+  logger.info('Adding hooks for "[%s]" to "%s" as type "%s"', methods.join(','), getName(target), hookType);
 
   for (const method of methods) {
     switch (hookType) {
       case 'post':
-        hooksData.get(name).post.push({ method, func });
+        const postHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPost, target) ?? []);
+        postHooks.push({ func, method });
+        Reflect.defineMetadata(DecoratorKeys.HooksPost, postHooks, target);
         break;
       case 'pre':
-        hooksData.get(name).pre.push({ method, func });
+        const preHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPre, target) ?? []);
+        preHooks.push({ func, method });
+        Reflect.defineMetadata(DecoratorKeys.HooksPre, preHooks, target);
         break;
     }
   }

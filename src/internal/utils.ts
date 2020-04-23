@@ -3,19 +3,18 @@ import * as mongoose from 'mongoose';
 import { format } from 'util';
 
 import { logger } from '../logSettings';
-import {
+import type {
   AnyParamConstructor,
+  Func,
   IModelOptions,
   IObjectWithTypegooseFunction,
   IObjectWithTypegooseName,
   IPrototype,
   PropOptionsWithNumberValidate,
   PropOptionsWithStringValidate,
-  Severity,
-  VirtualOptions,
-  WhatIsIt
+  VirtualOptions
 } from '../types';
-import { DecoratorKeys } from './constants';
+import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
 import { NoValidClass } from './errors';
 
@@ -251,12 +250,8 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
  * @internal
  */
 export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: new () => {}): T {
-  if (typeof key !== 'string') {
-    throw new TypeError(`"${key}"(key) is not a string! (assignMetadata)`);
-  }
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertion(typeof key === 'string', new TypeError(`"${key}"(key) is not a string! (assignMetadata)`));
+  assertionIsClass(cl);
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
   return mergeWith({},
@@ -384,6 +379,8 @@ export function mapArrayOptions(
       returnObject[key] = value;
     }
   }
+
+  returnObject.type = createArrayFromDimensions(rawOptions, returnObject.type, getName(target), pkey);
 
   logger.debug('(Array) Final mapped Options for Type "%s"', getName(loggerType), returnObject);
 
@@ -527,4 +524,49 @@ export function get_idStatus(Type: any, rawOptions: any): boolean {
   }
 
   return true;
+}
+
+/**
+ * Loop over "dimensions" and create an array from that
+ * @param rawOptions baseProp's rawOptions
+ * @param extra What is actually in the deepest array
+ * @param name name of the target for better error logging
+ * @param key key of target-key for better error logging
+ */
+export function createArrayFromDimensions(rawOptions: any, extra: any, name: string, key: string) {
+  // dimensions start at 1 (not 0)
+  const dim = typeof rawOptions.dim === 'number' ? rawOptions.dim : 1;
+  if (dim < 1) {
+    throw new RangeError(format('"dim" needs to be higher than 0 (%s.%s)', name, key));
+  }
+  delete rawOptions.dim; // delete this property to not actually put it as an option
+  logger.info('createArrayFromDimensions called with %d dimensions', dim);
+
+  let retArray: any[] = Array.isArray(extra) ? extra : [extra];
+  // index starts at 1 because "retArray" is already once wrapped in an array
+  for (let index = 1; index < dim; index++) {
+    retArray = [retArray];
+  }
+
+  return retArray as any[];
+}
+
+/**
+ * Assert an condition, if "false" throw error
+ * Note: it is not named "assert" to differentiate between node and jest types
+ * @param cond The Condition to throw
+ * @param error An Custom Error to throw
+ */
+export function assertion(cond: any, error?: Error): asserts cond {
+  if (!cond) {
+    throw error ?? new Error('Assert failed - no custom error');
+  }
+}
+
+/**
+ * Assert if val is an function (constructor for classes)
+ * @param val Value to test
+ */
+export function assertionIsClass(val: any): asserts val is Func {
+  assertion(typeof val === 'function', new NoValidClass(val));
 }

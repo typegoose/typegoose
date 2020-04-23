@@ -36,6 +36,8 @@ docs:
         url: /docs/decorators/indexes
       - title: 'Plugins'
         url: /docs/decorators/plugins
+      - title: 'Query Methods'
+        url: /docs/decorators/queryMethod
 
   - title: Functions
     children:
@@ -55,11 +57,15 @@ docs:
         url: /docs/functions/deleteModel
       - title: 'Set Global Options'
         url: /docs/functions/setGlobalOptions
+      - title: 'Get Model With String'
+        url: /docs/functions/getModelWithString
 
   - title: TypeGuards
     children:
       - title: 'Is Document'
         url: /docs/functions/typeguards/isDocument
+      - title: 'Is Ref-Type'
+        url: /docs/functions/typeguards/isRefType
 
   - title: Types
     children:

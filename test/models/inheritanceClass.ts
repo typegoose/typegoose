@@ -1,5 +1,4 @@
-import { arrayProp, prop } from '../../src/prop';
-import { getModelForClass, modelOptions } from '../../src/typegoose';
+import { arrayProp, getModelForClass, modelOptions, prop } from '../../src/typegoose';
 
 @modelOptions({
   schemaOptions: {
@@ -38,4 +37,4 @@ export class Skyscraper extends OfficeBuilding {
   public garagesInArea: Garage[];
 }
 
-export const model = getModelForClass(Skyscraper);
+export const SkyscraperModel = getModelForClass(Skyscraper);

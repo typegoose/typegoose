@@ -1,6 +1,4 @@
-import * as mongoose from 'mongoose';
-
-import { getModelForClass, pre, prop } from '../../src/typegoose';
+import { getModelForClass, mongoose, pre, prop } from '../../src/typegoose';
 
 @pre<Car>('save', function (next) {
   if (this.model === 'Trabant') {
@@ -25,4 +23,4 @@ export class Car {
   public someId: mongoose.Types.ObjectId;
 }
 
-export const model = getModelForClass(Car);
+export const CarModel = getModelForClass(Car);

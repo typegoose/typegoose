@@ -1,5 +1,4 @@
-import { prop } from '../../src/prop';
-import { getModelForClass } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose';
 
 export class GetClassTestSub {
   @prop()

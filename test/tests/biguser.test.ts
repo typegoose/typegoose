@@ -1,148 +1,162 @@
-import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
 import { Genders } from '../enums/genders';
 import { Role } from '../enums/role';
-import { model as Car } from '../models/car';
-import { model as User } from '../models/user';
+import { CarModel } from '../models/car';
+import { UserModel } from '../models/user';
 
-/**
- * Function to pass into describe
- * ->Important: you need to always bind this
- */
-export function suite() {
-  it('should create a User with connections', async () => {
-    const [tesla, trabant, zastava] = await Car.create([{
-      model: 'Tesla',
-      version: 'ModelS',
-      price: mongoose.Types.Decimal128.fromString('50123.25')
-    }, {
-      model: 'Trabant',
-      price: mongoose.Types.Decimal128.fromString('28189.25')
-    }, {
-      model: 'Zastava',
-      price: mongoose.Types.Decimal128.fromString('1234.25')
-    }]);
+it('should create a User with connections', async () => {
+  const [tesla, trabant, zastava] = await CarModel.create([{
+    model: 'Tesla',
+    version: 'ModelS',
+    price: mongoose.Types.Decimal128.fromString('50123.25')
+  }, {
+    model: 'Trabant',
+    price: mongoose.Types.Decimal128.fromString('28189.25')
+  }, {
+    model: 'Zastava',
+    price: mongoose.Types.Decimal128.fromString('1234.25')
+  }]);
 
-    const user = await User.create({
+  const user = await UserModel.create({
+    _id: mongoose.Types.ObjectId(),
+    firstName: 'John',
+    lastName: 'Doe',
+    age: 20,
+    uniqueId: 'john-doe-20',
+    gender: Genders.MALE,
+    role: Role.User,
+    job: {
+      title: 'Developer',
+      position: 'Lead',
+      jobType: {
+        salery: 5000,
+        field: 'IT'
+      }
+    },
+    car: tesla.id,
+    languages: ['english', 'typescript'],
+    previousJobs: [{
+      title: 'Janitor'
+    }, {
+      title: 'Manager'
+    }],
+    previousCars: [trabant.id, zastava.id]
+  });
+
+  {
+    const foundUser = await UserModel
+      .findById(user.id)
+      .populate('car previousCars')
+      .exec();
+
+    expect(foundUser).toHaveProperty('nick', 'Nothing');
+    expect(foundUser).toHaveProperty('firstName', 'John');
+    expect(foundUser).toHaveProperty('lastName', 'Doe');
+    expect(foundUser).toHaveProperty('uniqueId', 'john-doe-20');
+    expect(foundUser).toHaveProperty('age', 20);
+    expect(foundUser).toHaveProperty('gender', Genders.MALE);
+    expect(foundUser).toHaveProperty('role', Role.User);
+    {
+      expect(foundUser).toHaveProperty('roles');
+      expect(foundUser.roles).toHaveLength(1);
+      expect(foundUser.roles.includes(Role.Guest)).toBe(true);
+    }
+    expect(foundUser).toHaveProperty('job');
+    expect(foundUser).toHaveProperty('car');
+    {
+      expect(foundUser).toHaveProperty('languages');
+      expect(foundUser.languages).toHaveLength(2);
+      expect(foundUser.languages.includes('english')).toBe(true);
+      expect(foundUser.languages.includes('typescript')).toBe(true);
+    }
+    expect(foundUser.job).toHaveProperty('title', 'Developer');
+    expect(foundUser.job).toHaveProperty('position', 'Lead');
+    {
+      expect(foundUser.job).toHaveProperty('startedAt');
+      expect(foundUser.job.startedAt).toBeInstanceOf(Date);
+    }
+    expect(foundUser.job.titleInUppercase()).toEqual('Developer'.toUpperCase());
+    expect(foundUser.job.jobType).not.toHaveProperty('_id');
+    expect(foundUser.job.jobType).toHaveProperty('salery', 5000);
+    expect(foundUser.job.jobType).toHaveProperty('field', 'IT');
+    {
+      expect(foundUser.job.jobType).toHaveProperty('salery');
+      expect(typeof foundUser.job.jobType.salery).toBe('number');
+    }
+    expect(foundUser.car).toHaveProperty('model', 'Tesla');
+    expect(foundUser.car).toHaveProperty('version', 'models');
+    {
+      expect(foundUser).toHaveProperty('previousJobs');
+      expect(foundUser.previousJobs).toHaveLength(2);
+    }
+
+    expect(foundUser).toHaveProperty('fullName', 'John Doe');
+
+    const [janitor, manager] = foundUser.previousJobs;
+    expect(janitor).toHaveProperty('title', 'Janitor');
+    expect(manager).toHaveProperty('title', 'Manager');
+
+    {
+      expect(foundUser).toHaveProperty('previousCars');
+      expect(foundUser.previousCars).toHaveLength(2);
+    }
+
+    const [foundTrabant, foundZastava] = foundUser.previousCars;
+    expect(foundTrabant).toHaveProperty('model', 'Trabant');
+    expect(foundTrabant).toHaveProperty('isSedan', true);
+    expect(foundZastava).toHaveProperty('model', 'Zastava');
+    expect(foundZastava).toHaveProperty('isSedan', undefined);
+
+    foundUser.fullName = 'Sherlock Holmes';
+    expect(foundUser).toHaveProperty('firstName', 'Sherlock');
+    expect(foundUser).toHaveProperty('lastName', 'Holmes');
+
+    await foundUser.incrementAge();
+    expect(foundUser).toHaveProperty('age', 21);
+  }
+
+  {
+    const foundUser = await UserModel.findByAge(21);
+    expect(foundUser).toHaveProperty('firstName', 'Sherlock');
+    expect(foundUser).toHaveProperty('lastName', 'Holmes');
+  }
+}, 10 * 1000);
+
+it('should create a user with [Plugin].findOrCreate', async () => {
+  const createdUser = await UserModel.findOrCreate({
+    firstName: 'Jane',
+    lastName: 'Doe',
+    gender: Genders.FEMALE
+  });
+
+  expect(createdUser).not.toBe(undefined);
+  expect(createdUser).toHaveProperty('created');
+  expect(createdUser.created).toBe(true);
+  expect(createdUser).toHaveProperty('doc');
+  expect(createdUser.doc).toHaveProperty('firstName', 'Jane');
+
+  const foundUser = await UserModel.findOrCreate({
+    firstName: 'Jane',
+    lastName: 'Doe'
+  });
+
+  expect(foundUser).not.toBe(undefined);
+  expect(foundUser).toHaveProperty('created');
+  expect(foundUser.created).toBe(false);
+  expect(foundUser).toHaveProperty('doc');
+  expect(foundUser.doc).toHaveProperty('firstName', 'Jane');
+
+  try {
+    await UserModel.create({
       _id: mongoose.Types.ObjectId(),
       firstName: 'John',
       lastName: 'Doe',
       age: 20,
-      uniqueId: 'john-doe-20',
       gender: Genders.MALE,
-      role: Role.User,
-      job: {
-        title: 'Developer',
-        position: 'Lead',
-        jobType: {
-          salery: 5000,
-          field: 'IT'
-        }
-      },
-      car: tesla.id,
-      languages: ['english', 'typescript'],
-      previousJobs: [{
-        title: 'Janitor'
-      }, {
-        title: 'Manager'
-      }],
-      previousCars: [trabant.id, zastava.id]
+      uniqueId: 'john-doe-20'
     });
-
-    {
-      const foundUser = await User
-        .findById(user.id)
-        .populate('car previousCars')
-        .exec();
-
-      expect(foundUser).to.have.property('nick', 'Nothing');
-      expect(foundUser).to.have.property('firstName', 'John');
-      expect(foundUser).to.have.property('lastName', 'Doe');
-      expect(foundUser).to.have.property('uniqueId', 'john-doe-20');
-      expect(foundUser).to.have.property('age', 20);
-      expect(foundUser).to.have.property('gender', Genders.MALE);
-      expect(foundUser).to.have.property('role', Role.User);
-      expect(foundUser).to.have.property('roles').to.have.length(1).to.include(Role.Guest);
-      expect(foundUser).to.have.property('job');
-      expect(foundUser).to.have.property('car');
-      expect(foundUser).to.have.property('languages').to.have.length(2).to.include('english').to.include('typescript');
-      expect(foundUser.job).to.have.property('title', 'Developer');
-      expect(foundUser.job).to.have.property('position', 'Lead');
-      expect(foundUser.job).to.have.property('startedAt').to.be.instanceof(Date);
-      expect(foundUser.job.titleInUppercase()).to.equal('Developer'.toUpperCase());
-      expect(foundUser.job.jobType).to.not.have.property('_id');
-      expect(foundUser.job.jobType).to.have.property('salery', 5000);
-      expect(foundUser.job.jobType).to.have.property('field', 'IT');
-      expect(foundUser.job.jobType).to.have.property('salery').to.be.a('number');
-      expect(foundUser.car).to.have.property('model', 'Tesla');
-      expect(foundUser.car).to.have.property('version', 'models');
-      expect(foundUser).to.have.property('previousJobs').to.have.length(2);
-
-      expect(foundUser).to.have.property('fullName', 'John Doe');
-
-      const [janitor, manager] = foundUser.previousJobs;
-      expect(janitor).to.have.property('title', 'Janitor');
-      expect(manager).to.have.property('title', 'Manager');
-
-      expect(foundUser).to.have.property('previousCars').to.have.length(2);
-
-      const [foundTrabant, foundZastava] = foundUser.previousCars;
-      expect(foundTrabant).to.have.property('model', 'Trabant');
-      expect(foundTrabant).to.have.property('isSedan', true);
-      expect(foundZastava).to.have.property('model', 'Zastava');
-      expect(foundZastava).to.have.property('isSedan', undefined);
-
-      foundUser.fullName = 'Sherlock Holmes';
-      expect(foundUser).to.have.property('firstName', 'Sherlock');
-      expect(foundUser).to.have.property('lastName', 'Holmes');
-
-      await foundUser.incrementAge();
-      expect(foundUser).to.have.property('age', 21);
-    }
-
-    {
-      const foundUser = await User.findByAge(21);
-      expect(foundUser).to.have.property('firstName', 'Sherlock');
-      expect(foundUser).to.have.property('lastName', 'Holmes');
-    }
-  });
-
-  it('should create a user with [Plugin].findOrCreate', async () => {
-    const createdUser = await User.findOrCreate({
-      firstName: 'Jane',
-      lastName: 'Doe',
-      gender: Genders.FEMALE
-    });
-
-    expect(createdUser).to.not.be.an('undefined');
-    expect(createdUser).to.have.property('created');
-    expect(createdUser.created).to.be.equals(true);
-    expect(createdUser).to.have.property('doc');
-    expect(createdUser.doc).to.have.property('firstName', 'Jane');
-
-    const foundUser = await User.findOrCreate({
-      firstName: 'Jane',
-      lastName: 'Doe'
-    });
-
-    expect(foundUser).to.not.be.an('undefined');
-    expect(foundUser).to.have.property('created');
-    expect(foundUser.created).to.be.equals(false);
-    expect(foundUser).to.have.property('doc');
-    expect(foundUser.doc).to.have.property('firstName', 'Jane');
-
-    try {
-      await User.create({
-        _id: mongoose.Types.ObjectId(),
-        firstName: 'John',
-        lastName: 'Doe',
-        age: 20,
-        gender: Genders.MALE,
-        uniqueId: 'john-doe-20'
-      });
-    } catch (err) {
-      expect(err).to.have.property('code', 11000);
-    }
-  });
-}
+  } catch (err) {
+    expect(err).toHaveProperty('code', 11000);
+  }
+});

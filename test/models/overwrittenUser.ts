@@ -1,11 +1,10 @@
-import { modelOptions, prop } from '../../src/typegoose';
-import { IModelOptions } from '../../src/types';
+import { modelOptions, prop, types } from '../../src/typegoose';
 
 const options = {
   schemaOptions: {
     collection: 'OverwriteUser'
   }
-} as IModelOptions;
+} as types.IModelOptions;
 
 @modelOptions(options)
 export class NormalUser {

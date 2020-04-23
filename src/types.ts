@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
-import { Base } from './defaultClasses';
+import type { Base } from './defaultClasses';
+import type { Severity, WhatIsIt } from './internal/constants';
 
 /**
  * Get the Type of an instance of a Document with Class properties
@@ -19,7 +20,7 @@ export type DocumentType<T> = (T extends Base ? Omit<mongoose.Document, '_id'> &
  * Used Internally for ModelTypes
  * @internal
  */
-export type ModelType<T> = mongoose.Model<DocumentType<T>> & T;
+export type ModelType<T> = mongoose.Model<DocumentType<T>>;
 /**
  * Any-param Constructor
  * @internal
@@ -58,6 +59,8 @@ export interface BasePropOptions {
   required?: RequiredType;
   /** Only accept Values from the Enum(|Array) */
   enum?: string[] | object;
+  /** Add "null" to the enum array */
+  addNullToEnum?: boolean;
   /** Give the Property a default Value */
   default?: any;
   /** Give an Validator RegExp or Function */
@@ -184,21 +187,6 @@ export interface ArrayPropOptions extends BasePropOptions {
    */
   items?: any;
   /**
-   * Same as {@link PropOptions.ref}, only that it is for an array
-   * @deprecated Please use {@link PropOptions.ref}
-   */
-  itemsRef?: any;
-  /**
-   * Same as {@link PropOptions.refPath}, only that it is for an array
-   * @deprecated Please use {@link PropOptions.refPath}
-   */
-  itemsRefPath?: any;
-  /**
-   * Same as {@link PropOptions.refType}, only that it is for an array
-   * @deprecated Please use {@link PropOptions.refType}
-   */
-  itemsRefType?: RefSchemaType;
-  /**
    * Use this to define inner-options
    * Use this if the auto-mapping is not correct or for plugin options
    *
@@ -216,6 +204,12 @@ export interface ArrayPropOptions extends BasePropOptions {
   outerOptions?: {
     [key: string]: any;
   };
+  /**
+   * How many dimensions this Array should have
+   * (needs to be higher than 0)
+   * @default 1
+   */
+  dim?: number;
 }
 
 export interface ValidateNumberOptions {
@@ -256,11 +250,6 @@ export interface VirtualOptions {
   justOne?: boolean;
   /** Return the number of Documents found instead of the actual Documents */
   count?: boolean;
-  /**
-   * DEPRECATED (see README#Migrate to 6.0.0)
-   * @deprecated
-   */
-  overwrite: boolean;
 }
 
 export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
@@ -327,13 +316,6 @@ export interface ICustomOptions {
   runSyncIndexes?: boolean;
 }
 
-/** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
-export enum WhatIsIt {
-  ARRAY,
-  MAP,
-  NONE
-}
-
 export interface DecoratedPropertyMetadata {
   /** Prop Options */
   origOptions: any;
@@ -347,12 +329,6 @@ export interface DecoratedPropertyMetadata {
   whatis: WhatIsIt;
 }
 export type DecoratedPropertyMetadataMap = Map<string, DecoratedPropertyMetadata>;
-
-export enum Severity {
-  ALLOW,
-  WARN,
-  ERROR
-}
 
 /*
  copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
@@ -408,6 +384,7 @@ export interface IndexOptions<T> {
   partialFilterExpression?: any;
   collation?: object;
   default_language?: string;
+  language_override?: string;
 
   lowercase?: boolean; // whether to always call .toLowerCase() on the value
   uppercase?: boolean; // whether to always call .toUpperCase() on the value
@@ -419,10 +396,10 @@ export interface IndexOptions<T> {
 }
 
 /**
- * Used as a Type for the return of getMetadata
+ * Used for the Reflection of Indexes
  * @example
  * ```ts
- * const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, target) || [];
+ * const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, target) || []);
  * ```
  */
 export interface IIndexArray<T> {
@@ -430,6 +407,48 @@ export interface IIndexArray<T> {
     [key: string]: any;
   };
   options: IndexOptions<T>;
+}
+
+/**
+ * Used for the Reflection of Plugins
+ * @example
+ * ```ts
+ * const plugins: IPluginsArray<any>[] = Array.from(Reflect.getMetadata(DecoratorKeys.Plugins, target) ?? []);
+ * ```
+ */
+export interface IPluginsArray<T> {
+  mongoosePlugin: Func;
+  options: T;
+}
+
+/**
+ * Used for the Reflection of Virtual Populates
+ * @example
+ * ```ts
+ * const virtuals: VirtualPopulateMap = new Map(Reflect.getMetadata(DecoratorKeys.VirtualPopulate, target.constructor) ?? []);
+ * ```
+ */
+export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
+
+/**
+ * Used for the Reflection of Query Methods
+ * @example
+ * ```ts
+ * const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target.constructor) ?? []);
+ * ```
+ */
+export type QueryMethodMap = Map<string, Func>;
+
+/**
+ * Used for the Reflection of Hooks
+ * @example
+ * ```ts
+ * const postHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPost, target) ?? []);
+ * ```
+ */
+export interface IHooksArray {
+  func: Func;
+  method: string | RegExp;
 }
 
 export interface IGlobalOptions {
