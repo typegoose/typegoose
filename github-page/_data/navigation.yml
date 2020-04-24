@@ -113,6 +113,8 @@ guides:
         url: /guides/advanced/plugins
       - title: 'Change _id Type'
         url: /guides/advanced/changeIDType
+      - title: 'Using ObjectId Type'
+        url: /guides/advanced/objectId
   # - title: Combine with other packages
   #   children:
   #     - title: 'type-graphql'
