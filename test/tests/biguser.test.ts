@@ -7,14 +7,14 @@ import { UserModel } from '../models/user';
 
 it('should create a User with connections', async () => {
   const [tesla, trabant, zastava] = await CarModel.create([{
-    model: 'Tesla',
+    carModel: 'Tesla',
     version: 'ModelS',
     price: mongoose.Types.Decimal128.fromString('50123.25')
   }, {
-    model: 'Trabant',
+    carModel: 'Trabant',
     price: mongoose.Types.Decimal128.fromString('28189.25')
   }, {
-    model: 'Zastava',
+    carModel: 'Zastava',
     price: mongoose.Types.Decimal128.fromString('1234.25')
   }]);
 

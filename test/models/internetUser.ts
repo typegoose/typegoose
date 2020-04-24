@@ -8,7 +8,7 @@ export class SideNote {
   public link?: string;
 }
 
-enum ProjectValue {
+export enum ProjectValue {
   WORKING = 'working',
   UNDERDEVELOPMENT = 'underdevelopment',
   BROKEN = 'broken'
@@ -16,13 +16,13 @@ enum ProjectValue {
 
 class InternetUser {
   @mapProp({ of: String, default: {} })
-  public socialNetworks?: Map<string, string>;
+  public socialNetworks?: Record<string, string>;
 
   @mapProp({ of: SideNote, _id: false })
-  public sideNotes?: Map<string, SideNote>;
+  public sideNotes?: Record<string, SideNote>;
 
   @mapProp({ of: String, enum: ProjectValue })
-  public projects: Map<string, ProjectValue>;
+  public projects: Record<string, ProjectValue>;
 }
 
 export const InternetUserModel = getModelForClass(InternetUser);

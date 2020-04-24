@@ -1,6 +1,6 @@
 import { CarModel } from '../models/car';
 import { IndexWeights, IndexWeightsModel } from '../models/indexweigths';
-import { RatingModel } from '../models/rating';
+import { RatingModel, Rating } from '../models/rating';
 import { SelectModel, SelectStrings } from '../models/select';
 import { UserModel } from '../models/user';
 

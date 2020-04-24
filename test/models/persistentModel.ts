@@ -3,7 +3,7 @@ import { Car } from './car';
 
 export abstract class PersistentModel {
   @prop()
-  public createdAt: Date;
+  public createdAt?: Date;
 
   @arrayProp({ ref: Car })
   public cars?: Ref<Car>[];

@@ -75,7 +75,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
     ?? roptions?.existingMongoose?.model.bind(roptions.existingMongoose)
     ?? mongoose.model.bind(mongoose);
 
-  const compiledmodel: TypegooseModel<any> = model(name, buildSchema(cl, roptions.schemaOptions));
+  const compiledmodel = model(name, buildSchema(cl, roptions.schemaOptions)) as TypegooseModel<any>;
   const refetchedOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions ?? {};
 
   if (refetchedOptions?.options?.runSyncIndexes) {
@@ -219,5 +219,5 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
 
   const model = from.discriminator(name, sch, id ? id : name);
 
-  return addModelToTypegoose(model, cl);
+  return addModelToTypegoose(model as TypegooseModel<any>, cl);
 }

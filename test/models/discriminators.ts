@@ -6,7 +6,7 @@ export class DisMain {
 
   @prop({ default: undefined })
   // tslint:disable-next-line:variable-name
-  public __t: string;
+  public __t?: string;
 }
 
 export class DisAbove extends DisMain {
@@ -15,7 +15,7 @@ export class DisAbove extends DisMain {
 
   @prop({ default: 'DisAbove' })
   // tslint:disable-next-line:variable-name
-  public __t: string;
+  public __t?: string;
 }
 
 export const DisMainModel = getModelForClass(DisMain);

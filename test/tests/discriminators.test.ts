@@ -3,8 +3,8 @@ import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discri
 import { Default, DefaultModel, DisciminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminatorsWithGenerics';
 
 it('should make use of discriminators', async () => {
-  const disMainDoc = await DisMainModel.create({ main1: 'hello DMM' } as DisMain);
-  const disAboveDoc = await DisAboveModel.create({ main1: 'hello DAM', above1: 'hello DAM' } as DisAbove);
+  const disMainDoc = await DisMainModel.create({ main1: 'hello DMM' });
+  const disAboveDoc = await DisAboveModel.create({ main1: 'hello DAM', above1: 'hello DAM' });
   expect(disMainDoc).not.toEqual(undefined);
   expect(disMainDoc.main1).toEqual('hello DMM');
   expect(disMainDoc).not.toHaveProperty('above1');

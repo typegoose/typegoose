@@ -1,7 +1,7 @@
 import { TestTimeStamps, TestTimeStampsModel } from '../models/dClasses';
 
 it('TimeStamp Model', async () => {
-  const doc = await TestTimeStampsModel.create({ someValue: 'hello' } as Partial<TestTimeStamps>);
+  const doc = await TestTimeStampsModel.create({ someValue: 'hello' });
   expect(doc).not.toEqual(undefined);
   expect(doc.someValue).toEqual('hello');
   expect(doc.updatedAt).toBeInstanceOf(Date);
