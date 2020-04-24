@@ -3,7 +3,7 @@
 import type { Query } from 'mongoose';
 
 import { DecoratorKeys } from './internal/constants';
-import { assertion, getName } from './internal/utils';
+import { assertion, generateName, getName } from './internal/utils';
 import { logger } from './logSettings';
 import type { DocumentType, EmptyVoidFn, IHooksArray } from './types';
 
@@ -101,12 +101,12 @@ function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]) {
     switch (hookType) {
       case 'post':
         const postHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPost, target) ?? []);
-        postHooks.push({ func, method });
+        postHooks.push({ name: generateName(), func, method });
         Reflect.defineMetadata(DecoratorKeys.HooksPost, postHooks, target);
         break;
       case 'pre':
         const preHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPre, target) ?? []);
-        preHooks.push({ func, method });
+        preHooks.push({ name: generateName(), func, method });
         Reflect.defineMetadata(DecoratorKeys.HooksPre, preHooks, target);
         break;
     }

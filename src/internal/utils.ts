@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import { mergeWith, omit } from 'lodash';
 import * as mongoose from 'mongoose';
 import { format } from 'util';
@@ -569,4 +570,8 @@ export function assertion(cond: any, error?: Error): asserts cond {
  */
 export function assertionIsClass(val: any): asserts val is Func {
   assertion(typeof val === 'function', new NoValidClass(val));
+}
+
+export function generateName(): string {
+  return randomBytes(16).toString('hex');
 }

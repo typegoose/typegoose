@@ -73,20 +73,27 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
     /** Get Metadata for PreHooks */
     const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
     if (Array.isArray(preHooks)) {
-      preHooks.forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
+      const parentHooks = Reflect.getMetadata(DecoratorKeys.HooksPre, Object.getPrototypeOf(cl.prototype).constructor) ?? [];
+      preHooks
+        .filter(obj => !parentHooks.find(ph => ph.name === obj.name))
+        .forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
     }
 
     /** Get Metadata for PreHooks */
     const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
     if (Array.isArray(postHooks)) {
-      postHooks.forEach((obj) => sch.post(obj.method, obj.func));
+      const parentHooks = Reflect.getMetadata(DecoratorKeys.HooksPost, Object.getPrototypeOf(cl.prototype).constructor) ?? [];
+      postHooks
+        .filter(obj => !parentHooks.find(ph => ph.name === obj.name))
+        .forEach((obj) => sch.post(obj.method, obj.func));
     }
   }
 
   /** Get Metadata for indices */
   const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
   if (Array.isArray(plugins)) {
-    for (const plugin of plugins) {
+    const parentPlugins = Reflect.getMetadata(DecoratorKeys.Plugins, Object.getPrototypeOf(cl.prototype).constructor) ?? [];
+    for (const plugin of plugins.filter(p => !parentPlugins.find(pp => pp.name === p.name))) {
       logger.debug('Applying Plugin:', plugin);
       sch.plugin(plugin.mongoosePlugin, plugin.options);
     }
