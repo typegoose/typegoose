@@ -3,6 +3,42 @@ import * as mongoose from 'mongoose';
 import type { Base } from './defaultClasses';
 import type { Severity, WhatIsIt } from './internal/constants';
 
+export interface TypegooseModel<
+  T extends mongoose.Document,
+  Q = {},
+  D = Omit<T, keyof mongoose.Document | keyof IObjectWithTypegooseFunction>>
+  extends Omit<Pick<mongoose.Model<T, Q>, keyof mongoose.Model<T, Q>>, 'create'> {
+  /**
+   * Model constructor
+   * Provides the interface to MongoDB collections as well as creates document instances.
+   * @param doc values with which to create the document
+   * @event error If listening to this event, it is emitted when a document
+   *   was saved without passing a callback and an error occurred. If not
+   *   listening, the event bubbles to the connection used to create this Model.
+   * @event index Emitted after Model#ensureIndexes completes. If an error
+   *   occurred it is passed with the event.
+   * @event index-single-start Emitted when an individual index starts within
+   *   Model#ensureIndexes. The fields and options being used to build the index
+   *   are also passed with the event.
+   * @event index-single-done Emitted when an individual index finishes within
+   *   Model#ensureIndexes. If an error occurred it is passed with the event.
+   *   The fields, options, and index name are also passed.
+   */
+  new(doc: D): T;
+  /**
+   * Shortcut for saving one or more documents to the database. MyModel.create(docs)
+   * does new MyModel(doc).save() for every doc in docs.
+   * Triggers the save() hook.
+   */
+  create<U extends D | D[]>(docs: U, callback?: (err: any, res: U) => void): Promise<U>;
+  /**
+   * Shortcut for saving one or more documents to the database. MyModel.create(docs)
+   * does new MyModel(doc).save() for every doc in docs.
+   * Triggers the save() hook.
+   */
+  create<U extends D | D[]>(docs: U, options?: mongoose.SaveOptions, callback?: (err: any, res: U) => void): Promise<U>;
+}
+
 /**
  * Get the Type of an instance of a Document with Class properties
  * @public
@@ -20,7 +56,7 @@ export type DocumentType<T> = (T extends Base ? Omit<mongoose.Document, '_id'> &
  * Used Internally for ModelTypes
  * @internal
  */
-export type ModelType<T> = mongoose.Model<DocumentType<T>>;
+export type ModelType<T> = TypegooseModel<DocumentType<T>>;
 /**
  * Any-param Constructor
  * @internal
@@ -29,8 +65,8 @@ export type AnyParamConstructor<T> = new (...args: any) => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
  */
-export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = ModelType<InstanceType<U>> & U;
-
+export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = ModelType<InstanceType<U>> | U;
+// Union with U is a hack to fix compilation errors
 /** @internal */
 export type Func = (...args: any[]) => any;
 

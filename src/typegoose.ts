@@ -25,7 +25,8 @@ import type {
   DocumentType,
   IModelOptions,
   Ref,
-  ReturnModelType
+  ReturnModelType,
+  TypegooseModel
 } from './types';
 
 /* exports */
@@ -74,7 +75,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
     ?? roptions?.existingMongoose?.model.bind(roptions.existingMongoose)
     ?? mongoose.model.bind(mongoose);
 
-  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions));
+  const compiledmodel: TypegooseModel<any> = model(name, buildSchema(cl, roptions.schemaOptions));
   const refetchedOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions ?? {};
 
   if (refetchedOptions?.options?.runSyncIndexes) {
@@ -134,7 +135,7 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
  * const model = addModelToTypegoose(mongoose.model(schema), T);
  * ```
  */
-export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: mongoose.Model<any>, cl: U) {
+export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: TypegooseModel<any>, cl: U) {
   assertion(model.prototype instanceof mongoose.Model, new TypeError(`"${model}" is not a valid Model!`));
   assertionIsClass(cl);
 
@@ -198,7 +199,7 @@ export function deleteModelWithClass<T, U extends AnyParamConstructor<T>>(cl: U)
  * ```
  */
 export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T>>(
-  from: mongoose.Model<any>,
+  from: TypegooseModel<any>,
   cl: U,
   id?: string
 ) {
