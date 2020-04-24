@@ -7,7 +7,7 @@ redirect_from:
 Using the type `ObjectId` can be done by defining it as such:
 
 ```ts
-import mongoose from 'mongoose';
+import * as mongoose from 'mongoose';
 import { prop } from '@typegoose/typegoose';
 
 class FooModel {
