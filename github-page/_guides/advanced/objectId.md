@@ -22,5 +22,5 @@ In order to query this model later you should use the type `mongoose.Types.Objec
 
 ```ts
 const FooModel = getModelForClass(FooModel);
-FooModel.findOne({userId: new mongoose.Types.ObjectId('5e997f95d6a35f3a0def3339')})
+FooModel.findOne({ userId: new mongoose.Types.ObjectId('5e997f95d6a35f3a0def3339') })
 ```
