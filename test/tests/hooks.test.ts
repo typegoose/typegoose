@@ -67,14 +67,12 @@ it('should execute multiple hooks with array', async () => {
 
 it('should execute pre hooks only twice in case inheritance is used with the same class name', async () => {
   const doc = new ExtendedHookModel();
-  doc.hooksMessages = [];
   await doc.save();
   expect(doc.hooksMessages.length).toEqual(2);
 });
 
 it('should execute post hooks only twice in case inheritance is used with the same class name', async () => {
   const doc = new ExtendedHookModel();
-  doc.hooksMessages = [];
   await doc.save();
 
   const docFromDb = await ExtendedHookModel.findOne({ _id: doc._id }).exec();

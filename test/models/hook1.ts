@@ -55,7 +55,7 @@ export class HookArray {
 })
 export class BaseHook {
   @arrayProp({ items: String, default: [] })
-  public hooksMessages = [];
+  public hooksMessages: string[];
 }
 
 @pre<ExtendedHook>('save', function (next) {
