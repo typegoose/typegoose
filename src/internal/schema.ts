@@ -23,13 +23,15 @@ import { assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined,
  * @param cl The not initialized Class
  * @param sch Already Existing Schema?
  * @param opt Options to override
+ * @param isFinalSchema If it's the final schema to be built (defaults to `true`).
  * @returns Returns the Build Schema
  * @private
  */
 export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   cl: U,
   sch?: mongoose.Schema,
-  opt?: mongoose.SchemaOptions
+  opt?: mongoose.SchemaOptions,
+  isFinalSchema: boolean = true
 ) {
   assertionIsClass(cl);
 
@@ -68,62 +70,64 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   sch.loadClass(cl);
 
-  // Hooks
-  {
-    /** Get Metadata for PreHooks */
-    const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
-    if (Array.isArray(preHooks)) {
-      preHooks.forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
+  if (isFinalSchema) {
+    // Hooks
+    {
+      /** Get Metadata for PreHooks */
+      const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
+      if (Array.isArray(preHooks)) {
+        preHooks.forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
+      }
+
+      /** Get Metadata for PreHooks */
+      const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
+      if (Array.isArray(postHooks)) {
+        postHooks.forEach((obj) => sch.post(obj.method, obj.func));
+      }
     }
 
-    /** Get Metadata for PreHooks */
-    const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
-    if (Array.isArray(postHooks)) {
-      postHooks.forEach((obj) => sch.post(obj.method, obj.func));
+    /** Get Metadata for indices */
+    const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
+    if (Array.isArray(plugins)) {
+      for (const plugin of plugins) {
+        logger.debug('Applying Plugin:', plugin);
+        sch.plugin(plugin.mongoosePlugin, plugin.options);
+      }
     }
+
+    /** Get Metadata for Virtual Populates */
+    const virtuals: VirtualPopulateMap = Reflect.getMetadata(DecoratorKeys.VirtualPopulate, cl);
+    /** Simplify the usage */
+    if (virtuals instanceof Map) {
+      for (const [key, options] of virtuals) {
+        logger.debug('Applying Virtual Populates:', key, options);
+        sch.virtual(key, options);
+      }
+    }
+
+    /** Get Metadata for indices */
+    const indices: IIndexArray<any>[] = Reflect.getMetadata(DecoratorKeys.Index, cl);
+    if (Array.isArray(indices)) {
+      for (const index of indices) {
+        logger.debug('Applying Index:', index);
+        sch.index(index.fields, index.options);
+      }
+    }
+
+    /** Get Metadata for Query Methods */
+    const queryMethods: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, cl);
+    if (queryMethods instanceof Map) {
+      for (const [funcName, func] of queryMethods) {
+        logger.debug('Applying Query Method:', funcName, func);
+        sch.query[funcName] = func;
+      }
+    }
+
+    // this method is to get the typegoose name of the model/class if it is user-handled (like buildSchema, then manually mongoose.model)
+    sch.method('typegooseName', () => {
+      return name;
+    });
   }
-
-  /** Get Metadata for indices */
-  const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
-  if (Array.isArray(plugins)) {
-    for (const plugin of plugins) {
-      logger.debug('Applying Plugin:', plugin);
-      sch.plugin(plugin.mongoosePlugin, plugin.options);
-    }
-  }
-
-  /** Get Metadata for Virtual Populates */
-  const virtuals: VirtualPopulateMap = Reflect.getMetadata(DecoratorKeys.VirtualPopulate, cl);
-  /** Simplify the usage */
-  if (virtuals instanceof Map) {
-    for (const [key, options] of virtuals) {
-      logger.debug('Applying Virtual Populates:', key, options);
-      sch.virtual(key, options);
-    }
-  }
-
-  /** Get Metadata for indices */
-  const indices: IIndexArray<any>[] = Reflect.getMetadata(DecoratorKeys.Index, cl);
-  if (Array.isArray(indices)) {
-    for (const index of indices) {
-      logger.debug('Applying Index:', index);
-      sch.index(index.fields, index.options);
-    }
-  }
-
-  /** Get Metadata for Query Methods */
-  const queryMethods: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, cl);
-  if (queryMethods instanceof Map) {
-    for (const [funcName, func] of queryMethods) {
-      logger.debug('Applying Query Method:', funcName, func);
-      sch.query[funcName] = func;
-    }
-  }
-
-  // this method is to get the typegoose name of the model/class if it is user-handled (like buildSchema, then manually mongoose.model)
-  sch.method('typegooseName', () => {
-    return name;
-  });
 
   // add the class to the constructors map
   constructors.set(name, cl);

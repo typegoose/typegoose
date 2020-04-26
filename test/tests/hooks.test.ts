@@ -1,4 +1,4 @@
-import { Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
+import { ExtendedHookModel, Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
 import { Hook2Model } from '../models/hook2';
 
 it('RegEXP tests', async () => {
@@ -63,4 +63,18 @@ it('should execute multiple hooks with array', async () => {
   expect(Array.isArray(found.testArray)).toBe(true);
   expect(found.testArray).toHaveLength(3);
   expect(Array.from(found.testArray)).toEqual(['hello', 'hello', 'hello']);
+});
+
+it('should execute pre hooks only twice in case inheritance is being used [typegoose#218]', async () => {
+  const doc = new ExtendedHookModel();
+  await doc.save();
+  expect(doc.hooksMessages.length).toEqual(2);
+});
+
+it('should execute post hooks only twice in case inheritance is being used [typegoose#218]', async () => {
+  const doc = new ExtendedHookModel();
+  await doc.save();
+
+  const docFromDb = await ExtendedHookModel.findOne({ _id: doc._id }).exec();
+  expect(docFromDb.hooksMessages.length).toEqual(4);
 });
