@@ -417,7 +417,6 @@ export interface IIndexArray<T> {
  * ```
  */
 export interface IPluginsArray<T> {
-  name: string;
   mongoosePlugin: Func;
   options: T;
 }
@@ -448,7 +447,6 @@ export type QueryMethodMap = Map<string, Func>;
  * ```
  */
 export interface IHooksArray {
-  name: string;
   func: Func;
   method: string | RegExp;
 }

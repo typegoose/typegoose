@@ -110,7 +110,7 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
     // extend schema
-    sch = _buildSchema(parentCtor, sch, mergedOptions);
+    sch = _buildSchema(parentCtor, sch, mergedOptions, false);
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }

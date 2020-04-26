@@ -1,4 +1,4 @@
-import { arrayProp, getModelForClass, post, pre, prop } from '../../src/typegoose';
+import { getModelForClass, post, pre, prop } from '../../src/typegoose';
 
 @pre<Hook2>('save', function (next) {
   this.text = 'saved';
@@ -21,16 +21,3 @@ export class Hook2 {
 }
 
 export const Hook2Model = getModelForClass(Hook2);
-
-@pre<InheritanceHook>('save', function (next) {
-  this.hooksMessages.push('Base');
-  next();
-})
-@post<InheritanceHook>('findOne', async (doc, next) => {
-  doc.hooksMessages.push('Post Base');
-  next();
-})
-export class InheritanceHook {
-  @arrayProp({ items: String, default: [] })
-  public hooksMessages = [];
-}

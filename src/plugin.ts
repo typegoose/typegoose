@@ -1,5 +1,5 @@
 import { DecoratorKeys } from './internal/constants';
-import { generateName, getName } from './internal/utils';
+import { getName } from './internal/utils';
 import { logger } from './logSettings';
 import type { Func, IPluginsArray } from './types';
 
@@ -13,7 +13,7 @@ export function plugin<T = any>(mongoosePlugin: Func, options?: T) {
   return (target: any) => {
     logger.info('Adding plugin "%s" to "%s" with options: "%o"', mongoosePlugin.name, getName(target), options);
     const plugins: IPluginsArray<any>[] = Array.from(Reflect.getMetadata(DecoratorKeys.Plugins, target) ?? []);
-    plugins.push({ name: generateName(), mongoosePlugin, options });
+    plugins.push({ mongoosePlugin, options });
     Reflect.defineMetadata(DecoratorKeys.Plugins, plugins, target);
   };
 }

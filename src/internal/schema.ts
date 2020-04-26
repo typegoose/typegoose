@@ -23,13 +23,15 @@ import { assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined,
  * @param cl The not initialized Class
  * @param sch Already Existing Schema?
  * @param opt Options to override
+ * @param isFinalSchema If it's the final schema to be built (defaults to `true`).
  * @returns Returns the Build Schema
  * @private
  */
 export function _buildSchema<T, U extends AnyParamConstructor<T>>(
   cl: U,
   sch?: mongoose.Schema,
-  opt?: mongoose.SchemaOptions
+  opt?: mongoose.SchemaOptions,
+  isFinalSchema: boolean = true
 ) {
   assertionIsClass(cl);
 
@@ -68,34 +70,29 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   sch.loadClass(cl);
 
-  // Hooks
-  {
-    /** Get Metadata for PreHooks */
-    const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
-    if (Array.isArray(preHooks)) {
-      const parentHooks = Reflect.getMetadata(DecoratorKeys.HooksPre, Object.getPrototypeOf(cl.prototype).constructor) ?? [];
-      preHooks
-        .filter(obj => !parentHooks.find(ph => ph.name === obj.name))
-        .forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
+  if (isFinalSchema) {
+    // Hooks
+    {
+      /** Get Metadata for PreHooks */
+      const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
+      if (Array.isArray(preHooks)) {
+        preHooks.forEach((obj) => sch.pre(obj.method, obj.func as EmptyVoidFn));
+      }
+
+      /** Get Metadata for PreHooks */
+      const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
+      if (Array.isArray(postHooks)) {
+        postHooks.forEach((obj) => sch.post(obj.method, obj.func));
+      }
     }
 
-    /** Get Metadata for PreHooks */
-    const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
-    if (Array.isArray(postHooks)) {
-      const parentHooks = Reflect.getMetadata(DecoratorKeys.HooksPost, Object.getPrototypeOf(cl.prototype).constructor) ?? [];
-      postHooks
-        .filter(obj => !parentHooks.find(ph => ph.name === obj.name))
-        .forEach((obj) => sch.post(obj.method, obj.func));
-    }
-  }
-
-  /** Get Metadata for indices */
-  const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
-  if (Array.isArray(plugins)) {
-    const parentPlugins = Reflect.getMetadata(DecoratorKeys.Plugins, Object.getPrototypeOf(cl.prototype).constructor) ?? [];
-    for (const plugin of plugins.filter(p => !parentPlugins.find(pp => pp.name === p.name))) {
-      logger.debug('Applying Plugin:', plugin);
-      sch.plugin(plugin.mongoosePlugin, plugin.options);
+    /** Get Metadata for indices */
+    const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
+    if (Array.isArray(plugins)) {
+      for (const plugin of plugins) {
+        logger.debug('Applying Plugin:', plugin);
+        sch.plugin(plugin.mongoosePlugin, plugin.options);
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import { Hook, HookArray, HookArrayModel, HookModel, InheritedHookModel } from '../models/hook1';
+import { ExtendedHookModel, Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
 import { Hook2Model } from '../models/hook2';
 
 it('RegEXP tests', async () => {
@@ -66,17 +66,17 @@ it('should execute multiple hooks with array', async () => {
 });
 
 it('should execute pre hooks only twice in case inheritance is used with the same class name', async () => {
-  const doc = new InheritedHookModel();
+  const doc = new ExtendedHookModel();
   doc.hooksMessages = [];
   await doc.save();
   expect(doc.hooksMessages.length).toEqual(2);
 });
 
 it('should execute post hooks only twice in case inheritance is used with the same class name', async () => {
-  const doc = new InheritedHookModel();
+  const doc = new ExtendedHookModel();
   doc.hooksMessages = [];
   await doc.save();
 
-  const docFromDb = await InheritedHookModel.findOne({ _id: doc._id }).exec();
+  const docFromDb = await ExtendedHookModel.findOne({ _id: doc._id }).exec();
   expect(docFromDb.hooksMessages.length).toEqual(4);
 });
