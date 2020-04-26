@@ -178,7 +178,7 @@ it('should make use of "@prop({ _id: false })" and have no _id', async () => {
   expect(doc.someprop).not.toHaveProperty('_id');
 });
 
-// it('should run with a self-containing-class [hasezoey#42]', () => {
+// it('should run with a self-containing-class [typegoose#42]', () => {
 //   class SelfContaining {
 //     @prop()
 //     public nest?: SelfContaining;

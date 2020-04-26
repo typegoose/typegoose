@@ -11,13 +11,19 @@ redirect_from:
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
 <!-- 
-## 7.1.x
+## 7.2.x
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Add here
 -->
 *`[IC]` means `Internal Change`*
+
+## 7.1.0
+
+<sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+- Fix duplicate hooks / virtuals / queryMethods / plugins / indices via inheritance [{% include gitissue repo="typegoose" num=218 %}]
 
 ## 7.0.0
 
@@ -236,7 +242,7 @@ This Release didnt change anything on the code, it was mostly tests & github-pag
 - adding a migration guide from ~5.9 to 6.0.0
 - adding missing "get" and "set" property options [{% include gitissue repo="szokodiakos" num=260 %}]
 - adding `@modelOptions` and `getModelForClass` and `setModelForClass` will now override it
-- `setModelForClass` is now deprecated [{% include gitissue repo="hasezoey" num=6 %}, {% include gitissue repo="szokodiakos" num=186 %}]
+- `setModelForClass` is now deprecated [{% include gitissue repo="typegoose" num=6 %}, {% include gitissue repo="szokodiakos" num=186 %}]
 - setting the Typegoose Class to abstract
 - deprecating the Typegoose Class because of making the functions outsourced [{% include gitissue repo="szokodiakos" num=356 %}]
 - hook methods can now be arrays of methods [{% include gitissue repo="szokodiakos" num=313 %}]
@@ -248,7 +254,7 @@ This Release didnt change anything on the code, it was mostly tests & github-pag
 - schema generation got refactored (/reconstructed) multiple times
 - adding `count` to VirtualOptions
 - Updated Dependencies (^mongoose@5.7.1)
-- adding discriminator support hasezoey#11
+- adding discriminator support [{% include gitissue repo="typegoose" num=11 %}]
 - adding default class for (schemaOptions) timestamps
 - adding more docs to README & as tsdoc
 - some changes that are probably forgot
@@ -262,12 +268,12 @@ This Release didnt change anything on the code, it was mostly tests & github-pag
 - Change Error text of "InvalidPropError"
 - adding some "soft-errors" and traces with "loglevel"
 - exposing settings for "loglevel"
-- fixes Decorator Execution Order [{% include gitissue repo="hasezoey" num=23 %}, {% include gitissue repo="hasezoey" num=24 %}]
+- fixes Decorator Execution Order [{% include gitissue repo="typegoose" num=23 %}, {% include gitissue repo="typegoose" num=24 %}]
 - add support for custom discriminator properties
 - add error if using a self-containing class
 - add support for using multiple classes with the same name (`automaticName`, `customName`, `collection`)
 - [IC] "NoParamConstructor" got renamed into "AnyParamConstructor" it now accepts any arguments
-- [IC] Remake data.ts to use Maps hasezoey#3
+- [IC] Remake data.ts to use Maps [{% include gitissue repo="typegoose" num=3 %}]
 - [IC] adding many tests and bumping coverage
 - [IC] moving many Types to types.ts
 - [IC] removing unneeded dependencies
