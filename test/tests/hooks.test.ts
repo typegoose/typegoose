@@ -65,13 +65,13 @@ it('should execute multiple hooks with array', async () => {
   expect(Array.from(found.testArray)).toEqual(['hello', 'hello', 'hello']);
 });
 
-it('should execute pre hooks only twice in case inheritance is used with the same class name', async () => {
+it('should execute pre hooks only twice in case inheritance is being used [typegoose#218]', async () => {
   const doc = new ExtendedHookModel();
   await doc.save();
   expect(doc.hooksMessages.length).toEqual(2);
 });
 
-it('should execute post hooks only twice in case inheritance is used with the same class name', async () => {
+it('should execute post hooks only twice in case inheritance is being used [typegoose#218]', async () => {
   const doc = new ExtendedHookModel();
   await doc.save();
 
