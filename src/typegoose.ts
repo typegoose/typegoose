@@ -107,13 +107,25 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
   let sch: mongoose.Schema<U>;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
+  const parentClasses: AnyParamConstructor<T>[] = [];
+
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
-    // extend schema
-    sch = _buildSchema(parentCtor, sch, mergedOptions, false);
+    // add parent class to the beginning of the array if not added yet.
+    if (!parentClasses.find(cls => cls.name === parentCtor.name)) {
+      parentClasses.unshift(parentCtor);
+    }
+
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
+
+  // iterate and build parent class schemas
+  for (const parentClass of parentClasses) {
+    // extend schema
+    sch = _buildSchema(parentClass, sch, mergedOptions, false);
+  }
+
   // get schema of current model
   sch = _buildSchema(cl, sch, mergedOptions);
 
