@@ -112,9 +112,7 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
     // add parent class to the beginning of the array if not added yet.
-    if (!parentClasses.find(cls => cls.name === parentCtor.name)) {
-      parentClasses.unshift(parentCtor);
-    }
+    parentClasses.unshift(parentCtor);
 
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
