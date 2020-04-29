@@ -70,22 +70,6 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
 
   sch.loadClass(cl);
 
-  // Override getters & setters.
-  const accessors = Object.getOwnPropertyDescriptors(cl.prototype);
-  for (const key in accessors) {
-    if (key.match(/^(constructor)$/) || !(sch as any).virtuals[key]) {
-      continue;
-    }
-
-    if (typeof accessors[key].get === 'function') {
-      (sch as any).virtuals[key].getters = [accessors[key].get];
-    }
-
-    if (typeof accessors[key].set === 'function') {
-      (sch as any).virtuals[key].setters = [accessors[key].set];
-    }
-  }
-
   if (isFinalSchema) {
     // Hooks
     {
