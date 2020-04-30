@@ -17,7 +17,7 @@ import { getModelForClass, post, pre, prop } from '../../src/typegoose';
 })
 export class Hook2 {
   @prop()
-  public text: string;
+  public text?: string;
 }
 
 export const Hook2Model = getModelForClass(Hook2);

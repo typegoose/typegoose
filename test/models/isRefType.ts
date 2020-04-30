@@ -2,12 +2,12 @@ import { arrayProp, getModelForClass, mongoose, prop, Ref } from '../../src/type
 
 export class IsRefTypeNestedString {
   @prop()
-  public _id: string;
+  public _id!: string;
 }
 
 export class IsRefTypeNestedObjectId {
   @prop()
-  public _id: mongoose.Schema.Types.ObjectId;
+  public _id!: mongoose.Schema.Types.ObjectId;
 }
 
 export class IsRefType {

@@ -3,7 +3,7 @@ import { Car } from './car';
 
 export abstract class PersistentModel {
   @prop()
-  public createdAt: Date;
+  public createdAt?: Date;
 
   @arrayProp({ ref: Car })
   public cars?: Ref<Car>[];
@@ -18,7 +18,7 @@ export abstract class PersistentModel {
     return 'PersistentModel';
   }
 
-  // define an instanceMethod that is called by the derived class
+  // define an instance method that is called by the derived class
   public async addCar(this: DocumentType<PersistentModel>, car: Car) {
     if (!Array.isArray(this.cars)) {
       this.cars = [];

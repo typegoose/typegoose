@@ -23,7 +23,7 @@ import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../
 })
 export class Hook {
   @prop({ required: true })
-  public material: string;
+  public material!: string;
 
   @prop()
   public shape?: string;
@@ -42,7 +42,7 @@ export class Hook {
 })
 export class HookArray {
   @arrayProp({ required: true, items: String })
-  public testArray: string[];
+  public testArray!: string[];
 }
 
 @pre<BaseHook>('save', function (next) {
@@ -55,7 +55,7 @@ export class HookArray {
 })
 export class BaseHook {
   @arrayProp({ items: String, default: [] })
-  public hooksMessages: string[];
+  public hooksMessages?: string[];
 }
 
 @pre<ExtendedHook>('save', function (next) {

@@ -9,16 +9,16 @@ export enum NumberValidatorEnum {
 
 export class NumberValidators {
   @prop({ max: 3 })
-  public max: number;
+  public max?: number;
 
   @prop({ min: 10 })
-  public min: number;
+  public min?: number;
 
   @prop({ enum: NumberValidatorEnum })
-  public enumed: number;
+  public enumed?: number;
 
   @prop({ enum: NumberValidatorEnum })
-  public enumedt: NumberValidatorEnum;
+  public enumedt?: NumberValidatorEnum;
 }
 
 export const NumberValidatorsModel = getModelForClass(NumberValidators);
