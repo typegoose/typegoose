@@ -83,6 +83,7 @@ it('should error if an non-existing(runtime) type is given [NoMetadataError]', (
 it('should error if no function for hooks is defined [TypeError]', () => {
   try {
     // ignore that it is not written right, it should be tested so
+    // TODO: when upgrading to ts 3.9 change to "ts-expect-error"
     // @ts-ignore
     @pre<Test>('')
     class TestNoFunctionHook {

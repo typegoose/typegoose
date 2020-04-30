@@ -1,8 +1,6 @@
-import { CarModel } from '../models/car';
 import { IndexWeights, IndexWeightsModel } from '../models/indexweigths';
-import { RatingModel } from '../models/rating';
+import { RatingCar, RatingCarModel, RatingModel, RatingUser, RatingUserModel } from '../models/rating';
 import { SelectModel, SelectStrings } from '../models/select';
-import { UserModel } from '../models/user';
 
 describe('Property Option {select}', () => {
   beforeEach(async () => {
@@ -61,14 +59,17 @@ it('should create and find indexes with weights', async () => {
 });
 
 it('should add compound index', async () => {
-  const user = await UserModel.findOne().exec();
-  const car = await CarModel.findOne().exec();
+  expect.assertions(1);
+  const user = await RatingUserModel.create({ name: 'hi' } as RatingUser);
+  const car = await RatingCarModel.create({ model: 'some' } as RatingCar);
 
   await RatingModel.create({ user, car, stars: 4 });
 
   // should fail, because user and car should be unique
   try {
     await RatingModel.create({ user, car, stars: 5 });
+
+    fail('Expected .create to fail with code 11000');
   } catch (err) {
     expect(err).toHaveProperty('code', 11000);
   }
