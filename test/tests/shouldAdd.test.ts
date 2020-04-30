@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 import { arrayProp, buildSchema, getClass, getName, isDocumentArray, prop, Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
-import { Alias, model as AliasModel } from '../models/alias';
+import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
 import { GetSet, GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
@@ -284,13 +284,13 @@ it('should make use of virtual get- & set-ters', async () => {
     const doc = await GetSetModel.create({ actualProp: 'hello1' } as GetSet);
     expect(doc).not.toEqual(undefined);
     expect(doc.actualProp).toEqual('hello1');
-    expect(doc.some).toEqual('hello1');
+    expect(doc.someGetSet).toEqual('hello1');
   }
   {
-    const doc = await GetSetModel.create({ some: 'hello2' } as GetSet);
+    const doc = await GetSetModel.create({ someGetSet: 'hello2' } as GetSet);
     expect(doc).not.toEqual(undefined);
     expect(doc.actualProp).toEqual('hello2');
-    expect(doc.some).toEqual('hello2');
+    expect(doc.someGetSet).toEqual('hello2');
   }
 });
 
@@ -314,17 +314,17 @@ it('should add schema paths when there is a virtual called `name`', () => {
 
 describe('utils.getClass', () => {
   it('should get class by string', () => {
-    const doc = new GetClassTestParentModel({ testy: { test: 'hi' } });
+    const doc = new GetClassTestParentModel({ nested: { subprop: 'hi' } });
 
     expect(getClass(doc.typegooseName())).toEqual(GetClassTestParent);
-    expect(getClass((doc.testy as any).typegooseName())).toEqual(GetClassTestSub);
+    expect(getClass((doc.nested as any).typegooseName())).toEqual(GetClassTestSub);
   });
 
   it('should get class by Document / Embedded', () => {
-    const doc = new GetClassTestParentModel({ testy: { test: 'hi' } });
+    const doc = new GetClassTestParentModel({ nested: { subprop: 'hi' } });
 
     expect(getClass(doc)).toEqual(GetClassTestParent);
-    expect(getClass(doc.testy)).toEqual(GetClassTestSub);
+    expect(getClass(doc.nested)).toEqual(GetClassTestSub);
   });
 
   it('should get class by typegooseString', () => {

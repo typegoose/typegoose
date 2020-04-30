@@ -5,12 +5,12 @@ import { Genders } from '../enums/genders';
 import { Car, CarModel } from '../models/car';
 import { InternetUserModel } from '../models/internetUser';
 import { AddressNested, AddressNestedModel, PersonNested, PersonNestedModel } from '../models/nestedObject';
-import { model as Person } from '../models/person';
+import { PersonModel } from '../models/person';
 import { User, UserModel } from '../models/user';
 
 it('should return correct class type for document', async () => {
   const car = await CarModel.create({
-    model: 'Tesla',
+    carModel: 'Tesla',
     price: mongoose.Types.Decimal128.fromString('50123.25')
   });
   const carReflectedType = getClassForDocument(car);
@@ -32,15 +32,15 @@ it('should return correct class type for document', async () => {
 });
 
 it('should use inherited schema', async () => {
-  let user = await Person.create({ email: 'my@email.com' });
+  let user = await PersonModel.create({ email: 'my@email.com' });
 
   const car = await CarModel.create({
-    model: 'Tesla',
+    carModel: 'Tesla',
     price: mongoose.Types.Decimal128.fromString('50123.25')
   });
   await user.addCar(car);
 
-  user = await Person.findById(user.id).populate('cars').exec();
+  user = await PersonModel.findById(user.id).populate('cars').exec();
 
   // verify properties
   expect(user).toHaveProperty('createdAt');
@@ -49,7 +49,7 @@ it('should use inherited schema', async () => {
   expect(user.cars.length > 0).toBe(true);
   user.cars.forEach((currentCar) => {
     if (isDocument(currentCar)) {
-      expect(typeof currentCar.model).toBe('string');
+      expect(typeof currentCar.carModel).toBe('string');
     } else {
       fail('Expected "currentCar" to be populated!');
     }
@@ -57,7 +57,7 @@ it('should use inherited schema', async () => {
 
   // verify methods
   expect(user.getClassName()).toEqual('Person');
-  expect(Person.getStaticName()).toEqual('Person');
+  expect(PersonModel.getStaticName()).toEqual('Person');
 });
 
 it('should store nested address', async () => {
@@ -89,7 +89,7 @@ it('should properly set Decimal128, ObjectID types to field', () => {
 it('should validate Decimal128', async () => {
   try {
     await CarModel.create({
-      model: 'Tesla',
+      carModel: 'Tesla',
       price: 'NO DECIMAL'
     });
     // fail('Validation must fail.');
@@ -97,7 +97,7 @@ it('should validate Decimal128', async () => {
     expect(e).toBeInstanceOf((mongoose.Error as any).ValidationError);
   }
   const car = await CarModel.create({
-    model: 'Tesla',
+    carModel: 'Tesla',
     price: mongoose.Types.Decimal128.fromString('123.45')
   });
   const foundCar = await CarModel.findById(car._id).exec();
@@ -107,7 +107,7 @@ it('should validate Decimal128', async () => {
 
 it('should validate email', async () => {
   try {
-    await Person.create({
+    await PersonModel.create({
       email: 'email'
     });
     fail('Validation must fail.');

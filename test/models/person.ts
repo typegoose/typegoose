@@ -24,4 +24,4 @@ export class Person extends PersistentModel {
   }
 }
 
-export const model = getModelForClass(Person);
+export const PersonModel = getModelForClass(Person);

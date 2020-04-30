@@ -9,4 +9,4 @@ export class Alias {
   public aliasProp!: string; // its just for type completion
 }
 
-export const model = getModelForClass(Alias);
+export const AliasModel = getModelForClass(Alias);

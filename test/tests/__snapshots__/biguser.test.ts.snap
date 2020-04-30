@@ -8,8 +8,8 @@ Object {
   "car": Object {
     "__v": 0,
     "_id": Any<ObjectID>,
+    "carModel": "Tesla",
     "id": Any<String>,
-    "model": "Tesla",
     "price": Object {
       "$numberDecimal": "50123.25",
     },

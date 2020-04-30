@@ -1,14 +1,14 @@
 import { getModelForClass, mongoose, pre, prop } from '../../src/typegoose';
 
 @pre<Car>('save', function (next) {
-  if (this.model === 'Trabant') {
+  if (this.carModel === 'Trabant') {
     this.isSedan = true;
   }
   next();
 })
 export class Car {
   @prop({ required: true })
-  public model!: string;
+  public carModel!: string;
 
   @prop({ lowercase: true })
   public version?: string;

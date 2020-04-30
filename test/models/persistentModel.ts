@@ -8,12 +8,12 @@ export abstract class PersistentModel {
   @arrayProp({ ref: Car })
   public cars?: Ref<Car>[];
 
-  // define an 'instanceMethod' that will be overwritten
+  // define an instance method that will be overwritten
   public getClassName() {
     return 'PersistentModel';
   }
 
-  // define an 'instanceMethod' that will be overwritten
+  // define an instance method that will be overwritten
   public static getStaticName() {
     return 'PersistentModel';
   }
