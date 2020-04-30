@@ -213,6 +213,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
           });
       } else {
         // this will happen if the enum contains both types ("design:type" will be "Object")
+        // this should never happen, because it is prevented by typescript (failsafe)
         throw new Error(`Invalid type used for map!, got: "${Type}" (${name}.${key})`);
       }
     }

@@ -73,7 +73,7 @@ interface Hooks {
   post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>): ClassDecorator;
 }
 
-// Note: Documentation for the hooks can't be added without adding it to *every* overload
+// Note: TSDoc for the hooks can't be added without adding it to *every* overload
 const hooks: Hooks = {
   pre(...args) {
     return (target: any) => addToHooks(target, 'pre', args);
