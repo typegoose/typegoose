@@ -15,12 +15,12 @@ class SomeChangedID {
 
 Note: when the type is not `ObjectID`, you need to explicitly set the `_id` before saving.
 
-To disable the `_id` field altogether (useful in arrays of subdocuments), set it to `false`. This will be passed directly to mongoose.
+To disable the `_id` field altogether (useful in arrays of subdocuments), add `@prop({ _id: false })`.
 
 ```ts
 class SomeChangedID {
-  @prop()
-  _id: false;  // no _id
+  @prop({ _id: false })  // no _id
+  @prop(): someField: string;
 }
 ```
 
