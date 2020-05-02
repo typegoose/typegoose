@@ -15,7 +15,7 @@ class SomeChangedID {
 
 Note: when the type is not `ObjectID`, you need to explicitly set the `_id` before saving.
 
-To disable the `_id` field altogether (useful in arrays of subdocuments), add `@prop({ _id: false })`.
+To disable the `_id` field altogether (useful in arrays of subdocuments), add [`@prop({ _id: false })`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#_id).
 
 ```ts
 class SomeChangedID {
