@@ -18,7 +18,7 @@ import {
   modelOptions,
   prop
 } from '../../src/typegoose';
-import type { IModelOptions, DocumentQuery, QueryMethodMap, ReturnModelType } from '../../src/types';
+import type { DocumentQuery, IModelOptions, QueryMethodMap, ReturnModelType } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
