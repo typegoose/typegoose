@@ -59,7 +59,7 @@ parseENV(); // call this before anything to ensure they are applied
  * const NameModel = getModelForClass(Name);
  * ```
  */
-export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
+export function getModelForClass<T, U extends AnyParamConstructor<T>, QueryHelpers>(cl: U, options?: IModelOptions) {
   assertionIsClass(cl);
   options = typeof options === 'object' ? options : {};
 
@@ -67,7 +67,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
   const name = getName(cl);
 
   if (models.has(name)) {
-    return models.get(name) as ReturnModelType<U, T>;
+    return models.get(name) as ReturnModelType<U, T, QueryHelpers>;
   }
 
   const model = roptions?.existingConnection?.model.bind(roptions.existingConnection)
@@ -81,7 +81,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
     compiledmodel.syncIndexes();
   }
 
-  return addModelToTypegoose(compiledmodel, cl);
+  return addModelToTypegoose<T, U, QueryHelpers>(compiledmodel, cl);
 }
 
 /**
@@ -146,7 +146,7 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
  * const model = addModelToTypegoose(mongoose.model("Name", schema), Name);
  * ```
  */
-export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: mongoose.Model<any>, cl: U) {
+export function addModelToTypegoose<T, U extends AnyParamConstructor<T>, QueryHelpers = {}>(model: mongoose.Model<any>, cl: U) {
   assertion(model.prototype instanceof mongoose.Model, new TypeError(`"${model}" is not a valid Model!`));
   assertionIsClass(cl);
 
@@ -163,7 +163,7 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
   models.set(name, model);
   constructors.set(name, cl);
 
-  return models.get(name) as ReturnModelType<U, T>;
+  return models.get(name) as ReturnModelType<U, T, QueryHelpers>;
 }
 
 /**

@@ -19,7 +19,7 @@ export type DocumentType<T> = (T extends Base ? Omit<mongoose.Document, '_id'> &
  * Used Internally for ModelTypes
  * @internal
  */
-export type ModelType<T> = mongoose.Model<DocumentType<T>>;
+export type ModelType<T, QueryHelpers = {}> = mongoose.Model<DocumentType<T>, QueryHelpers>;
 /**
  * Any-param Constructor
  * @internal
@@ -28,7 +28,7 @@ export type AnyParamConstructor<T> = new (...args: any) => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
  */
-export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = ModelType<InstanceType<U>> & U;
+export type ReturnModelType<U extends AnyParamConstructor<T>, T = any, QueryHelpers = {}> = ModelType<InstanceType<U>, QueryHelpers> & U;
 
 /** @internal */
 export type Func = (...args: any[]) => any;
@@ -433,6 +433,11 @@ export interface IPluginsArray<T> {
  * ```
  */
 export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
+
+/**
+ * Return query methods
+ */
+export type DocumentQuery<T, U> = mongoose.DocumentQuery<DocumentType<T>[], DocumentType<T>, U>;
 
 /**
  * Used for the Reflection of Query Methods
