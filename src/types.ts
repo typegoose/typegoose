@@ -45,18 +45,6 @@ export interface TypegooseModel<
    */
   new <ExtraOmittedKeys extends keyof D = never>(doc?: Omit<D, ExtraOmittedKeys>): T;
   /**
-   * Shortcut for saving one or more documents to the database. MyModel.create(doc)
-   * does new MyModel(doc).save() for every doc.
-   * Triggers the save() hook.
-   */
-  create<ExtraOmittedKeys extends keyof D = never>(doc: Omit<D, ExtraOmittedKeys>): Promise<T>;
-  /**
-   * Shortcut for saving one or more documents to the database. MyModel.create(docs)
-   * does new MyModel(doc).save() for every doc in docs.
-   * Triggers the save() hook.
-   */
-  create<ExtraOmittedKeys extends keyof D = never>(docs: Omit<D, ExtraOmittedKeys>[]): Promise<T[]>;
-  /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
