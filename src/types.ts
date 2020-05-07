@@ -25,11 +25,10 @@ export interface TypegooseModel<
     | keyof IObjectWithTypegooseFunction
     | (T extends TimeStamps ? keyof TimeStamps : never)> & Partial<Pick<mongoose.Document, '_id' | '__v'>>,
   D = { [K in keyof V]: V[K] extends Map<infer X, infer Y> ?
-    X extends string | number | symbol ? Record<X, Y> | Map<X, Y> : Map<X, Y> : V[K] }>
+    X extends string | number | symbol ? Record<X, Y> | [X, Y][] | Map<X, Y> : [X, Y][] | Map<X, Y> : V[K] }>
   extends Omit<Pick<mongoose.Model<T, QueryHelpers>, keyof mongoose.Model<T, QueryHelpers>>, 'create'> {
   /**
-   * Model constructor
-   * Provides the interface to MongoDB collections as well as creates document instances.
+   * Creates a document synchronously, not saving it to the database
    * @param doc values with which to create the document
    * @event error If listening to this event, it is emitted when a document
    *   was saved without passing a callback and an error occurred. If not
