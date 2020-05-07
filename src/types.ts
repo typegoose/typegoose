@@ -13,12 +13,17 @@ type ReadonlyKeysOf<T> = {
   [P in keyof T]: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, never, P>
 }[keyof T];
 
+type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
+
 export interface TypegooseModel<
   T extends mongoose.Document,
   QueryHelpers = {},
-  V = Omit<T, ReadonlyKeysOf<T> | { [K in keyof T]: T[K] extends Function ? K : never }[keyof T] | keyof mongoose.Document |
-    keyof IObjectWithTypegooseFunction | (T extends TimeStamps ? ('createdAt' | 'updatedAt') : never)> &
-  Partial<Pick<mongoose.Document, '_id' | '__v'>>,
+  V = Omit<T,
+    ReadonlyKeysOf<T>
+    | FunctionPropertyNames<T>
+    | keyof mongoose.Document
+    | keyof IObjectWithTypegooseFunction
+    | (T extends TimeStamps ? keyof TimeStamps : never)> & Partial<Pick<mongoose.Document, '_id' | '__v'>>,
   D = { [K in keyof V]: V[K] extends Map<infer X, infer Y> ?
     X extends string | number | symbol ? Record<X, Y> | Map<X, Y> : Map<X, Y> : V[K] }>
   extends Omit<Pick<mongoose.Model<T, QueryHelpers>, keyof mongoose.Model<T, QueryHelpers>>, 'create'> {
