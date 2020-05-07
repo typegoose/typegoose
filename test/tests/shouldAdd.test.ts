@@ -148,13 +148,13 @@ it('should support dynamic references via refPath', async () => {
   // I should now have two "inventory" items, with different embedded reference documents.
   const items = await InventoryModel.find({}).populate('kind kindArray').exec();
   expect(items[0].refItemPathName).toEqual('Beverage');
-  expect((items[0].kind as Beverage).isDecaf).toEqual(true); expect((items[0].kind as Beverage).isDecaf).toEqual(true);
+  expect((items[0].kind as Beverage).isDecaf).toEqual(true);
   expect((items[0].kindArray[0] as Beverage).isDecaf).toEqual(true);
 
 
   // wrong type to make TypeScript happy	  // wrong type to make TypeScript happy
   expect(items[1].refItemPathName).toEqual('Scooter');
-  expect((items[1].kind as Beverage).isDecaf).toEqual(undefined); expect((items[1].kind as Beverage).isDecaf).toEqual(undefined);
+  expect((items[1].kind as Beverage).isDecaf).toEqual(undefined);
   expect((items[1].kindArray[0] as Beverage).isDecaf).toEqual(undefined);
 });
 
