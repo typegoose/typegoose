@@ -61,4 +61,4 @@ interface Something extends Base {} // have the interface to add the types of "B
 class Something extends TimeStamps {} // have your class
 ```
 
-Note: This only works because `Base` only has types and does not modify anything
+Note: This only works because `Base` only has types and does not modify anything. You cannot, for example, implement `TimeStamps` and extend `Base` because `TimeStamps` modifies the behavior.

@@ -36,4 +36,4 @@ class Main {
 }
 ```
 
-When you get errors about references, try putting it as a string
+When you get errors about references, try putting it as a string.

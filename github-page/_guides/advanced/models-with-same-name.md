@@ -4,7 +4,7 @@ description: >
   Models with the same name OR Models with different collection
 ---
 
-This Guide shows all the possibilitys for a model to use different names
+This Guide shows all the possibilities for a model to use different names
 
 Note: if you want classes with the same name, you need to do one of these, so that typegoose can differentiate them
 

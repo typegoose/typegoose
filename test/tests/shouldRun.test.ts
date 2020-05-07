@@ -223,7 +223,7 @@ it('should use type "Buffer" [typegoose#88]', async () => {
 
   expect(model.schema.path('propy')).toBeInstanceOf(mongoose.Schema.Types.Buffer);
 
-  const { _id: id } = await model.create({ propy: Buffer.from('Hello') } as TestBuffer);
+  const { _id: id } = await model.create({ propy: Buffer.from('Hello') });
 
   const found = await model.findById(id).exec();
   expect(found).not.toEqual(undefined);

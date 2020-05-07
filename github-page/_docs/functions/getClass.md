@@ -29,7 +29,7 @@ class Kitten {
 
 const KittenModel = getModelForClass(Kitten);
 
-const input = new KittenModel();
+const input = new KittenModel({ currentFood: { name: 'Mix' } });
 
 // Nested
 getClass(input.currentFood) === Food; // should be "true"

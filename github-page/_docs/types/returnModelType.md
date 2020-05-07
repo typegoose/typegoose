@@ -6,7 +6,7 @@ redirect_from:
 
 The Type `ReturnModelType<T>` is the type used to have type information for a class converted to an mongoose Model
 
--> It is the logical `AND` of `mongoose.Model<DocumentType<T>>` and `T`
+-> It is the logical `AND` (aka the intersection) of `mongoose.Model<DocumentType<T>>` and `T`
 
 Note: It has to be always with `typeof Class`, otherwise it will not work
 
@@ -27,5 +27,5 @@ class Kitten {
 
 ## Difference to ModelType
 
-`ModelType` is the logical `AND` of `mongoose.Model<DocumentType<T>>` and `T` whereas `ReturnModelType` is an extension to `ModelType`: `ModelType<InstanceType<U>> & U`
+`ModelType` is the logical `AND` (i.e. the intersection) of `mongoose.Model<DocumentType<T>>` and `T` whereas `ReturnModelType` is an extension to `ModelType`: `ModelType<InstanceType<U>> & U`
 <!--I (hasezoey) don't know how the types worked there, and because ModelType was lacking some types i tried some things and came to this, but dont know what exactly it does-->

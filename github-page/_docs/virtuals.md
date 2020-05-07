@@ -42,6 +42,24 @@ Resulting Document in MongoDB:
 }
 ```
 
+Please note that as of version 8.x, virtual properties are discouraged, as they can cause issues with document creation typings. Specifically, having a virtual getter and setter with the same name causes the property to be required in the creation process unless you omit it manually.
+
+```js
+new Name({
+  firstName: 'Will',
+  lastName: 'Smith'
+}); // Error: fullName must be specified
+
+type KeysToOmit = 'fullName';
+
+// Use generic parameter to omit certain keys
+new Name<KeysToOmit>({
+  firstName: 'Will',
+  lastName: 'Smith'
+}); // Works
+```
+
+
 ### Difference between @prop's get & set and this get & set
 
 *This shows the difference between [`@prop`'s get & set]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#get--set) and [this one]({{ site.baseurl }}{% link _docs/virtuals.md %}#get--set)*

@@ -114,7 +114,7 @@ let document = await Kitten.create({ name: 'Kitty' });
 // "document" has types of KittenClass
 ```
 
-Please note that `new Kitten({})` & `await Kitten.create({})` has no types of KittenClass, because typegoose doesn't modify functions of mongoose
+Please note that before version 8.0.0, `new Kitten({})` & `await Kitten.create({})` did not have typings of KittenClass. To see what this means for older projects, see [`the migration guide`]({{ site.baseurl }}{% link _guides/migrate-to-8.md %})
 
 ## Do's and Dont's of Typegoose
 
