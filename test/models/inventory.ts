@@ -24,14 +24,11 @@ export class Inventory {
   @prop({ required: true, enum: ['Beverage', 'Scooter'] })
   public refItemPathName!: string;
 
-  @prop()
-  public name?: string;
-
   @prop({ required: true, refPath: 'refItemPathName' })
   public kind!: Ref<Beverage | Scooter>;
 
-  @arrayProp({ refPath: 'refItemPathName' })
-  public irp?: Ref<Beverage | Scooter>[];
+  @arrayProp({ required: true, refPath: 'refItemPathName' })
+  public kindArray!: Ref<Beverage | Scooter>[];
 }
 
 export class TestIRPbyString {
