@@ -6,7 +6,7 @@ import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
 import { GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
-import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models/inventory';
+import { Beverage, BeverageModel, Inventory, InventoryModel, ScooterModel } from '../models/inventory';
 import { OptionsModel } from '../models/options';
 import { UserExclude, UserModel } from '../models/user';
 import {
@@ -115,7 +115,7 @@ it(`should add dynamic fields using map`, async () => {
   expect(user.sideNotes.get('day2')).not.toHaveProperty('_id');
 });
 
-it('Should support dynamic references via refPath', async () => {
+it('should support dynamic references via refPath', async () => {
   const sprite = await BeverageModel.create({
     isDecaf: true,
     isSugarFree: false
@@ -131,7 +131,7 @@ it('Should support dynamic references via refPath', async () => {
     kindArray: [sprite],
     count: 10,
     value: 1.99
-  });
+  } as Inventory);
 
   await InventoryModel.create({
     refItemPathName: 'Scooter',
@@ -139,7 +139,7 @@ it('Should support dynamic references via refPath', async () => {
     kindArray: [vespa],
     count: 1,
     value: 1099.98
-  });
+  } as Inventory);
 
   // I should now have two "inventory" items, with different embedded reference documents.
   const items = await InventoryModel.find({}).populate('kind kindArray').exec();

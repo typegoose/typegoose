@@ -14,7 +14,7 @@ export enum ProjectValue {
   BROKEN = 'broken'
 }
 
-class InternetUser {
+export class InternetUser {
   @mapProp({ of: String, default: {} })
   public socialNetworks?: Map<string, string>;
 
