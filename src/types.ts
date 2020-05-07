@@ -33,12 +33,12 @@ export interface TypegooseModel<
    */
   new <ExtraOmittedKeys extends keyof D = never>(doc?: Omit<D, ExtraOmittedKeys>): T;
   /**
-   * Creates and saves multiple documents to the database. Shortcut for `docs.forEach(doc => Model.create(doc).save())`.
+   * Creates and saves a single document to the database. Shortcut for `Model.create(doc).save()`.
    * The generic parameter, ExtraOmittedKeys, is the keys in the schema to ignore for the sake of the creation of this document. It is
    * useful for excluding getters/setters, which don't strictly need to be specified in `doc`.
-   * @param docs The array of values with which to create each document to be saved to the database
-   * @param options Options for saving the documents
-   * @returns The array of documents created with the provided values
+   * @param docs The with which to create the document to be saved to the database
+   * @param options Options for saving the document
+   * @returns The document created with the provided values
    */
   create<ExtraOmittedKeys extends keyof D = never>(doc: Omit<D, ExtraOmittedKeys>, options?: mongoose.SaveOptions): Promise<T>;
   /**
