@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { arrayProp, buildSchema, getClass, getName, isDocumentArray, prop, Ref } from '../../src/typegoose';
+import { arrayProp, buildSchema, getClass, getName, isDocumentArray, prop, Ref, mapProp, getModelForClass } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
@@ -330,4 +330,19 @@ describe('utils.getClass', () => {
     expect(getClass(doc)).toEqual(GetClassTestParent);
     expect(getClass(doc.testy)).toEqual(GetClassTestSub);
   });
+});
+
+it('should work with both map creation types', async () => {
+  class MapTest {
+    @mapProp({ of: Number, required: true })
+    public prop: Map<string, number>;
+  }
+
+  const MapTestModel = getModelForClass(MapTest);
+
+  const variant1 = new MapTestModel({ prop: [['key1', 1], ['key2', 2]] });
+  await variant1.validate();
+
+  const variant2 = new MapTestModel({ prop: { key1: 1, key2: 2 } });
+  await variant2.validate();
 });
