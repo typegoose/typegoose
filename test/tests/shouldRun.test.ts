@@ -241,11 +241,11 @@ it('should use "type" as a last resort', async () => {
 
   expect(model.schema.path('propy')).toBeInstanceOf(mongoose.Schema.Types.Number);
 
-  // @ts-ignore
-  const doc = new model({ propy: 100 });
+  const doc = new model({ propy: 100 as any });
 
   expect(doc).not.toEqual(undefined);
   expect(doc.propy).toEqual(100);
+  expect(model.schema.path('propy')).toBeInstanceOf(mongoose.Schema.Types.Number);
 });
 
 it('should run with Custom Types', async () => {
