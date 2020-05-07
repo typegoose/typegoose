@@ -23,7 +23,7 @@ import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../
 })
 export class Hook {
   @prop({ required: true })
-  public material: string;
+  public material!: string;
 
   @prop()
   public shape?: string;
@@ -42,8 +42,32 @@ export class Hook {
 })
 export class HookArray {
   @arrayProp({ required: true, items: String })
-  public testArray: string[];
+  public testArray!: string[];
 }
+
+@pre<BaseHook>('save', function (next) {
+  this.hooksMessages.push('Base');
+  next();
+})
+@post<BaseHook>('findOne', async (doc, next) => {
+  doc.hooksMessages.push('Post Base');
+  next();
+})
+export class BaseHook {
+  @arrayProp({ items: String, default: [] })
+  public hooksMessages?: string[];
+}
+
+@pre<ExtendedHook>('save', function (next) {
+  this.hooksMessages.push('Actual');
+  next();
+})
+@post<ExtendedHook>('findOne', async (doc, next) => {
+  doc.hooksMessages.push('Post Actual');
+  next();
+})
+class ExtendedHook extends BaseHook { }
 
 export const HookModel = getModelForClass(Hook);
 export const HookArrayModel = getModelForClass(HookArray);
+export const ExtendedHookModel = getModelForClass(ExtendedHook);

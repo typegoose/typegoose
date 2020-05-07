@@ -4,10 +4,10 @@ export class GetSet {
   @prop({ required: true })
   public actualProp!: string;
 
-  public get some() {
+  public get someGetSet() {
     return this.actualProp;
   }
-  public set some(v: string) {
+  public set someGetSet(v: string) {
     this.actualProp = v;
   }
 }

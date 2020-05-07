@@ -17,10 +17,10 @@ import { Job } from './job';
 @plugin(findOrCreate)
 export class User extends defaultClasses.FindOrCreate {
   @prop({ required: true })
-  public firstName: string;
+  public firstName!: string;
 
   @prop({ required: true })
-  public lastName: string;
+  public lastName!: string;
 
   public get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
@@ -47,7 +47,7 @@ export class User extends defaultClasses.FindOrCreate {
   public age?: number;
 
   @prop({ enum: Genders, required: true })
-  public gender: Genders;
+  public gender!: Genders;
 
   @prop({ enum: Role })
   public role?: Role;
@@ -62,7 +62,7 @@ export class User extends defaultClasses.FindOrCreate {
   public car?: Ref<Car>;
 
   @arrayProp({ items: String, required: true })
-  public languages: string[];
+  public languages!: string[];
 
   @arrayProp({ items: Job, _id: false })
   public previousJobs?: Job[];

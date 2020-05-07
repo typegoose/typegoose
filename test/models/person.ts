@@ -11,7 +11,7 @@ import { PersistentModel } from './persistentModel';
 export class Person extends PersistentModel {
   // add new property
   @prop({ required: true, validate: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/ })
-  public email: string;
+  public email!: string;
 
   // override instanceMethod
   public getClassName() {
@@ -24,4 +24,4 @@ export class Person extends PersistentModel {
   }
 }
 
-export const model = getModelForClass(Person);
+export const PersonModel = getModelForClass(Person);

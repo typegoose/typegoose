@@ -34,14 +34,14 @@ it('should create a User with connections', async () => {
         field: 'IT'
       }
     },
-    car: tesla.id,
+    car: tesla,
     languages: ['english', 'typescript'],
     previousJobs: [{
       title: 'Janitor'
     }, {
       title: 'Manager'
     }],
-    previousCars: [trabant.id, zastava.id]
+    previousCars: [trabant, zastava]
   });
 
   {
@@ -50,63 +50,40 @@ it('should create a User with connections', async () => {
       .populate('car previousCars')
       .exec();
 
-    expect(foundUser).toHaveProperty('nick', 'Nothing');
-    expect(foundUser).toHaveProperty('firstName', 'John');
-    expect(foundUser).toHaveProperty('lastName', 'Doe');
-    expect(foundUser).toHaveProperty('uniqueId', 'john-doe-20');
-    expect(foundUser).toHaveProperty('age', 20);
-    expect(foundUser).toHaveProperty('gender', Genders.MALE);
-    expect(foundUser).toHaveProperty('role', Role.User);
-    {
-      expect(foundUser).toHaveProperty('roles');
-      expect(foundUser.roles).toHaveLength(1);
-      expect(foundUser.roles.includes(Role.Guest)).toBe(true);
-    }
-    expect(foundUser).toHaveProperty('job');
-    expect(foundUser).toHaveProperty('car');
-    {
-      expect(foundUser).toHaveProperty('languages');
-      expect(foundUser.languages).toHaveLength(2);
-      expect(foundUser.languages.includes('english')).toBe(true);
-      expect(foundUser.languages.includes('typescript')).toBe(true);
-    }
-    expect(foundUser.job).toHaveProperty('title', 'Developer');
-    expect(foundUser.job).toHaveProperty('position', 'Lead');
-    {
-      expect(foundUser.job).toHaveProperty('startedAt');
-      expect(foundUser.job.startedAt).toBeInstanceOf(Date);
-    }
+    expect(foundUser.toObject({ virtuals: true, getters: true })).toMatchSnapshot({
+      _id: expect.any(mongoose.Types.ObjectId),
+      id: expect.any(String),
+      job: {
+        startedAt: expect.any(Date)
+      },
+      car: {
+        _id: expect.any(mongoose.Types.ObjectId),
+        id: expect.any(String)
+      },
+      previousJobs: expect.any(Array),
+      previousCars: expect.any(Array)
+    });
+
     expect(foundUser.job.titleInUppercase()).toEqual('Developer'.toUpperCase());
-    expect(foundUser.job.jobType).not.toHaveProperty('_id');
-    expect(foundUser.job.jobType).toHaveProperty('salery', 5000);
-    expect(foundUser.job.jobType).toHaveProperty('field', 'IT');
-    {
-      expect(foundUser.job.jobType).toHaveProperty('salery');
-      expect(typeof foundUser.job.jobType.salery).toBe('number');
-    }
-    expect(foundUser.car).toHaveProperty('carModel', 'Tesla');
-    expect(foundUser.car).toHaveProperty('version', 'models');
     {
       expect(foundUser).toHaveProperty('previousJobs');
       expect(foundUser.previousJobs).toHaveLength(2);
+
+      const [janitor, manager] = foundUser.previousJobs;
+      expect(janitor).toHaveProperty('title', 'Janitor');
+      expect(manager).toHaveProperty('title', 'Manager');
     }
-
-    expect(foundUser).toHaveProperty('fullName', 'John Doe');
-
-    const [janitor, manager] = foundUser.previousJobs;
-    expect(janitor).toHaveProperty('title', 'Janitor');
-    expect(manager).toHaveProperty('title', 'Manager');
 
     {
       expect(foundUser).toHaveProperty('previousCars');
       expect(foundUser.previousCars).toHaveLength(2);
-    }
 
-    const [foundTrabant, foundZastava] = foundUser.previousCars;
-    expect(foundTrabant).toHaveProperty('carModel', 'Trabant');
-    expect(foundTrabant).toHaveProperty('isSedan', true);
-    expect(foundZastava).toHaveProperty('carModel', 'Zastava');
-    expect(foundZastava).toHaveProperty('isSedan', undefined);
+      const [foundTrabant, foundZastava] = foundUser.previousCars;
+      expect(foundTrabant).toHaveProperty('carModel', 'Trabant');
+      expect(foundTrabant).toHaveProperty('isSedan', true);
+      expect(foundZastava).toHaveProperty('carModel', 'Zastava');
+      expect(foundZastava).toHaveProperty('isSedan', undefined);
+    }
 
     foundUser.fullName = 'Sherlock Holmes';
     expect(foundUser).toHaveProperty('firstName', 'Sherlock');

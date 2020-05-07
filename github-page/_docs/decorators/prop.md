@@ -74,7 +74,7 @@ class Defaulted {
 
 Accepts Type: `boolean`
 
-Set this to `false` if you want to turn of creating IDs for sub-documents.
+Set this to `false` if you want to turn off creating IDs for sub-documents.
 
 Example:
 

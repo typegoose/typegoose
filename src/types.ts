@@ -62,7 +62,6 @@ export interface TypegooseModel<
 
 /**
  * Get the Type of an instance of a Document with Class properties
- * @public
  * @example
  * ```ts
  * class Name {}
@@ -122,15 +121,21 @@ export interface BasePropOptions {
   default?: any;
   /** Give an Validator RegExp or Function */
   validate?: Validator | Validator[];
-  /** should this value be unique?
+  /**
+   * Should this property have an "unique" index?
    * @link https://docs.mongodb.com/manual/indexes/#unique-indexes
    */
   unique?: boolean;
-  /** should this value get an index?
+  /**
+   * Should this property have an index?
+   * Note: dont use this if you want to do an compound index
    * @link https://docs.mongodb.com/manual/indexes
    */
   index?: boolean;
-  /** @link https://docs.mongodb.com/manual/indexes/#sparse-indexes */
+  /**
+   * Should this property have an "sparse" index?
+   * @link https://docs.mongodb.com/manual/indexes/#sparse-indexes
+   */
   sparse?: boolean;
   /**
    * Should this property have an "expires" index?
@@ -142,7 +147,7 @@ export interface BasePropOptions {
    * @link https://mongoosejs.com/docs/api.html#schematype_SchemaType-text
    */
   text?: boolean;
-  /** should subdocuments get their own id?
+  /** Should subdocuments get their own id?
    * @default true (Implicitly)
    */
   _id?: boolean;
@@ -321,7 +326,6 @@ export type RefSchemaType = typeof mongoose.Schema.Types.Number |
 
 /**
  * Reference another Model
- * @public
  */
 // export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
 export type Ref<R, T extends RefType = R extends { _id: RefType; } ? R['_id'] : mongoose.Types.ObjectId> = R | T;

@@ -13,7 +13,7 @@ import * as mongoose from "mongoose";
 import * as autopopulate from "mongoose-autopopulate";
 import { plugin, prop, Ref, getModelForClass } from "@typegoose/typegoose";
 
-@plugin(autopopulate)
+@plugin(autopopulate as any) // this is an dirty fix, because the types of this plugin dont work
 class SomeClass {
   @prop({ autopopulate: true, ref: "SomeReferencedClass" })
   public populateField: Ref<SomeReferencedClass>;
@@ -25,7 +25,7 @@ const SomeClassModel = getModelForClass(SomeClass);
 const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 
 (async () => {
-  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: "guides" });
+  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: "guides", useUnifiedTopology: true });
 
   const reference = await SomeReferencedClassModel.create({});
   const { _id: id } = await SomeClassModel.create({ populateField: reference } as SomeClass);

@@ -10,10 +10,10 @@ export class Virtual {
 
 export class VirtualSub {
   @prop({ required: true, ref: Virtual })
-  public virtual: Ref<Virtual>;
+  public virtual!: Ref<Virtual>;
 
   @prop({ required: true })
-  public dummy: string;
+  public dummy!: string;
 }
 
 export class NonVirtual {

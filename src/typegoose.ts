@@ -88,6 +88,12 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
 /**
  * Get Model from internal cache
  * @param key ModelName key
+ * @example
+ * ```ts
+ * class Name {}
+ * getModelForClass(Name); // build the model
+ * const NameModel = getModelWithString<typeof Name>("Name");
+ * ```
  */
 export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
   assertion(typeof key === 'string', TypeError(format('Expected "key" to be a string, got "%s"', key)));
@@ -99,6 +105,12 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
  * Generates a Mongoose schema out of class props, iterating through all parents
  * @param cl The not initialized Class
  * @returns Returns the Build Schema
+ * @example
+ * ```ts
+ * class Name {}
+ * const NameSchema = buildSchema(Name);
+ * const NameModel = mongoose.model("Name", NameSchema);
+ * ```
  */
 export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?: mongoose.SchemaOptions) {
   assertionIsClass(cl);
@@ -111,7 +123,7 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
     // extend schema
-    sch = _buildSchema(parentCtor, sch, mergedOptions);
+    sch = _buildSchema(parentCtor, sch, mergedOptions, false);
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
@@ -128,11 +140,11 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
  * @param cl The Class to store
  * @example
  * ```ts
- * class T {}
+ * class Name {}
  *
- * const schema = buildSchema(T);
+ * const schema = buildSchema(Name);
  * // modifications to the schame can be done
- * const model = addModelToTypegoose(mongoose.model(schema), T);
+ * const model = addModelToTypegoose(mongoose.model("Name", schema), Name);
  * ```
  */
 export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: TypegooseModel<any>, cl: U) {
@@ -141,11 +153,10 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
 
   const name = getName(cl);
 
-  if (models.has(name)) {
-    throw new Error(format('It seems like "addModelToTypegoose" got called twice\n'
-      + 'Or multiple classes with the same name are used, which is not supported!'
-      + '(%s)', name));
-  }
+  assertion(!models.has(name), new Error(format('It seems like "addModelToTypegoose" got called twice\n'
+    + 'Or multiple classes with the same name are used, which is not supported!'
+    + '(Model Name: "%s")', name)));
+
   if (constructors.get(name)) {
     logger.info('Class "%s" already existed in the constructors Map', name);
   }
@@ -159,8 +170,14 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
 /**
  * Deletes an existing model so that it can be overwritten
  * with another model
- *
+ * (deletes from mongoose.connection & typegoose models cache & typegoose constructors cache)
  * @param key
+ * @example
+ * ```ts
+ * class Name {}
+ * const NameModel = getModelForClass(Name);
+ * deleteModel("Name");
+ * ```
  */
 export function deleteModel(name: string) {
   assertion(typeof name === 'string', new TypeError('name is not an string! (deleteModel)'));
@@ -176,7 +193,14 @@ export function deleteModel(name: string) {
 
 /**
  * Delete a model, with the given class
+ * Same as "deleteModel", only that it can be done with the class instead of the name
  * @param cl The Class
+ * @example
+ * ```ts
+ * class Name {}
+ * const NameModel = getModelForClass(Name);
+ * deleteModelWithClass(Name);
+ * ```
  */
 export function deleteModelWithClass<T, U extends AnyParamConstructor<T>>(cl: U) {
   assertionIsClass(cl);

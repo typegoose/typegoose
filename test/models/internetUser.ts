@@ -2,7 +2,7 @@ import { getModelForClass, mapProp, prop } from '../../src/typegoose';
 
 export class SideNote {
   @prop()
-  public content: string;
+  public content?: string;
 
   @prop()
   public link?: string;
@@ -22,7 +22,7 @@ class InternetUser {
   public sideNotes?: Map<string, SideNote>;
 
   @mapProp({ of: String, enum: ProjectValue })
-  public projects: Map<string, ProjectValue>;
+  public projects?: Map<string, ProjectValue>;
 }
 
 export const InternetUserModel = getModelForClass(InternetUser);

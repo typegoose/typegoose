@@ -9,7 +9,7 @@ import { getModelForClass, mongoose, pre, prop } from '../../src/typegoose';
 export class Car {
   // Interferes with mongoose.Document.model()
   @prop({ required: true })
-  public carModel: string;
+  public carModel!: string;
 
   @prop({ lowercase: true })
   public version?: string;
@@ -18,7 +18,7 @@ export class Car {
   public isSedan?: boolean;
 
   @prop({ required: true })
-  public price: mongoose.Types.Decimal128;
+  public price!: mongoose.Types.Decimal128;
 
   @prop()
   public someId?: mongoose.Types.ObjectId;

@@ -31,7 +31,7 @@ it('should not error when trying to get model multiple times', () => {
   getModelForClass(TEST);
 });
 
-it('should return cache for buildSchema', () => {
+it('should build multiple times', () => {
   class TEST { }
   buildSchema(TEST);
   buildSchema(TEST);
@@ -86,7 +86,6 @@ it('should make use of Map default', async () => {
 });
 
 it('should work with Objects in Class [szokodiakos#54]', async () => {
-  // TODO: refactor this test when moving to jest to use spies
   class TESTObject {
     @prop()
     public test: {
@@ -178,7 +177,7 @@ it('should make use of "@prop({ _id: false })" and have no _id', async () => {
   expect(doc.someprop).not.toHaveProperty('_id');
 });
 
-// it('should run with a self-containing-class [hasezoey#42]', () => {
+// it('should run with a self-containing-class [typegoose#42]', () => {
 //   class SelfContaining {
 //     @prop()
 //     public nest?: SelfContaining;
@@ -356,7 +355,6 @@ it('should also allow "mongoose.Types.Array<string>" as possible type', () => {
   expect((schema.path('someString') as any).caster).toBeInstanceOf(mongoose.Schema.Types.String);
 });
 
-// TODO: re-do this test when moving to jest
 it('should give a warning [typegoose/typegoose#152]', () => {
   logger.warn = jest.fn();
 
