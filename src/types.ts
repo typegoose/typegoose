@@ -43,28 +43,31 @@ export interface TypegooseModel<
    *   Model#ensureIndexes. If an error occurred it is passed with the event.
    *   The fields, options, and index name are also passed.
    */
-  new <ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(doc?: P): T;
+  new <ExtraOmittedKeys extends keyof D = never>(doc?: Omit<D, ExtraOmittedKeys>): T;
+  /**
+   * Shortcut for saving one or more documents to the database. MyModel.create(doc)
+   * does new MyModel(doc).save() for every doc.
+   * Triggers the save() hook.
+   */
+  create<ExtraOmittedKeys extends keyof D = never>(doc: Omit<D, ExtraOmittedKeys>): Promise<T>;
   /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
-  create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P,
-    options?: mongoose.SaveOptions): Promise<T>;
+  create<ExtraOmittedKeys extends keyof D = never>(docs: Omit<D, ExtraOmittedKeys>[]): Promise<T[]>;
   /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
-  create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P[],
-    options?: mongoose.SaveOptions): Promise<T[]>;
+  create<ExtraOmittedKeys extends keyof D = never>(doc: Omit<D, ExtraOmittedKeys>, options?: mongoose.SaveOptions): Promise<T>;
   /**
-   * Shortcut for saving one or more documents to the database. MyModel.create(docs)
-   * does new MyModel(doc).save() for every doc in docs.
+   * Shortcut for saving one or more documents to the database. MyModel.create(doc)
+   * does new MyModel(doc).save() for every doc.
    * Triggers the save() hook.
    */
-  create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P | P[],
-    options?: mongoose.SaveOptions): Promise<T | T[]>;
+  create<ExtraOmittedKeys extends keyof D = never>(docs: Omit<D, ExtraOmittedKeys>[], options?: mongoose.SaveOptions): Promise<T[]>;
 }
 
 /**
