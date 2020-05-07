@@ -8,7 +8,7 @@ import { GetSet, GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
 import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models/inventory';
 import { OptionsClass, OptionsModel } from '../models/options';
-import { UserModel } from '../models/user';
+import { UserModel, UserExclude } from '../models/user';
 import {
   NonVirtual,
   NonVirtualGS,
@@ -21,7 +21,7 @@ import {
 } from '../models/virtualprop';
 
 it('should add a language and job using instance methods', async () => {
-  const user = await UserModel.create({
+  const user = await UserModel.create<UserExclude>({
     firstName: 'harry',
     lastName: 'potter',
     gender: Genders.MALE,
@@ -40,19 +40,19 @@ it('should add a language and job using instance methods', async () => {
 });
 
 it('should add and populate the virtual properties', async () => {
-  const virtual1 = await VirtualModel.create({ dummyVirtual: 'dummyVirtual1' } as Virtual);
+  const virtual1 = await VirtualModel.create({ dummyVirtual: 'dummyVirtual1' });
   const virtualsub1 = await VirtualSubModel.create({
     dummy: 'virtualSub1',
     virtual: virtual1._id
-  } as Partial<VirtualSub>);
+  });
   const virtualsub2 = await VirtualSubModel.create({
     dummy: 'virtualSub2',
     virtual: mongoose.Types.ObjectId() as Ref<any>
-  } as Partial<VirtualSub>);
+  });
   const virtualsub3 = await VirtualSubModel.create({
     dummy: 'virtualSub3',
     virtual: virtual1._id
-  } as Partial<VirtualSub>);
+  });
 
   const newfound = await VirtualModel.findById(virtual1._id).populate('virtualSubs').exec();
 
@@ -72,7 +72,7 @@ it('should add and populate the virtual properties', async () => {
 it('should make use of nonVirtual set pre-processor', async () => {
   {
     // test if everything works
-    const doc = await NonVirtualModel.create({ non: 'HELLO THERE' } as Partial<NonVirtual>);
+    const doc = await NonVirtualModel.create({ non: 'HELLO THERE' });
 
     expect(doc.non).not.toEqual(undefined);
     expect(doc.non).toEqual('hello there');

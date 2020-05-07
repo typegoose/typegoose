@@ -2,7 +2,7 @@ import { Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
 import { Hook2Model } from '../models/hook2';
 
 it('RegEXP tests', async () => {
-  const doc = new HookModel({ material: 'iron' } as Hook);
+  const doc = new HookModel({ material: 'iron' });
   await doc.save();
   await doc.updateOne(doc).exec(); // to run the update hook with regexp, find doesn't work (it doesn't get applied)
 

@@ -3,10 +3,19 @@ import * as mongoose from 'mongoose';
 import type { Base, TimeStamps } from './defaultClasses';
 import type { Severity, WhatIsIt } from './internal/constants';
 
+type IfEquals<X, Y, A, B> =
+  (<T>() => T extends X ? 1 : 2) extends
+  (<T>() => T extends Y ? 1 : 2) ? A : B;
+
+type ReadonlyKeysOf<T> = {
+  [P in keyof T]: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, never, P>
+}[keyof T];
+
 export interface TypegooseModel<
   T extends mongoose.Document,
   Q = {},
-  D = Omit<T, { [K in keyof T]: T[K] extends Function ? K : never }[keyof T] | keyof mongoose.Document | keyof IObjectWithTypegooseFunction | (T extends TimeStamps ? ('createdAt' | 'updatedAt') : never)> & Partial<Pick<mongoose.Document, '_id' | '__v'>>>
+  V = Omit<T, ReadonlyKeysOf<T> | { [K in keyof T]: T[K] extends Function ? K : never }[keyof T] | keyof mongoose.Document | keyof IObjectWithTypegooseFunction | (T extends TimeStamps ? ('createdAt' | 'updatedAt') : never)> & Partial<Pick<mongoose.Document, '_id' | '__v'>>,
+  D = { [K in keyof V]: V[K] extends Map<infer X, infer Y> ? X extends string | number | symbol ? Record<X, Y> | Map<X, Y> : Map<X, Y> : V[K] }>
   extends Omit<Pick<mongoose.Model<T, Q>, keyof mongoose.Model<T, Q>>, 'create'> {
   /**
    * Model constructor
@@ -24,31 +33,31 @@ export interface TypegooseModel<
    *   Model#ensureIndexes. If an error occurred it is passed with the event.
    *   The fields, options, and index name are also passed.
    */
-  new(doc?: D): T;
+  new <E extends keyof D = never, P extends Omit<D, E> = Omit<D, E>>(doc?: P): T;
   /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
-  create(docs: D[], callback?: (err: any, res: T[]) => void): Promise<T[]>;
+  create<E extends keyof D = never, P extends Omit<D, E> = Omit<D, E>>(docs: P[], callback?: (err: any, res: T[]) => void): Promise<T[]>;
   /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
-  create(docs: D, callback?: (err: any, res: T) => void): Promise<T>;
+  create<E extends keyof D = never, P extends Omit<D, E> = Omit<D, E>>(docs: P, callback?: (err: any, res: T) => void): Promise<T>;
   /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
-  create(docs: D[], options?: mongoose.SaveOptions, callback?: (err: any, res: T[]) => void): Promise<T[]>;
+  create<E extends keyof D = never, P extends Omit<D, E> = Omit<D, E>>(docs: P[], options?: mongoose.SaveOptions, callback?: (err: any, res: T[]) => void): Promise<T[]>;
   /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
-  create(docs: D, options?: mongoose.SaveOptions, callback?: (err: any, res: T) => void): Promise<T>;
+  create<E extends keyof D = never, P extends Omit<D, E> = Omit<D, E>>(docs: P, options?: mongoose.SaveOptions, callback?: (err: any, res: T) => void): Promise<T>;
 };
 
 /**

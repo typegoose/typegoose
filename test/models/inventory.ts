@@ -30,8 +30,8 @@ export class Inventory {
   @prop({ required: true, refPath: 'refItemPathName' })
   public kind!: Ref<Beverage | Scooter>;
 
-  @arrayProp({ required: true, refPath: 'refItemPathName' })
-  public irp!: Ref<Beverage | Scooter>[];
+  @arrayProp({ refPath: 'refItemPathName' })
+  public irp?: Ref<Beverage | Scooter>[];
 }
 
 export class TestIRPbyString {

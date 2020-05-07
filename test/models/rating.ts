@@ -15,7 +15,7 @@ export class Rating {
   public stars: number;
 
   @arrayProp({ items: Array })
-  public location: [[number]];
+  public location?: number[][];
 }
 
 export const RatingModel = getModelForClass(Rating);

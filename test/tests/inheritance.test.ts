@@ -18,7 +18,7 @@ it('should set all parent props for nested schemas', async () => {
     mainGarage: {
       slotsForCars: 3
     }
-  } as Skyscraper;
+  };
   const instance = await SkyscraperModel.create(input);
 
   expect(instance.mainGarage.slotsForCars).toEqual(3);
@@ -35,7 +35,7 @@ it('should set all parent props for nested array items', async () => {
     garagesInArea: [{
       slotsForCars: 2
     }]
-  } as Skyscraper;
+  };
   const instance = await SkyscraperModel.create(input);
 
   expect(instance.garagesInArea).toHaveLength(1);

@@ -151,7 +151,7 @@ describe('isRefType / isRefTypeArray', () => {
     it('should guarantee the RefType - String', async () => {
       const doc = await IsRefTypeModel.create({
         nestedString: await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType' })
-      } as IsRefType);
+      });
       doc.depopulate('nestedString');
 
       expect(doc.nestedString).not.toEqual(undefined);
@@ -166,7 +166,7 @@ describe('isRefType / isRefTypeArray', () => {
     it('should guarantee the RefType - ObjectId', async () => {
       const doc = await IsRefTypeModel.create({
         nestedObjectId: await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() })
-      } as IsRefType);
+      });
       doc.depopulate('nestedObjectId');
 
       expect(doc.nestedObjectId).not.toEqual(undefined);
@@ -183,7 +183,7 @@ describe('isRefType / isRefTypeArray', () => {
     it('should guarantee the RefType - String', async () => {
       const doc = await IsRefTypeArrayModel.create({
         nestedString: [await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType - Array' })]
-      } as IsRefTypeArray);
+      });
       doc.depopulate('nestedString');
 
       expect(doc.nestedString).not.toEqual(undefined);
@@ -199,7 +199,7 @@ describe('isRefType / isRefTypeArray', () => {
     it('should guarantee the RefType - ObjectId', async () => {
       const doc = await IsRefTypeArrayModel.create({
         nestedObjectId: [await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() })]
-      } as IsRefTypeArray);
+      });
       doc.depopulate('nestedObjectId');
 
       expect(doc.nestedObjectId).not.toEqual(undefined);

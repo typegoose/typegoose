@@ -69,7 +69,7 @@ it('should make use of addModelToTypegoose', async () => {
 it('should make use of Map default', async () => {
   class TestMapDefault {
     @mapProp({ of: String, default: new Map([['hello', 'hello']]) })
-    public test: Map<string, string>;
+    public test?: Map<string, string>;
 
     @prop()
     public someother: string;
@@ -97,7 +97,7 @@ it('should work with Objects in Class [szokodiakos#54]', async () => {
   logger.warn = jest.fn();
 
   const model = getModelForClass(TESTObject);
-  const doc = await model.create({ test: { anotherTest: 'hello' } } as TESTObject);
+  const doc = await model.create({ test: { anotherTest: 'hello' } });
 
   expect((logger.warn as any).mock.calls.length).toEqual(1);
   expect(doc).not.toEqual(undefined);
@@ -203,11 +203,11 @@ it('should make use of required as function [szokodiakos#247]', async () => {
   const model = getModelForClass(RequiredFunction);
 
   // this should work because the length is not higher than 0
-  await model.create({ someProp: 0 } as RequiredFunction);
+  await model.create({ someProp: 0 });
 
   try {
     // this should not work because someProp is higher than 0
-    await model.create({ someProp: 3 } as RequiredFunction);
+    await model.create({ someProp: 3 });
     fail('Expected to throw an "ValidationError"');
   } catch (err) {
     expect(err).toBeInstanceOf(mongoose.Error.ValidationError);
@@ -242,6 +242,7 @@ it('should use "type" as a last resort', async () => {
 
   expect(model.schema.path('propy')).toBeInstanceOf(mongoose.Schema.Types.Number);
 
+  // @ts-ignore
   const doc = new model({ propy: 100 });
 
   expect(doc).not.toEqual(undefined);
@@ -268,7 +269,7 @@ it('should run with Custom Types', async () => {
 
   const model = getModelForClass(CustomIntClass);
 
-  const doc = new model({ num: 1 } as CustomIntClass);
+  const doc = new model({ num: 1 });
 
   await doc.validate();
 
@@ -327,7 +328,7 @@ it('should use "_id" from ModelOptions if not in @prop options [typegoose/typego
   @modelOptions({ schemaOptions: { _id: false } })
   class SubID {
     @prop()
-    public someprop: string;
+    public someprop?: string;
   }
 
   class ParentID {
@@ -396,7 +397,7 @@ it('should add "null" to the enum (addNullToEnum)', async () => {
   }
   const AddNullToEnumModel = getModelForClass(AddNullToEnum);
 
-  const doc = new AddNullToEnumModel({ value: null } as AddNullToEnum);
+  const doc = new AddNullToEnumModel({ value: null });
   await doc.validate();
 
   const path: any = AddNullToEnumModel.schema.path('value');

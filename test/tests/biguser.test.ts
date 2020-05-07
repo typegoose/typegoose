@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 import { Genders } from '../enums/genders';
 import { Role } from '../enums/role';
 import { CarModel } from '../models/car';
-import { UserModel } from '../models/user';
+import { UserModel, UserExclude } from '../models/user';
 
 it('should create a User with connections', async () => {
   const [tesla, trabant, zastava] = await CarModel.create([{
@@ -18,7 +18,7 @@ it('should create a User with connections', async () => {
     price: mongoose.Types.Decimal128.fromString('1234.25')
   }]);
 
-  const user = await UserModel.create({
+  const user = await UserModel.create<UserExclude>({
     _id: mongoose.Types.ObjectId(),
     firstName: 'John',
     lastName: 'Doe',
@@ -84,7 +84,7 @@ it('should create a User with connections', async () => {
       expect(foundUser.job.jobType).toHaveProperty('salery');
       expect(typeof foundUser.job.jobType.salery).toBe('number');
     }
-    expect(foundUser.car).toHaveProperty('model', 'Tesla');
+    expect(foundUser.car).toHaveProperty('carModel', 'Tesla');
     expect(foundUser.car).toHaveProperty('version', 'models');
     {
       expect(foundUser).toHaveProperty('previousJobs');
@@ -103,9 +103,9 @@ it('should create a User with connections', async () => {
     }
 
     const [foundTrabant, foundZastava] = foundUser.previousCars;
-    expect(foundTrabant).toHaveProperty('model', 'Trabant');
+    expect(foundTrabant).toHaveProperty('carModel', 'Trabant');
     expect(foundTrabant).toHaveProperty('isSedan', true);
-    expect(foundZastava).toHaveProperty('model', 'Zastava');
+    expect(foundZastava).toHaveProperty('carModel', 'Zastava');
     expect(foundZastava).toHaveProperty('isSedan', undefined);
 
     foundUser.fullName = 'Sherlock Holmes';
@@ -148,7 +148,8 @@ it('should create a user with [Plugin].findOrCreate', async () => {
   expect(foundUser.doc).toHaveProperty('firstName', 'Jane');
 
   try {
-    await UserModel.create({
+    // @ts-ignore
+    await UserModel.create<UserExclude>({
       _id: mongoose.Types.ObjectId(),
       firstName: 'John',
       lastName: 'Doe',

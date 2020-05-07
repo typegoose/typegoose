@@ -16,13 +16,13 @@ export enum ProjectValue {
 
 class InternetUser {
   @mapProp({ of: String, default: {} })
-  public socialNetworks?: Record<string, string>;
+  public socialNetworks?: Map<string, string>;
 
   @mapProp({ of: SideNote, _id: false })
-  public sideNotes?: Record<string, SideNote>;
+  public sideNotes?: Map<string, SideNote>;
 
   @mapProp({ of: String, enum: ProjectValue })
-  public projects: Record<string, ProjectValue>;
+  public projects: Map<string, ProjectValue>;
 }
 
 export const InternetUserModel = getModelForClass(InternetUser);

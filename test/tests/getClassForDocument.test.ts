@@ -6,7 +6,7 @@ import { Car, CarModel } from '../models/car';
 import { InternetUserModel, ProjectValue } from '../models/internetUser';
 import { AddressNested, AddressNestedModel, PersonNested, PersonNestedModel } from '../models/nestedObject';
 import { model as Person } from '../models/person';
-import { User, UserModel } from '../models/user';
+import { User, UserExclude, UserModel } from '../models/user';
 
 it('should return correct class type for document', async () => {
   const car = await CarModel.create({
@@ -15,7 +15,7 @@ it('should return correct class type for document', async () => {
   });
   const carReflectedType = getClassForDocument(car);
   expect(carReflectedType).toEqual(Car);
-  const user = await UserModel.create({
+  const user = await UserModel.create<UserExclude>({
     firstName: 'John2',
     lastName: 'Doe2',
     gender: Genders.MALE,
@@ -48,7 +48,7 @@ it('should use inherited schema', async () => {
   expect(user.cars.length > 0).toBe(true);
   user.cars.forEach((currentCar) => {
     if (isDocument(currentCar)) {
-      expect(typeof currentCar.model).toBe('string');
+      expect(typeof currentCar.carModel).toBe('string');
     } else {
       fail('Expected "currentCar" to be populated!');
     }

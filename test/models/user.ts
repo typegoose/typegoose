@@ -22,10 +22,10 @@ export class User extends defaultClasses.FindOrCreate {
   @prop({ required: true })
   public lastName: string;
 
-  public get fullName() {
+  public get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
-  public set fullName(full) {
+  public set fullName(full: string) {
     const split = full.split(' ');
     this.firstName = split[0];
     this.lastName = split[1];
@@ -93,5 +93,7 @@ export class User extends defaultClasses.FindOrCreate {
     return this.save();
   }
 }
+
+export type UserExclude = 'fullName';
 
 export const UserModel = getModelForClass(User);
