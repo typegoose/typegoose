@@ -161,7 +161,7 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
     logger.info('Class "%s" already existed in the constructors Map', name);
   }
 
-  models.set(name, model);
+  models.set(name, model as mongoose.Model<any>);
   constructors.set(name, cl);
 
   return models.get(name) as ReturnModelType<U, T>;
