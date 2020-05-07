@@ -15,10 +15,10 @@ type ReadonlyKeysOf<T> = {
 
 export interface TypegooseModel<
   T extends mongoose.Document,
-  Q = {},
+  QueryHelpers = {},
   V = Omit<T, ReadonlyKeysOf<T> | { [K in keyof T]: T[K] extends Function ? K : never }[keyof T] | keyof mongoose.Document | keyof IObjectWithTypegooseFunction | (T extends TimeStamps ? ('createdAt' | 'updatedAt') : never)> & Partial<Pick<mongoose.Document, '_id' | '__v'>>,
   D = { [K in keyof V]: V[K] extends Map<infer X, infer Y> ? X extends string | number | symbol ? Record<X, Y> | Map<X, Y> : Map<X, Y> : V[K] }>
-  extends Omit<Pick<mongoose.Model<T, Q>, keyof mongoose.Model<T, Q>>, 'create'> {
+  extends Omit<Pick<mongoose.Model<T, QueryHelpers>, keyof mongoose.Model<T, QueryHelpers>>, 'create'> {
   /**
    * Model constructor
    * Provides the interface to MongoDB collections as well as creates document instances.
@@ -35,31 +35,31 @@ export interface TypegooseModel<
    *   Model#ensureIndexes. If an error occurred it is passed with the event.
    *   The fields, options, and index name are also passed.
    */
-  new <E extends keyof D = never, P extends Omit<D, E> = Omit<D, E>>(doc?: P): T;
+  new <ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(doc?: P): T;
   /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
-  create<E extends keyof D = never, P extends Omit<D, E> = Omit<D, E>>(docs: P[], callback?: (err: any, res: T[]) => void): Promise<T[]>;
+  create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P[], callback?: (err: any, res: T[]) => void): Promise<T[]>;
   /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
-  create<E extends keyof D = never, P extends Omit<D, E> = Omit<D, E>>(docs: P, callback?: (err: any, res: T) => void): Promise<T>;
+  create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P, callback?: (err: any, res: T) => void): Promise<T>;
   /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
-  create<E extends keyof D = never, P extends Omit<D, E> = Omit<D, E>>(docs: P[], options?: mongoose.SaveOptions, callback?: (err: any, res: T[]) => void): Promise<T[]>;
+  create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P[], options?: mongoose.SaveOptions, callback?: (err: any, res: T[]) => void): Promise<T[]>;
   /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
-  create<E extends keyof D = never, P extends Omit<D, E> = Omit<D, E>>(docs: P, options?: mongoose.SaveOptions, callback?: (err: any, res: T) => void): Promise<T>;
+  create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P, options?: mongoose.SaveOptions, callback?: (err: any, res: T) => void): Promise<T>;
 }
 
 /**
