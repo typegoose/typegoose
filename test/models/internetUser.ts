@@ -8,13 +8,13 @@ export class SideNote {
   public link?: string;
 }
 
-enum ProjectValue {
+export enum ProjectValue {
   WORKING = 'working',
   UNDERDEVELOPMENT = 'underdevelopment',
   BROKEN = 'broken'
 }
 
-class InternetUser {
+export class InternetUser {
   @mapProp({ of: String, default: {} })
   public socialNetworks?: Map<string, string>;
 

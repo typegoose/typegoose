@@ -61,7 +61,7 @@ it('should create and find indexes with weights', async () => {
 it('should add compound index', async () => {
   expect.assertions(1);
   const user = await RatingUserModel.create({ name: 'hi' } as RatingUser);
-  const car = await RatingCarModel.create({ model: 'some' } as RatingCar);
+  const car = await RatingCarModel.create({ carModel: 'some' } as RatingCar);
 
   await RatingModel.create({ user, car, stars: 4 });
 

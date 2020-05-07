@@ -87,14 +87,15 @@ it('should properly set Decimal128, ObjectID types to field', () => {
 
 // faild validation will need to be checked
 it('should validate Decimal128', async () => {
+  expect.assertions(3);
   try {
     await CarModel.create({
       carModel: 'Tesla',
       price: 'NO DECIMAL'
     });
-    // fail('Validation must fail.');
+    fail('Validation must fail.');
   } catch (e) {
-    expect(e).toBeInstanceOf((mongoose.Error as any).ValidationError);
+    expect(e).toBeInstanceOf(mongoose.Error.ValidationError);
   }
   const car = await CarModel.create({
     carModel: 'Tesla',

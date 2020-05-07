@@ -397,6 +397,7 @@ export function mapProp(options: MapPropOptions) {
     });
   };
 }
+
 /**
  * Set Property(that are Arrays) Options for the property below
  * @param options Options

@@ -132,9 +132,11 @@ it('should create a user with [Plugin].findOrCreate', async () => {
       lastName: 'Doe',
       age: 20,
       gender: Genders.MALE,
-      uniqueId: 'john-doe-20'
+      uniqueId: 'john-doe-20',
+      languages: []
     });
   } catch (err) {
+    // Duplicate key error (11000)
     expect(err).toHaveProperty('code', 11000);
   }
 });

@@ -22,10 +22,10 @@ export class User extends defaultClasses.FindOrCreate {
   @prop({ required: true })
   public lastName!: string;
 
-  public get fullName() {
+  public get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
-  public set fullName(full) {
+  public set fullName(full: string) {
     const split = full.split(' ');
     this.firstName = split[0];
     this.lastName = split[1];
@@ -50,7 +50,7 @@ export class User extends defaultClasses.FindOrCreate {
   public gender!: Genders;
 
   @prop({ enum: Role })
-  public role: Role;
+  public role?: Role;
 
   @arrayProp({ items: String, enum: Role, default: [Role.Guest] })
   public roles?: Role[];
