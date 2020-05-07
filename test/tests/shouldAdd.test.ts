@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { arrayProp, buildSchema, getClass, getName, isDocumentArray, prop, Ref, mapProp, getModelForClass } from '../../src/typegoose';
+import { arrayProp, buildSchema, getClass, getModelForClass, getName, isDocumentArray, mapProp, prop, Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
