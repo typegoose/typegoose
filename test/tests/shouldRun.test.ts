@@ -72,7 +72,7 @@ it('should make use of Map default', async () => {
     public test?: Map<string, string>;
 
     @prop()
-    public someother: string;
+    public someother?: string;
   }
 
   const model = getModelForClass(TestMapDefault);
@@ -166,7 +166,7 @@ it('should make use of "@prop({ _id: false })" and have no _id', async () => {
   }
   class TestidFalse {
     @prop({ _id: false })
-    public someprop: TestidFalseNested;
+    public someprop?: TestidFalseNested;
   }
 
   const model = getModelForClass(TestidFalse);
@@ -241,11 +241,11 @@ it('should use "type" as a last resort', async () => {
 
   expect(model.schema.path('propy')).toBeInstanceOf(mongoose.Schema.Types.Number);
 
-  // @ts-ignore
-  const doc = new model({ propy: 100 });
+  const doc = new model({ propy: 100 as any });
 
   expect(doc).not.toEqual(undefined);
   expect(doc.propy).toEqual(100);
+  expect(model.schema.path('propy')).toBeInstanceOf(mongoose.Schema.Types.Number);
 });
 
 it('should run with Custom Types', async () => {
