@@ -9,7 +9,7 @@ These are the changes needed to migrate to version 8 of Typegoose.
 Document creation now has types, so some old code may fail. Note that now, you MUST specify which parameters are optional and which are mandatory in your classes with `?` and `!`. Note that no modifier means that the property will be assumed required.
 
 ```ts
-// This is bad - both name and favoriteNumber are supposed to be mandatory, but appear mandatory to TypeScript
+// This is bad - both name and favoriteNumber are not supposed to be mandatory, but appear mandatory to TypeScript
 class MyOldClass {
   @prop();
   name: string;
@@ -21,7 +21,7 @@ class MyOldClass {
 const MyOldClassModel = getModelForClass(MyOldClass);
 
 new MyOldClassModel({ }); // TypeScript complains
-new MyOldClassModel(); // Works, but it should not
+new MyOldClassModel(); // Works, but should not be used
 new MyOldClassModel({
   name: 'Bob',
   favoriteNumber: 23
@@ -41,7 +41,7 @@ class MyNewClass {
 
 const MyOldClassModel = getModelForClass(MyOldClass);
 
-new MyOldClassModel(); // Works, but should not
+new MyOldClassModel(); // Works, but should not be used
 MyOldClass.create(); // IMPORTANT: TYPESCRIPT ERROR
 new MyOldClassModel({ }); // Works
 new MyOldClassModel({
@@ -50,7 +50,7 @@ new MyOldClassModel({
 }); // Works
 ```
 
-Note that zero-argument creation from `.create()` will throw an error. Zero-argument creation with the constructor is deprecated but still supported for Mongoose compatibility reasons. It will likely be removed in a future version, so remove it from your code immediately.
+Note that zero-argument creation from `.create()` will now be a TypeScript (but not runtime) error. Zero-argument creation with the constructor is deprecated but still supported for Mongoose compatibility reasons. It will likely be removed in a future version, so remove it from your code immediately.
 
 Of course, you can always specify an empty object literal and achieve the same thing with no chance of error.
 
