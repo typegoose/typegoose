@@ -7,7 +7,6 @@ import { getModelForClass, mongoose, pre, prop } from '../../src/typegoose';
   next();
 })
 export class Car {
-  // Interferes with mongoose.Document.model()
   @prop({ required: true })
   public carModel!: string;
 

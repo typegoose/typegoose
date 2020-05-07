@@ -1,4 +1,4 @@
-import { ExtendedHookModel, Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
+import { ExtendedHookModel, HookArray, HookArrayModel, HookModel } from '../models/hook1';
 import { Hook2Model } from '../models/hook2';
 
 it('RegEXP tests', async () => {

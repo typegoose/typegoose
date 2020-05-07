@@ -56,7 +56,6 @@ it('should respect min [Number]', async () => {
 
 it('should respect enum [String]', async () => {
   try {
-
     await ArrayValidatorsModel.create({
       enumedString: ['not in the enum' as ArrayValidatorEnumString] // string not in the enum
     });

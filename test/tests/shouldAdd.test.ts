@@ -8,15 +8,12 @@ import { GetSet, GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
 import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models/inventory';
 import { OptionsClass, OptionsModel } from '../models/options';
-import { UserModel, UserExclude } from '../models/user';
+import { UserExclude, UserModel } from '../models/user';
 import {
-  NonVirtual,
   NonVirtualGS,
   NonVirtualGSModel,
   NonVirtualModel,
-  Virtual,
   VirtualModel,
-  VirtualSub,
   VirtualSubModel
 } from '../models/virtualprop';
 

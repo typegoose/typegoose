@@ -1,5 +1,5 @@
 import { DocumentType, getDiscriminatorModelForClass, getModelForClass, mongoose } from '../../src/typegoose';
-import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
+import { DisAboveModel, DisMainModel } from '../models/discriminators';
 import { Default, DefaultModel, DisciminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminatorsWithGenerics';
 
 it('should make use of discriminators', async () => {

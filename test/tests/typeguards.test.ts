@@ -1,5 +1,5 @@
 import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose';
-import { IsRefType, IsRefTypeArray, IsRefTypeArrayModel, IsRefTypeModel, IsRefTypeNestedObjectIdModel, IsRefTypeNestedStringModel } from '../models/isRefType';
+import { IsRefTypeArrayModel, IsRefTypeModel, IsRefTypeNestedObjectIdModel, IsRefTypeNestedStringModel } from '../models/isRefType';
 import { UserRefModel } from '../models/userRefs';
 
 describe('isDocument / isDocumentArray', () => {

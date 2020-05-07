@@ -1,4 +1,4 @@
-import { Skyscraper, SkyscraperModel } from '../models/inheritanceClass';
+import { SkyscraperModel } from '../models/inheritanceClass';
 
 it('should set all direct parent props', async () => {
   const instance = await SkyscraperModel.create({});

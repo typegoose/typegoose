@@ -3,6 +3,8 @@ import * as mongoose from 'mongoose';
 import type { Base, TimeStamps } from './defaultClasses';
 import type { Severity, WhatIsIt } from './internal/constants';
 
+// tslint:disable:ban-types
+
 type IfEquals<X, Y, A, B> =
   (<T>() => T extends X ? 1 : 2) extends
   (<T>() => T extends Y ? 1 : 2) ? A : B;
@@ -58,7 +60,7 @@ export interface TypegooseModel<
    * Triggers the save() hook.
    */
   create<E extends keyof D = never, P extends Omit<D, E> = Omit<D, E>>(docs: P, options?: mongoose.SaveOptions, callback?: (err: any, res: T) => void): Promise<T>;
-};
+}
 
 /**
  * Get the Type of an instance of a Document with Class properties

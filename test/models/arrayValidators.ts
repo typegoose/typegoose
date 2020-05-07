@@ -49,5 +49,4 @@ export class ArrayValidators {
   public enumedNumber?: ArrayValidatorEnumNumber[];
 }
 
-
 export const ArrayValidatorsModel = getModelForClass(ArrayValidators);
