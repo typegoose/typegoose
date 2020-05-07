@@ -49,29 +49,22 @@ export interface TypegooseModel<
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
-  create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P/* ,
-    callback?: (err: any, res: T) => void */): Promise<T>;
-  /**
-   * Shortcut for saving one or more documents to the database. MyModel.create(docs)
-   * does new MyModel(doc).save() for every doc in docs.
-   * Triggers the save() hook.
-   */
-  create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P[]/* ,
-    callback?: (err: any, res: T[]) => void */): Promise<T[]>;
-  /**
-   * Shortcut for saving one or more documents to the database. MyModel.create(docs)
-   * does new MyModel(doc).save() for every doc in docs.
-   * Triggers the save() hook.
-   */
   create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P,
-    options?: mongoose.SaveOptions/* , callback?: (err: any, res: T) => void */): Promise<T>;
+    options?: mongoose.SaveOptions): Promise<T>;
   /**
    * Shortcut for saving one or more documents to the database. MyModel.create(docs)
    * does new MyModel(doc).save() for every doc in docs.
    * Triggers the save() hook.
    */
   create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P[],
-    options?: mongoose.SaveOptions/* , callback?: (err: any, res: T[]) => void */): Promise<T[]>;
+    options?: mongoose.SaveOptions): Promise<T[]>;
+  /**
+   * Shortcut for saving one or more documents to the database. MyModel.create(docs)
+   * does new MyModel(doc).save() for every doc in docs.
+   * Triggers the save() hook.
+   */
+  create<ExtraOmittedKeys extends keyof D = never, P extends Omit<D, ExtraOmittedKeys> = Omit<D, ExtraOmittedKeys>>(docs: P | P[],
+    options?: mongoose.SaveOptions): Promise<T | T[]>;
 }
 
 /**
