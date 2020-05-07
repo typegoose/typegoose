@@ -10,7 +10,6 @@ import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models
 import { OptionsModel } from '../models/options';
 import { UserExclude, UserModel } from '../models/user';
 import {
-  NonVirtualGS,
   NonVirtualGSModel,
   NonVirtualModel,
   VirtualModel,

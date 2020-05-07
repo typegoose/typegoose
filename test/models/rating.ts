@@ -2,7 +2,7 @@ import { getModelForClass, index, prop, Ref } from '../../src/typegoose';
 
 export class RatingCar {
   @prop({ required: true })
-  public model!: string;
+  public carModel!: string;
 }
 
 export class RatingUser {
