@@ -6,7 +6,7 @@ import { Car, CarModel } from '../models/car';
 import { InternetUserModel, ProjectValue } from '../models/internetUser';
 import { AddressNested, AddressNestedModel, PersonNested, PersonNestedModel } from '../models/nestedObject';
 import { PersonModel } from '../models/person';
-import { User, UserModel } from '../models/user';
+import { User, UserExclude, UserModel } from '../models/user';
 
 it('should return correct class type for document', async () => {
   const car = await CarModel.create({

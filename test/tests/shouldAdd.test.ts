@@ -4,10 +4,10 @@ import { arrayProp, buildSchema, getClass, getName, isDocumentArray, prop, Ref }
 import { Genders } from '../enums/genders';
 import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
-import { GetSet, GetSetModel } from '../models/getSet';
+import { GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
 import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models/inventory';
-import { OptionsClass, OptionsModel } from '../models/options';
+import { OptionsModel } from '../models/options';
 import { UserExclude, UserModel } from '../models/user';
 import {
   NonVirtualGS,
@@ -180,7 +180,7 @@ it('it should alias correctly', () => {
 });
 
 it('should add model with createdAt and updatedAt', async () => {
-  const { id: createdId } = await OptionsModel.create({ someprop: 10 } as OptionsClass);
+  const { id: createdId } = await OptionsModel.create({ someprop: 10 });
 
   const found = await OptionsModel.findById(createdId).exec();
 
@@ -191,7 +191,7 @@ it('should add model with createdAt and updatedAt', async () => {
 });
 
 it('should make use of non-virtuals with pre- and post-processors', async () => {
-  const doc = await NonVirtualGSModel.create({ non: ['hi', 'where?'] } as NonVirtualGS);
+  const doc = await NonVirtualGSModel.create({ non: ['hi', 'where?'] });
   // stored gets { non: 'hi where?' }
 
   expect(doc.non).not.toEqual(undefined);
@@ -278,13 +278,13 @@ it('should add options to array-refPath [szokodiakos#379]', () => {
 
 it('should make use of virtual get- & set-ters', async () => {
   {
-    const doc = await GetSetModel.create({ actualProp: 'hello1' } as GetSet);
+    const doc = await GetSetModel.create<'someGetSet'>({ actualProp: 'hello1' });
     expect(doc).not.toEqual(undefined);
     expect(doc.actualProp).toEqual('hello1');
     expect(doc.someGetSet).toEqual('hello1');
   }
   {
-    const doc = await GetSetModel.create({ someGetSet: 'hello2' } as GetSet);
+    const doc = await GetSetModel.create<'actualProp'>({ someGetSet: 'hello2' });
     expect(doc).not.toEqual(undefined);
     expect(doc.actualProp).toEqual('hello2');
     expect(doc.someGetSet).toEqual('hello2');
