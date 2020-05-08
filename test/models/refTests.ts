@@ -15,6 +15,16 @@ export class RefTestString {
   public _id!: string;
 }
 
+export class RefTestStringOptional {
+  @prop()
+  public _id?: string;
+}
+
+export class RefTestStringOrUndefined {
+  @prop()
+  public _id!: string | undefined;
+}
+
 export const RefTestBufferModel = getModelForClass(RefTestBuffer);
 export const RefTestNumberModel = getModelForClass(RefTestNumber);
 export const RefTestStringModel = getModelForClass(RefTestString);
@@ -47,6 +57,20 @@ export class RefTest {
 
   @arrayProp({ ref: 'RefTestString', refType: mongoose.Schema.Types.String })
   public refArrayString2?: Ref<RefTestString, string>[];
+
+  // ref string optional or undefined
+  @prop({ ref: RefTestString, refType: mongoose.Schema.Types.String })
+  public refFieldStringOptional?: Ref<RefTestStringOptional /* , string */>; // RefType not set, to know if automatic Ref is brocken
+
+  @prop({ ref: 'RefTestString', refType: mongoose.Schema.Types.String })
+  public refFieldStringOrUndefined?: Ref<RefTestStringOrUndefined /* , string */>; // RefType not set, to know if automatic Ref is brocken
+
+  // ref string array
+  @arrayProp({ ref: RefTestString, refType: mongoose.Schema.Types.String })
+  public refArrayStringOptional?: Ref<RefTestStringOptional, string>[];
+
+  @arrayProp({ ref: 'RefTestString', refType: mongoose.Schema.Types.String })
+  public refArrayStringOrUndefined?: Ref<RefTestStringOrUndefined, string>[];
 
   // ref number
   @prop({ ref: RefTestNumber, refType: mongoose.Schema.Types.Number })
