@@ -49,7 +49,6 @@ it('should create a User with connections', async () => {
       .findById(user.id)
       .populate('car previousCars')
       .exec();
-
     expect(foundUser.toObject({ virtuals: true, getters: true })).toMatchSnapshot({
       _id: expect.any(mongoose.Types.ObjectId),
       id: expect.any(String),

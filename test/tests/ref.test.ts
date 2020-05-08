@@ -63,11 +63,11 @@ it('check reference with string _id', async () => {
   const id1 = 'testid1';
   const id2 = 'testid2';
 
-  const refTypeTest = new RefTestModel();
+  const refTypeTest = new RefTestModel({});
   refTypeTest.refFieldString = id1;
   refTypeTest.refArrayString = [id1, id2];
-  refTypeTest.refFieldString = new RefTestStringModel();
-  refTypeTest.refArrayString = [new RefTestStringModel(), new RefTestStringModel()];
+  refTypeTest.refFieldString = new RefTestStringModel({});
+  refTypeTest.refArrayString = [new RefTestStringModel({}), new RefTestStringModel({})];
 
   const { _id: _id1 } = await RefTestStringModel.create({ _id: id1 });
   expect(_id1).toEqual(id1);
@@ -86,11 +86,11 @@ it('check reference with number _id', async () => {
   const id1 = 1234;
   const id2 = 5678;
 
-  const refTypeTest = new RefTestModel();
+  const refTypeTest = new RefTestModel({});
   refTypeTest.refFieldNumber = id1;
   refTypeTest.refArrayNumber = [id1, id2];
-  refTypeTest.refFieldNumber = new RefTestNumberModel();
-  refTypeTest.refArrayNumber = [new RefTestNumberModel(), new RefTestNumberModel()];
+  refTypeTest.refFieldNumber = new RefTestNumberModel({});
+  refTypeTest.refArrayNumber = [new RefTestNumberModel({}), new RefTestNumberModel({})];
 
   const { _id: _id1 } = await RefTestNumberModel.create({ _id: id1 });
   expect(_id1).toEqual(id1);
@@ -109,11 +109,11 @@ it('check reference with buffer _id', async () => {
   const id1 = Buffer.from([1, 2, 3, 4]);
   const id2 = Buffer.from([5, 6, 7, 8]);
 
-  const refTypeTest = new RefTestModel();
+  const refTypeTest = new RefTestModel({});
   refTypeTest.refFieldBuffer = id1;
   refTypeTest.refArrayBuffer = [id1, id2];
-  refTypeTest.refFieldBuffer = new RefTestBufferModel();
-  refTypeTest.refArrayBuffer = [new RefTestBufferModel(), new RefTestBufferModel()];
+  refTypeTest.refFieldBuffer = new RefTestBufferModel({});
+  refTypeTest.refArrayBuffer = [new RefTestBufferModel({}), new RefTestBufferModel({})];
 
   const { _id: _id1 } = await RefTestBufferModel.create({ _id: id1 });
   expect(_id1.equals(id1)).toEqual(true);

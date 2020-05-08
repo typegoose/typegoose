@@ -6,7 +6,7 @@ it('expect no changes to model Name when not using customOptions or collection',
   const model = getModelForClass(NormalOptions);
   expect(model.modelName).toEqual('NormalOptions');
 
-  const doc = new model();
+  const doc = new model({});
   const gotClass = getClassForDocument(doc);
   expect(gotClass).toEqual(NormalOptions);
 });
@@ -18,7 +18,7 @@ it('expect if collection is defined to be automatically used with automaticName'
   const model = getModelForClass(CollectionOption);
   expect(model.modelName).toEqual('CollectionOption_Something');
 
-  const doc = new model();
+  const doc = new model({});
   const gotClass = getClassForDocument(doc);
   expect(gotClass).toEqual(CollectionOption);
 });
@@ -30,7 +30,7 @@ it('expect if options.customName is defined to be used with automaticName', () =
   const model = getModelForClass(CustomNameOption);
   expect(model.modelName).toEqual('CustomNameOption_CustomName');
 
-  const doc = new model();
+  const doc = new model({});
   const gotClass = getClassForDocument(doc);
   expect(gotClass).toEqual(CustomNameOption);
 });
@@ -42,7 +42,7 @@ it('expect to use options.customName if both are defined with automaticName', ()
   const model = getModelForClass(BothOptions);
   expect(model.modelName).toEqual('BothOptions_CustomName2');
 
-  const doc = new model();
+  const doc = new model({});
   const gotClass = getClassForDocument(doc);
   expect(gotClass).toEqual(BothOptions);
 });
@@ -57,7 +57,7 @@ it('create multiple models depending on options with base class (extends) with a
     const model = getModelForClass(MultiModel);
     expect(model.modelName).toEqual('MultiModel_Something');
 
-    const doc = new model();
+    const doc = new model({});
     const gotClass = getClassForDocument(doc);
     expect(gotClass).toEqual(MultiModel);
   }
@@ -68,7 +68,7 @@ it('create multiple models depending on options with base class (extends) with a
     const model = getModelForClass(MultiModel);
     expect(model.modelName).toEqual('MultiModel_SomethingDifferent');
 
-    const doc = new model();
+    const doc = new model({});
     const gotClass = getClassForDocument(doc);
     expect(gotClass).toEqual(MultiModel);
   }
@@ -79,16 +79,16 @@ it('create multiple models depending on options without base model with automati
     @modelOptions({ schemaOptions: { collection: 'SomethingNoExtend' }, options: { automaticName: true } })
     class MultiModel {
       @prop({ default: '1' })
-      public t1: string;
+      public t1?: string;
 
       @prop({ default: '2' })
-      public t2: string;
+      public t2?: string;
     }
 
     const model = getModelForClass(MultiModel);
     expect(model.modelName).toEqual('MultiModel_SomethingNoExtend');
 
-    const doc = new model();
+    const doc = new model({});
 
     expect(doc).not.toEqual(undefined);
     expect(doc.t1).toEqual('1');
@@ -103,16 +103,16 @@ it('create multiple models depending on options without base model with automati
     @modelOptions({ schemaOptions: { collection: 'SomethingDifferentNoExtend' }, options: { automaticName: true } })
     class MultiModel {
       @prop({ default: '3' })
-      public t3: string;
+      public t3?: string;
 
       @prop({ default: '4' })
-      public t4: string;
+      public t4?: string;
     }
 
     const model = getModelForClass(MultiModel);
     expect(model.modelName).toEqual('MultiModel_SomethingDifferentNoExtend');
 
-    const doc = new model();
+    const doc = new model({});
 
     expect(doc).not.toEqual(undefined);
     expect(doc).not.toHaveProperty('t1');
