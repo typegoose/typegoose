@@ -31,7 +31,7 @@ export type CreateQuery<T> = Omit<
 export interface TypegooseModel<
   T extends mongoose.Document,
   QueryHelpers = {}>
-  extends Omit<RemoveConstructSignature<mongoose.Model<T, QueryHelpers>>, 'create'> {
+  extends RemoveConstructSignature<Omit<mongoose.Model<T, QueryHelpers>, 'create'>> {
   /**
    * Creates a document synchronously, not automatically saved to the database
    * @param doc The values with which to create the document
@@ -44,10 +44,26 @@ export interface TypegooseModel<
    * It is useful for excluding getters/setters, which don't strictly need to be specified in the document.
    * @param doc The document that should get created
    * @param options Options for saving the documents
-   * @returns The created document
+   * @param deprecatedCallback The callback called after the document is created and saved. Use is deprecated, prefer using the returned
+   * promise.
+   * @returns A promise resolving with the created document
    */
   create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
-    (doc: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>, options?: mongoose.SaveOptions):
+    (doc: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>, options?: mongoose.SaveOptions,
+      deprecatedCallback?: (err: any, fullDoc: T) => unknown):
+    Promise<T>;
+  /**
+   * Creates and saves a document to the database. Shortcut for `new Model(doc).save()`.
+   * The generic parameter "ExtraOmittedKeys" are extra keys ignored in the type for the sake of the creation of this document
+   * It is useful for excluding getters/setters, which don't strictly need to be specified in the document.
+   * @param doc The document that should get created
+   * @param deprecatedCallback The callback called after the document is created and saved. Use is deprecated, prefer using the returned
+   * promise.
+   * @returns A promise resolving with the created document
+   */
+  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
+    (doc: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>,
+      deprecatedCallback?: (err: any, fullDoc: T) => unknown):
     Promise<T>;
   /**
    * Creates and saves multiple documents to the database. Shortcut for `Promise.all(docs.map(doc => new Model(doc).save()))`.
@@ -55,10 +71,26 @@ export interface TypegooseModel<
    * It is useful for excluding getters/setters, which don't strictly need to be specified in the documents.
    * @param docs The array of values with which to create each document to be saved to the database
    * @param options Options for saving the documents
-   * @returns The array of created documents (maybe not in the same order)
+   * @param deprecatedCallback The callback called after the documents are created and saved. Use is deprecated, prefer using the returned
+   * promise.
+   * @returns A promise resolving with the array of created documents (maybe not in the same order)
    */
   create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
-    (docs: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>[], options?: mongoose.SaveOptions):
+    (docs: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>[], options?: mongoose.SaveOptions,
+      deprecatedCallback?: (err: any, fullDocs: T[]) => unknown):
+    Promise<T[]>;
+  /**
+   * Creates and saves multiple documents to the database. Shortcut for `Promise.all(docs.map(doc => new Model(doc).save()))`.
+   * The generic parameter "ExtraOmittedKeys" are extra keys ignored in the type for the sake of the creation of these documents
+   * It is useful for excluding getters/setters, which don't strictly need to be specified in the documents.
+   * @param docs The array of values with which to create each document to be saved to the database
+   * @param deprecatedCallback The callback called after the documents are created and saved. Use is deprecated, prefer using the returned
+   * promise.
+   * @returns A promise resolving with the array of created documents (maybe not in the same order)
+   */
+  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
+    (docs: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>[],
+      deprecatedCallback?: (err: any, fullDocs: T[]) => unknown):
     Promise<T[]>;
 }
 
