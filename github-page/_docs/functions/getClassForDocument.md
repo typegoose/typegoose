@@ -18,7 +18,7 @@ class Kitten {
 
 const model = getModelForClass(Kitten);
 
-const doc = new model();
+const doc = new model({});
 
 getClassForDocument(doc) === Kitten // should be "true"
 ```

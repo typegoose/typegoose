@@ -9,13 +9,13 @@ export enum SelectStrings {
 // Note: "select: true" is just to test if it works, and doesn't give an error
 export class Select {
   @prop({ required: true, default: SelectStrings.test1, select: false })
-  public test1!: string;
+  public test1?: string;
 
   @prop({ required: true, default: SelectStrings.test2, select: true })
-  public test2!: string;
+  public test2?: string;
 
   @prop({ required: true, default: SelectStrings.test3, select: false })
-  public test3!: string;
+  public test3?: string;
 }
 
 export const SelectModel = getModelForClass(Select);

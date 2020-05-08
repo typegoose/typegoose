@@ -20,8 +20,8 @@ class MyOldClass {
 
 const MyOldClassModel = getModelForClass(MyOldClass);
 
+new MyOldClassModel(); // TypeScript error
 new MyOldClassModel({ }); // TypeScript complains
-new MyOldClassModel(); // Works, but should not be used
 new MyOldClassModel({
   name: 'Bob',
   favoriteNumber: 23
@@ -41,8 +41,8 @@ class MyNewClass {
 
 const MyOldClassModel = getModelForClass(MyOldClass);
 
-new MyOldClassModel(); // Works, but should not be used
-MyOldClass.create(); // IMPORTANT: TYPESCRIPT ERROR
+new MyOldClassModel(); // TypeScript error
+MyOldClass.create(); // TypeScript error
 new MyOldClassModel({ }); // Works
 new MyOldClassModel({
   name: 'Bob',
@@ -50,9 +50,7 @@ new MyOldClassModel({
 }); // Works
 ```
 
-Note that zero-argument creation from `.create()` will now be a TypeScript (but not runtime) error. Zero-argument creation with the constructor is deprecated but still supported for Mongoose compatibility reasons. It will likely be removed in a future version, so remove it from your code immediately.
-
-Of course, you can always specify an empty object literal and achieve the same thing with no chance of error.
+Note that zero-argument creation will now be a TypeScript (but not runtime) error. Of course, you can always specify an empty object literal and achieve the same thing with no chance of error.
 
 Note that the auto-detection for values to specify in the creation is imperfect. It will require that you specify all properties that have both a getter and a setter. As a workaround, specify the keys to ignore for creation as a generic parameter.
 

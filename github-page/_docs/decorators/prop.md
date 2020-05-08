@@ -70,6 +70,8 @@ class Defaulted {
 }
 ```
 
+Note that if you don't specify the property as optional (i.e. with the question mark) you will be forced to specify the property at creation time. 
+
 ### _id
 
 Accepts Type: `boolean`

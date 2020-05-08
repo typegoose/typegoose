@@ -15,41 +15,51 @@ type ReadonlyKeysOf<T> = {
 
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 
+type MongooseMap<T> = T | (T extends Map<infer K, infer V> ? ([K, V][] |
+  (K extends string | number | symbol ? Record<K, V> : never)) : never);
+
+type RemoveConstructSignature<T> = Pick<T, keyof T>;
+
+export type CreateQuery<T> = Omit<
+  { [K in keyof T]: MongooseMap<T[K]> },
+  | ReadonlyKeysOf<T>
+  | FunctionPropertyNames<T>
+  | keyof mongoose.Document
+  | keyof IObjectWithTypegooseFunction
+  | (T extends TimeStamps ? keyof TimeStamps : never)> & Partial<Pick<mongoose.Document, '_id' | '__v'>>;
+
 export interface TypegooseModel<
   T extends mongoose.Document,
-  QueryHelpers = {},
-  V = Omit<T,
-    ReadonlyKeysOf<T>
-    | FunctionPropertyNames<T>
-    | keyof mongoose.Document
-    | keyof IObjectWithTypegooseFunction
-    | (T extends TimeStamps ? keyof TimeStamps : never)> & Partial<Pick<mongoose.Document, '_id' | '__v'>>,
-  D = { [K in keyof V]: V[K] extends Map<infer X, infer Y> ?
-    X extends string | number | symbol ? Record<X, Y> | [X, Y][] | Map<X, Y> : [X, Y][] | Map<X, Y> : V[K] }>
-  extends Omit<Pick<mongoose.Model<T, QueryHelpers>, keyof mongoose.Model<T, QueryHelpers>>, 'create'> {
+  QueryHelpers = {}>
+  extends Omit<RemoveConstructSignature<mongoose.Model<T, QueryHelpers>>, 'create'> {
   /**
    * Creates a document synchronously, not automatically saved to the database
    * @param doc The values with which to create the document
    */
-  new <ExtraOmittedKeys extends keyof D = never>(doc?: Omit<D, ExtraOmittedKeys>): T;
+  new <ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
+    (doc: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>): T;
   /**
-   * Creates and saves a document to the database. Shortcut for `Model.create(doc).save()`.
+   * Creates and saves a document to the database. Shortcut for `new Model(doc).save()`.
    * The generic parameter "ExtraOmittedKeys" are extra keys ignored in the type for the sake of the creation of this document
    * It is useful for excluding getters/setters, which don't strictly need to be specified in the document.
    * @param doc The document that should get created
    * @param options Options for saving the documents
    * @returns The created document
    */
-  create<ExtraOmittedKeys extends keyof D = never>(doc: Omit<D, ExtraOmittedKeys>, options?: mongoose.SaveOptions): Promise<T>;
+  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
+    (doc: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>, options?: mongoose.SaveOptions):
+    Promise<T>;
   /**
-   * Creates and saves multiple documents to the database. Shortcut for `Promise.all(docs.map(doc => Model.create(doc).save()))`.
+   * Creates and saves multiple documents to the database. Shortcut for `Promise.all(docs.map(doc => new Model(doc).save()))`.
    * The generic parameter "ExtraOmittedKeys" are extra keys ignored in the type for the sake of the creation of these documents
    * It is useful for excluding getters/setters, which don't strictly need to be specified in the documents.
    * @param docs The array of values with which to create each document to be saved to the database
    * @param options Options for saving the documents
    * @returns The array of created documents (maybe not in the same order)
    */
-  create<ExtraOmittedKeys extends keyof D = never>(docs: Omit<D, ExtraOmittedKeys>[], options?: mongoose.SaveOptions): Promise<T[]>;
+  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
+    (docs: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>[], options?: mongoose.SaveOptions):
+    Promise<T[]>;
 }
 
 /**
@@ -73,11 +83,11 @@ export type ModelType<T> = TypegooseModel<DocumentType<T>>;
  * Any-param Constructor
  * @internal
  */
-export type AnyParamConstructor<T> = new (...args: any) => T;
+export type AnyParamConstructor<T> = new (...args: any[]) => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
  */
-export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = ModelType<InstanceType<U>> & U;
+export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = ModelType<InstanceType<U>> & RemoveConstructSignature<U>;
 /** @internal */
 export type Func = (...args: any[]) => any;
 

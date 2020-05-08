@@ -4,7 +4,7 @@ import { SelectModel, SelectStrings } from '../models/select';
 
 describe('Property Option {select}', () => {
   beforeEach(async () => {
-    const selecttest = new SelectModel();
+    const selecttest = new SelectModel({});
     await selecttest.save();
   });
 
