@@ -54,13 +54,15 @@ Note that zero-argument creation will now be a TypeScript (but not runtime) erro
 
 Note that the auto-detection for values to specify in the creation is imperfect. It will require that you specify all properties that have both a getter and a setter. As a workaround, specify the keys to ignore for creation as a generic parameter.
 
+In addition, parameters with a default cannot be detected, so there is a second generic parameter for them.
+
 ```ts
 class Name {
-  @prop()
-  public firstName?: string;
+  @prop({ required: true, default: 'Will' })
+  public firstName: string;
 
-  @prop()
-  public lastName?: string;
+  @prop({ required: true })
+  public lastName: string;
 
   // this will create a virtual property called 'fullName'
   public get fullName() {
@@ -73,7 +75,36 @@ class Name {
   }
 }
 
-new Name({ firstName: 'John', lastName: 'Smith' }); // TypeScript complains, but it shouldn't
-new Name({ fullName: 'John Smith' }); // Works
-new Name<'fullName'>({ firstName: 'John', lastName: 'Smith' }); // Works
+new Name({
+  firstName: 'Johnny',
+  lastName: 'Appleseed',
+  fullName: 'Johnny Appleseed'
+}); // Works
+
+
+// First parameter allows excluding a property entirely
+new Name<'firstName' | 'lastName'>({ fullName: 'Johnny Appleseed' }); // Works
+new Name<'fullName'>({ firstName: 'Johnny', lastName: 'Appleseed' }) // Works
+new Name<'fullName'>({
+  firstName: 'Johnny',
+  lastName: 'Appleseed',
+  fullName: 'Johnny Appleseed'
+}); // Fails: does not expect fullName parameter
+
+
+// Second parameter allows making a property optional
+new Name<'fullName'>({
+  lastName: 'Appleseed'
+}); // Fails: TypeScript expects firstName key-value pair
+new Name<'fullName', 'firstName'>({ lastName: 'Appleseed' }) // Works
+new Name<'fullName', 'firstName'>({
+  firstName: 'Bobby',
+  lastName: 'Appleseed'
+}) // Works: unlike with first parameter, you can still specify key-value pair
+
+// You can exclude the first parameter by putting never
+new Name<never, 'firstName'>({
+  lastName: 'Appleseed',
+  fullName: 'Bobby Appleseed'
+}) // Works
 ```

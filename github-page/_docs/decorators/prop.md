@@ -70,7 +70,7 @@ class Defaulted {
 }
 ```
 
-Note that if you don't specify the property as optional (i.e. with the question mark) you will be forced to specify the property at creation time. 
+Note that if you don't specify the property as optional (i.e. with the question mark) you will be forced to specify the property at creation time. For a workaround, see [`the version 8.0.0 migration guide`]({{ site.baseurl }}{% link _guides/migrate-to-8.md %})
 
 ### _id
 
