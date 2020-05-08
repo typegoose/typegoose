@@ -351,7 +351,7 @@ export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
 export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions & ValidateStringOptions;
 export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate | VirtualOptions;
 
-export type RefType = number | string | mongoose.Types.ObjectId | Buffer;
+export type RefType = number | string | mongoose.Types.ObjectId | Buffer | undefined;
 export type RefSchemaType = typeof mongoose.Schema.Types.Number |
   typeof mongoose.Schema.Types.String |
   typeof mongoose.Schema.Types.Buffer |
@@ -361,7 +361,7 @@ export type RefSchemaType = typeof mongoose.Schema.Types.Number |
  * Reference another Model
  */
 // export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
-export type Ref<R, T extends RefType = R extends { _id: RefType; } ? R['_id'] : mongoose.Types.ObjectId> = R | T;
+export type Ref<R, T extends RefType = R extends { _id?: RefType } ? NonNullable<R['_id']> : mongoose.Types.ObjectId> = R | T;
 
 /**
  * An Function type for a function that doesn't have any arguments and doesn't return anything

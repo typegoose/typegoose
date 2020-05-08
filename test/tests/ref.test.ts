@@ -82,6 +82,52 @@ it('check reference with string _id', async () => {
   expect(Array.from(refArrayString)).toEqual([_id1, _id2]);
 });
 
+it('check reference with optional string _id [typegoose/typegoose#249]', async () => {
+  const id1 = 'testid3';
+  const id2 = 'testid4';
+
+  const refTypeTest = new RefTestModel();
+  refTypeTest.refFieldStringOptional = id1;
+  refTypeTest.refArrayStringOptional = [id1, id2];
+  refTypeTest.refFieldStringOptional = new RefTestStringModel();
+  refTypeTest.refArrayStringOptional = [new RefTestStringModel(), new RefTestStringModel()];
+
+  const { _id: _id1 } = await RefTestStringModel.create({ _id: id1 });
+  expect(_id1).toEqual(id1);
+  const { _id: _id2 } = await RefTestStringModel.create({ _id: id2 });
+  expect(_id2).toEqual(id2);
+
+  const { _id: refStringId } = await RefTestModel.create({ refFieldString: _id1 });
+  const { refFieldString } = await RefTestModel.findById(refStringId).exec();
+  expect(refFieldString).toEqual(_id1);
+  const { _id: refArrayId } = await RefTestModel.create({ refArrayString: [_id1, _id2] });
+  const { refArrayString } = await RefTestModel.findById(refArrayId).exec();
+  expect(Array.from(refArrayString)).toEqual([_id1, _id2]);
+});
+
+it('check reference with string or undefined _id [typegoose/typegoose#249]', async () => {
+  const id1 = 'testid5';
+  const id2 = 'testid6';
+
+  const refTypeTest = new RefTestModel();
+  refTypeTest.refFieldStringOrUndefined = id1;
+  refTypeTest.refArrayStringOrUndefined = [id1, id2];
+  refTypeTest.refFieldStringOrUndefined = new RefTestStringModel();
+  refTypeTest.refArrayStringOrUndefined = [new RefTestStringModel(), new RefTestStringModel()];
+
+  const { _id: _id1 } = await RefTestStringModel.create({ _id: id1 });
+  expect(_id1).toEqual(id1);
+  const { _id: _id2 } = await RefTestStringModel.create({ _id: id2 });
+  expect(_id2).toEqual(id2);
+
+  const { _id: refStringId } = await RefTestModel.create({ refFieldString: _id1 });
+  const { refFieldString } = await RefTestModel.findById(refStringId).exec();
+  expect(refFieldString).toEqual(_id1);
+  const { _id: refArrayId } = await RefTestModel.create({ refArrayString: [_id1, _id2] });
+  const { refArrayString } = await RefTestModel.findById(refArrayId).exec();
+  expect(Array.from(refArrayString)).toEqual([_id1, _id2]);
+});
+
 it('check reference with number _id', async () => {
   const id1 = 1234;
   const id2 = 5678;
