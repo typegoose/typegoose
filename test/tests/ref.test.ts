@@ -86,11 +86,11 @@ it('check reference with optional string _id [typegoose/typegoose#249]', async (
   const id1 = 'testid3';
   const id2 = 'testid4';
 
-  const refTypeTest = new RefTestModel();
+  const refTypeTest = new RefTestModel({});
   refTypeTest.refFieldStringOptional = id1;
   refTypeTest.refArrayStringOptional = [id1, id2];
-  refTypeTest.refFieldStringOptional = new RefTestStringModel();
-  refTypeTest.refArrayStringOptional = [new RefTestStringModel(), new RefTestStringModel()];
+  refTypeTest.refFieldStringOptional = new RefTestStringModel({});
+  refTypeTest.refArrayStringOptional = [new RefTestStringModel({}), new RefTestStringModel({})];
 
   const { _id: _id1 } = await RefTestStringModel.create({ _id: id1 });
   expect(_id1).toEqual(id1);
@@ -109,11 +109,11 @@ it('check reference with string or undefined _id [typegoose/typegoose#249]', asy
   const id1 = 'testid5';
   const id2 = 'testid6';
 
-  const refTypeTest = new RefTestModel();
+  const refTypeTest = new RefTestModel({});
   refTypeTest.refFieldStringOrUndefined = id1;
   refTypeTest.refArrayStringOrUndefined = [id1, id2];
-  refTypeTest.refFieldStringOrUndefined = new RefTestStringModel();
-  refTypeTest.refArrayStringOrUndefined = [new RefTestStringModel(), new RefTestStringModel()];
+  refTypeTest.refFieldStringOrUndefined = new RefTestStringModel({});
+  refTypeTest.refArrayStringOrUndefined = [new RefTestStringModel({}), new RefTestStringModel({})];
 
   const { _id: _id1 } = await RefTestStringModel.create({ _id: id1 });
   expect(_id1).toEqual(id1);
