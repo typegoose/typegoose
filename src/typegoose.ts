@@ -22,11 +22,11 @@ import { assertion, assertionIsClass, getName, mergeMetadata, mergeSchemaOptions
 import { logger } from './logSettings';
 import type {
   AnyParamConstructor,
+  CreateQuery,
   DocumentType,
   IModelOptions,
   Ref,
   ReturnModelType,
-  CreateQuery,
   TypegooseModel
 } from './types';
 

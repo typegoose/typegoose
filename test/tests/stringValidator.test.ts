@@ -42,7 +42,7 @@ it('should lowercase', async () => {
 it('should respect enum', async () => {
   try {
     await StringValidatorsModel.create({
-      enumed: 'not in the enum' // string not in the enum
+      enumed: 'not in the enum' as StringValidatorEnum // string not in the enum
     });
 
     fail('Expected to throw ValidationError!');
