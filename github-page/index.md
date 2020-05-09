@@ -9,7 +9,7 @@ header:
       url: "/guides/quick-start-guide/"
 excerpt: >
   Define Mongoose models using TypeScript classes.<br />
-  <small><a href="https://www.npmjs.com/package/@typegoose/typegoose">Latest release v6.0.X</a></small>
+  <small><a href="https://www.npmjs.com/package/@typegoose/typegoose">Latest release: v7</a></small>
 feature_row:
 # I just made these 3 as fillers, because other guides / docs are not made yet
   # - image_path: /assets/images/unkown.png
