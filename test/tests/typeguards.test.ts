@@ -195,9 +195,9 @@ describe('isRefType / isRefTypeArray', () => {
 
       expect(doc.nestedString).not.toEqual(undefined);
 
-      if (isRefTypeArray(doc.nestedString)) {
+      if (isRefTypeArray(doc.nestedString!)) {
         expect(Array.isArray(doc.nestedString)).toBe(true);
-        expect(typeof doc.nestedString[0]).toBe('string');
+        expect(typeof doc.nestedString![0]).toBe('string');
       } else {
         fail('Expected isRefTypeArray to be returning true');
       }
@@ -211,9 +211,9 @@ describe('isRefType / isRefTypeArray', () => {
 
       expect(doc.nestedObjectId).not.toEqual(undefined);
 
-      if (isRefTypeArray(doc.nestedObjectId)) {
+      if (isRefTypeArray(doc.nestedObjectId!)) {
         expect(Array.isArray(doc.nestedString)).toBe(true);
-        expect(doc.nestedObjectId[0]).toBeInstanceOf(mongoose.Types.ObjectId);
+        expect(doc.nestedObjectId![0]).toBeInstanceOf(mongoose.Types.ObjectId);
       } else {
         fail('Expected isRefTypeArray to be returning true');
       }

@@ -268,7 +268,7 @@ export type RefSchemaType =
  * Reference another Model
  */
 // export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
-export type Ref<R, T extends RefType = R extends { _id?: RefType } ? NonNullable<R['_id']> : mongoose.Types.ObjectId> = R | T;
+export type Ref<R, T extends RefType = (R extends { _id?: RefType } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined> = R | T;
 
 /**
  * An Function type for a function that doesn't have any arguments and doesn't return anything
