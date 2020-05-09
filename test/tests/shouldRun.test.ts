@@ -18,7 +18,7 @@ import {
   modelOptions,
   prop
 } from '../../src/typegoose';
-import type { DocumentQuery, IModelOptions, QueryMethodMap, ReturnModelType } from '../../src/types';
+import type { IModelOptions, QueryMethod, QueryMethodMap, ReturnModelType } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -404,13 +404,14 @@ it('should add "null" to the enum (addNullToEnum)', async () => {
 
 it('should add query Methods', async () => {
   interface FindHelpers {
-    findByName(name: string): DocumentQuery<QueryMethods, FindHelpers>;
+    findByName: QueryMethod<typeof findByName>;
+    findByLastname: QueryMethod<typeof findByLastname>;
   }
-  function findByName(this: ReturnModelType<typeof QueryMethods>, name: string) {
+  function findByName(this: ReturnModelType<typeof QueryMethods, QueryMethods, FindHelpers>, name: string) {
     return this.find({ name }); // important to not do an "await" and ".exec"
   }
 
-  function findByLastname(this: ReturnModelType<typeof QueryMethods>, lastname: string) {
+  function findByLastname(this: ReturnModelType<typeof QueryMethods, QueryMethods, FindHelpers>, lastname: string) {
     return this.find({ lastname }); // important to not do an "await" and ".exec"
   }
 
@@ -434,8 +435,7 @@ it('should add query Methods', async () => {
 
   const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
 
-  const found: DocumentType<QueryMethods>[] | null =
-    await (QueryMethodsModel.find() as any).findByName('hello').findByLastname('world').exec();
+  const found: DocumentType<QueryMethods>[] | null = await QueryMethodsModel.find().findByName('hello').findByLastname('world').exec();
   assertion(isDocumentArray(found), new Error('Found is not an document array'));
   expect(found[0].toObject()).toEqual(doc.toObject());
 });
