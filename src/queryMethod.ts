@@ -17,7 +17,7 @@ import type { Func, QueryMethodMap } from './types';
 export function queryMethod(func: Func) {
   return (target: any) => {
     logger.info('Adding query method "%s" to %s', func.name, getName(target));
-    const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target.constructor) ?? []);
+    const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target) ?? []);
     queryMethods.set(func.name, func);
     Reflect.defineMetadata(DecoratorKeys.QueryMethod, queryMethods, target);
   };
