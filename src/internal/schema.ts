@@ -76,13 +76,13 @@ export function _buildSchema<T, U extends AnyParamConstructor<T>>(
       /** Get Metadata for PreHooks */
       const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
       if (Array.isArray(preHooks)) {
-        preHooks.forEach(obj => sch!.pre(obj.method, obj.func as EmptyVoidFn));
+        preHooks.forEach((obj) => sch!.pre(obj.method, obj.func as EmptyVoidFn));
       }
 
       /** Get Metadata for PreHooks */
       const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
       if (Array.isArray(postHooks)) {
-        postHooks.forEach(obj => sch!.post(obj.method, obj.func));
+        postHooks.forEach((obj) => sch!.post(obj.method, obj.func));
       }
     }
 

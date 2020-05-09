@@ -16,7 +16,7 @@ export function isDocument<T, S extends RefType>(doc: Ref<T, S>): doc is Documen
  * @param docs The Array of Refs with uncertain type
  */
 export function isDocumentArray<T, S extends RefType>(docs: Ref<T, S>[]): docs is DocumentType<T>[] {
-  return Array.isArray(docs) && docs.every(v => isDocument(v));
+  return Array.isArray(docs) && docs.every((v) => isDocument(v));
 }
 
 /**
@@ -32,5 +32,5 @@ export function isRefType<T, S extends RefType>(doc: Ref<T, S>): doc is S {
  * @param docs The Ref with uncretain type
  */
 export function isRefTypeArray<T, S extends RefType>(docs: Ref<T, S>[]): docs is S[] {
-  return Array.isArray(docs) && docs.every(v => isRefType(v));
+  return Array.isArray(docs) && docs.every((v) => isRefType(v));
 }

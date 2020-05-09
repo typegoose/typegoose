@@ -47,7 +47,7 @@ it('should use inherited schema', async () => {
   expect(user).toHaveProperty('email', 'my@email.com');
 
   expect(user.cars!.length > 0).toBe(true);
-  user.cars!.forEach(currentCar => {
+  user.cars!.forEach((currentCar) => {
     if (isDocument(currentCar)) {
       expect(typeof currentCar.carModel).toBe('string');
     } else {

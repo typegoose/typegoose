@@ -9,14 +9,14 @@ import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../
 })
 @pre<Hook>(/^update/, function () {
   if (Array.isArray(this)) {
-    this.forEach(async v => await v.update({ shape: 'REGEXP_PRE' })); // i know this is inefficient
+    this.forEach(async (v) => await v.update({ shape: 'REGEXP_PRE' })); // i know this is inefficient
   } else {
     this.update({ shape: 'REGEXP_PRE' });
   }
 })
-@post<Hook>(/^find/, doc => {
+@post<Hook>(/^find/, (doc) => {
   if (Array.isArray(doc)) {
-    doc.forEach(v => (v.material = 'REGEXP_POST'));
+    doc.forEach((v) => (v.material = 'REGEXP_POST'));
   } else if (isDocument(doc)) {
     doc.material = 'REGEXP_POST';
   }
@@ -29,10 +29,10 @@ export class Hook {
   public shape?: string;
 }
 
-@post<HookArray>(['find', 'findOne'], async docs => {
+@post<HookArray>(['find', 'findOne'], async (docs) => {
   if (Array.isArray(docs)) {
     await Promise.all(
-      docs.map(async v => {
+      docs.map(async (v) => {
         v.testArray.push('hello');
         await v.save();
       })

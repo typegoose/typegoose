@@ -31,7 +31,7 @@ export function isPrimitive(Type: any): boolean {
       Object.getOwnPropertyNames(mongoose.Schema.Types).includes(Type.name) ||
       // try to match "Type.name" with all "mongoose.Schema.Types.*.name"
       // (like "SchemaString" with "mongoose.Schema.Types.String.name")
-      Object.values(mongoose.Schema.Types).findIndex(v => v.name === Type.name) >= 0
+      Object.values(mongoose.Schema.Types).findIndex((v) => v.name === Type.name) >= 0
     );
   }
 
@@ -62,7 +62,7 @@ export function isAnRefType(Type: any): boolean {
       tmp.includes(Type.name) ||
       // try to match "Type.name" with all "mongoose.Schema.Types.*.name"
       // (like "SchemaString" with "mongoose.Schema.Types.String.name")
-      Object.values(mongoose.Schema.Types).findIndex(v => v.name === Type.name) >= 0
+      Object.values(mongoose.Schema.Types).findIndex((v) => v.name === Type.name) >= 0
     );
   }
 
@@ -207,7 +207,7 @@ const virtualOptions = ['localField', 'foreignField'];
  * @param options RawOptions of the Prop
  */
 export function isWithVirtualPOP(options: any): options is VirtualOptions {
-  return Object.keys(options).some(v => virtualOptions.includes(v));
+  return Object.keys(options).some((v) => virtualOptions.includes(v));
 }
 
 export const allVirtualoptions = virtualOptions.slice(0);
@@ -218,7 +218,7 @@ allVirtualoptions.push('ref');
  * @param options RawOptions of the Prop
  */
 export function includesAllVirtualPOP(options: VirtualOptions): options is VirtualOptions {
-  return allVirtualoptions.every(v => Object.keys(options).includes(v));
+  return allVirtualoptions.every((v) => Object.keys(options).includes(v));
 }
 
 /**

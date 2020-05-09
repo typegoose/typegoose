@@ -35,7 +35,7 @@ it('should add a language and job using instance methods', async () => {
 
   expect(savedUser.languages.includes('Hungarian')).toBe(true);
   expect(savedUser.previousJobs.length > 0).toBe(true);
-  savedUser.previousJobs.map(prevJob => {
+  savedUser.previousJobs.map((prevJob) => {
     expect(prevJob.startedAt instanceof Date).toBe(true);
   });
 });
