@@ -115,6 +115,14 @@
     "no-unnecessary-else": {
       "severity": "warn"
     },
+    "space-within-parens": {
+      "severity": "warn",
+      "options": 0
+    },
+    "arrow-parens": {
+      "severity": "warn"
+    },
+    "new-parens": true,
     "space-before-function-paren": false,
     "encoding": true,
     "no-invalid-template-strings": true,
