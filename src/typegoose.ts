@@ -26,6 +26,7 @@ import type {
   IModelOptions,
   Ref,
   ReturnModelType,
+  CreateQuery,
   TypegooseModel
 } from './types';
 
@@ -41,7 +42,7 @@ export * from './modelOptions';
 export * as defaultClasses from './defaultClasses';
 export * as errors from './internal/errors';
 export * as types from './types';
-export { DocumentType, Ref, ReturnModelType };
+export { DocumentType, Ref, ReturnModelType, CreateQuery };
 export { getClassForDocument, getClass, getName } from './internal/utils';
 export { Severity } from './internal/constants';
 
