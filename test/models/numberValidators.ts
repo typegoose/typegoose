@@ -15,10 +15,7 @@ export class NumberValidators {
   public min?: number;
 
   @prop({ enum: NumberValidatorEnum })
-  public enumed?: number;
-
-  @prop({ enum: NumberValidatorEnum })
-  public enumedt?: NumberValidatorEnum;
+  public enumed?: NumberValidatorEnum;
 }
 
 export const NumberValidatorsModel = getModelForClass(NumberValidators);

@@ -25,7 +25,7 @@ export class StringValidators {
   public lowercased?: string;
 
   @prop({ enum: StringValidatorEnum })
-  public enumed?: string;
+  public enumed?: StringValidatorEnum;
 }
 
 export const StringValidatorsModel = getModelForClass(StringValidators);
