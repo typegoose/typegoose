@@ -434,10 +434,8 @@ export interface IPluginsArray<T> {
  */
 export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
 
-/**
- * Return query methods
- */
-export type DocumentQuery<T, U> = mongoose.DocumentQuery<DocumentType<T>[], DocumentType<T>, U>;
+
+export type QueryMethod<T extends (...args: any) => any> = (...args: Parameters<T>) => ReturnType<T>;
 
 /**
  * Used for the Reflection of Query Methods
