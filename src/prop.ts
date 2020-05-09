@@ -33,7 +33,7 @@ function baseProp(input: DecoratedPropertyMetadata): void {
     // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
     throw new TypeError(
       'It seems like the type used is the same as the target class, which is currently not supported\n' +
-        `Please look at https://github.com/typegoose/typegoose/issues/42 for more information, for now please avoid using it!`
+      `Please look at https://github.com/typegoose/typegoose/issues/42 for more information, for now please avoid using it!`
     );
   }
 
