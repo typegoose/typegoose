@@ -389,8 +389,8 @@ it('should add "null" to the enum (addNullToEnum)', async () => {
     three = 3
   }
   class AddNullToEnum {
-    @prop({ enum: SomeNumberEnum, addNullToEnum: true })
-    public value?: SomeNumberEnum;
+    @prop({ enum: SomeNumberEnum, addNullToEnum: true, type: Number })
+    public value?: SomeNumberEnum | null;
   }
   const AddNullToEnumModel = getModelForClass(AddNullToEnum);
 
