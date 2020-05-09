@@ -269,7 +269,7 @@ describe('tests for "InvalidTypeError"', () => {
 describe('tests for "assignMetadata"', () => {
   it('should error if no valid key is supplied [TypeError]', () => {
     try {
-      class Dummy { }
+      class Dummy {}
       // @ts-ignore
       assignMetadata(true, {}, Dummy);
       fail('Expected to throw "TypeError"');
@@ -314,7 +314,7 @@ it('should throw when "deleteModel" is called with no string [TypeError]', () =>
 });
 
 it('should throw when "addModelToTypegoose" is called twice for the same class [Error]', () => {
-  class TestDouble { }
+  class TestDouble {}
 
   const gotmodel = getModelForClass(TestDouble);
 
@@ -330,7 +330,7 @@ it('should throw when "addModelToTypegoose" is called twice for the same class [
 it('should throw when "customName" is used, but length <= 0 [TypeError]', () => {
   try {
     @modelOptions({ options: { customName: '' } })
-    class TestCustomNameError { }
+    class TestCustomNameError {}
     getName(TestCustomNameError);
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -340,7 +340,7 @@ it('should throw when "customName" is used, but length <= 0 [TypeError]', () => 
 
 it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
   try {
-    mapOptions({}, Error, undefined, undefined, true);
+    mapOptions({}, Error, undefined, undefined as any, true);
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -396,7 +396,7 @@ it('should error if "refPath" is used with @mapProp [TypeError]', () => {
 
 it('should error if the options provide to "setGlobalOptions" are not an object [TypeError]', () => {
   try {
-    setGlobalOptions(undefined);
+    setGlobalOptions(undefined as any);
 
     fail('Expected to throw "TypeError"');
   } catch (err) {

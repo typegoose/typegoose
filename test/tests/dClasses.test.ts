@@ -7,7 +7,7 @@ it('TimeStamp Model', async () => {
   expect(doc.updatedAt).toBeInstanceOf(Date);
   expect(doc.createdAt).toBeInstanceOf(Date);
 
-  const found = await TestTimeStampsModel.findById(doc.id).exec();
+  const found = await TestTimeStampsModel.findById(doc.id).orFail().exec();
   expect(found).not.toEqual(undefined);
   expect(found.someValue).toEqual('hello');
   expect(found.updatedAt).toBeInstanceOf(Date);

@@ -20,6 +20,6 @@ it('should have global options, without using @modelOptions', () => {
 
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, TestGlobalOptions);
 
-  expect(typeof options).not.toBe(undefined);
-  expect(options.options.allowMixed).toEqual(Severity.WARN);
+  expect(typeof options).not.toBeUndefined();
+  expect(options.options!.allowMixed).toEqual(Severity.WARN);
 });

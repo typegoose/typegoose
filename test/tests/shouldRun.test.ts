@@ -26,26 +26,26 @@ import type { IModelOptions, QueryMethodMap, ReturnModelType } from '../../src/t
 // tslint:disable:no-console
 
 it('should not error when trying to get model multiple times', () => {
-  class TEST { }
+  class TEST {}
   getModelForClass(TEST);
   getModelForClass(TEST);
 });
 
 it('should build multiple times', () => {
-  class TEST { }
+  class TEST {}
   buildSchema(TEST);
   buildSchema(TEST);
 });
 
 it('should use existingMongoose', async () => {
   @modelOptions({ existingMongoose: mongoose })
-  class TESTexistingMongoose { }
+  class TESTexistingMongoose {}
   expect(getModelForClass(TESTexistingMongoose)).not.toEqual(undefined);
 });
 
 it('should use existingConnection', async () => {
   @modelOptions({ existingConnection: mongoose.connection })
-  class TESTexistingConnection { }
+  class TESTexistingConnection {}
   expect(getModelForClass(TESTexistingConnection)).not.toEqual(undefined);
 });
 
@@ -78,11 +78,11 @@ it('should make use of Map default', async () => {
   const model = getModelForClass(TestMapDefault);
   const { _id: id } = await model.create({ someother: 'hi' });
 
-  const found = await model.findById(id).exec();
+  const found = await model.findById(id).orFail().exec();
   expect(found).not.toEqual(undefined);
   expect(found.someother).toEqual('hi');
   expect(found.test instanceof Map).toBe(true);
-  expect(new Map(found.test)).toEqual(new Map([['hello', 'hello']]));
+  expect(new Map(found.test!)).toEqual(new Map([['hello', 'hello']]));
 });
 
 it('should work with Objects in Class [szokodiakos#54]', async () => {
@@ -105,7 +105,7 @@ it('should work with Objects in Class [szokodiakos#54]', async () => {
 });
 
 it('simple test for assignMetadata', () => {
-  class TestAssignMetadata { }
+  class TestAssignMetadata {}
 
   assignMetadata(DecoratorKeys.ModelOptions, { testOption: 'hello' }, TestAssignMetadata);
 
@@ -116,20 +116,19 @@ it('simple test for assignMetadata', () => {
 });
 
 it('should just run with an non existing value in "assignMetadata"', () => {
-  class Dummy { }
+  class Dummy {}
   assignMetadata(DecoratorKeys.ModelOptions, { test: 'hello' }, Dummy);
   assignMetadata(DecoratorKeys.ModelOptions, undefined, Dummy);
   expect(Reflect.getMetadata(DecoratorKeys.ModelOptions, Dummy)).toEqual({ test: 'hello' });
 });
 
 it('should just run with an non existing value in "mergeMetadata"', () => {
-  class Dummy { }
+  class Dummy {}
   assignMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
-  expect(mergeMetadata(DecoratorKeys.ModelOptions, undefined, Dummy))
-    .toEqual({ schemaOptions: { _id: false } });
+  expect(mergeMetadata(DecoratorKeys.ModelOptions, undefined, Dummy)).toEqual({ schemaOptions: { _id: false } });
 });
 it('should not modify current metadata object in "mergeMetadata"', () => {
-  class Dummy { }
+  class Dummy {}
   const someData = { property: 'value' };
   Reflect.defineMetadata(DecoratorKeys.ModelOptions, someData, Dummy);
   mergeMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
@@ -137,14 +136,14 @@ it('should not modify current metadata object in "mergeMetadata"', () => {
 });
 
 it('should just run with an non existing value in "mergeSchemaOptions"', () => {
-  class Dummy { }
+  class Dummy {}
   assignMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
   expect(mergeSchemaOptions(undefined, Dummy)).toEqual({ _id: false });
 });
 
 it('merge options with assignMetadata', () => {
   @modelOptions({ schemaOptions: { timestamps: true, _id: false } })
-  class TestAssignMetadata { }
+  class TestAssignMetadata {}
 
   const model = getModelForClass(TestAssignMetadata, {
     schemaOptions: {
@@ -225,7 +224,7 @@ it('should use type "Buffer" [typegoose#88]', async () => {
 
   const { _id: id } = await model.create({ propy: Buffer.from('Hello') } as TestBuffer);
 
-  const found = await model.findById(id).exec();
+  const found = await model.findById(id).orFail().exec();
   expect(found).not.toEqual(undefined);
   expect(found.propy).toBeInstanceOf(Buffer);
   expect(found.propy.toString()).toEqual('Hello');
@@ -280,15 +279,15 @@ it('should run with Custom Types', async () => {
 
 it('should not have the same options (modelOptions deep copy) [typegoose/typegoose#100]', () => {
   @modelOptions({ schemaOptions: { collection: '1' } })
-  class SOBase { }
+  class SOBase {}
 
   @modelOptions({ schemaOptions: { collection: '2' } })
-  class SOInheritedBase extends SOBase { }
+  class SOInheritedBase extends SOBase {}
 
   const refSOBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOBase);
   const refSOInheritedBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOInheritedBase);
 
-  expect(refSOBase.schemaOptions.collection).not.toEqual(refSOInheritedBase.schemaOptions.collection);
+  expect(refSOBase.schemaOptions!.collection).not.toEqual(refSOInheritedBase.schemaOptions!.collection);
   expect(refSOBase).not.toEqual(refSOInheritedBase);
 });
 
@@ -315,7 +314,7 @@ it('should return undefined if model does not exists (getModelWithString)', () =
 it('should merge existingConnection correctly (overwrite)', () => {
   // @ts-ignore ignore that "existingConnection" is not of type connection
   @modelOptions({ existingConnection: { hello: 1 } })
-  class Dummy { }
+  class Dummy {}
 
   const out = mergeMetadata(DecoratorKeys.ModelOptions, { existingConnection: { hi: 1 } }, Dummy);
 
@@ -390,7 +389,7 @@ it('should add "null" to the enum (addNullToEnum)', async () => {
   }
   class AddNullToEnum {
     @prop({ enum: SomeNumberEnum, addNullToEnum: true })
-    public value?: SomeNumberEnum;
+    public value?: SomeNumberEnum | null;
   }
   const AddNullToEnumModel = getModelForClass(AddNullToEnum);
 
@@ -415,7 +414,7 @@ it('should add query Methods', async () => {
   const QueryMethodsModel = getModelForClass(QueryMethods);
   const doc = await QueryMethodsModel.create({ name: 'hello' });
 
-  const found: DocumentType<QueryMethods>[] | null = await (QueryMethodsModel.find() as any).findByName('hello').exec();
+  const found: DocumentType<QueryMethods>[] = await (QueryMethodsModel.find() as any).findByName('hello').orFail().exec();
   assertion(isDocumentArray(found), new Error('Found is not an document array'));
   expect(found[0].toObject()).toEqual(doc.toObject());
 

@@ -13,18 +13,15 @@ type ClassDecorator = (target: any) => void;
 type HookNextErrorFn = (err?: Error) => void;
 
 type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => void;
-type PreFnWithQuery<T> = (
-  this: Query<T>,
-  next?: (error?: Error) => void,
-  done?: EmptyVoidFn) => void;
+type PreFnWithQuery<T> = (this: Query<T>, next?: (error?: Error) => void, done?: EmptyVoidFn) => void;
 
-type ModelPostFn<T> = (result: any, next?: EmptyVoidFn) => void;
+type ModelPostFn<T> = (result: any, next: EmptyVoidFn) => void;
 
-type PostNumberResponse<T> = (result: number, next?: EmptyVoidFn) => void;
-type PostSingleResponse<T> = (result: DocumentType<T>, next?: EmptyVoidFn) => void;
-type PostMultipleResponse<T> = (result: DocumentType<T>[], next?: EmptyVoidFn) => void;
-type PostRegExpResponse<T> = (result: NDA<T>, next?: EmptyVoidFn) => void;
-type PostArrayResponse<T> = (result: NDA<T>, next?: EmptyVoidFn) => void;
+type PostNumberResponse<T> = (result: number, next: EmptyVoidFn) => void;
+type PostSingleResponse<T> = (result: DocumentType<T>, next: EmptyVoidFn) => void;
+type PostMultipleResponse<T> = (result: DocumentType<T>[], next: EmptyVoidFn) => void;
+type PostRegExpResponse<T> = (result: NDA<T>, next: EmptyVoidFn) => void;
+type PostArrayResponse<T> = (result: NDA<T>, next: EmptyVoidFn) => void;
 
 type PostNumberWithError<T> = (error: Error, result: number, next: HookNextErrorFn) => void;
 type PostSingleWithError<T> = (error: Error, result: DocumentType<T>, next: HookNextErrorFn) => void;
@@ -36,15 +33,7 @@ type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
 type NumberMethod = 'count';
 type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | DocumentMethod;
 type MultipleMethod = 'find' | 'update';
-type QueryMethod =
-  | 'count'
-  | 'find'
-  | 'findOne'
-  | 'findOneAndRemove'
-  | 'findOneAndUpdate'
-  | 'update'
-  | 'updateOne'
-  | 'updateMany';
+type QueryMethod = 'count' | 'find' | 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'update' | 'updateOne' | 'updateMany';
 type ModelMethod = 'insertMany';
 type QMR = QueryMethod | ModelMethod | RegExp;
 type QDM = QMR | DocumentMethod;
@@ -92,7 +81,10 @@ const hooks: Hooks = {
 function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]) {
   // Convert Method to array if only a string is provided
   const methods: QDM[] = Array.isArray(args[0]) ? args[0] : [args[0]];
-  assertion(typeof args[1] === 'function', new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s function is not a function!`));
+  assertion(
+    typeof args[1] === 'function',
+    new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s function is not a function!`)
+  );
   const func: EmptyVoidFn = args[1];
 
   logger.info('Adding hooks for "[%s]" to "%s" as type "%s"', methods.join(','), getName(target), hookType);

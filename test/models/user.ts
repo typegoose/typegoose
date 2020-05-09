@@ -1,14 +1,5 @@
 import * as findOrCreate from 'mongoose-findorcreate';
-import {
-  arrayProp,
-  defaultClasses,
-  DocumentType,
-  getModelForClass,
-  plugin,
-  prop,
-  Ref,
-  ReturnModelType
-} from '../../src/typegoose';
+import { arrayProp, defaultClasses, DocumentType, getModelForClass, plugin, prop, Ref, ReturnModelType } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Role } from '../enums/role';
 import { Car } from './car';
@@ -56,7 +47,7 @@ export class User extends defaultClasses.FindOrCreate {
   public roles?: Role[];
 
   @prop()
-  public job?: Job;
+  public job!: Job;
 
   @prop({ ref: Car })
   public car?: Ref<Car>;
@@ -65,10 +56,10 @@ export class User extends defaultClasses.FindOrCreate {
   public languages!: string[];
 
   @arrayProp({ items: Job, _id: false })
-  public previousJobs?: Job[];
+  public previousJobs!: Job[];
 
   @arrayProp({ ref: Car })
-  public previousCars?: Ref<Car>[];
+  public previousCars!: Ref<Car>[];
 
   public static async findByAge(this: ReturnModelType<typeof User>, age: number) {
     return this.findOne({ age }).exec();
@@ -87,7 +78,7 @@ export class User extends defaultClasses.FindOrCreate {
     return this.save();
   }
 
-  public async addJob(this: DocumentType<User>, job: Job = {}) {
+  public async addJob(this: DocumentType<User>, job: Job = new Job()) {
     this.previousJobs.push(job);
 
     return this.save();

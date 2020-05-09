@@ -39,9 +39,10 @@ export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<
     connection = mongoose.createConnection(connectionString, options);
   } else {
     await mongoose.connect(connectionString, options);
+    connection = mongoose.connection;
   }
 
-  return connection ?? mongoose.connection;
+  return connection;
 }
 
 /**

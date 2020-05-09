@@ -28,7 +28,10 @@ export function parseENV(): void {
   const options: IGlobalOptions = {
     globalOptions: {},
     options: {
-      allowMixed: process.env.TG_ALLOW_MIXED in Severity ? mapValueToSeverity(process.env.TG_ALLOW_MIXED) : globalOptions.options.allowMixed
+      allowMixed:
+        process.env.TG_ALLOW_MIXED && process.env.TG_ALLOW_MIXED in Severity
+          ? mapValueToSeverity(process.env.TG_ALLOW_MIXED)
+          : globalOptions.options?.allowMixed
     }
   };
 

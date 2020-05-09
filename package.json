@@ -45,7 +45,7 @@
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/lodash": "^4.14.150",
-    "@types/mongoose": "^5.7.12",
+    "@types/mongoose": "^5.7.16",
     "@types/node": "^10.17.16",
     "@types/semver": "^7.1.0",
     "coveralls": "^3.0.13",

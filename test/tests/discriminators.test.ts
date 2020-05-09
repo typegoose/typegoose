@@ -17,7 +17,7 @@ it('should make use of discriminators', async () => {
 });
 
 it('"getDiscriminatorModelForClass" should return the same model if already defined', () => {
-  class TestSameModelDicriminator { }
+  class TestSameModelDicriminator {}
 
   const model = getModelForClass(TestSameModelDicriminator);
 
@@ -41,7 +41,7 @@ describe('Generic Discriminators', () => {
     expect((instance as any).visitor).toEqual(undefined);
     expect(instance.default).toEqual('sth');
     expect((instance.profile as any).test).toEqual(undefined);
-    expect(instance.profile.lastName).toEqual('sth');
+    expect(instance.profile!.lastName).toEqual('sth');
   });
 
   it('should work when using "DefaultModel" directly', async () => {
@@ -56,7 +56,7 @@ describe('Generic Discriminators', () => {
     expect((instance as any).visitor).toEqual(undefined);
     expect(instance.default).toEqual('sth');
     expect((instance.profile as any).test).toEqual(undefined);
-    expect(instance.profile.lastName).toEqual('sth');
+    expect(instance.profile!.lastName).toEqual('sth');
   });
 
   it('should use VisitorModel when setting role to "ROLE.VISITOR"', async () => {
@@ -73,6 +73,6 @@ describe('Generic Discriminators', () => {
     expect((instance as any).default).toEqual(undefined);
     expect((instance.profile as any).test).toEqual(undefined);
     expect((instance.profile as any).lastName).toEqual(undefined);
-    expect(instance.profile.firstName).toEqual('sth');
+    expect(instance.profile!.firstName).toEqual('sth');
   });
 });

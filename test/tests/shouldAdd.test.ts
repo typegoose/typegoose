@@ -7,6 +7,7 @@ import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '..
 import { GetSet, GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
 import { Beverage, BeverageModel, Inventory, InventoryModel, ScooterModel } from '../models/inventory';
+import { Job } from '../models/job';
 import { OptionsClass, OptionsModel } from '../models/options';
 import { UserModel } from '../models/user';
 import {
@@ -28,13 +29,13 @@ it('should add a language and job using instance methods', async () => {
     languages: ['english'],
     uniqueId: 'unique-id'
   });
-  await user.addJob({ position: 'Dark Wizzard', title: 'Archmage' });
+  await user.addJob(new Job({ position: 'Dark Wizzard', title: 'Archmage' }));
   await user.addJob();
   const savedUser = await user.addLanguage();
 
   expect(savedUser.languages.includes('Hungarian')).toBe(true);
   expect(savedUser.previousJobs.length > 0).toBe(true);
-  savedUser.previousJobs.map((prevJob) => {
+  savedUser.previousJobs.map(prevJob => {
     expect(prevJob.startedAt instanceof Date).toBe(true);
   });
 });
@@ -54,11 +55,11 @@ it('should add and populate the virtual properties', async () => {
     virtual: virtual1._id
   } as Partial<VirtualSub>);
 
-  const newfound = await VirtualModel.findById(virtual1._id).populate('virtualSubs').exec();
+  const newfound = await VirtualModel.findById(virtual1._id).populate('virtualSubs').orFail().exec();
 
   expect(newfound.dummyVirtual).toEqual('dummyVirtual1');
   expect(newfound.virtualSubs).not.toEqual(undefined);
-  if (isDocumentArray(newfound.virtualSubs)) {
+  if (isDocumentArray(newfound.virtualSubs!)) {
     expect(newfound.virtualSubs[0].dummy).toEqual('virtualSub1');
     expect(newfound.virtualSubs[0]._id.toString()).toEqual(virtualsub1._id.toString());
     expect(newfound.virtualSubs[1].dummy).toEqual('virtualSub3');
@@ -107,16 +108,16 @@ it(`should add dynamic fields using map`, async () => {
   expect(user).not.toEqual(undefined);
   expect(user).toHaveProperty('socialNetworks');
   expect(user.socialNetworks).toBeInstanceOf(Map);
-  expect(user.socialNetworks.get('twitter')).toEqual('twitter account');
-  expect(user.socialNetworks.get('facebook')).toEqual('facebook account');
+  expect(user.socialNetworks!.get('twitter')).toEqual('twitter account');
+  expect(user.socialNetworks!.get('facebook')).toEqual('facebook account');
   expect(user).toHaveProperty('sideNotes');
   expect(user.sideNotes).toBeInstanceOf(Map);
-  expect(user.sideNotes.get('day1')).toHaveProperty('content', 'day1');
-  expect(user.sideNotes.get('day1')).toHaveProperty('link', 'url');
-  expect(user.sideNotes.has('day2')).toEqual(true);
+  expect(user.sideNotes!.get('day1')).toHaveProperty('content', 'day1');
+  expect(user.sideNotes!.get('day1')).toHaveProperty('link', 'url');
+  expect(user.sideNotes!.has('day2')).toEqual(true);
 
-  expect(user.sideNotes.get('day1')).not.toHaveProperty('_id');
-  expect(user.sideNotes.get('day2')).not.toHaveProperty('_id');
+  expect(user.sideNotes!.get('day1')).not.toHaveProperty('_id');
+  expect(user.sideNotes!.get('day2')).not.toHaveProperty('_id');
 });
 
 it('should support dynamic references via refPath', async () => {
@@ -150,7 +151,6 @@ it('should support dynamic references via refPath', async () => {
   expect(items[0].refItemPathName).toEqual('Beverage');
   expect((items[0].kind as Beverage).isDecaf).toEqual(true);
   expect((items[0].kindArray[0] as Beverage).isDecaf).toEqual(true);
-
 
   // wrong type to make TypeScript happy
   expect(items[1].refItemPathName).toEqual('Scooter');
@@ -191,8 +191,8 @@ it('should add model with createdAt and updatedAt', async () => {
 
   expect(found).not.toEqual(undefined);
   expect(found).toHaveProperty('someprop', 10);
-  expect(found.createdAt).toBeInstanceOf(Date);
-  expect(found.updatedAt).toBeInstanceOf(Date);
+  expect(found!.createdAt).toBeInstanceOf(Date);
+  expect(found!.updatedAt).toBeInstanceOf(Date);
 });
 
 it('should make use of non-virtuals with pre- and post-processors', async () => {
@@ -204,7 +204,7 @@ it('should make use of non-virtuals with pre- and post-processors', async () => 
 });
 
 it('should add options to ref [szokodiakos#379]', () => {
-  class T { }
+  class T {}
   class TestRef {
     @prop({ ref: T, customoption: 'custom' })
     public someprop: Ref<T>;
@@ -222,7 +222,7 @@ it('should add options to ref [szokodiakos#379]', () => {
 });
 
 it('should add options to refPath [szokodiakos#379]', () => {
-  class T { }
+  class T {}
   class TestRefPath {
     @prop({ default: 'T' })
     public something: string;
@@ -243,7 +243,7 @@ it('should add options to refPath [szokodiakos#379]', () => {
 });
 
 it('should add options to array-ref [szokodiakos#379]', () => {
-  class T { }
+  class T {}
   class TestArrayRef {
     @arrayProp({ ref: T, customoption: 'custom' })
     public someprop: Ref<T>[];
@@ -261,7 +261,7 @@ it('should add options to array-ref [szokodiakos#379]', () => {
 });
 
 it('should add options to array-refPath [szokodiakos#379]', () => {
-  class T { }
+  class T {}
   class TestArrayRefPath {
     @prop({ default: 'T' })
     public something: string;
@@ -345,7 +345,12 @@ it('should work with both map creation types', async () => {
 
   const MapTestModel = getModelForClass(MapTest);
 
-  const variant1 = new MapTestModel({ prop: [['key1', 1], ['key2', 2]] });
+  const variant1 = new MapTestModel({
+    prop: [
+      ['key1', 1],
+      ['key2', 2]
+    ]
+  });
   await variant1.validate();
 
   const variant2 = new MapTestModel({ prop: { key1: 1, key2: 2 } });

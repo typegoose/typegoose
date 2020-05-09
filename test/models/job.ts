@@ -23,7 +23,13 @@ export class Job {
   @prop({ _id: false })
   public jobType?: JobType;
 
-  public titleInUppercase?() { // TODO: remove "?" when https://github.com/typegoose/typegoose/pull/241 should get merged
-    return this.title.toUpperCase();
+  public titleInUppercase() {
+    return this.title?.toUpperCase();
+  }
+
+  constructor(opts?: Partial<Job>) {
+    if (opts) {
+      Object.assign(this, opts);
+    }
   }
 }

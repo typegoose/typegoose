@@ -5,15 +5,19 @@ import { NumberValidatorEnum, NumberValidatorsModel } from '../models/numberVali
 // Please try to keep this file in sync with ./arrayValidator.test.ts
 
 it('should respect max', async () => {
-  await expect(NumberValidatorsModel.create({
-    max: 4 // over 3
-  })).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
+  await expect(
+    NumberValidatorsModel.create({
+      max: 4 // over 3
+    })
+  ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
 
 it('should respect min', async () => {
-  await expect(NumberValidatorsModel.create({
-    min: 9 // under 10
-  })).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
+  await expect(
+    NumberValidatorsModel.create({
+      min: 9 // under 10
+    })
+  ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
 
 it('should respect enum', async () => {
@@ -34,7 +38,7 @@ it('should respect enum', async () => {
   expect(doc).not.toEqual(undefined);
   expect(doc.enumed).toEqual(NumberValidatorEnum.OPT2);
 
-  const found = await NumberValidatorsModel.findById(doc._id).exec();
+  const found = await NumberValidatorsModel.findById(doc._id).orFail().exec();
 
   expect(found).not.toEqual(undefined);
   expect(found.enumed).toEqual(NumberValidatorEnum.OPT2);

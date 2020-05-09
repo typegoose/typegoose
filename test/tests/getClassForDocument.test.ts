@@ -40,14 +40,14 @@ it('should use inherited schema', async () => {
   });
   await user.addCar(car);
 
-  user = await PersonModel.findById(user.id).populate('cars').exec();
+  user = await PersonModel.findById(user.id).populate('cars').orFail().exec();
 
   // verify properties
   expect(user).toHaveProperty('createdAt');
   expect(user).toHaveProperty('email', 'my@email.com');
 
-  expect(user.cars.length > 0).toBe(true);
-  user.cars.forEach((currentCar) => {
+  expect(user.cars!.length > 0).toBe(true);
+  user.cars!.forEach(currentCar => {
     if (isDocument(currentCar)) {
       expect(typeof currentCar.carModel).toBe('string');
     } else {
@@ -73,11 +73,11 @@ it('should store nested address', async () => {
   expect(person).not.toEqual(undefined);
   expect(person.name).toEqual('Person, Some');
   expect(person.address).not.toEqual(undefined);
-  expect(person.address.street).toEqual('A Street 1');
+  expect(person.address!.street).toEqual('A Street 1');
   expect(person.moreAddresses).not.toEqual(undefined);
-  expect(person.moreAddresses.length).toEqual(2);
-  expect(person.moreAddresses[0].street).toEqual('A Street 2');
-  expect(person.moreAddresses[1].street).toEqual('A Street 3');
+  expect(person.moreAddresses!.length).toEqual(2);
+  expect(person.moreAddresses![0].street).toEqual('A Street 2');
+  expect(person.moreAddresses![1].street).toEqual('A Street 3');
 });
 
 it('should properly set Decimal128, ObjectID types to field', () => {
@@ -101,7 +101,7 @@ it('should validate Decimal128', async () => {
     carModel: 'Tesla',
     price: mongoose.Types.Decimal128.fromString('123.45')
   });
-  const foundCar = await CarModel.findById(car._id).exec();
+  const foundCar = await CarModel.findById(car._id).orFail().exec();
   expect(foundCar.price).toBeInstanceOf(mongoose.Types.Decimal128);
   expect(foundCar.price.toString()).toEqual('123.45');
 });
@@ -114,7 +114,8 @@ it('should validate email', async () => {
     fail('Validation must fail.');
   } catch (e) {
     expect(e).toBeInstanceOf(mongoose.Error.ValidationError);
-    expect(e.message).toEqual( // test it specifically, to know that it is not another error
+    expect(e.message).toEqual(
+      // test it specifically, to know that it is not another error
       'Person validation failed: email: Validator failed for path `email` with value `email`'
     );
   }
@@ -130,7 +131,8 @@ it(`should Validate Map`, async () => {
     fail('Validation should Fail');
   } catch (e) {
     expect(e).toBeInstanceOf(mongoose.Error.ValidationError);
-    expect(e.message).toEqual( // test it specifically, to know that it is not another error
+    expect(e.message).toEqual(
+      // test it specifically, to know that it is not another error
       'InternetUser validation failed: projects.p1: `project` is not a valid enum value for path `projects.p1`.'
     );
   }
