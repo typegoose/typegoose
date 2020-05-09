@@ -114,8 +114,7 @@ it('should validate email', async () => {
     fail('Validation must fail.');
   } catch (e) {
     expect(e).toBeInstanceOf(mongoose.Error.ValidationError);
-    expect(e.message).toEqual(
-      // test it specifically, to know that it is not another error
+    expect(e.message).toEqual(// test it specifically, to know that it is not another error
       'Person validation failed: email: Validator failed for path `email` with value `email`'
     );
   }
@@ -131,8 +130,7 @@ it(`should Validate Map`, async () => {
     fail('Validation should Fail');
   } catch (e) {
     expect(e).toBeInstanceOf(mongoose.Error.ValidationError);
-    expect(e.message).toEqual(
-      // test it specifically, to know that it is not another error
+    expect(e.message).toEqual(// test it specifically, to know that it is not another error
       'InternetUser validation failed: projects.p1: `project` is not a valid enum value for path `projects.p1`.'
     );
   }
