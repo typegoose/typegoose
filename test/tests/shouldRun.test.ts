@@ -69,10 +69,10 @@ it('should make use of addModelToTypegoose', async () => {
 it('should make use of Map default', async () => {
   class TestMapDefault {
     @mapProp({ of: String, default: new Map([['hello', 'hello']]) })
-    public test: Map<string, string>;
+    public test?: Map<string, string>;
 
     @prop()
-    public someother: string;
+    public someother?: string;
   }
 
   const model = getModelForClass(TestMapDefault);
@@ -166,7 +166,7 @@ it('should make use of "@prop({ _id: false })" and have no _id', async () => {
   }
   class TestidFalse {
     @prop({ _id: false })
-    public someprop: TestidFalseNested;
+    public someprop?: TestidFalseNested;
   }
 
   const model = getModelForClass(TestidFalse);

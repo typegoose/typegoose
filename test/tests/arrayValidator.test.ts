@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { ArrayValidatorEnumNumber, ArrayValidatorEnumString, ArrayValidatorsModel } from '../models/arrayValidators';
+import { ArrayValidatorEnumNumber, ArrayValidatorEnumString, ArrayValidators, ArrayValidatorsModel } from '../models/arrayValidators';
 
 // Please try to keep this file in sync with ./stringValidator.test.ts
 
@@ -57,8 +57,8 @@ it('should respect min [Number]', async () => {
 it('should respect enum [String]', async () => {
   try {
     await ArrayValidatorsModel.create({
-      enumedString: 'not in the enum' // string not in the enum
-    });
+      enumedString: ['not in the enum' as any] // string not in the enum
+    } as ArrayValidators);
 
     fail('Expected to throw ValidationError!');
   } catch (err) {
@@ -81,8 +81,8 @@ it('should respect enum [String]', async () => {
 it('should respect enum [Number]', async () => {
   try {
     await ArrayValidatorsModel.create({
-      enumedNumber: 5 // number not in the enum
-    });
+      enumedNumber: [5] // number not in the enum
+    } as ArrayValidators);
 
     fail('Expected to throw ValidationError!');
   } catch (err) {

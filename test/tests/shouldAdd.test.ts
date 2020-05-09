@@ -1,12 +1,12 @@
 import * as mongoose from 'mongoose';
 
-import { arrayProp, buildSchema, getClass, getName, isDocumentArray, prop, Ref } from '../../src/typegoose';
+import { arrayProp, buildSchema, getClass, getModelForClass, getName, isDocumentArray, mapProp, prop, Ref } from '../../src/typegoose';
 import { Genders } from '../enums/genders';
 import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
 import { GetSet, GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
-import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models/inventory';
+import { Beverage, BeverageModel, Inventory, InventoryModel, ScooterModel } from '../models/inventory';
 import { OptionsClass, OptionsModel } from '../models/options';
 import { UserModel } from '../models/user';
 import {
@@ -119,15 +119,10 @@ it(`should add dynamic fields using map`, async () => {
   expect(user.sideNotes.get('day2')).not.toHaveProperty('_id');
 });
 
-it('Should support dynamic references via refPath', async () => {
+it('should support dynamic references via refPath', async () => {
   const sprite = await BeverageModel.create({
     isDecaf: true,
     isSugarFree: false
-  });
-
-  await BeverageModel.create({
-    isDecaf: false,
-    isSugarFree: true
   });
 
   const vespa = await ScooterModel.create({
@@ -137,23 +132,30 @@ it('Should support dynamic references via refPath', async () => {
   await InventoryModel.create({
     refItemPathName: 'Beverage',
     kind: sprite,
+    kindArray: [sprite],
     count: 10,
     value: 1.99
-  });
+  } as Inventory);
 
   await InventoryModel.create({
     refItemPathName: 'Scooter',
     kind: vespa,
+    kindArray: [vespa],
     count: 1,
     value: 1099.98
-  });
+  } as Inventory);
 
   // I should now have two "inventory" items, with different embedded reference documents.
-  const items = await InventoryModel.find({}).populate('kind').exec();
+  const items = await InventoryModel.find({}).populate('kind kindArray').exec();
+  expect(items[0].refItemPathName).toEqual('Beverage');
   expect((items[0].kind as Beverage).isDecaf).toEqual(true);
+  expect((items[0].kindArray[0] as Beverage).isDecaf).toEqual(true);
+
 
   // wrong type to make TypeScript happy
+  expect(items[1].refItemPathName).toEqual('Scooter');
   expect((items[1].kind as Beverage).isDecaf).toEqual(undefined);
+  expect((items[1].kindArray[0] as Beverage).isDecaf).toEqual(undefined);
 });
 
 it('it should alias correctly', () => {
@@ -333,4 +335,19 @@ describe('utils.getClass', () => {
     expect(getClass(doc)).toEqual(GetClassTestParent);
     expect(getClass(doc.testy)).toEqual(GetClassTestSub);
   });
+});
+
+it('should work with both map creation types', async () => {
+  class MapTest {
+    @mapProp({ of: Number, required: true })
+    public prop: Map<string, number>;
+  }
+
+  const MapTestModel = getModelForClass(MapTest);
+
+  const variant1 = new MapTestModel({ prop: [['key1', 1], ['key2', 2]] });
+  await variant1.validate();
+
+  const variant2 = new MapTestModel({ prop: { key1: 1, key2: 2 } });
+  await variant2.validate();
 });
