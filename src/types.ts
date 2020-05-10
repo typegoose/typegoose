@@ -17,7 +17,7 @@ type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : ne
 type RemoveConstructSignature<T> = Pick<T, keyof T>;
 
 export type CreateQuery<
-  T, Id = T extends { _id?: infer TId } ? TId extends RefType ? { _id?: TId } :
+  T, Id = T extends { _id: infer TId } ? TId extends RefType ? { _id?: TId } :
   { _id: TId } : { _id?: RefType }> = Omit<
     { [k in keyof T]:
       T[k] extends Map<infer K, infer V> ? (Map<K, V> | [K, V][] | (K extends string | number | symbol ? Record<K, V> : never)) : T[k] },
