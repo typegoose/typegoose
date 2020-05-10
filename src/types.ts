@@ -16,8 +16,6 @@ type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : ne
 
 type RemoveConstructSignature<T> = Pick<T, keyof T>;
 
-type X = {} extends object ? true : false;
-
 type CreateQueryShallow<
   T, Id = T extends { _id: infer TId } ? TId extends RefDeclaredType ?
   {
@@ -39,7 +37,7 @@ type CreateQueryShallow<
   & Partial<Pick<mongoose.Document, '__v'>>
   & Id;
 
-export type CreateQuery<T, SQ = CreateQueryShallow<T>> = { [k in keyof SQ]: SQ[k] extends object ? SQ[k] | CreateQuery<SQ[k]> : SQ[k] }
+export type CreateQuery<T, SQ = CreateQueryShallow<T>> = { [k in keyof SQ]: SQ[k] extends object ? SQ[k] | CreateQuery<SQ[k]> : SQ[k] };
 
 export interface TypegooseModel<
   SchemaType,
@@ -424,7 +422,8 @@ export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOption
 
 
 export type RefType = number | string | mongoose.Types.ObjectId | Buffer | undefined;
-export type RefDeclaredType = mongoose.Schema.Types.Number | mongoose.Schema.Types.String | mongoose.Schema.Types.Buffer | mongoose.Schema.Types.ObjectId | RefType;
+export type RefDeclaredType = mongoose.Schema.Types.Number | mongoose.Schema.Types.String | mongoose.Schema.Types.Buffer |
+  mongoose.Schema.Types.ObjectId | RefType;
 export type RefSchemaType = typeof mongoose.Schema.Types.Number |
   typeof mongoose.Schema.Types.String |
   typeof mongoose.Schema.Types.Buffer |
