@@ -17,8 +17,8 @@ type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : ne
 type RemoveConstructSignature<T> = Pick<T, keyof T>;
 
 export type CreateQuery<
-  SchemaType, Id = SchemaType extends { _id?: infer TId } ? TId extends string | mongoose.Types.ObjectId ? { _id?: TId } :
-  { _id: TId } : { _id?: RefType }, T = DocumentType<SchemaType>> = Omit<
+  T, Id = T extends { _id?: infer TId } ? TId extends RefType ? { _id?: TId } :
+  { _id: TId } : { _id?: RefType }> = Omit<
     { [k in keyof T]:
       T[k] extends Map<infer K, infer V> ? (Map<K, V> | [K, V][] | (K extends string | number | symbol ? Record<K, V> : never)) : T[k] },
     | ReadonlyKeysOf<T>
@@ -172,12 +172,6 @@ export interface TypegooseModel<
  */
 export type DocumentType<T> = mongoose.Document & T & IObjectWithTypegooseFunction;
 
-// I tested "T & (T extends ? : )" already, but it didnt work out
-/**
- * Used Internally for ModelTypes
- * @internal
- */
-export type ModelType<T> = TypegooseModel<T>;
 /**
  * Any-param Constructor
  * @internal
@@ -186,7 +180,7 @@ export type AnyParamConstructor<T> = new (...args: any[]) => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
  */
-export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = ModelType<InstanceType<U>> & RemoveConstructSignature<U>;
+export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = TypegooseModel<InstanceType<U>> & RemoveConstructSignature<U>;
 /** @internal */
 export type Func = (...args: any[]) => any;
 
