@@ -28,8 +28,6 @@ export type CreateQuery<
     | (T extends TimeStamps ? keyof TimeStamps : never)>
   & Partial<Pick<mongoose.Document, '__v'>>
   & Id;
-// TId extends string | mongoose.Types.ObjectId ? { _id?: TId } : { _id: TId } :
-// { _id?: RefType };
 
 export interface TypegooseModel<
   SchemaType,

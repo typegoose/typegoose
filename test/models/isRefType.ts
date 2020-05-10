@@ -7,7 +7,7 @@ export class IsRefTypeNestedString {
 
 export class IsRefTypeNestedObjectId {
   @prop()
-  public _id!: mongoose.Schema.Types.ObjectId;
+  public _id!: mongoose.Types.ObjectId;
 }
 
 export class IsRefType {
