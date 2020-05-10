@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import type { Base, TimeStamps } from './defaultClasses';
+import type { TimeStamps } from './defaultClasses';
 import type { Severity, WhatIsIt } from './internal/constants';
 
 // tslint:disable:ban-types
@@ -8,29 +8,34 @@ import type { Severity, WhatIsIt } from './internal/constants';
 type IfEquals<X, Y, A, B> =
   (<T>() => T extends X ? 1 : 2) extends
   (<T>() => T extends Y ? 1 : 2) ? A : B;
-
 type ReadonlyKeysOf<T> = {
   [P in keyof T]: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, never, P>
 }[keyof T];
 
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 
-type MongooseMap<T> = T | (T extends Map<infer K, infer V> ? ([K, V][] |
-  (K extends string | number | symbol ? Record<K, V> : never)) : never);
-
 type RemoveConstructSignature<T> = Pick<T, keyof T>;
 
-export type CreateQuery<T> = Omit<
-  { [K in keyof T]: MongooseMap<T[K]> },
-  | ReadonlyKeysOf<T>
-  | FunctionPropertyNames<T>
-  | keyof mongoose.Document
-  | keyof IObjectWithTypegooseFunction
-  | (T extends TimeStamps ? keyof TimeStamps : never)> & Partial<Pick<mongoose.Document, '_id' | '__v'>>;
+export type CreateQuery<
+  SchemaType, Id = SchemaType extends { _id?: infer TId } ? TId extends string | mongoose.Types.ObjectId ? { _id?: TId } :
+  { _id: TId } : { _id?: RefType }, T = DocumentType<SchemaType>> = Omit<
+    { [k in keyof T]:
+      T[k] extends Map<infer K, infer V> ? (Map<K, V> | [K, V][] | (K extends string | number | symbol ? Record<K, V> : never)) : T[k] },
+    | ReadonlyKeysOf<T>
+    | FunctionPropertyNames<T>
+    | keyof mongoose.Document
+    | keyof IObjectWithTypegooseFunction
+    | (T extends TimeStamps ? keyof TimeStamps : never)>
+  & Partial<Pick<mongoose.Document, '__v'>>
+  & Id;
+// TId extends string | mongoose.Types.ObjectId ? { _id?: TId } : { _id: TId } :
+// { _id?: RefType };
 
 export interface TypegooseModel<
-  T extends mongoose.Document,
-  QueryHelpers = {}>
+  SchemaType,
+  T extends mongoose.Document = DocumentType<SchemaType>,
+  QueryHelpers = {},
+  D = CreateQuery<SchemaType>>
   extends RemoveConstructSignature<Omit<mongoose.Model<T, QueryHelpers>, 'create'>> {
   /**
    * Creates a document synchronously. The document is not automatically saved to the database.
@@ -43,7 +48,7 @@ export interface TypegooseModel<
    *
    * @param doc The values with which to create the document
    */
-  new <ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
+  new <ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never>
     (doc: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>): T;
 
   /**
@@ -59,10 +64,9 @@ export interface TypegooseModel<
    * @param options Options for saving the documents
    * @returns A promise resolving with the created document
    */
-  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
-    (doc: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>, options?: mongoose.SaveOptions):
-    Promise<T>;
-
+  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never>
+    (doc: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>,
+      options?: mongoose.SaveOptions): Promise<T>;
 
   /**
    * Creates and saves a document to the database. Shortcut for `new Model(doc).save()`.
@@ -78,7 +82,7 @@ export interface TypegooseModel<
    *
    * @deprecated
    */
-  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
+  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never>
     (doc: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>,
       callback: (err: any, fullDoc: T) => unknown): Promise<T>;
 
@@ -97,9 +101,9 @@ export interface TypegooseModel<
    *
    * @deprecated
    */
-  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
-    (doc: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>, options: mongoose.SaveOptions,
-      callback: (err: any, fullDoc: T) => unknown): Promise<T>;
+  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never>
+    (doc: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>,
+      options: mongoose.SaveOptions, callback: (err: any, fullDoc: T) => unknown): Promise<T>;
 
   /**
    * Creates and saves multiple documents to the database. Shortcut for `Promise.all(docs.map(doc => new Model(doc).save()))`.
@@ -114,9 +118,9 @@ export interface TypegooseModel<
    * @param options Options for saving the documents
    * @returns A promise resolving with the array of created documents (maybe not in the same order)
    */
-  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
-    (docs: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>[], options?: mongoose.SaveOptions):
-    Promise<T[]>;
+  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never>
+    (docs: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>[],
+      options?: mongoose.SaveOptions): Promise<T[]>;
 
   /**
    * Creates and saves multiple documents to the database. Shortcut for `Promise.all(docs.map(doc => new Model(doc).save()))`.
@@ -132,7 +136,7 @@ export interface TypegooseModel<
    *
    * @deprecated
    */
-  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
+  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never>
     (docs: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>[],
       callback: (err: any, fullDocs: T[]) => unknown): Promise<T[]>;
 
@@ -151,9 +155,9 @@ export interface TypegooseModel<
    *
    * @deprecated
    */
-  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never, D = CreateQuery<T>>
-    (docs: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>[], options: mongoose.SaveOptions,
-      callback: (err: any, fullDocs: T[]) => unknown): Promise<T[]>;
+  create<ExtraOmittedKeys extends keyof D = never, ExtraPartialKeys extends Exclude<keyof D, ExtraOmittedKeys> = never>
+    (docs: Omit<Omit<D, ExtraPartialKeys> & Partial<Pick<D, ExtraPartialKeys>>, ExtraOmittedKeys>[],
+      options: mongoose.SaveOptions, callback: (err: any, fullDocs: T[]) => unknown): Promise<T[]>;
 }
 
 /**
@@ -163,16 +167,17 @@ export interface TypegooseModel<
  * class Name {}
  * const NameModel = Name.getModelForClass(Name);
  *
- * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
+ * const t: DocumentType<Name> = await NameModel.create({});
  * ```
  */
-export type DocumentType<T> = (T extends Base ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T) & IObjectWithTypegooseFunction;
+export type DocumentType<T> = mongoose.Document & T & IObjectWithTypegooseFunction;
+
 // I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
  * @internal
  */
-export type ModelType<T> = TypegooseModel<DocumentType<T>>;
+export type ModelType<T> = TypegooseModel<T>;
 /**
  * Any-param Constructor
  * @internal
