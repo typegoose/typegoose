@@ -16,11 +16,21 @@ type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : ne
 
 type RemoveConstructSignature<T> = Pick<T, keyof T>;
 
-export type CreateQuery<
-  T, Id = T extends { _id: infer TId } ? TId extends RefType ? { _id?: TId } :
+type X = {} extends object ? true : false;
+
+type CreateQueryShallow<
+  T, Id = T extends { _id: infer TId } ? TId extends RefDeclaredType ?
+  {
+    _id?: TId extends mongoose.Schema.Types.ObjectId ? mongoose.Types.ObjectId | string :
+    TId extends mongoose.Schema.Types.Buffer ? mongoose.Types.Buffer | Buffer :
+    TId extends mongoose.Schema.Types.String ? string :
+    TId extends mongoose.Schema.Types.Number ? number :
+    TId
+  } :
   { _id: TId } : { _id?: RefType }> = Omit<
     { [k in keyof T]:
-      T[k] extends Map<infer K, infer V> ? (Map<K, V> | [K, V][] | (K extends string | number | symbol ? Record<K, V> : never)) : T[k] },
+      T[k] extends Map<infer K, infer V> ? (Map<K, V> | [K, V][] | (K extends string | number | symbol ? Record<K, V> : never)) :
+      T[k] },
     | ReadonlyKeysOf<T>
     | FunctionPropertyNames<T>
     | keyof mongoose.Document
@@ -28,6 +38,8 @@ export type CreateQuery<
     | (T extends TimeStamps ? keyof TimeStamps : never)>
   & Partial<Pick<mongoose.Document, '__v'>>
   & Id;
+
+export type CreateQuery<T, SQ = CreateQueryShallow<T>> = { [k in keyof SQ]: SQ[k] extends object ? SQ[k] | CreateQuery<SQ[k]> : SQ[k] }
 
 export interface TypegooseModel<
   SchemaType,
@@ -410,7 +422,9 @@ export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
 export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions & ValidateStringOptions;
 export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate | VirtualOptions;
 
+
 export type RefType = number | string | mongoose.Types.ObjectId | Buffer | undefined;
+export type RefDeclaredType = mongoose.Schema.Types.Number | mongoose.Schema.Types.String | mongoose.Schema.Types.Buffer | mongoose.Schema.Types.ObjectId | RefType;
 export type RefSchemaType = typeof mongoose.Schema.Types.Number |
   typeof mongoose.Schema.Types.String |
   typeof mongoose.Schema.Types.Buffer |

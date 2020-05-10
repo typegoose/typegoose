@@ -2,7 +2,7 @@ import { arrayProp, getModelForClass, mongoose, prop, Ref } from '../../src/type
 
 export class RefTestBuffer {
   @prop()
-  public _id!: Buffer;
+  public _id!: mongoose.Schema.Types.Buffer;
 }
 
 export class RefTestNumber {
