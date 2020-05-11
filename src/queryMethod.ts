@@ -1,23 +1,32 @@
 import { DecoratorKeys } from './internal/constants';
 import { getName } from './internal/utils';
 import { logger } from './logSettings';
-import type { Func, QueryMethodMap } from './types';
+import { mongoose } from './typegoose';
+import type { AnyParamConstructor, QueryMethodMap, ReturnModelType } from './types';
 
 /**
- * Define Options for the Class
- * @param options Options
- * @example Example:
- * ```
- *  @modelOptions({ schemaOptions: { timestamps: true } })
- *  class Name {}
+ * Adds a query method to schema.
  *
- *  // Note: The default Class "TimeStamps" can be used for type information and options already set
+ * @param func Query function
+ * @example
+ * ```ts
+ * function findByTitle(this: ReturnModelType<typeof Event>, title: string) {
+ *  return this.find({ title });
+ * }
+ *
+ * @queryMethod(findByTitle)
+ * class Event {
+ *  @prop()
+ *  public title: string;
+ * }
  * ```
  */
-export function queryMethod(func: Func) {
+export function queryMethod<T extends AnyParamConstructor<any>>(
+  func: (this: ReturnModelType<T>, ...params: any[]) => mongoose.DocumentQuery<any, any>
+) {
   return (target: any) => {
     logger.info('Adding query method "%s" to %s', func.name, getName(target));
-    const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target.constructor) ?? []);
+    const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target) ?? []);
     queryMethods.set(func.name, func);
     Reflect.defineMetadata(DecoratorKeys.QueryMethod, queryMethods, target);
   };

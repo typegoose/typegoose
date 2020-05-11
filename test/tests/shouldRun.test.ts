@@ -402,22 +402,36 @@ it('should add "null" to the enum (addNullToEnum)', async () => {
 });
 
 it('should add query Methods', async () => {
-  function findByName(this: ReturnModelType<typeof QueryMethods>, name: string) {
+  function findByName(this: ReturnModelType<typeof QueryMethodsClass>, name: string) {
     return this.find({ name }); // important to not do an "await" and ".exec"
   }
-  @queryMethod(findByName)
-  class QueryMethods {
-    @prop({ required: true })
-    public name: string;
+
+  function findByLastname(this: ReturnModelType<typeof QueryMethodsClass>, lastname: string) {
+    return this.find({ lastname }); // important to not do an "await" and ".exec"
   }
 
-  const QueryMethodsModel = getModelForClass(QueryMethods);
-  const doc = await QueryMethodsModel.create({ name: 'hello' });
+  @queryMethod(findByName)
+  @queryMethod(findByLastname)
+  class QueryMethodsClass {
+    @prop({ required: true })
+    public name: string;
 
-  const found: DocumentType<QueryMethods>[] = await (QueryMethodsModel.find() as any).findByName('hello').orFail().exec();
+    @prop({ required: true })
+    public lastname: string;
+  }
+
+  const QueryMethodsModel = getModelForClass(QueryMethodsClass);
+
+  const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethodsClass);
+  expect(Array.from(metadata)).toEqual(
+    expect.arrayContaining([['findByName', findByName]]) &&
+    expect.arrayContaining([['findByLastname', findByLastname]])
+  );
+
+  const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
+
+  const found: DocumentType<QueryMethodsClass>[] = await (QueryMethodsModel.find() as any)
+    .findByName('hello').findByLastname('world').orFail().exec();
   assertion(isDocumentArray(found), new Error('Found is not an document array'));
   expect(found[0].toObject()).toEqual(doc.toObject());
-
-  const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethods);
-  expect(Array.from(metadata)).toEqual([['findByName', findByName]]);
 });
