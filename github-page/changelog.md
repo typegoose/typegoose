@@ -5,24 +5,66 @@ classes: wide
 toc: true
 redirect_from:
   - /CHANGELOG
+  - /Changelog
 ---
 
 <!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
 
 <!-- 
-## 6.5.x
+## 7.2.x
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Add here
 -->
+*`[IC]` means `Internal Change`*
 
-## 6.5.0
+## 7.1.0
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
+- Fix duplicate hooks / virtuals / queryMethods / plugins / indices via inheritance [{% include gitissue repo="typegoose" num=218 %}]
+
+## 7.0.0
+
+- Update Dependencies
+  - `mongoose` to 5.9.10
+  - `@types/mongoose` to 5.7.12
+- Minimal NodeJS version is now 10.15
+- Minimal Typescript version is now 3.8.3
+- Typegoose class got completly removed
+- All Deprecated `arrayProp` options got remove
+  - `itemsRef` replaced with plain `ref`
+  - `itemsRefPath` replaced with plain `refPath`
+  - `itemsRefType` replaced with plain `refType`
+- All enums got moved from `src/types` to `src/internal/constants`
+- All things from `src/types` now get exported as `type`
+- All Errors now get exported as `errors`
+- All non-essentail types get exported as `types`
+- `utils`'s `getName` function now gets exported
+- Add PropOption `addNullToEnum`
+- Remove Deprecated value `overwrite` for `VirtualOptions`
+- Remove instance properties from Model type (remove `& T` from `ModelType`)
+- Add class decorator `queryMethod`
+- [IC] rename file `optionsProp` to `modelOptions`
+- [IC] Replace mocha & chai with jest
+- [IC] Completly remove `TG_USE_NEW_ENUM` from documentation & code
+- [IC] Replace almost all if-throw with the internal `assertion` function
+- [IC] Move VirtualPopulate cache to Reflection
+- [IC] Move Plugins cache to Reflection
+- [IC] Move Hooks cache to Reflection
+- [IC] All remaining test's models now get exported with an name (not being exported as `model` anymore)
+
+## 6.5.0
+
+- Update Dependencies
+  - `semver` to 7.3.2
+  - `tslib` to 1.11.1
+  - `loglevel` to 1.6.8
 - Remove `useNewEnum` type from `types`
 - Add warning when value is an primitive and will result in an `Mixed` (fixes {% include gitissue repo="typegoose" num=152 %})
+- Add option `language_override` to `IndexOptions`
+- Fix spelling errors in documentation
 - [IC] Replace deprecated arrayProp options with proper ones in all tests & test-models
 
 ## 6.4.0
@@ -200,7 +242,7 @@ This Release didnt change anything on the code, it was mostly tests & github-pag
 - adding a migration guide from ~5.9 to 6.0.0
 - adding missing "get" and "set" property options [{% include gitissue repo="szokodiakos" num=260 %}]
 - adding `@modelOptions` and `getModelForClass` and `setModelForClass` will now override it
-- `setModelForClass` is now deprecated [{% include gitissue repo="hasezoey" num=6 %}, {% include gitissue repo="szokodiakos" num=186 %}]
+- `setModelForClass` is now deprecated [{% include gitissue repo="typegoose" num=6 %}, {% include gitissue repo="szokodiakos" num=186 %}]
 - setting the Typegoose Class to abstract
 - deprecating the Typegoose Class because of making the functions outsourced [{% include gitissue repo="szokodiakos" num=356 %}]
 - hook methods can now be arrays of methods [{% include gitissue repo="szokodiakos" num=313 %}]
@@ -212,7 +254,7 @@ This Release didnt change anything on the code, it was mostly tests & github-pag
 - schema generation got refactored (/reconstructed) multiple times
 - adding `count` to VirtualOptions
 - Updated Dependencies (^mongoose@5.7.1)
-- adding discriminator support hasezoey#11
+- adding discriminator support [{% include gitissue repo="typegoose" num=11 %}]
 - adding default class for (schemaOptions) timestamps
 - adding more docs to README & as tsdoc
 - some changes that are probably forgot
@@ -226,12 +268,12 @@ This Release didnt change anything on the code, it was mostly tests & github-pag
 - Change Error text of "InvalidPropError"
 - adding some "soft-errors" and traces with "loglevel"
 - exposing settings for "loglevel"
-- fixes Decorator Execution Order [{% include gitissue repo="hasezoey" num=23 %}, {% include gitissue repo="hasezoey" num=24 %}]
+- fixes Decorator Execution Order [{% include gitissue repo="typegoose" num=23 %}, {% include gitissue repo="typegoose" num=24 %}]
 - add support for custom discriminator properties
 - add error if using a self-containing class
 - add support for using multiple classes with the same name (`automaticName`, `customName`, `collection`)
 - [IC] "NoParamConstructor" got renamed into "AnyParamConstructor" it now accepts any arguments
-- [IC] Remake data.ts to use Maps hasezoey#3
+- [IC] Remake data.ts to use Maps [{% include gitissue repo="typegoose" num=3 %}]
 - [IC] adding many tests and bumping coverage
 - [IC] moving many Types to types.ts
 - [IC] removing unneeded dependencies

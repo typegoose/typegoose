@@ -1,7 +1,7 @@
-import { Types } from 'mongoose';
+import type { Types } from 'mongoose';
 
-import { modelOptions } from './optionsProp';
-import { DocumentType, RefType } from './types';
+import { modelOptions } from './modelOptions';
+import type { DocumentType, RefType } from './types';
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 /**

@@ -2,26 +2,25 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
-import { deprecate, format } from 'util';
+import { format } from 'util';
 
 /* istanbul ignore next */
-if (semver.lt(mongoose.version, '5.9.2')) {
-  throw new Error('Please use mongoose 5.9.2 or higher');
+if (semver.lt(mongoose.version, '5.9.10')) {
+  throw new Error('Please use mongoose 5.9.10 or higher');
 }
 
-if (semver.lt(process.version.slice(1), '8.10.0')) {
-  logger.warn('You are using a NodeJS Version below 8.10.0, Please Upgrade!');
+/* istanbul ignore next */
+if (semver.lt(process.version.slice(1), '10.15.0')) {
+  logger.warn('You are using a NodeJS Version below 10.15.0, Please Upgrade!');
 }
 
-import * as defaultClasses from './defaultClasses';
 import { parseENV, setGlobalOptions } from './globalOptions';
 import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
-import { NoValidClass } from './internal/errors';
 import { _buildSchema } from './internal/schema';
-import { getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import { assertion, assertionIsClass, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
-import {
+import type {
   AnyParamConstructor,
   DocumentType,
   IModelOptions,
@@ -35,42 +34,17 @@ export { setLogLevel, LogLevels } from './logSettings';
 export * from './prop';
 export * from './hooks';
 export * from './plugin';
-export * from '.';
+export * from './index';
 export * from './typeguards';
-export * from './optionsProp';
-export { defaultClasses };
+export * from './modelOptions';
+export * as defaultClasses from './defaultClasses';
+export * as errors from './internal/errors';
+export * as types from './types';
 export { DocumentType, Ref, ReturnModelType };
-export { Severity, IGlobalOptions } from './types';
-export { getClassForDocument, getClass } from './internal/utils';
+export { getClassForDocument, getClass, getName } from './internal/utils';
+export { Severity } from './internal/constants';
 
 parseENV(); // call this before anything to ensure they are applied
-
-/** @deprecated */
-export abstract class Typegoose {
-  /* istanbul ignore next */
-  constructor() {
-    // tslint:disable-next-line:no-empty
-    deprecate(() => { }, 'Typegoose Class is Deprecated!')();
-  }
-
-  /* istanbul ignore next */
-  /** @deprecated */
-  public getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
-    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!');
-  }
-
-  /* istanbul ignore next */
-  /** @deprecated */
-  public setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, settings?: any) {
-    return deprecate(getModelForClass.bind(undefined, cl, settings), 'Typegoose Class is Deprecated!');
-  }
-
-  /* istanbul ignore next */
-  /** @deprecated */
-  public buildSchema<T, U extends AnyParamConstructor<T>>(cl: U) {
-    return deprecate(buildSchema.bind(undefined, cl), 'Typegoose Class is Deprecated!');
-  }
-}
 
 /**
  * Get a Model for a Class
@@ -86,9 +60,7 @@ export abstract class Typegoose {
  * ```
  */
 export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertionIsClass(cl);
   options = typeof options === 'object' ? options : {};
 
   const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
@@ -115,38 +87,32 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
 /**
  * Get Model from internal cache
  * @param key ModelName key
+ * @example
+ * ```ts
+ * class Name {}
+ * getModelForClass(Name); // build the model
+ * const NameModel = getModelWithString<typeof Name>("Name");
+ * ```
  */
 export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
-  if (typeof key !== 'string') {
-    throw new TypeError(format('Expected "key" to be a string, got "%s"', key));
-  }
+  assertion(typeof key === 'string', TypeError(format('Expected "key" to be a string, got "%s"', key)));
 
   return models.get(key) as any;
-}
-
-/* istanbul ignore next */
-/**
- * Builds the Schema & The Model
- * DEPRECTAED: use getModelForClass
- * @param cl The uninitialized Class
- * @returns The Model
- * @deprecated
- */
-export function setModelForClass<T, U extends AnyParamConstructor<T>>(cl: U) {
-  return deprecate(
-    getModelForClass.bind(undefined, cl),
-    'setModelForClass is deprecated, please use getModelForClass (see README#Migrate to 6.0.0)');
 }
 
 /**
  * Generates a Mongoose schema out of class props, iterating through all parents
  * @param cl The not initialized Class
  * @returns Returns the Build Schema
+ * @example
+ * ```ts
+ * class Name {}
+ * const NameSchema = buildSchema(Name);
+ * const NameModel = mongoose.model("Name", NameSchema);
+ * ```
  */
 export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?: mongoose.SchemaOptions) {
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertionIsClass(cl);
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
@@ -155,14 +121,8 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
-    /* istanbul ignore next */
-    if (parentCtor.name === 'Typegoose') { // TODO: remove this "if", if the Typegoose class gets removed [DEPRECATION]
-      deprecate(() => undefined, 'The Typegoose Class is deprecated, please try to remove it')();
-
-      break;
-    }
     // extend schema
-    sch = _buildSchema(parentCtor, sch, mergedOptions);
+    sch = _buildSchema(parentCtor, sch, mergedOptions, false);
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
@@ -179,28 +139,23 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
  * @param cl The Class to store
  * @example
  * ```ts
- * class T {}
+ * class Name {}
  *
- * const schema = buildSchema(T);
+ * const schema = buildSchema(Name);
  * // modifications to the schame can be done
- * const model = addModelToTypegoose(mongoose.model(schema), T);
+ * const model = addModelToTypegoose(mongoose.model("Name", schema), Name);
  * ```
  */
 export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: mongoose.Model<any>, cl: U) {
-  if (!(model.prototype instanceof mongoose.Model)) {
-    throw new TypeError(`"${model}" is not a valid Model!`);
-  }
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertion(model.prototype instanceof mongoose.Model, new TypeError(`"${model}" is not a valid Model!`));
+  assertionIsClass(cl);
 
   const name = getName(cl);
 
-  if (models.has(name)) {
-    throw new Error(format('It seems like "addModelToTypegoose" got called twice\n'
-      + 'Or multiple classes with the same name are used, which is not supported!'
-      + '(%s)', name));
-  }
+  assertion(!models.has(name), new Error(format('It seems like "addModelToTypegoose" got called twice\n'
+    + 'Or multiple classes with the same name are used, which is not supported!'
+    + '(Model Name: "%s")', name)));
+
   if (constructors.get(name)) {
     logger.info('Class "%s" already existed in the constructors Map', name);
   }
@@ -214,16 +169,18 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
 /**
  * Deletes an existing model so that it can be overwritten
  * with another model
- *
+ * (deletes from mongoose.connection & typegoose models cache & typegoose constructors cache)
  * @param key
+ * @example
+ * ```ts
+ * class Name {}
+ * const NameModel = getModelForClass(Name);
+ * deleteModel("Name");
+ * ```
  */
 export function deleteModel(name: string) {
-  if (typeof name !== 'string') {
-    throw new TypeError('name is not an string! (deleteModel)');
-  }
-  if (!models.has(name)) {
-    throw new Error(`Model "${name}" could not be found`);
-  }
+  assertion(typeof name === 'string', new TypeError('name is not an string! (deleteModel)'));
+  assertion(models.has(name), new Error(`Model "${name}" could not be found`));
 
   logger.debug('Deleting Model "%s"', name);
 
@@ -235,12 +192,17 @@ export function deleteModel(name: string) {
 
 /**
  * Delete a model, with the given class
+ * Same as "deleteModel", only that it can be done with the class instead of the name
  * @param cl The Class
+ * @example
+ * ```ts
+ * class Name {}
+ * const NameModel = getModelForClass(Name);
+ * deleteModelWithClass(Name);
+ * ```
  */
 export function deleteModelWithClass<T, U extends AnyParamConstructor<T>>(cl: U) {
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertionIsClass(cl);
 
   return deleteModel(getName(cl));
 }
@@ -264,22 +226,18 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
   cl: U,
   id?: string
 ) {
-  if (!(from.prototype instanceof mongoose.Model)) {
-    throw new TypeError(`"${from}" is not a valid Model!`);
-  }
-  if (typeof cl !== 'function') {
-    throw new NoValidClass(cl);
-  }
+  assertion(from.prototype instanceof mongoose.Model, new TypeError(`"${from}" is not a valid Model!`));
+  assertionIsClass(cl);
 
   const name = getName(cl);
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
-  const sch = buildSchema(cl) as mongoose.Schema & { paths: object; };
+  const sch = buildSchema(cl) as mongoose.Schema & { paths: any; };
 
   const discriminatorKey = sch.get('discriminatorKey');
   if (sch.path(discriminatorKey)) {
-    sch.paths[discriminatorKey].options.$skipDiscriminatorCheck = true;
+    (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
   }
 
   const model = from.discriminator(name, sch, id ? id : name);

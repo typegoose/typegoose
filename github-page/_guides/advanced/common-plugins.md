@@ -13,7 +13,7 @@ import * as mongoose from "mongoose";
 import * as autopopulate from "mongoose-autopopulate";
 import { plugin, prop, Ref, getModelForClass } from "@typegoose/typegoose";
 
-@plugin(autopopulate)
+@plugin(autopopulate as any) // this is an dirty fix, because the types of this plugin dont work
 class SomeClass {
   @prop({ autopopulate: true, ref: "SomeReferencedClass" })
   public populateField: Ref<SomeReferencedClass>;
@@ -25,7 +25,7 @@ const SomeClassModel = getModelForClass(SomeClass);
 const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 
 (async () => {
-  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: "guides" });
+  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: "guides", useUnifiedTopology: true });
 
   const reference = await SomeReferencedClassModel.create({});
   const { _id: id } = await SomeClassModel.create({ populateField: reference } as SomeClass);
@@ -67,8 +67,9 @@ const SomeClassModel = getModelForClass(SomeClass);
 ## mongoose-sequence
 
 To use [mongoose-sequence](https://github.com/ramiel/mongoose-sequence), import the plugin and use it like this:
+
 ```ts
-import AutoIncrementFactory from 'mongoose-sequence'; 
+import AutoIncrementFactory from 'mongoose-sequence';
 
 // AutoIncrement now is the instance
 const AutoIncrement = AutoIncrementFactory(mongoose);
@@ -78,6 +79,48 @@ class ... { ... }
 ```
 
 For more details, see [this issue](https://github.com/ramiel/mongoose-sequence/issues/83).
+
+## @typegoose/auto-increment
+
+The Typegoose project provides an [`auto-increment` plugin](https://github.com/typegoose/auto-increment) for mongoose, here is how to use it:
+
+### AutoIncrementSimple
+
+Always increments the field on each save
+
+```ts
+@plugin<AutoIncrementSimplePluginOptions>(AutoIncrementSimple, [{ field: "someIncrementedField" }])
+class SomeClass {
+  @prop() // does not need to be empty
+  public someIncrementedField: number;
+}
+
+const SomeModel = getModelForClass(SomeClass);
+
+const doc = await SomeModel.create({ someIncrementedField: 10 });
+
+await doc.save(); // someIncrementedField will be 11
+```
+
+### AutoIncrementID
+
+Only increases the field if the document is *new* and the counter is stored in an counter-collection
+(default field: `_id`)
+
+```ts
+@plugin<AutoIncrementOptionsID>(AutoIncrementID, {})
+class SomeClass {
+  @prop()
+  public _id: number;
+
+  @prop() // does not need to be empty
+  public someIncrementedField: number;
+}
+
+const SomeModel = getModelForClass(SomeClass);
+
+const doc = await SomeModel.create({ someIncrementedField: 10 }); // _id will be 1
+```
 
 ---
 

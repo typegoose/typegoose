@@ -1,7 +1,7 @@
 import { DecoratorKeys } from './internal/constants';
 import { getName } from './internal/utils';
 import { logger } from './logSettings';
-import { IIndexArray, IndexOptions } from './types';
+import type { IIndexArray, IndexOptions } from './types';
 
 /**
  * Defines an index (most likely compound) for this schema.

@@ -74,7 +74,7 @@ class Defaulted {
 
 Accepts Type: `boolean`
 
-Set this to `false` if you want to turn of creating IDs for sub-documents.
+Set this to `false` if you want to turn off creating IDs for sub-documents.
 
 Example:
 
@@ -292,6 +292,34 @@ class Enumed {
   @prop({ enum: Gender })
   public gender?: Gender;
 }
+```
+
+#### addNullToEnum
+
+Accepts Type: `boolean`
+
+Add "null" to the enum array
+
+Note: dosnt work if the value is `required`
+
+Example:
+
+```ts
+enum SomeNumberEnum {
+  one = 1,
+  two = 2
+}
+class AddNullToEnum {
+  @prop({ enum: SomeNumberEnum, addNullToEnum: true })
+  public value?: SomeNumberEnum;
+}
+
+const AddNullToEnumModel = getModelForClass(AddNullToEnum);
+
+AddNullToEnumModel.schema.path('value').options.enum === [1, 2, null]; // true
+
+// this allows to do the following without an validation error
+new AddNullToEnumModel({ value: null } as AddNullToEnum);
 ```
 
 <!--Below are just the Specific Options-->

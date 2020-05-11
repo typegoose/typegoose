@@ -1,23 +1,15 @@
-import { expect } from 'chai';
-
 import { TestTimeStamps, TestTimeStampsModel } from '../models/dClasses';
 
-/**
- * Function to pass into describe
- * ->Important: you need to always bind this
- */
-export function suite() {
-  it('TimeStamp Model', async () => {
-    const doc = await TestTimeStampsModel.create({ someValue: 'hello' } as Partial<TestTimeStamps>);
-    expect(doc).to.not.be.an('undefined');
-    expect(doc.someValue).to.equal('hello');
-    expect(doc.updatedAt).to.be.an.instanceOf(Date);
-    expect(doc.createdAt).to.be.an.instanceOf(Date);
+it('TimeStamp Model', async () => {
+  const doc = await TestTimeStampsModel.create({ someValue: 'hello' } as Partial<TestTimeStamps>);
+  expect(doc).not.toEqual(undefined);
+  expect(doc.someValue).toEqual('hello');
+  expect(doc.updatedAt).toBeInstanceOf(Date);
+  expect(doc.createdAt).toBeInstanceOf(Date);
 
-    const found = await TestTimeStampsModel.findById(doc.id).exec();
-    expect(found).to.not.be.an('undefined');
-    expect(found.someValue).to.equal('hello');
-    expect(found.updatedAt).to.be.an.instanceOf(Date);
-    expect(found.createdAt).to.be.an.instanceOf(Date);
-  });
-}
+  const found = await TestTimeStampsModel.findById(doc.id).exec();
+  expect(found).not.toEqual(undefined);
+  expect(found.someValue).toEqual('hello');
+  expect(found.updatedAt).toBeInstanceOf(Date);
+  expect(found.createdAt).toBeInstanceOf(Date);
+});

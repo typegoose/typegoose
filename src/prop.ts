@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 import { format } from 'util';
 
-import { DecoratorKeys } from './internal/constants';
-import { schemas, virtuals } from './internal/data';
+import { DecoratorKeys, WhatIsIt } from './internal/constants';
+import { schemas } from './internal/data';
 import {
   InvalidPropError,
   InvalidTypeError,
@@ -14,13 +14,13 @@ import {
 import * as utils from './internal/utils';
 import { logger } from './logSettings';
 import { buildSchema } from './typegoose';
-import {
+import type {
   ArrayPropOptions,
   DecoratedPropertyMetadata,
   DecoratedPropertyMetadataMap,
   MapPropOptions,
   PropOptionsWithValidate,
-  WhatIsIt
+  VirtualPopulateMap
 } from './types';
 
 /**
@@ -78,15 +78,14 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
   const name: string = utils.getName(target);
 
-  if (!virtuals.has(name)) {
-    virtuals.set(name, new Map());
-  }
-
   if (utils.isWithVirtualPOP(rawOptions)) {
     if (!utils.includesAllVirtualPOP(rawOptions)) {
       throw new NotAllVPOPElementsError(name, key);
     }
-    virtuals.get(name).set(key, rawOptions);
+
+    const virtuals: VirtualPopulateMap = new Map(Reflect.getMetadata(DecoratorKeys.VirtualPopulate, target.constructor) ?? []);
+    virtuals.set(key, rawOptions);
+    Reflect.defineMetadata(DecoratorKeys.VirtualPopulate, virtuals, target.constructor);
 
     return;
   }
@@ -94,12 +93,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   utils.initProperty(name, key, whatis);
 
   if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
-    if (typeof rawOptions?.set !== 'function') {
-      throw new TypeError(`"${name}.${key}" does not have a set function!`);
-    }
-    if (typeof rawOptions?.get !== 'function') {
-      throw new TypeError(`"${name}.${key}" does not have a get function!`);
-    }
+    utils.assertion(typeof rawOptions?.set === 'function', new TypeError(`"${name}.${key}" does not have a set function!`));
+    utils.assertion(typeof rawOptions?.get === 'function', new TypeError(`"${name}.${key}" does not have a get function!`));
 
     /*
      * Note:
@@ -124,12 +119,12 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
     switch (whatis) {
       case WhatIsIt.ARRAY:
-        schemas.get(name)[key][0] = {
+        schemas.get(name)[key] = utils.createArrayFromDimensions(rawOptions, {
           ...schemas.get(name)[key][0],
           type: refType,
           ref: refName,
           ...rawOptions
-        };
+        }, name, key);
         break;
       case WhatIsIt.NONE:
         schemas.get(name)[key] = {
@@ -149,19 +144,19 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   const refPath = rawOptions?.refPath;
   if (refPath) {
-    if (typeof refPath !== 'string') {
-      throw new TypeError(format('"refPath" for "%s, %s" should be of type String!', utils.getName(target), key));
-    }
+    utils.assertion(typeof refPath === 'string',
+      new TypeError(format('"refPath" for "%s, %s" should be of type String!', utils.getName(target), key)));
+
     delete rawOptions.refPath;
 
     switch (whatis) {
       case WhatIsIt.ARRAY:
-        schemas.get(name)[key][0] = {
+        schemas.get(name)[key] = utils.createArrayFromDimensions(rawOptions, {
           ...schemas.get(name)[key][0],
           type: refType,
           refPath,
           ...rawOptions
-        };
+        }, name, key);
         break;
       case WhatIsIt.NONE:
         schemas.get(name)[key] = {
@@ -218,9 +213,16 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
           });
       } else {
         // this will happen if the enum contains both types ("design:type" will be "Object")
+        // this should never happen, because it is prevented by typescript (failsafe)
         throw new Error(`Invalid type used for map!, got: "${Type}" (${name}.${key})`);
       }
     }
+  }
+
+  if (!utils.isNullOrUndefined(rawOptions.addNullToEnum)) {
+    rawOptions.enum = Array.isArray(rawOptions.enum) ? rawOptions.enum : [];
+    rawOptions.enum.push(null);
+    delete rawOptions.addNullToEnum;
   }
 
   const selectOption = rawOptions?.select;
@@ -298,6 +300,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   // so that mongoose can store it as nested document
   if (utils.isObject(Type) && !isInSchemas) {
     utils.warnMixed(target, key);
+    logger.warn('if someone can see this message, please open an new issue at https://github.com/typegoose/typegoose/issues with reproduction code for tests');
     schemas.get(name)[key] = {
       ...schemas.get(name)[key],
       ...rawOptions,
@@ -348,9 +351,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
     const Type = Reflect.getMetadata(DecoratorKeys.Type, target, key);
-    if (utils.isNullOrUndefined(Type)) {
-      throw new NoMetadataError(key);
-    }
+    utils.assertion(!utils.isNullOrUndefined(Type), new NoMetadataError(key));
 
     // soft errors
     {
@@ -396,6 +397,7 @@ export function mapProp(options: MapPropOptions) {
     });
   };
 }
+
 /**
  * Set Property(that are Arrays) Options for the property below
  * @param options Options
@@ -409,20 +411,9 @@ export function arrayProp(options: ArrayPropOptions) {
       logger.warn('You might not want to use option "of" in a @arrayProp, use @mapProp (%s.%s)', utils.getName(target), key);
     }
 
+    // Delete the "items" option from options because it got set as "Type"
     if ('items' in options) {
       delete options.items;
-    }
-    if ('itemsRef' in options) {
-      options.ref = options.itemsRef;
-      delete options.itemsRef;
-    }
-    if ('itemsRefPath' in options) {
-      options.refPath = options.itemsRefPath;
-      delete options.itemsRefPath;
-    }
-    if ('itemsRefType' in options) {
-      options.refType = options.itemsRefType;
-      delete options.itemsRefType;
     }
 
     baseProp({

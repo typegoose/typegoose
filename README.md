@@ -107,18 +107,29 @@ class User {
 
 ## Requirements
 
-* TypeScript 3.7+
-* Node 8.10+
-* mongoose ^5.9.2
-* `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
+* TypeScript 3.8+
+* Node 10.15+
+* mongoose ^5.9.10
+* `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
+* if you use the [Babel TypeScript preset](https://babeljs.io/docs/en/babel-preset-typescript), you will need to reproduce the `--experimentalDecorators` and `--emitDecoratorMetadata` [TypeScript compiler options](https://babeljs.io/docs/en/babel-plugin-transform-typescript#typescript-compiler-options) by using the corresponding plugins for [enabling decorators](https://babeljs.io/docs/en/babel-plugin-proposal-decorators) and [emitting decorator metadata](https://github.com/leonardfactory/babel-plugin-transform-typescript-metadata):
+
+```js
+module.exports = {
+  plugins: [
+    ['@babel/plugin-proposal-decorators', { legacy: true }],
+    'babel-plugin-transform-typescript-metadata',
+  ]
+}
+```
 
 ## Install
 
-`npm i -s @typegoose/typegoose`
+```sh
+npm i -s @typegoose/typegoose # install typegoose itself
 
-You also need to install `mongoose`. Since version 5 it is listed as a peer dependency.
-
-`npm i -s mongoose`
+npm i -s mongoose # install peer-dependencie mongoose
+npm i -D @types/mongoose # install all types for mongoose - this is required for typegoose to work in typescript
+```
 
 ## Testing
 
@@ -130,7 +141,6 @@ npm test
 ## Versioning
 
 This Project should comply with [Semver](https://semver.org). It uses the `Major.Minor.Fix` standard (or in NPM terms, `Major.Minor.Patch`).
-
 
 ## Join Our Discord Server
 
