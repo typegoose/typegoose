@@ -343,6 +343,7 @@ export function isNotDefined(cl: any) {
  * @param Type The Type of the array
  * @param target The Target class
  * @param pkey Key of the Property
+ * @param loggerType Type to use for logging
  */
 export function mapArrayOptions(
   rawOptions: any,
@@ -393,6 +394,8 @@ export function mapArrayOptions(
  * @param Type The Type of the array
  * @param target The Target class
  * @param pkey Key of the Property
+ * @param errorOC Error instead of doing nothing
+ * @param loggerType Type to use for logging
  */
 export function mapOptions(
   rawOptions: any,
