@@ -16,7 +16,7 @@ import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../
 })
 @post<Hook>(/^find/, (doc) => {
   if (Array.isArray(doc)) {
-    doc.forEach((v) => v.material = 'REGEXP_POST');
+    doc.forEach((v) => (v.material = 'REGEXP_POST'));
   } else if (isDocument(doc)) {
     doc.material = 'REGEXP_POST';
   }
@@ -31,10 +31,12 @@ export class Hook {
 
 @post<HookArray>(['find', 'findOne'], async (docs) => {
   if (Array.isArray(docs)) {
-    await Promise.all(docs.map(async (v) => {
-      v.testArray.push('hello');
-      await v.save();
-    }));
+    await Promise.all(
+      docs.map(async (v) => {
+        v.testArray.push('hello');
+        await v.save();
+      })
+    );
   } else if (isDocument(docs)) {
     docs.testArray.push('hello');
     await docs.save();
@@ -55,7 +57,7 @@ export class HookArray {
 })
 export class BaseHook {
   @arrayProp({ items: String, default: [] })
-  public hooksMessages?: string[];
+  public hooksMessages!: string[];
 }
 
 @pre<ExtendedHook>('save', function (next) {

@@ -5,15 +5,19 @@ import { ArrayValidatorEnumNumber, ArrayValidatorEnumString, ArrayValidators, Ar
 // Please try to keep this file in sync with ./stringValidator.test.ts
 
 it('should respect maxlength [String]', async () => {
-  await expect(ArrayValidatorsModel.create({
-    maxLength: ['this is too long']
-  })).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
+  await expect(
+    ArrayValidatorsModel.create({
+      maxLength: ['this is too long']
+    })
+  ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
 
 it('should respect minlength [String]', async () => {
-  await expect(ArrayValidatorsModel.create({
-    minLength: ['too short']
-  })).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
+  await expect(
+    ArrayValidatorsModel.create({
+      minLength: ['too short']
+    })
+  ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
 
 it('should trim [String]', async () => {
@@ -43,15 +47,19 @@ it('should lowercase & have a default [String]', async () => {
 });
 
 it('should respect max [Number]', async () => {
-  await expect(ArrayValidatorsModel.create({
-    max: [4] // over 3
-  })).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
+  await expect(
+    ArrayValidatorsModel.create({
+      max: [4] // over 3
+    })
+  ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
 
 it('should respect min [Number]', async () => {
-  expect(ArrayValidatorsModel.create({
-    min: [9] // under 10
-  })).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
+  expect(
+    ArrayValidatorsModel.create({
+      min: [9] // under 10
+    })
+  ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
 
 it('should respect enum [String]', async () => {
@@ -69,13 +77,13 @@ it('should respect enum [String]', async () => {
     enumedString: [ArrayValidatorEnumString.OPT1, ArrayValidatorEnumString.OPT2]
   });
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(Array.from(doc.enumedString)).toEqual([ArrayValidatorEnumString.OPT1, ArrayValidatorEnumString.OPT2]);
 
   const found = await ArrayValidatorsModel.findById(doc._id).exec();
 
-  expect(found).not.toEqual(undefined);
-  expect(Array.from(found.enumedString)).toEqual([ArrayValidatorEnumString.OPT1, ArrayValidatorEnumString.OPT2]);
+  expect(found).not.toBeUndefined();
+  expect(Array.from(found!.enumedString)).toEqual([ArrayValidatorEnumString.OPT1, ArrayValidatorEnumString.OPT2]);
 });
 
 it('should respect enum [Number]', async () => {
@@ -93,11 +101,11 @@ it('should respect enum [Number]', async () => {
     enumedNumber: [ArrayValidatorEnumNumber.OPT1, ArrayValidatorEnumNumber.OPT2]
   });
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(Array.from(doc.enumedNumber)).toEqual([ArrayValidatorEnumNumber.OPT1, ArrayValidatorEnumNumber.OPT2]);
 
   const found = await ArrayValidatorsModel.findById(doc._id).exec();
 
-  expect(found).not.toEqual(undefined);
-  expect(Array.from(found.enumedNumber)).toEqual([ArrayValidatorEnumNumber.OPT1, ArrayValidatorEnumNumber.OPT2]);
+  expect(found).not.toBeUndefined();
+  expect(Array.from(found!.enumedNumber)).toEqual([ArrayValidatorEnumNumber.OPT1, ArrayValidatorEnumNumber.OPT2]);
 });

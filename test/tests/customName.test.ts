@@ -90,7 +90,7 @@ it('create multiple models depending on options without base model with automati
 
     const doc = new model();
 
-    expect(doc).not.toEqual(undefined);
+    expect(doc).not.toBeUndefined();
     expect(doc.t1).toEqual('1');
     expect(doc.t2).toEqual('2');
     expect(doc).not.toHaveProperty('t3');
@@ -114,7 +114,7 @@ it('create multiple models depending on options without base model with automati
 
     const doc = new model();
 
-    expect(doc).not.toEqual(undefined);
+    expect(doc).not.toBeUndefined();
     expect(doc).not.toHaveProperty('t1');
     expect(doc).not.toHaveProperty('t2');
     expect(doc.t3).toEqual('3');

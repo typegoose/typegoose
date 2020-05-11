@@ -40,14 +40,14 @@ it('should use inherited schema', async () => {
   });
   await user.addCar(car);
 
-  user = await PersonModel.findById(user.id).populate('cars').exec();
+  user = await PersonModel.findById(user.id).populate('cars').orFail().exec();
 
   // verify properties
   expect(user).toHaveProperty('createdAt');
   expect(user).toHaveProperty('email', 'my@email.com');
 
-  expect(user.cars.length > 0).toBe(true);
-  user.cars.forEach((currentCar) => {
+  expect(user.cars!.length > 0).toBe(true);
+  user.cars!.forEach((currentCar) => {
     if (isDocument(currentCar)) {
       expect(typeof currentCar.carModel).toBe('string');
     } else {
@@ -70,14 +70,14 @@ it('should store nested address', async () => {
     ]
   } as PersonNested);
 
-  expect(person).not.toEqual(undefined);
+  expect(person).not.toBeUndefined();
   expect(person.name).toEqual('Person, Some');
-  expect(person.address).not.toEqual(undefined);
-  expect(person.address.street).toEqual('A Street 1');
-  expect(person.moreAddresses).not.toEqual(undefined);
-  expect(person.moreAddresses.length).toEqual(2);
-  expect(person.moreAddresses[0].street).toEqual('A Street 2');
-  expect(person.moreAddresses[1].street).toEqual('A Street 3');
+  expect(person.address).not.toBeUndefined();
+  expect(person.address!.street).toEqual('A Street 1');
+  expect(person.moreAddresses).not.toBeUndefined();
+  expect(person.moreAddresses!.length).toEqual(2);
+  expect(person.moreAddresses![0].street).toEqual('A Street 2');
+  expect(person.moreAddresses![1].street).toEqual('A Street 3');
 });
 
 it('should properly set Decimal128, ObjectID types to field', () => {
@@ -101,7 +101,7 @@ it('should validate Decimal128', async () => {
     carModel: 'Tesla',
     price: mongoose.Types.Decimal128.fromString('123.45')
   });
-  const foundCar = await CarModel.findById(car._id).exec();
+  const foundCar = await CarModel.findById(car._id).orFail().exec();
   expect(foundCar.price).toBeInstanceOf(mongoose.Types.Decimal128);
   expect(foundCar.price.toString()).toEqual('123.45');
 });

@@ -1,5 +1,12 @@
 import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose';
-import { IsRefType, IsRefTypeArray, IsRefTypeArrayModel, IsRefTypeModel, IsRefTypeNestedObjectIdModel, IsRefTypeNestedStringModel } from '../models/isRefType';
+import {
+  IsRefType,
+  IsRefTypeArray,
+  IsRefTypeArrayModel,
+  IsRefTypeModel,
+  IsRefTypeNestedObjectIdModel,
+  IsRefTypeNestedStringModel
+} from '../models/isRefType';
 import { UserRefModel } from '../models/userRefs';
 
 describe('isDocument / isDocumentArray', () => {
@@ -154,7 +161,7 @@ describe('isRefType / isRefTypeArray', () => {
       } as IsRefType);
       doc.depopulate('nestedString');
 
-      expect(doc.nestedString).not.toEqual(undefined);
+      expect(doc.nestedString).not.toBeUndefined();
 
       if (isRefType(doc.nestedString)) {
         expect(typeof doc.nestedString).toBe('string');
@@ -169,7 +176,7 @@ describe('isRefType / isRefTypeArray', () => {
       } as IsRefType);
       doc.depopulate('nestedObjectId');
 
-      expect(doc.nestedObjectId).not.toEqual(undefined);
+      expect(doc.nestedObjectId).not.toBeUndefined();
 
       if (isRefType(doc.nestedObjectId)) {
         expect(doc.nestedObjectId).toBeInstanceOf(mongoose.Types.ObjectId);
@@ -186,11 +193,11 @@ describe('isRefType / isRefTypeArray', () => {
       } as IsRefTypeArray);
       doc.depopulate('nestedString');
 
-      expect(doc.nestedString).not.toEqual(undefined);
+      expect(doc.nestedString).not.toBeUndefined();
 
-      if (isRefTypeArray(doc.nestedString)) {
+      if (isRefTypeArray(doc.nestedString!)) {
         expect(Array.isArray(doc.nestedString)).toBe(true);
-        expect(typeof doc.nestedString[0]).toBe('string');
+        expect(typeof doc.nestedString![0]).toBe('string');
       } else {
         fail('Expected isRefTypeArray to be returning true');
       }
@@ -202,11 +209,11 @@ describe('isRefType / isRefTypeArray', () => {
       } as IsRefTypeArray);
       doc.depopulate('nestedObjectId');
 
-      expect(doc.nestedObjectId).not.toEqual(undefined);
+      expect(doc.nestedObjectId).not.toBeUndefined();
 
-      if (isRefTypeArray(doc.nestedObjectId)) {
+      if (isRefTypeArray(doc.nestedObjectId!)) {
         expect(Array.isArray(doc.nestedString)).toBe(true);
-        expect(doc.nestedObjectId[0]).toBeInstanceOf(mongoose.Types.ObjectId);
+        expect(doc.nestedObjectId![0]).toBeInstanceOf(mongoose.Types.ObjectId);
       } else {
         fail('Expected isRefTypeArray to be returning true');
       }
