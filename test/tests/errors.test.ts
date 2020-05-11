@@ -269,7 +269,7 @@ describe('tests for "InvalidTypeError"', () => {
 describe('tests for "assignMetadata"', () => {
   it('should error if no valid key is supplied [TypeError]', () => {
     try {
-      class Dummy {}
+      class Dummy { }
       // @ts-ignore
       assignMetadata(true, {}, Dummy);
       fail('Expected to throw "TypeError"');
@@ -314,7 +314,7 @@ it('should throw when "deleteModel" is called with no string [TypeError]', () =>
 });
 
 it('should throw when "addModelToTypegoose" is called twice for the same class [Error]', () => {
-  class TestDouble {}
+  class TestDouble { }
 
   const gotmodel = getModelForClass(TestDouble);
 
@@ -330,7 +330,7 @@ it('should throw when "addModelToTypegoose" is called twice for the same class [
 it('should throw when "customName" is used, but length <= 0 [TypeError]', () => {
   try {
     @modelOptions({ options: { customName: '' } })
-    class TestCustomNameError {}
+    class TestCustomNameError { }
     getName(TestCustomNameError);
     fail('Expected to throw "TypeError"');
   } catch (err) {

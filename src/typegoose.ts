@@ -152,8 +152,8 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
     new Error(
       format(
         'It seems like "addModelToTypegoose" got called twice\n' +
-          'Or multiple classes with the same name are used, which is not supported!' +
-          '(Model Name: "%s")',
+        'Or multiple classes with the same name are used, which is not supported!' +
+        '(Model Name: "%s")',
         name
       )
     )
@@ -232,7 +232,7 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, T>;
   }
-  const sch = buildSchema(cl) as mongoose.Schema & { paths: any };
+  const sch = buildSchema(cl) as mongoose.Schema & { paths: any; };
 
   const discriminatorKey = sch.get('discriminatorKey');
   if (sch.path(discriminatorKey)) {

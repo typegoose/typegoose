@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["esnext"],
+    "lib": [
+      "esnext"
+    ],
     "removeComments": false,
     "module": "commonjs",
     "moduleResolution": "node",
@@ -17,6 +19,11 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"],
-  "exclude": ["node_modules/**/*"]
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules/**/*"
+  ]
 }

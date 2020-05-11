@@ -165,7 +165,7 @@ export interface BasePropOptions {
    * This option as only an effect when the plugin `mongoose-autopopulate` is used
    */
   // tslint:disable-next-line:ban-types
-  autopopulate?: boolean | Function | { [key: string]: any };
+  autopopulate?: boolean | Function | { [key: string]: any; };
   /** Reference an other Document (you should use Ref<T> as Prop type) */
   ref?: any;
   /** Take the Path and try to resolve it to a Model */
@@ -179,7 +179,7 @@ export interface BasePropOptions {
 }
 
 // tslint:disable-next-line:no-empty-interface
-export interface PropOptions extends BasePropOptions {}
+export interface PropOptions extends BasePropOptions { }
 
 export interface ArrayPropOptions extends BasePropOptions {
   /** What array is it?
@@ -268,7 +268,9 @@ export type RefSchemaType =
  * Reference another Model
  */
 // export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
-export type Ref<R, T extends RefType = (R extends { _id?: RefType } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined> = R | T;
+export type Ref<
+  R,
+  T extends RefType = (R extends { _id?: RefType; } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined> = R | T;
 
 /**
  * An Function type for a function that doesn't have any arguments and doesn't return anything

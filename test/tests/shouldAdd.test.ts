@@ -204,7 +204,7 @@ it('should make use of non-virtuals with pre- and post-processors', async () => 
 });
 
 it('should add options to ref [szokodiakos#379]', () => {
-  class T {}
+  class T { }
   class TestRef {
     @prop({ ref: T, customoption: 'custom' })
     public someprop: Ref<T>;
@@ -222,7 +222,7 @@ it('should add options to ref [szokodiakos#379]', () => {
 });
 
 it('should add options to refPath [szokodiakos#379]', () => {
-  class T {}
+  class T { }
   class TestRefPath {
     @prop({ default: 'T' })
     public something: string;
@@ -243,7 +243,7 @@ it('should add options to refPath [szokodiakos#379]', () => {
 });
 
 it('should add options to array-ref [szokodiakos#379]', () => {
-  class T {}
+  class T { }
   class TestArrayRef {
     @arrayProp({ ref: T, customoption: 'custom' })
     public someprop: Ref<T>[];
@@ -261,7 +261,7 @@ it('should add options to array-ref [szokodiakos#379]', () => {
 });
 
 it('should add options to array-refPath [szokodiakos#379]', () => {
-  class T {}
+  class T { }
   class TestArrayRefPath {
     @prop({ default: 'T' })
     public something: string;

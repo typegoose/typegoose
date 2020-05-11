@@ -68,7 +68,7 @@ export class BaseHook {
   doc.hooksMessages.push('Post Actual');
   next();
 })
-class ExtendedHook extends BaseHook {}
+class ExtendedHook extends BaseHook { }
 
 export const HookModel = getModelForClass(Hook);
 export const HookArrayModel = getModelForClass(HookArray);

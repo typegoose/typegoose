@@ -17,7 +17,7 @@ it('should make use of discriminators', async () => {
 });
 
 it('"getDiscriminatorModelForClass" should return the same model if already defined', () => {
-  class TestSameModelDicriminator {}
+  class TestSameModelDicriminator { }
 
   const model = getModelForClass(TestSameModelDicriminator);
 
