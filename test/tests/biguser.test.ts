@@ -113,7 +113,7 @@ it('should create a user with [Plugin].findOrCreate', async () => {
     gender: Genders.FEMALE
   });
 
-  expect(createdUser).not.toBe(undefined);
+  expect(createdUser).not.toBeUndefined();
   expect(createdUser).toHaveProperty('created');
   expect(createdUser.created).toBe(true);
   expect(createdUser).toHaveProperty('doc');
@@ -124,7 +124,7 @@ it('should create a user with [Plugin].findOrCreate', async () => {
     lastName: 'Doe'
   });
 
-  expect(foundUser).not.toBe(undefined);
+  expect(foundUser).not.toBeUndefined();
   expect(foundUser).toHaveProperty('created');
   expect(foundUser.created).toBe(false);
   expect(foundUser).toHaveProperty('doc');

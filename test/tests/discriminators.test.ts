@@ -5,12 +5,12 @@ import { Default, DefaultModel, DisciminatedUserModel, ROLE, Visitor, VisitorMod
 it('should make use of discriminators', async () => {
   const disMainDoc = await DisMainModel.create({ main1: 'hello DMM' } as DisMain);
   const disAboveDoc = await DisAboveModel.create({ main1: 'hello DAM', above1: 'hello DAM' } as DisAbove);
-  expect(disMainDoc).not.toEqual(undefined);
+  expect(disMainDoc).not.toBeUndefined();
   expect(disMainDoc.main1).toEqual('hello DMM');
   expect(disMainDoc).not.toHaveProperty('above1');
-  expect(disMainDoc.__t).toEqual(undefined);
+  expect(disMainDoc.__t).toBeUndefined();
 
-  expect(disAboveDoc).not.toEqual(undefined);
+  expect(disAboveDoc).not.toBeUndefined();
   expect(disAboveDoc.main1).toEqual('hello DAM');
   expect(disAboveDoc.above1).toEqual('hello DAM');
   expect(disAboveDoc.__t).toEqual('DisAbove');
@@ -38,9 +38,9 @@ describe('Generic Discriminators', () => {
     } as Default);
     expect(instance.constructor).toEqual(DefaultModel);
     expect(instance.schema.path('profile')).not.toBeInstanceOf(mongoose.Schema.Types.Mixed);
-    expect((instance as any).visitor).toEqual(undefined);
+    expect((instance as any).visitor).toBeUndefined();
     expect(instance.default).toEqual('sth');
-    expect((instance.profile as any).test).toEqual(undefined);
+    expect((instance.profile as any).test).toBeUndefined();
     expect(instance.profile!.lastName).toEqual('sth');
   });
 
@@ -53,9 +53,9 @@ describe('Generic Discriminators', () => {
     expect(instance.constructor).toEqual(DefaultModel);
     expect(instance.schema.path('profile')).not.toBeInstanceOf(mongoose.Schema.Types.Mixed);
     expect(instance.role).toEqual(ROLE.DEFAULT);
-    expect((instance as any).visitor).toEqual(undefined);
+    expect((instance as any).visitor).toBeUndefined();
     expect(instance.default).toEqual('sth');
-    expect((instance.profile as any).test).toEqual(undefined);
+    expect((instance.profile as any).test).toBeUndefined();
     expect(instance.profile!.lastName).toEqual('sth');
   });
 
@@ -70,9 +70,9 @@ describe('Generic Discriminators', () => {
     expect(instance.schema.path('profile')).not.toBeInstanceOf(mongoose.Schema.Types.Mixed);
     expect(instance.role).toEqual(ROLE.VISITOR);
     expect(instance.visitor).toEqual('sth');
-    expect((instance as any).default).toEqual(undefined);
-    expect((instance.profile as any).test).toEqual(undefined);
-    expect((instance.profile as any).lastName).toEqual(undefined);
+    expect((instance as any).default).toBeUndefined();
+    expect((instance.profile as any).test).toBeUndefined();
+    expect((instance.profile as any).lastName).toBeUndefined();
     expect(instance.profile!.firstName).toEqual('sth');
   });
 });

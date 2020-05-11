@@ -77,12 +77,12 @@ it('should respect enum [String]', async () => {
     enumedString: [ArrayValidatorEnumString.OPT1, ArrayValidatorEnumString.OPT2]
   });
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(Array.from(doc.enumedString)).toEqual([ArrayValidatorEnumString.OPT1, ArrayValidatorEnumString.OPT2]);
 
   const found = await ArrayValidatorsModel.findById(doc._id).exec();
 
-  expect(found).not.toEqual(undefined);
+  expect(found).not.toBeUndefined();
   expect(Array.from(found!.enumedString)).toEqual([ArrayValidatorEnumString.OPT1, ArrayValidatorEnumString.OPT2]);
 });
 
@@ -101,11 +101,11 @@ it('should respect enum [Number]', async () => {
     enumedNumber: [ArrayValidatorEnumNumber.OPT1, ArrayValidatorEnumNumber.OPT2]
   });
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(Array.from(doc.enumedNumber)).toEqual([ArrayValidatorEnumNumber.OPT1, ArrayValidatorEnumNumber.OPT2]);
 
   const found = await ArrayValidatorsModel.findById(doc._id).exec();
 
-  expect(found).not.toEqual(undefined);
+  expect(found).not.toBeUndefined();
   expect(Array.from(found!.enumedNumber)).toEqual([ArrayValidatorEnumNumber.OPT1, ArrayValidatorEnumNumber.OPT2]);
 });

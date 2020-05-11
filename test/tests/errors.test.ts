@@ -157,7 +157,7 @@ it('should not modify an immutable', async () => {
 
   const TIModel = getModelForClass(TestImmutable);
   const doc = await TIModel.create({ someprop: 'Hello' } as TestImmutable);
-  expect(doc).not.toBe(undefined);
+  expect(doc).not.toBeUndefined();
   doc.someprop = 'Hello2';
   await doc.save();
   expect(doc.someprop).toEqual('Hello');

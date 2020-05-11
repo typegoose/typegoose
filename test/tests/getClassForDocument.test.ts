@@ -70,11 +70,11 @@ it('should store nested address', async () => {
     ]
   } as PersonNested);
 
-  expect(person).not.toEqual(undefined);
+  expect(person).not.toBeUndefined();
   expect(person.name).toEqual('Person, Some');
-  expect(person.address).not.toEqual(undefined);
+  expect(person.address).not.toBeUndefined();
   expect(person.address!.street).toEqual('A Street 1');
-  expect(person.moreAddresses).not.toEqual(undefined);
+  expect(person.moreAddresses).not.toBeUndefined();
   expect(person.moreAddresses!.length).toEqual(2);
   expect(person.moreAddresses![0].street).toEqual('A Street 2');
   expect(person.moreAddresses![1].street).toEqual('A Street 3');

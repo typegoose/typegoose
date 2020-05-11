@@ -58,11 +58,11 @@ it('should respect enum', async () => {
     enumed: StringValidatorEnum.OPT2
   });
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(doc.enumed).toEqual(StringValidatorEnum.OPT2);
 
   const found = await StringValidatorsModel.findById(doc._id).orFail().exec();
 
-  expect(found).not.toEqual(undefined);
+  expect(found).not.toBeUndefined();
   expect(found.enumed).toEqual(StringValidatorEnum.OPT2);
 });

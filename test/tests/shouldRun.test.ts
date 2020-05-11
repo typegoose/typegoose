@@ -40,13 +40,13 @@ it('should build multiple times', () => {
 it('should use existingMongoose', async () => {
   @modelOptions({ existingMongoose: mongoose })
   class TESTexistingMongoose { }
-  expect(getModelForClass(TESTexistingMongoose)).not.toEqual(undefined);
+  expect(getModelForClass(TESTexistingMongoose)).not.toBeUndefined();
 });
 
 it('should use existingConnection', async () => {
   @modelOptions({ existingConnection: mongoose.connection })
   class TESTexistingConnection { }
-  expect(getModelForClass(TESTexistingConnection)).not.toEqual(undefined);
+  expect(getModelForClass(TESTexistingConnection)).not.toBeUndefined();
 });
 
 it('should make use of addModelToTypegoose', async () => {
@@ -61,7 +61,7 @@ it('should make use of addModelToTypegoose', async () => {
   const model = addModelToTypegoose(mongoose.model(TestAMTT.name, schema), TestAMTT);
   const doc = await model.create({ somevalue: 'hello from SV', somesecondvalue: 'hello from SSV' } as TestAMTT);
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(doc.somevalue).toEqual('hello from SV');
   expect(doc.somesecondvalue).toEqual('hello from SSV');
 });
@@ -79,7 +79,7 @@ it('should make use of Map default', async () => {
   const { _id: id } = await model.create({ someother: 'hi' });
 
   const found = await model.findById(id).orFail().exec();
-  expect(found).not.toEqual(undefined);
+  expect(found).not.toBeUndefined();
   expect(found.someother).toEqual('hi');
   expect(found.test instanceof Map).toBe(true);
   expect(new Map(found.test!)).toEqual(new Map([['hello', 'hello']]));
@@ -99,7 +99,7 @@ it('should work with Objects in Class [szokodiakos#54]', async () => {
   const doc = await model.create({ test: { anotherTest: 'hello' } } as TESTObject);
 
   expect((logger.warn as any).mock.calls.length).toEqual(1);
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(typeof doc.test).toBe('object');
   expect(doc.test.anotherTest).toEqual('hello');
 });
@@ -111,7 +111,7 @@ it('simple test for assignMetadata', () => {
 
   const reflected = Reflect.getMetadata(DecoratorKeys.ModelOptions, TestAssignMetadata);
 
-  expect(reflected).not.toEqual(undefined);
+  expect(reflected).not.toBeUndefined();
   expect(reflected).toHaveProperty('testOption', 'hello');
 });
 
@@ -171,7 +171,7 @@ it('should make use of "@prop({ _id: false })" and have no _id', async () => {
   const model = getModelForClass(TestidFalse);
   const doc = await model.create({ someprop: { hi: 10 } } as TestidFalse);
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(doc.someprop).toHaveProperty('hi', 10);
   expect(doc.someprop).not.toHaveProperty('_id');
 });
@@ -225,7 +225,7 @@ it('should use type "Buffer" [typegoose#88]', async () => {
   const { _id: id } = await model.create({ propy: Buffer.from('Hello') } as TestBuffer);
 
   const found = await model.findById(id).orFail().exec();
-  expect(found).not.toEqual(undefined);
+  expect(found).not.toBeUndefined();
   expect(found.propy).toBeInstanceOf(Buffer);
   expect(found.propy.toString()).toEqual('Hello');
 });
@@ -242,7 +242,7 @@ it('should use "type" as a last resort', async () => {
 
   const doc = new model({ propy: 100 });
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(doc.propy).toEqual(100);
 });
 
@@ -270,9 +270,9 @@ it('should run with Custom Types', async () => {
 
   await doc.validate();
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   const path = doc.schema.path('num');
-  expect(path).not.toEqual(undefined);
+  expect(path).not.toBeUndefined();
   expect(path).not.toBeInstanceOf(mongoose.Schema.Types.Mixed);
   expect(path).toBeInstanceOf(CustomInt);
 });
@@ -300,15 +300,15 @@ it('should return the correct model "getModelWithString"', () => {
   const model = getModelForClass(GetModelWithStringClass);
   const gotModel = getModelWithString<typeof GetModelWithStringClass>(model.modelName);
 
-  expect(model).not.toEqual(undefined);
-  expect(gotModel).not.toEqual(undefined);
+  expect(model).not.toBeUndefined();
+  expect(gotModel).not.toBeUndefined();
   expect(gotModel).toEqual(model);
 });
 
 it('should return undefined if model does not exists (getModelWithString)', () => {
   const type = getModelWithString('someTestyString');
 
-  expect(type).toEqual(undefined);
+  expect(type).toBeUndefined();
 });
 
 it('should merge existingConnection correctly (overwrite)', () => {
@@ -336,8 +336,8 @@ it('should use "_id" from ModelOptions if not in @prop options [typegoose/typego
   const model = getModelForClass(ParentID);
   const doc = new model({ key: {} });
 
-  expect(doc).not.toEqual(undefined);
-  expect(doc.key).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
+  expect(doc.key).not.toBeUndefined();
   expect(doc.key).not.toHaveProperty('_id');
 });
 

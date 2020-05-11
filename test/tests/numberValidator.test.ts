@@ -35,11 +35,11 @@ it('should respect enum', async () => {
     enumed: NumberValidatorEnum.OPT2
   });
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(doc.enumed).toEqual(NumberValidatorEnum.OPT2);
 
   const found = await NumberValidatorsModel.findById(doc._id).orFail().exec();
 
-  expect(found).not.toEqual(undefined);
+  expect(found).not.toBeUndefined();
   expect(found.enumed).toEqual(NumberValidatorEnum.OPT2);
 });
