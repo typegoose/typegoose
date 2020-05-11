@@ -74,8 +74,19 @@ import AutoIncrementFactory from 'mongoose-sequence';
 // AutoIncrement now is the instance
 const AutoIncrement = AutoIncrementFactory(mongoose);
 
-@plugin(AutoIncrement, { inc_field: 'id', start_seq: 200 })
-class ... { ... }
+@plugin(AutoIncrement, { inc_field: '_id', start_seq: 200 })
+class SomeClass extends defaultClasses.Base<number> {
+  @prop()
+  public _id: number;
+}
+
+// The Plugin options can be applied too
+
+@plugin<mongoose.SequenceOptions>(AutoIncrement, { inc_field: '_id' }) // Note: "start_seq" is not in the "SequenceOptions" type
+class SomeClass extends defaultClasses.Base<number> {
+  @prop()
+  public _id!: number;
+}
 ```
 
 For more details, see [this issue](https://github.com/ramiel/mongoose-sequence/issues/83).
