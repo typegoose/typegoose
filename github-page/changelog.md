@@ -26,6 +26,7 @@ redirect_from:
 - Fix duplicate hooks / virtuals / queryMethods / plugins / indices via inheritance [{% include gitissue repo="typegoose" num=218 %}]
 - improve TSDoc of some functions
 - Fix `queryMethod` reflection
+- Set proper function type for `queryMethod`
 - [IC] add some tslint rules & apply them
 
 ## 7.0.0
