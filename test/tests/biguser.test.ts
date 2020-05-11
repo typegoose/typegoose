@@ -52,7 +52,7 @@ it('should create a User with connections', async () => {
   });
 
   {
-    const foundUser = await UserModel.findById(user.id).populate('car previousCars').exec();
+    const foundUser = await UserModel.findById(user.id).populate('car previousCars').orFail().exec();
 
     expect(foundUser).not.toBeNull();
     expect(foundUser!.toObject({ virtuals: true, getters: true })).toMatchSnapshot({
@@ -104,9 +104,7 @@ it('should create a User with connections', async () => {
     expect(foundUser).toHaveProperty('firstName', 'Sherlock');
     expect(foundUser).toHaveProperty('lastName', 'Holmes');
   }
-},
-  10 * 1000
-);
+}, 10 * 1000);
 
 it('should create a user with [Plugin].findOrCreate', async () => {
   const createdUser = await UserModel.findOrCreate({

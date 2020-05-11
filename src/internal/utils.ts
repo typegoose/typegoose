@@ -352,6 +352,10 @@ export function mapArrayOptions(
     loggerType = Type;
   }
 
+  if (isNullOrUndefined(loggerType)) {
+    logger.info('mapArrayOptions loggerType is undefined!');
+  }
+
   const options = Object.assign({}, rawOptions); // for sanity
   const mapped = mapOptions(rawOptions, Type, target, pkey, false, loggerType);
 
@@ -422,6 +426,10 @@ export function mapOptions(
         warnMixed(target, pkey);
       }
     }
+  }
+
+  if (isNullOrUndefined(loggerType)) {
+    logger.info('mapOptions loggerType is undefined!');
   }
 
   /** The OptionsConstructor to use */

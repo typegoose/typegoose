@@ -180,10 +180,10 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     // check if the supplied value is already "mongoose-consumeable"
     if (!Array.isArray(enumOption)) {
       if (Type === String) {
-        rawOptions.enum = Object.entries(enumOption) // get all key-value pairs of the enum
+        rawOptions.enum = Object.entries<string>(enumOption) // get all key-value pairs of the enum
           // no reverse-filtering because if it is full of strings, there is no reverse mapping
           .map(([enumKey, enumValue]) => {
-            // convert key-value pairs to mongoose-usable strings
+            // convert key-value pairs to an mongoose-usable enum
             // safeguard, this should never happen because TypeScript only sets "design:type" to "String"
             // if the enum is full of strings
             if (typeof enumValue !== 'string') {
@@ -207,7 +207,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
             return typeof enumValue === 'number';
           })
           .map(([enumKey, enumValue]) => {
-            // convert key-value pairs to mongoose-useable strings
+            // convert key-value pairs to an mongoose-useable enum
             if (typeof enumValue !== 'number') {
               throw new NotNumberTypeError(name, key, enumKey, typeof enumValue);
             }

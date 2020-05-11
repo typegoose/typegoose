@@ -13,7 +13,7 @@ type ClassDecorator = (target: any) => void;
 type HookNextErrorFn = (err?: Error) => void;
 
 type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => void;
-type PreFnWithQuery<T> = (this: Query<T>, next?: (error?: Error) => void, done?: EmptyVoidFn) => void;
+type PreFnWithQuery<T> = (this: Query<T>, next: (error?: Error) => void, done: EmptyVoidFn) => void;
 
 type ModelPostFn<T> = (result: any, next: EmptyVoidFn) => void;
 
