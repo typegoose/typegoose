@@ -45,14 +45,13 @@ otherwise the functions still override the settings made in `modelOptions`
 Hooks got (in 6.0.0-13) a change for the types to comply with the latest mongoose (5.6.8)
 -> no workarounds or typedefs required anymore
 
-## Methods (static, instance, virtuals)
+## Methods (staticMethod, instanceMethod, virtuals)
 
 `@staticMethod` & `@instanceMethod` were deprecated in favor of `schema.loadClass()`. These decorators are no longer needed, because the methods are auto-detected.
 
-For [virtuals](https://mongoosejs.com/docs/tutorials/virtuals.html), simply use `get somevalue() { return ''; }` and `set somevalue(val: string) { }` (`@prop` is no longer needed).
+For [virtuals](https://mongoosejs.com/docs/tutorials/virtuals.html), simply use `get somevalue() { return ''; }` and `set somevalue(val: string) { }` (`@prop` is no longer needed). [[New Documentation]({{ site.baseurl }}{% link _docs/virtuals.md %}#get--set)]
 
-For [populating virtuals](https://mongoosejs.com/docs/tutorials/virtuals.html#populate), use `@prop({ localField, foreignField })`. The `overwrite` option is no longer needed.
-
+For [populating virtuals](https://mongoosejs.com/docs/tutorials/virtuals.html#populate), use `@prop({ localField, foreignField })`. The `overwrite` option is no longer needed. [[New Documentation]({{ site.baseurl }}{% link _docs/virtuals.md %}#virtual-populate)]
 
 Update: `@staticMethod` & `@instanceMethod` got removed in 6.1.0-1
 
