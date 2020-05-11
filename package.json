@@ -45,13 +45,13 @@
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/lodash": "^4.14.150",
-    "@types/mongoose": "^5.7.12",
+    "@types/mongoose": "^5.7.16",
     "@types/node": "^10.17.16",
     "@types/semver": "^7.1.0",
     "coveralls": "^3.1.0",
     "jest": "^26.0.1",
     "mongodb-memory-server": "^6.6.0",
-    "mongoose": "^5.9.10",
+    "mongoose": "^5.9.13",
     "mongoose-findorcreate": "^3.0.0",
     "prettier": "^2.0.5",
     "rimraf": "3.0.2",
@@ -67,7 +67,7 @@
     "loglevel": "^1.6.8",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.3.2",
-    "tslib": "^1.11.1"
+    "tslib": "^1.11.2"
   },
   "publishConfig": {
     "access": "public"

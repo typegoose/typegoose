@@ -23,6 +23,10 @@ redirect_from:
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
+- Update Dependencies
+  - `mongoose` to 5.9.13
+  - `@types/mongoose` to 5.7.16
+  - `tslib` to 1.11.2
 - Fix duplicate hooks / virtuals / queryMethods / plugins / indices via inheritance [{% include gitissue repo="typegoose" num=218 %}]
 - improve TSDoc of some functions
 - Fix `queryMethod` reflection
