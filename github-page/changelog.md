@@ -32,6 +32,7 @@ redirect_from:
 - Fix `queryMethod` reflection
 - Set proper function type for `queryMethod`
 - [IC] add some tslint rules & apply them
+- [IC] enable "strictNullChecks" & fix accordingly
 
 ## 7.0.0
 
