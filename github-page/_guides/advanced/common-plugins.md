@@ -2,11 +2,11 @@
 title: "Common Plugins"
 ---
 
-Typegoose supports the use of plugins from mongoose, in this guide some common plugins are shown
+Typegoose supports mongoose plugins. Here's how to use some common plugins:
 
 ## mongoose-autopopulate
 
-Typegoose has the PropOption `autopopulate` implemented, but it only has an effect if `mongoose-autopopulate` is used too
+Typegoose has the PropOption `autopopulate` implemented, but it only has an effect if `mongoose-autopopulate` is used too.
 
 ```ts
 import * as mongoose from "mongoose";
@@ -39,7 +39,7 @@ const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 
 ## mongoose-findorcreate
 
-Typegoose has a default class for `mongoose-findorcreate` that has all the types it needs, it is used like below
+Typegoose has a default class for `mongoose-findorcreate` that has all the types it needs. Here's how to use it:
 
 ```ts
 import { DocumentType, getModelForClass, plugin, prop, defaultClasses } from "@typegoose/typegoose";
@@ -63,6 +63,33 @@ const SomeClassModel = getModelForClass(SomeClass);
   await mongoose.disconnect();
 })();
 ```
+
+## mongoose-sequence
+
+To use [mongoose-sequence](https://github.com/ramiel/mongoose-sequence), import the plugin and use it like this:
+
+```ts
+import AutoIncrementFactory from 'mongoose-sequence';
+
+// AutoIncrement now is the instance
+const AutoIncrement = AutoIncrementFactory(mongoose);
+
+@plugin(AutoIncrement, { inc_field: '_id', start_seq: 200 })
+class SomeClass extends defaultClasses.Base<number> {
+  @prop()
+  public _id: number;
+}
+
+// The Plugin options can be applied too
+
+@plugin<mongoose.SequenceOptions>(AutoIncrement, { inc_field: '_id' }) // Note: "start_seq" is not in the "SequenceOptions" type
+class SomeClass extends defaultClasses.Base<number> {
+  @prop()
+  public _id!: number;
+}
+```
+
+For more details, see [this issue](https://github.com/ramiel/mongoose-sequence/issues/83).
 
 ## @typegoose/auto-increment
 
@@ -108,4 +135,4 @@ const doc = await SomeModel.create({ someIncrementedField: 10 }); // _id will be
 
 ---
 
-Please note that some or all of the listed plugins might not have an `@types` package, so you mostly have to declare it as a model
+Please note that some or all of the listed plugins might not have a `@types` package, so you mostly have to declare it as a model.
