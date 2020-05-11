@@ -389,8 +389,8 @@ it('should add "null" to the enum (addNullToEnum)', async () => {
     three = 3
   }
   class AddNullToEnum {
-    @prop({ enum: SomeNumberEnum, addNullToEnum: true })
-    public value?: SomeNumberEnum;
+    @prop({ enum: SomeNumberEnum, addNullToEnum: true, type: Number })
+    public value?: SomeNumberEnum | null;
   }
   const AddNullToEnumModel = getModelForClass(AddNullToEnum);
 
@@ -406,19 +406,33 @@ it('should add query Methods', async () => {
   function findByName(this: ReturnModelType<typeof QueryMethods>, name: string) {
     return this.find({ name }); // important to not do an "await" and ".exec"
   }
+
+  function findByLastname(this: ReturnModelType<typeof QueryMethods>, lastname: string) {
+    return this.find({ lastname }); // important to not do an "await" and ".exec"
+  }
+
   @queryMethod(findByName)
+  @queryMethod(findByLastname)
   class QueryMethods {
     @prop({ required: true })
     public name: string;
+
+    @prop({ required: true })
+    public lastname: string;
   }
 
   const QueryMethodsModel = getModelForClass(QueryMethods);
-  const doc = await QueryMethodsModel.create({ name: 'hello' });
-
-  const found: DocumentType<QueryMethods>[] | null = await (QueryMethodsModel.find() as any).findByName('hello').exec();
-  assertion(isDocumentArray(found), new Error('Found is not an document array'));
-  expect(found[0].toObject()).toEqual(doc.toObject());
 
   const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethods);
-  expect(Array.from(metadata)).toEqual([['findByName', findByName]]);
+  expect(Array.from(metadata)).toEqual(
+    expect.arrayContaining([['findByName', findByName]]) &&
+    expect.arrayContaining([['findByLastname', findByLastname]])
+  );
+
+  const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
+
+  const found: DocumentType<QueryMethods>[] | null =
+    await (QueryMethodsModel.find() as any).findByName('hello').findByLastname('world').exec();
+  assertion(isDocumentArray(found), new Error('Found is not an document array'));
+  expect(found[0].toObject()).toEqual(doc.toObject());
 });
