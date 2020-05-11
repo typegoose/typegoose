@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 import { DecoratorKeys } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
 import { assertion, assignMetadata, createArrayFromDimensions, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
-import { logger, setLogLevel } from '../../src/logSettings';
+import { logger } from '../../src/logSettings';
 import { queryMethod } from '../../src/queryMethod';
 import {
   addModelToTypegoose,
