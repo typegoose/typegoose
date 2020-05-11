@@ -85,6 +85,8 @@ guides:
         url: /guides/quick-start-guide/
       - title: 'Migrate to 6.0.0'
         url: /guides/migrate-to-6/
+      - title: 'Migrate to 7.0.0'
+        url: /guides/migrate-to-7/
       - title: 'FAQ'
         url: /guides/faq
       - title: 'Known Issues'

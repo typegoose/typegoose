@@ -24,6 +24,9 @@ redirect_from:
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Fix duplicate hooks / virtuals / queryMethods / plugins / indices via inheritance [{% include gitissue repo="typegoose" num=218 %}]
+- improve TSDoc of some functions
+- Fix `queryMethod` reflection
+- [IC] add some tslint rules & apply them
 
 ## 7.0.0
 
