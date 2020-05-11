@@ -1,5 +1,5 @@
 {
-  "defaultSeverity": "error",
+  "defaultSeverity": "warn",
   "extends": [
     "tslint:recommended",
     "tslint-consistent-codestyle"
@@ -8,17 +8,12 @@
     "node_modules/tslint-eslint-rules/dist/rules"
   ],
   "rules": {
-    "no-unused": {
-      "severity": "warn"
-    },
     "quotemark": {
-      "severity": "warn",
       "options": [
         "single"
       ]
     },
     "indent": {
-      "severity": "error",
       "options": [
         "spaces",
         2
@@ -32,7 +27,6 @@
       }
     ],
     "semicolon": {
-      "severity": "error",
       "options": [
         "always"
       ]
@@ -42,14 +36,12 @@
       "LF"
     ],
     "max-line-length": {
-      "severity": "warn",
       "options": 140
     },
     "comment-format": {
       "options": [
         "check-space"
-      ],
-      "severity": "warn"
+      ]
     },
     "variable-name": [
       true,
@@ -77,51 +69,44 @@
       "camel-case"
     ],
     "trailing-comma": {
-      "severity": "warn",
       "options": {
         "singleline": "never",
         "multiline": "never"
       }
     },
     "ter-padded-blocks": {
-      "severity": "warn",
       "options": "never"
     },
-    "no-unused-expression": {
-      "severity": "warn"
-    },
     "object-literal-key-quotes": {
-      "severity": "warn",
       "options": "as-needed"
     },
-    "no-trailing-whitespace": {
-      "severity": "warn"
-    },
-    "await-promise": {
-      "severity": "warn"
-    },
-    "no-console": {
-      "severity": "warn"
-    },
-    "ordered-imports": {
-      "severity": "warn"
-    },
-    "deprecation": {
-      "severity": "warn"
-    },
-    "curly": {
-      "severity": "warn"
-    },
-    "no-unnecessary-else": {
-      "severity": "warn"
-    },
     "space-within-parens": {
-      "severity": "warn",
       "options": 0
     },
-    "arrow-parens": {
-      "severity": "warn"
+    "whitespace": {
+      "options": [
+        "check-branch",
+        "check-decl",
+        "check-operator",
+        "check-module",
+        "check-separator",
+        "check-rest-spread",
+        "check-type",
+        "check-typecast",
+        "check-type-operator",
+        "check-preblock"
+      ]
     },
+    "no-unused": true,
+    "no-unused-expression": true,
+    "no-trailing-whitespace": true,
+    "await-promise": true,
+    "no-console": true,
+    "ordered-imports": true,
+    "deprecation": true,
+    "curly": true,
+    "no-unnecessary-else": true,
+    "arrow-parens": true,
     "new-parens": true,
     "space-before-function-paren": false,
     "encoding": true,
