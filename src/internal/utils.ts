@@ -279,7 +279,7 @@ function customMerger(key: string | number, val: unknown): any {
  * @param value The value to use
  * @param cl The Class to get the values from
  */
-export function mergeSchemaOptions<T, U extends AnyParamConstructor<T>>(value: mongoose.SchemaOptions | undefined, cl: U) {
+export function mergeSchemaOptions<U extends AnyParamConstructor<any>>(value: mongoose.SchemaOptions | undefined, cl: U) {
   return mergeMetadata<IModelOptions>(DecoratorKeys.ModelOptions, { schemaOptions: value }, cl).schemaOptions;
 }
 
@@ -297,7 +297,7 @@ export function getRightTarget(target: any): any {
  * (with suffix)
  * @param cl The Class
  */
-export function getName<T, U extends AnyParamConstructor<T>>(cl: U) {
+export function getName<U extends AnyParamConstructor<any>>(cl: U) {
   const ctor: any = getRightTarget(cl);
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
   const baseName: string = ctor.name;

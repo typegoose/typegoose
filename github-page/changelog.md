@@ -33,6 +33,12 @@ redirect_from:
 - Set proper function type for `queryMethod`
 - Added the ability to define option `ref` with an arrow-function [(`ref: () => type`)]({{ site.baseurl }}{% link _guides/advanced/reference-other-classes.md %}#referencing-other-classes)
 - All Decorators are now exported PascalCased & camelCased
+- Actually export the `@queryMethod` decorator
+- The `@queryMethod` decorator now has correct types [{% include gitissue repo="typegoose" num=247 %}]
+- The functions `addModelToTypegoose`, `getModelForClass`, `buildSchema`, `deleteModelWithClass`, `getDiscriminatorModelForClass` now have the `T` generic removed (it was unnecessary)
+- The functions `addModelToTypegoose`, `getModelForClass`, `getDiscriminatorModelForClass` now have an new optional generic `QueryHelpers`
+- The Type `ReturnModelType` now has the `T` generic removed (it was unnecessary)
+- The Type `ReturnModelType` now has an second optional generic `QueryHelpers`
 - [IC] add some tslint rules & apply them
 - [IC] enable "strictNullChecks" & fix accordingly
 
