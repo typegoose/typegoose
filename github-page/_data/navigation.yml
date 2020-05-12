@@ -59,6 +59,8 @@ docs:
         url: /docs/functions/setGlobalOptions
       - title: 'Get Model With String'
         url: /docs/functions/getModelWithString
+      - title: 'Get Name For Class'
+        url: /docs/functions/getName
 
   - title: TypeGuards
     children:
