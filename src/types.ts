@@ -167,7 +167,7 @@ export interface BasePropOptions {
   // tslint:disable-next-line:ban-types
   autopopulate?: boolean | Function | { [key: string]: any; };
   /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref?: any;
+  ref?: any | (() => any);
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
   /**

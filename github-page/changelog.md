@@ -31,6 +31,7 @@ redirect_from:
 - improve TSDoc of some functions
 - Fix `queryMethod` reflection
 - Set proper function type for `queryMethod`
+- Added the ability to define option `ref` with an arrow-function [(`ref: () => type`)]({{ site.baseurl }}{% link _guides/advanced/reference-other-classes.md %}#referencing-other-classes)
 - [IC] add some tslint rules & apply them
 - [IC] enable "strictNullChecks" & fix accordingly
 

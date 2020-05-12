@@ -17,6 +17,7 @@ import {
   modelOptions,
   pre,
   prop,
+  Ref,
   setGlobalOptions
 } from '../../src/typegoose'; // import order is important with jest
 
@@ -504,5 +505,27 @@ it('should error if 0 or less dimensions are given (createArrayFromDimensions) [
     fail('Expected to throw "RangeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(RangeError);
+  }
+});
+
+it('should error if ref\'s arrow-function returning type returns undefined', async () => {
+  class Nested {
+    @prop()
+    public someNestedProperty: string;
+  }
+
+  class Main {
+    @prop({ ref: () => undefined })
+    public nested: Ref<Nested>;
+  }
+
+  try {
+    getModelForClass(Main);
+
+    fail('Expected to throw "Error"');
+  } catch (err) {
+    expect(err).not.toBeInstanceOf(AssertionError);
+    expect(err).toBeInstanceOf(Error);
+    expect(err.message).toEqual('Option "ref" for "Main.nested" was defined with an arrow-function, but the function returned null/undefined!');
   }
 });

@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
-import { isDocument, isDocumentArray } from '../../src/typegoose';
+import { assertion, getName } from '../../src/internal/utils';
+import { getModelForClass, isDocument, isDocumentArray, prop, Ref } from '../../src/typegoose';
 import { RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
 
 it('check generated ref schema for ObjectID _id', async () => {
@@ -232,4 +233,28 @@ it('check typeguards', async () => {
   expect(isDocumentArray(foundPopulated.refArrayString!)).toEqual(true);
   expect(isDocumentArray(foundPopulated.refArrayNumber!)).toEqual(true);
   expect(isDocumentArray(foundPopulated.refArrayBuffer!)).toEqual(true);
+});
+
+it('should make use of arrow-function returning ref-type', async () => {
+  class Nested {
+    @prop()
+    public someNestedProperty: string;
+  }
+
+  class Main {
+    @prop({ ref: () => Nested })
+    public nested: Ref<Nested>;
+  }
+
+  const NestedModel = getModelForClass(Nested);
+  const MainModel = getModelForClass(Main);
+
+  const { _id } = await MainModel.create({ nested: await NestedModel.create({ someNestedProperty: 'Hello' }) });
+  const found = await MainModel.findById(_id).populate('nested').orFail().exec();
+  expect(found.nested).not.toBeUndefined();
+  assertion(isDocument(found.nested));
+  expect(found.nested!.someNestedProperty).toEqual('Hello');
+
+  expect(MainModel.schema.path('nested')).toBeInstanceOf(mongoose.Schema.Types.ObjectId);
+  expect((MainModel.schema.path('nested') as any).options.ref).toEqual(getName(Nested));
 });

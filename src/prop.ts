@@ -69,6 +69,16 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   }
   const name = utils.getName(target);
 
+  // allow setting the type asynchronously
+  if (rawOptions?.ref instanceof Function && utils.isNullOrUndefined(rawOptions?.ref.prototype)) {
+    logger.debug('"%s.%s" option ref is an arrow-function', name, key);
+    rawOptions.ref = rawOptions.ref();
+    utils.assertion(
+      !utils.isNullOrUndefined(rawOptions.ref),
+      new Error(format('Option "ref" for "%s.%s" was defined with an arrow-function, but the function returned null/undefined!', name, key))
+    );
+  }
+
   if (utils.isWithVirtualPOP(rawOptions)) {
     if (!utils.includesAllVirtualPOP(rawOptions)) {
       throw new NotAllVPOPElementsError(name, key);
