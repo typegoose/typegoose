@@ -32,6 +32,7 @@ redirect_from:
 - Fix `queryMethod` reflection
 - Set proper function type for `queryMethod`
 - Added the ability to define option `ref` with an arrow-function [(`ref: () => type`)]({{ site.baseurl }}{% link _guides/advanced/reference-other-classes.md %}#referencing-other-classes)
+- All Decorators are now exported PascalCased & camelCased
 - [IC] add some tslint rules & apply them
 - [IC] enable "strictNullChecks" & fix accordingly
 

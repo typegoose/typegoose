@@ -31,3 +31,6 @@ export function queryMethod<T extends AnyParamConstructor<any>>(
     Reflect.defineMetadata(DecoratorKeys.QueryMethod, queryMethods, target);
   };
 }
+
+// Export it PascalCased
+export const QueryMethod = queryMethod;

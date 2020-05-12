@@ -21,3 +21,6 @@ export function index<T = {}>(fields: T, options?: IndexOptions<T>) {
     Reflect.defineMetadata(DecoratorKeys.Index, indices, target);
   };
 }
+
+// Export it PascalCased
+export const Index = index;

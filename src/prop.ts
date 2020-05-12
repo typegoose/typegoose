@@ -440,3 +440,8 @@ export function arrayProp(options: ArrayPropOptions) {
     });
   };
 }
+
+// Export it PascalCased
+export const Prop = prop;
+export const ArrayProp = arrayProp;
+export const MapProp = mapProp;

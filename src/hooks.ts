@@ -107,3 +107,7 @@ function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]) {
 
 export const pre = hooks.pre;
 export const post = hooks.post;
+
+// Export it PascalCased
+export const Pre = hooks.pre;
+export const Post = hooks.post;
