@@ -434,6 +434,23 @@ export interface IPluginsArray<T> {
 export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
 
 
+/**
+ * Gets the signature (parameters with their types, and the return type) of a function type.
+ * 
+ * @description Should be used when defining an interface for a class that uses query methods.
+ * 
+ * @example
+ * ```ts
+ * function sendMessage(recipient: string, sender: string, priority: number, retryIfFails: boolean) {
+ *  // some logic...
+ *  return true;
+ * }
+ * 
+ * // Both of the following types will be identical.
+ * type SendMessageType = QueryMethod<typeof sendMessage>;
+ * type SendMessageManualType = (recipient: string, sender: string, priority: number, retryIfFails: boolean) => boolean;
+ * ```
+ */
 export type QueryMethod<T extends (...args: any) => any> = (...args: Parameters<T>) => ReturnType<T>;
 
 /**
