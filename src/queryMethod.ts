@@ -21,8 +21,8 @@ import type { AnyParamConstructor, QueryMethodMap, ReturnModelType } from './typ
  * }
  * ```
  */
-export function queryMethod<T extends AnyParamConstructor<any>>(
-  func: (this: ReturnModelType<T>, ...params: any[]) => mongoose.DocumentQuery<any, any>
+export function queryMethod<QueryHelpers, T, U extends AnyParamConstructor<T>>(
+  func: (this: ReturnModelType<U, T, QueryHelpers>, ...params: any[]) => mongoose.DocumentQuery<any, any>
 ) {
   return (target: any) => {
     logger.info('Adding query method "%s" to %s', func.name, getName(target));
