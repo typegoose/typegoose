@@ -407,11 +407,11 @@ it('should add query Methods', async () => {
     findByLastname: QueryMethod<typeof findByLastname>;
   }
   function findByName(this: ReturnModelType<typeof QueryMethodsClass, FindHelpers>, name: string) {
-    return this.find({ name }); // important to not do an "await" and ".exec"
+    return this.find({ name });
   }
 
   function findByLastname(this: ReturnModelType<typeof QueryMethodsClass, FindHelpers>, lastname: string) {
-    return this.find({ lastname }); // important to not do an "await" and ".exec"
+    return this.find({ lastname });
   }
 
   @queryMethod(findByName)
