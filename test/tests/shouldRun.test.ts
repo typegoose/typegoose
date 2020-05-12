@@ -5,7 +5,6 @@ import { DecoratorKeys } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
 import { assertion, assignMetadata, createArrayFromDimensions, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
-import { queryMethod } from '../../src/queryMethod';
 import {
   addModelToTypegoose,
   arrayProp,
@@ -16,9 +15,10 @@ import {
   isDocumentArray,
   mapProp,
   modelOptions,
-  prop
+  prop,
+  queryMethod
 } from '../../src/typegoose';
-import type { IModelOptions, QueryMethodMap, ReturnModelType } from '../../src/types';
+import type { IModelOptions, QueryMethod, QueryMethodMap, ReturnModelType } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -402,12 +402,16 @@ it('should add "null" to the enum (addNullToEnum)', async () => {
 });
 
 it('should add query Methods', async () => {
-  function findByName(this: ReturnModelType<typeof QueryMethodsClass>, name: string) {
-    return this.find({ name }); // important to not do an "await" and ".exec"
+  interface FindHelpers {
+    findByName: QueryMethod<typeof findByName>;
+    findByLastname: QueryMethod<typeof findByLastname>;
+  }
+  function findByName(this: ReturnModelType<typeof QueryMethodsClass, FindHelpers>, name: string) {
+    return this.find({ name });
   }
 
-  function findByLastname(this: ReturnModelType<typeof QueryMethodsClass>, lastname: string) {
-    return this.find({ lastname }); // important to not do an "await" and ".exec"
+  function findByLastname(this: ReturnModelType<typeof QueryMethodsClass, FindHelpers>, lastname: string) {
+    return this.find({ lastname });
   }
 
   @queryMethod(findByName)
@@ -420,7 +424,7 @@ it('should add query Methods', async () => {
     public lastname: string;
   }
 
-  const QueryMethodsModel = getModelForClass(QueryMethodsClass);
+  const QueryMethodsModel = getModelForClass<typeof QueryMethodsClass, FindHelpers>(QueryMethodsClass);
 
   const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethodsClass);
   expect(Array.from(metadata)).toEqual(
@@ -430,8 +434,7 @@ it('should add query Methods', async () => {
 
   const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
 
-  const found: DocumentType<QueryMethodsClass>[] = await (QueryMethodsModel.find() as any)
-    .findByName('hello').findByLastname('world').orFail().exec();
+  const found = await QueryMethodsModel.find().findByName('hello').findByLastname('world').orFail().exec();
   assertion(isDocumentArray(found), new Error('Found is not an document array'));
   expect(found[0].toObject()).toEqual(doc.toObject());
 });

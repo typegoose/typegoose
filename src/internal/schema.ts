@@ -27,7 +27,7 @@ import { assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined,
  * @returns Returns the Build Schema
  * @private
  */
-export function _buildSchema<T, U extends AnyParamConstructor<T>>(
+export function _buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
   sch?: mongoose.Schema,
   opt?: mongoose.SchemaOptions,

@@ -10,7 +10,11 @@ import type { AnyParamConstructor, QueryMethodMap, ReturnModelType } from './typ
  * @param func Query function
  * @example
  * ```ts
- * function findByTitle(this: ReturnModelType<typeof Event>, title: string) {
+ * interface FindHelpers {
+ *   findByTitle: QueryMethod<typeof findByTitle>;
+ * }
+ *
+ * function findByTitle(this: ReturnModelType<typeof Event, FindHelpers>, title: string) {
  *  return this.find({ title });
  * }
  *
@@ -19,10 +23,12 @@ import type { AnyParamConstructor, QueryMethodMap, ReturnModelType } from './typ
  *  @prop()
  *  public title: string;
  * }
+ *
+ * const EventModel = getModelForClass<typeof Event, FindHelpers>(Event);
  * ```
  */
-export function queryMethod<T extends AnyParamConstructor<any>>(
-  func: (this: ReturnModelType<T>, ...params: any[]) => mongoose.DocumentQuery<any, any>
+export function queryMethod<QueryHelpers, U extends AnyParamConstructor<any>>(
+  func: (this: ReturnModelType<U, QueryHelpers>, ...params: any[]) => mongoose.DocumentQuery<any, any>
 ) {
   return (target: any) => {
     logger.info('Adding query method "%s" to %s', func.name, getName(target));

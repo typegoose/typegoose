@@ -30,6 +30,7 @@ export * from './hooks';
 export * from './plugin';
 export * from './index';
 export * from './modelOptions';
+export * from './queryMethod';
 export * from './typeguards';
 export * as defaultClasses from './defaultClasses';
 export * as errors from './internal/errors';
@@ -53,7 +54,7 @@ parseENV(); // call this before anything to ensure they are applied
  * const NameModel = getModelForClass(Name);
  * ```
  */
-export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, options?: IModelOptions) {
+export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = {}>(cl: U, options?: IModelOptions) {
   assertionIsClass(cl);
   options = typeof options === 'object' ? options : {};
 
@@ -61,7 +62,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
   const name = getName(cl);
 
   if (models.has(name)) {
-    return models.get(name) as ReturnModelType<U, T>;
+    return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
   const model =
@@ -76,7 +77,7 @@ export function getModelForClass<T, U extends AnyParamConstructor<T>>(cl: U, opt
     compiledmodel.syncIndexes();
   }
 
-  return addModelToTypegoose(compiledmodel, cl);
+  return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl);
 }
 
 /**
@@ -106,7 +107,7 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
  * const NameModel = mongoose.model("Name", NameSchema);
  * ```
  */
-export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?: mongoose.SchemaOptions) {
+export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?: mongoose.SchemaOptions) {
   assertionIsClass(cl);
 
   const mergedOptions = mergeSchemaOptions(options, cl);
@@ -141,7 +142,7 @@ export function buildSchema<T, U extends AnyParamConstructor<T>>(cl: U, options?
  * const model = addModelToTypegoose(mongoose.model("Name", schema), Name);
  * ```
  */
-export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: mongoose.Model<any>, cl: U) {
+export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = {}>(model: mongoose.Model<any>, cl: U) {
   assertion(model.prototype instanceof mongoose.Model, new TypeError(`"${model}" is not a valid Model!`));
   assertionIsClass(cl);
 
@@ -166,7 +167,7 @@ export function addModelToTypegoose<T, U extends AnyParamConstructor<T>>(model: 
   models.set(name, model);
   constructors.set(name, cl);
 
-  return models.get(name) as ReturnModelType<U, T>;
+  return models.get(name) as ReturnModelType<U, QueryHelpers>;
 }
 
 /**
@@ -204,7 +205,7 @@ export function deleteModel(name: string) {
  * deleteModelWithClass(Name);
  * ```
  */
-export function deleteModelWithClass<T, U extends AnyParamConstructor<T>>(cl: U) {
+export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) {
   assertionIsClass(cl);
 
   return deleteModel(getName(cl));
@@ -224,13 +225,17 @@ export function deleteModelWithClass<T, U extends AnyParamConstructor<T>>(cl: U)
  * const C2Model = getDiscriminatorModelForClass(C1Model, C1);
  * ```
  */
-export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T>>(from: mongoose.Model<any>, cl: U, id?: string) {
+export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = {}>(
+  from: mongoose.Model<any>,
+  cl: U,
+  id?: string
+) {
   assertion(from.prototype instanceof mongoose.Model, new TypeError(`"${from}" is not a valid Model!`));
   assertionIsClass(cl);
 
   const name = getName(cl);
   if (models.has(name)) {
-    return models.get(name) as ReturnModelType<U, T>;
+    return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
   const sch = buildSchema(cl) as mongoose.Schema & { paths: any; };
 
@@ -241,5 +246,5 @@ export function getDiscriminatorModelForClass<T, U extends AnyParamConstructor<T
 
   const model = from.discriminator(name, sch, id ? id : name);
 
-  return addModelToTypegoose(model, cl);
+  return addModelToTypegoose<U, QueryHelpers>(model, cl);
 }

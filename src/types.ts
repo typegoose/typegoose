@@ -19,7 +19,7 @@ export type DocumentType<T> = (T extends Base ? Omit<mongoose.Document, '_id'> &
  * Used Internally for ModelTypes
  * @internal
  */
-export type ModelType<T> = mongoose.Model<DocumentType<T>>;
+export type ModelType<T, QueryHelpers = {}> = mongoose.Model<DocumentType<T>, QueryHelpers>;
 /**
  * Any-param Constructor
  * @internal
@@ -28,7 +28,7 @@ export type AnyParamConstructor<T> = new (...args: any) => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
  */
-export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = ModelType<InstanceType<U>> & U;
+export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = {}> = ModelType<InstanceType<U>, QueryHelpers> & U;
 
 /** @internal */
 export type Func = (...args: any[]) => any;
@@ -432,6 +432,26 @@ export interface IPluginsArray<T> {
  * ```
  */
 export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
+
+
+/**
+ * Gets the signature (parameters with their types, and the return type) of a function type.
+ *
+ * @description Should be used when defining an interface for a class that uses query methods.
+ *
+ * @example
+ * ```ts
+ * function sendMessage(recipient: string, sender: string, priority: number, retryIfFails: boolean) {
+ *  // some logic...
+ *  return true;
+ * }
+ *
+ * // Both of the following types will be identical.
+ * type SendMessageType = QueryMethod<typeof sendMessage>;
+ * type SendMessageManualType = (recipient: string, sender: string, priority: number, retryIfFails: boolean) => boolean;
+ * ```
+ */
+export type QueryMethod<T extends (...args: any) => any> = (...args: Parameters<T>) => ReturnType<T>;
 
 /**
  * Used for the Reflection of Query Methods
