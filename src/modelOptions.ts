@@ -19,3 +19,6 @@ export function modelOptions(options: IModelOptions) {
     assignMetadata(DecoratorKeys.ModelOptions, options, target);
   };
 }
+
+// Export it PascalCased
+export const ModelOptions = modelOptions;

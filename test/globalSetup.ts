@@ -1,6 +1,5 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import * as mongoose from 'mongoose';
-import 'source-map-support/register';
 import { logger } from '../src/logSettings';
 import { config } from './utils/config';
 

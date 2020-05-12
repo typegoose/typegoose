@@ -1,7 +1,8 @@
 import { DecoratorKeys } from './internal/constants';
 import { getName } from './internal/utils';
 import { logger } from './logSettings';
-import type { Func, QueryMethodMap } from './types';
+import { mongoose } from './typegoose';
+import type { AnyParamConstructor, QueryMethodMap, ReturnModelType } from './types';
 
 /**
  * Adds a query method to schema.
@@ -20,7 +21,9 @@ import type { Func, QueryMethodMap } from './types';
  * }
  * ```
  */
-export function queryMethod(func: Func) {
+export function queryMethod<T extends AnyParamConstructor<any>>(
+  func: (this: ReturnModelType<T>, ...params: any[]) => mongoose.DocumentQuery<any, any>
+) {
   return (target: any) => {
     logger.info('Adding query method "%s" to %s', func.name, getName(target));
     const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target) ?? []);
@@ -28,3 +31,6 @@ export function queryMethod(func: Func) {
     Reflect.defineMetadata(DecoratorKeys.QueryMethod, queryMethods, target);
   };
 }
+
+// Export it PascalCased
+export const QueryMethod = queryMethod;

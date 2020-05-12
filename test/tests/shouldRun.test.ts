@@ -40,13 +40,13 @@ it('should build multiple times', () => {
 it('should use existingMongoose', async () => {
   @modelOptions({ existingMongoose: mongoose })
   class TESTexistingMongoose { }
-  expect(getModelForClass(TESTexistingMongoose)).not.toEqual(undefined);
+  expect(getModelForClass(TESTexistingMongoose)).not.toBeUndefined();
 });
 
 it('should use existingConnection', async () => {
   @modelOptions({ existingConnection: mongoose.connection })
   class TESTexistingConnection { }
-  expect(getModelForClass(TESTexistingConnection)).not.toEqual(undefined);
+  expect(getModelForClass(TESTexistingConnection)).not.toBeUndefined();
 });
 
 it('should make use of addModelToTypegoose', async () => {
@@ -61,7 +61,7 @@ it('should make use of addModelToTypegoose', async () => {
   const model = addModelToTypegoose(mongoose.model(TestAMTT.name, schema), TestAMTT);
   const doc = await model.create({ somevalue: 'hello from SV', somesecondvalue: 'hello from SSV' } as TestAMTT);
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(doc.somevalue).toEqual('hello from SV');
   expect(doc.somesecondvalue).toEqual('hello from SSV');
 });
@@ -78,11 +78,11 @@ it('should make use of Map default', async () => {
   const model = getModelForClass(TestMapDefault);
   const { _id: id } = await model.create({ someother: 'hi' });
 
-  const found = await model.findById(id).exec();
-  expect(found).not.toEqual(undefined);
+  const found = await model.findById(id).orFail().exec();
+  expect(found).not.toBeUndefined();
   expect(found.someother).toEqual('hi');
   expect(found.test instanceof Map).toBe(true);
-  expect(new Map(found.test)).toEqual(new Map([['hello', 'hello']]));
+  expect(new Map(found.test!)).toEqual(new Map([['hello', 'hello']]));
 });
 
 it('should work with Objects in Class [szokodiakos#54]', async () => {
@@ -99,7 +99,7 @@ it('should work with Objects in Class [szokodiakos#54]', async () => {
   const doc = await model.create({ test: { anotherTest: 'hello' } } as TESTObject);
 
   expect((logger.warn as any).mock.calls.length).toEqual(1);
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(typeof doc.test).toBe('object');
   expect(doc.test.anotherTest).toEqual('hello');
 });
@@ -111,7 +111,7 @@ it('simple test for assignMetadata', () => {
 
   const reflected = Reflect.getMetadata(DecoratorKeys.ModelOptions, TestAssignMetadata);
 
-  expect(reflected).not.toEqual(undefined);
+  expect(reflected).not.toBeUndefined();
   expect(reflected).toHaveProperty('testOption', 'hello');
 });
 
@@ -125,8 +125,7 @@ it('should just run with an non existing value in "assignMetadata"', () => {
 it('should just run with an non existing value in "mergeMetadata"', () => {
   class Dummy { }
   assignMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
-  expect(mergeMetadata(DecoratorKeys.ModelOptions, undefined, Dummy))
-    .toEqual({ schemaOptions: { _id: false } });
+  expect(mergeMetadata(DecoratorKeys.ModelOptions, undefined, Dummy)).toEqual({ schemaOptions: { _id: false } });
 });
 it('should not modify current metadata object in "mergeMetadata"', () => {
   class Dummy { }
@@ -172,7 +171,7 @@ it('should make use of "@prop({ _id: false })" and have no _id', async () => {
   const model = getModelForClass(TestidFalse);
   const doc = await model.create({ someprop: { hi: 10 } } as TestidFalse);
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(doc.someprop).toHaveProperty('hi', 10);
   expect(doc.someprop).not.toHaveProperty('_id');
 });
@@ -225,8 +224,8 @@ it('should use type "Buffer" [typegoose#88]', async () => {
 
   const { _id: id } = await model.create({ propy: Buffer.from('Hello') } as TestBuffer);
 
-  const found = await model.findById(id).exec();
-  expect(found).not.toEqual(undefined);
+  const found = await model.findById(id).orFail().exec();
+  expect(found).not.toBeUndefined();
   expect(found.propy).toBeInstanceOf(Buffer);
   expect(found.propy.toString()).toEqual('Hello');
 });
@@ -243,7 +242,7 @@ it('should use "type" as a last resort', async () => {
 
   const doc = new model({ propy: 100 });
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(doc.propy).toEqual(100);
 });
 
@@ -271,9 +270,9 @@ it('should run with Custom Types', async () => {
 
   await doc.validate();
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   const path = doc.schema.path('num');
-  expect(path).not.toEqual(undefined);
+  expect(path).not.toBeUndefined();
   expect(path).not.toBeInstanceOf(mongoose.Schema.Types.Mixed);
   expect(path).toBeInstanceOf(CustomInt);
 });
@@ -288,7 +287,7 @@ it('should not have the same options (modelOptions deep copy) [typegoose/typegoo
   const refSOBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOBase);
   const refSOInheritedBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOInheritedBase);
 
-  expect(refSOBase.schemaOptions.collection).not.toEqual(refSOInheritedBase.schemaOptions.collection);
+  expect(refSOBase.schemaOptions!.collection).not.toEqual(refSOInheritedBase.schemaOptions!.collection);
   expect(refSOBase).not.toEqual(refSOInheritedBase);
 });
 
@@ -301,15 +300,15 @@ it('should return the correct model "getModelWithString"', () => {
   const model = getModelForClass(GetModelWithStringClass);
   const gotModel = getModelWithString<typeof GetModelWithStringClass>(model.modelName);
 
-  expect(model).not.toEqual(undefined);
-  expect(gotModel).not.toEqual(undefined);
+  expect(model).not.toBeUndefined();
+  expect(gotModel).not.toBeUndefined();
   expect(gotModel).toEqual(model);
 });
 
 it('should return undefined if model does not exists (getModelWithString)', () => {
   const type = getModelWithString('someTestyString');
 
-  expect(type).toEqual(undefined);
+  expect(type).toBeUndefined();
 });
 
 it('should merge existingConnection correctly (overwrite)', () => {
@@ -337,8 +336,8 @@ it('should use "_id" from ModelOptions if not in @prop options [typegoose/typego
   const model = getModelForClass(ParentID);
   const doc = new model({ key: {} });
 
-  expect(doc).not.toEqual(undefined);
-  expect(doc.key).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
+  expect(doc.key).not.toBeUndefined();
   expect(doc.key).not.toHaveProperty('_id');
 });
 
@@ -407,17 +406,17 @@ it('should add query Methods', async () => {
     findByName: QueryMethod<typeof findByName>;
     findByLastname: QueryMethod<typeof findByLastname>;
   }
-  function findByName(this: ReturnModelType<typeof QueryMethods, QueryMethods, FindHelpers>, name: string) {
+  function findByName(this: ReturnModelType<typeof QueryMethodsClass, QueryMethodsClass, FindHelpers>, name: string) {
     return this.find({ name }); // important to not do an "await" and ".exec"
   }
 
-  function findByLastname(this: ReturnModelType<typeof QueryMethods, QueryMethods, FindHelpers>, lastname: string) {
+  function findByLastname(this: ReturnModelType<typeof QueryMethodsClass, QueryMethodsClass, FindHelpers>, lastname: string) {
     return this.find({ lastname }); // important to not do an "await" and ".exec"
   }
 
   @queryMethod(findByName)
   @queryMethod(findByLastname)
-  class QueryMethods {
+  class QueryMethodsClass {
     @prop({ required: true })
     public name: string;
 
@@ -425,9 +424,9 @@ it('should add query Methods', async () => {
     public lastname: string;
   }
 
-  const QueryMethodsModel = getModelForClass<QueryMethods, typeof QueryMethods, FindHelpers>(QueryMethods);
+  const QueryMethodsModel = getModelForClass<QueryMethodsClass, typeof QueryMethodsClass, FindHelpers>(QueryMethodsClass);
 
-  const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethods);
+  const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethodsClass);
   expect(Array.from(metadata)).toEqual(
     expect.arrayContaining([['findByName', findByName]]) &&
     expect.arrayContaining([['findByLastname', findByLastname]])
@@ -435,7 +434,7 @@ it('should add query Methods', async () => {
 
   const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
 
-  const found: DocumentType<QueryMethods>[] | null = await QueryMethodsModel.find().findByName('hello').findByLastname('world').exec();
+  const found: DocumentType<QueryMethodsClass>[] = await QueryMethodsModel.find().findByName('hello').findByLastname('world').orFail().exec();
   assertion(isDocumentArray(found), new Error('Found is not an document array'));
   expect(found[0].toObject()).toEqual(doc.toObject());
 });

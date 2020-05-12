@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 
-import { isDocument, isDocumentArray } from '../../src/typegoose';
+import { assertion, getName } from '../../src/internal/utils';
+import { getModelForClass, isDocument, isDocumentArray, prop, Ref } from '../../src/typegoose';
 import { RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
 
 it('check generated ref schema for ObjectID _id', async () => {
@@ -75,11 +76,11 @@ it('check reference with string _id', async () => {
   expect(_id2).toEqual(id2);
 
   const { _id: refStringId } = await RefTestModel.create({ refFieldString: _id1 });
-  const { refFieldString } = await RefTestModel.findById(refStringId).exec();
+  const { refFieldString } = await RefTestModel.findById(refStringId).orFail().exec();
   expect(refFieldString).toEqual(_id1);
   const { _id: refArrayId } = await RefTestModel.create({ refArrayString: [_id1, _id2] });
-  const { refArrayString } = await RefTestModel.findById(refArrayId).exec();
-  expect(Array.from(refArrayString)).toEqual([_id1, _id2]);
+  const { refArrayString } = await RefTestModel.findById(refArrayId).orFail().exec();
+  expect(Array.from(refArrayString!)).toEqual([_id1, _id2]);
 });
 
 it('check reference with optional string _id [typegoose/typegoose#249]', async () => {
@@ -98,11 +99,11 @@ it('check reference with optional string _id [typegoose/typegoose#249]', async (
   expect(_id2).toEqual(id2);
 
   const { _id: refStringId } = await RefTestModel.create({ refFieldString: _id1 });
-  const { refFieldString } = await RefTestModel.findById(refStringId).exec();
+  const { refFieldString } = await RefTestModel.findById(refStringId).orFail().exec();
   expect(refFieldString).toEqual(_id1);
   const { _id: refArrayId } = await RefTestModel.create({ refArrayString: [_id1, _id2] });
-  const { refArrayString } = await RefTestModel.findById(refArrayId).exec();
-  expect(Array.from(refArrayString)).toEqual([_id1, _id2]);
+  const { refArrayString } = await RefTestModel.findById(refArrayId).orFail().exec();
+  expect(Array.from(refArrayString!)).toEqual([_id1, _id2]);
 });
 
 it('check reference with string or undefined _id [typegoose/typegoose#249]', async () => {
@@ -121,11 +122,11 @@ it('check reference with string or undefined _id [typegoose/typegoose#249]', asy
   expect(_id2).toEqual(id2);
 
   const { _id: refStringId } = await RefTestModel.create({ refFieldString: _id1 });
-  const { refFieldString } = await RefTestModel.findById(refStringId).exec();
+  const { refFieldString } = await RefTestModel.findById(refStringId).orFail().exec();
   expect(refFieldString).toEqual(_id1);
   const { _id: refArrayId } = await RefTestModel.create({ refArrayString: [_id1, _id2] });
-  const { refArrayString } = await RefTestModel.findById(refArrayId).exec();
-  expect(Array.from(refArrayString)).toEqual([_id1, _id2]);
+  const { refArrayString } = await RefTestModel.findById(refArrayId).orFail().exec();
+  expect(Array.from(refArrayString!)).toEqual([_id1, _id2]);
 });
 
 it('check reference with number _id', async () => {
@@ -144,11 +145,11 @@ it('check reference with number _id', async () => {
   expect(_id2).toEqual(id2);
 
   const { _id: refNumberId } = await RefTestModel.create({ refFieldNumber: _id1 });
-  const { refFieldNumber } = await RefTestModel.findById(refNumberId).exec();
+  const { refFieldNumber } = await RefTestModel.findById(refNumberId).orFail().exec();
   expect(refFieldNumber).toEqual(_id1);
   const { _id: refArrayId } = await RefTestModel.create({ refArrayNumber: [_id1, _id2] });
-  const { refArrayNumber } = await RefTestModel.findById(refArrayId).exec();
-  expect(Array.from(refArrayNumber)).toEqual([_id1, _id2]);
+  const { refArrayNumber } = await RefTestModel.findById(refArrayId).orFail().exec();
+  expect(Array.from(refArrayNumber!)).toEqual([_id1, _id2]);
 });
 
 it('check reference with buffer _id', async () => {
@@ -167,11 +168,11 @@ it('check reference with buffer _id', async () => {
   expect(_id2.equals(id2)).toEqual(true);
 
   const { _id: refBufferId } = await RefTestModel.create({ refFieldBuffer: _id1 });
-  const { refFieldBuffer } = await RefTestModel.findById(refBufferId).exec();
+  const { refFieldBuffer } = await RefTestModel.findById(refBufferId).orFail().exec();
   expect(_id1.equals(refFieldBuffer)).toEqual(true);
   const { _id: refArrayId } = await RefTestModel.create({ refArrayBuffer: [_id1, _id2] });
-  const { refArrayBuffer } = await RefTestModel.findById(refArrayId).exec();
-  expect(Array.from(refArrayBuffer)).toEqual([_id1, _id2]);
+  const { refArrayBuffer } = await RefTestModel.findById(refArrayId).orFail().exec();
+  expect(Array.from(refArrayBuffer!)).toEqual([_id1, _id2]);
 });
 
 it('check typeguards', async () => {
@@ -191,24 +192,18 @@ it('check typeguards', async () => {
   expect(isDocument(idFields.refFieldNumber)).toEqual(false);
   expect(isDocument(idFields.refFieldBuffer)).toEqual(false);
 
-  expect(isDocumentArray(idFields.refArray)).toEqual(false);
-  expect(isDocumentArray(idFields.refArrayString)).toEqual(false);
-  expect(isDocumentArray(idFields.refArrayNumber)).toEqual(false);
-  expect(isDocumentArray(idFields.refArrayBuffer)).toEqual(false);
+  expect(isDocumentArray(idFields.refArray!)).toEqual(false);
+  expect(isDocumentArray(idFields.refArrayString!)).toEqual(false);
+  expect(isDocumentArray(idFields.refArrayNumber!)).toEqual(false);
+  expect(isDocumentArray(idFields.refArrayBuffer!)).toEqual(false);
 
   const { _id: populatedId } = await RefTestModel.create({
     refField: await RefTestModel.create({}),
     refArray: [await RefTestModel.create({}), await RefTestModel.create({})],
     refFieldString: await RefTestStringModel.create({ _id: 'atest1' }),
-    refArrayString: [
-      await RefTestStringModel.create({ _id: 'btest2' }),
-      await RefTestStringModel.create({ _id: 'ctest3' })
-    ],
+    refArrayString: [await RefTestStringModel.create({ _id: 'btest2' }), await RefTestStringModel.create({ _id: 'ctest3' })],
     refFieldNumber: await RefTestNumberModel.create({ _id: 12345 }),
-    refArrayNumber: [
-      await RefTestNumberModel.create({ _id: 56789 }),
-      await RefTestNumberModel.create({ _id: 98765 })
-    ],
+    refArrayNumber: [await RefTestNumberModel.create({ _id: 56789 }), await RefTestNumberModel.create({ _id: 98765 })],
     refFieldBuffer: await RefTestBufferModel.create({ _id: Buffer.from([1, 2, 3, 4, 5]) }),
     refArrayBuffer: [
       await RefTestBufferModel.create({ _id: Buffer.from([5, 6, 7, 8, 9]) }),
@@ -217,25 +212,49 @@ it('check typeguards', async () => {
   });
 
   const populate = Object.keys(RefTestModel.schema.obj);
-  const foundPopulated = await RefTestModel.findById(populatedId).populate(populate).exec();
+  const foundPopulated = await RefTestModel.findById(populatedId).populate(populate).orFail().exec();
 
   expect(Array.isArray(foundPopulated.refArray)).toBe(true);
   expect(Array.isArray(foundPopulated.refArrayString)).toBe(true);
   expect(Array.isArray(foundPopulated.refArrayNumber)).toBe(true);
   expect(Array.isArray(foundPopulated.refArrayBuffer)).toBe(true);
 
-  expect(foundPopulated.refArray.length).toEqual(2);
-  expect(foundPopulated.refArrayString.length).toEqual(2);
-  expect(foundPopulated.refArrayNumber.length).toEqual(2);
-  expect(foundPopulated.refArrayBuffer.length).toEqual(2);
+  expect(foundPopulated.refArray!.length).toEqual(2);
+  expect(foundPopulated.refArrayString!.length).toEqual(2);
+  expect(foundPopulated.refArrayNumber!.length).toEqual(2);
+  expect(foundPopulated.refArrayBuffer!.length).toEqual(2);
 
   expect(isDocument(foundPopulated.refField)).toEqual(true);
   expect(isDocument(foundPopulated.refFieldString)).toEqual(true);
   expect(isDocument(foundPopulated.refFieldNumber)).toEqual(true);
   expect(isDocument(foundPopulated.refFieldBuffer)).toEqual(true);
 
-  expect(isDocumentArray(foundPopulated.refArray)).toEqual(true);
-  expect(isDocumentArray(foundPopulated.refArrayString)).toEqual(true);
-  expect(isDocumentArray(foundPopulated.refArrayNumber)).toEqual(true);
-  expect(isDocumentArray(foundPopulated.refArrayBuffer)).toEqual(true);
+  expect(isDocumentArray(foundPopulated.refArray!)).toEqual(true);
+  expect(isDocumentArray(foundPopulated.refArrayString!)).toEqual(true);
+  expect(isDocumentArray(foundPopulated.refArrayNumber!)).toEqual(true);
+  expect(isDocumentArray(foundPopulated.refArrayBuffer!)).toEqual(true);
+});
+
+it('should make use of arrow-function returning ref-type', async () => {
+  class Nested {
+    @prop()
+    public someNestedProperty: string;
+  }
+
+  class Main {
+    @prop({ ref: () => Nested })
+    public nested: Ref<Nested>;
+  }
+
+  const NestedModel = getModelForClass(Nested);
+  const MainModel = getModelForClass(Main);
+
+  const { _id } = await MainModel.create({ nested: await NestedModel.create({ someNestedProperty: 'Hello' }) });
+  const found = await MainModel.findById(_id).populate('nested').orFail().exec();
+  expect(found.nested).not.toBeUndefined();
+  assertion(isDocument(found.nested));
+  expect(found.nested!.someNestedProperty).toEqual('Hello');
+
+  expect(MainModel.schema.path('nested')).toBeInstanceOf(mongoose.Schema.Types.ObjectId);
+  expect((MainModel.schema.path('nested') as any).options.ref).toEqual(getName(Nested));
 });

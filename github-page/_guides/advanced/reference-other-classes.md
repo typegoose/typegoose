@@ -20,6 +20,20 @@ class Main {
 }
 ```
 
+Since 7.1.0 it is also allowed to do arrow-functions returning the type:
+
+```ts
+class Nested {
+  @prop()
+  public someNestedProperty: string;
+}
+
+class Main {
+  @prop({ ref: () => Nested })
+  public nested: Ref<Nested>;
+}
+```
+
 ## Common Problems
 
 Because of the order classes are loaded and reordered at runtime, might result that some references are null / undefined / not existing, thats why mongoose provides the following

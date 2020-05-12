@@ -7,6 +7,7 @@ import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '..
 import { GetSet, GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
 import { Beverage, BeverageModel, Inventory, InventoryModel, ScooterModel } from '../models/inventory';
+import { Job } from '../models/job';
 import { OptionsClass, OptionsModel } from '../models/options';
 import { UserModel } from '../models/user';
 import {
@@ -28,7 +29,7 @@ it('should add a language and job using instance methods', async () => {
     languages: ['english'],
     uniqueId: 'unique-id'
   });
-  await user.addJob({ position: 'Dark Wizzard', title: 'Archmage' });
+  await user.addJob(new Job({ position: 'Dark Wizzard', title: 'Archmage' }));
   await user.addJob();
   const savedUser = await user.addLanguage();
 
@@ -54,11 +55,11 @@ it('should add and populate the virtual properties', async () => {
     virtual: virtual1._id
   } as Partial<VirtualSub>);
 
-  const newfound = await VirtualModel.findById(virtual1._id).populate('virtualSubs').exec();
+  const newfound = await VirtualModel.findById(virtual1._id).populate('virtualSubs').orFail().exec();
 
   expect(newfound.dummyVirtual).toEqual('dummyVirtual1');
-  expect(newfound.virtualSubs).not.toEqual(undefined);
-  if (isDocumentArray(newfound.virtualSubs)) {
+  expect(newfound.virtualSubs).not.toBeUndefined();
+  if (isDocumentArray(newfound.virtualSubs!)) {
     expect(newfound.virtualSubs[0].dummy).toEqual('virtualSub1');
     expect(newfound.virtualSubs[0]._id.toString()).toEqual(virtualsub1._id.toString());
     expect(newfound.virtualSubs[1].dummy).toEqual('virtualSub3');
@@ -74,14 +75,14 @@ it('should make use of nonVirtual set pre-processor', async () => {
     // test if everything works
     const doc = await NonVirtualModel.create({ non: 'HELLO THERE' } as Partial<NonVirtual>);
 
-    expect(doc.non).not.toEqual(undefined);
+    expect(doc.non).not.toBeUndefined();
     expect(doc.non).toEqual('hello there');
   }
   {
     // test if other options work too
     const doc = await NonVirtualModel.create({});
 
-    expect(doc.non).not.toEqual(undefined);
+    expect(doc.non).not.toBeUndefined();
     expect(doc.non).toEqual('hello_default');
   }
 });
@@ -104,19 +105,19 @@ it(`should add dynamic fields using map`, async () => {
     },
     projects: {}
   });
-  expect(user).not.toEqual(undefined);
+  expect(user).not.toBeUndefined();
   expect(user).toHaveProperty('socialNetworks');
   expect(user.socialNetworks).toBeInstanceOf(Map);
-  expect(user.socialNetworks.get('twitter')).toEqual('twitter account');
-  expect(user.socialNetworks.get('facebook')).toEqual('facebook account');
+  expect(user.socialNetworks!.get('twitter')).toEqual('twitter account');
+  expect(user.socialNetworks!.get('facebook')).toEqual('facebook account');
   expect(user).toHaveProperty('sideNotes');
   expect(user.sideNotes).toBeInstanceOf(Map);
-  expect(user.sideNotes.get('day1')).toHaveProperty('content', 'day1');
-  expect(user.sideNotes.get('day1')).toHaveProperty('link', 'url');
-  expect(user.sideNotes.has('day2')).toEqual(true);
+  expect(user.sideNotes!.get('day1')).toHaveProperty('content', 'day1');
+  expect(user.sideNotes!.get('day1')).toHaveProperty('link', 'url');
+  expect(user.sideNotes!.has('day2')).toEqual(true);
 
-  expect(user.sideNotes.get('day1')).not.toHaveProperty('_id');
-  expect(user.sideNotes.get('day2')).not.toHaveProperty('_id');
+  expect(user.sideNotes!.get('day1')).not.toHaveProperty('_id');
+  expect(user.sideNotes!.get('day2')).not.toHaveProperty('_id');
 });
 
 it('should support dynamic references via refPath', async () => {
@@ -151,17 +152,16 @@ it('should support dynamic references via refPath', async () => {
   expect((items[0].kind as Beverage).isDecaf).toEqual(true);
   expect((items[0].kindArray[0] as Beverage).isDecaf).toEqual(true);
 
-
   // wrong type to make TypeScript happy
   expect(items[1].refItemPathName).toEqual('Scooter');
-  expect((items[1].kind as Beverage).isDecaf).toEqual(undefined);
-  expect((items[1].kindArray[0] as Beverage).isDecaf).toEqual(undefined);
+  expect((items[1].kind as Beverage).isDecaf).toBeUndefined();
+  expect((items[1].kindArray[0] as Beverage).isDecaf).toBeUndefined();
 });
 
 it('it should alias correctly', () => {
   const created = new AliasModel({ alias: 'hello from aliasProp', normalProp: 'hello from normalProp' } as Alias);
 
-  expect(created).not.toEqual(undefined);
+  expect(created).not.toBeUndefined();
   expect(created).toHaveProperty('normalProp', 'hello from normalProp');
   expect(created).toHaveProperty('alias', 'hello from aliasProp');
   expect(created).toHaveProperty('aliasProp');
@@ -169,7 +169,7 @@ it('it should alias correctly', () => {
   // include virtuals
   {
     const toObject = created.toObject({ virtuals: true });
-    expect(toObject).not.toEqual(undefined);
+    expect(toObject).not.toBeUndefined();
     expect(toObject).toHaveProperty('normalProp', 'hello from normalProp');
     expect(toObject).toHaveProperty('alias', 'hello from aliasProp');
     expect(toObject).toHaveProperty('aliasProp', 'hello from aliasProp');
@@ -177,7 +177,7 @@ it('it should alias correctly', () => {
   // do not include virtuals
   {
     const toObject = created.toObject();
-    expect(toObject).not.toEqual(undefined);
+    expect(toObject).not.toBeUndefined();
     expect(toObject).toHaveProperty('normalProp', 'hello from normalProp');
     expect(toObject).toHaveProperty('alias', 'hello from aliasProp');
     expect(toObject).not.toHaveProperty('aliasProp');
@@ -189,17 +189,17 @@ it('should add model with createdAt and updatedAt', async () => {
 
   const found = await OptionsModel.findById(createdId).exec();
 
-  expect(found).not.toEqual(undefined);
+  expect(found).not.toBeUndefined();
   expect(found).toHaveProperty('someprop', 10);
-  expect(found.createdAt).toBeInstanceOf(Date);
-  expect(found.updatedAt).toBeInstanceOf(Date);
+  expect(found!.createdAt).toBeInstanceOf(Date);
+  expect(found!.updatedAt).toBeInstanceOf(Date);
 });
 
 it('should make use of non-virtuals with pre- and post-processors', async () => {
   const doc = await NonVirtualGSModel.create({ non: ['hi', 'where?'] } as NonVirtualGS);
   // stored gets { non: 'hi where?' }
 
-  expect(doc.non).not.toEqual(undefined);
+  expect(doc.non).not.toBeUndefined();
   expect(doc.non).toEqual(['hi', 'where?']);
 });
 
@@ -212,8 +212,8 @@ it('should add options to ref [szokodiakos#379]', () => {
 
   const schema = buildSchema(TestRef);
   const someprop = schema.path('someprop');
-  expect(schema).not.toEqual(undefined);
-  expect(someprop).not.toEqual(undefined);
+  expect(schema).not.toBeUndefined();
+  expect(someprop).not.toBeUndefined();
   // @ts-ignore
   const opt: any = someprop.options;
   expect(typeof opt.type).toEqual('function');
@@ -233,8 +233,8 @@ it('should add options to refPath [szokodiakos#379]', () => {
 
   const schema = buildSchema(TestRefPath);
   const someprop = schema.path('someprop');
-  expect(schema).not.toEqual(undefined);
-  expect(someprop).not.toEqual(undefined);
+  expect(schema).not.toBeUndefined();
+  expect(someprop).not.toBeUndefined();
   // @ts-ignore
   const opt: any = someprop.options;
   expect(typeof opt.type).toEqual('function');
@@ -251,8 +251,8 @@ it('should add options to array-ref [szokodiakos#379]', () => {
 
   const schema = buildSchema(TestArrayRef);
   const someprop = schema.path('someprop');
-  expect(schema).not.toEqual(undefined);
-  expect(someprop).not.toEqual(undefined);
+  expect(schema).not.toBeUndefined();
+  expect(someprop).not.toBeUndefined();
   // @ts-ignore
   const opt: any = someprop.options.type[0];
   expect(typeof opt.type).toEqual('function');
@@ -272,8 +272,8 @@ it('should add options to array-refPath [szokodiakos#379]', () => {
 
   const schema = buildSchema(TestArrayRefPath);
   const someprop = schema.path('someprop');
-  expect(schema).not.toEqual(undefined);
-  expect(someprop).not.toEqual(undefined);
+  expect(schema).not.toBeUndefined();
+  expect(someprop).not.toBeUndefined();
   // @ts-ignore
   const opt: any = someprop.options.type[0];
   expect(typeof opt.type).toEqual('function');
@@ -284,13 +284,13 @@ it('should add options to array-refPath [szokodiakos#379]', () => {
 it('should make use of virtual get- & set-ters', async () => {
   {
     const doc = await GetSetModel.create({ actualProp: 'hello1' } as GetSet);
-    expect(doc).not.toEqual(undefined);
+    expect(doc).not.toBeUndefined();
     expect(doc.actualProp).toEqual('hello1');
     expect(doc.someGetSet).toEqual('hello1');
   }
   {
     const doc = await GetSetModel.create({ someGetSet: 'hello2' } as GetSet);
-    expect(doc).not.toEqual(undefined);
+    expect(doc).not.toBeUndefined();
     expect(doc.actualProp).toEqual('hello2');
     expect(doc.someGetSet).toEqual('hello2');
   }
@@ -310,8 +310,8 @@ it('should add schema paths when there is a virtual called `name`', () => {
   const someprop = schema.path('something');
 
   expect(getName(TestName)).toEqual('TestName');
-  expect(schema).not.toEqual(undefined);
-  expect(someprop).not.toEqual(undefined);
+  expect(schema).not.toBeUndefined();
+  expect(someprop).not.toBeUndefined();
 });
 
 describe('utils.getClass', () => {
@@ -345,7 +345,12 @@ it('should work with both map creation types', async () => {
 
   const MapTestModel = getModelForClass(MapTest);
 
-  const variant1 = new MapTestModel({ prop: [['key1', 1], ['key2', 2]] });
+  const variant1 = new MapTestModel({
+    prop: [
+      ['key1', 1],
+      ['key2', 2]
+    ]
+  });
   await variant1.validate();
 
   const variant2 = new MapTestModel({ prop: { key1: 1, key2: 2 } });

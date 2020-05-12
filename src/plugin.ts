@@ -17,3 +17,6 @@ export function plugin<T = any>(mongoosePlugin: Func, options?: T) {
     Reflect.defineMetadata(DecoratorKeys.Plugins, plugins, target);
   };
 }
+
+// Export it PascalCased
+export const Plugin = plugin;

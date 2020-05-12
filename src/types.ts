@@ -40,11 +40,7 @@ export interface ValidatorOptions {
   validator: ValidatorFunction;
   message?: string;
 }
-export type Validator =
-  | ValidatorFunction
-  | RegExp
-  | ValidatorOptions
-  | ValidatorOptions[];
+export type Validator = ValidatorFunction | RegExp | ValidatorOptions | ValidatorOptions[];
 
 export interface BasePropOptions {
   [key: string]: any;
@@ -171,7 +167,7 @@ export interface BasePropOptions {
   // tslint:disable-next-line:ban-types
   autopopulate?: boolean | Function | { [key: string]: any; };
   /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref?: any;
+  ref?: any | (() => any);
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
   /**
@@ -262,16 +258,19 @@ export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions
 export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate | VirtualOptions;
 
 export type RefType = number | string | mongoose.Types.ObjectId | Buffer | undefined;
-export type RefSchemaType = typeof mongoose.Schema.Types.Number |
-  typeof mongoose.Schema.Types.String |
-  typeof mongoose.Schema.Types.Buffer |
-  typeof mongoose.Schema.Types.ObjectId;
+export type RefSchemaType =
+  | typeof mongoose.Schema.Types.Number
+  | typeof mongoose.Schema.Types.String
+  | typeof mongoose.Schema.Types.Buffer
+  | typeof mongoose.Schema.Types.ObjectId;
 
 /**
  * Reference another Model
  */
 // export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
-export type Ref<R, T extends RefType = R extends { _id?: RefType } ? NonNullable<R['_id']> : mongoose.Types.ObjectId> = R | T;
+export type Ref<
+  R,
+  T extends RefType = (R extends { _id?: RefType; } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined> = R | T;
 
 /**
  * An Function type for a function that doesn't have any arguments and doesn't return anything
@@ -410,7 +409,7 @@ export interface IIndexArray<T> {
   fields: {
     [key: string]: any;
   };
-  options: IndexOptions<T>;
+  options?: IndexOptions<T>;
 }
 
 /**

@@ -28,24 +28,20 @@ import type {
  * @param input All the options needed for prop's
  */
 function baseProp(input: DecoratedPropertyMetadata): void {
-  const {
-    Type,
-    key,
-    origOptions,
-    target,
-    whatis
-  } = input;
-  if (Type === target.constructor) { // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
-    throw new TypeError('It seems like the type used is the same as the target class, which is currently not supported\n'
-      + `Please look at https://github.com/typegoose/typegoose/issues/42 for more information, for now please avoid using it!`);
+  const { Type, key, origOptions, target, whatis } = input;
+  if (Type === target.constructor) {
+    // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
+    throw new TypeError(
+      'It seems like the type used is the same as the target class, which is currently not supported\n' +
+      `Please look at https://github.com/typegoose/typegoose/issues/42 for more information, for now please avoid using it!`
+    );
   }
 
   const existingMapForTarget = Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
   if (utils.isNullOrUndefined(existingMapForTarget)) {
     Reflect.defineMetadata(DecoratorKeys.PropCache, new Map<string, DecoratedPropertyMetadata>(), target);
   }
-  const mapForTarget = existingMapForTarget
-    ?? Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
+  const mapForTarget = existingMapForTarget ?? (Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap);
 
   mapForTarget.set(key, { origOptions, Type, target, key, whatis });
 
@@ -58,12 +54,7 @@ function baseProp(input: DecoratedPropertyMetadata): void {
  */
 export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   let { Type } = input;
-  const {
-    key,
-    origOptions,
-    target,
-    whatis
-  } = input;
+  const { key, origOptions, target, whatis } = input;
   const rawOptions = Object.assign({}, origOptions);
   logger.debug('Starting to process "%s.%s"', utils.getName(target), key);
 
@@ -76,7 +67,17 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   if (utils.isNotDefined(Type)) {
     buildSchema(Type);
   }
-  const name: string = utils.getName(target);
+  const name = utils.getName(target);
+
+  // allow setting the type asynchronously
+  if (rawOptions?.ref instanceof Function && utils.isNullOrUndefined(rawOptions?.ref.prototype)) {
+    logger.debug('"%s.%s" option ref is an arrow-function', name, key);
+    rawOptions.ref = rawOptions.ref();
+    utils.assertion(
+      !utils.isNullOrUndefined(rawOptions.ref),
+      new Error(format('Option "ref" for "%s.%s" was defined with an arrow-function, but the function returned null/undefined!', name, key))
+    );
+  }
 
   if (utils.isWithVirtualPOP(rawOptions)) {
     if (!utils.includesAllVirtualPOP(rawOptions)) {
@@ -90,7 +91,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     return;
   }
 
-  utils.initProperty(name, key, whatis);
+  const schemaProp = utils.initProperty(name, key, whatis);
 
   if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
     utils.assertion(typeof rawOptions?.set === 'function', new TypeError(`"${name}.${key}" does not have a set function!`));
@@ -101,8 +102,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
      * this doesn't have a check if prop & returntype of the function is the same,
      * because it can't be accessed at runtime
      */
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key],
+    schemaProp[key] = {
+      ...schemaProp[key],
       type: Type,
       ...rawOptions
     };
@@ -119,24 +120,28 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
     switch (whatis) {
       case WhatIsIt.ARRAY:
-        schemas.get(name)[key] = utils.createArrayFromDimensions(rawOptions, {
-          ...schemas.get(name)[key][0],
-          type: refType,
-          ref: refName,
-          ...rawOptions
-        }, name, key);
+        schemaProp[key] = utils.createArrayFromDimensions(
+          rawOptions,
+          {
+            ...schemaProp[key][0],
+            type: refType,
+            ref: refName,
+            ...rawOptions
+          },
+          name,
+          key
+        );
         break;
       case WhatIsIt.NONE:
-        schemas.get(name)[key] = {
-          ...schemas.get(name)[key],
+        schemaProp[key] = {
+          ...schemaProp[key],
           type: refType,
           ref: refName,
           ...rawOptions
         };
         break;
       default:
-        throw new TypeError(format('"ref" is not supported for "%s"! (%s, %s)',
-          whatis, utils.getName(target), key));
+        throw new TypeError(format('"ref" is not supported for "%s"! (%s, %s)', whatis, utils.getName(target), key));
     }
 
     return;
@@ -144,31 +149,37 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   const refPath = rawOptions?.refPath;
   if (refPath) {
-    utils.assertion(typeof refPath === 'string',
-      new TypeError(format('"refPath" for "%s, %s" should be of type String!', utils.getName(target), key)));
+    utils.assertion(
+      typeof refPath === 'string',
+      new TypeError(format('"refPath" for "%s, %s" should be of type String!', utils.getName(target), key))
+    );
 
     delete rawOptions.refPath;
 
     switch (whatis) {
       case WhatIsIt.ARRAY:
-        schemas.get(name)[key] = utils.createArrayFromDimensions(rawOptions, {
-          ...schemas.get(name)[key][0],
-          type: refType,
-          refPath,
-          ...rawOptions
-        }, name, key);
+        schemaProp[key] = utils.createArrayFromDimensions(
+          rawOptions,
+          {
+            ...schemaProp[key][0],
+            type: refType,
+            refPath,
+            ...rawOptions
+          },
+          name,
+          key
+        );
         break;
       case WhatIsIt.NONE:
-        schemas.get(name)[key] = {
-          ...schemas.get(name)[key],
+        schemaProp[key] = {
+          ...schemaProp[key],
           type: refType,
           refPath,
           ...rawOptions
         };
         break;
       default:
-        throw new TypeError(format('"refPath" is not supported for "%s"! (%s, %s)',
-          whatis, utils.getName(target), key));
+        throw new TypeError(format('"refPath" is not supported for "%s"! (%s, %s)', whatis, utils.getName(target), key));
     }
 
     return;
@@ -179,9 +190,10 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     // check if the supplied value is already "mongoose-consumeable"
     if (!Array.isArray(enumOption)) {
       if (Type === String) {
-        rawOptions.enum = Object.entries(enumOption) // get all key-value pairs of the enum
+        rawOptions.enum = Object.entries<string>(enumOption) // get all key-value pairs of the enum
           // no reverse-filtering because if it is full of strings, there is no reverse mapping
-          .map(([enumKey, enumValue]) => { // convert key-value pairs to mongoose-usable strings
+          .map(([enumKey, enumValue]) => {
+            // convert key-value pairs to an mongoose-usable enum
             // safeguard, this should never happen because TypeScript only sets "design:type" to "String"
             // if the enum is full of strings
             if (typeof enumValue !== 'string') {
@@ -191,7 +203,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
             return enumValue;
           });
       } else if (Type === Number) {
-        rawOptions.enum = Object.entries(enumOption) // get all key-value pairs of the enum
+        rawOptions.enum = Object.entries<string | number>(enumOption) // get all key-value pairs of the enum
           // filter out the "reverse (value -> name) mappings"
           // https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings
           .filter(([enumKey, enumValue], _i, arr) => {
@@ -204,7 +216,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
             return typeof enumValue === 'number';
           })
-          .map(([enumKey, enumValue]) => { // convert key-value pairs to mongoose-useable strings
+          .map(([enumKey, enumValue]) => {
+            // convert key-value pairs to an mongoose-useable enum
             if (typeof enumValue !== 'number') {
               throw new NotNumberTypeError(name, key, enumKey, typeof enumValue);
             }
@@ -227,8 +240,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   const selectOption = rawOptions?.select;
   if (typeof selectOption === 'boolean') {
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key],
+    schemaProp[key] = {
+      ...schemaProp[key],
       select: selectOption
     };
   }
@@ -266,8 +279,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     }
     switch (whatis) {
       case WhatIsIt.ARRAY:
-        schemas.get(name)[key] = {
-          ...schemas.get(name)[key][0],
+        schemaProp[key] = {
+          ...schemaProp[key][0],
           ...utils.mapArrayOptions(rawOptions, Type, target, key)
         };
 
@@ -275,8 +288,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
       case WhatIsIt.MAP:
         const mapped = utils.mapOptions(rawOptions, Type, target, key, true);
 
-        schemas.get(name)[key] = {
-          ...schemas.get(name)[key],
+        schemaProp[key] = {
+          ...schemaProp[key],
           ...mapped.outer,
           type: Map,
           of: { type: Type, ...mapped.inner }
@@ -284,8 +297,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
         return;
       case WhatIsIt.NONE:
-        schemas.get(name)[key] = {
-          ...schemas.get(name)[key],
+        schemaProp[key] = {
+          ...schemaProp[key],
           ...rawOptions,
           type: Type
         };
@@ -300,9 +313,11 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   // so that mongoose can store it as nested document
   if (utils.isObject(Type) && !isInSchemas) {
     utils.warnMixed(target, key);
-    logger.warn('if someone can see this message, please open an new issue at https://github.com/typegoose/typegoose/issues with reproduction code for tests');
-    schemas.get(name)[key] = {
-      ...schemas.get(name)[key],
+    logger.warn(
+      'if someone can see this message, please open an new issue at https://github.com/typegoose/typegoose/issues with reproduction code for tests'
+    );
+    schemaProp[key] = {
+      ...schemaProp[key],
       ...rawOptions,
       type: mongoose.Schema.Types.Mixed
     };
@@ -313,8 +328,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   const virtualSchema = buildSchema(Type);
   switch (whatis) {
     case WhatIsIt.ARRAY:
-      schemas.get(name)[key] = {
-        ...schemas.get(name)[key][0], // [0] is needed, because "initasArray" adds this (empty)
+      schemaProp[key] = {
+        ...schemaProp[key][0], // [0] is needed, because "initasArray" adds this (empty)
         ...utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type)
       };
 
@@ -322,8 +337,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     case WhatIsIt.MAP:
       const mapped = utils.mapOptions(rawOptions, virtualSchema, target, key, false, Type);
 
-      schemas.get(name)[key] = {
-        ...schemas.get(name)[key],
+      schemaProp[key] = {
+        ...schemaProp[key],
         ...mapped.outer,
         type: Map,
         of: { type: virtualSchema, ...mapped.inner }
@@ -331,8 +346,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
       return;
     case WhatIsIt.NONE:
-      schemas.get(name)[key] = {
-        ...schemas.get(name)[key],
+      schemaProp[key] = {
+        ...schemaProp[key],
         ...rawOptions,
         type: virtualSchema
       };
@@ -425,3 +440,8 @@ export function arrayProp(options: ArrayPropOptions) {
     });
   };
 }
+
+// Export it PascalCased
+export const Prop = prop;
+export const ArrayProp = arrayProp;
+export const MapProp = mapProp;

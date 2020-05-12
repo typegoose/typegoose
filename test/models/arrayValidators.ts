@@ -17,36 +17,36 @@ export enum ArrayValidatorEnumNumber {
 export class ArrayValidators {
   // String-Array Values
   @arrayProp({ items: String, maxlength: 3 })
-  public maxLength?: string[];
+  public maxLength!: string[];
 
   @arrayProp({ items: String, minlength: 10 })
-  public minLength?: string[];
+  public minLength!: string[];
 
   @arrayProp({ items: String, trim: true })
-  public trimmed?: string[];
+  public trimmed!: string[];
 
   @arrayProp({ items: String, uppercase: true })
-  public uppercased?: string[];
+  public uppercased!: string[];
 
   @arrayProp({ items: String, lowercase: true })
-  public lowercased?: string[];
+  public lowercased!: string[];
 
   @arrayProp({ items: String, default: ['hello'], lowercase: true })
-  public defaulted?: string[];
+  public defaulted!: string[];
 
   // Number-Array Values
   @arrayProp({ items: Number, max: 3 })
-  public max?: number[];
+  public max!: number[];
 
   @arrayProp({ items: Number, min: 10 })
-  public min?: number[];
+  public min!: number[];
 
   // Enum-Array Values
   @arrayProp({ items: String, enum: ArrayValidatorEnumString })
-  public enumedString?: ArrayValidatorEnumString[];
+  public enumedString!: ArrayValidatorEnumString[];
 
   @arrayProp({ items: Number, enum: ArrayValidatorEnumNumber })
-  public enumedNumber?: ArrayValidatorEnumNumber[];
+  public enumedNumber!: ArrayValidatorEnumNumber[];
 }
 
 export const ArrayValidatorsModel = getModelForClass(ArrayValidators);

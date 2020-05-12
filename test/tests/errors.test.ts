@@ -17,6 +17,7 @@ import {
   modelOptions,
   pre,
   prop,
+  Ref,
   setGlobalOptions
 } from '../../src/typegoose'; // import order is important with jest
 
@@ -157,7 +158,7 @@ it('should not modify an immutable', async () => {
 
   const TIModel = getModelForClass(TestImmutable);
   const doc = await TIModel.create({ someprop: 'Hello' } as TestImmutable);
-  expect(doc).not.toBe(undefined);
+  expect(doc).not.toBeUndefined();
   doc.someprop = 'Hello2';
   await doc.save();
   expect(doc.someprop).toEqual('Hello');
@@ -340,7 +341,7 @@ it('should throw when "customName" is used, but length <= 0 [TypeError]', () => 
 
 it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
   try {
-    mapOptions({}, Error, undefined, undefined, true);
+    mapOptions({}, Error, undefined, undefined as any, true);
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -396,7 +397,7 @@ it('should error if "refPath" is used with @mapProp [TypeError]', () => {
 
 it('should error if the options provide to "setGlobalOptions" are not an object [TypeError]', () => {
   try {
-    setGlobalOptions(undefined);
+    setGlobalOptions(undefined as any);
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -504,5 +505,27 @@ it('should error if 0 or less dimensions are given (createArrayFromDimensions) [
     fail('Expected to throw "RangeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(RangeError);
+  }
+});
+
+it('should error if ref\'s arrow-function returning type returns undefined', async () => {
+  class Nested {
+    @prop()
+    public someNestedProperty: string;
+  }
+
+  class Main {
+    @prop({ ref: () => undefined })
+    public nested: Ref<Nested>;
+  }
+
+  try {
+    getModelForClass(Main);
+
+    fail('Expected to throw "Error"');
+  } catch (err) {
+    expect(err).not.toBeInstanceOf(AssertionError);
+    expect(err).toBeInstanceOf(Error);
+    expect(err.message).toEqual('Option "ref" for "Main.nested" was defined with an arrow-function, but the function returned null/undefined!');
   }
 });

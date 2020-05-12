@@ -23,7 +23,18 @@ redirect_from:
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
+- Update Dependencies
+  - `mongoose` to 5.9.13
+  - `@types/mongoose` to 5.7.16
+  - `tslib` to 1.11.2
 - Fix duplicate hooks / virtuals / queryMethods / plugins / indices via inheritance [{% include gitissue repo="typegoose" num=218 %}]
+- improve TSDoc of some functions
+- Fix `queryMethod` reflection
+- Set proper function type for `queryMethod`
+- Added the ability to define option `ref` with an arrow-function [(`ref: () => type`)]({{ site.baseurl }}{% link _guides/advanced/reference-other-classes.md %}#referencing-other-classes)
+- All Decorators are now exported PascalCased & camelCased
+- [IC] add some tslint rules & apply them
+- [IC] enable "strictNullChecks" & fix accordingly
 
 ## 7.0.0
 
