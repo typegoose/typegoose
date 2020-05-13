@@ -9,7 +9,7 @@ main:
     url: /typedoc
 
 # Sidebars
-# note: these sidebars below are just placeholders, until actual documentation starts
+## Documentation
 docs:
   - title: Start
     children:
@@ -80,6 +80,7 @@ docs:
       - title: 'Additional Types'
         url: /docs/types/additional
 
+## Guides
 guides:
   - title: Getting Started
     children:
@@ -119,9 +120,3 @@ guides:
         url: /guides/advanced/changeIDType
       - title: 'Using ObjectId Type'
         url: /guides/advanced/objectId
-  # - title: Combine with other packages
-  #   children:
-  #     - title: 'type-graphql'
-  #       url: /guides/type-graphql
-  #     - title: 'nestjs'
-  #       url: /guides/nestjs

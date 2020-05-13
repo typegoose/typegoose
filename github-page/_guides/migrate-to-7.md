@@ -3,7 +3,6 @@ title: "Migrate to 7.0.0"
 classes: wide
 ---
 
-<!--Note this is mostly just a copy of "migrate_to_6.md" on the root of the repo-->
 These are the changes made for 7.0.0 that are breaking or just important to know
 
 ## Requirements changed
@@ -31,3 +30,7 @@ All possible cache-maps that were in `data.ts` now got refactored to be in the r
 ## [IC] almost all "if-throw" blocks got replaced with "assertion" functions
 
 Typescript 3.7 brought an new type-keyword [`asserts`](https://devblogs.microsoft.com/typescript/announcing-typescript-3-7/#assertion-functions) and now almost every occurence got replaced with an custom assertion function
+
+---
+
+<sub>*`IC` means `Internal Change`*</sub>

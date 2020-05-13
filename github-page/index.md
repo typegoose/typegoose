@@ -15,14 +15,14 @@ feature_row:
   # - image_path: /assets/images/unkown.png
   - alt: "compatible"
     title: "Compatible"
-    excerpt: "Can be used with every option in Mongoose, it can be used down to NodeJS 8.10.0"
+    excerpt: "Can be used with every option in Mongoose, it can be used down to NodeJS 10.15.0"
     url: "/guides/quick-start-guide/"
     btn_class: "btn--primary"
     btn_label: "Learn more"
   # - image_path: /assets/images/unkown.png
   - alt: "Latest Versions"
     title: "Latest Versions"
-    excerpt: "Built with TypeScript 3.7"
+    excerpt: "Built with TypeScript 3.9"
     url: "/guides/quick-start-guide/"
     btn_class: "btn--primary"
     btn_label: "Learn more"

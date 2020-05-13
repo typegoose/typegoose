@@ -34,6 +34,8 @@ class Main {
 }
 ```
 
+This is useful if the class is either defined *after* the current class, or will otherwise be `undefined` and without hardcoding strings
+
 ## Common Problems
 
 Because of the order classes are loaded and reordered at runtime, might result that some references are null / undefined / not existing, thats why mongoose provides the following
@@ -45,7 +47,7 @@ class Nested {
 }
 
 class Main {
-  @prop({ ref: "Nested" })
+  @prop({ ref: "Nested" }) // since 7.0 it is recommended to use "ref: getName(Class)" to dynamically get the name
   public nested: Ref<Nested>;
 }
 ```

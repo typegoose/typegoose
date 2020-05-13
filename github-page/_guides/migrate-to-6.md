@@ -3,8 +3,7 @@ title: "Migrate to 6.0.0"
 classes: wide
 ---
 
-<!--Note this is mostly just a copy of "migrate_to_6.md" on the root of the repo-->
-These are the changes made for 6.0.0 that are breaking \| important to know
+These are the changes made for 6.0.0 that are breaking or just important to know
 
 ## Important, Read this first
 

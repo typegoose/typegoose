@@ -11,7 +11,7 @@ assignees: ''
 
 - When you have an Implementation Idea, remove "*no*"
 - Make sure you read [Mastering-Markdown](https://guides.github.com/features/mastering-markdown/), thanks
-
+- Make sure it is not feature-parity, otherwise use the feature-parity template
 -->
 
 ## Describe what you need | want
