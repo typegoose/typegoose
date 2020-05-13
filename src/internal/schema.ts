@@ -5,7 +5,6 @@ import { _buildPropMetadata } from '../prop';
 import type {
   AnyParamConstructor,
   DecoratedPropertyMetadataMap,
-  EmptyVoidFn,
   IHooksArray,
   IIndexArray,
   IModelOptions,
@@ -76,7 +75,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       /** Get Metadata for PreHooks */
       const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
       if (Array.isArray(preHooks)) {
-        preHooks.forEach((obj) => sch!.pre(obj.method, obj.func as EmptyVoidFn));
+        preHooks.forEach((obj) => sch!.pre(obj.method, obj.func));
       }
 
       /** Get Metadata for PreHooks */

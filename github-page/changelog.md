@@ -40,6 +40,7 @@ redirect_from:
 - The functions `addModelToTypegoose`, `getModelForClass`, `getDiscriminatorModelForClass` now have an new optional generic `QueryHelpers`
 - The Type `ReturnModelType` now has the `T` generic removed (it was unnecessary)
 - The Type `ReturnModelType` now has an second optional generic `QueryHelpers`
+- Fix bug where `ref: Class` didnt execute `getName` when Virtual-Populate was used
 - [IC] add some tslint rules & apply them
 - [IC] enable "strictNullChecks" & fix accordingly
 

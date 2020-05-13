@@ -274,7 +274,7 @@ describe('tests for "assignMetadata"', () => {
       fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).toBeInstanceOf(TypeError);
-      expect((err as TypeError).message).toEqual(`"true"(key) is not a string! (assignMetadata)`);
+      expect((err as TypeError).message).toEqual(`"true"(key) is not a string! (mergeMetadata)`);
     }
   });
 

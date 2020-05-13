@@ -4,7 +4,7 @@ export class Virtual {
   @prop({ required: true })
   public dummyVirtual?: string;
 
-  @prop({ ref: 'VirtualSub', foreignField: 'virtual', localField: '_id', justOne: false })
+  @prop({ ref: () => VirtualSub, foreignField: 'virtual', localField: '_id', justOne: false })
   public virtualSubs?: Ref<VirtualSub>[];
 }
 

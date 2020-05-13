@@ -210,7 +210,7 @@ export function isWithVirtualPOP(options: any): options is VirtualOptions {
   return Object.keys(options).some((v) => virtualOptions.includes(v));
 }
 
-export const allVirtualoptions = virtualOptions.slice(0);
+export const allVirtualoptions = virtualOptions.slice(0); // copy "virtualOptions" array
 allVirtualoptions.push('ref');
 
 /**
@@ -249,7 +249,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
  * @internal
  */
 export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: new () => {}): T {
-  assertion(typeof key === 'string', new TypeError(`"${key}"(key) is not a string! (assignMetadata)`));
+  assertion(typeof key === 'string', new TypeError(`"${key}"(key) is not a string! (mergeMetadata)`));
   assertionIsClass(cl);
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what

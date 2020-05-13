@@ -79,6 +79,10 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     );
   }
 
+  if (!utils.isNullOrUndefined(rawOptions.ref)) {
+    rawOptions.ref = typeof rawOptions.ref === 'string' ? rawOptions.ref : utils.getName(rawOptions.ref);
+  }
+
   if (utils.isWithVirtualPOP(rawOptions)) {
     if (!utils.includesAllVirtualPOP(rawOptions)) {
       throw new NotAllVPOPElementsError(name, key);
@@ -116,7 +120,6 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   const refType = rawOptions?.refType ?? (utils.isAnRefType(Type) ? Type : undefined) ?? mongoose.Schema.Types.ObjectId;
   if (!utils.isNullOrUndefined(ref)) {
     delete rawOptions.ref;
-    const refName = typeof ref === 'string' ? ref : utils.getName(ref);
 
     switch (whatis) {
       case WhatIsIt.ARRAY:
@@ -125,7 +128,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
           {
             ...schemaProp[key][0],
             type: refType,
-            ref: refName,
+            ref,
             ...rawOptions
           },
           name,
@@ -136,7 +139,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
         schemaProp[key] = {
           ...schemaProp[key],
           type: refType,
-          ref: refName,
+          ref,
           ...rawOptions
         };
         break;

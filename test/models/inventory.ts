@@ -35,7 +35,7 @@ export class TestIRPbyString {
   @prop({ required: true })
   public normalProp!: string;
 
-  @arrayProp({ required: true, ref: 'Beverage' })
+  @arrayProp({ required: true, ref: Beverage })
   public bev!: Ref<Beverage>[];
 }
 
