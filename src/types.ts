@@ -42,6 +42,8 @@ export interface ValidatorOptions {
 }
 export type Validator = ValidatorFunction | RegExp | ValidatorOptions | ValidatorOptions[];
 
+export type DeferredFunc<T = any> = () => T;
+
 export interface BasePropOptions {
   [key: string]: any;
   /** include this value?
@@ -136,7 +138,7 @@ export interface BasePropOptions {
    * This may be needed if get/set is used
    * (this sets the type how it is saved to the DB)
    */
-  type?: any;
+  type?: any | DeferredFunc;
   /**
    * Make a property read-only
    * @example
@@ -167,7 +169,7 @@ export interface BasePropOptions {
   // tslint:disable-next-line:ban-types
   autopopulate?: boolean | Function | { [key: string]: any; };
   /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref?: any | (() => any);
+  ref?: any | DeferredFunc;
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
   /**
@@ -186,7 +188,7 @@ export interface ArrayPropOptions extends BasePropOptions {
    * {@link BasePropOptions.type} can be used too
    * Note: this is only needed because Reflect & refelact Metadata can't give an accurate Response for an array
    */
-  items?: any;
+  items?: any | DeferredFunc;
   /**
    * Use this to define inner-options
    * Use this if the auto-mapping is not correct or for plugin options
@@ -211,6 +213,13 @@ export interface ArrayPropOptions extends BasePropOptions {
    * @default 1
    */
   dim?: number;
+}
+
+export interface MapPropOptions extends BasePropOptions {
+  /**
+   * The type of the Map (Map<string, THIS>)
+   */
+  of?: any | DeferredFunc;
 }
 
 export interface ValidateNumberOptions {
@@ -242,7 +251,7 @@ export interface TransformStringOptions {
 
 export interface VirtualOptions {
   /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref: any;
+  ref: any | DeferredFunc;
   /** Which property(on the current-Class) to match `foreignField` against */
   localField: string;
   /** Which property(on the ref-Class) to match `localField` against */
@@ -276,13 +285,6 @@ export type Ref<
  * An Function type for a function that doesn't have any arguments and doesn't return anything
  */
 export type EmptyVoidFn = () => void;
-
-export interface MapPropOptions extends BasePropOptions {
-  /**
-   * The type of the Map (Map<string, THIS>)
-   */
-  of?: any;
-}
 
 export interface IModelOptions {
   /** An Existing Mongoose Connection */

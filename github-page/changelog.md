@@ -41,6 +41,7 @@ redirect_from:
 - The Type `ReturnModelType` now has the `T` generic removed (it was unnecessary)
 - The Type `ReturnModelType` now has an second optional generic `QueryHelpers`
 - Fix bug where `ref: Class` didnt execute `getName` when Virtual-Populate was used
+- Allow use of `@prop` for arrays & maps (In preparation for 8.0), it is now auto-detected based on `design:type`
 - [IC] add some tslint rules & apply them
 - [IC] enable "strictNullChecks" & fix accordingly
 

@@ -60,7 +60,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
   if (!utils.isNullOrUndefined(rawOptions.type)) {
     logger.info('Prop Option "type" is set to', rawOptions.type);
-    Type = rawOptions.type;
+    Type = utils.getType(rawOptions.type);
     delete rawOptions.type;
   }
 
@@ -70,16 +70,13 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   const name = utils.getName(target);
 
   // allow setting the type asynchronously
-  if (rawOptions?.ref instanceof Function && utils.isNullOrUndefined(rawOptions?.ref.prototype)) {
-    logger.debug('"%s.%s" option ref is an arrow-function', name, key);
-    rawOptions.ref = rawOptions.ref();
+  if (!utils.isNullOrUndefined(rawOptions.ref)) {
+    rawOptions.ref = utils.getType(rawOptions.ref);
     utils.assertion(
       !utils.isNullOrUndefined(rawOptions.ref),
       new Error(format('Option "ref" for "%s.%s" was defined with an arrow-function, but the function returned null/undefined!', name, key))
     );
-  }
 
-  if (!utils.isNullOrUndefined(rawOptions.ref)) {
     rawOptions.ref = typeof rawOptions.ref === 'string' ? rawOptions.ref : utils.getName(rawOptions.ref);
   }
 
@@ -368,18 +365,48 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
  */
 export function prop(options: PropOptionsWithValidate = {}) {
   return (target: any, key: string) => {
-    const Type = Reflect.getMetadata(DecoratorKeys.Type, target, key);
+    let Type = Reflect.getMetadata(DecoratorKeys.Type, target, key);
     utils.assertion(!utils.isNullOrUndefined(Type), new NoMetadataError(key));
 
-    // soft errors
-    {
-      if ('items' in options) {
-        logger.warn('You might not want to use option "items" in a @prop, use @arrayProp (%s.%s)', utils.getName(target), key);
-      }
+    let whatis = WhatIsIt.NONE;
 
-      if ('of' in options) {
-        logger.warn('You might not want to use option "of" in a @prop, use @mapProp (%s.%s)', utils.getName(target), key);
-      }
+    if (Type === Array) {
+      whatis = WhatIsIt.ARRAY;
+    } else if (Type === Map) {
+      whatis = WhatIsIt.MAP;
+    }
+
+    // soft errors
+    switch (whatis) {
+      case WhatIsIt.NONE:
+        if ('items' in options) {
+          logger.warn('You might not want to use option "items" in an normal @prop (%s.%s)', utils.getName(target), key);
+        }
+
+        if ('of' in options) {
+          logger.warn('You might not want to use option "of" in an normal @prop (%s.%s)', utils.getName(target), key);
+        }
+        break;
+      case WhatIsIt.ARRAY:
+        if ('items' in options) {
+          Type = utils.getType(options.items);
+          delete options.items;
+        }
+
+        if ('of' in options) {
+          logger.warn('You might not want to use option "of" where the "design:type" is "Array" (%s.%s)', utils.getName(target), key);
+        }
+        break;
+      case WhatIsIt.MAP:
+        if ('of' in options) {
+          Type = utils.getType(options.of);
+          delete options.of;
+        }
+
+        if ('items' in options) {
+          logger.warn('You might not want to use option "items" where the "design:type" is "Map" (%s.%s)', utils.getName(target), key);
+        }
+        break;
     }
 
     baseProp({
@@ -387,7 +414,7 @@ export function prop(options: PropOptionsWithValidate = {}) {
       key,
       origOptions: options,
       target,
-      whatis: WhatIsIt.NONE
+      whatis
     });
   };
 }
@@ -399,7 +426,7 @@ export function prop(options: PropOptionsWithValidate = {}) {
  */
 export function mapProp(options: MapPropOptions) {
   return (target: any, key: string) => {
-    const Type = options?.of;
+    const Type = utils.getType(options?.of);
     delete options.of;
 
     if ('items' in options) {
@@ -423,7 +450,7 @@ export function mapProp(options: MapPropOptions) {
  */
 export function arrayProp(options: ArrayPropOptions) {
   return (target: any, key: string) => {
-    const Type = options?.items;
+    const Type = utils.getType(options?.items);
 
     if ('of' in options) {
       logger.warn('You might not want to use option "of" in a @arrayProp, use @mapProp (%s.%s)', utils.getName(target), key);

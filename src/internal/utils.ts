@@ -583,3 +583,22 @@ export function assertion(cond: any, error?: Error): asserts cond {
 export function assertionIsClass(val: any): asserts val is Func {
   assertion(typeof val === 'function', new NoValidClass(val));
 }
+
+/**
+ * Get Type, if input is an arrow-function, execute it and return the result
+ * @param typeOrFunc Function or Type
+ */
+export function getType(typeOrFunc: Func | any): any {
+  if (typeof typeOrFunc === 'function' && !isConstructor(typeOrFunc)) {
+    return (typeOrFunc as Func)();
+  }
+
+  return typeOrFunc;
+}
+
+/**
+ * Is the provided input an class with an constructor?
+ */
+export function isConstructor(obj: any): obj is AnyParamConstructor<any> {
+  return !isNullOrUndefined(obj?.prototype?.constructor?.name);
+}
