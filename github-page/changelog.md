@@ -25,8 +25,9 @@ redirect_from:
 
 - Update Dependencies
   - `mongoose` to 5.9.13
-  - `@types/mongoose` to 5.7.16
-  - `tslib` to 1.11.2
+  - `@types/mongoose` to 5.7.18
+  - `tslib` to 1.12.0
+  - `typescript` to 3.9.2
 - Fix duplicate hooks / virtuals / queryMethods / plugins / indices via inheritance [{% include gitissue repo="typegoose" num=218 %}]
 - improve TSDoc of some functions
 - Fix `queryMethod` reflection

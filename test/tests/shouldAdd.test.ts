@@ -214,7 +214,7 @@ it('should add options to ref [szokodiakos#379]', () => {
   const someprop = schema.path('someprop');
   expect(schema).not.toBeUndefined();
   expect(someprop).not.toBeUndefined();
-  // @ts-ignore
+  // @ts-expect-error
   const opt: any = someprop.options;
   expect(typeof opt.type).toEqual('function');
   expect(opt.ref).toEqual('T');
@@ -235,7 +235,7 @@ it('should add options to refPath [szokodiakos#379]', () => {
   const someprop = schema.path('someprop');
   expect(schema).not.toBeUndefined();
   expect(someprop).not.toBeUndefined();
-  // @ts-ignore
+  // @ts-expect-error
   const opt: any = someprop.options;
   expect(typeof opt.type).toEqual('function');
   expect(opt.refPath).toEqual('something');
@@ -253,7 +253,7 @@ it('should add options to array-ref [szokodiakos#379]', () => {
   const someprop = schema.path('someprop');
   expect(schema).not.toBeUndefined();
   expect(someprop).not.toBeUndefined();
-  // @ts-ignore
+  // @ts-expect-error
   const opt: any = someprop.options.type[0];
   expect(typeof opt.type).toEqual('function');
   expect(opt.ref).toEqual('T');
@@ -274,7 +274,7 @@ it('should add options to array-refPath [szokodiakos#379]', () => {
   const someprop = schema.path('someprop');
   expect(schema).not.toBeUndefined();
   expect(someprop).not.toBeUndefined();
-  // @ts-ignore
+  // @ts-expect-error
   const opt: any = someprop.options.type[0];
   expect(typeof opt.type).toEqual('function');
   expect(opt.refPath).toEqual('something');

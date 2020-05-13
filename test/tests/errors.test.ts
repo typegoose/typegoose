@@ -83,9 +83,7 @@ it('should error if an non-existing(runtime) type is given [NoMetadataError]', (
 
 it('should error if no function for hooks is defined [TypeError]', () => {
   try {
-    // ignore that it is not written right, it should be tested so
-    // TODO: when upgrading to ts 3.9 change to "ts-expect-error"
-    // @ts-ignore
+    // @ts-expect-error
     @pre<Test>('')
     class TestNoFunctionHook {
       @prop()
@@ -102,7 +100,7 @@ it('should error if no function for hooks is defined [TypeError]', () => {
 it('should error if no get or set function is defined for non-virtuals [TypeError]', () => {
   try {
     class TestNoGetNoSet {
-      // @ts-ignore
+      // @ts-expect-error
       @prop({ set: false })
       public test: string;
     }
@@ -114,7 +112,7 @@ it('should error if no get or set function is defined for non-virtuals [TypeErro
   }
   try {
     class TestWrongGetSetType {
-      // @ts-ignore
+      // @ts-expect-error
       @prop({ set: () => undefined, get: false })
       public test: string;
     }
@@ -141,7 +139,7 @@ it('should error if not all needed parameters for virtual-populate are given [No
 
 it('should error if no valid model is supplied to "addModelToTypegoose" [TypeError]', () => {
   try {
-    // @ts-ignore
+    // @ts-expect-error
     addModelToTypegoose('hello');
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -168,7 +166,7 @@ it('should not modify an immutable', async () => {
 describe('tests for "NoValidClass"', () => {
   it('should error if no valid class is supplied to "addModelToTypegoose" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       addModelToTypegoose(model('hello', new Schema()), 'not class');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -178,7 +176,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "buildSchema" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       buildSchema('hello');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -188,7 +186,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "_buildSchema" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       _buildSchema('hello');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -198,7 +196,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "getModelForClass" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       getModelForClass('hello');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -208,7 +206,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "deleteModelWithClass" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       deleteModelWithClass(true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -218,7 +216,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       mergeSchemaOptions({}, true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -228,7 +226,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       getDiscriminatorModelForClass(model('NoValidClassgetDiscriminatorModelForClass', {}), true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -271,7 +269,7 @@ describe('tests for "assignMetadata"', () => {
   it('should error if no valid key is supplied [TypeError]', () => {
     try {
       class Dummy { }
-      // @ts-ignore
+      // @ts-expect-error
       assignMetadata(true, {}, Dummy);
       fail('Expected to throw "TypeError"');
     } catch (err) {
@@ -282,7 +280,7 @@ describe('tests for "assignMetadata"', () => {
 
   it('should error if no valid class is supplied [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       assignMetadata(DecoratorKeys.Index, {}, true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -306,7 +304,7 @@ it('should throw an error if a self-contained class is used', () => {
 
 it('should throw when "deleteModel" is called with no string [TypeError]', () => {
   try {
-    // @ts-ignore
+    // @ts-expect-error
     deleteModel(true);
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -352,7 +350,7 @@ it('should error if the Type does not have a valid "OptionsConstructor" [TypeErr
 it('should error if "refPath" is not of type string [TypeError]', () => {
   try {
     class TestRefPathError {
-      // @ts-ignore
+      // @ts-expect-error
       @prop({ refPath: 1 })
       public hello: string;
     }
@@ -462,7 +460,7 @@ it('should fail when using String-Enum on an Number Type [NotNumberTypeError]', 
 
 it('should error if no valid model is supplied to "getDiscriminatorModelForClass" [TypeError]', () => {
   try {
-    // @ts-ignore
+    // @ts-expect-error
     getDiscriminatorModelForClass(true);
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -472,7 +470,7 @@ it('should error if no valid model is supplied to "getDiscriminatorModelForClass
 
 it('should error if no valid key is supplied to "getModelWithString" [TypeError]', () => {
   try {
-    // @ts-ignore
+    // @ts-expect-error
     getModelWithString(true);
     fail('Expected to throw "TypeError"');
   } catch (err) {

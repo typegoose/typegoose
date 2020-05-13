@@ -153,9 +153,11 @@ it('merge options with assignMetadata', () => {
     }
   });
 
-  expect(model.schema.options).toHaveProperty('testOption', 'hello');
-  expect(model.schema.options).toHaveProperty('timestamps', true);
-  expect(model.schema.options).toHaveProperty('_id', true);
+  const schemaOptions = (model.schema as any).options;
+
+  expect(schemaOptions).toHaveProperty('testOption', 'hello');
+  expect(schemaOptions).toHaveProperty('timestamps', true);
+  expect(schemaOptions).toHaveProperty('_id', true);
 });
 
 it('should make use of "@prop({ _id: false })" and have no _id', async () => {
@@ -312,7 +314,7 @@ it('should return undefined if model does not exists (getModelWithString)', () =
 });
 
 it('should merge existingConnection correctly (overwrite)', () => {
-  // @ts-ignore ignore that "existingConnection" is not of type connection
+  // @ts-expect-error
   @modelOptions({ existingConnection: { hello: 1 } })
   class Dummy { }
 
