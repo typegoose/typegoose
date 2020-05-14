@@ -15,8 +15,11 @@ class Nested {
 }
 
 class Main {
-  @prop({ ref: Nested })
+  @prop({ ref: Nested }) // for one
   public nested: Ref<Nested>;
+
+  @arrayProp({ ref: Nested }) // for an array of references
+  public nestedArray: Ref<Nested>[];
 }
 ```
 
