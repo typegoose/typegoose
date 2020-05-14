@@ -6,7 +6,7 @@ Typegoose supports mongoose plugins. Here's how to use some common plugins:
 
 ## mongoose-autopopulate
 
-Typegoose has the PropOption `autopopulate` implemented, but it only has an effect if [`mongoose-autopopulate`](https://github.com/mongodb-js/mongoose-autopopulate) is used too. 
+Typegoose has the PropOption `autopopulate` implemented, but it only has an effect if [`mongoose-autopopulate`](https://github.com/mongodb-js/mongoose-autopopulate) is used too.
 
 ```ts
 import * as mongoose from "mongoose";
