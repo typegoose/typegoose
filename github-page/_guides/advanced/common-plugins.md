@@ -6,7 +6,7 @@ Typegoose supports mongoose plugins. Here's how to use some common plugins:
 
 ## mongoose-autopopulate
 
-Typegoose has the PropOption `autopopulate` implemented, but it only has an effect if `mongoose-autopopulate` is used too.
+Typegoose has the PropOption `autopopulate` implemented, but it only has an effect if [`mongoose-autopopulate`](https://github.com/mongodb-js/mongoose-autopopulate) is used too. 
 
 ```ts
 import * as mongoose from "mongoose";
@@ -36,6 +36,16 @@ const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 })();
 
 ```
+
+**PLEASE NOTE:** If you have a 'ref' which refers back to its own class/ model, like having a User class with a `createdBy` field referring back to User, then you'll need to set the `maxDepth` prop of `autocomplete` to 1. If you don't do this, Mongoose will do recursive call to the user collection 10 times, extremely delaying the output of the query. Below is an example of how to set `maxDepth`.   
+
+```
+@plugin(autopopulate as any) // this is an dirty fix, because the types of this plugin dont work
+class SomeClass {
+  @prop({ autopopulate: { maxDepth: 1 }, ref: "SomeReferencedClass" })
+  public populateField: Ref<SomeReferencedClass>;
+}
+``` 
 
 ## mongoose-findorcreate
 
