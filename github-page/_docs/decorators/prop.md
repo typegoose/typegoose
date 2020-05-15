@@ -232,12 +232,9 @@ class Dummy {
 
 ### type
 
-Accepts Type: `any`
+Accepts Type: `any | () => any`
 
-This option is mainly used for [get & set](#get--set) to override the inferred type,
-but it can also be used to override the inferred type of any prop.
-
--> this overwriting is meant as a last resort, please open a new issue if you need to use it
+Overwrite the type that is got from the `design:type` reflection
 
 Example: get as `string[]`, save as `string`
 
@@ -257,7 +254,20 @@ class Dummy {
 }
 ```
 
-#### enum
+Example: Overwrite type for an enum
+
+```ts
+enum SomeEnum {
+  One,
+  Two
+}
+class Dummy {
+  @prop({ enum: SomeEnum, type: Number })
+  public enumprop: SomeEnum;
+}
+```
+
+### enum
 
 Accepts Type: `enum | any[]`
 
@@ -294,7 +304,11 @@ class Enumed {
 }
 ```
 
-#### addNullToEnum
+Known-Issues:
+- Babel dosnt set the type for enums correctly, the need to be set manually with [the `type` option](#type)
+- If the code got transpiled with `tsc --transpile-only` or `ts-node --transpile-only` then `--transpile-only` neeeds to be removed or the type needs to be set manually with [the `type` option](#type)
+
+### addNullToEnum
 
 Accepts Type: `boolean`
 

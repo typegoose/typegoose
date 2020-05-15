@@ -8,6 +8,8 @@ redirect_from:
 
 Please note that mongoose initializes arrayProp arrays with `[]` instead of `null` / `undefined`.
 
+**Note**: this decorator will get deprecated in 8.0
+
 ## Options
 
 *All options from [`@prop`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#options) are valid, except the ones [listed at the bottom](#options-from-prop-that-do-not-work-on-arrayprop)*.
@@ -15,6 +17,7 @@ Please note that mongoose initializes arrayProp arrays with `[]` instead of `nul
 ### items
 
 Accepts Type: `any`
+(alias for [`type`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#type) from `@prop`)
 
 Tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or another primitive type is given) or of subdocuments, if a class is given.
 

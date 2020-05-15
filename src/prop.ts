@@ -225,9 +225,13 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
             return enumValue;
           });
       } else {
-        // this will happen if the enum contains both types ("design:type" will be "Object")
-        // this should never happen, because it is prevented by typescript (failsafe)
-        throw new Error(`Invalid type used for map!, got: "${Type}" (${name}.${key})`);
+        // this will happen if the enum type is not "String" or "Number"
+        // most likely this error happened because the code got transpiled with babel or "tsc --transpile-only"
+        throw new Error(
+          `Invalid type used for map!, got: "${Type}" (${name}.${key})`
+          + 'Is the code transpiled with Babel or \'tsc --transpile-only\' or \'ts-node --transpile-only\'?\n'
+          + 'See https://typegoose.github.io/typegoose/docs/decorators/prop/#enum'
+        );
       }
     }
   }
