@@ -109,7 +109,7 @@ class User {
 
 * TypeScript 3.9+
 * Node 10.15+
-* mongoose ^5.9.13
+* mongoose ^5.9.14
 * `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
 * if you use the [Babel TypeScript preset](https://babeljs.io/docs/en/babel-preset-typescript), you will need to reproduce the `--experimentalDecorators` and `--emitDecoratorMetadata` [TypeScript compiler options](https://babeljs.io/docs/en/babel-plugin-transform-typescript#typescript-compiler-options) by using the corresponding plugins for [enabling decorators](https://babeljs.io/docs/en/babel-plugin-proposal-decorators) and [emitting decorator metadata](https://github.com/leonardfactory/babel-plugin-transform-typescript-metadata):
 

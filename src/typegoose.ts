@@ -5,8 +5,8 @@ import * as semver from 'semver';
 import { format } from 'util';
 
 /* istanbul ignore next */
-if (semver.lt(mongoose.version, '5.9.13')) {
-  throw new Error('Please use mongoose 5.9.13 or higher');
+if (semver.lt(mongoose.version, '5.9.14')) {
+  throw new Error('Please use mongoose 5.9.14 or higher');
 }
 
 /* istanbul ignore next */
@@ -20,10 +20,12 @@ import { constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
 import { assertion, assertionIsClass, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
+import { isModel } from './typeguards';
 import type { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
 
 /* exports */
-export { mongoose, setGlobalOptions }; // export the internally used one, to not need to always import it
+// export the internally used "mongoose", to not need to always import it
+export { mongoose, setGlobalOptions };
 export { setLogLevel, LogLevels } from './logSettings';
 export * from './prop';
 export * from './hooks';
@@ -74,6 +76,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   const refetchedOptions = (Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions) ?? {};
 
   if (refetchedOptions?.options?.runSyncIndexes) {
+    // no async/await, to wait for execution on connection in the background
     compiledmodel.syncIndexes();
   }
 
@@ -230,7 +233,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   cl: U,
   id?: string
 ) {
-  assertion(from.prototype instanceof mongoose.Model, new TypeError(`"${from}" is not a valid Model!`));
+  assertion(isModel(from), new TypeError(`"${from}" is not a valid Model!`));
   assertionIsClass(cl);
 
   const name = getName(cl);

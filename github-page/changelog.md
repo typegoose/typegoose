@@ -24,9 +24,9 @@ redirect_from:
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Update Dependencies
-  - `mongoose` to 5.9.13
-  - `@types/mongoose` to 5.7.18
-  - `tslib` to 1.12.0
+  - `mongoose` to 5.9.14
+  - `@types/mongoose` to 5.7.19
+  - `tslib` to 2.0.0
   - `typescript` to 3.9.2
 - Fix duplicate hooks / virtuals / queryMethods / plugins / indices via inheritance [{% include gitissue repo="typegoose" num=218 %}]
 - improve TSDoc of some functions

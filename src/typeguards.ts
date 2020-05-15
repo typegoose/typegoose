@@ -34,3 +34,11 @@ export function isRefType<T, S extends RefType>(doc: Ref<T, S>): doc is NonNulla
 export function isRefTypeArray<T, S extends RefType>(docs: Ref<T, S>[]): docs is NonNullable<S>[] {
   return Array.isArray(docs) && docs.every((v) => isRefType(v));
 }
+
+/**
+ * Check if the input is a mongoose.Model
+ * @param model The Value to check
+ */
+export function isModel(model: any): model is mongoose.Model<any> {
+  return model?.prototype instanceof mongoose.Model;
+}

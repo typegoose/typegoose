@@ -79,9 +79,9 @@ class User {
 
 ### Requirements
 
-- TypeScript 3.9+ (sicne 7.1)
-- NodeJS 10.15.0+
-- Mongoose 5.9.13+
+- TypeScript ^3.9 (since 7.1)
+- NodeJS ^10.15.0
+- Mongoose ^5.9.14
 - An IDE that supports TypeScript linting (VSCode is recommendet)
 - This Guide expect you to know how mongoose (at least its models) work
 
