@@ -6,9 +6,9 @@ title: "Quick Start Guide"
 
 ## Quick Overview of Typegoose
 
-Typegoose is an "wrapper" for mongoose models
+Typegoose is a "wrapper" for mongoose models
 
-Instead of:
+Instead of writing this:
 
 ```ts
 interface Car {
@@ -42,7 +42,7 @@ const UserModel = mongoose.model('User', {
 });
 ```
 
-You can just:
+You can just write:
 
 ```ts
 class Job {
@@ -83,20 +83,20 @@ class User {
 - NodeJS ^10.15.0
 - Mongoose ^5.9.14
 - An IDE that supports TypeScript linting (VSCode is recommended)
-- This Guide expect you to know how mongoose (at least its models) work
+- This Guide expects you to know how mongoose (or at least its models) works
 
 ## Install
 
 ```sh
 npm i -s @typegoose/typegoose # install typegoose itself
 
-npm i -s mongoose # install peer-dependencie mongoose
+npm i -s mongoose # install peer-dependency mongoose
 npm i -D @types/mongoose # install all types for mongoose - this is required for typegoose to work in typescript
 ```
 
 ### How to Use
 
-Lets say you have an mongoose model like:
+Let's say you have a mongoose model like this one:
 
 ```ts
 const kittenSchema = new mongoose.Schema({
@@ -109,7 +109,7 @@ let document = await Kitten.create({ name: 'Kitty' });
 // "document" has no types
 ```
 
-with typegoose it can be converted to something like:
+With typegoose it can be converted to something like:
 
 ```ts
 class KittenClass {
@@ -125,7 +125,7 @@ let document = await Kitten.create({ name: 'Kitty' });
 
 Please note that `new Kitten({})` & `Kitten.create({})` has no types of KittenClass, because typegoose doesn't modify functions of mongoose
 
-## Do's and Dont's of Typegoose
+## Do's and Don'ts of Typegoose
 
 - Typegoose is a wrapper for mongoose's models
 - Typegoose aims to not modify any functions of mongoose
