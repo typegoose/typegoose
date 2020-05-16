@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 
 import { DecoratorKeys } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
-import { assertion, assignMetadata, createArrayFromDimensions, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
+import { assertion, assignMetadata, createArrayFromDimensions, getName, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 import {
   addModelToTypegoose,
@@ -18,7 +18,7 @@ import {
   prop,
   queryMethod
 } from '../../src/typegoose';
-import type { IModelOptions, QueryMethod, QueryMethodMap, ReturnModelType } from '../../src/types';
+import type { IModelOptions, QueryMethod, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -186,6 +186,24 @@ it('should make use of "@prop({ _id: false })" and have no _id', async () => {
 
 //   getModelForClass(SelfContaining);
 // });
+
+it('should allow self-referencing classes', async () => {
+  class SelfReference {
+    @prop({ ref: () => SelfReference })
+    public ref?: Ref<SelfReference>;
+  }
+  const SelfReferenceModel = getModelForClass(SelfReference);
+
+  const doc1 = await SelfReferenceModel.create();
+  const doc2 = await SelfReferenceModel.create({ ref: doc1 });
+
+  const found = await SelfReferenceModel.findById(doc2).orFail().populate('ref').exec();
+
+  expect(found.toJSON()).toEqual(doc2.toJSON());
+  const schemaPath = SelfReferenceModel.schema.path('ref');
+  expect(schemaPath).toBeInstanceOf(mongoose.Schema.Types.ObjectId);
+  expect((schemaPath as any).options.ref).toEqual(getName(SelfReference));
+});
 
 it('should make use of required as function [szokodiakos#247]', async () => {
   class RequiredFunction {

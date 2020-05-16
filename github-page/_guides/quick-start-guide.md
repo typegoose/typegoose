@@ -82,8 +82,17 @@ class User {
 - TypeScript ^3.9 (since 7.1)
 - NodeJS ^10.15.0
 - Mongoose ^5.9.14
-- An IDE that supports TypeScript linting (VSCode is recommendet)
+- An IDE that supports TypeScript linting (VSCode is recommended)
 - This Guide expect you to know how mongoose (at least its models) work
+
+## Install
+
+```sh
+npm i -s @typegoose/typegoose # install typegoose itself
+
+npm i -s mongoose # install peer-dependencie mongoose
+npm i -D @types/mongoose # install all types for mongoose - this is required for typegoose to work in typescript
+```
 
 ### How to Use
 
