@@ -8,7 +8,8 @@ redirect_from:
 
 Please note that mongoose initializes arrayProp arrays with `[]` instead of `null` / `undefined`.
 
-**Note**: this decorator will get deprecated in 8.0
+**Note**: this decorator will get removed in 8.0
+**Note**: Deprecated since 7.1.1, replace with [`@prop`]({{ site.baseurl }}{% link _docs/decorators/prop.md%})
 
 ## Options
 

@@ -2,7 +2,9 @@
 title: "Prop"
 ---
 
-`@prop(options: object)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
+`@prop(options: object, kind: WhatIsIt)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
+- `options` is to set [all options](#options)
+- `kind` is to overwrite what kind of prop this is (None = Normal, Array = for arrays, Map = for Maps) (should be auto-inferred)
 
 ## Options
 

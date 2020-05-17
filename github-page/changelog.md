@@ -35,6 +35,7 @@ redirect_from:
 - PascalCased decorators now have the TSDoc of the original function
 - Default class `Base`'s `__v` & `__t` are now optional (with `?`)
 - Fix mentioned bug from {% include gitissue repo="typegoose" num=181 %}, to allow `mongoose.Schema.Types.String` & `mongoose.Schema.Types.Number` as valid enum types
+- Options `of` & `items` are now mapped to `type` and get called when `buildSchema` is called
 - [IC] DeDuplicate code in `prop.ts`
 
 ## 7.1.0

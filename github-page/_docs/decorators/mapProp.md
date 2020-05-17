@@ -6,7 +6,8 @@ redirect_from:
 
 `@mapProp(options: object)` is a decorator which makes it possible to create map schema properties, here are just the differences listed
 
-**Note**: this decorator will get deprecated in 8.0
+**Note**: this decorator will get removed in 8.0
+**Note**: Deprecated since 7.1.1, replace with [`@prop`]({{ site.baseurl }}{% link _docs/decorators/prop.md%})
 
 ## Options
 
