@@ -238,29 +238,29 @@ describe('tests for "NoValidClass"', () => {
 describe('tests for "InvalidTypeError"', () => {
   // test for @prop will return a "NoMetadataError", which is already tested above
 
-  it('should error if no valid type is supplied to "@arrayProp" [InvalidTypeError]', () => {
+  it('should error if no valid type is supplied to "@arrayProp" [NoMetadataError]', () => {
     try {
-      class TestInvalidTypeErrorAP {
+      class TestNoMetadataErrorAP {
         @arrayProp({ items: undefined })
         public something: undefined;
       }
-      getModelForClass(TestInvalidTypeErrorAP);
-      fail('Expected to throw "InvalidTypeError"');
+      getModelForClass(TestNoMetadataErrorAP);
+      fail('Expected to throw "NoMetadataError"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.InvalidTypeError);
+      expect(err).toBeInstanceOf(errors.NoMetadataError);
     }
   });
 
-  it('should error if no valid type is supplied to "@mapProp" [InvalidTypeError]', () => {
+  it('should error if no valid type is supplied to "@mapProp" [NoMetadataError]', () => {
     try {
-      class TestInvalidTypeErrorMP {
+      class TestNoMetadataErrorMP {
         @mapProp({ of: undefined })
         public something: undefined;
       }
-      getModelForClass(TestInvalidTypeErrorMP);
-      fail('Expected to throw "InvalidTypeError"');
+      getModelForClass(TestNoMetadataErrorMP);
+      fail('Expected to throw "NoMetadataError"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.InvalidTypeError);
+      expect(err).toBeInstanceOf(errors.NoMetadataError);
     }
   });
 });

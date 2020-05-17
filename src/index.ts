@@ -23,4 +23,4 @@ export function index<T = {}>(fields: T, options?: IndexOptions<T>) {
 }
 
 // Export it PascalCased
-export const Index = index;
+export { index as Index };

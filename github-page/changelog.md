@@ -19,6 +19,22 @@ redirect_from:
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.1.1
+
+- Remove empty interface `PropOptions`
+- Remove type `PropOptionsWithValidate`
+- Rename type `PropOptionsWithNumberValidate` to `PropOptionsForNumber`
+- Rename type `PropOptionsWithStringValidate` to `PropOptionsForString`
+- Add options `options` & `match` for `VirtualOptions`
+- Add option `enum` for `ValidateNumberOptions`
+- `arrayProp` & `mapProp` are now just an alias for `prop`
+- Set TSDoc option `@deprecated` for `arrayProp` and `mapProp`
+- Detect `mongoose.Types.Array` & `mongoose.Schema.Types.Array` as `Array` in `@prop`
+- Detect `mongoose.Types.Map` & `mongoose.Schema.Types.Map` as `Map` in `@prop`
+- Add Overloads to `@prop`
+- PascalCased decorators now have the TSDoc of the original function
+- [IC] DeDuplicate code in `prop.ts`
+
 ## 7.1.0
 
 - Update Dependencies

@@ -19,4 +19,4 @@ export function plugin<TFunc extends Func, TParams = Parameters<TFunc>[1]>(mongo
 }
 
 // Export it PascalCased
-export const Plugin = plugin;
+export { plugin as Plugins };

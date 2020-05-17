@@ -167,9 +167,9 @@ export interface BasePropOptions {
    * This option as only an effect when the plugin `mongoose-autopopulate` is used
    */
   // tslint:disable-next-line:ban-types
-  autopopulate?: boolean | Function | { [key: string]: any; };
+  autopopulate?: boolean | Function | KeyStringAny;
   /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref?: any | DeferredFunc;
+  ref?: DeferredFunc | string | AnyParamConstructor<any>;
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
   /**
@@ -179,9 +179,6 @@ export interface BasePropOptions {
    */
   refType?: RefSchemaType;
 }
-
-// tslint:disable-next-line:no-empty-interface
-export interface PropOptions extends BasePropOptions { }
 
 export interface ArrayPropOptions extends BasePropOptions {
   /** What array is it?
@@ -195,18 +192,14 @@ export interface ArrayPropOptions extends BasePropOptions {
    *
    * Please open a new issue if some option is mismatched or not existing / mapped
    */
-  innerOptions?: {
-    [key: string]: any;
-  };
+  innerOptions?: KeyStringAny;
   /**
    * Use this to define outer-options
    * Use this if the auto-mapping is not correct or for plugin options
    *
    * Please open a new issue if some option is mismatched or not existing / mapped
    */
-  outerOptions?: {
-    [key: string]: any;
-  };
+  outerOptions?: KeyStringAny;
   /**
    * How many dimensions this Array should have
    * (needs to be higher than 0)
@@ -223,20 +216,22 @@ export interface MapPropOptions extends BasePropOptions {
 }
 
 export interface ValidateNumberOptions {
-  /** The Number must be at least this high */
+  /** Only allow numbers that are higher than this */
   min?: number | [number, string];
-  /** The Number can only be lower than this */
+  /** Only allow numbers lower than this */
   max?: number | [number, string];
+  /** Only allow Values from the enum */
+  enum?: number[];
 }
 
 export interface ValidateStringOptions {
-  /** Only Allowes if the value matches an RegExp */
+  /** Only allow values that match this RegExp */
   match?: RegExp | [RegExp, string];
-  /** Only Allowes if the value is in the Enum */
+  /** Only allow Values from the enum */
   enum?: string[];
-  /** Only Allowes if the value is at least the lenght */
+  /** Only allow values that have at least this length */
   minlength?: number | [number, string];
-  /** Only Allowes if the value is not longer than the maxlenght */
+  /** Only allow values that have at max this length */
   maxlength?: number | [number, string];
 }
 
@@ -251,7 +246,7 @@ export interface TransformStringOptions {
 
 export interface VirtualOptions {
   /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref: any | DeferredFunc;
+  ref: NonNullable<BasePropOptions['ref']>;
   /** Which property(on the current-Class) to match `foreignField` against */
   localField: string;
   /** Which property(on the ref-Class) to match `localField` against */
@@ -260,11 +255,14 @@ export interface VirtualOptions {
   justOne?: boolean;
   /** Return the number of Documents found instead of the actual Documents */
   count?: boolean;
+  /** Extra Query Options */
+  options?: KeyStringAny;
+  /** Match Options */
+  match?: KeyStringAny | ((doc) => KeyStringAny);
 }
 
-export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
-export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions & ValidateStringOptions;
-export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate | VirtualOptions;
+export type PropOptionsForNumber = BasePropOptions & ValidateNumberOptions;
+export type PropOptionsForString = BasePropOptions & TransformStringOptions & ValidateStringOptions;
 
 export type RefType = number | string | mongoose.Types.ObjectId | Buffer | undefined;
 export type RefSchemaType =
@@ -408,9 +406,7 @@ export interface IndexOptions<T> {
  * ```
  */
 export interface IIndexArray<T> {
-  fields: {
-    [key: string]: any;
-  };
+  fields: KeyStringAny;
   options?: IndexOptions<T>;
 }
 
@@ -499,4 +495,9 @@ export interface IObjectWithTypegooseName {
 /** For the types that error that seemingly dont have a prototype */
 export interface IPrototype {
   prototype?: any;
+}
+
+/** An Helper Interface for key: any: string */
+export interface KeyStringAny {
+  [key: string]: any;
 }

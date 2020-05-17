@@ -10,8 +10,8 @@ import type {
   IObjectWithTypegooseFunction,
   IObjectWithTypegooseName,
   IPrototype,
-  PropOptionsWithNumberValidate,
-  PropOptionsWithStringValidate,
+  PropOptionsForNumber,
+  PropOptionsForString,
   VirtualOptions
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
@@ -180,7 +180,7 @@ export function getClass(
  * Return true if there are Options
  * @param options The raw Options
  */
-export function isWithStringValidate(options: PropOptionsWithStringValidate): options is PropOptionsWithStringValidate {
+export function isWithStringValidate(options: PropOptionsForString): options is PropOptionsForString {
   return !isNullOrUndefined(options.match ?? options.minlength ?? options.maxlength);
 }
 
@@ -188,7 +188,7 @@ export function isWithStringValidate(options: PropOptionsWithStringValidate): op
  * Return true if there are Options
  * @param options The raw Options
  */
-export function isWithStringTransform(options: PropOptionsWithStringValidate): options is PropOptionsWithStringValidate {
+export function isWithStringTransform(options: PropOptionsForString): options is PropOptionsForString {
   return !isNullOrUndefined(options.lowercase ?? options.uppercase ?? options.trim);
 }
 
@@ -196,7 +196,7 @@ export function isWithStringTransform(options: PropOptionsWithStringValidate): o
  * Return true if there are Options
  * @param options The raw Options
  */
-export function isWithNumberValidate(options: PropOptionsWithNumberValidate): options is PropOptionsWithNumberValidate {
+export function isWithNumberValidate(options: PropOptionsForNumber): options is PropOptionsForNumber {
   return !isNullOrUndefined(options.min ?? options.max);
 }
 

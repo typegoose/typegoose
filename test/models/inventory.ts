@@ -1,5 +1,5 @@
 // Tests for discriminators and refPaths
-import { arrayProp, getModelForClass, prop, Ref } from '../../src/typegoose';
+import { arrayProp, getModelForClass, getName, prop, Ref } from '../../src/typegoose';
 
 export class Scooter {
   @prop()
@@ -21,7 +21,7 @@ export class Inventory {
   @prop({ default: 1 })
   public value?: number;
 
-  @prop({ required: true, enum: ['Beverage', 'Scooter'] })
+  @prop({ required: true, enum: [getName(Beverage), getName(Scooter)] })
   public refItemPathName!: string;
 
   @prop({ required: true, refPath: 'refItemPathName' })

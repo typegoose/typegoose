@@ -261,19 +261,20 @@ it('should add options to array-ref [szokodiakos#379]', () => {
 });
 
 it('should add options to array-refPath [szokodiakos#379]', () => {
-  class T { }
+  class EmptyClass { }
   class TestArrayRefPath {
-    @prop({ default: 'T' })
+    @prop({ default: getName(EmptyClass) })
     public something: string;
 
     @arrayProp({ refPath: 'something', customoption: 'custom' })
-    public someprop: Ref<T>;
+    public someprop: Ref<EmptyClass>[];
   }
 
   const schema = buildSchema(TestArrayRefPath);
   const someprop = schema.path('someprop');
   expect(schema).not.toBeUndefined();
   expect(someprop).not.toBeUndefined();
+  expect(someprop).toBeInstanceOf(mongoose.Schema.Types.Array);
   // @ts-expect-error
   const opt: any = someprop.options.type[0];
   expect(typeof opt.type).toEqual('function');

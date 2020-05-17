@@ -16,10 +16,13 @@ import { logger } from './logSettings';
 import { buildSchema } from './typegoose';
 import type {
   ArrayPropOptions,
+  BasePropOptions,
   DecoratedPropertyMetadata,
   DecoratedPropertyMetadataMap,
   MapPropOptions,
-  PropOptionsWithValidate,
+  PropOptionsForNumber,
+  PropOptionsForString,
+  VirtualOptions,
   VirtualPopulateMap
 } from './types';
 
@@ -365,45 +368,60 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 /**
  * Set Property Options for the property below
  * @param options Options
- * @public
+ * @param kind Overwrite auto-inferred kind
  */
-export function prop(options: PropOptionsWithValidate = {}) {
+function prop(options?: BasePropOptions, kind?: WhatIsIt);
+function prop(options?: ArrayPropOptions, kind?: WhatIsIt);
+function prop(options?: MapPropOptions, kind?: WhatIsIt);
+function prop(options?: VirtualOptions, kind?: WhatIsIt);
+function prop(options?: PropOptionsForNumber, kind?: WhatIsIt);
+function prop(options?: PropOptionsForString, kind?: WhatIsIt);
+function prop(options: any = {}, kind?: WhatIsIt) {
   return (target: any, key: string) => {
     let Type = Reflect.getMetadata(DecoratorKeys.Type, target, key);
     utils.assertion(!utils.isNullOrUndefined(Type), new NoMetadataError(key));
 
-    let whatis = WhatIsIt.NONE;
+    options = options ?? {};
 
-    if (Type === Array) {
-      whatis = WhatIsIt.ARRAY;
-    } else if (Type === Map) {
-      whatis = WhatIsIt.MAP;
+    if (!kind) {
+      if (Type === Array || Type === mongoose.Types.Array || Type === mongoose.Schema.Types.Array) {
+        kind = WhatIsIt.ARRAY;
+      } else if (Type === Map || Type === mongoose.Types.Map || Type === mongoose.Schema.Types.Map) {
+        kind = WhatIsIt.MAP;
+      } else {
+        kind = WhatIsIt.NONE;
+      }
     }
 
-    // soft errors
-    switch (whatis) {
+    // soft errors & "type"-alias mapping
+    switch (kind) {
       case WhatIsIt.NONE:
         if ('items' in options) {
-          logger.warn('You might not want to use option "items" in an normal @prop (%s.%s)', utils.getName(target), key);
+          logger.warn('You might not want to use option "items" for an non-array @prop type (%s.%s)', utils.getName(target), key);
         }
 
         if ('of' in options) {
-          logger.warn('You might not want to use option "of" in an normal @prop (%s.%s)', utils.getName(target), key);
+          logger.warn('You might not want to use option "of" for an non-map @prop type (%s.%s)', utils.getName(target), key);
         }
         break;
       case WhatIsIt.ARRAY:
         if ('items' in options) {
-          Type = utils.getType(options.items);
+          options.type = options.items;
           delete options.items;
         }
 
         if ('of' in options) {
           logger.warn('You might not want to use option "of" where the "design:type" is "Array" (%s.%s)', utils.getName(target), key);
         }
+
+        // set the "Type" to undefined, if "ref" or "refPath" are defined, otherwise the "refType" will be wrong
+        if ((('ref' in options) || ('refPath' in options)) && !('type' in options)) {
+          Type = undefined;
+        }
         break;
       case WhatIsIt.MAP:
         if ('of' in options) {
-          Type = utils.getType(options.of);
+          options.type = options.of;
           delete options.of;
         }
 
@@ -418,7 +436,7 @@ export function prop(options: PropOptionsWithValidate = {}) {
       key,
       origOptions: options,
       target,
-      whatis
+      whatis: kind
     });
   };
 }
@@ -426,56 +444,24 @@ export function prop(options: PropOptionsWithValidate = {}) {
 /**
  * Set Property(that are Maps) Options for the property below
  * @param options Options for the Map
- * @public
+ *
+ * @deprecated use "prop"
  */
-export function mapProp(options: MapPropOptions) {
-  return (target: any, key: string) => {
-    const Type = utils.getType(options?.of);
-    delete options.of;
-
-    if ('items' in options) {
-      logger.warn('You might not want to use option "items" in a @mapProp, use @arrayProp (%s.%s)', utils.getName(target), key);
-    }
-
-    baseProp({
-      Type,
-      key,
-      origOptions: options,
-      target,
-      whatis: WhatIsIt.MAP
-    });
-  };
+function mapProp(options: MapPropOptions) {
+  return prop(options, WhatIsIt.MAP);
 }
 
 /**
  * Set Property(that are Arrays) Options for the property below
  * @param options Options
- * @public
+ *
+ * @deprecated use "prop"
  */
-export function arrayProp(options: ArrayPropOptions) {
-  return (target: any, key: string) => {
-    const Type = utils.getType(options?.items);
-
-    if ('of' in options) {
-      logger.warn('You might not want to use option "of" in a @arrayProp, use @mapProp (%s.%s)', utils.getName(target), key);
-    }
-
-    // Delete the "items" option from options because it got set as "Type"
-    if ('items' in options) {
-      delete options.items;
-    }
-
-    baseProp({
-      Type,
-      key,
-      origOptions: options,
-      target,
-      whatis: WhatIsIt.ARRAY
-    });
-  };
+function arrayProp(options: ArrayPropOptions) {
+  return prop(options, WhatIsIt.ARRAY);
 }
 
+export { prop, arrayProp, mapProp };
+
 // Export it PascalCased
-export const Prop = prop;
-export const ArrayProp = arrayProp;
-export const MapProp = mapProp;
+export { prop as Prop, arrayProp as ArrayProp, mapProp as MapProp };

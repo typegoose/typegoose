@@ -21,4 +21,4 @@ export function modelOptions(options: IModelOptions) {
 }
 
 // Export it PascalCased
-export const ModelOptions = modelOptions;
+export { modelOptions as ModelOptions };

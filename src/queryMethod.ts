@@ -39,4 +39,4 @@ export function queryMethod<QueryHelpers, U extends AnyParamConstructor<any>>(
 }
 
 // Export it PascalCased
-export const QueryMethod = queryMethod;
+export { queryMethod as QueryMethod };
