@@ -33,6 +33,8 @@ redirect_from:
 - Detect `mongoose.Types.Map` & `mongoose.Schema.Types.Map` as `Map` in `@prop`
 - Add Overloads to `@prop`
 - PascalCased decorators now have the TSDoc of the original function
+- Default class `Base`'s `__v` & `__t` are now optional (with `?`)
+- Fix mentioned bug from {% include gitissue repo="typegoose" num=181 %}, to allow `mongoose.Schema.Types.String` & `mongoose.Schema.Types.Number` as valid enum types
 - [IC] DeDuplicate code in `prop.ts`
 
 ## 7.1.0

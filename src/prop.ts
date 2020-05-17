@@ -192,7 +192,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
   if (!utils.isNullOrUndefined(enumOption)) {
     // check if the supplied value is already "mongoose-consumeable"
     if (!Array.isArray(enumOption)) {
-      if (Type === String) {
+      if (Type === String || Type === mongoose.Schema.Types.String) {
         rawOptions.enum = Object.entries<string>(enumOption) // get all key-value pairs of the enum
           // no reverse-filtering because if it is full of strings, there is no reverse mapping
           .map(([enumKey, enumValue]) => {
@@ -205,7 +205,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
 
             return enumValue;
           });
-      } else if (Type === Number) {
+      } else if (Type === Number || Type === mongoose.Schema.Types.Number) {
         rawOptions.enum = Object.entries<string | number>(enumOption) // get all key-value pairs of the enum
           // filter out the "reverse (value -> name) mappings"
           // https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings
