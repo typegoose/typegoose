@@ -19,6 +19,13 @@ redirect_from:
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.1.2
+
+- `@prop` now has more tsdoc for various options
+- `BasePropOptions.type` is now `unkown` instead of `any`
+- All aliases of `BasePropOptions.type` now inherit the types from there
+- [IC] `refType` is now moved to `prop`
+
 ## 7.1.1
 
 - Remove empty interface `PropOptions`

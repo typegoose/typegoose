@@ -45,11 +45,13 @@ export function isPrimitive(Type: any): boolean {
  */
 export function isAnRefType(Type: any): boolean {
   if (typeof Type?.name === 'string') {
+    // Note: this is not done "once" because types can be added as custom types
     const tmp = Object.getOwnPropertyNames(mongoose.Schema.Types).filter((x) => {
       switch (x) {
         case 'Oid':
         case 'Bool':
         case 'Object':
+        case 'Boolean':
           return false;
         default:
           return true;

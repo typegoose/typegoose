@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import type * as mongoose from 'mongoose';
 
 import type { Base } from './defaultClasses';
 import type { Severity, WhatIsIt } from './internal/constants';
@@ -17,12 +17,10 @@ export type DocumentType<T> = (T extends Base ? Omit<mongoose.Document, '_id'> &
 // I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
- * @internal
  */
 export type ModelType<T, QueryHelpers = {}> = mongoose.Model<DocumentType<T>, QueryHelpers>;
 /**
  * Any-param Constructor
- * @internal
  */
 export type AnyParamConstructor<T> = new (...args: any) => T;
 /**
@@ -30,7 +28,6 @@ export type AnyParamConstructor<T> = new (...args: any) => T;
  */
 export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = {}> = ModelType<InstanceType<U>, QueryHelpers> & U;
 
-/** @internal */
 export type Func = (...args: any[]) => any;
 
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
@@ -46,11 +43,13 @@ export type DeferredFunc<T = any> = () => T;
 
 export interface BasePropOptions {
   [key: string]: any;
-  /** include this value?
+  /**
+   * include this value?
    * @default true (Implicitly)
    */
   select?: boolean;
-  /** is this value required?
+  /**
+   * is this value required?
    * @default false (Implicitly)
    */
   required?: RequiredType;
@@ -138,7 +137,10 @@ export interface BasePropOptions {
    * This may be needed if get/set is used
    * (this sets the type how it is saved to the DB)
    */
-  type?: any | DeferredFunc;
+  type?:
+  | DeferredFunc<AnyParamConstructor<any>>
+  | DeferredFunc<unknown>
+  | unknown;
   /**
    * Make a property read-only
    * @example
@@ -177,15 +179,16 @@ export interface BasePropOptions {
    * {@link BasePropOptions.type} can be used too
    * @default ObjectId
    */
-  refType?: RefSchemaType;
+  refType?: NonNullable<BasePropOptions['type']> | RefSchemaType;
 }
 
 export interface ArrayPropOptions extends BasePropOptions {
-  /** What array is it?
+  /**
+   * What array is it?
    * {@link BasePropOptions.type} can be used too
    * Note: this is only needed because Reflect & refelact Metadata can't give an accurate Response for an array
    */
-  items?: any | DeferredFunc;
+  items?: NonNullable<BasePropOptions['type']>;
   /**
    * Use this to define inner-options
    * Use this if the auto-mapping is not correct or for plugin options
@@ -212,7 +215,7 @@ export interface MapPropOptions extends BasePropOptions {
   /**
    * The type of the Map (Map<string, THIS>)
    */
-  of?: any | DeferredFunc;
+  of?: NonNullable<BasePropOptions['type']>;
 }
 
 export interface ValidateNumberOptions {
@@ -277,7 +280,8 @@ export type RefSchemaType =
 // export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
 export type Ref<
   R,
-  T extends RefType = (R extends { _id?: RefType; } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined> = R | T;
+  T extends RefType = (R extends { _id?: RefType; } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined
+  > = R | T;
 
 /**
  * An Function type for a function that doesn't have any arguments and doesn't return anything

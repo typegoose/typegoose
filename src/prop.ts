@@ -19,6 +19,7 @@ import type {
   BasePropOptions,
   DecoratedPropertyMetadata,
   DecoratedPropertyMetadataMap,
+  KeyStringAny,
   MapPropOptions,
   PropOptionsForNumber,
   PropOptionsForString,
@@ -55,10 +56,10 @@ function baseProp(input: DecoratedPropertyMetadata): void {
  * Function that is the actual processing of the prop's (used for caching)
  * @param input All the options needed for prop's
  */
-export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
+export function _buildPropMetadata(input: DecoratedPropertyMetadata): void {
   let { Type } = input;
   const { key, origOptions, target, whatis } = input;
-  const rawOptions = Object.assign({}, origOptions);
+  const rawOptions: KeyStringAny = Object.assign({}, origOptions);
   logger.debug('Starting to process "%s.%s"', utils.getName(target), key);
 
   if (!utils.isNullOrUndefined(rawOptions.type)) {
@@ -115,9 +116,9 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     return;
   }
 
-  const ref = rawOptions?.ref;
-  // use "rawOptions.refType" if set, otherwise "Type" if it is an suitable ref-type, otherwise default back to "ObjectId"
-  const refType = rawOptions?.refType ?? (utils.isAnRefType(Type) ? Type : undefined) ?? mongoose.Schema.Types.ObjectId;
+  const ref = rawOptions.ref;
+  // use "Type" if it is an suitable ref-type, otherwise default back to "ObjectId"
+  const refType = utils.isAnRefType(Type) ? Type : mongoose.Schema.Types.ObjectId;
   if (!utils.isNullOrUndefined(ref)) {
     delete rawOptions.ref;
 
@@ -150,7 +151,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     return;
   }
 
-  const refPath = rawOptions?.refPath;
+  const refPath = rawOptions.refPath;
   if (refPath) {
     utils.assertion(
       typeof refPath === 'string',
@@ -188,7 +189,7 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     return;
   }
 
-  const enumOption = rawOptions?.enum;
+  const enumOption = rawOptions.enum;
   if (!utils.isNullOrUndefined(enumOption)) {
     // check if the supplied value is already "mongoose-consumeable"
     if (!Array.isArray(enumOption)) {
@@ -243,14 +244,6 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
     rawOptions.enum = Array.isArray(rawOptions.enum) ? rawOptions.enum : [];
     rawOptions.enum.push(null);
     delete rawOptions.addNullToEnum;
-  }
-
-  const selectOption = rawOptions?.select;
-  if (typeof selectOption === 'boolean') {
-    schemaProp[key] = {
-      ...schemaProp[key],
-      select: selectOption
-    };
   }
 
   {
@@ -369,14 +362,61 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata) {
  * Set Property Options for the property below
  * @param options Options
  * @param kind Overwrite auto-inferred kind
+ * @example
+ * ```ts
+ * class ClassName {
+ *   @prop()
+ *   public someprop: string;
+ * }
+ * ```
  */
 function prop(options?: BasePropOptions, kind?: WhatIsIt);
+/**
+ * Set Property Options for the property below
+ * @param options Options
+ * @param kind Overwrite auto-inferred kind
+ * @example
+ * ```ts
+ * class ClassName {
+ *   @prop({ type: () => String })
+ *   public someprop: string[];
+ * }
+ * ```
+ */
 function prop(options?: ArrayPropOptions, kind?: WhatIsIt);
+/**
+ * Set Property Options for the property below
+ * @param options Options
+ * @param kind Overwrite auto-inferred kind
+ * @example
+ * ```ts
+ * class ClassName {
+ *   @prop({ type: () => String })
+ *   public someprop: Map<string, string>;
+ * }
+ * ```
+ */
 function prop(options?: MapPropOptions, kind?: WhatIsIt);
+/**
+ * Set Property Options for the property below
+ * @param options Options
+ * @param kind Overwrite auto-inferred kind
+ * @example
+ * ```ts
+ * class Item {
+ *   @prop()
+ *   public owner: mongoose.Types.ObjectId
+ * }
+ * class User {
+ *   @prop({ ref: () => SomeRefClass, localField: '_id', foreignField: 'owner', justOne: true })
+ *   public someprop: string;
+ * }
+ * ```
+ */
 function prop(options?: VirtualOptions, kind?: WhatIsIt);
 function prop(options?: PropOptionsForNumber, kind?: WhatIsIt);
 function prop(options?: PropOptionsForString, kind?: WhatIsIt);
-function prop(options: any = {}, kind?: WhatIsIt) {
+function prop(options?: any, kind?: WhatIsIt) {
   return (target: any, key: string) => {
     let Type = Reflect.getMetadata(DecoratorKeys.Type, target, key);
     utils.assertion(!utils.isNullOrUndefined(Type), new NoMetadataError(key));
@@ -391,6 +431,11 @@ function prop(options: any = {}, kind?: WhatIsIt) {
       } else {
         kind = WhatIsIt.NONE;
       }
+    }
+
+    if ('refType' in options) {
+      options.type = options.refType;
+      delete options.refType;
     }
 
     // soft errors & "type"-alias mapping
