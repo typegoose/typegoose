@@ -24,6 +24,7 @@ redirect_from:
 - `@prop` now has more tsdoc for various options
 - `BasePropOptions.type` is now `unkown` instead of `any`
 - All aliases of `BasePropOptions.type` now inherit the types from there
+- Fix bug where autopopulate (or any other plugin) wouldnt pick up on virtuals [{% include gitissue repo="typegoose" num=274 %}]
 - [IC] `refType` is now moved to `prop`
 
 ## 7.1.1

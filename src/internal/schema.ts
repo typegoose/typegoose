@@ -85,15 +85,6 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       }
     }
 
-    /** Get Metadata for indices */
-    const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
-    if (Array.isArray(plugins)) {
-      for (const plugin of plugins) {
-        logger.debug('Applying Plugin:', plugin);
-        sch.plugin(plugin.mongoosePlugin, plugin.options);
-      }
-    }
-
     /** Get Metadata for Virtual Populates */
     const virtuals: VirtualPopulateMap = Reflect.getMetadata(DecoratorKeys.VirtualPopulate, cl);
     /** Simplify the usage */
@@ -119,6 +110,15 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       for (const [funcName, func] of queryMethods) {
         logger.debug('Applying Query Method:', funcName, func);
         sch.query[funcName] = func;
+      }
+    }
+
+    /** Get Metadata for indices */
+    const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
+    if (Array.isArray(plugins)) {
+      for (const plugin of plugins) {
+        logger.debug('Applying Plugin:', plugin);
+        sch.plugin(plugin.mongoosePlugin, plugin.options);
       }
     }
 
