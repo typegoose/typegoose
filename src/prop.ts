@@ -370,53 +370,10 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata): void {
  * }
  * ```
  */
-function prop(options?: BasePropOptions, kind?: WhatIsIt);
-/**
- * Set Property Options for the property below
- * @param options Options
- * @param kind Overwrite auto-inferred kind
- * @example
- * ```ts
- * class ClassName {
- *   @prop({ type: () => String })
- *   public someprop: string[];
- * }
- * ```
- */
-function prop(options?: ArrayPropOptions, kind?: WhatIsIt);
-/**
- * Set Property Options for the property below
- * @param options Options
- * @param kind Overwrite auto-inferred kind
- * @example
- * ```ts
- * class ClassName {
- *   @prop({ type: () => String })
- *   public someprop: Map<string, string>;
- * }
- * ```
- */
-function prop(options?: MapPropOptions, kind?: WhatIsIt);
-/**
- * Set Property Options for the property below
- * @param options Options
- * @param kind Overwrite auto-inferred kind
- * @example
- * ```ts
- * class Item {
- *   @prop()
- *   public owner: mongoose.Types.ObjectId
- * }
- * class User {
- *   @prop({ ref: () => SomeRefClass, localField: '_id', foreignField: 'owner', justOne: true })
- *   public someprop: string;
- * }
- * ```
- */
-function prop(options?: VirtualOptions, kind?: WhatIsIt);
-function prop(options?: PropOptionsForNumber, kind?: WhatIsIt);
-function prop(options?: PropOptionsForString, kind?: WhatIsIt);
-function prop(options?: any, kind?: WhatIsIt) {
+function prop(
+  options?: BasePropOptions | ArrayPropOptions | MapPropOptions | PropOptionsForNumber | PropOptionsForString | VirtualOptions,
+  kind?: WhatIsIt
+) {
   return (target: any, key: string) => {
     let Type = Reflect.getMetadata(DecoratorKeys.Type, target, key);
     utils.assertion(!utils.isNullOrUndefined(Type), new NoMetadataError(key));
