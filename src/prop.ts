@@ -99,8 +99,8 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata): void {
   const schemaProp = utils.initProperty(name, key, whatis);
 
   if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
-    utils.assertion(typeof rawOptions?.set === 'function', new TypeError(`"${name}.${key}" does not have a set function!`));
-    utils.assertion(typeof rawOptions?.get === 'function', new TypeError(`"${name}.${key}" does not have a get function!`));
+    utils.assertion(typeof rawOptions.set === 'function', new TypeError(`"${name}.${key}" does not have a set function!`));
+    utils.assertion(typeof rawOptions.get === 'function', new TypeError(`"${name}.${key}" does not have a get function!`));
 
     /*
      * Note:

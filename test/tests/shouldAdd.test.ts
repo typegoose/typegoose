@@ -357,3 +357,33 @@ it('should work with both map creation types', async () => {
   const variant2 = new MapTestModel({ prop: { key1: 1, key2: 2 } });
   await variant2.validate();
 });
+
+it('should set innerOptions correctly', () => {
+  class InnerOptions {
+    @prop({ type: String, innerOptions: { hello: true } })
+    public someArray: string[];
+  }
+
+  const schema = buildSchema(InnerOptions);
+  const path: any = schema.path('someArray');
+
+  expect(path).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(path.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(path.caster.options).toHaveProperty('hello', true);
+  expect(path.options).not.toHaveProperty('hello', true);
+});
+
+it('should set outerOptions correctly', () => {
+  class OuterOptions {
+    @prop({ type: String, outerOptions: { hello: true } })
+    public someArray: string[];
+  }
+
+  const schema = buildSchema(OuterOptions);
+  const path: any = schema.path('someArray');
+
+  expect(path).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(path.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(path.caster.options).not.toHaveProperty('hello', true);
+  expect(path.options).toHaveProperty('hello', true);
+});

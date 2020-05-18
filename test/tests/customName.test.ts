@@ -11,7 +11,7 @@ it('expect no changes to model Name when not using customOptions or collection',
   expect(gotClass).toEqual(NormalOptions);
 });
 
-it('expect if collection is defined to be automatically used with automaticName', () => {
+it('if collection is defined to be automatically used with automaticName', () => {
   @modelOptions({ schemaOptions: { collection: 'Something' }, options: { automaticName: true } })
   class CollectionOption { }
 
@@ -23,7 +23,7 @@ it('expect if collection is defined to be automatically used with automaticName'
   expect(gotClass).toEqual(CollectionOption);
 });
 
-it('expect if options.customName is defined to be used with automaticName', () => {
+it('if options.customName is defined to be used with automaticName', () => {
   @modelOptions({ options: { customName: 'CustomName', automaticName: true } })
   class CustomNameOption { }
 
@@ -134,4 +134,15 @@ it('should not make an automatic name (automaticName)', () => {
 
   const model = getModelForClass(DisableAutomaticName);
   expect(model.modelName).toEqual('DAN');
+});
+
+it('should not make an automatic name if no collection or customName are defined (automaticName)', () => {
+  @modelOptions({ options: { automaticName: true } })
+  class NoAutomaticName {
+    @prop()
+    public test: string;
+  }
+
+  const model = getModelForClass(NoAutomaticName);
+  expect(model.modelName).toEqual('NoAutomaticName');
 });

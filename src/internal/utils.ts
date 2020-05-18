@@ -10,6 +10,7 @@ import type {
   IObjectWithTypegooseFunction,
   IObjectWithTypegooseName,
   IPrototype,
+  KeyStringAny,
   PropOptionsForNumber,
   PropOptionsForString,
   VirtualOptions
@@ -265,8 +266,8 @@ export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: n
  * @param key the key of the current object
  * @param val the value of the object that should get returned for "existingMongoose" & "existingConnection"
  */
-function customMerger(key: string | number, val: unknown): any {
-  if (isNullOrUndefined(key) || typeof key !== 'string') {
+function customMerger(key: string | number, val: unknown): undefined | unknown {
+  if (typeof key !== 'string') {
     return undefined;
   }
   if (/^(existingMongoose|existingConnection)$/.test(key)) {
@@ -362,7 +363,7 @@ export function mapArrayOptions(
   const mapped = mapOptions(rawOptions, Type, target, pkey, false, loggerType);
 
   /** The Object that gets returned */
-  const returnObject = {
+  const returnObject: KeyStringAny = {
     ...mapped.outer,
     type: [
       {
@@ -373,11 +374,13 @@ export function mapArrayOptions(
   };
 
   if (typeof options?.innerOptions === 'object') {
+    delete returnObject.innerOptions;
     for (const [key, value] of Object.entries(options.innerOptions)) {
       returnObject.type[0][key] = value;
     }
   }
   if (typeof options?.outerOptions === 'object') {
+    delete returnObject.outerOptions;
     for (const [key, value] of Object.entries(options.outerOptions)) {
       returnObject[key] = value;
     }
@@ -520,25 +523,6 @@ export function assignGlobalModelOptions(target: any) {
     logger.info('Assigning global Schema Options to "%s"', getName(target));
     assignMetadata(DecoratorKeys.ModelOptions, omit(globalOptions, 'globalOptions'), target);
   }
-}
-
-/**
- * Get the status of "_id"
- * -> Check if _id should be present, or not
- * @param Type The Class to check on
- * @param rawOptions baseProp's rawOptions
- */
-export function get_idStatus(Type: any, rawOptions: any): boolean {
-  if (typeof rawOptions?._id === 'boolean') {
-    return rawOptions._id;
-  }
-
-  const TypeModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, Type);
-  if (typeof TypeModelOptions?.schemaOptions?._id === 'boolean') {
-    return TypeModelOptions.schemaOptions._id;
-  }
-
-  return true;
 }
 
 /**

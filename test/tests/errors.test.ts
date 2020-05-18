@@ -23,7 +23,7 @@ import {
 
 import { DecoratorKeys } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
-import { assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
+import { assertion, assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 
 // disable "no-unused" for this file, because it tests for errors
@@ -525,5 +525,15 @@ it('should error if ref\'s arrow-function returning type returns undefined', asy
     expect(err).not.toBeInstanceOf(AssertionError);
     expect(err).toBeInstanceOf(Error);
     expect(err.message).toEqual('Option "ref" for "Main.nested" was defined with an arrow-function, but the function returned null/undefined!');
+  }
+});
+
+it('should throw default error if no error is specified (assertion)', () => {
+  expect.assertions(2);
+  try {
+    assertion(false);
+  } catch (err) {
+    expect(err).toBeInstanceOf(Error);
+    expect(err.message).toEqual('Assert failed - no custom error');
   }
 });
