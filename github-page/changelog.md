@@ -19,6 +19,10 @@ redirect_from:
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.1.3
+
+- Added an Error if option `ref` is set but is `undefined/null`
+
 ## 7.1.2
 
 - `@prop` options types now work again

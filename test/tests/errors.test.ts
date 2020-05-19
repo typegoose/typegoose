@@ -537,3 +537,20 @@ it('should throw default error if no error is specified (assertion)', () => {
     expect(err.message).toEqual('Assert failed - no custom error');
   }
 });
+
+it('should error if ref is set but is "undefined/null"', () => {
+  expect.assertions(2);
+  try {
+    class RefUndefined {
+      @prop({ ref: undefined })
+      public someref?: Ref<undefined>;
+    }
+
+    buildSchema(RefUndefined);
+
+    fail('Expect to throw "Error"');
+  } catch (err) {
+    expect(err).toBeInstanceOf(Error);
+    expect(err.message).toEqual('Options "ref" is set, but is undefined/null! (RefUndefined.someref)');
+  }
+});
