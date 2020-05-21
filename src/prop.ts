@@ -385,7 +385,13 @@ function prop(
     options = options ?? {};
 
     if (!kind) {
-      if (Type === Array || Type === mongoose.Types.Array || Type === mongoose.Schema.Types.Array) {
+      if (
+        Type === Array ||
+        Type === mongoose.Types.Array ||
+        Type === mongoose.Schema.Types.Array ||
+        Type === mongoose.Types.DocumentArray ||
+        Type === mongoose.Schema.Types.DocumentArray
+      ) {
         kind = WhatIsIt.ARRAY;
       } else if (Type === Map || Type === mongoose.Types.Map || Type === mongoose.Schema.Types.Map) {
         kind = WhatIsIt.MAP;
