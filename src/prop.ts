@@ -384,7 +384,7 @@ function prop(
 
     options = options ?? {};
 
-    if (!kind) {
+    if (utils.isNullOrUndefined(kind)) {
       if (
         Type === Array ||
         Type === mongoose.Types.Array ||

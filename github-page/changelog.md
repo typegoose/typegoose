@@ -23,6 +23,7 @@ redirect_from:
 
 - Added an Error if option `ref` is set but is `undefined/null`
 - Add `mongoose.Types.DocumentArray` and `mongoose.Schema.Types.DocumentArray` to `@prop` array-detection
+- Change `if (!kind)` to `if (isNullOrUndefined(kind))`
 
 ## 7.1.2
 
