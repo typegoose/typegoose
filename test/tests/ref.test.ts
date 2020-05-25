@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 import { assertion, getName } from '../../src/internal/utils';
 import { getModelForClass, isDocument, isDocumentArray, prop, Ref } from '../../src/typegoose';
-import { RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
+import { RefTestArrayTypesModel, RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
 
 it('check generated ref schema for ObjectID _id', async () => {
   expect((RefTestModel.schema.path('refField') as any).instance).toEqual('ObjectID');
@@ -257,4 +257,17 @@ it('should make use of arrow-function returning ref-type', async () => {
 
   expect(MainModel.schema.path('nested')).toBeInstanceOf(mongoose.Schema.Types.ObjectId);
   expect((MainModel.schema.path('nested') as any).options.ref).toEqual(getName(Nested));
+});
+
+it('reference arrays should work with mongoose.Types.Array<Ref<T>>', async () => {
+  const stringdoc = await RefTestStringModel.create({ _id: 'm.t.a<r>' });
+  const doc = await RefTestArrayTypesModel.create({ array: [stringdoc, stringdoc] });
+  const found = await RefTestArrayTypesModel.findById(doc._id).orFail().exec();
+
+  expect(found.toObject()).toEqual(doc.depopulate('array').toObject());
+  const schemaPath: any = RefTestArrayTypesModel.schema.path('array');
+  expect(schemaPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(schemaPath.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+
+  expect(Array.from(found.array!.toObject())).toEqual([stringdoc._id, stringdoc._id]);
 });

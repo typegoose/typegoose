@@ -19,6 +19,13 @@ redirect_from:
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.1.4
+
+<sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+- Remove type `RefSchemaType`
+- Add `mongoose.Schema.Types.*` that are suitable for ref to `RefType`
+
 ## 7.1.3
 
 - Added an Error if option `ref` is set but is `undefined/null`

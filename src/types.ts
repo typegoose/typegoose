@@ -179,7 +179,7 @@ export interface BasePropOptions {
    * {@link BasePropOptions.type} can be used too
    * @default ObjectId
    */
-  refType?: NonNullable<BasePropOptions['type']> | RefSchemaType;
+  refType?: NonNullable<BasePropOptions['type']> | RefType;
 }
 
 export interface ArrayPropOptions extends BasePropOptions {
@@ -267,8 +267,12 @@ export interface VirtualOptions {
 export type PropOptionsForNumber = BasePropOptions & ValidateNumberOptions;
 export type PropOptionsForString = BasePropOptions & TransformStringOptions & ValidateStringOptions;
 
-export type RefType = number | string | mongoose.Types.ObjectId | Buffer | undefined;
-export type RefSchemaType =
+export type RefType =
+  | number
+  | string
+  | mongoose.Types.ObjectId
+  | Buffer
+  | undefined
   | typeof mongoose.Schema.Types.Number
   | typeof mongoose.Schema.Types.String
   | typeof mongoose.Schema.Types.Buffer

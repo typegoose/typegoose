@@ -102,3 +102,10 @@ export class RefTest {
 }
 
 export const RefTestModel = getModelForClass(RefTest);
+
+export class RefTestArrayTypes {
+  @arrayProp({ ref: RefTestString, refType: String })
+  public array?: mongoose.Types.Array<Ref<RefTestString>>;
+}
+
+export const RefTestArrayTypesModel = getModelForClass(RefTestArrayTypes);
