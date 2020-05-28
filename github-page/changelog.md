@@ -296,7 +296,7 @@ This Release didnt change anything on the code, it was mostly tests & github-pag
 
 [To Migrate, please look at the migration guide]({{ site.baseurl }}{% link _guides/migrate-to-6.md %})
 
-- Project got moved to the new repo (hasezoey/typegoose) and new package `@hasezoey/typegoose`
+- Project got moved to the new repo (typegoose/typegoose) and new package `@typegoose/typegoose`
 - rename `InstanceType<T>` to `DocumentType<T>` [{% include gitissue repo="szokodiakos" num=366 %}]
 - adding a migration guide from ~5.9 to 6.0.0
 - adding missing "get" and "set" property options [{% include gitissue repo="szokodiakos" num=260 %}]

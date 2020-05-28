@@ -18,7 +18,7 @@ A: because an collaborator cannot archive an project, only the owner can ([What 
 
 ### Why is the package now released in another package?
 
-(context: from `typegoose` to `@hasezoey/typegoose`)<br/>
+(context: from `typegoose` to `@typegoose/typegoose`)<br/>
 A: Because of a Repository Switch ([reasons](#is-this-project-still-active)) and because a name cannot be used by multiple packages except if it is scoped
 
 ### Why @typegoose/typegoose

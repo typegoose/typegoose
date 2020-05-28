@@ -17,7 +17,7 @@ Currently available loglevels:
 and to set the loglevel of typegoose:
 
 ```ts
-import { setLogLevel, LogLevels } from '@hasezoey/typegoose';
+import { setLogLevel, LogLevels } from '@typegoose/typegoose';
 
 setLogLevel(LogLevels.SILENT);
 ```
