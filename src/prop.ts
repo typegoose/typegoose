@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { format } from 'util';
+import { deprecate, format } from 'util';
 
 import { DecoratorKeys, WhatIsIt } from './internal/constants';
 import { schemas } from './internal/data';
@@ -36,8 +36,8 @@ function baseProp(input: DecoratedPropertyMetadata): void {
   if (Type === target.constructor) {
     // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
     throw new TypeError(
-      'It seems like the type used is the same as the target class, which is currently not supported\n' +
-      `Please look at https://github.com/typegoose/typegoose/issues/42 for more information, for now please avoid using it!`
+      'It seems like the type used is the same as the target class, which is not supported\n' +
+      `Please look at https://github.com/typegoose/typegoose/issues/42 for more information`
     );
   }
 
@@ -403,6 +403,16 @@ function prop(
     if ('refType' in options) {
       options.type = options.refType;
       delete options.refType;
+
+      deprecate(() => undefined, 'Option "refType" is deprecated, use option "type"', 'TDEP0003');
+    }
+
+    if ('of' in options) {
+      deprecate(() => undefined, 'Option "of" is deprecated, use option "type"', 'TDEP0003');
+    }
+
+    if ('items' in options) {
+      deprecate(() => undefined, 'Option "items" is deprecated, use option "type"', 'TDEP0003');
     }
 
     // soft errors & "type"-alias mapping
@@ -460,7 +470,7 @@ function prop(
  * @deprecated use "prop"
  */
 function mapProp(options: MapPropOptions) {
-  return prop(options, WhatIsIt.MAP);
+  return deprecate(prop.call(null, options, WhatIsIt.MAP), '"@mapProp" is deprecated, use "@prop" instead', 'TDEP0002');
 }
 
 /**
@@ -470,7 +480,7 @@ function mapProp(options: MapPropOptions) {
  * @deprecated use "prop"
  */
 function arrayProp(options: ArrayPropOptions) {
-  return prop(options, WhatIsIt.ARRAY);
+  return deprecate(prop.call(null, options, WhatIsIt.ARRAY), '"@arrayProp" is deprecated, use "@prop" instead', 'TDEP0001');
 }
 
 export { prop, arrayProp, mapProp };

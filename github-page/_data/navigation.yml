@@ -94,6 +94,8 @@ guides:
         url: /guides/faq
       - title: 'Known Issues'
         url: /guides/known-issues
+      - title: 'Deprecation Codes'
+        url: /guides/deprecation-codes
 
   - title: Basics
     children:

@@ -19,12 +19,14 @@ redirect_from:
 -->
 *`[IC]` means `Internal Change`*
 
-## 7.1.4
+## 7.2.0
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Remove type `RefSchemaType`
 - Add `mongoose.Schema.Types.*` that are suitable for ref to `RefType`
+- Runtime-Deprecate `@mapProp`(`TDEP0002`) & `@arrayProp`(`TDEP0001`)
+- Runtime-Deprecate `type`-alias options, `items` & `of` & `refType`(`TDEP0003`)
 
 ## 7.1.3
 

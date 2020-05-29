@@ -59,6 +59,8 @@ Options ([look here for more details](https://mongoosejs.com/docs/api/schema.htm
   - `localField`: Which property(on the current-Class) to match `foreignField` against **[Required]**
   - `justOne`: Return as One Document(true) or as Array(false) ***[Optional]***
   - `count`: Return the number of Documents found instead of the actual Documents ***[Optional]***
+  - `options`: Extra Query Options ***[Optional]***
+  - `match`: Extra Match Options ***[Optional]***
 
 Example: for an array
 

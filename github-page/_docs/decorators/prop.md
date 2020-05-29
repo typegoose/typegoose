@@ -139,7 +139,7 @@ Accepts Type: `mongoose.Schema.Types.Number` \| `mongoose.Schema.Types.String` \
 
 Set which Type to use for refs.
 
--> [`@prop`'s `type`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#type) can be used too
+Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
 
 ```ts
 class Nested {}
@@ -340,6 +340,138 @@ new AddNullToEnumModel({ value: null } as AddNullToEnum);
 
 <!--Below are just the Specific Options-->
 
+### Array Options
+
+#### items
+
+Accepts Type: `any`
+(alias for [`type`](#type) from `@prop`)
+
+Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
+
+Tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or another primitive type is given) or of subdocuments, if a class is given.
+
+```ts
+// Array of Primitives
+class Something {
+  @arrayProp({ items: String })
+  public languages?: string[];
+}
+
+// Array of subdocuments
+class Link {
+  @prop()
+  url: string;
+
+  @prop()
+  text: string;
+}
+
+class Something {
+  @arrayProp({ items: Link })
+  public links?: Link[];
+}
+```
+
+#### innerOptions
+
+`innerOptions` is used to overwrite here the options in this object go
+-> Use this only when absolutely needed and please open a new issue about it - or for plugins
+
+Example:
+
+```ts
+class Something {
+  @arrayProp({ required: true })
+  public propy: string[];
+}
+
+// This would be mapped to
+{
+  type: [{ type: String }],
+  required: true
+}
+
+// when using the overwrite
+class Something {
+  @arrayProp({ innerOptions: { required: true } })
+  public propy: string[];
+}
+
+// This would be mapped to
+{
+  type: [{ type: String, required: true }]
+}
+```
+
+#### outerOptions
+
+`outerOptions` is used to overwrite here the options in this object go
+-> Use this only when absolutely needed and please open a new issue about it - or for plugins
+
+Example:
+
+```ts
+class Something {
+  @arrayProp({ maxlength: 1 })
+  public propy: string[];
+}
+
+// This would be mapped to
+{
+  type: [{ type: String, maxlength: 1 }]
+}
+
+// when using the overwrite
+class Something {
+  @arrayProp({ outerOptions: { maxlength: 1 } })
+  public propy: string[];
+}
+
+// This would be mapped to
+{
+  type: [{ type: String }],
+  maxlength: 1
+}
+```
+
+#### dim
+
+`dim` is used to set the Dimensions this array should have (for something like an matrix)
+-> needs to be higher than 0
+
+Example:
+
+```ts
+class Something {
+  @arrayProp({ dim: 3, items: String })
+  public propy: string[][][];
+}
+
+// This would be mapped to
+{
+  type: [[[{ type: String }]]]
+}
+```
+
+### Map Options
+
+#### of
+
+Accepts Type: `any`
+(alias for [`type`](#type) from `@prop`)
+
+Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
+
+This will tell Typegoose that the Map value consists of primitives (If `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
+
+```ts
+class Car {
+  @mapProp({ of: Car })
+  public keys?: Map<string, Car>;
+}
+```
+
 ### String Transform options
 
 #### lowercase
@@ -416,6 +548,21 @@ Example:
 class MinLengthed {
   @prop({ minlength: 10 })
   public minlengthed?: string; // the string must be at least 10 characters long
+}
+```
+
+#### match
+
+Accepts Type: `RegExp`
+
+Set an Regular Expression the string must match with
+
+Example:
+
+```ts
+class RegExpString {
+  @prop({ match: /^H/i })
+  public matched?: string;
 }
 ```
 
