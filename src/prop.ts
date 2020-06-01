@@ -404,15 +404,15 @@ function prop(
       options.type = options.refType;
       delete options.refType;
 
-      deprecate(() => undefined, 'Option "refType" is deprecated, use option "type"', 'TDEP0003');
+      deprecate(() => undefined, 'Option "refType" is deprecated, use option "type"', 'TDEP0003')();
     }
 
     if ('of' in options) {
-      deprecate(() => undefined, 'Option "of" is deprecated, use option "type"', 'TDEP0003');
+      deprecate(() => undefined, 'Option "of" is deprecated, use option "type"', 'TDEP0003')();
     }
 
     if ('items' in options) {
-      deprecate(() => undefined, 'Option "items" is deprecated, use option "type"', 'TDEP0003');
+      deprecate(() => undefined, 'Option "items" is deprecated, use option "type"', 'TDEP0003')();
     }
 
     // soft errors & "type"-alias mapping
