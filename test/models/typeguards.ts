@@ -1,3 +1,4 @@
+import { WhatIsIt } from '../../src/internal/constants';
 import { arrayProp, getModelForClass, mongoose, prop, Ref } from '../../src/typegoose';
 
 export class IsRefTypeNestedString {
@@ -31,3 +32,16 @@ export class IsRefTypeArray {
 }
 
 export const IsRefTypeArrayModel = getModelForClass(IsRefTypeArray);
+
+export class Sub {
+  @prop({ required: true })
+  public someValue!: string;
+}
+
+export class MTypesArrayRef {
+  @prop({ required: true, ref: () => Sub }, WhatIsIt.ARRAY)
+  public subs!: mongoose.Types.Array<Ref<Sub>>;
+}
+
+export const SubModel = getModelForClass(Sub);
+export const MTypesArrayRefModel = getModelForClass(MTypesArrayRef);

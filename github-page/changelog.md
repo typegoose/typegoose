@@ -27,6 +27,7 @@ redirect_from:
 - Add `mongoose.Schema.Types.*` that are suitable for ref to `RefType`
 - Runtime-Deprecate `@mapProp`(`TDEP0002`) & `@arrayProp`(`TDEP0001`)
 - Runtime-Deprecate `type`-alias options, `items` & `of` & `refType`(`TDEP0003`)
+- Handle `mongoose.Types.Array<Ref<>>` for Typeguards (`isDocumentArray` & `isRefTypeArray`) [{% include gitissue repo="typegoose" num=278 %}]
 
 ## 7.1.3
 

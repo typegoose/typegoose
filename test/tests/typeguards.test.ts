@@ -1,3 +1,4 @@
+import { assertion } from '../../src/internal/utils';
 import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose';
 import {
   IsRefType,
@@ -5,8 +6,10 @@ import {
   IsRefTypeArrayModel,
   IsRefTypeModel,
   IsRefTypeNestedObjectIdModel,
-  IsRefTypeNestedStringModel
-} from '../models/isRefType';
+  IsRefTypeNestedStringModel,
+  MTypesArrayRefModel,
+  SubModel
+} from '../models/typeguards';
 import { UserRefModel } from '../models/userRefs';
 
 describe('isDocument / isDocumentArray', () => {
@@ -219,4 +222,26 @@ describe('isRefType / isRefTypeArray', () => {
       }
     });
   });
+});
+
+it('should support mongoose.Types.Array<Ref<>> for isDocumentArray', async () => {
+  // This Test is mainly for Type-checking (compile time)
+  const subdoc = await SubModel.create({ someValue: 'MTA_IDA' });
+  const mtarefdoc = await MTypesArrayRefModel.create({ subs: [subdoc, subdoc] });
+
+  const found = await MTypesArrayRefModel.findById(mtarefdoc).populate('subs').orFail().exec();
+
+  assertion(isDocumentArray(found.subs), new Error('Expected found.subs to be populated'));
+  expect(found.subs[0].someValue).toBe('MTA_IDA');
+});
+
+it('should support mongoose.Types.Array<Ref<>> for isRefTypeArray', async () => {
+  // This Test is mainly for Type-checking (compile time)
+  const subdoc = await SubModel.create({ someValue: 'MTA_IRTA' });
+  const mtarefdoc = await MTypesArrayRefModel.create({ subs: [subdoc, subdoc] });
+
+  const found = await MTypesArrayRefModel.findById(mtarefdoc).orFail().exec();
+
+  assertion(isRefTypeArray(found.subs), new Error('Expected found.subs to not be populated'));
+  expect(found.subs[0]).toBeInstanceOf(mongoose.Types.ObjectId);
 });
