@@ -23,6 +23,10 @@ redirect_from:
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
+- Update Dependencies
+  - `mongoose` to 5.9.17
+  - `@types/mongoose` to 5.7.21
+  - `typescript` to 3.9.3
 - Remove type `RefSchemaType`
 - Add `mongoose.Schema.Types.*` that are suitable for ref to `RefType`
 - Runtime-Deprecate `@mapProp`(`TDEP0002`) & `@arrayProp`(`TDEP0001`)
