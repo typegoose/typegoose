@@ -106,10 +106,13 @@ class Parent {
   @prop({ ref: Nested })
   public nest: Ref<Nested>;
   // or
-  @prop({ ref: "Nested" })
+  @prop({ ref: 'Nested' })
   public nest: Ref<Nested>;
 }
 ```
+
+The `'Nested'` form is useful to avoid unintuitive errors due to circular dependencies, such as
+`Error: Options "ref" is set, but is undefined/null!`.
 
 ### refPath
 
