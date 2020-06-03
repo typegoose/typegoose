@@ -15,12 +15,14 @@ import * as utils from './internal/utils';
 import { logger } from './logSettings';
 import { buildSchema } from './typegoose';
 import type {
+  AnyParamConstructor,
   ArrayPropOptions,
   BasePropOptions,
   DecoratedPropertyMetadata,
   DecoratedPropertyMetadataMap,
   KeyStringAny,
   MapPropOptions,
+  NestedDiscriminatorsMap,
   PropOptionsForNumber,
   PropOptionsForString,
   VirtualOptions,
@@ -72,6 +74,22 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata): void {
     buildSchema(Type);
   }
   const name = utils.getName(target);
+
+  if ('discriminators' in rawOptions) {
+    logger.debug('Found option "discriminators" in "%s.%s"', name, key);
+    const discriminators: AnyParamConstructor<any>[] = utils.getType(rawOptions.discriminators);
+    discriminators.forEach((con, index) => {
+      if (!utils.isConstructor(con)) {
+        throw new Error(format('"%s.%s" discriminators index "%s" is not an constructor!', name, key, index));
+      }
+    });
+
+    const disMap: NestedDiscriminatorsMap = new Map(Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, target.constructor) ?? []);
+    disMap.set(key, discriminators);
+    Reflect.defineMetadata(DecoratorKeys.NestedDiscriminators, disMap, target.constructor);
+
+    delete rawOptions.discriminators;
+  }
 
   // allow setting the type asynchronously
   if (!utils.isNullOrUndefined(rawOptions.ref)) {

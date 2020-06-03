@@ -1,20 +1,24 @@
 import * as mongoose from 'mongoose';
 
+import { format } from 'util';
 import { logger } from '../logSettings';
 import { _buildPropMetadata } from '../prop';
+import { buildSchema } from '../typegoose';
 import type {
   AnyParamConstructor,
   DecoratedPropertyMetadataMap,
+  Func,
   IHooksArray,
   IIndexArray,
   IModelOptions,
   IPluginsArray,
+  NestedDiscriminatorsMap,
   QueryMethodMap,
   VirtualPopulateMap
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
-import { assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
+import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
 /**
  * Private schema builder out of class props
@@ -70,6 +74,30 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   sch.loadClass(cl);
 
   if (isFinalSchema) {
+    /** Get Metadata for Nested Discriminators */
+    const disMap: NestedDiscriminatorsMap = Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, cl);
+    if (disMap instanceof Map) {
+      for (const [key, discriminators] of disMap) {
+        logger.debug('Applying Nested Discriminators for:', key, discriminators);
+
+        const path: { discriminator?: Func; } = sch.path(key) as any;
+        assertion(!isNullOrUndefined(path), new Error(format('Path "%s" does not exist on Schema of "%s"', key, name)));
+        assertion(typeof path.discriminator === 'function', new Error(format('There is no function called "discriminator" on schema-path "%s" on Schema of "%s"', key, name)));
+
+        for (const child of discriminators) {
+          const childSch = buildSchema(child) as mongoose.Schema & { paths: any; };
+
+          const discriminatorKey = childSch.get('discriminatorKey');
+          if (childSch.path(discriminatorKey)) {
+            (childSch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
+          }
+
+          const childName = getName(child);
+          path.discriminator(childName, childSch, childName);
+        }
+      }
+    }
+
     // Hooks
     {
       /** Get Metadata for PreHooks */
@@ -87,7 +115,6 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
     /** Get Metadata for Virtual Populates */
     const virtuals: VirtualPopulateMap = Reflect.getMetadata(DecoratorKeys.VirtualPopulate, cl);
-    /** Simplify the usage */
     if (virtuals instanceof Map) {
       for (const [key, options] of virtuals) {
         logger.debug('Applying Virtual Populates:', key, options);

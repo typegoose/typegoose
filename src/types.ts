@@ -180,6 +180,11 @@ export interface BasePropOptions {
    * @default ObjectId
    */
   refType?: NonNullable<BasePropOptions['type']> | RefType;
+  /**
+   * Set the Nested Discriminators
+   * Note: "_id: false" as an prop option dosnt work here
+   */
+  discriminators?: DeferredFunc<AnyParamConstructor<any>[]>;
 }
 
 export interface ArrayPropOptions extends BasePropOptions {
@@ -463,10 +468,19 @@ export type QueryMethod<T extends (...args: any) => any> = (...args: Parameters<
  * Used for the Reflection of Query Methods
  * @example
  * ```ts
- * const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target.constructor) ?? []);
+ * const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target) ?? []);
  * ```
  */
 export type QueryMethodMap = Map<string, Func>;
+
+/**
+ * Used for the Reflection of Nested Discriminators
+ * @example
+ * ```ts
+ * const disMap: NestedDiscriminatorsMap = new Map(Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, target) ?? []);
+ * ```
+ */
+export type NestedDiscriminatorsMap = Map<string, AnyParamConstructor<any>[]>;
 
 /**
  * Used for the Reflection of Hooks

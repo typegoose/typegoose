@@ -1,4 +1,4 @@
-import { arrayProp, getModelForClass, getNestedDiscriminatorForClass, modelOptions, prop } from '../../src/typegoose';
+import { getModelForClass, modelOptions, mongoose, prop } from '../../src/typegoose';
 
 it('should make use of nested-discriminators [typegoose/typegoose#25]', async () => {
   enum BuildingTypes {
@@ -8,7 +8,10 @@ it('should make use of nested-discriminators [typegoose/typegoose#25]', async ()
 
   @modelOptions({
     schemaOptions: {
-      discriminatorKey: 'type'
+      discriminatorKey: 'type',
+      // set to "throw" that if the discriminators dont get applied it fails instead of silently discarding non-existent values
+      strict: 'throw',
+      _id: false
     }
   })
   class Building {
@@ -30,24 +33,11 @@ it('should make use of nested-discriminators [typegoose/typegoose#25]', async ()
   }
 
   class Area {
-    @arrayProp({ items: Building })
+    @prop({ type: Building, discriminators: () => [Garage, SummerHouse] })
     public buildings: Building[];
   }
 
-  // const AreaSchema = buildSchema(Area);
   const AreaModel = getModelForClass(Area);
-  // const docArray: mongoose.Schema.Types.DocumentArray | any = AreaSchema.path('buildings');
-
-  // if (!(docArray instanceof mongoose.Schema.Types.DocumentArray)) {
-  //   throw new Error('Expected "docArray" to be an mongoose.Types.DocumentArray');
-  // }
-
-  // const BuildingModel = getModelForClass(Building);
-  const GarageModel = getNestedDiscriminatorForClass(AreaModel, 'buildings', Garage, BuildingTypes.Garage);
-  const SummerHouseModel = getNestedDiscriminatorForClass(AreaModel, 'buildings', SummerHouse, BuildingTypes.SummerHouse);
-
-  // const AreaModel = mongoose.model('Area', AreaSchema) as ReturnModelType<typeof Area>;
-  // addModelToTypegoose(AreaModel, Area);
 
   {
     const area = await AreaModel.create({});
@@ -55,7 +45,23 @@ it('should make use of nested-discriminators [typegoose/typegoose#25]', async ()
     area.buildings.push({ type: BuildingTypes.Garage, slotsForCars: 20 } as Garage);
     await area.save();
 
-    console.log(area);
-    console.log(area.schema.path('buildings'));
+    const docPOJO = area.toJSON();
+    expect(docPOJO).toHaveProperty('buildings');
+    expect(docPOJO.buildings).toEqual([
+      {
+        width: 100,
+        type: 'SummerHouse',
+        distanceToLake: 100
+      },
+      {
+        width: 100,
+        type: 'Garage',
+        slotsForCars: 20
+      }
+    ]);
+
+    const schemaPath: any = AreaModel.schema.path('buildings');
+    expect(schemaPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+    expect(schemaPath.schemaOptions.type).toHaveProperty('discriminators');
   }
 });

@@ -18,13 +18,12 @@ import { parseENV, setGlobalOptions } from './globalOptions';
 import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
-import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import { assertion, assertionIsClass, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
 import { isModel } from './typeguards';
 import type {
   AnyParamConstructor,
   DocumentType,
-  Func,
   IModelOptions,
   Ref,
   ReturnModelType
@@ -258,39 +257,4 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   const model = from.discriminator(name, sch, id ? id : name);
 
   return addModelToTypegoose<U, QueryHelpers>(model, cl);
-}
-
-/**
- * Build a Model from a given class and return the model
- * @param from The Model to build From
- * @param schemaPath The path at which the discriminator should be registered at
- * @param cl The Class to make a model out
- * @param id The Identifier to use to differentiate documents (default: cl.name)
- */
-export function getNestedDiscriminatorForClass<T, U extends AnyParamConstructor<T>>(
-  from: mongoose.Model<any>,
-  schemaPath: string,
-  cl: U,
-  id?: string
-) {
-  assertion(isModel(from), new TypeError(`"${from}" is not a valid Model!`));
-  assertionIsClass(cl);
-
-  const disName = getName(cl);
-  const fromName = from.modelName;
-  const path: { discriminator?: Func; } = from.schema.path(schemaPath) as any;
-  assertion(!isNullOrUndefined(path), new Error(format('Path "%s" does not exist on "%s"', schemaPath, fromName)));
-
-  const sch = buildSchema(cl) as mongoose.Schema & { paths: any; };
-
-  const discriminatorKey = sch.get('discriminatorKey');
-  if (sch.path(discriminatorKey)) {
-    (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
-  }
-
-  assertion(typeof path.discriminator === 'function', new Error(format('There is no function called "discriminator" on schema-path "%s" on model "%s"', schemaPath, fromName)));
-
-  const model = path.discriminator(disName, sch, id ? id : disName);
-
-  return model as ReturnModelType<U, T>; // not using "addModelToTypegoose" because it isnt really a model
 }
