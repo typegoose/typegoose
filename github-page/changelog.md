@@ -21,8 +21,6 @@ redirect_from:
 
 ## 7.2.0
 
-<sub>This Version is not yet released, only changes made until now are listed here</sub>
-
 - Update Dependencies
   - `mongoose` to 5.9.17
   - `@types/mongoose` to 5.7.21
