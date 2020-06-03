@@ -244,9 +244,9 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   assertionIsClass(cl);
 
   const name = getName(cl);
-  // if (models.has(name)) { // disabled for testing
-  //   return models.get(name) as ReturnModelType<U, QueryHelpers>;
-  // }
+  if (models.has(name)) {
+    return models.get(name) as ReturnModelType<U, QueryHelpers>;
+  }
 
   const sch = buildSchema(cl) as mongoose.Schema & { paths: any; };
 
