@@ -3,8 +3,7 @@ title: "Migrate to 6.0.0"
 classes: wide
 ---
 
-<!--Note this is mostly just a copy of "migrate_to_6.md" on the root of the repo-->
-These are the changes made for 6.0.0 that are breaking \| important to know
+These are the changes made for 6.0.0 that are breaking or just important to know
 
 ## Important, Read this first
 
@@ -47,11 +46,11 @@ Hooks got (in 6.0.0-13) a change for the types to comply with the latest mongoos
 
 ## Methods (staticMethod, instanceMethod, virtuals)
 
-`@staticMethod` & `@instanceMethod` got deprecated in favor of `schema.loadClass()`
-(means these decorators are no more needed, so they are auto-detected)
+`@staticMethod` & `@instanceMethod` were deprecated in favor of `schema.loadClass()`. These decorators are no longer needed, because the methods are auto-detected.
 
-for virtual-populates use `@prop({ localField, foreignField })` and no more `overwrite` option is needed, it will auto detect if one of these values is included
-for normal virtuals, just use `get somevalue() { return ''; }` and `set somevalue(val: string) { }` (no more `@prop` needed)
+For [virtuals](https://mongoosejs.com/docs/tutorials/virtuals.html), simply use `get somevalue() { return ''; }` and `set somevalue(val: string) { }` (`@prop` is no longer needed). [[New Documentation]({{ site.baseurl }}{% link _docs/virtuals.md %}#get--set)]
+
+For [populating virtuals](https://mongoosejs.com/docs/tutorials/virtuals.html#populate), use `@prop({ localField, foreignField })`. The `overwrite` option is no longer needed. [[New Documentation]({{ site.baseurl }}{% link _docs/virtuals.md %}#virtual-populate)]
 
 Update: `@staticMethod` & `@instanceMethod` got removed in 6.1.0-1
 

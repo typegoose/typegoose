@@ -1,11 +1,11 @@
-import { arrayProp, DocumentType, prop, Ref } from '../../src/typegoose';
+import { DocumentType, prop, Ref } from '../../src/typegoose';
 import { Car } from './car';
 
 export abstract class PersistentModel {
   @prop()
   public createdAt?: Date;
 
-  @arrayProp({ ref: Car })
+  @prop({ ref: Car })
   public cars?: Ref<Car>[];
 
   // define an instance method that will be overwritten

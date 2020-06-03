@@ -10,7 +10,7 @@ describe('Property Option {select}', () => {
 
   it('should only return default selected properties', async () => {
     /** variable name long: foundSelectDefault */
-    const fSDefault = (await SelectModel.findOne({}).exec()).toObject();
+    const fSDefault = (await SelectModel.findOne({}).orFail().exec()).toObject();
 
     expect(fSDefault).not.toHaveProperty('test1');
     expect(fSDefault).toHaveProperty('test2', SelectStrings.test2);
@@ -19,7 +19,7 @@ describe('Property Option {select}', () => {
 
   it('should only return specifically selected properties', async () => {
     /** variable name long: foundSelectExtra */
-    const fSExtra = (await SelectModel.findOne({}).select(['+test1', '+test3', '-test2']).exec()).toObject();
+    const fSExtra = (await SelectModel.findOne({}).select(['+test1', '+test3', '-test2']).orFail().exec()).toObject();
 
     expect(fSExtra).toHaveProperty('test1', SelectStrings.test1);
     expect(fSExtra).not.toHaveProperty('test2');
@@ -61,7 +61,7 @@ it('should create and find indexes with weights', async () => {
 it('should add compound index', async () => {
   expect.assertions(1);
   const user = await RatingUserModel.create({ name: 'hi' } as RatingUser);
-  const car = await RatingCarModel.create({ model: 'some' } as RatingCar);
+  const car = await RatingCarModel.create({ carModel: 'some' } as RatingCar);
 
   await RatingModel.create({ user, car, stars: 4 });
 

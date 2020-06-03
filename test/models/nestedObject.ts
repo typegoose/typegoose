@@ -1,4 +1,4 @@
-import { arrayProp, getModelForClass, prop } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose';
 
 export class AddressNested {
   @prop()
@@ -12,7 +12,7 @@ export class PersonNested {
   @prop({ _id: false })
   public address?: AddressNested;
 
-  @arrayProp({ _id: false, items: AddressNested })
+  @prop({ _id: false, type: AddressNested })
   public moreAddresses?: AddressNested[];
 }
 

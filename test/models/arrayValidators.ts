@@ -1,4 +1,4 @@
-import { arrayProp, getModelForClass } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose';
 
 // Please try to keep this file in sync with ./stringValidators.ts
 
@@ -16,37 +16,37 @@ export enum ArrayValidatorEnumNumber {
 
 export class ArrayValidators {
   // String-Array Values
-  @arrayProp({ items: String, maxlength: 3 })
-  public maxLength?: string[];
+  @prop({ type: String, maxlength: 3 })
+  public maxLength!: string[];
 
-  @arrayProp({ items: String, minlength: 10 })
-  public minLength?: string[];
+  @prop({ type: String, minlength: 10 })
+  public minLength!: string[];
 
-  @arrayProp({ items: String, trim: true })
-  public trimmed?: string[];
+  @prop({ type: String, trim: true })
+  public trimmed!: string[];
 
-  @arrayProp({ items: String, uppercase: true })
-  public uppercased?: string[];
+  @prop({ type: String, uppercase: true })
+  public uppercased!: string[];
 
-  @arrayProp({ items: String, lowercase: true })
-  public lowercased?: string[];
+  @prop({ type: String, lowercase: true })
+  public lowercased!: string[];
 
-  @arrayProp({ items: String, default: ['hello'], lowercase: true })
-  public defaulted?: string[];
+  @prop({ type: String, default: ['hello'], lowercase: true })
+  public defaulted!: string[];
 
   // Number-Array Values
-  @arrayProp({ items: Number, max: 3 })
-  public max?: number[];
+  @prop({ type: Number, max: 3 })
+  public max!: number[];
 
-  @arrayProp({ items: Number, min: 10 })
-  public min?: number[];
+  @prop({ type: Number, min: 10 })
+  public min!: number[];
 
   // Enum-Array Values
-  @arrayProp({ items: String, enum: ArrayValidatorEnumString })
-  public enumedString?: ArrayValidatorEnumString[];
+  @prop({ type: String, enum: ArrayValidatorEnumString })
+  public enumedString!: ArrayValidatorEnumString[];
 
-  @arrayProp({ items: Number, enum: ArrayValidatorEnumNumber })
-  public enumedNumber?: ArrayValidatorEnumNumber[];
+  @prop({ type: Number, enum: ArrayValidatorEnumNumber })
+  public enumedNumber!: ArrayValidatorEnumNumber[];
 }
 
 export const ArrayValidatorsModel = getModelForClass(ArrayValidators);

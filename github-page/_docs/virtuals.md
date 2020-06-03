@@ -59,18 +59,20 @@ Options ([look here for more details](https://mongoosejs.com/docs/api/schema.htm
   - `localField`: Which property(on the current-Class) to match `foreignField` against **[Required]**
   - `justOne`: Return as One Document(true) or as Array(false) ***[Optional]***
   - `count`: Return the number of Documents found instead of the actual Documents ***[Optional]***
+  - `options`: Extra Query Options ***[Optional]***
+  - `match`: Extra Match Options ***[Optional]***
 
 Example: for an array
 
 ```ts
 class Kittens {
-  @prop({ required: true, ref: "Cat" })
+  @prop({ required: true, ref: () => Cat ) }) // providing the type deferred
   public parent: Ref<Cat>;
 }
 
 class Cat {
   @arrayProp({
-    ref: "Kittens", // please know for "virtual populate" that "ref" will **not** work here
+    ref: Kittens,
     foreignField: 'parent', // compare this value to the local document populate is called on
     localField: '_id' // compare this to the foreign document's value defined in "foreignField"
   })
@@ -83,13 +85,13 @@ Example: for only one document
 ```ts
 // i couldnt think of an real use case example
 class Sub {
-  @prop({ requried: true, ref: "Parent" })
+  @prop({ requried: true, ref: () => Parent }) // providing the type deferred
   public parent: Ref<Parent>;
 }
 
 class Parent {
   @prop({
-    ref: "Sub",
+    ref: Sub,
     foreignField: 'parent',
     localField: '_id',
     justOne: true // please know that when this is not included, mongoose will return an array
@@ -109,6 +111,8 @@ Note: it can be set in `@modelOptions`, but it can be set in `getModelForClass` 
 Example:
 
 ```ts
+class Sub {}
+
 @modelOptions({
   schemaOptions: {
     toJSON: { virtuals: true },
@@ -117,10 +121,10 @@ Example:
 })
 class Parent {
   @prop({
-    ref: "Sub",
+    ref: Sub,
     foreignField: 'parent',
     localField: '_id',
-    justOne: true // please know that when this is not included, mongoose will return an array
+    justOne: true
   })
   public one: Ref<Sub>;
 }

@@ -15,10 +15,29 @@ class Nested {
 }
 
 class Main {
-  @prop({ ref: Nested })
+  @prop({ ref: Nested }) // for one
+  public nested: Ref<Nested>;
+
+  @arrayProp({ ref: Nested }) // for an array of references
+  public nestedArray: Ref<Nested>[];
+}
+```
+
+Since 7.1.0 it is also allowed to do arrow-functions returning the type:
+
+```ts
+class Nested {
+  @prop()
+  public someNestedProperty: string;
+}
+
+class Main {
+  @prop({ ref: () => Nested })
   public nested: Ref<Nested>;
 }
 ```
+
+This is useful if the class is either defined *after* the current class, or will otherwise be `undefined` and without hardcoding strings
 
 ## Common Problems
 
@@ -31,7 +50,7 @@ class Nested {
 }
 
 class Main {
-  @prop({ ref: "Nested" })
+  @prop({ ref: "Nested" }) // since 7.0 it is recommended to use "ref: getName(Class)" to dynamically get the name
   public nested: Ref<Nested>;
 }
 ```

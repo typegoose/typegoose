@@ -6,16 +6,20 @@ import { StringValidatorEnum, StringValidatorsModel } from '../models/stringVali
 
 it('should respect maxlength', async () => {
   expect.assertions(1);
-  await expect(StringValidatorsModel.create({
-    maxLength: 'this is too long'
-  })).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
+  await expect(
+    StringValidatorsModel.create({
+      maxLength: 'this is too long'
+    })
+  ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
 
 it('should respect minlength', async () => {
   expect.assertions(1);
-  await expect(StringValidatorsModel.create({
-    minLength: 'too short'
-  })).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
+  await expect(
+    StringValidatorsModel.create({
+      minLength: 'too short'
+    })
+  ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
 
 it('should trim', async () => {
@@ -54,11 +58,11 @@ it('should respect enum', async () => {
     enumed: StringValidatorEnum.OPT2
   });
 
-  expect(doc).not.toEqual(undefined);
+  expect(doc).not.toBeUndefined();
   expect(doc.enumed).toEqual(StringValidatorEnum.OPT2);
 
-  const found = await StringValidatorsModel.findById(doc._id).exec();
+  const found = await StringValidatorsModel.findById(doc._id).orFail().exec();
 
-  expect(found).not.toEqual(undefined);
+  expect(found).not.toBeUndefined();
   expect(found.enumed).toEqual(StringValidatorEnum.OPT2);
 });

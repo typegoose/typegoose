@@ -1,4 +1,4 @@
-import { arrayProp, getModelForClass, modelOptions, prop } from '../../src/typegoose';
+import { getModelForClass, modelOptions, prop } from '../../src/typegoose';
 
 @modelOptions({
   schemaOptions: {
@@ -33,7 +33,7 @@ export class Skyscraper extends OfficeBuilding {
   @prop({ _id: false })
   public mainGarage?: Garage;
 
-  @arrayProp({ items: Garage, _id: false })
+  @prop({ type: Garage, _id: false })
   public garagesInArea?: Garage[];
 }
 

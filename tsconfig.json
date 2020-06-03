@@ -16,7 +16,8 @@
     "inlineSourceMap": true,
     "importHelpers": true,
     "strictBindCallApply": true,
-    "strictFunctionTypes": true
+    "strictFunctionTypes": true,
+    "strictNullChecks": true
   },
   "include": [
     "src/**/*.ts",

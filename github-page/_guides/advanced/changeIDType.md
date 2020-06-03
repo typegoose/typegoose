@@ -18,12 +18,16 @@ Note: when the type is not `ObjectID`, you need to explicitly set the `_id` befo
 To disable the `_id` field altogether (useful in arrays of subdocuments), add [`@prop({ _id: false })`]({{ site.baseurl }}{% link _docs/decorators/prop.md %}#_id) or [`@modelOptions({ schemaOptions: { _id: false } })`](https://mongoosejs.com/docs/guide.html#_id).
 
 ```ts
+class WithNoId {
+  @prop()
+  public someValue: string;
+}
+
 class SomeChangedID {
-  @prop({ _id: false })  // no _id
-  @prop(): someField: string;
+  @arrayProp({ items: WithNoId, _id: false })
+  public someField: WithNoId[];
 }
 ```
-
 
 ## With the Base Class
 

@@ -3,7 +3,6 @@ import { model, Schema } from 'mongoose';
 
 import {
   addModelToTypegoose,
-  arrayProp,
   buildSchema,
   deleteModel,
   deleteModelWithClass,
@@ -13,16 +12,16 @@ import {
   getModelForClass,
   getModelWithString,
   getName,
-  mapProp,
   modelOptions,
   pre,
   prop,
+  Ref,
   setGlobalOptions
 } from '../../src/typegoose'; // import order is important with jest
 
-import { DecoratorKeys } from '../../src/internal/constants';
+import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
-import { assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
+import { assertion, assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 
 // disable "no-unused" for this file, because it tests for errors
@@ -82,9 +81,7 @@ it('should error if an non-existing(runtime) type is given [NoMetadataError]', (
 
 it('should error if no function for hooks is defined [TypeError]', () => {
   try {
-    // ignore that it is not written right, it should be tested so
-    // TODO: when upgrading to ts 3.9 change to "ts-expect-error"
-    // @ts-ignore
+    // @ts-expect-error
     @pre<Test>('')
     class TestNoFunctionHook {
       @prop()
@@ -101,7 +98,7 @@ it('should error if no function for hooks is defined [TypeError]', () => {
 it('should error if no get or set function is defined for non-virtuals [TypeError]', () => {
   try {
     class TestNoGetNoSet {
-      // @ts-ignore
+      // @ts-expect-error
       @prop({ set: false })
       public test: string;
     }
@@ -113,7 +110,7 @@ it('should error if no get or set function is defined for non-virtuals [TypeErro
   }
   try {
     class TestWrongGetSetType {
-      // @ts-ignore
+      // @ts-expect-error
       @prop({ set: () => undefined, get: false })
       public test: string;
     }
@@ -140,7 +137,7 @@ it('should error if not all needed parameters for virtual-populate are given [No
 
 it('should error if no valid model is supplied to "addModelToTypegoose" [TypeError]', () => {
   try {
-    // @ts-ignore
+    // @ts-expect-error
     addModelToTypegoose('hello');
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -157,7 +154,7 @@ it('should not modify an immutable', async () => {
 
   const TIModel = getModelForClass(TestImmutable);
   const doc = await TIModel.create({ someprop: 'Hello' } as TestImmutable);
-  expect(doc).not.toBe(undefined);
+  expect(doc).not.toBeUndefined();
   doc.someprop = 'Hello2';
   await doc.save();
   expect(doc.someprop).toEqual('Hello');
@@ -167,7 +164,7 @@ it('should not modify an immutable', async () => {
 describe('tests for "NoValidClass"', () => {
   it('should error if no valid class is supplied to "addModelToTypegoose" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       addModelToTypegoose(model('hello', new Schema()), 'not class');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -177,7 +174,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "buildSchema" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       buildSchema('hello');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -187,7 +184,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "_buildSchema" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       _buildSchema('hello');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -197,7 +194,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "getModelForClass" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       getModelForClass('hello');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -207,7 +204,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "deleteModelWithClass" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       deleteModelWithClass(true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -217,7 +214,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       mergeSchemaOptions({}, true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -227,7 +224,7 @@ describe('tests for "NoValidClass"', () => {
 
   it('should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       getDiscriminatorModelForClass(model('NoValidClassgetDiscriminatorModelForClass', {}), true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -239,29 +236,29 @@ describe('tests for "NoValidClass"', () => {
 describe('tests for "InvalidTypeError"', () => {
   // test for @prop will return a "NoMetadataError", which is already tested above
 
-  it('should error if no valid type is supplied to "@arrayProp" [InvalidTypeError]', () => {
+  it('should error if no valid type is supplied to WhatIsIt.ARRAY [NoMetadataError]', () => {
     try {
-      class TestInvalidTypeErrorAP {
-        @arrayProp({ items: undefined })
+      class TestNoMetadataErrorAP {
+        @prop({ type: undefined }, WhatIsIt.ARRAY)
         public something: undefined;
       }
-      getModelForClass(TestInvalidTypeErrorAP);
-      fail('Expected to throw "InvalidTypeError"');
+      getModelForClass(TestNoMetadataErrorAP);
+      fail('Expected to throw "NoMetadataError"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.InvalidTypeError);
+      expect(err).toBeInstanceOf(errors.NoMetadataError);
     }
   });
 
-  it('should error if no valid type is supplied to "@mapProp" [InvalidTypeError]', () => {
+  it('should error if no valid type is supplied to WhatIsIt.MAP [NoMetadataError]', () => {
     try {
-      class TestInvalidTypeErrorMP {
-        @mapProp({ of: undefined })
+      class TestNoMetadataErrorMP {
+        @prop({ type: undefined }, WhatIsIt.MAP)
         public something: undefined;
       }
-      getModelForClass(TestInvalidTypeErrorMP);
-      fail('Expected to throw "InvalidTypeError"');
+      getModelForClass(TestNoMetadataErrorMP);
+      fail('Expected to throw "NoMetadataError"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.InvalidTypeError);
+      expect(err).toBeInstanceOf(errors.NoMetadataError);
     }
   });
 });
@@ -270,18 +267,18 @@ describe('tests for "assignMetadata"', () => {
   it('should error if no valid key is supplied [TypeError]', () => {
     try {
       class Dummy { }
-      // @ts-ignore
+      // @ts-expect-error
       assignMetadata(true, {}, Dummy);
       fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).toBeInstanceOf(TypeError);
-      expect((err as TypeError).message).toEqual(`"true"(key) is not a string! (assignMetadata)`);
+      expect((err as TypeError).message).toEqual(`"true"(key) is not a string! (mergeMetadata)`);
     }
   });
 
   it('should error if no valid class is supplied [NoValidClass]', () => {
     try {
-      // @ts-ignore
+      // @ts-expect-error
       assignMetadata(DecoratorKeys.Index, {}, true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
@@ -305,7 +302,7 @@ it('should throw an error if a self-contained class is used', () => {
 
 it('should throw when "deleteModel" is called with no string [TypeError]', () => {
   try {
-    // @ts-ignore
+    // @ts-expect-error
     deleteModel(true);
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -340,7 +337,7 @@ it('should throw when "customName" is used, but length <= 0 [TypeError]', () => 
 
 it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
   try {
-    mapOptions({}, Error, undefined, undefined, true);
+    mapOptions({}, Error, undefined, undefined as any, true);
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -351,7 +348,7 @@ it('should error if the Type does not have a valid "OptionsConstructor" [TypeErr
 it('should error if "refPath" is not of type string [TypeError]', () => {
   try {
     class TestRefPathError {
-      // @ts-ignore
+      // @ts-expect-error
       @prop({ refPath: 1 })
       public hello: string;
     }
@@ -364,10 +361,10 @@ it('should error if "refPath" is not of type string [TypeError]', () => {
   }
 });
 
-it('should error if "ref" is used with @mapProp [TypeError]', () => {
+it('should error if "ref" is used with WhatIsIt.MAP [TypeError]', () => {
   try {
     class TestRefSwitchError {
-      @mapProp({ ref: 'hi' })
+      @prop({ ref: 'hi' }, WhatIsIt.MAP)
       public hello: string;
     }
 
@@ -379,10 +376,10 @@ it('should error if "ref" is used with @mapProp [TypeError]', () => {
   }
 });
 
-it('should error if "refPath" is used with @mapProp [TypeError]', () => {
+it('should error if "refPath" is used with WhatIsIt.MAP [TypeError]', () => {
   try {
     class TestRefPathSwitchError {
-      @mapProp({ refPath: 'hi' })
+      @prop({ refPath: 'hi' }, WhatIsIt.MAP)
       public hello: string;
     }
 
@@ -396,7 +393,7 @@ it('should error if "refPath" is used with @mapProp [TypeError]', () => {
 
 it('should error if the options provide to "setGlobalOptions" are not an object [TypeError]', () => {
   try {
-    setGlobalOptions(undefined);
+    setGlobalOptions(undefined as any);
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -461,7 +458,7 @@ it('should fail when using String-Enum on an Number Type [NotNumberTypeError]', 
 
 it('should error if no valid model is supplied to "getDiscriminatorModelForClass" [TypeError]', () => {
   try {
-    // @ts-ignore
+    // @ts-expect-error
     getDiscriminatorModelForClass(true);
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -471,7 +468,7 @@ it('should error if no valid model is supplied to "getDiscriminatorModelForClass
 
 it('should error if no valid key is supplied to "getModelWithString" [TypeError]', () => {
   try {
-    // @ts-ignore
+    // @ts-expect-error
     getModelWithString(true);
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -504,5 +501,54 @@ it('should error if 0 or less dimensions are given (createArrayFromDimensions) [
     fail('Expected to throw "RangeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(RangeError);
+  }
+});
+
+it('should error if ref\'s arrow-function returning type returns undefined', async () => {
+  class Nested {
+    @prop()
+    public someNestedProperty: string;
+  }
+
+  class Main {
+    @prop({ ref: () => undefined })
+    public nested: Ref<Nested>;
+  }
+
+  try {
+    getModelForClass(Main);
+
+    fail('Expected to throw "Error"');
+  } catch (err) {
+    expect(err).not.toBeInstanceOf(AssertionError);
+    expect(err).toBeInstanceOf(Error);
+    expect(err.message).toEqual('Option "ref" for "Main.nested" was defined with an arrow-function, but the function returned null/undefined!');
+  }
+});
+
+it('should throw default error if no error is specified (assertion)', () => {
+  expect.assertions(2);
+  try {
+    assertion(false);
+  } catch (err) {
+    expect(err).toBeInstanceOf(Error);
+    expect(err.message).toEqual('Assert failed - no custom error');
+  }
+});
+
+it('should error if ref is set but is "undefined/null"', () => {
+  expect.assertions(2);
+  try {
+    class RefUndefined {
+      @prop({ ref: undefined })
+      public someref?: Ref<undefined>;
+    }
+
+    buildSchema(RefUndefined);
+
+    fail('Expect to throw "Error"');
+  } catch (err) {
+    expect(err).toBeInstanceOf(Error);
+    expect(err.message).toEqual('Options "ref" is set, but is undefined/null! (RefUndefined.someref)');
   }
 });
