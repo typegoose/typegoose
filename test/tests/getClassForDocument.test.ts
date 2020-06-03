@@ -1,12 +1,11 @@
 import * as mongoose from 'mongoose';
 
 import { getClassForDocument, isDocument } from '../../src/typegoose';
-import { Genders } from '../enums/genders';
 import { Car, CarModel } from '../models/car';
 import { InternetUserModel } from '../models/internetUser';
 import { AddressNested, AddressNestedModel, PersonNested, PersonNestedModel } from '../models/nestedObject';
 import { PersonModel } from '../models/person';
-import { User, UserModel } from '../models/user';
+import { Genders, User, UserModel } from '../models/user';
 
 it('should return correct class type for document', async () => {
   const car = await CarModel.create({

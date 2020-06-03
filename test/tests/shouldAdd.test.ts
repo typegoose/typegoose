@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 
 import { arrayProp, buildSchema, getClass, getModelForClass, getName, isDocumentArray, mapProp, prop, Ref } from '../../src/typegoose';
-import { Genders } from '../enums/genders';
 import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
 import { GetSet, GetSetModel } from '../models/getSet';
@@ -9,7 +8,7 @@ import { InternetUserModel } from '../models/internetUser';
 import { Beverage, BeverageModel, Inventory, InventoryModel, ScooterModel } from '../models/inventory';
 import { Job } from '../models/job';
 import { OptionsClass, OptionsModel } from '../models/options';
-import { UserModel } from '../models/user';
+import { Genders, UserModel } from '../models/user';
 import {
   NonVirtual,
   NonVirtualGS,

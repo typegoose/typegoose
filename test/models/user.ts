@@ -1,9 +1,19 @@
 import * as findOrCreate from 'mongoose-findorcreate';
 import { arrayProp, defaultClasses, DocumentType, getModelForClass, plugin, prop, Ref, ReturnModelType } from '../../src/typegoose';
-import { Genders } from '../enums/genders';
-import { Role } from '../enums/role';
 import { Car } from './car';
 import { Job } from './job';
+
+export enum Genders {
+  MALE = 'male',
+  FEMALE = 'female'
+}
+
+export enum Role {
+  Admin = 'admin',
+  User = 'user',
+  Guest = 'guest'
+}
+
 
 @plugin(findOrCreate)
 export class User extends defaultClasses.FindOrCreate {

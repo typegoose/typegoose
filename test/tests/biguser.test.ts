@@ -1,9 +1,7 @@
 import * as mongoose from 'mongoose';
 
-import { Genders } from '../enums/genders';
-import { Role } from '../enums/role';
 import { CarModel } from '../models/car';
-import { UserModel } from '../models/user';
+import { Genders, Role, UserModel } from '../models/user';
 
 it('should create a User with connections', async () => {
   const [tesla, trabant, zastava] = await CarModel.create([
