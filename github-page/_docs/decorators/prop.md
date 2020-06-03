@@ -112,7 +112,7 @@ class Parent {
 ```
 
 The `'Nested'` form is useful to avoid unintuitive errors due to circular dependencies, such as
-"Error: Options "ref" is set, but is undefined/null!".
+`Error: Options "ref" is set, but is undefined/null!`.
 
 ### refPath
 
