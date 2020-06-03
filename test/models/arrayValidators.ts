@@ -1,4 +1,4 @@
-import { arrayProp, getModelForClass } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose';
 
 // Please try to keep this file in sync with ./stringValidators.ts
 
@@ -16,36 +16,36 @@ export enum ArrayValidatorEnumNumber {
 
 export class ArrayValidators {
   // String-Array Values
-  @arrayProp({ items: String, maxlength: 3 })
+  @prop({ type: String, maxlength: 3 })
   public maxLength!: string[];
 
-  @arrayProp({ items: String, minlength: 10 })
+  @prop({ type: String, minlength: 10 })
   public minLength!: string[];
 
-  @arrayProp({ items: String, trim: true })
+  @prop({ type: String, trim: true })
   public trimmed!: string[];
 
-  @arrayProp({ items: String, uppercase: true })
+  @prop({ type: String, uppercase: true })
   public uppercased!: string[];
 
-  @arrayProp({ items: String, lowercase: true })
+  @prop({ type: String, lowercase: true })
   public lowercased!: string[];
 
-  @arrayProp({ items: String, default: ['hello'], lowercase: true })
+  @prop({ type: String, default: ['hello'], lowercase: true })
   public defaulted!: string[];
 
   // Number-Array Values
-  @arrayProp({ items: Number, max: 3 })
+  @prop({ type: Number, max: 3 })
   public max!: number[];
 
-  @arrayProp({ items: Number, min: 10 })
+  @prop({ type: Number, min: 10 })
   public min!: number[];
 
   // Enum-Array Values
-  @arrayProp({ items: String, enum: ArrayValidatorEnumString })
+  @prop({ type: String, enum: ArrayValidatorEnumString })
   public enumedString!: ArrayValidatorEnumString[];
 
-  @arrayProp({ items: Number, enum: ArrayValidatorEnumNumber })
+  @prop({ type: Number, enum: ArrayValidatorEnumNumber })
   public enumedNumber!: ArrayValidatorEnumNumber[];
 }
 

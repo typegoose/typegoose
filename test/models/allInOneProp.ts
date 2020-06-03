@@ -4,10 +4,10 @@ export class AllInOneProp {
   @prop()
   public normal?: string;
 
-  @prop({ items: () => String })
+  @prop({ type: () => String })
   public array?: string[];
 
-  @prop({ of: String })
+  @prop({ type: String })
   public map?: Map<string, string>;
 }
 

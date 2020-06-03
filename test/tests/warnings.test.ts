@@ -1,5 +1,7 @@
 import { logger } from '../../src/logSettings';
-import { arrayProp, buildSchema, mapProp, prop, setGlobalOptions, Severity } from '../../src/typegoose';
+import { buildSchema, mongoose, prop, setGlobalOptions, Severity } from '../../src/typegoose';
+
+// Note: TDEP0003 is expected in here
 
 beforeEach(() => {
   logger.warn = jest.fn();
@@ -32,25 +34,29 @@ describe('prop.ts', () => {
     });
   });
 
-  describe('@mapProp', () => {
-    it('should warn if option "items" is used in an @mapProp', () => {
+  describe('WhatIsIt.MAP', () => {
+    it('should warn if option "items" is used in an WhatIsIt.MAP', () => {
+      expect.assertions(2);
       class TestMapPropOptionItems {
-        @mapProp({ items: String, of: String })
-        public test: any[];
+        @prop({ items: String, of: String })
+        public test: Map<any, any>;
       }
-      buildSchema(TestMapPropOptionItems);
+      const schema = buildSchema(TestMapPropOptionItems);
       expect((logger.warn as any).mock.calls.length).toEqual(1);
+      expect(schema.path('test')).toBeInstanceOf(mongoose.Schema.Types.Map);
     });
   });
 
-  describe('@arrayProp', () => {
-    it('should warn if option "of" is used in an @arrayProp', () => {
+  describe('WhatIsIt.ARRAY', () => {
+    it('should warn if option "of" is used in an WhatIsIt.ARRAY', () => {
+      expect.assertions(2);
       class TestArrayPropOptionOf {
-        @arrayProp({ of: String, items: String })
+        @prop({ of: String, items: String })
         public test: any[];
       }
-      buildSchema(TestArrayPropOptionOf);
+      const schema = buildSchema(TestArrayPropOptionOf);
       expect((logger.warn as any).mock.calls.length).toEqual(1);
+      expect(schema.path('test')).toBeInstanceOf(mongoose.Schema.Types.Array);
     });
   });
 });

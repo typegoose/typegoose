@@ -7,13 +7,11 @@ import { assertion, assignMetadata, createArrayFromDimensions, getName, mergeMet
 import { logger } from '../../src/logSettings';
 import {
   addModelToTypegoose,
-  arrayProp,
   buildSchema,
   DocumentType,
   getModelForClass,
   getModelWithString,
   isDocumentArray,
-  mapProp,
   modelOptions,
   prop,
   queryMethod
@@ -68,7 +66,7 @@ it('should make use of addModelToTypegoose', async () => {
 
 it('should make use of Map default', async () => {
   class TestMapDefault {
-    @mapProp({ of: String, default: new Map([['hello', 'hello']]) })
+    @prop({ type: String, default: new Map([['hello', 'hello']]) })
     public test?: Map<string, string>;
 
     @prop()
@@ -363,7 +361,7 @@ it('should use "_id" from ModelOptions if not in @prop options [typegoose/typego
 
 it('should also allow "mongoose.Types.Array<string>" as possible type', () => {
   class TypesArray {
-    @arrayProp({ items: String })
+    @prop({ type: String })
     public someString: mongoose.Types.Array<string>;
   }
 

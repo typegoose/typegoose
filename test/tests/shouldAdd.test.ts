@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { arrayProp, buildSchema, getClass, getModelForClass, getName, isDocumentArray, mapProp, prop, Ref } from '../../src/typegoose';
+import { buildSchema, getClass, getModelForClass, getName, isDocumentArray, prop, Ref } from '../../src/typegoose';
 import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
 import { GetSet, GetSetModel } from '../models/getSet';
@@ -244,7 +244,7 @@ it('should add options to refPath [szokodiakos#379]', () => {
 it('should add options to array-ref [szokodiakos#379]', () => {
   class T { }
   class TestArrayRef {
-    @arrayProp({ ref: T, customoption: 'custom' })
+    @prop({ ref: T, customoption: 'custom' })
     public someprop: Ref<T>[];
   }
 
@@ -265,7 +265,7 @@ it('should add options to array-refPath [szokodiakos#379]', () => {
     @prop({ default: getName(EmptyClass) })
     public something: string;
 
-    @arrayProp({ refPath: 'something', customoption: 'custom' })
+    @prop({ refPath: 'something', customoption: 'custom' })
     public someprop: Ref<EmptyClass>[];
   }
 
@@ -339,7 +339,7 @@ describe('utils.getClass', () => {
 
 it('should work with both map creation types', async () => {
   class MapTest {
-    @mapProp({ of: Number, required: true })
+    @prop({ type: Number, required: true })
     public prop: Map<string, number>;
   }
 

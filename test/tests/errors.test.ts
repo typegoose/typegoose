@@ -3,7 +3,6 @@ import { model, Schema } from 'mongoose';
 
 import {
   addModelToTypegoose,
-  arrayProp,
   buildSchema,
   deleteModel,
   deleteModelWithClass,
@@ -13,7 +12,6 @@ import {
   getModelForClass,
   getModelWithString,
   getName,
-  mapProp,
   modelOptions,
   pre,
   prop,
@@ -21,7 +19,7 @@ import {
   setGlobalOptions
 } from '../../src/typegoose'; // import order is important with jest
 
-import { DecoratorKeys } from '../../src/internal/constants';
+import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import { assertion, assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
@@ -238,10 +236,10 @@ describe('tests for "NoValidClass"', () => {
 describe('tests for "InvalidTypeError"', () => {
   // test for @prop will return a "NoMetadataError", which is already tested above
 
-  it('should error if no valid type is supplied to "@arrayProp" [NoMetadataError]', () => {
+  it('should error if no valid type is supplied to WhatIsIt.ARRAY [NoMetadataError]', () => {
     try {
       class TestNoMetadataErrorAP {
-        @arrayProp({ items: undefined })
+        @prop({ type: undefined }, WhatIsIt.ARRAY)
         public something: undefined;
       }
       getModelForClass(TestNoMetadataErrorAP);
@@ -251,10 +249,10 @@ describe('tests for "InvalidTypeError"', () => {
     }
   });
 
-  it('should error if no valid type is supplied to "@mapProp" [NoMetadataError]', () => {
+  it('should error if no valid type is supplied to WhatIsIt.MAP [NoMetadataError]', () => {
     try {
       class TestNoMetadataErrorMP {
-        @mapProp({ of: undefined })
+        @prop({ type: undefined }, WhatIsIt.MAP)
         public something: undefined;
       }
       getModelForClass(TestNoMetadataErrorMP);
@@ -363,10 +361,10 @@ it('should error if "refPath" is not of type string [TypeError]', () => {
   }
 });
 
-it('should error if "ref" is used with @mapProp [TypeError]', () => {
+it('should error if "ref" is used with WhatIsIt.MAP [TypeError]', () => {
   try {
     class TestRefSwitchError {
-      @mapProp({ ref: 'hi' })
+      @prop({ ref: 'hi' }, WhatIsIt.MAP)
       public hello: string;
     }
 
@@ -378,10 +376,10 @@ it('should error if "ref" is used with @mapProp [TypeError]', () => {
   }
 });
 
-it('should error if "refPath" is used with @mapProp [TypeError]', () => {
+it('should error if "refPath" is used with WhatIsIt.MAP [TypeError]', () => {
   try {
     class TestRefPathSwitchError {
-      @mapProp({ refPath: 'hi' })
+      @prop({ refPath: 'hi' }, WhatIsIt.MAP)
       public hello: string;
     }
 

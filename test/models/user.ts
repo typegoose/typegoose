@@ -1,5 +1,5 @@
 import * as findOrCreate from 'mongoose-findorcreate';
-import { arrayProp, defaultClasses, DocumentType, getModelForClass, plugin, prop, Ref, ReturnModelType } from '../../src/typegoose';
+import { defaultClasses, DocumentType, getModelForClass, plugin, prop, Ref, ReturnModelType } from '../../src/typegoose';
 import { Car } from './car';
 import { Job } from './job';
 
@@ -53,7 +53,7 @@ export class User extends defaultClasses.FindOrCreate {
   @prop({ enum: Role })
   public role?: Role;
 
-  @arrayProp({ items: String, enum: Role, default: [Role.Guest] })
+  @prop({ type: String, enum: Role, default: [Role.Guest] })
   public roles?: Role[];
 
   @prop()
@@ -62,13 +62,13 @@ export class User extends defaultClasses.FindOrCreate {
   @prop({ ref: Car })
   public car?: Ref<Car>;
 
-  @arrayProp({ items: String, required: true })
+  @prop({ type: String, required: true })
   public languages!: string[];
 
-  @arrayProp({ items: Job, _id: false })
+  @prop({ type: Job, _id: false })
   public previousJobs!: Job[];
 
-  @arrayProp({ ref: Car })
+  @prop({ ref: Car })
   public previousCars!: Ref<Car>[];
 
   public static async findByAge(this: ReturnModelType<typeof User>, age: number) {

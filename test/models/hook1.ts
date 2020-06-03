@@ -1,4 +1,4 @@
-import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
+import { getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
 
 @pre<Hook>('save', function () {
   if (this.isModified('shape')) {
@@ -43,7 +43,7 @@ export class Hook {
   }
 })
 export class HookArray {
-  @arrayProp({ required: true, items: String })
+  @prop({ required: true, type: String })
   public testArray!: string[];
 }
 
@@ -56,7 +56,7 @@ export class HookArray {
   next();
 })
 export class BaseHook {
-  @arrayProp({ items: String, default: [] })
+  @prop({ type: String, default: [] })
   public hooksMessages!: string[];
 }
 
