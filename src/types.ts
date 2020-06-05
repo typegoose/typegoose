@@ -184,7 +184,7 @@ export interface BasePropOptions {
    * Set the Nested Discriminators
    * Note: "_id: false" as an prop option dosnt work here
    */
-  discriminators?: DeferredFunc<AnyParamConstructor<any>[] | DiscriminatorObject>;
+  discriminators?: DeferredFunc<(AnyParamConstructor<any> | DiscriminatorObject)[]>;
 }
 
 export interface ArrayPropOptions extends BasePropOptions {
@@ -300,10 +300,11 @@ export type EmptyVoidFn = () => void;
 export interface DiscriminatorObject {
   /** The Class to use */
   type: AnyParamConstructor<any>;
-  /** The Name to use for `.discriminator(name, schema)` */
+  /**
+   * The Name to differentiate between other classes
+   * @default {string} The output of "getName"
+   */
   name?: string;
-  /** No mongoose documentation found, but parameter for `.discriminator` */
-  tiedValue?: any;
 }
 
 export interface IModelOptions {
