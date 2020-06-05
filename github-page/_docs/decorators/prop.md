@@ -347,7 +347,7 @@ Accepts Type: `() => [DiscriminatorObject | Class]`
 
 Use this function for embedded discriminators
 
-Note: the `discriminatorKey` (like in the example property `type`) needs to be always set in an `.create` or newly created document on `.save`
+Note: the `discriminatorKey` (like in the example property `type`) needs to be always set in a newly created document (via `.create({..., type: "..."})`, or `.save()`)
 
 Example for `[Class]`:
 
