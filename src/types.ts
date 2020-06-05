@@ -302,9 +302,10 @@ export interface DiscriminatorObject {
   type: AnyParamConstructor<any>;
   /**
    * The Name to differentiate between other classes
+   * Mongoose JSDOC: [value] the string stored in the `discriminatorKey` property. If not specified, Mongoose uses the `name` parameter.
    * @default {string} The output of "getName"
    */
-  name?: string;
+  value?: string;
 }
 
 export interface IModelOptions {

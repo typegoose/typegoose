@@ -102,8 +102,8 @@ it('should make use of nested-discriminators (options as object) [typegoose/type
     @prop({
       type: BuildingObject,
       discriminators: () => [
-        { type: GarageObject, name: BuildingTypes.Garage },
-        { type: SummerHouseObject, name: BuildingTypes.SummerHouse }
+        { type: GarageObject, value: BuildingTypes.Garage },
+        { type: SummerHouseObject, value: BuildingTypes.SummerHouse }
       ]
     })
     public buildings: BuildingObject[];

@@ -224,7 +224,7 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
  * Build a Model from a given class and return the model
  * @param from The Model to build From
  * @param cl The Class to make a model out
- * @param id The Identifier to use to differentiate documents (default: cl.name)
+ * @param value The Identifier to use to differentiate documents (default: cl.name)
  * @example
  * ```ts
  * class C1 {}
@@ -237,7 +237,7 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = {}>(
   from: mongoose.Model<any>,
   cl: U,
-  id?: string
+  value?: string
 ) {
   assertion(isModel(from), new TypeError(`"${from}" is not a valid Model!`));
   assertionIsClass(cl);
@@ -254,7 +254,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
     (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
   }
 
-  const model = from.discriminator(name, sch, id ? id : name);
+  const model = from.discriminator(name, sch, value ? value : name);
 
   return addModelToTypegoose<U, QueryHelpers>(model, cl);
 }
