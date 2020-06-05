@@ -85,7 +85,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
         assertion(typeof path.discriminator === 'function', new Error(format('There is no function called "discriminator" on schema-path "%s" on Schema of "%s"', key, name)));
 
         for (const { type: child, value: childName } of discriminators) {
-          const childSch = buildSchema(child) as mongoose.Schema & { paths: any; };
+          const childSch = getName(child) === name ? sch : buildSchema(child) as mongoose.Schema & { paths: any; };
 
           const discriminatorKey = childSch.get('discriminatorKey');
           if (childSch.path(discriminatorKey)) {
