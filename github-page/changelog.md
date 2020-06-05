@@ -19,6 +19,12 @@ redirect_from:
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.3.0
+
+<sub>This Version is not yet released, only changes made until now are listed here</sub>
+
+- Add option `discriminators` for embedded Discriminators [{% include gitissue repo="typegoose" num=248 %}]
+
 ## 7.2.0
 
 - Update Dependencies

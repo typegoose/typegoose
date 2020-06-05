@@ -22,7 +22,13 @@ import { constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
 import { assertion, assertionIsClass, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { isModel } from './typeguards';
-import type { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
+import type {
+  AnyParamConstructor,
+  DocumentType,
+  IModelOptions,
+  Ref,
+  ReturnModelType
+} from './types';
 
 /* exports */
 // export the internally used "mongoose", to not need to always import it
@@ -219,7 +225,7 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
  * Build a Model from a given class and return the model
  * @param from The Model to build From
  * @param cl The Class to make a model out
- * @param id The Identifier to use to differentiate documents (default: cl.name)
+ * @param value The Identifier to use to differentiate documents (default: cl.name)
  * @example
  * ```ts
  * class C1 {}
@@ -232,7 +238,7 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = {}>(
   from: mongoose.Model<any>,
   cl: U,
-  id?: string
+  value?: string
 ) {
   assertion(isModel(from), new TypeError(`"${from}" is not a valid Model!`));
   assertionIsClass(cl);
@@ -241,6 +247,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
+
   const sch = buildSchema(cl) as mongoose.Schema & { paths: any; };
 
   const discriminatorKey = sch.get('discriminatorKey');
@@ -248,7 +255,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
     (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
   }
 
-  const model = from.discriminator(name, sch, id ? id : name);
+  const model = from.discriminator(name, sch, value ? value : name);
 
   return addModelToTypegoose<U, QueryHelpers>(model, cl);
 }

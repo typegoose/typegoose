@@ -180,6 +180,11 @@ export interface BasePropOptions {
    * @default ObjectId
    */
   refType?: NonNullable<BasePropOptions['type']> | RefType;
+  /**
+   * Set the Nested Discriminators
+   * Note: "_id: false" as an prop option dosnt work here
+   */
+  discriminators?: DeferredFunc<(AnyParamConstructor<any> | DiscriminatorObject)[]>;
 }
 
 export interface ArrayPropOptions extends BasePropOptions {
@@ -291,6 +296,17 @@ export type Ref<
  * An Function type for a function that doesn't have any arguments and doesn't return anything
  */
 export type EmptyVoidFn = () => void;
+
+export interface DiscriminatorObject {
+  /** The Class to use */
+  type: AnyParamConstructor<any>;
+  /**
+   * The Name to differentiate between other classes
+   * Mongoose JSDOC: [value] the string stored in the `discriminatorKey` property. If not specified, Mongoose uses the `name` parameter.
+   * @default {string} The output of "getName"
+   */
+  value?: string;
+}
 
 export interface IModelOptions {
   /** An Existing Mongoose Connection */
@@ -463,10 +479,19 @@ export type QueryMethod<T extends (...args: any) => any> = (...args: Parameters<
  * Used for the Reflection of Query Methods
  * @example
  * ```ts
- * const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target.constructor) ?? []);
+ * const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target) ?? []);
  * ```
  */
 export type QueryMethodMap = Map<string, Func>;
+
+/**
+ * Used for the Reflection of Nested Discriminators
+ * @example
+ * ```ts
+ * const disMap: NestedDiscriminatorsMap = new Map(Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, target) ?? []);
+ * ```
+ */
+export type NestedDiscriminatorsMap = Map<string, DiscriminatorObject[]>;
 
 /**
  * Used for the Reflection of Hooks

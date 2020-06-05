@@ -341,6 +341,94 @@ AddNullToEnumModel.schema.path('value').options.enum === [1, 2, null]; // true
 new AddNullToEnumModel({ value: null } as AddNullToEnum);
 ```
 
+### discriminators
+
+Accepts Type: `() => [DiscriminatorObject | Class]`
+
+Use this function for embedded discriminators
+
+Note: the `discriminatorKey` (like in the example property `type`) needs to be always set in a newly created document (via `.create({..., type: "..."})`, or `.save()`)
+
+Example for `[Class]`:
+
+```ts
+@modelOptions({
+  schemaOptions: {
+    discriminatorKey: 'type',
+  }
+})
+class Building {
+  @prop({ default: 100 })
+  public width: number;
+
+  @prop({ required: true })
+  public type: string;
+}
+
+class Garage extends Building {
+  @prop({ default: 10 })
+  public slotsForCars: number;
+}
+
+class SummerHouse extends Building {
+  @prop({ default: 100 })
+  public distanceToLake: number;
+}
+
+class Area {
+  @prop({ type: Building, discriminators: () => [Garage, SummerHouse] })
+  public buildings: Building[];
+}
+
+const AreaModel = getModelForClass(Area);
+
+// then somewhere in an async function
+const area = await AreaModel.create({});
+area.buildings.push({ type: getName(SummerHouse), distanceToLake: 100 } as SummerHouse);
+area.buildings.push({ type: getName(Garage), slotsForCars: 20 } as Garage);
+await area.save();
+```
+
+Example for `[DiscriminatorObject]`:
+
+```ts
+@modelOptions({
+  schemaOptions: {
+    discriminatorKey: 'type',
+  }
+})
+class Building {
+  @prop({ default: 100 })
+  public width: number;
+
+  @prop({ required: true })
+  public type: string;
+}
+
+class Garage extends Building {
+  @prop({ default: 10 })
+  public slotsForCars: number;
+}
+
+class SummerHouse extends Building {
+  @prop({ default: 100 })
+  public distanceToLake: number;
+}
+
+class Area {
+  @prop({ type: Building, discriminators: () => [{ type: Garage, value: "G", }, { type: SummerHouse, value: "S" }] })
+  public buildings: Building[];
+}
+
+const AreaModel = getModelForClass(Area);
+
+// then somewhere in an async function
+const area = await AreaModel.create({});
+area.buildings.push({ type: "S", distanceToLake: 100 } as SummerHouse);
+area.buildings.push({ type: "G", slotsForCars: 20 } as Garage);
+await area.save();
+```
+
 <!--Below are just the Specific Options-->
 
 ### Array Options
