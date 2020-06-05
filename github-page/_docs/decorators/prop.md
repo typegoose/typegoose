@@ -416,7 +416,7 @@ class SummerHouse extends Building {
 }
 
 class Area {
-  @prop({ type: Building, discriminators: () => [{ type: Garage, name: "G", }, { type: SummerHouse, name: "S" }] })
+  @prop({ type: Building, discriminators: () => [{ type: Garage, value: "G", }, { type: SummerHouse, value: "S" }] })
   public buildings: Building[];
 }
 
