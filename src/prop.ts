@@ -20,6 +20,7 @@ import type {
   BasePropOptions,
   DecoratedPropertyMetadata,
   DecoratedPropertyMetadataMap,
+  DiscriminatorObject,
   KeyStringAny,
   MapPropOptions,
   NestedDiscriminatorsMap,
@@ -77,12 +78,24 @@ export function _buildPropMetadata(input: DecoratedPropertyMetadata): void {
 
   if ('discriminators' in rawOptions) {
     logger.debug('Found option "discriminators" in "%s.%s"', name, key);
-    const discriminators: AnyParamConstructor<any>[] = utils.getType(rawOptions.discriminators);
-    discriminators.forEach((con, index) => {
-      if (!utils.isConstructor(con)) {
-        throw new Error(format('"%s.%s" discriminators index "%s" is not an constructor!', name, key, index));
-      }
-    });
+    const discriminators: DiscriminatorObject[] =
+      (utils.getType(rawOptions.discriminators) as (AnyParamConstructor<any> | DiscriminatorObject)[])
+        .map((val, index) => {
+          if (utils.isConstructor(val)) {
+            return { type: val };
+          }
+          if (typeof val === 'object') {
+            if (!('type' in val)) {
+              throw new Error(
+                format('"%s.%s" discriminator index "%s" is an object, but does not contain the "type" property!', name, key, index)
+              );
+            }
+
+            return val;
+          }
+
+          throw new Error(format('"%s.%s" discriminators index "%s" is not an object or an constructor!', name, key, index));
+        });
 
     const disMap: NestedDiscriminatorsMap = new Map(Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, target.constructor) ?? []);
     disMap.set(key, discriminators);

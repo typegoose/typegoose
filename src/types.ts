@@ -184,7 +184,7 @@ export interface BasePropOptions {
    * Set the Nested Discriminators
    * Note: "_id: false" as an prop option dosnt work here
    */
-  discriminators?: DeferredFunc<AnyParamConstructor<any>[]>;
+  discriminators?: DeferredFunc<AnyParamConstructor<any>[] | DiscriminatorObject>;
 }
 
 export interface ArrayPropOptions extends BasePropOptions {
@@ -296,6 +296,15 @@ export type Ref<
  * An Function type for a function that doesn't have any arguments and doesn't return anything
  */
 export type EmptyVoidFn = () => void;
+
+export interface DiscriminatorObject {
+  /** The Class to use */
+  type: AnyParamConstructor<any>;
+  /** The Name to use for `.discriminator(name, schema)` */
+  name?: string;
+  /** No mongoose documentation found, but parameter for `.discriminator` */
+  tiedValue?: any;
+}
 
 export interface IModelOptions {
   /** An Existing Mongoose Connection */
@@ -480,7 +489,7 @@ export type QueryMethodMap = Map<string, Func>;
  * const disMap: NestedDiscriminatorsMap = new Map(Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, target) ?? []);
  * ```
  */
-export type NestedDiscriminatorsMap = Map<string, AnyParamConstructor<any>[]>;
+export type NestedDiscriminatorsMap = Map<string, DiscriminatorObject[]>;
 
 /**
  * Used for the Reflection of Hooks
