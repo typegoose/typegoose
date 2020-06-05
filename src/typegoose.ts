@@ -9,6 +9,8 @@ if (semver.lt(mongoose.version, '5.9.14')) {
   throw new Error('Please use mongoose 5.9.14 or higher');
 }
 
+import { logger } from './logSettings';
+
 /* istanbul ignore next */
 if (semver.lt(process.version.slice(1), '10.15.0')) {
   logger.warn('You are using a NodeJS Version below 10.15.0, Please Upgrade!');
@@ -19,7 +21,6 @@ import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
 import { assertion, assertionIsClass, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
-import { logger } from './logSettings';
 import { isModel } from './typeguards';
 import type { AnyParamConstructor, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
 
