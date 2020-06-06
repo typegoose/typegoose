@@ -345,15 +345,13 @@ export interface ICustomOptions {
 
 export interface DecoratedPropertyMetadata {
   /** Prop Options */
-  origOptions: any;
-  /** What the Property Type should be */
-  Type: AnyParamConstructor<any>;
+  options: any;
   /** Target Class */
-  target: any;
+  target: AnyParamConstructor<any>;
   /** Property name */
   key: string;
   /** What is it for a prop type? */
-  whatis: WhatIsIt;
+  whatis?: WhatIsIt;
 }
 export type DecoratedPropertyMetadataMap = Map<string, DecoratedPropertyMetadata>;
 

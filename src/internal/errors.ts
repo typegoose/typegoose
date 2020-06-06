@@ -43,16 +43,6 @@ export class NotStringTypeError extends Error {
   }
 }
 
-export class NoMetadataError extends Error {
-  constructor(key: string) {
-    super(
-      `There is no metadata for the "${key}" property.\n` +
-      'Check if emitDecoratorMetadata is enabled in tsconfig.json ' +
-      'or check if you\'ve declared a sub document\'s class after usage.'
-    );
-  }
-}
-
 /** Not All Virtual Populate Elements Error */
 export class NotAllVPOPElementsError extends Error {
   constructor(name: string, key: string) {
