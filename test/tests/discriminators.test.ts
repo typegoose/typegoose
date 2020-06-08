@@ -26,8 +26,7 @@ it('should make use of discriminators', async () => {
 });
 
 it('"getDiscriminatorModelForClass" should return the same model if already defined', () => {
-  class TestSameModelDiscriminator {
-  }
+  class TestSameModelDiscriminator { }
 
   const model = getModelForClass(TestSameModelDiscriminator);
 
@@ -179,7 +178,7 @@ it('should pass all mongoose discriminator tests', async () => {
   expect(clickedEvent).toHaveProperty('url', 'google.com');
 
   // https://mongoosejs.com/docs/discriminators.html#discriminators-save-to-the-event-models-collection
-  const eventCount = await EventModel.countDocuments();
+  const eventCount = await EventModel.countDocuments().exec();
   expect(eventCount).toEqual(3);
 
   // https://mongoosejs.com/docs/discriminators.html#discriminator-keys
@@ -191,7 +190,7 @@ it('should pass all mongoose discriminator tests', async () => {
   expect(signedUpEvent).toHaveProperty('kind', 'SignedUpEvent');
 
   // https://mongoosejs.com/docs/discriminators.html#discriminators-add-the-discriminator-key-to-queries
-  const clickedEvents = await ClickedLinkEventModel.find();
+  const clickedEvents = await ClickedLinkEventModel.find().exec();
   expect(clickedEvents).toHaveLength(1);
   expect(clickedEvents[0]._id).toEqual(clickedEvent._id);
   expect(clickedEvents[0].url).toEqual('google.com');
