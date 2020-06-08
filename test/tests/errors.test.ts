@@ -66,16 +66,16 @@ it('should error if type is not number and a validate is supplied [NotNumberType
   }
 });
 
-it('should error if an non-existing(runtime) type is given [NoMetadataError]', () => {
+it('should error if an non-existing(runtime) type is given [InvalidTypeError]', () => {
   try {
     class TestNME {
       @prop()
       public test: undefined;
     }
     getModelForClass(TestNME);
-    fail('Expected to throw "NoMetadataError"');
+    fail('Expected to throw "InvalidTypeError"');
   } catch (err) {
-    expect(err).toBeInstanceOf(errors.NoMetadataError);
+    expect(err).toBeInstanceOf(errors.InvalidTypeError);
   }
 });
 
@@ -236,29 +236,31 @@ describe('tests for "NoValidClass"', () => {
 describe('tests for "InvalidTypeError"', () => {
   // test for @prop will return a "NoMetadataError", which is already tested above
 
-  it('should error if no valid type is supplied to WhatIsIt.ARRAY [NoMetadataError]', () => {
+  it('should error if no valid type is supplied to WhatIsIt.ARRAY [InvalidTypeError]', () => {
     try {
       class TestNoMetadataErrorAP {
         @prop({ type: undefined }, WhatIsIt.ARRAY)
         public something: undefined;
       }
-      getModelForClass(TestNoMetadataErrorAP);
-      fail('Expected to throw "NoMetadataError"');
+      buildSchema(TestNoMetadataErrorAP);
+
+      fail('Expected to throw "InvalidTypeError"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoMetadataError);
+      expect(err).toBeInstanceOf(errors.InvalidTypeError);
     }
   });
 
-  it('should error if no valid type is supplied to WhatIsIt.MAP [NoMetadataError]', () => {
+  it('should error if no valid type is supplied to WhatIsIt.MAP [InvalidTypeError]', () => {
     try {
       class TestNoMetadataErrorMP {
         @prop({ type: undefined }, WhatIsIt.MAP)
         public something: undefined;
       }
-      getModelForClass(TestNoMetadataErrorMP);
-      fail('Expected to throw "NoMetadataError"');
+      buildSchema(TestNoMetadataErrorMP);
+
+      fail('Expected to throw "InvalidTypeError"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoMetadataError);
+      expect(err).toBeInstanceOf(errors.InvalidTypeError);
     }
   });
 });
@@ -293,6 +295,8 @@ it('should throw an error if a self-contained class is used', () => {
       @prop()
       public self: TestSelfContained;
     }
+    buildSchema(TestSelfContained);
+
     fail('Expected to throw "Error"');
   } catch (err) {
     expect(err).not.toBeInstanceOf(AssertionError);

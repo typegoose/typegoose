@@ -2,7 +2,6 @@ import * as mongoose from 'mongoose';
 
 import { format } from 'util';
 import { logger } from '../logSettings';
-import { _buildPropMetadata } from '../prop';
 import { buildSchema } from '../typegoose';
 import type {
   AnyParamConstructor,
@@ -18,6 +17,7 @@ import type {
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
+import { processProp } from './processProp';
 import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
 /**
@@ -56,7 +56,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
   if (!isNullOrUndefined(decorators)) {
     for (const decorator of decorators.values()) {
-      _buildPropMetadata(decorator);
+      processProp(decorator);
     }
   }
 
