@@ -15,35 +15,37 @@ it('should make use of nested-discriminators [typegoose/typegoose#25]', async ()
     }
   })
   class BuildingNormal {
-    @prop({ default: 100 })
-    public width: number;
+    @prop({ required: true })
+    public width!: number;
 
     @prop({ enum: BuildingTypes, required: true })
-    public type: BuildingTypes;
+    public type!: BuildingTypes;
   }
 
   class GarageNormal extends BuildingNormal {
-    @prop({ default: 10 })
-    public slotsForCars: number;
+    @prop({ required: true })
+    public slotsForCars!: number;
   }
 
   class SummerHouseNormal extends BuildingNormal {
-    @prop({ default: 100 })
-    public distanceToLake: number;
+    @prop({ required: true })
+    public distanceToLake!: number;
   }
 
   class AreaNormal {
-    @prop({ type: BuildingNormal, discriminators: () => [GarageNormal, SummerHouseNormal] })
-    public buildings: BuildingNormal[];
+    @prop({ type: BuildingNormal, discriminators: () => [GarageNormal, SummerHouseNormal], required: true })
+    public buildings!: BuildingNormal[];
   }
 
   const AreaModel = getModelForClass(AreaNormal);
 
   {
-    const area = await AreaModel.create({});
-    area.buildings.push({ type: BuildingTypes.SummerHouse, distanceToLake: 100 } as SummerHouseNormal);
-    area.buildings.push({ type: BuildingTypes.Garage, slotsForCars: 20 } as GarageNormal);
-    await area.save();
+    const area = await AreaModel.create({
+      buildings: [
+        { type: BuildingTypes.SummerHouse, distanceToLake: 100 } as SummerHouseNormal,
+        { type: BuildingTypes.Garage, slotsForCars: 20 } as GarageNormal
+      ]
+    });
 
     const docPOJO = area.toJSON();
     expect(docPOJO).toHaveProperty('buildings');
@@ -112,10 +114,12 @@ it('should make use of nested-discriminators (options as object) [typegoose/type
   const AreaModel = getModelForClass(AreaObject);
 
   {
-    const area = await AreaModel.create({});
-    area.buildings.push({ type: BuildingTypes.SummerHouse, distanceToLake: 100 } as SummerHouseObject);
-    area.buildings.push({ type: BuildingTypes.Garage, slotsForCars: 20 } as GarageObject);
-    await area.save();
+    const area = await AreaModel.create({
+      buildings: [
+        { type: BuildingTypes.SummerHouse, distanceToLake: 100 } as SummerHouseObject,
+        { type: BuildingTypes.Garage, slotsForCars: 20 } as GarageObject
+      ]
+    });
 
     const docPOJO = area.toJSON();
     expect(docPOJO).toHaveProperty('buildings');

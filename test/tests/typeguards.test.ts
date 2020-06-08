@@ -1,16 +1,15 @@
-import { assertion } from '../../src/internal/utils';
+import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose';
 import {
   IsRefType,
-  IsRefTypeArray,
   IsRefTypeArrayModel,
   IsRefTypeModel,
   IsRefTypeNestedObjectIdModel,
   IsRefTypeNestedStringModel,
   MTypesArrayRefModel,
-  SubModel
+  SubModel,
+  UserRefModel
 } from '../models/typeguards';
-import { UserRefModel } from '../models/userRefs';
 
 describe('isDocument / isDocumentArray', () => {
   it('should guarantee array of document types', async () => {
@@ -20,6 +19,8 @@ describe('isDocument / isDocumentArray', () => {
     const UserSub = await UserRefModel.create({
       name: 'sub'
     });
+
+    assertion(!isNullOrUndefined(UserMaster.subAccounts), new Error('Expected "subAccounts" to not be undefined/null'));
 
     UserMaster.subAccounts.push(UserSub._id);
 
@@ -63,6 +64,9 @@ describe('isDocument / isDocumentArray', () => {
     const UserSub = await UserRefModel.create({
       name: 'sub'
     });
+
+    assertion(!isNullOrUndefined(UserMaster.subAccounts), new Error('Expected "subAccounts" to not be undefined/null'));
+
     UserMaster.subAccounts.push(UserSub._id);
 
     if (!isDocumentArray(UserMaster.subAccounts)) {
@@ -193,7 +197,7 @@ describe('isRefType / isRefTypeArray', () => {
     it('should guarantee the RefType - String', async () => {
       const doc = await IsRefTypeArrayModel.create({
         nestedString: [await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType - Array' })]
-      } as IsRefTypeArray);
+      });
       doc.depopulate('nestedString');
 
       expect(doc.nestedString).not.toBeUndefined();
@@ -209,7 +213,7 @@ describe('isRefType / isRefTypeArray', () => {
     it('should guarantee the RefType - ObjectId', async () => {
       const doc = await IsRefTypeArrayModel.create({
         nestedObjectId: [await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() })]
-      } as IsRefTypeArray);
+      });
       doc.depopulate('nestedObjectId');
 
       expect(doc.nestedObjectId).not.toBeUndefined();

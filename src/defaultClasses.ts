@@ -8,8 +8,8 @@ import type { AnyParamConstructor, DocumentType, RefType } from './types';
  * This class can be used for already existing type information for the Timestamps
  */
 export abstract class TimeStamps {
-  public createdAt!: Readonly<Date>;
-  public updatedAt!: Readonly<Date>;
+  public createdAt?: Date;
+  public updatedAt?: Date;
 }
 
 /**

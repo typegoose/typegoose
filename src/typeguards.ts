@@ -16,12 +16,14 @@ export function isDocument<T, S extends RefType>(doc: Ref<T, S>): doc is Documen
  * @param docs The Array of Refs with uncertain type
  */
 export function isDocumentArray<T, S extends RefType>(
-  docs: mongoose.Types.Array<Ref<T, S>>
+  docs: mongoose.Types.Array<Ref<T, S>> | undefined
 ): docs is mongoose.Types.Array<DocumentType<NonNullable<T>>>;
 export function isDocumentArray<T, S extends RefType>(
-  docs: Ref<T, S>[]
+  docs: Ref<T, S>[] | undefined
 ): docs is DocumentType<NonNullable<T>>[];
-export function isDocumentArray(docs: Ref<any, any>[]): unknown { // its "any" & "unkown" because this is not listed as an overload
+export function isDocumentArray(
+  docs: Ref<any, any>[] | undefined
+): unknown { // its "any" & "unkown" because this is not listed as an overload
   return Array.isArray(docs) && docs.every((v) => isDocument(v));
 }
 
@@ -29,7 +31,7 @@ export function isDocumentArray(docs: Ref<any, any>[]): unknown { // its "any" &
  * Check if the document is not undefined/null and is not an document
  * @param doc The Ref with uncretain type
  */
-export function isRefType<T, S extends RefType>(doc: Ref<T, S>): doc is NonNullable<S> {
+export function isRefType<T, S extends RefType>(doc: Ref<T, S> | undefined): doc is NonNullable<S> {
   return !isNullOrUndefined(doc) && !isDocument(doc);
 }
 
@@ -37,9 +39,15 @@ export function isRefType<T, S extends RefType>(doc: Ref<T, S>): doc is NonNulla
  * Check if the document is not undefined/null and is not an document
  * @param docs The Ref with uncretain type
  */
-export function isRefTypeArray<T, S extends RefType>(docs: mongoose.Types.Array<Ref<T, S>>): docs is mongoose.Types.Array<NonNullable<S>>;
-export function isRefTypeArray<T, S extends RefType>(docs: Ref<T, S>[]): docs is NonNullable<S>[];
-export function isRefTypeArray(docs: Ref<any, any>[]): unknown { // its "any" & "unkown" because this is not listed as an overload
+export function isRefTypeArray<T, S extends RefType>(
+  docs: mongoose.Types.Array<Ref<T, S>> | undefined
+): docs is mongoose.Types.Array<NonNullable<S>>;
+export function isRefTypeArray<T, S extends RefType>(
+  docs: Ref<T, S>[] | undefined
+): docs is NonNullable<S>[];
+export function isRefTypeArray(
+  docs: Ref<any, any>[] | undefined
+): unknown { // its "any" & "unkown" because this is not listed as an overload
   return Array.isArray(docs) && docs.every((v) => isRefType(v));
 }
 

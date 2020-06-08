@@ -1,27 +1,26 @@
 import * as mongoose from 'mongoose';
 
-import { buildSchema, getClass, getModelForClass, getName, isDocumentArray, prop, Ref } from '../../src/typegoose';
+import { assertion, isNullOrUndefined } from '../../src/internal/utils';
+import { buildSchema, DocumentType, getClass, getModelForClass, getName, isDocumentArray, prop, Ref } from '../../src/typegoose';
 import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
 import { GetSet, GetSetModel } from '../models/getSet';
 import { InternetUserModel } from '../models/internetUser';
-import { Beverage, BeverageModel, Inventory, InventoryModel, ScooterModel } from '../models/inventory';
+import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models/inventory';
 import { Job } from '../models/job';
 import { OptionsClass, OptionsModel } from '../models/options';
-import { Genders, UserModel } from '../models/user';
+import { Genders, User, UserModel } from '../models/user';
 import {
   NonVirtual,
   NonVirtualGS,
   NonVirtualGSModel,
   NonVirtualModel,
-  Virtual,
   VirtualModel,
-  VirtualSub,
   VirtualSubModel
 } from '../models/virtualprop';
 
 it('should add a language and job using instance methods', async () => {
-  const user = await UserModel.create({
+  const user = await UserModel.create<DocumentType<Omit<User, 'fullName'>>>({
     firstName: 'harry',
     lastName: 'potter',
     gender: Genders.MALE,
@@ -32,6 +31,8 @@ it('should add a language and job using instance methods', async () => {
   await user.addJob();
   const savedUser = await user.addLanguage();
 
+  assertion(!isNullOrUndefined(savedUser.previousJobs), new Error('Expected "previousJobs" to not be undefined/null'));
+
   expect(savedUser.languages.includes('Hungarian')).toBe(true);
   expect(savedUser.previousJobs.length > 0).toBe(true);
   savedUser.previousJobs.map((prevJob) => {
@@ -40,19 +41,19 @@ it('should add a language and job using instance methods', async () => {
 });
 
 it('should add and populate the virtual properties', async () => {
-  const virtual1 = await VirtualModel.create({ dummyVirtual: 'dummyVirtual1' } as Virtual);
+  const virtual1 = await VirtualModel.create({ dummyVirtual: 'dummyVirtual1' });
   const virtualsub1 = await VirtualSubModel.create({
     dummy: 'virtualSub1',
     virtual: virtual1._id
-  } as Partial<VirtualSub>);
+  });
   const virtualsub2 = await VirtualSubModel.create({
     dummy: 'virtualSub2',
     virtual: mongoose.Types.ObjectId() as Ref<any>
-  } as Partial<VirtualSub>);
+  });
   const virtualsub3 = await VirtualSubModel.create({
     dummy: 'virtualSub3',
     virtual: virtual1._id
-  } as Partial<VirtualSub>);
+  });
 
   const newfound = await VirtualModel.findById(virtual1._id).populate('virtualSubs').orFail().exec();
 
@@ -135,7 +136,7 @@ it('should support dynamic references via refPath', async () => {
     kindArray: [sprite],
     count: 10,
     value: 1.99
-  } as Inventory);
+  });
 
   await InventoryModel.create({
     refItemPathName: 'Scooter',
@@ -143,7 +144,7 @@ it('should support dynamic references via refPath', async () => {
     kindArray: [vespa],
     count: 1,
     value: 1099.98
-  } as Inventory);
+  });
 
   // I should now have two "inventory" items, with different embedded reference documents.
   const items = await InventoryModel.find({}).populate('kind kindArray').exec();
