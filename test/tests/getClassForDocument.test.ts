@@ -122,6 +122,7 @@ it('should validate email', async () => {
 it(`should Validate Map`, async () => {
   try {
     await InternetUserModel.create({
+      // @ts-expect-error
       projects: {
         p1: 'project'
       }
