@@ -6,9 +6,9 @@ title: "Quick Start Guide"
 
 ## Quick Overview of Typegoose
 
-Typegoose is an "wrapper" for mongoose models
+Typegoose is a "wrapper" for mongoose models
 
-Instead of:
+Instead of writing this:
 
 ```ts
 interface Car {
@@ -27,7 +27,11 @@ interface User {
   car?: Car | string;
 }
 
-mongoose.model('User', {
+const CarModel = mongoose.model('Car', {
+  model: string,
+});
+
+const UserModel = mongoose.model('User', {
   name: String,
   age: { type: Number, required: true },
   job: {
@@ -36,58 +40,63 @@ mongoose.model('User', {
   },
   car: { type: Schema.Types.ObjectId, ref: 'Car' }
 });
-
-mongoose.model('Car', {
-  model: string,
-});
 ```
 
-You can just:
+You can just write:
 
 ```ts
 class Job {
   @prop()
-  title?: string;
+  public title?: string;
 
   @prop()
-  position?: string;
+  public position?: string;
 }
 
 class Car {
   @prop()
-  model?: string;
+  public model?: string;
 }
 
 class User {
   @prop()
-  name?: string;
+  public name?: string;
 
   @prop({ required: true })
-  age!: number;
+  public age!: number;
 
   @prop()
-  job?: Job;
+  public job?: Job;
 
   @prop({ ref: Car })
-  car?: Ref<Car>;
+  public car?: Ref<Car>;
 }
 ```
 
 ## How to Start using it
 
-*Please note that this guide is for Typegoose 6.0.0*
+*Please note that this guide is for Typegoose 7.0.0*
 
 ### Requirements
 
-- TypeScript 3.7+
-- NodeJS 8.10.0+
-- Mongoose 5.7.7+
-- An IDE that supports TypeScript linting (VSCode is recommendet)
-- This Guide expect you to know how mongoose (at least its models) work
+- TypeScript ^3.9 (since 7.1)
+- NodeJS ^10.15.0
+- Mongoose ^5.9.17
+- An IDE that supports TypeScript linting (VSCode is recommended)
+- This Guide expects you to know how mongoose (or at least its models) works
+
+## Install
+
+```sh
+npm i -s @typegoose/typegoose # install typegoose itself
+
+npm i -s mongoose # install peer-dependency mongoose
+npm i -D @types/mongoose # install all types for mongoose - this is required for typegoose to work in typescript
+```
 
 ### How to Use
 
-Lets say you have an mongoose model like
+Let's say you have a mongoose model like this one:
 
 ```ts
 const kittenSchema = new mongoose.Schema({
@@ -100,29 +109,26 @@ let document = await Kitten.create({ name: 'Kitty' });
 // "document" has no types
 ```
 
-you can convert it into
+With typegoose it can be converted to something like:
 
 ```ts
 class KittenClass {
   @prop()
-  name: string
+  public name: string
 }
 
 const Kitten = getModelForClass(KittenClass);
 
 let document = await Kitten.create({ name: 'Kitty' });
-// "document" has types of KittenClass
+// "document" has proper types of KittenClass
 ```
 
-Please note that `new Kitten({})` & `await Kitten.create({})` has no types of KittenClass, because typegoose doesn't modify functions of mongoose
+Please note that `new Kitten({})` & `Kitten.create({})` has no types of KittenClass, because typegoose doesn't modify functions of mongoose
 
-## Do's and Dont's of Typegoose
+## Do's and Don'ts of Typegoose
 
 - Typegoose is a wrapper for mongoose's models
 - Typegoose aims to not modify any functions of mongoose
 - Typegoose aims to get mongoose's models to be stable through type-information
-- Typegoose aims to make mongoose more usable by making the models more type-rich (thanks to TypeScript)
+- Typegoose aims to make mongoose more usable by making the models more type-rich with TypeScript
 - Decorated schema configuration classes (like KittenClass above) must use explicit type declaration
-instead of type inference for their types.  Otherwise, a property's type will become Mixed!  This is
-because Typegoose uses emitDecoratorMetadata to determine types, and by design, emitDecorator emits the
-explicit type instead of what's inferred (see [microsoft/TypeScript#18995](https://github.com/microsoft/TypeScript/issues/18995)).

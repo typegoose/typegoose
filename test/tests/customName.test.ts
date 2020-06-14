@@ -11,7 +11,7 @@ it('expect no changes to model Name when not using customOptions or collection',
   expect(gotClass).toEqual(NormalOptions);
 });
 
-it('expect if collection is defined to be automatically used with automaticName', () => {
+it('if collection is defined to be automatically used with automaticName', () => {
   @modelOptions({ schemaOptions: { collection: 'Something' }, options: { automaticName: true } })
   class CollectionOption { }
 
@@ -23,7 +23,7 @@ it('expect if collection is defined to be automatically used with automaticName'
   expect(gotClass).toEqual(CollectionOption);
 });
 
-it('expect if options.customName is defined to be used with automaticName', () => {
+it('if options.customName is defined to be used with automaticName', () => {
   @modelOptions({ options: { customName: 'CustomName', automaticName: true } })
   class CustomNameOption { }
 
@@ -90,7 +90,7 @@ it('create multiple models depending on options without base model with automati
 
     const doc = new model();
 
-    expect(doc).not.toEqual(undefined);
+    expect(doc).not.toBeUndefined();
     expect(doc.t1).toEqual('1');
     expect(doc.t2).toEqual('2');
     expect(doc).not.toHaveProperty('t3');
@@ -114,7 +114,7 @@ it('create multiple models depending on options without base model with automati
 
     const doc = new model();
 
-    expect(doc).not.toEqual(undefined);
+    expect(doc).not.toBeUndefined();
     expect(doc).not.toHaveProperty('t1');
     expect(doc).not.toHaveProperty('t2');
     expect(doc.t3).toEqual('3');
@@ -134,4 +134,15 @@ it('should not make an automatic name (automaticName)', () => {
 
   const model = getModelForClass(DisableAutomaticName);
   expect(model.modelName).toEqual('DAN');
+});
+
+it('should not make an automatic name if no collection or customName are defined (automaticName)', () => {
+  @modelOptions({ options: { automaticName: true } })
+  class NoAutomaticName {
+    @prop()
+    public test: string;
+  }
+
+  const model = getModelForClass(NoAutomaticName);
+  expect(model.modelName).toEqual('NoAutomaticName');
 });

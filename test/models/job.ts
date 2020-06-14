@@ -3,10 +3,10 @@ import { modelOptions, prop } from '../../src/typegoose';
 @modelOptions({ schemaOptions: { _id: false } })
 export class JobType {
   @prop({ required: true })
-  public field: string;
+  public field!: string;
 
   @prop({ required: true })
-  public salery: number;
+  public salery!: number;
 }
 
 @modelOptions({ schemaOptions: { _id: false } })
@@ -23,7 +23,13 @@ export class Job {
   @prop({ _id: false })
   public jobType?: JobType;
 
-  public titleInUppercase?() {
-    return this.title.toUpperCase();
+  public titleInUppercase() {
+    return this.title?.toUpperCase();
+  }
+
+  constructor(opts?: Partial<Job>) {
+    if (opts) {
+      Object.assign(this, opts);
+    }
   }
 }

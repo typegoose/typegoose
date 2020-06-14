@@ -10,22 +10,22 @@ export enum StringValidatorEnum {
 
 export class StringValidators {
   @prop({ maxlength: 3 })
-  public maxLength: string;
+  public maxLength?: string;
 
   @prop({ minlength: 10 })
-  public minLength: string;
+  public minLength?: string;
 
   @prop({ trim: true })
-  public trimmed: string;
+  public trimmed?: string;
 
   @prop({ uppercase: true })
-  public uppercased: string;
+  public uppercased?: string;
 
   @prop({ lowercase: true })
-  public lowercased: string;
+  public lowercased?: string;
 
   @prop({ enum: StringValidatorEnum })
-  public enumed: string;
+  public enumed?: StringValidatorEnum;
 }
 
 export const StringValidatorsModel = getModelForClass(StringValidators);

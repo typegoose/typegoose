@@ -1,11 +1,10 @@
-import * as mongoose from 'mongoose';
+import type * as mongoose from 'mongoose';
 
 import type { Base } from './defaultClasses';
 import type { Severity, WhatIsIt } from './internal/constants';
 
 /**
  * Get the Type of an instance of a Document with Class properties
- * @public
  * @example
  * ```ts
  * class Name {}
@@ -18,20 +17,17 @@ export type DocumentType<T> = (T extends Base ? Omit<mongoose.Document, '_id'> &
 // I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
- * @internal
  */
-export type ModelType<T> = mongoose.Model<DocumentType<T>>;
+export type ModelType<T, QueryHelpers = {}> = mongoose.Model<DocumentType<T>, QueryHelpers>;
 /**
  * Any-param Constructor
- * @internal
  */
 export type AnyParamConstructor<T> = new (...args: any) => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
  */
-export type ReturnModelType<U extends AnyParamConstructor<T>, T = any> = ModelType<InstanceType<U>> & U;
+export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = {}> = ModelType<InstanceType<U>, QueryHelpers> & U;
 
-/** @internal */
 export type Func = (...args: any[]) => any;
 
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
@@ -41,19 +37,19 @@ export interface ValidatorOptions {
   validator: ValidatorFunction;
   message?: string;
 }
-export type Validator =
-  | ValidatorFunction
-  | RegExp
-  | ValidatorOptions
-  | ValidatorOptions[];
+export type Validator = ValidatorFunction | RegExp | ValidatorOptions | ValidatorOptions[];
+
+export type DeferredFunc<T = any> = () => T;
 
 export interface BasePropOptions {
   [key: string]: any;
-  /** include this value?
+  /**
+   * include this value?
    * @default true (Implicitly)
    */
   select?: boolean;
-  /** is this value required?
+  /**
+   * is this value required?
    * @default false (Implicitly)
    */
   required?: RequiredType;
@@ -65,15 +61,21 @@ export interface BasePropOptions {
   default?: any;
   /** Give an Validator RegExp or Function */
   validate?: Validator | Validator[];
-  /** should this value be unique?
+  /**
+   * Should this property have an "unique" index?
    * @link https://docs.mongodb.com/manual/indexes/#unique-indexes
    */
   unique?: boolean;
-  /** should this value get an index?
+  /**
+   * Should this property have an index?
+   * Note: dont use this if you want to do an compound index
    * @link https://docs.mongodb.com/manual/indexes
    */
   index?: boolean;
-  /** @link https://docs.mongodb.com/manual/indexes/#sparse-indexes */
+  /**
+   * Should this property have an "sparse" index?
+   * @link https://docs.mongodb.com/manual/indexes/#sparse-indexes
+   */
   sparse?: boolean;
   /**
    * Should this property have an "expires" index?
@@ -85,7 +87,7 @@ export interface BasePropOptions {
    * @link https://mongoosejs.com/docs/api.html#schematype_SchemaType-text
    */
   text?: boolean;
-  /** should subdocuments get their own id?
+  /** Should subdocuments get their own id?
    * @default true (Implicitly)
    */
   _id?: boolean;
@@ -135,7 +137,10 @@ export interface BasePropOptions {
    * This may be needed if get/set is used
    * (this sets the type how it is saved to the DB)
    */
-  type?: any;
+  type?:
+  | DeferredFunc<AnyParamConstructor<any>>
+  | DeferredFunc<unknown>
+  | unknown;
   /**
    * Make a property read-only
    * @example
@@ -164,9 +169,9 @@ export interface BasePropOptions {
    * This option as only an effect when the plugin `mongoose-autopopulate` is used
    */
   // tslint:disable-next-line:ban-types
-  autopopulate?: boolean | Function | { [key: string]: any; };
+  autopopulate?: boolean | Function | KeyStringAny;
   /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref?: any;
+  ref?: DeferredFunc | string | AnyParamConstructor<any>;
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
   /**
@@ -174,36 +179,35 @@ export interface BasePropOptions {
    * {@link BasePropOptions.type} can be used too
    * @default ObjectId
    */
-  refType?: RefSchemaType;
+  refType?: NonNullable<BasePropOptions['type']> | RefType;
+  /**
+   * Set the Nested Discriminators
+   * Note: "_id: false" as an prop option dosnt work here
+   */
+  discriminators?: DeferredFunc<(AnyParamConstructor<any> | DiscriminatorObject)[]>;
 }
 
-// tslint:disable-next-line:no-empty-interface
-export interface PropOptions extends BasePropOptions { }
-
 export interface ArrayPropOptions extends BasePropOptions {
-  /** What array is it?
+  /**
+   * What array is it?
    * {@link BasePropOptions.type} can be used too
    * Note: this is only needed because Reflect & refelact Metadata can't give an accurate Response for an array
    */
-  items?: any;
+  items?: NonNullable<BasePropOptions['type']>;
   /**
    * Use this to define inner-options
    * Use this if the auto-mapping is not correct or for plugin options
    *
    * Please open a new issue if some option is mismatched or not existing / mapped
    */
-  innerOptions?: {
-    [key: string]: any;
-  };
+  innerOptions?: KeyStringAny;
   /**
    * Use this to define outer-options
    * Use this if the auto-mapping is not correct or for plugin options
    *
    * Please open a new issue if some option is mismatched or not existing / mapped
    */
-  outerOptions?: {
-    [key: string]: any;
-  };
+  outerOptions?: KeyStringAny;
   /**
    * How many dimensions this Array should have
    * (needs to be higher than 0)
@@ -212,21 +216,30 @@ export interface ArrayPropOptions extends BasePropOptions {
   dim?: number;
 }
 
+export interface MapPropOptions extends BasePropOptions {
+  /**
+   * The type of the Map (Map<string, THIS>)
+   */
+  of?: NonNullable<BasePropOptions['type']>;
+}
+
 export interface ValidateNumberOptions {
-  /** The Number must be at least this high */
+  /** Only allow numbers that are higher than this */
   min?: number | [number, string];
-  /** The Number can only be lower than this */
+  /** Only allow numbers lower than this */
   max?: number | [number, string];
+  /** Only allow Values from the enum */
+  enum?: number[];
 }
 
 export interface ValidateStringOptions {
-  /** Only Allowes if the value matches an RegExp */
+  /** Only allow values that match this RegExp */
   match?: RegExp | [RegExp, string];
-  /** Only Allowes if the value is in the Enum */
+  /** Only allow Values from the enum */
   enum?: string[];
-  /** Only Allowes if the value is at least the lenght */
+  /** Only allow values that have at least this length */
   minlength?: number | [number, string];
-  /** Only Allowes if the value is not longer than the maxlenght */
+  /** Only allow values that have at max this length */
   maxlength?: number | [number, string];
 }
 
@@ -241,7 +254,7 @@ export interface TransformStringOptions {
 
 export interface VirtualOptions {
   /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref: any;
+  ref: NonNullable<BasePropOptions['ref']>;
   /** Which property(on the current-Class) to match `foreignField` against */
   localField: string;
   /** Which property(on the ref-Class) to match `localField` against */
@@ -250,35 +263,49 @@ export interface VirtualOptions {
   justOne?: boolean;
   /** Return the number of Documents found instead of the actual Documents */
   count?: boolean;
+  /** Extra Query Options */
+  options?: KeyStringAny;
+  /** Match Options */
+  match?: KeyStringAny | ((doc) => KeyStringAny);
 }
 
-export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
-export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions & ValidateStringOptions;
-export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate | VirtualOptions;
+export type PropOptionsForNumber = BasePropOptions & ValidateNumberOptions;
+export type PropOptionsForString = BasePropOptions & TransformStringOptions & ValidateStringOptions;
 
-export type RefType = number | string | mongoose.Types.ObjectId | Buffer;
-export type RefSchemaType = typeof mongoose.Schema.Types.Number |
-  typeof mongoose.Schema.Types.String |
-  typeof mongoose.Schema.Types.Buffer |
-  typeof mongoose.Schema.Types.ObjectId;
+export type RefType =
+  | number
+  | string
+  | mongoose.Types.ObjectId
+  | Buffer
+  | undefined
+  | typeof mongoose.Schema.Types.Number
+  | typeof mongoose.Schema.Types.String
+  | typeof mongoose.Schema.Types.Buffer
+  | typeof mongoose.Schema.Types.ObjectId;
 
 /**
  * Reference another Model
- * @public
  */
 // export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
-export type Ref<R, T extends RefType = R extends { _id: RefType; } ? R['_id'] : mongoose.Types.ObjectId> = R | T;
+export type Ref<
+  R,
+  T extends RefType = (R extends { _id?: RefType; } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined
+  > = R | T;
 
 /**
  * An Function type for a function that doesn't have any arguments and doesn't return anything
  */
 export type EmptyVoidFn = () => void;
 
-export interface MapPropOptions extends BasePropOptions {
+export interface DiscriminatorObject {
+  /** The Class to use */
+  type: AnyParamConstructor<any>;
   /**
-   * The type of the Map (Map<string, THIS>)
+   * The Name to differentiate between other classes
+   * Mongoose JSDOC: [value] the string stored in the `discriminatorKey` property. If not specified, Mongoose uses the `name` parameter.
+   * @default {string} The output of "getName"
    */
-  of?: any;
+  value?: string;
 }
 
 export interface IModelOptions {
@@ -318,15 +345,13 @@ export interface ICustomOptions {
 
 export interface DecoratedPropertyMetadata {
   /** Prop Options */
-  origOptions: any;
-  /** What the Property Type should be */
-  Type: AnyParamConstructor<any>;
+  options: any;
   /** Target Class */
-  target: any;
+  target: AnyParamConstructor<any>;
   /** Property name */
   key: string;
   /** What is it for a prop type? */
-  whatis: WhatIsIt;
+  whatis?: WhatIsIt;
 }
 export type DecoratedPropertyMetadataMap = Map<string, DecoratedPropertyMetadata>;
 
@@ -403,10 +428,8 @@ export interface IndexOptions<T> {
  * ```
  */
 export interface IIndexArray<T> {
-  fields: {
-    [key: string]: any;
-  };
-  options: IndexOptions<T>;
+  fields: KeyStringAny;
+  options?: IndexOptions<T>;
 }
 
 /**
@@ -430,14 +453,43 @@ export interface IPluginsArray<T> {
  */
 export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
 
+
+/**
+ * Gets the signature (parameters with their types, and the return type) of a function type.
+ *
+ * @description Should be used when defining an interface for a class that uses query methods.
+ *
+ * @example
+ * ```ts
+ * function sendMessage(recipient: string, sender: string, priority: number, retryIfFails: boolean) {
+ *  // some logic...
+ *  return true;
+ * }
+ *
+ * // Both of the following types will be identical.
+ * type SendMessageType = QueryMethod<typeof sendMessage>;
+ * type SendMessageManualType = (recipient: string, sender: string, priority: number, retryIfFails: boolean) => boolean;
+ * ```
+ */
+export type QueryMethod<T extends (...args: any) => any> = (...args: Parameters<T>) => ReturnType<T>;
+
 /**
  * Used for the Reflection of Query Methods
  * @example
  * ```ts
- * const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target.constructor) ?? []);
+ * const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target) ?? []);
  * ```
  */
 export type QueryMethodMap = Map<string, Func>;
+
+/**
+ * Used for the Reflection of Nested Discriminators
+ * @example
+ * ```ts
+ * const disMap: NestedDiscriminatorsMap = new Map(Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, target) ?? []);
+ * ```
+ */
+export type NestedDiscriminatorsMap = Map<string, DiscriminatorObject[]>;
 
 /**
  * Used for the Reflection of Hooks
@@ -474,4 +526,9 @@ export interface IObjectWithTypegooseName {
 /** For the types that error that seemingly dont have a prototype */
 export interface IPrototype {
   prototype?: any;
+}
+
+/** An Helper Interface for key: any: string */
+export interface KeyStringAny {
+  [key: string]: any;
 }

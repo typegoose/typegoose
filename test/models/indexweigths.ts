@@ -1,4 +1,4 @@
-import { arrayProp, getModelForClass, index, prop } from '../../src/typegoose';
+import { getModelForClass, index, prop } from '../../src/typegoose';
 
 // using examples from https://docs.mongodb.com/manual/tutorial/control-results-of-text-search/
 @index({ content: 'text', about: 'text', keywords: 'text' }, {
@@ -10,13 +10,13 @@ import { arrayProp, getModelForClass, index, prop } from '../../src/typegoose';
 })
 export class IndexWeights {
   @prop({ required: true })
-  public content: string;
+  public content!: string;
 
   @prop({ required: true })
-  public about: string;
+  public about!: string;
 
-  @arrayProp({ required: true, items: String })
-  public keywords: string[];
+  @prop({ required: true, type: String })
+  public keywords!: string[];
 }
 
 export const IndexWeightsModel = getModelForClass(IndexWeights);

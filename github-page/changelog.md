@@ -19,11 +19,85 @@ redirect_from:
 -->
 *`[IC]` means `Internal Change`*
 
-## 7.1.0
+## 7.3.0
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
+- Add option `discriminators` for embedded Discriminators [{% include gitissue repo="typegoose" num=248 %}]
+- [IC] Moved functino `_buildPropMetadata` to its own file (`processProp`) and renamed it to `processProp` [{% include gitissue repo="typegoose" num=286 %}]
+- [IC] Moved pre-processing in function `prop` into `processProp` [{% include gitissue repo="typegoose" num=286 %}]
+- [IC] Removed error `NoMetadataError`
+- [IC] Removed check that `Type` needs to be defined in `prop` / `processProp`
+
+## 7.2.0
+
+- Update Dependencies
+  - `mongoose` to 5.9.17
+  - `@types/mongoose` to 5.7.21
+  - `typescript` to 3.9.3
+- Remove type `RefSchemaType`
+- Add `mongoose.Schema.Types.*` that are suitable for ref to `RefType`
+- Runtime-Deprecate `@mapProp`(`TDEP0002`) & `@arrayProp`(`TDEP0001`)
+- Runtime-Deprecate `type`-alias options, `items` & `of` & `refType`(`TDEP0003`)
+- Handle `mongoose.Types.Array<Ref<>>` for Typeguards (`isDocumentArray` & `isRefTypeArray`) [{% include gitissue repo="typegoose" num=278 %}]
+
+## 7.1.3
+
+- Added an Error if option `ref` is set but is `undefined/null`
+- Add `mongoose.Types.DocumentArray` and `mongoose.Schema.Types.DocumentArray` to `@prop` array-detection
+- Change `if (!kind)` to `if (isNullOrUndefined(kind))`
+
+## 7.1.2
+
+- `@prop` options types now work again
+- `BasePropOptions.type` is now `unkown` instead of `any`
+- All aliases of `BasePropOptions.type` now inherit the types from there
+- Fix bug where autopopulate (or any other plugin) wouldnt pick up on virtuals [{% include gitissue repo="typegoose" num=274 %}]
+- [IC] `refType` is now moved to `prop`
+
+## 7.1.1
+
+- Remove empty interface `PropOptions`
+- Remove type `PropOptionsWithValidate`
+- Rename type `PropOptionsWithNumberValidate` to `PropOptionsForNumber`
+- Rename type `PropOptionsWithStringValidate` to `PropOptionsForString`
+- Add options `options` & `match` for `VirtualOptions`
+- Add option `enum` for `ValidateNumberOptions`
+- `arrayProp` & `mapProp` are now just an alias for `prop`
+- Set TSDoc option `@deprecated` for `arrayProp` and `mapProp`
+- Detect `mongoose.Types.Array` & `mongoose.Schema.Types.Array` as `Array` in `@prop`
+- Detect `mongoose.Types.Map` & `mongoose.Schema.Types.Map` as `Map` in `@prop`
+- Add Overloads to `@prop`
+- PascalCased decorators now have the TSDoc of the original function
+- Default class `Base`'s `__v` & `__t` are now optional (with `?`)
+- Fix mentioned bug from {% include gitissue repo="typegoose" num=181 %}, to allow `mongoose.Schema.Types.String` & `mongoose.Schema.Types.Number` as valid enum types
+- Options `of` & `items` are now mapped to `type` and get called when `buildSchema` is called
+- [IC] DeDuplicate code in `prop.ts`
+
+## 7.1.0
+
+- Update Dependencies
+  - `mongoose` to 5.9.14
+  - `@types/mongoose` to 5.7.19
+  - `tslib` to 2.0.0
+  - `typescript` to 3.9.2
 - Fix duplicate hooks / virtuals / queryMethods / plugins / indices via inheritance [{% include gitissue repo="typegoose" num=218 %}]
+- improve TSDoc of some functions
+- Fix `queryMethod` reflection
+- Set proper function type for `queryMethod`
+- Added the ability to define option `ref` with an arrow-function [(`ref: () => type`)]({{ site.baseurl }}{% link _guides/advanced/reference-other-classes.md %}#referencing-other-classes)
+- All Decorators are now exported PascalCased & camelCased
+- Actually export the `@queryMethod` decorator
+- The `@queryMethod` decorator now has correct types [{% include gitissue repo="typegoose" num=247 %}]
+- The functions `addModelToTypegoose`, `getModelForClass`, `buildSchema`, `deleteModelWithClass`, `getDiscriminatorModelForClass` now have the `T` generic removed (it was unnecessary)
+- The functions `addModelToTypegoose`, `getModelForClass`, `getDiscriminatorModelForClass` now have an new optional generic `QueryHelpers`
+- The Type `ReturnModelType` now has the `T` generic removed (it was unnecessary)
+- The Type `ReturnModelType` now has an second optional generic `QueryHelpers`
+- Fix bug where `ref: Class` didnt execute `getName` when Virtual-Populate was used
+- Allow use of `@prop` for arrays & maps (In preparation for 8.0), it is now auto-detected based on `design:type`
+- The Decorator `@plugin` now automatically infers the options if the plugin & function have typings and use options
+- [IC] add some tslint rules & apply them
+- [IC] enable "strictNullChecks" & fix accordingly
 
 ## 7.0.0
 
@@ -237,7 +311,7 @@ This Release didnt change anything on the code, it was mostly tests & github-pag
 
 [To Migrate, please look at the migration guide]({{ site.baseurl }}{% link _guides/migrate-to-6.md %})
 
-- Project got moved to the new repo (hasezoey/typegoose) and new package `@hasezoey/typegoose`
+- Project got moved to the new repo (typegoose/typegoose) and new package `@typegoose/typegoose`
 - rename `InstanceType<T>` to `DocumentType<T>` [{% include gitissue repo="szokodiakos" num=366 %}]
 - adding a migration guide from ~5.9 to 6.0.0
 - adding missing "get" and "set" property options [{% include gitissue repo="szokodiakos" num=260 %}]

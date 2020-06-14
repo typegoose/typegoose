@@ -1,5 +1,15 @@
+import { assertion } from '../../src/internal/utils';
 import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose';
-import { IsRefType, IsRefTypeArray, IsRefTypeArrayModel, IsRefTypeModel, IsRefTypeNestedObjectIdModel, IsRefTypeNestedStringModel } from '../models/isRefType';
+import {
+  IsRefType,
+  IsRefTypeArray,
+  IsRefTypeArrayModel,
+  IsRefTypeModel,
+  IsRefTypeNestedObjectIdModel,
+  IsRefTypeNestedStringModel,
+  MTypesArrayRefModel,
+  SubModel
+} from '../models/typeguards';
 import { UserRefModel } from '../models/userRefs';
 
 describe('isDocument / isDocumentArray', () => {
@@ -154,7 +164,7 @@ describe('isRefType / isRefTypeArray', () => {
       } as IsRefType);
       doc.depopulate('nestedString');
 
-      expect(doc.nestedString).not.toEqual(undefined);
+      expect(doc.nestedString).not.toBeUndefined();
 
       if (isRefType(doc.nestedString)) {
         expect(typeof doc.nestedString).toBe('string');
@@ -169,7 +179,7 @@ describe('isRefType / isRefTypeArray', () => {
       } as IsRefType);
       doc.depopulate('nestedObjectId');
 
-      expect(doc.nestedObjectId).not.toEqual(undefined);
+      expect(doc.nestedObjectId).not.toBeUndefined();
 
       if (isRefType(doc.nestedObjectId)) {
         expect(doc.nestedObjectId).toBeInstanceOf(mongoose.Types.ObjectId);
@@ -186,11 +196,11 @@ describe('isRefType / isRefTypeArray', () => {
       } as IsRefTypeArray);
       doc.depopulate('nestedString');
 
-      expect(doc.nestedString).not.toEqual(undefined);
+      expect(doc.nestedString).not.toBeUndefined();
 
-      if (isRefTypeArray(doc.nestedString)) {
+      if (isRefTypeArray(doc.nestedString!)) {
         expect(Array.isArray(doc.nestedString)).toBe(true);
-        expect(typeof doc.nestedString[0]).toBe('string');
+        expect(typeof doc.nestedString![0]).toBe('string');
       } else {
         fail('Expected isRefTypeArray to be returning true');
       }
@@ -202,14 +212,36 @@ describe('isRefType / isRefTypeArray', () => {
       } as IsRefTypeArray);
       doc.depopulate('nestedObjectId');
 
-      expect(doc.nestedObjectId).not.toEqual(undefined);
+      expect(doc.nestedObjectId).not.toBeUndefined();
 
-      if (isRefTypeArray(doc.nestedObjectId)) {
+      if (isRefTypeArray(doc.nestedObjectId!)) {
         expect(Array.isArray(doc.nestedString)).toBe(true);
-        expect(doc.nestedObjectId[0]).toBeInstanceOf(mongoose.Types.ObjectId);
+        expect(doc.nestedObjectId![0]).toBeInstanceOf(mongoose.Types.ObjectId);
       } else {
         fail('Expected isRefTypeArray to be returning true');
       }
     });
   });
+});
+
+it('should support mongoose.Types.Array<Ref<>> for isDocumentArray', async () => {
+  // This Test is mainly for Type-checking (compile time)
+  const subdoc = await SubModel.create({ someValue: 'MTA_IDA' });
+  const mtarefdoc = await MTypesArrayRefModel.create({ subs: [subdoc, subdoc] });
+
+  const found = await MTypesArrayRefModel.findById(mtarefdoc).populate('subs').orFail().exec();
+
+  assertion(isDocumentArray(found.subs), new Error('Expected found.subs to be populated'));
+  expect(found.subs[0].someValue).toBe('MTA_IDA');
+});
+
+it('should support mongoose.Types.Array<Ref<>> for isRefTypeArray', async () => {
+  // This Test is mainly for Type-checking (compile time)
+  const subdoc = await SubModel.create({ someValue: 'MTA_IRTA' });
+  const mtarefdoc = await MTypesArrayRefModel.create({ subs: [subdoc, subdoc] });
+
+  const found = await MTypesArrayRefModel.findById(mtarefdoc).orFail().exec();
+
+  assertion(isRefTypeArray(found.subs), new Error('Expected found.subs to not be populated'));
+  expect(found.subs[0]).toBeInstanceOf(mongoose.Types.ObjectId);
 });

@@ -11,18 +11,16 @@ assignees: ''
 
 - remove "not needed" from your parity below
 - Make sure you read [Mastering-Markdown](https://guides.github.com/features/mastering-markdown/), thanks
-
 -->
 
 ## Which feature
 
 - [Example Feature 1](documentation_link)
-- [Example Feature 2](documentation_link)
 
-## Why do you want it
+## Code Examples
 
-just because
+<!--please provide an code example on how to use this feature in normal mongoose / or how you imagine it to work in typegoose-->
 
 ## Additional Notes
 
-- add it here
+<!--add it here-->

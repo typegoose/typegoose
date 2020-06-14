@@ -1,5 +1,9 @@
 ---
 title: "Delete Models"
+redirect_from:
+  - /docs/functions/deletemodel
+  - /docs/functions/deletemodels
+  - /docs/functions/deleteModels
 ---
 
 ## deleteModel

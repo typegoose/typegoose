@@ -9,11 +9,11 @@ const options = {
 @modelOptions(options)
 export class NormalUser {
   @prop()
-  public name: string;
+  public name?: string;
 }
 
 @modelOptions(options)
 export class OverwrittenUser {
   @prop()
-  public nickName: string;
+  public nickName?: string;
 }

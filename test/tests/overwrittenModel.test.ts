@@ -73,7 +73,7 @@ it('should delete model from different connection', async () => {
   expect(name).toEqual('NormalUser');
 
   deleteModelWithClass(NormalUser);
-  expect(connection.models.NormalUser).toEqual(undefined);
+  expect(connection.models.NormalUser).toBeUndefined();
 
   expect(models.has(name)).toEqual(false);
   expect(constructors.has(name)).toEqual(false);

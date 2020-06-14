@@ -1,22 +1,24 @@
 import * as mongoose from 'mongoose';
 
-import { Genders } from '../enums/genders';
-import { Role } from '../enums/role';
 import { CarModel } from '../models/car';
-import { UserModel } from '../models/user';
+import { Genders, Role, UserModel } from '../models/user';
 
 it('should create a User with connections', async () => {
-  const [tesla, trabant, zastava] = await CarModel.create([{
-    model: 'Tesla',
-    version: 'ModelS',
-    price: mongoose.Types.Decimal128.fromString('50123.25')
-  }, {
-    model: 'Trabant',
-    price: mongoose.Types.Decimal128.fromString('28189.25')
-  }, {
-    model: 'Zastava',
-    price: mongoose.Types.Decimal128.fromString('1234.25')
-  }]);
+  const [tesla, trabant, zastava] = await CarModel.create([
+    {
+      carModel: 'Tesla',
+      version: 'ModelS',
+      price: mongoose.Types.Decimal128.fromString('50123.25')
+    },
+    {
+      carModel: 'Trabant',
+      price: mongoose.Types.Decimal128.fromString('28189.25')
+    },
+    {
+      carModel: 'Zastava',
+      price: mongoose.Types.Decimal128.fromString('1234.25')
+    }
+  ]);
 
   const user = await UserModel.create({
     _id: mongoose.Types.ObjectId(),
@@ -34,85 +36,64 @@ it('should create a User with connections', async () => {
         field: 'IT'
       }
     },
-    car: tesla.id,
+    car: tesla,
     languages: ['english', 'typescript'],
-    previousJobs: [{
-      title: 'Janitor'
-    }, {
-      title: 'Manager'
-    }],
-    previousCars: [trabant.id, zastava.id]
+    previousJobs: [
+      {
+        title: 'Janitor'
+      },
+      {
+        title: 'Manager'
+      }
+    ],
+    previousCars: [trabant, zastava]
   });
 
   {
-    const foundUser = await UserModel
-      .findById(user.id)
-      .populate('car previousCars')
-      .exec();
+    const foundUser = await UserModel.findById(user.id).populate('car previousCars').orFail().exec();
 
-    expect(foundUser).toHaveProperty('nick', 'Nothing');
-    expect(foundUser).toHaveProperty('firstName', 'John');
-    expect(foundUser).toHaveProperty('lastName', 'Doe');
-    expect(foundUser).toHaveProperty('uniqueId', 'john-doe-20');
-    expect(foundUser).toHaveProperty('age', 20);
-    expect(foundUser).toHaveProperty('gender', Genders.MALE);
-    expect(foundUser).toHaveProperty('role', Role.User);
-    {
-      expect(foundUser).toHaveProperty('roles');
-      expect(foundUser.roles).toHaveLength(1);
-      expect(foundUser.roles.includes(Role.Guest)).toBe(true);
-    }
-    expect(foundUser).toHaveProperty('job');
-    expect(foundUser).toHaveProperty('car');
-    {
-      expect(foundUser).toHaveProperty('languages');
-      expect(foundUser.languages).toHaveLength(2);
-      expect(foundUser.languages.includes('english')).toBe(true);
-      expect(foundUser.languages.includes('typescript')).toBe(true);
-    }
-    expect(foundUser.job).toHaveProperty('title', 'Developer');
-    expect(foundUser.job).toHaveProperty('position', 'Lead');
-    {
-      expect(foundUser.job).toHaveProperty('startedAt');
-      expect(foundUser.job.startedAt).toBeInstanceOf(Date);
-    }
-    expect(foundUser.job.titleInUppercase()).toEqual('Developer'.toUpperCase());
-    expect(foundUser.job.jobType).not.toHaveProperty('_id');
-    expect(foundUser.job.jobType).toHaveProperty('salery', 5000);
-    expect(foundUser.job.jobType).toHaveProperty('field', 'IT');
-    {
-      expect(foundUser.job.jobType).toHaveProperty('salery');
-      expect(typeof foundUser.job.jobType.salery).toBe('number');
-    }
-    expect(foundUser.car).toHaveProperty('model', 'Tesla');
-    expect(foundUser.car).toHaveProperty('version', 'models');
+    expect(foundUser).not.toBeNull();
+    expect(foundUser!.toObject({ virtuals: true, getters: true })).toMatchSnapshot({
+      _id: expect.any(mongoose.Types.ObjectId),
+      id: expect.any(String),
+      job: {
+        startedAt: expect.any(Date)
+      },
+      car: {
+        _id: expect.any(mongoose.Types.ObjectId),
+        id: expect.any(String)
+      },
+      previousJobs: expect.any(Array),
+      previousCars: expect.any(Array)
+    });
+
+    expect(foundUser!.job.titleInUppercase()).toEqual('Developer'.toUpperCase());
+
     {
       expect(foundUser).toHaveProperty('previousJobs');
-      expect(foundUser.previousJobs).toHaveLength(2);
+      expect(foundUser!.previousJobs).toHaveLength(2);
+
+      const [janitor, manager] = foundUser!.previousJobs;
+      expect(janitor).toHaveProperty('title', 'Janitor');
+      expect(manager).toHaveProperty('title', 'Manager');
     }
-
-    expect(foundUser).toHaveProperty('fullName', 'John Doe');
-
-    const [janitor, manager] = foundUser.previousJobs;
-    expect(janitor).toHaveProperty('title', 'Janitor');
-    expect(manager).toHaveProperty('title', 'Manager');
 
     {
       expect(foundUser).toHaveProperty('previousCars');
-      expect(foundUser.previousCars).toHaveLength(2);
+      expect(foundUser!.previousCars).toHaveLength(2);
+
+      const [foundTrabant, foundZastava] = foundUser!.previousCars;
+      expect(foundTrabant).toHaveProperty('carModel', 'Trabant');
+      expect(foundTrabant).toHaveProperty('isSedan', true);
+      expect(foundZastava).toHaveProperty('carModel', 'Zastava');
+      expect(foundZastava).toHaveProperty('isSedan', undefined);
     }
 
-    const [foundTrabant, foundZastava] = foundUser.previousCars;
-    expect(foundTrabant).toHaveProperty('model', 'Trabant');
-    expect(foundTrabant).toHaveProperty('isSedan', true);
-    expect(foundZastava).toHaveProperty('model', 'Zastava');
-    expect(foundZastava).toHaveProperty('isSedan', undefined);
-
-    foundUser.fullName = 'Sherlock Holmes';
+    foundUser!.fullName = 'Sherlock Holmes';
     expect(foundUser).toHaveProperty('firstName', 'Sherlock');
     expect(foundUser).toHaveProperty('lastName', 'Holmes');
 
-    await foundUser.incrementAge();
+    await foundUser!.incrementAge();
     expect(foundUser).toHaveProperty('age', 21);
   }
 
@@ -130,7 +111,7 @@ it('should create a user with [Plugin].findOrCreate', async () => {
     gender: Genders.FEMALE
   });
 
-  expect(createdUser).not.toBe(undefined);
+  expect(createdUser).not.toBeUndefined();
   expect(createdUser).toHaveProperty('created');
   expect(createdUser.created).toBe(true);
   expect(createdUser).toHaveProperty('doc');
@@ -141,7 +122,7 @@ it('should create a user with [Plugin].findOrCreate', async () => {
     lastName: 'Doe'
   });
 
-  expect(foundUser).not.toBe(undefined);
+  expect(foundUser).not.toBeUndefined();
   expect(foundUser).toHaveProperty('created');
   expect(foundUser.created).toBe(false);
   expect(foundUser).toHaveProperty('doc');
@@ -154,9 +135,11 @@ it('should create a user with [Plugin].findOrCreate', async () => {
       lastName: 'Doe',
       age: 20,
       gender: Genders.MALE,
-      uniqueId: 'john-doe-20'
+      uniqueId: 'john-doe-20',
+      languages: []
     });
   } catch (err) {
+    // Duplicate key error (11000)
     expect(err).toHaveProperty('code', 11000);
   }
 });

@@ -7,6 +7,8 @@ title: "Mongoose Compatibility"
 <!--Everything below here is generated as stated above-->
 | Typegoose Version | Mongoose Version |
 | ----------------- | ---------------- |
+| 7.2.x             | ^5.9.17          |
+| 7.1.x             | ^5.9.14          |
 | 7.0.x             | ^5.9.9           |
 | 6.4.x             | ^5.9.2           |
 | 6.3.x             | ^5.8.11          |

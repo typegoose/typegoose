@@ -7,18 +7,19 @@ assignees: ''
 ---
 
 <!--
-- In Versions, only include the Typegoose version you use (NPM or from GIT)
+- in versions, only include the Typegoose version you use (NPM or from GIT)
 - in "Code Example" add as many code blocks as needed, but when possible try to use an repo / gist
 - in "Do you know *why* it happenes replace the "*no*" if you know why
+- Make sure you read [Mastering-Markdown](https://guides.github.com/features/mastering-markdown/)
 -->
 
 ## Versions
 
-<!--If Possible, please try to use the latest versions-->
+<!--Please confirm you are running the latest versions-->
 
-<!--"0.0.0" means it is **not** used / unknown-->
+<!--"0.0.0" means it is not used-->
 - NodeJS: 0.0.0
-- Typegoose(NPM): 0.0.0 <!--Please confirm that the verison is 6.0.x or above-->
+- Typegoose(NPM): 0.0.0 <!--Please confirm that the verison is 7.0.x or above-->
 - Typegoose(GIT): commithash
 - mongoose: 0.0.0
 - mongodb: 0.0.0
@@ -30,6 +31,11 @@ assignees: ''
 <!--Please add an description of what the bug / problem is-->
 
 ## Code Example
+
+<!--
+Look here for an example of how to structure you reproduction code
+https://github.com/typegoose/typegoose-testing/blob/master/src/test.ts
+-->
 
 ```ts
 code here

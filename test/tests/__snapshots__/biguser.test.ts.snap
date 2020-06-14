@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should create a User with connections 1`] = `
+Object {
+  "__v": 0,
+  "_id": Any<ObjectID>,
+  "age": 20,
+  "car": Object {
+    "__v": 0,
+    "_id": Any<ObjectID>,
+    "carModel": "Tesla",
+    "id": Any<String>,
+    "price": Object {
+      "$numberDecimal": "50123.25",
+    },
+    "version": "models",
+  },
+  "firstName": "John",
+  "fullName": "John Doe",
+  "gender": "male",
+  "id": Any<String>,
+  "job": Object {
+    "id": null,
+    "jobType": Object {
+      "field": "IT",
+      "id": null,
+      "salery": 5000,
+    },
+    "position": "Lead",
+    "startedAt": Any<Date>,
+    "title": "Developer",
+  },
+  "languages": Array [
+    "english",
+    "typescript",
+  ],
+  "lastName": "Doe",
+  "nick": "Nothing",
+  "previousCars": Any<Array>,
+  "previousJobs": Any<Array>,
+  "role": "user",
+  "roles": Array [
+    "guest",
+  ],
+  "uniqueId": "john-doe-20",
+}
+`;

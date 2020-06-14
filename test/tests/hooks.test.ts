@@ -58,7 +58,7 @@ it('should execute multiple hooks with array', async () => {
   await HookArrayModel.find({}).exec();
   await HookArrayModel.findOne({ _id: doc.id }).exec();
 
-  const found = await HookArrayModel.findById(doc.id).exec();
+  const found = await HookArrayModel.findById(doc.id).orFail().exec();
   expect(typeof found).not.toBe('undefined');
   expect(Array.isArray(found.testArray)).toBe(true);
   expect(found.testArray).toHaveLength(3);
@@ -75,6 +75,6 @@ it('should execute post hooks only twice in case inheritance is being used [type
   const doc = new ExtendedHookModel();
   await doc.save();
 
-  const docFromDb = await ExtendedHookModel.findOne({ _id: doc._id }).exec();
+  const docFromDb = await ExtendedHookModel.findOne({ _id: doc._id }).orFail().exec();
   expect(docFromDb.hooksMessages.length).toEqual(4);
 });

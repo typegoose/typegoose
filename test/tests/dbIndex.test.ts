@@ -1,8 +1,6 @@
-import { CarModel } from '../models/car';
 import { IndexWeights, IndexWeightsModel } from '../models/indexweigths';
-import { RatingModel } from '../models/rating';
+import { RatingCar, RatingCarModel, RatingModel, RatingUser, RatingUserModel } from '../models/rating';
 import { SelectModel, SelectStrings } from '../models/select';
-import { UserModel } from '../models/user';
 
 describe('Property Option {select}', () => {
   beforeEach(async () => {
@@ -12,7 +10,7 @@ describe('Property Option {select}', () => {
 
   it('should only return default selected properties', async () => {
     /** variable name long: foundSelectDefault */
-    const fSDefault = (await SelectModel.findOne({}).exec()).toObject();
+    const fSDefault = (await SelectModel.findOne({}).orFail().exec()).toObject();
 
     expect(fSDefault).not.toHaveProperty('test1');
     expect(fSDefault).toHaveProperty('test2', SelectStrings.test2);
@@ -21,7 +19,7 @@ describe('Property Option {select}', () => {
 
   it('should only return specifically selected properties', async () => {
     /** variable name long: foundSelectExtra */
-    const fSExtra = (await SelectModel.findOne({}).select(['+test1', '+test3', '-test2']).exec()).toObject();
+    const fSExtra = (await SelectModel.findOne({}).select(['+test1', '+test3', '-test2']).orFail().exec()).toObject();
 
     expect(fSExtra).toHaveProperty('test1', SelectStrings.test1);
     expect(fSExtra).not.toHaveProperty('test2');
@@ -61,14 +59,17 @@ it('should create and find indexes with weights', async () => {
 });
 
 it('should add compound index', async () => {
-  const user = await UserModel.findOne().exec();
-  const car = await CarModel.findOne().exec();
+  expect.assertions(1);
+  const user = await RatingUserModel.create({ name: 'hi' } as RatingUser);
+  const car = await RatingCarModel.create({ carModel: 'some' } as RatingCar);
 
   await RatingModel.create({ user, car, stars: 4 });
 
   // should fail, because user and car should be unique
   try {
     await RatingModel.create({ user, car, stars: 5 });
+
+    fail('Expected .create to fail with code 11000');
   } catch (err) {
     expect(err).toHaveProperty('code', 11000);
   }

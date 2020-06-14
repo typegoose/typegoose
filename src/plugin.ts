@@ -8,7 +8,7 @@ import type { Func, IPluginsArray } from './types';
  * @param mongoosePlugin The Plugin to plug-in
  * @param options Options for the Plugin, if any
  */
-export function plugin<T = any>(mongoosePlugin: Func, options?: T) {
+export function plugin<TFunc extends Func, TParams = Parameters<TFunc>[1]>(mongoosePlugin: TFunc, options?: TParams) {
   // don't check if options is an object, because any plugin could make it anything
   return (target: any) => {
     logger.info('Adding plugin "%s" to "%s" with options: "%o"', mongoosePlugin.name, getName(target), options);
@@ -17,3 +17,6 @@ export function plugin<T = any>(mongoosePlugin: Func, options?: T) {
     Reflect.defineMetadata(DecoratorKeys.Plugins, plugins, target);
   };
 }
+
+// Export it PascalCased
+export { plugin as Plugins };

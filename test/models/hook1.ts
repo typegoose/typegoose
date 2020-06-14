@@ -1,4 +1,4 @@
-import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
+import { getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
 
 @pre<Hook>('save', function () {
   if (this.isModified('shape')) {
@@ -16,14 +16,14 @@ import { arrayProp, getModelForClass, isDocument, post, pre, prop } from '../../
 })
 @post<Hook>(/^find/, (doc) => {
   if (Array.isArray(doc)) {
-    doc.forEach((v) => v.material = 'REGEXP_POST');
+    doc.forEach((v) => (v.material = 'REGEXP_POST'));
   } else if (isDocument(doc)) {
     doc.material = 'REGEXP_POST';
   }
 })
 export class Hook {
   @prop({ required: true })
-  public material: string;
+  public material!: string;
 
   @prop()
   public shape?: string;
@@ -31,18 +31,20 @@ export class Hook {
 
 @post<HookArray>(['find', 'findOne'], async (docs) => {
   if (Array.isArray(docs)) {
-    await Promise.all(docs.map(async (v) => {
-      v.testArray.push('hello');
-      await v.save();
-    }));
+    await Promise.all(
+      docs.map(async (v) => {
+        v.testArray.push('hello');
+        await v.save();
+      })
+    );
   } else if (isDocument(docs)) {
     docs.testArray.push('hello');
     await docs.save();
   }
 })
 export class HookArray {
-  @arrayProp({ required: true, items: String })
-  public testArray: string[];
+  @prop({ required: true, type: String })
+  public testArray!: string[];
 }
 
 @pre<BaseHook>('save', function (next) {
@@ -54,8 +56,8 @@ export class HookArray {
   next();
 })
 export class BaseHook {
-  @arrayProp({ items: String, default: [] })
-  public hooksMessages: string[];
+  @prop({ type: String, default: [] })
+  public hooksMessages!: string[];
 }
 
 @pre<ExtendedHook>('save', function (next) {

@@ -13,7 +13,6 @@ assignees: ''
 - Make sure you provide all the needed code
 - Make sure you read [Mastering-Markdown](https://guides.github.com/features/mastering-markdown/), thanks
 - If it is a small question, try to use [our discord](https://discord.gg/BpGjTTD)
-
 -->
 
 ## Versions

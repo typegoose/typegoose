@@ -43,7 +43,12 @@ export enum DecoratorKeys {
    * Storage location for Query Methods
    * -> Use only for a class
    */
-  QueryMethod = 'typegoose:queryMethod'
+  QueryMethod = 'typegoose:queryMethod',
+  /**
+   * Storage location for Nested Discriminators
+   * -> Use only for a class
+   */
+  NestedDiscriminators = 'typegoose:nestedDiscriminators'
 }
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
@@ -53,6 +58,7 @@ export enum WhatIsIt {
   NONE
 }
 
+/** Severity levels for soft-warnings */
 export enum Severity {
   ALLOW,
   WARN,
