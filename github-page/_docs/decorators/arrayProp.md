@@ -115,7 +115,7 @@ Example:
 
 ```ts
 class Something {
-  @arrayProp({ dim: 3, items: String })
+  @arrayProp({ dim: 3, type: String })
   public propy: string[][][];
 }
 

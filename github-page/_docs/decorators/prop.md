@@ -445,7 +445,7 @@ Tell Typegoose that this is an array which consists of primitives (if `String`, 
 ```ts
 // Array of Primitives
 class Something {
-  @arrayProp({ items: String })
+  @prop({ items: String })
   public languages?: string[];
 }
 
@@ -459,7 +459,7 @@ class Link {
 }
 
 class Something {
-  @arrayProp({ items: Link })
+  @prop({ items: Link })
   public links?: Link[];
 }
 ```
@@ -473,7 +473,7 @@ Example:
 
 ```ts
 class Something {
-  @arrayProp({ required: true })
+  @prop({ required: true })
   public propy: string[];
 }
 
@@ -485,7 +485,7 @@ class Something {
 
 // when using the overwrite
 class Something {
-  @arrayProp({ innerOptions: { required: true } })
+  @prop({ innerOptions: { required: true } })
   public propy: string[];
 }
 
@@ -504,7 +504,7 @@ Example:
 
 ```ts
 class Something {
-  @arrayProp({ maxlength: 1 })
+  @prop({ maxlength: 1 })
   public propy: string[];
 }
 
@@ -515,7 +515,7 @@ class Something {
 
 // when using the overwrite
 class Something {
-  @arrayProp({ outerOptions: { maxlength: 1 } })
+  @prop({ outerOptions: { maxlength: 1 } })
   public propy: string[];
 }
 
@@ -535,7 +535,7 @@ Example:
 
 ```ts
 class Something {
-  @arrayProp({ dim: 3, items: String })
+  @prop({ dim: 3, type: String })
   public propy: string[][][];
 }
 

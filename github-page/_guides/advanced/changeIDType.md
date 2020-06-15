@@ -24,7 +24,7 @@ class WithNoId {
 }
 
 class SomeChangedID {
-  @arrayProp({ items: WithNoId, _id: false })
+  @prop({ type: WithNoId, _id: false })
   public someField: WithNoId[];
 }
 ```

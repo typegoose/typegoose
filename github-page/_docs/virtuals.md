@@ -71,7 +71,7 @@ class Kittens {
 }
 
 class Cat {
-  @arrayProp({
+  @prop({
     ref: Kittens,
     foreignField: 'parent', // compare this value to the local document populate is called on
     localField: '_id' // compare this to the foreign document's value defined in "foreignField"
