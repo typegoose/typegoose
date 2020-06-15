@@ -349,11 +349,11 @@ export interface DecoratedPropertyMetadata {
   /** Target Class */
   target: AnyParamConstructor<any>;
   /** Property name */
-  key: string;
+  key: string | symbol;
   /** What is it for a prop type? */
   whatis?: WhatIsIt;
 }
-export type DecoratedPropertyMetadataMap = Map<string, DecoratedPropertyMetadata>;
+export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropertyMetadata>;
 
 /*
  copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')

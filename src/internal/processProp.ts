@@ -26,6 +26,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const propKind = input.whatis ?? detectWhatIsIt(Type);
 
   logger.debug('Starting to process "%s.%s"', utils.getName(target), key);
+  utils.assertion(typeof key === 'string', new Error(format('Property Key in typegoose cannot be an symbol! (%s.%s)', name, key)));
 
   optionDeprecation(rawOptions);
 

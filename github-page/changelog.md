@@ -24,7 +24,9 @@ redirect_from:
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
 - Add option `discriminators` for embedded Discriminators [{% include gitissue repo="typegoose" num=248 %}]
-- [IC] Moved functino `_buildPropMetadata` to its own file (`processProp`) and renamed it to `processProp` [{% include gitissue repo="typegoose" num=286 %}]
+- Set correct Decorator Return type (`ClassDecorator` & `PropertyDecorator`)
+- Change warning message for `warnMixed`
+- [IC] Moved function `_buildPropMetadata` to its own file (`processProp`) and renamed it to `processProp` [{% include gitissue repo="typegoose" num=286 %}]
 - [IC] Moved pre-processing in function `prop` into `processProp` [{% include gitissue repo="typegoose" num=286 %}]
 - [IC] Removed error `NoMetadataError`
 - [IC] Removed check that `Type` needs to be defined in `prop` / `processProp`

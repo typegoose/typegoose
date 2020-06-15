@@ -7,13 +7,13 @@ import type { IModelOptions } from './types';
  * @param options Options
  * @example Example:
  * ```
- *  @modelOptions({ schemaOptions: { timestamps: true } })
- *  class Name {}
+ * @modelOptions({ schemaOptions: { timestamps: true } })
+ * class Name {}
  *
- *  // Note: The default Class "TimeStamps" can be used for type information and options already set
+ * // Note: The default Class "TimeStamps" can be used for type information and options already set
  * ```
  */
-export function modelOptions(options: IModelOptions) {
+export function modelOptions(options: IModelOptions): ClassDecorator {
   return (target: any) => {
     assignGlobalModelOptions(target);
     assignMetadata(DecoratorKeys.ModelOptions, options, target);
