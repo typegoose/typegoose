@@ -65,7 +65,7 @@ module.exports = {
 
 ## Known Mongoose incompatibilities
 
-## typePojoToMixed
+### typePojoToMixed
 
 This option will **NOT** work because there is no neat / simple way of defining such thing in the same class
 
@@ -82,4 +82,12 @@ class Parent {
   @prop()
   public subDoc: Sub;
 }
+```
+
+### @types/mongoose@5.7.22 and higher
+
+Since 5.7.22 of `@types/mongoose` there are types for `.create`, but they are not fully compatible with typegoose's types, so if an error comes that cannot be fixed, the workaround is to use `<any>`
+
+```ts
+model.create<any>({ anything: anything });
 ```
