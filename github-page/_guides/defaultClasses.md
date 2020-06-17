@@ -10,16 +10,6 @@ This Guide contains all default classes typegoose provides
 
 ->Please know that all properties provied are just types to show which are available from mongoose, or stated otherwise
 
-## All the Default Classes
-
-Example of using all of them:
-
-```ts
-import { TimeStamps, Base } from '@typegoose/typegoose/lib/defaultClasses';
-
-class SomeClass extends TimeStamps, Base {} // this class now has the types of "TimeStamps" & "Base"
-```
-
 ### TimeStamps
 
 The `TimeStamps` class provides the following fields:
