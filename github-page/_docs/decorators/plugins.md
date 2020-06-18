@@ -2,11 +2,13 @@
 title: "Plugins"
 ---
 
-`@plugin(mongoosePlugin: (...args: any) => any, options: object)` is used to add plugins to a class
+`@plugin<PluginOptions>(mongoosePlugin: (...args: any) => any, options: object)` is used to add plugins to a class
   - `mongoosePlugin`: the plugin itself; some plugins might have to be called first
   - `options`: the options for the plugin
 
 -> Typegoose has a [default-class for `findOrCreate`]({{ site.baseurl }}{% link _guides/defaultClasses.md %}#findorcreate) with all the types supplied by the plugin
+
+Note: plugin-functions that have types and options defined, are automatically inferred, and can be manually set / overwritten with generic `PluginOptions`
 
 Example:
 

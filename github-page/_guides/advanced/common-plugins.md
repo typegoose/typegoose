@@ -37,15 +37,15 @@ const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 
 ```
 
-**PLEASE NOTE:** If you have a 'ref' which refers back to its own class/ model, like having a User class with a `createdBy` field referring back to User, then you'll need to set the `maxDepth` prop of `autocomplete` to 1. If you don't do this, Mongoose will do recursive call to the user collection 10 times, extremely delaying the output of the query. Below is an example of how to set `maxDepth`.   
+**PLEASE NOTE:** If you have a 'ref' which refers back to its own class/ model, like having a User class with a `createdBy` field referring back to User, then you'll need to set the `maxDepth` prop of `autocomplete` to 1. If you don't do this, Mongoose will do recursive call to the user collection 10 times, extremely delaying the output of the query. Below is an example of how to set `maxDepth`.
 
-```
+```ts
 @plugin(autopopulate as any) // this is an dirty fix, because the types of this plugin dont work
 class SomeClass {
   @prop({ autopopulate: { maxDepth: 1 }, ref: "SomeReferencedClass" })
   public populateField: Ref<SomeReferencedClass>;
 }
-``` 
+```
 
 ## mongoose-findorcreate
 
@@ -110,7 +110,7 @@ The Typegoose project provides an [`auto-increment` plugin](https://github.com/t
 Always increments the field on each save
 
 ```ts
-@plugin<AutoIncrementSimplePluginOptions>(AutoIncrementSimple, [{ field: "someIncrementedField" }])
+@plugin(AutoIncrementSimple, [{ field: "someIncrementedField" }])
 class SomeClass {
   @prop() // does not need to be empty
   public someIncrementedField: number;
@@ -129,7 +129,7 @@ Only increases the field if the document is *new* and the counter is stored in a
 (default field: `_id`)
 
 ```ts
-@plugin<AutoIncrementOptionsID>(AutoIncrementID, {})
+@plugin(AutoIncrementID, {})
 class SomeClass {
   @prop()
   public _id: number;
