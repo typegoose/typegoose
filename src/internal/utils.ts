@@ -494,13 +494,13 @@ export function warnMixed(target: any, key: string | symbol): void | never {
   switch (modelOptions?.options?.allowMixed) {
     default:
     case Severity.WARN:
-      logger.warn('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key);
+      logger.warn('Setting "Mixed" for property "%s.%s"\nLook here for how to disable this message: https://typegoose.github.io/typegoose/docs/decorators/modelOptions/#allowmixed', name, key);
 
       break;
     case Severity.ALLOW:
       break;
     case Severity.ERROR:
-      throw new TypeError(format('Implicitly setting "Mixed" is not allowed! (%s, %s)', name, key));
+      throw new TypeError(format('Setting "Mixed" is not allowed! (%s, %s)', name, key));
   }
 
   return; // always return, if "allowMixed" is not "ERROR"

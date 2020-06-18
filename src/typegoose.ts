@@ -120,6 +120,8 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
 export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?: mongoose.SchemaOptions) {
   assertionIsClass(cl);
 
+  logger.debug('buildSchema called for "%s"', getName(cl));
+
   const mergedOptions = mergeSchemaOptions(options, cl);
 
   let sch: mongoose.Schema<U>;

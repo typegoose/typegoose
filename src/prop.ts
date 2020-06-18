@@ -29,8 +29,8 @@ import type {
 function prop(
   options?: BasePropOptions | ArrayPropOptions | MapPropOptions | PropOptionsForNumber | PropOptionsForString | VirtualOptions,
   kind?: WhatIsIt
-) {
-  return (target: any, key: string) => {
+): PropertyDecorator {
+  return (target: any, key: string | symbol) => {
     options = options ?? {};
 
     const existingMapForTarget = Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
@@ -51,7 +51,7 @@ function prop(
  *
  * @deprecated use "prop"
  */
-function mapProp(options: MapPropOptions) {
+function mapProp(options: MapPropOptions): PropertyDecorator {
   return deprecate(prop.call(null, options, WhatIsIt.MAP), '"@mapProp" is deprecated, use "@prop" instead', 'TDEP0002');
 }
 
@@ -61,7 +61,7 @@ function mapProp(options: MapPropOptions) {
  *
  * @deprecated use "prop"
  */
-function arrayProp(options: ArrayPropOptions) {
+function arrayProp(options: ArrayPropOptions): PropertyDecorator {
   return deprecate(prop.call(null, options, WhatIsIt.ARRAY), '"@arrayProp" is deprecated, use "@prop" instead', 'TDEP0001');
 }
 

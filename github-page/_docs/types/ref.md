@@ -21,7 +21,7 @@ class Cat {
   public name: string;
 
   // Use `ref` for arrays too
-  @arrayProp({ ref: 'Kitten' })
+  @prop({ ref: 'Kitten' })
   public babies?: Ref<Kitten>[];
 }
 ```

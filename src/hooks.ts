@@ -9,7 +9,6 @@ import type { DocumentType, EmptyVoidFn, IHooksArray } from './types';
 
 type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 
-type ClassDecorator = (target: any) => void;
 type HookNextErrorFn = (err?: Error) => void;
 
 type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => void;
@@ -78,7 +77,7 @@ const hooks: Hooks = {
  * @param hookType What type is it
  * @param args All Arguments, that should be passed-throught
  */
-function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]) {
+function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
   // Convert Method to array if only a string is provided
   const methods: QDM[] = Array.isArray(args[0]) ? args[0] : [args[0]];
   assertion(

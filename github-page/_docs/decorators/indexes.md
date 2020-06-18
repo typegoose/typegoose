@@ -22,7 +22,7 @@ class Location {
   @prop()
   public stars?: number;
 
-  @arrayProp({ items: Array })
-  public location?: [[Number]] // Please note that Multi-Dimensonal Arrays are not supported by typegoose currently as explicit types
+  @prop({ type: Number, dim: 2 })
+  public location?: number[][];
 }
 ```

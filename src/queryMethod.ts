@@ -29,7 +29,7 @@ import type { AnyParamConstructor, QueryMethodMap, ReturnModelType } from './typ
  */
 export function queryMethod<QueryHelpers, U extends AnyParamConstructor<any>>(
   func: (this: ReturnModelType<U, QueryHelpers>, ...params: any[]) => mongoose.DocumentQuery<any, any>
-) {
+): ClassDecorator {
   return (target: any) => {
     logger.info('Adding query method "%s" to %s', func.name, getName(target));
     const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target) ?? []);
