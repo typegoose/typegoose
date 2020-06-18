@@ -45,3 +45,16 @@ export class MTypesArrayRef {
 
 export const SubModel = getModelForClass(Sub);
 export const MTypesArrayRefModel = getModelForClass(MTypesArrayRef);
+
+export class UserRef {
+  @prop({ ref: UserRef, default: null })
+  public master?: Ref<UserRef>;
+
+  @prop({ ref: UserRef, default: [] })
+  public subAccounts?: Ref<UserRef>[];
+
+  @prop({ required: true })
+  public name!: string;
+}
+
+export const UserRefModel = getModelForClass(UserRef);

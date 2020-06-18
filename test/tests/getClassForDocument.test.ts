@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { getClassForDocument, isDocument } from '../../src/typegoose';
+import { DocumentType, getClassForDocument, isDocument } from '../../src/typegoose';
 import { Car, CarModel } from '../models/car';
 import { InternetUserModel } from '../models/internetUser';
 import { AddressNested, AddressNestedModel, PersonNested, PersonNestedModel } from '../models/nestedObject';
@@ -15,7 +15,7 @@ it('should return correct class type for document', async () => {
   const carReflectedType = getClassForDocument(car);
   expect(carReflectedType).toEqual(Car);
 
-  const user = await UserModel.create({
+  const user = await UserModel.create<DocumentType<Omit<User, 'fullName'>>>({
     firstName: 'John2',
     lastName: 'Doe2',
     gender: Genders.MALE,
@@ -122,6 +122,7 @@ it('should validate email', async () => {
 it(`should Validate Map`, async () => {
   try {
     await InternetUserModel.create({
+      // @ts-expect-error
       projects: {
         p1: 'project'
       }

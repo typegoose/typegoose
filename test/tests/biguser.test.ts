@@ -1,7 +1,9 @@
 import * as mongoose from 'mongoose';
 
+import { assertion, isNullOrUndefined } from '../../src/internal/utils';
+import { DocumentType } from '../../src/types';
 import { CarModel } from '../models/car';
-import { Genders, Role, UserModel } from '../models/user';
+import { Genders, Role, User, UserModel } from '../models/user';
 
 it('should create a User with connections', async () => {
   const [tesla, trabant, zastava] = await CarModel.create([
@@ -20,7 +22,7 @@ it('should create a User with connections', async () => {
     }
   ]);
 
-  const user = await UserModel.create({
+  const user = await UserModel.create<DocumentType<Omit<User, 'fullName'>>>({
     _id: mongoose.Types.ObjectId(),
     firstName: 'John',
     lastName: 'Doe',
@@ -52,8 +54,11 @@ it('should create a User with connections', async () => {
   {
     const foundUser = await UserModel.findById(user.id).populate('car previousCars').orFail().exec();
 
-    expect(foundUser).not.toBeNull();
-    expect(foundUser!.toObject({ virtuals: true, getters: true })).toMatchSnapshot({
+    assertion(!isNullOrUndefined(foundUser.job), new Error('Expected "job" to not be undefined/null'));
+    assertion(!isNullOrUndefined(foundUser.previousJobs), new Error('Expected "previousJobs" to not be undefined/null'));
+    assertion(!isNullOrUndefined(foundUser.previousCars), new Error('Expected "previousCars" to not be undefined/null'));
+
+    expect(foundUser.toObject({ virtuals: true, getters: true })).toMatchSnapshot({
       _id: expect.any(mongoose.Types.ObjectId),
       id: expect.any(String),
       job: {
@@ -67,33 +72,33 @@ it('should create a User with connections', async () => {
       previousCars: expect.any(Array)
     });
 
-    expect(foundUser!.job.titleInUppercase()).toEqual('Developer'.toUpperCase());
+    expect(foundUser.job.titleInUppercase()).toEqual('Developer'.toUpperCase());
 
     {
       expect(foundUser).toHaveProperty('previousJobs');
-      expect(foundUser!.previousJobs).toHaveLength(2);
+      expect(foundUser.previousJobs).toHaveLength(2);
 
-      const [janitor, manager] = foundUser!.previousJobs;
+      const [janitor, manager] = foundUser.previousJobs;
       expect(janitor).toHaveProperty('title', 'Janitor');
       expect(manager).toHaveProperty('title', 'Manager');
     }
 
     {
       expect(foundUser).toHaveProperty('previousCars');
-      expect(foundUser!.previousCars).toHaveLength(2);
+      expect(foundUser.previousCars).toHaveLength(2);
 
-      const [foundTrabant, foundZastava] = foundUser!.previousCars;
+      const [foundTrabant, foundZastava] = foundUser.previousCars;
       expect(foundTrabant).toHaveProperty('carModel', 'Trabant');
       expect(foundTrabant).toHaveProperty('isSedan', true);
       expect(foundZastava).toHaveProperty('carModel', 'Zastava');
       expect(foundZastava).toHaveProperty('isSedan', undefined);
     }
 
-    foundUser!.fullName = 'Sherlock Holmes';
+    foundUser.fullName = 'Sherlock Holmes';
     expect(foundUser).toHaveProperty('firstName', 'Sherlock');
     expect(foundUser).toHaveProperty('lastName', 'Holmes');
 
-    await foundUser!.incrementAge();
+    await foundUser.incrementAge();
     expect(foundUser).toHaveProperty('age', 21);
   }
 
@@ -129,7 +134,7 @@ it('should create a user with [Plugin].findOrCreate', async () => {
   expect(foundUser.doc).toHaveProperty('firstName', 'Jane');
 
   try {
-    await UserModel.create({
+    await UserModel.create<DocumentType<Omit<User, 'fullName'>>>({
       _id: mongoose.Types.ObjectId(),
       firstName: 'John',
       lastName: 'Doe',

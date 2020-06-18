@@ -103,7 +103,7 @@ it('should pass all mongoose discriminator tests', async () => {
     next();
   })
   class Event {
-    public kind: string;
+    public kind?: string;
 
     @Prop()
     public time?: Date;
@@ -166,7 +166,7 @@ it('should pass all mongoose discriminator tests', async () => {
 
   // https://mongoosejs.com/docs/discriminators.html#using-discriminators-with-model-create
   const events = await Promise.all([
-    EventModel.create({ time: Date.now(), url: 'google.com' }),
+    EventModel.create<DocumentType<ClickedLinkEvent>>({ time: Date.now(), url: 'google.com' }),
     ClickedLinkEventModel.create({ time: Date.now(), url: 'google.com' }),
     SignedUpEventModel.create({ time: Date.now(), user: 'testuser' })
   ]);
