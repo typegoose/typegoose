@@ -75,13 +75,13 @@ class User {
 
 ## How to Start using it
 
-*Please note that this guide is for Typegoose 7.0.0*
+*Please note that this guide is for Typegoose 7.0+*
 
 ### Requirements
 
 - TypeScript ^3.9 (since 7.1)
 - NodeJS ^10.15.0
-- Mongoose ^5.9.17
+- Mongoose ^5.9.19
 - An IDE that supports TypeScript linting (VSCode is recommended)
 - This Guide expects you to know how mongoose (or at least its models) works
 
