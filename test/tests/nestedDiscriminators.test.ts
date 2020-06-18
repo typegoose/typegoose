@@ -42,8 +42,8 @@ it('should make use of nested-discriminators [typegoose/typegoose#25]', async ()
   {
     const area = await AreaModel.create({
       buildings: [
-        { type: BuildingTypes.SummerHouse, distanceToLake: 100 } as SummerHouseNormal,
-        { type: BuildingTypes.Garage, slotsForCars: 20 } as GarageNormal
+        { type: BuildingTypes.SummerHouse, distanceToLake: 100, width: 80 } as SummerHouseNormal,
+        { type: BuildingTypes.Garage, slotsForCars: 20, width: 50 } as GarageNormal
       ]
     });
 
@@ -51,12 +51,12 @@ it('should make use of nested-discriminators [typegoose/typegoose#25]', async ()
     expect(docPOJO).toHaveProperty('buildings');
     expect(docPOJO.buildings).toEqual([
       {
-        width: 100,
+        width: 80,
         type: getName(SummerHouseNormal),
         distanceToLake: 100
       },
       {
-        width: 100,
+        width: 50,
         type: getName(GarageNormal),
         slotsForCars: 20
       }
