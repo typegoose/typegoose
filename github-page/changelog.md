@@ -23,6 +23,13 @@ redirect_from:
 
 <sub>This Version is not yet released, only changes made until now are listed here</sub>
 
+- Update Dependencies
+  - `mongoose` to 5.9.19
+  - `@types/mongoose` to 5.7.27
+  - `@types/lodash` to 4.14.155
+  - `typescript` to 3.9.5
+- `TimeStamps`'s (Default Class) properties are not marked as `Readonly` anymore
+- All Typeguards now accept `undefined` as the first parameter too (if an type was OR with `undefined`, the function would give an type-error)
 - Add option `discriminators` for embedded Discriminators [{% include gitissue repo="typegoose" num=248 %}]
 - Set correct Decorator Return type (`ClassDecorator` & `PropertyDecorator`)
 - Change warning message for `warnMixed`
