@@ -39,7 +39,11 @@ export interface ValidatorOptions {
 }
 export type Validator = ValidatorFunction | RegExp | ValidatorOptions | ValidatorOptions[];
 
-export type DeferredFunc<T = any> = () => T;
+/**
+ * Defer an reference with an function (or as other projects call it "Forward declaration")
+ * @param type This is just to comply with the common pattern of `type => ActualType`
+ */
+export type DeferredFunc<T = any> = (type: undefined) => T;
 
 export interface BasePropOptions {
   [key: string]: any;
