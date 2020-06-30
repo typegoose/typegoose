@@ -341,7 +341,7 @@ it('should throw when "customName" is used, but length <= 0 [TypeError]', () => 
 
 it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
   try {
-    mapOptions({}, Error, undefined, undefined as any, true);
+    mapOptions({}, Error, undefined, 'undefined-pkey');
 
     fail('Expected to throw "TypeError"');
   } catch (err) {

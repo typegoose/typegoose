@@ -33,6 +33,9 @@ redirect_from:
 - Add option `discriminators` for embedded Discriminators [{% include gitissue repo="typegoose" num=248 %}]
 - Set correct Decorator Return type (`ClassDecorator` & `PropertyDecorator`)
 - Change warning message for `warnMixed`
+- If an SchemaType dosnt extend `SchemaTypeOptions`, the options are now defaulted to the outer-layer
+- `innerOptions` and `outerOptions` can now be used for Maps too
+- [IC] `mapOptions` now always errors if the given type dosnt extend `mongoose.SchemaTypeOptions`
 - [IC] Moved function `_buildPropMetadata` to its own file (`processProp`) and renamed it to `processProp` [{% include gitissue repo="typegoose" num=286 %}]
 - [IC] Moved pre-processing in function `prop` into `processProp` [{% include gitissue repo="typegoose" num=286 %}]
 - [IC] Removed error `NoMetadataError`

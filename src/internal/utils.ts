@@ -350,17 +350,13 @@ export function mapArrayOptions(
   loggerType?: AnyParamConstructor<any>
 ): mongoose.SchemaTypeOpts<any> {
   logger.debug('mapArrayOptions called');
+  loggerType = loggerType ?? Type as AnyParamConstructor<any>;
 
   if (!(Type instanceof mongoose.Schema)) {
     loggerType = Type;
   }
 
-  if (isNullOrUndefined(loggerType)) {
-    logger.info('mapArrayOptions loggerType is undefined!');
-  }
-
-  const options = Object.assign({}, rawOptions); // for sanity
-  const mapped = mapOptions(rawOptions, Type, target, pkey, false, loggerType);
+  const mapped = mapOptions(rawOptions, Type, target, pkey, loggerType);
 
   /** The Object that gets returned */
   const returnObject: KeyStringAny = {
@@ -372,19 +368,6 @@ export function mapArrayOptions(
       }
     ]
   };
-
-  if (typeof options?.innerOptions === 'object') {
-    delete returnObject.innerOptions;
-    for (const [key, value] of Object.entries(options.innerOptions)) {
-      returnObject.type[0][key] = value;
-    }
-  }
-  if (typeof options?.outerOptions === 'object') {
-    delete returnObject.outerOptions;
-    for (const [key, value] of Object.entries(options.outerOptions)) {
-      returnObject[key] = value;
-    }
-  }
 
   returnObject.type = createArrayFromDimensions(rawOptions, returnObject.type, getName(target), pkey);
 
@@ -401,7 +384,6 @@ export function mapArrayOptions(
  * @param Type The Type of the array
  * @param target The Target class
  * @param pkey Key of the Property
- * @param errorOC Error instead of doing nothing
  * @param loggerType Type to use for logging
  */
 export function mapOptions(
@@ -409,15 +391,15 @@ export function mapOptions(
   Type: AnyParamConstructor<any> | (mongoose.Schema & IPrototype),
   target: any,
   pkey: string,
-  errorOC: boolean = true,
   loggerType?: AnyParamConstructor<any>
 ) {
   logger.debug('mapOptions called');
+  loggerType = loggerType ?? Type as AnyParamConstructor<any>;
 
   /** The Object that gets returned */
   const ret = {
-    inner: {},
-    outer: {}
+    inner: {} as KeyStringAny,
+    outer: {} as KeyStringAny
   };
 
   if (!(Type instanceof mongoose.Schema)) {
@@ -447,11 +429,7 @@ export function mapOptions(
   }
 
   if (isNullOrUndefined(OptionsCTOR)) {
-    if (errorOC && loggerType) {
-      throw new TypeError(`Type does not have an valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey})`);
-    }
-
-    return ret;
+    throw new TypeError(`Type does not have an valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey})`);
   }
 
   const options = Object.assign({}, rawOptions); // for sanity
@@ -460,7 +438,6 @@ export function mapOptions(
   // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
   // TODO: remove "as any" cast if "OptionsConstructor" is implemented in @types/mongoose
   if (OptionsCTOR.prototype instanceof (mongoose as any).SchemaTypeOptions) {
-    // console.log("test2", target, pkey, Type, OptionsCTR.prototype);
     for (const [key, value] of Object.entries(options)) {
       if (Object.getOwnPropertyNames(OptionsCTOR.prototype).includes(key)) {
         ret.inner[key] = value;
@@ -470,7 +447,22 @@ export function mapOptions(
     }
   } else {
     if (loggerType) {
-      logger.info('The Type "%s" has a property "OptionsConstructor" but it does not extend "SchemaTypeOptions', getName(loggerType));
+      logger.info('The Type "%s" has a property "OptionsConstructor" but it does not extend "SchemaTypeOptions"', getName(loggerType));
+    }
+
+    ret.outer = options;
+  }
+
+  if (typeof options?.innerOptions === 'object') {
+    delete ret.outer.innerOptions;
+    for (const [key, value] of Object.entries(options.innerOptions)) {
+      ret.inner[key] = value;
+    }
+  }
+  if (typeof options?.outerOptions === 'object') {
+    delete ret.outer.outerOptions;
+    for (const [key, value] of Object.entries(options.outerOptions)) {
+      ret.outer[key] = value;
     }
   }
 

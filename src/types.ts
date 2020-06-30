@@ -191,13 +191,7 @@ export interface BasePropOptions {
   discriminators?: DeferredFunc<(AnyParamConstructor<any> | DiscriminatorObject)[]>;
 }
 
-export interface ArrayPropOptions extends BasePropOptions {
-  /**
-   * What array is it?
-   * {@link BasePropOptions.type} can be used too
-   * Note: this is only needed because Reflect & refelact Metadata can't give an accurate Response for an array
-   */
-  items?: NonNullable<BasePropOptions['type']>;
+export interface InnerOuterOptions {
   /**
    * Use this to define inner-options
    * Use this if the auto-mapping is not correct or for plugin options
@@ -212,6 +206,16 @@ export interface ArrayPropOptions extends BasePropOptions {
    * Please open a new issue if some option is mismatched or not existing / mapped
    */
   outerOptions?: KeyStringAny;
+}
+
+export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
+  /**
+   * What array is it?
+   * {@link BasePropOptions.type} can be used too
+   * Note: this is only needed because Reflect & refelact Metadata can't give an accurate Response for an array
+   * @deprecated
+   */
+  items?: NonNullable<BasePropOptions['type']>;
   /**
    * How many dimensions this Array should have
    * (needs to be higher than 0)
@@ -220,9 +224,10 @@ export interface ArrayPropOptions extends BasePropOptions {
   dim?: number;
 }
 
-export interface MapPropOptions extends BasePropOptions {
+export interface MapPropOptions extends BasePropOptions, InnerOuterOptions {
   /**
    * The type of the Map (Map<string, THIS>)
+   * @deprecated
    */
   of?: NonNullable<BasePropOptions['type']>;
 }

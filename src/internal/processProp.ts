@@ -333,7 +333,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
         return;
       case WhatIsIt.MAP:
-        const mapped = utils.mapOptions(rawOptions, Type, target, key, true);
+        const mapped = utils.mapOptions(rawOptions, Type, target, key);
 
         schemaProp[key] = {
           ...schemaProp[key],
@@ -382,7 +382,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
       return;
     case WhatIsIt.MAP:
-      const mapped = utils.mapOptions(rawOptions, virtualSchema, target, key, false, Type);
+      const mapped = utils.mapOptions(rawOptions, virtualSchema, target, key, Type);
 
       schemaProp[key] = {
         ...schemaProp[key],
