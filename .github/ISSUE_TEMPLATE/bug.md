@@ -41,6 +41,6 @@ https://github.com/typegoose/typegoose-testing/blob/master/src/test.ts
 code here
 ```
 
-## Do you know *why* it happenes?
+## Do you know *why* it happens?
 
 *no*
