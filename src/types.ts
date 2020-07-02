@@ -33,9 +33,17 @@ export type Func = (...args: any[]) => any;
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
 
 export type ValidatorFunction = (value: any) => boolean | Promise<boolean>;
+export interface ValidatorFunctionMessageParam {
+  validator: ValidatorFunction;
+  message(...args: any[]): string;
+  type: string;
+  path: string;
+  value: any;
+}
 export interface ValidatorOptions {
   validator: ValidatorFunction;
-  message?: string;
+  // the function for message is with "any" because im (hasezoey) not sure if the type is always "ValidatorFunctionMessageParam"
+  message?: string | ((props: ValidatorFunctionMessageParam) => string) | ((...args: any[]) => string);
 }
 export type Validator = ValidatorFunction | RegExp | ValidatorOptions | ValidatorOptions[];
 
