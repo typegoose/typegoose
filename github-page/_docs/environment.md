@@ -1,5 +1,5 @@
 ---
-title: "Environment Variables"
+title: 'Environment Variables'
 ---
 
 Typegoose allows the use of some environment variables to set global options.
@@ -8,9 +8,10 @@ Typegoose allows the use of some environment variables to set global options.
 
 ### TG_ALLOW_MIXED
 
-Sets the options [`options.allowMixed`]({{ site.baseurl }}{% link _docs/decorators/modelOptions.md%}#allowmixed) to the given Severity
+Sets the options [`options.allowMixed`]({{ site.baseurl }}{% link _docs/decorators/modelOptions.md%}#allowmixed) to the given Severity.
 
 Accepts:
+
 - numbers, in the range of `Severity`
 - strings, in the range of `Severity`
 

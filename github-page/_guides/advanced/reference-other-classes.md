@@ -6,7 +6,7 @@ description: >
 
 ## Referencing other Classes
 
-Referencing other Classes is easy as the following:
+Referencing other Classes is easy as shown by the following example:
 
 ```ts
 class Nested {
@@ -23,7 +23,7 @@ class Main {
 }
 ```
 
-Since 7.1.0 it is also allowed to do arrow-functions returning the type:
+Since 7.1.0, you can also use arrow-functions to return the type:
 
 ```ts
 class Nested {
@@ -37,11 +37,12 @@ class Main {
 }
 ```
 
-This is useful if the class is either defined *after* the current class, or will otherwise be `undefined` and without hardcoding strings
+This is useful, if the class is either defined _after_ the current class, or will otherwise be `undefined` and without hardcoding strings.
 
 ## Common Problems
 
-Because of the order classes are loaded and reordered at runtime, might result that some references are null / undefined / not existing, thats why mongoose provides the following
+Because of the order classes are loaded and reordered at runtime, this might result in some references being null / undefined / not
+existing. This is why Mongoose provides the following:
 
 ```ts
 class Nested {
@@ -50,9 +51,9 @@ class Nested {
 }
 
 class Main {
-  @prop({ ref: "Nested" }) // since 7.0 it is recommended to use "ref: getName(Class)" to dynamically get the name
+  @prop({ ref: 'Nested' }) // since 7.0 it is recommended to use "ref: getName(Class)" to dynamically get the name
   public nested: Ref<Nested>;
 }
 ```
 
-When you get errors about references, try putting it as a string
+When you get errors about references, try making the name of the referenced class a string.

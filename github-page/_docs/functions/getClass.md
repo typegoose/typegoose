@@ -1,17 +1,19 @@
 ---
-title: "Get Class"
+title: 'Get Class'
 redirect_from:
   - /docs/functions/getclass
 ---
 
-`getClass(input: any)` gets the class from a variety of things  
+`getClass(input: any)` gets the class in a variety of ways.  
 Overloads:
-- `getClass(input: mongoose.Document)`: get the class like in [`getClassForDocument`]({{ site.baseurl }}{% link _docs/functions/getClassForDocument.md%})
+
+- `getClass(input: mongoose.Document)`: get the class like in
+  [`getClassForDocument`]({{ site.baseurl }}{% link _docs/functions/getClassForDocument.md%})
 - `getClass(input: mongoose.Schema.Types.Embedded`: get the class for a nested document
 - `getClass(input: string)`: get the class by the name directly
 - `getClass(input: { typegooseName: string })`: get the class by using some object with the key `typegooseName` of type `string`
 
-Note: `Embedded` & `Document` only work if the class / schema / model was created with typegoose
+Note: `Embedded` & `Document` only work if the class / schema / model was created with Typegoose
 
 ## Example
 
@@ -46,5 +48,5 @@ class Kitten {
 
 buildSchema(Kitten);
 
-getClass("Kitten") === Kitten; // should be "true"
+getClass('Kitten') === Kitten; // should be "true"
 ```

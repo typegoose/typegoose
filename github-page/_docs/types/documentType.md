@@ -1,17 +1,17 @@
 ---
-title: "Document Type"
+title: 'Document Type'
 redirect_from:
   - /docs/types/document
   - /docs/types/documenttype
 ---
 
-*also known as `InstanceType<T>`*  
+_also known as `InstanceType<T>`_
 
-The Type `DocumentType<T>` is the type used for Documents
+The Type `DocumentType<T>` is the type used for Documents.
 
 -> It is the logical 'AND' of the `mongoose.Document` and `T`
 
-Note: when `typeof Class` is used, it might not work
+Note: when `typeof Class` is used, it might not work.
 
 ## Example
 
@@ -20,7 +20,8 @@ class Kitten {
   @prop()
   public name?: string;
 
-  public getName(this: DocumentType<Kitten>) { // this is an Instance Method
+  public getName (this: DocumentType<Kitten>) {
+    // this is an Instance Method
     return this.name; // thanks to "DocumentType" "this" has type information
   }
 }

@@ -1,13 +1,14 @@
 ---
-title: "Get Discriminator Model For Class"
+title: 'Get Discriminator Model For Class'
 redirect_from:
   - /docs/functions/getdiscriminatormodelforclass
 ---
 
-`getDiscriminatorModelForClass(from: mongoose.model<any>, class, discriminator?: string)` gets a model for a given discriminator
-  - `from`: which is the base model
-  - `class`: the class to use for the *new* model
-  - `discriminator` [optional]: set a custom discriminator id (defaults to `class`'s name)
+`getDiscriminatorModelForClass(from: mongoose.model<any>, class, discriminator?: string)` gets a model for a given discriminator.
+
+- `from`: which is the base model
+- `class`: the class to use for the _new_ model
+- `discriminator` [optional]: set a custom discriminator id (defaults to `class`'s name)
 
 ## Example
 
@@ -18,7 +19,7 @@ class Event {
 }
 
 class ClickEvent extends Event {
-  @prop({ required: true, default: 0})
+  @prop({ required: true, default: 0 })
   public timesClicked!: number;
 }
 

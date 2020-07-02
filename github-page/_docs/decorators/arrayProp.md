@@ -1,26 +1,27 @@
 ---
-title: "Array Prop"
+title: 'Array Prop'
 redirect_from:
   - /docs/decorators/arrayprop
 ---
 
-`@arrayProp(options: object)` is almost the same as `@prop`, here are just the differences listed
+`@arrayProp(options: object)` is almost the same as `@prop`, here are just the differences listed.
 
-Please note that mongoose initializes arrayProp arrays with `[]` instead of `null` / `undefined`.
+Please note that Mongoose initializes arrayProp arrays with `[]` instead of `null` / `undefined`.
 
-**Note**: this decorator will get removed in 8.0
-**Note**: Deprecated since 7.1.1, replace with [`@prop`]({{ site.baseurl }}{% link _docs/decorators/prop.md%})
+**Note**: this decorator will get removed in 8.0 **Note**: Deprecated since 7.1.1, replace with
+[`@prop`]({{ site.baseurl }}{% link _docs/decorators/prop.md%})
 
 ## Options
 
-*All options from [`@prop`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#options) are valid, except the ones [listed at the bottom](#options-from-prop-that-do-not-work-on-arrayprop)*.
+_All options from [`@prop`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#options) are valid, except the ones
+[listed at the bottom](#options-from-prop-that-do-not-work-on-arrayprop)_.
 
 ### items
 
-Accepts Type: `any`
-(alias for [`type`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#type) from `@prop`)
+Accepts Type: `any` (alias for [`type`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#type) from `@prop`)
 
-Tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or another primitive type is given) or of subdocuments, if a class is given.
+Tells Typegoose that this is an array which consists of primitives (if `String`, `Number`, or another primitive type is given) or of
+subdocuments, if a class is given.
 
 ```ts
 // Array of Primitives
@@ -46,8 +47,8 @@ class Something {
 
 ### innerOptions
 
-`innerOptions` is used to overwrite here the options in this object go
--> Use this only when absolutely needed and please open a new issue about it - or for plugins
+`innerOptions` is used to overwrite here the options in this object go -> Use this only when absolutely necessary and please open a new
+issue about it - or for plugins
 
 Example:
 
@@ -77,8 +78,8 @@ class Something {
 
 ### outerOptions
 
-`outerOptions` is used to overwrite here the options in this object go
--> Use this only when absolutely needed and please open a new issue about it - or for plugins
+`outerOptions` is used to overwrite here the options in this object go -> Use this only when absolutely necessary and please open a new
+issue about it - or for plugins
 
 Example:
 
@@ -108,8 +109,7 @@ class Something {
 
 ### dim
 
-`dim` is used to set the Dimensions this array should have (for something like an matrix)
--> needs to be higher than 0
+`dim` is used to set the Dimensions this array should have (for something like an matrix) -> needs to be higher than 0
 
 Example:
 
@@ -121,6 +121,6 @@ class Something {
 
 // This would be mapped to
 {
-  type: [[[{ type: String }]]]
+  type: [[[{ type: String }]]];
 }
 ```
