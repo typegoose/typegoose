@@ -218,9 +218,7 @@ In order to retrieve a prop marked as `select: false`, you must explicitly ask f
 
 ```ts
 // find all in the collection and have the "hello" property selected
-const dummies = await DummyModel.find()
-  .select('+hello')
-  .exec();
+const dummies = await DummyModel.find().select('+hello').exec();
 ```
 
 Note: `select()` accepts an array as well  
@@ -316,10 +314,9 @@ class Enumed {
 ```
 
 Known-Issues:
-
 - Babel doesn't set the type for enums correctly. They need to be set manually with [the `type` option](#type)
-- If transpiling your code with `tsc --transpile-only` or `ts-node --transpile-only`, then the `--transpile-only` needs to be removed or the
-  type needs to be set manually with [the `type` option](#type)
+- If transpiling your code with `tsc --transpile-only` or `ts-node -- transpile-only`, then the `--transpile-only` needs to be removed or
+  the type needs to be set manually with [the `type` option](#type)
 
 ### addNullToEnum
 
@@ -450,7 +447,9 @@ await area.save();
 
 #### items
 
-Accepts Type: `any` (alias for [`type`](#type) from `@prop`)
+Accepts Type: `any` 
+
+(alias for [`type`](#type) from `@prop`)
 
 Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
 
@@ -555,7 +554,7 @@ class Something {
 
 // This would be mapped to
 {
-  type: [[[{ type: String }]]];
+  type: [[[{ type: String }]]]
 }
 ```
 

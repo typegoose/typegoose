@@ -121,6 +121,6 @@ class Something {
 
 // This would be mapped to
 {
-  type: [[[{ type: String }]]];
+  type: [[[{ type: String }]]]
 }
 ```

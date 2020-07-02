@@ -5,7 +5,7 @@ redirect_from:
   - /docs/types/documenttype
 ---
 
-_also known as `InstanceType<T>`_
+*also known as `InstanceType<T>`*
 
 The Type `DocumentType<T>` is the type used for Documents.
 
@@ -20,7 +20,7 @@ class Kitten {
   @prop()
   public name?: string;
 
-  public getName (this: DocumentType<Kitten>) {
+  public getName(this: DocumentType<Kitten>) {
     // this is an Instance Method
     return this.name; // thanks to "DocumentType" "this" has type information
   }
