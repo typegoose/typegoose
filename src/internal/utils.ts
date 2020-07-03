@@ -327,7 +327,12 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
  * @param cl The Type
  */
 export function isNotDefined(cl: any) {
-  return typeof cl === 'function' && !isPrimitive(cl) && cl !== Object && cl !== mongoose.Schema.Types.Buffer && !schemas.has(getName(cl));
+  return (
+    typeof cl === 'function'
+    && !isPrimitive(cl)
+    && cl !== Object
+    && !schemas.has(getName(cl))
+  );
 }
 
 /**

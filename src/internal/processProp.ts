@@ -84,6 +84,11 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     );
   }
 
+  // map to correct buffer type, otherwise it would result in "Mixed"
+  if (Type === mongoose.Types.Buffer) {
+    Type = mongoose.Schema.Types.Buffer;
+  }
+
   if (utils.isNotDefined(Type)) {
     buildSchema(Type);
   }
