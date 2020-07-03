@@ -13,7 +13,9 @@ import type { Severity, WhatIsIt } from './internal/constants';
  * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
  * ```
  */
-export type DocumentType<T> = (T extends Base ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T) & IObjectWithTypegooseFunction;
+export type DocumentType<T> = (
+  T extends Base<any> ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T
+) & IObjectWithTypegooseFunction;
 // I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
@@ -292,9 +294,10 @@ export type PropOptionsForString = BasePropOptions & TransformStringOptions & Va
 export type RefType =
   | number
   | string
-  | mongoose.Types.ObjectId
   | Buffer
   | undefined
+  | mongoose.Types.ObjectId
+  | mongoose.Types.Buffer
   | typeof mongoose.Schema.Types.Number
   | typeof mongoose.Schema.Types.String
   | typeof mongoose.Schema.Types.Buffer

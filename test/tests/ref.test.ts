@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { assertion, getName } from '../../src/internal/utils';
-import { getModelForClass, isDocument, isDocumentArray, prop, Ref } from '../../src/typegoose';
+import { getModelForClass, isDocument, isDocumentArray, isRefType, prop, Ref } from '../../src/typegoose';
 import { RefTestArrayTypesModel, RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
 
 it('check generated ref schema for ObjectID _id', async () => {
@@ -169,6 +169,7 @@ it('check reference with buffer _id', async () => {
 
   const { _id: refBufferId } = await RefTestModel.create({ refFieldBuffer: _id1 });
   const { refFieldBuffer } = await RefTestModel.findById(refBufferId).orFail().exec();
+  assertion(isRefType(refFieldBuffer), new Error('Expected "refFieldBuffer" to be "mongoose.Types.Buffer | Buffer"'));
   expect(_id1.equals(refFieldBuffer)).toEqual(true);
   const { _id: refArrayId } = await RefTestModel.create({ refArrayBuffer: [_id1, _id2] });
   const { refArrayBuffer } = await RefTestModel.findById(refArrayId).orFail().exec();
