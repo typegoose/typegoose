@@ -36,6 +36,8 @@ redirect_from:
 - If an SchemaType dosnt extend `SchemaTypeOptions`, the options are now defaulted to the outer-layer
 - `innerOptions` and `outerOptions` can now be used for Maps too
 - Custom Validators now support `message` being an function
+- Automatically convert `mongoose.Types.Buffer` to `mongoose.Schema.Types.Buffer`
+- Fix Types when extending default class `Base` with other than `ObjectId` [{% include gitissue repo="typegoose" num=316 %}]
 - [IC] `mapOptions` now always errors if the given type dosnt extend `mongoose.SchemaTypeOptions`
 - [IC] Moved function `_buildPropMetadata` to its own file (`processProp`) and renamed it to `processProp` [{% include gitissue repo="typegoose" num=286 %}]
 - [IC] Moved pre-processing in function `prop` into `processProp` [{% include gitissue repo="typegoose" num=286 %}]
