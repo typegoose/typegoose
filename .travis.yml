@@ -23,7 +23,7 @@ jobs:
       stage: compile
       node_js: 14 # use latest version
       script: |
-        (npm audit || exit 0)
+        # (npm audit || exit 0) # disable script for now, enable again if no errors are logged
         npm run buildtests # build tests too to check if errors from tsc are present
     - name: 'Deploy to GitHub Pages'
       stage: deploy
