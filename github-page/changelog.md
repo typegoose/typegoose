@@ -21,8 +21,6 @@ redirect_from:
 
 ## 7.3.0
 
-<sub>This Version is not yet released, only changes made until now are listed here</sub>
-
 - Update Dependencies
   - `mongoose` to 5.9.22
   - `lodash` to 4.17.19
