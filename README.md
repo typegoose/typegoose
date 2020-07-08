@@ -109,7 +109,7 @@ class User {
 
 * TypeScript 3.9+
 * Node 10.15+
-* mongoose ^5.9.19
+* mongoose ^5.9.22
 * `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
 
 Note: it is recommended to not use babel [see here why](https://typegoose.github.io/typegoose/guides/known-issues/#babel)
