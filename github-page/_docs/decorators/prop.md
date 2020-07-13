@@ -241,6 +241,15 @@ Accepts Type: `any | () => any`
 
 Overwrite the type that is got from the `design:type` reflection
 
+Example: Arrays (array item types can't be automatically inferred via Reflect)
+
+```ts
+class Dummy {
+  @prop({ type: String })
+  public hello: string[];
+}
+```
+
 Example: get as `string[]`, save as `string`
 
 ```ts
