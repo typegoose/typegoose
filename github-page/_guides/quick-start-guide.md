@@ -132,3 +132,53 @@ Please note that `new Kitten({})` & `Kitten.create({})` has no types of KittenCl
 - Typegoose aims to get Mongoose's models to be stable through type-information
 - Typegoose aims to make Mongoose more usable by making the models more type-rich with TypeScript
 - Decorated schema configuration classes (like KittenClass above) must use explicit type declarations
+
+## Extra Examples
+
+### Static Methods
+
+Sometimes extra functions for model creation or pre-written querys are needed, they can be done as follows:
+
+```ts
+class KittenClass {
+  @prop()
+  public name?: string;
+
+  @prop()
+  public species?: string;
+
+  public static async findBySpecies(this: ReturnModelType<typeof KittenClass>, species: string) {
+    return this.find({ species }).exec();
+  }
+}
+const KittenModel = getModelForClass(KittenClass);
+
+const docs = await KittenModel.findBySpecies("SomeSpecies");
+```
+
+Note: pre-6.0 static functions needed `@staticMethod`, but this is not needed anymore
+
+### Instance Methods
+
+Sometimes extra functions for manipulating data on an instance is needed, they can be done as follows:
+
+```ts
+class KittenClass {
+  @prop()
+  public name?: string;
+
+  @prop()
+  public species?: string;
+
+  public async setSpeciesAndSave(this: DocumentType<KittenClass>, species: string) {
+    this.species = species;
+    return await this.save();
+  }
+}
+const KittenModel = getModelForClass(KittenClass);
+
+const doc = new KittenModel({ name: "SomeCat", species: "SomeSpecies" });
+await doc.setSpeciesAndSave("SomeOtherSpecies");
+```
+
+Note: pre-6.0 instance functions needed `@instanceMethod`, but this is not needed anymore
