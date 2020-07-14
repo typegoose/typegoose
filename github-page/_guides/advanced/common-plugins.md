@@ -1,21 +1,21 @@
 ---
-title: "Common Plugins"
+title: 'Common Plugins'
 ---
 
 Typegoose supports mongoose plugins. Here's how to use some common plugins:
 
 ## mongoose-autopopulate
 
-Typegoose has the PropOption `autopopulate` implemented, but it only has an effect if [`mongoose-autopopulate`](https://github.com/mongodb-js/mongoose-autopopulate) is used too.
+Typegoose has the prop option `autopopulate` implemented, but it only has an effect if [`mongoose-autopopulate`](https://github.com/mongodb-js/mongoose-autopopulate) is installed and used too.
 
 ```ts
-import * as mongoose from "mongoose";
-import * as autopopulate from "mongoose-autopopulate";
-import { plugin, prop, Ref, getModelForClass } from "@typegoose/typegoose";
+import * as mongoose from 'mongoose';
+import * as autopopulate from 'mongoose-autopopulate';
+import { plugin, prop, Ref, getModelForClass } from '@typegoose/typegoose';
 
 @plugin(autopopulate as any) // this is an dirty fix, because the types of this plugin dont work
 class SomeClass {
-  @prop({ autopopulate: true, ref: "SomeReferencedClass" })
+  @prop({ autopopulate: true, ref: 'SomeReferencedClass' })
   public populateField: Ref<SomeReferencedClass>;
 }
 
@@ -25,7 +25,7 @@ const SomeClassModel = getModelForClass(SomeClass);
 const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 
 (async () => {
-  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: "guides", useUnifiedTopology: true });
+  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: 'guides', useUnifiedTopology: true });
 
   const reference = await SomeReferencedClassModel.create({});
   const { _id: id } = await SomeClassModel.create({ populateField: reference } as SomeClass);
@@ -34,15 +34,17 @@ const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 
   await mongoose.disconnect();
 })();
-
 ```
 
-**PLEASE NOTE:** If you have a 'ref' which refers back to its own class/ model, like having a User class with a `createdBy` field referring back to User, then you'll need to set the `maxDepth` prop of `autocomplete` to 1. If you don't do this, Mongoose will do recursive call to the user collection 10 times, extremely delaying the output of the query. Below is an example of how to set `maxDepth`.
+**Note:** If you have a `ref` which refers back to its own class/model, like having a User class with a `createdBy` field referring
+back to User, then you'll need to set the `maxDepth` prop of `autocomplete` to 1. If you don't do this, Mongoose will do recursive calls to
+the user collection 10 times, extremely delaying the output of the query. Below is an example of how to set `maxDepth`.
 
 ```ts
-@plugin(autopopulate as any) // this is an dirty fix, because the types of this plugin dont work
+// the types of "autopopulate" may change depending on the tsconfig option "esModuleInterop"
+@plugin(autopopulate as any) // this is a dirty fix, because the types of this plugin dont work
 class SomeClass {
-  @prop({ autopopulate: { maxDepth: 1 }, ref: "SomeReferencedClass" })
+  @prop({ autopopulate: { maxDepth: 1 }, ref: 'SomeReferencedClass' })
   public populateField: Ref<SomeReferencedClass>;
 }
 ```
@@ -52,9 +54,9 @@ class SomeClass {
 Typegoose has a default class for `mongoose-findorcreate` that has all the types it needs. Here's how to use it:
 
 ```ts
-import { DocumentType, getModelForClass, plugin, prop, defaultClasses } from "@typegoose/typegoose";
-import * as mongoose from "mongoose";
-import * as findorcreate from "mongoose-findorcreate";
+import { DocumentType, getModelForClass, plugin, prop, defaultClasses } from '@typegoose/typegoose';
+import * as mongoose from 'mongoose';
+import * as findorcreate from 'mongoose-findorcreate';
 
 @plugin(findorcreate)
 class SomeClass extends defaultClasses.FindOrCreate {
@@ -65,10 +67,10 @@ class SomeClass extends defaultClasses.FindOrCreate {
 const SomeClassModel = getModelForClass(SomeClass);
 
 (async () => {
-  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: "guides" });
+  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: 'guides' });
 
-  console.log(await SomeClassModel.findOrCreate({ someField: "Hello" }));
-  console.log(await SomeClassModel.findOrCreate({ someField: "Hello" })); // both will give the same output
+  console.log(await SomeClassModel.findOrCreate({ someField: 'Hello' }));
+  console.log(await SomeClassModel.findOrCreate({ someField: 'Hello' })); // both will give the same output
 
   await mongoose.disconnect();
 })();
@@ -103,14 +105,14 @@ For more details, see [this issue](https://github.com/ramiel/mongoose-sequence/i
 
 ## @typegoose/auto-increment
 
-The Typegoose project provides an [`auto-increment` plugin](https://github.com/typegoose/auto-increment) for mongoose, here is how to use it:
+The Typegoose project provides an [`auto-increment` plugin](https://github.com/typegoose/auto-increment) for Mongoose. Here is how to use it:
 
 ### AutoIncrementSimple
 
 Always increments the field on each save
 
 ```ts
-@plugin(AutoIncrementSimple, [{ field: "someIncrementedField" }])
+@plugin(AutoIncrementSimple, [{ field: 'someIncrementedField' }])
 class SomeClass {
   @prop() // does not need to be empty
   public someIncrementedField: number;
@@ -125,8 +127,7 @@ await doc.save(); // someIncrementedField will be 11
 
 ### AutoIncrementID
 
-Only increases the field if the document is *new* and the counter is stored in an counter-collection
-(default field: `_id`)
+Only increases the field if the document is *new* and the counter is stored in a counter-collection (default field: `_id`).
 
 ```ts
 @plugin(AutoIncrementID, {})

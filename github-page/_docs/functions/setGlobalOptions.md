@@ -1,8 +1,8 @@
 ---
-title: "Set Global Options"
+title: 'Set Global Options'
 ---
 
-`setGlobalOptions(options)` is used to set the global Options  
+`setGlobalOptions(options)` is used to set the global Options.
 
 Example:
 
@@ -16,7 +16,7 @@ setGlobalOptions({ options: { allowMixed: true } });
 
 Will be merged with every class's `modelOptions`'s `schemaOptions`.
 
-[See the mongoose docs](https://mongoosejs.com/docs/guide.html#options).
+[See the Mongoose docs](https://mongoosejs.com/docs/guide.html#options).
 
 ### options
 
@@ -26,8 +26,4 @@ Will be merged with every class's `modelOptions`'s `options`.
 
 ### globalOptions
 
-Global Options that will be applied nowhere, only globally.
-
-#### useNewEnum
-
-Removed, [see the changelog]({{ site.baseurl }}{% link changelog.md%}#620)
+Global Options that will be applied no where else other than globally.

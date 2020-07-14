@@ -1,20 +1,18 @@
 ---
-title: "Hooks"
+title: 'Hooks'
 ---
-
-Note that additional typing information is required either by passing the class itself as a type parameter `<Car>` or explicitly telling TypeScript that `this` is a `Car` (`this: Car`). This will grant typing information inside the hook function. (Look into the tests for "live" examples)
 
 ## @pre
 
 `@pre<T>(name: string | string[] | regexp | regexp[], method: () => any)` is used to set Pre-Hooks
-  `@pre` supports to use an array of method names for comfort (this is not mongoose-native)
+- `@pre` supports the use of an array of method names for comfort (this is not mongoose-native)
 
 Note: Arrow Functions cannot be used here, because the binding of `this` is required to get & modify the document.
 
 Example:
 
 ```ts
-@pre<Car>('save', function() {
+@pre<Car>('save', function () {
   if (this.model === 'Tesla') {
     this.isFast = true;
   }
@@ -31,7 +29,7 @@ class Car {
 ## @post
 
 `@post<T>(name: string | string[] | regexp | regexp[], method: () => any)` is used to set Post-Hooks
-  `@post` supports to use an array of method names for comfort (this is not mongoose-native)
+- `@post` supports the use of an array of method names for comfort (this is not mongoose-native)
 
 Example:
 

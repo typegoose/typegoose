@@ -15,14 +15,9 @@ redirect_from:
 
 ### of
 
-Accepts Type: `any`
+Accepts Type: `any`  
 (alias for [`type`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#type) from `@prop`)
 
-This will tell Typegoose that the Map value consists of primitives (If `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
+Deprecated since `7.2.0`, use [`@prop`'s `type`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#type)
 
-```ts
-class Car {
-  @mapProp({ of: Car })
-  public keys?: Map<string, Car>;
-}
-```
+(see [`type`]({{ site.baseurl }}{% link _docs/decorators/prop.md%}#type) for Examples)

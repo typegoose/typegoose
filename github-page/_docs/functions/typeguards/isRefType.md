@@ -1,18 +1,18 @@
 ---
-title: "Is Ref-Type"
+title: 'Is Ref-Type'
 redirect_from:
   - /docs/functions/typeguards/isreftype
 ---
 
 ## isRefType
 
-`isRefType(doc: any)`: Check if the supplied value is not a document and is not undefined/null (mainly for `Ref<T>` fields).
+`isRefType(doc: any)`: Checks if the supplied value is not a document and is not undefined/null (mainly for `Ref<T>` fields).
 
 Example:
 
 ```ts
 class Cat {
-  @prop({ ref: "Cat" })
+  @prop({ ref: 'Cat' })
   public partner: Ref<Cat>;
 
   public hasPartner(): boolean {
@@ -30,13 +30,13 @@ class Cat {
 
 ## isRefTypeArray
 
-`isRefTypeArray(doc: any[])` is the same as `isRefType`, only that it checks if it is an array **AND** all of the items are a not undefined/null and not an document
+`isRefTypeArray(doc: any[])` is the same as `isRefType`, only that it checks if it is an array **AND** all of the items are not `undefined`/`null` and not a document.
 
 Example:
 
 ```ts
 class Cat {
-  @prop({ ref: "Cat" })
+  @prop({ ref: 'Cat' })
   public kittens: Ref<Cat>;
 
   public areAllKittensExisting(): boolean {

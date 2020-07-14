@@ -1,11 +1,10 @@
 ---
-title: "Get Model With String"
+title: 'Get Model With String'
 redirect_from:
   - /docs/functions/getmodelwithstring
 ---
 
-`getModelWithString(key)` retrieves a model with the given key.
-If no Mongoose model exists in typegoose's internal cache, it will return `undefined`.
+`getModelWithString(key)` retrieves a model with the given key. If no Mongoose model exists in Typegoose's internal cache, it will return `undefined`.
 
 ## Example
 

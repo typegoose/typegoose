@@ -1,14 +1,14 @@
 ---
-title: "Default Classes"
+title: 'Default Classes'
 redirect_from:
   - /guides/default-classes
   - /guides/default_classes
   - /guides/defaultclasses
 ---
 
-This Guide contains all default classes typegoose provides
+This Guide contains all default classes Typegoose provides.
 
-->Please know that all properties provied are just types to show which are available from mongoose, or stated otherwise
+->Please know that all properties provied are just types to show which are available from Mongoose, or stated otherwise.
 
 ### TimeStamps
 
@@ -26,7 +26,7 @@ The Base Class provides the following fields:
 - `__t`: undefined \| string \| number
 
 How to override `_id` type:  
-<sub>This only works on 6.0.2+</sub>
+<sub>This only works with 6.0.2+</sub>
 
 ```ts
 class Something extends Base<mongoose.Schema.Type.String> {} // _id is now of type "String" (from mongoose)
@@ -34,13 +34,13 @@ class Something extends Base<mongoose.Schema.Type.String> {} // _id is now of ty
 
 ### FindOrCreate
 
-This class provides all the types supplied be the plugin `mongoose-findOrCreate`
+This class provides all the types supplied by the plugin `mongoose-findOrCreate`.
 
--> This class should only be used if the plugin is used too
+-> This class should only be used, if the plugin is used too
 
 ## Extra information
 
-Here you can find extra information
+Here you can find extra information.
 
 ### Use multiple classes together
 
@@ -51,4 +51,4 @@ interface Something extends Base {} // have the interface to add the types of "B
 class Something extends TimeStamps {} // have your class
 ```
 
-Note: This only works because `Base` only has types and does not modify anything
+Note: This only works because `Base` only has types and does not modify anything.

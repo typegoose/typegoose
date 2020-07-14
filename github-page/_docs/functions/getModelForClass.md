@@ -1,12 +1,12 @@
 ---
-title: "Get Model For Class"
+title: 'Get Model For Class'
 redirect_from:
   - /docs/functions/getmodelforclass
 ---
 
-`getModelForClass(class, overwriteOptions)` gets a model for a given class. If no Mongoose model exists for this class yet, one will be created automatically.
+`getModelForClass(class, overwriteOptions)` gets a model for a given class. If no Mongoose Model exists for this class yet, one will be created automatically.
 
-[All options that can be specified with `overwriteOptions`]({{ site.baseurl }}{% link _docs/decorators/modelOptions.md%}#Options)
+[All options that can be specified with `overwriteOptions`.]({{ site.baseurl }}{% link _docs/decorators/modelOptions.md%}#Options)
 
 ## Example
 

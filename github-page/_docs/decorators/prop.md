@@ -1,5 +1,5 @@
 ---
-title: "Prop"
+title: 'Prop'
 ---
 
 `@prop(options: object, kind: WhatIsIt)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
@@ -12,7 +12,7 @@ title: "Prop"
 
 Accepts Type: `boolean`
 
-Set if this Property is required (best practice is `public property!: any`, note the `!`)  
+Set this to true, if the property is required (best practice is `public property!: any`, note the `!`)  
 For more information see the [mongoose documentation](http://mongoosejs.com/docs/api.html#schematype_SchemaType-required)
 
 Example:
@@ -61,13 +61,13 @@ class IndexedClass {
 
 Accepts Type: `any`
 
-Set a default when no value is given at creation time.
+Set a default, when no value is given at creation time.
 
 Example:
 
 ```ts
 class Defaulted {
-  @prop({ default: "hello world" })
+  @prop({ default: 'hello world' })
   public upperCase?: string; // mark as optional, because it will be defaulted
 }
 ```
@@ -76,7 +76,7 @@ class Defaulted {
 
 Accepts Type: `boolean`
 
-Set this to `false` if you want to turn off creating IDs for sub-documents.
+Set this to `false`. if you want to turn off creating IDs for sub-documents.
 
 Example:
 
@@ -118,7 +118,7 @@ The `'Nested'` form is useful to avoid unintuitive errors due to circular depend
 
 Accepts Type: `string`
 
-Set at which path to look for which Class to use.
+Set which path to look for which Class to use.
 
 Example:
 
@@ -138,6 +138,7 @@ class Another {
 
 ### refType
 
+<!--The "|" need to be escaped, because of some formatting from jekyll-->
 Accepts Type: `mongoose.Schema.Types.Number` \| `mongoose.Schema.Types.String` \| `mongoose.Schema.Types.Buffer` \| `mongoose.Schema.Types.ObjectId`
 
 Set which Type to use for refs.
@@ -148,17 +149,17 @@ Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
 class Nested {}
 
 class Parent {
-  @prop({ ref: "Nested", refType: mongoose.Schema.Types.ObjectId }) // it is a "String" because of reference errors
+  @prop({ ref: 'Nested', refType: mongoose.Schema.Types.ObjectId }) // it is a "String" because of reference errors
   public nest: Ref<Nested>;
 }
 ```
 
 ### validate
 
-Accepts Type: `object` OR `RegExp` OR `(value) => boolean` OR `object[]`
-Required options of the object:
-  - `validator`: `(value) => boolean`
-  - `message`: `String`, the message shows when the validator fails
+Accepts Type: `object` OR `RegExp` OR `(value) => boolean` OR `object[]` Required options of the object:
+
+- `validator`: `(value) => boolean`
+- `message`: `String`, the message shows when the validator fails
 
 Set a custom function for validation (must return a boolean).
 
@@ -167,12 +168,14 @@ Example: (For more Examples look at [Mongoose's Documentation](https://mongoosej
 ```ts
 // "maxlength" already exists as an option, this just shows how to use validate
 class Validated {
-  @prop({ validate: {
-    validator: (v) => {
-      return v.length <= 10;
-    },
-    message: "value is over 10 characters long!"
-  } })
+  @prop({
+    validate: {
+      validator: (v) => {
+        return v.length <= 10;
+      },
+      message: 'value is over 10 characters long!'
+    }
+  })
   public validated?: string;
 }
 ```
@@ -189,7 +192,7 @@ Example:
 
 ```ts
 class Dummy {
-  @prop({ alias: "helloWorld" })
+  @prop({ alias: 'helloWorld' })
   public hello: string; // will be included in the DB
   public helloWorld: string; // will NOT be included in the DB, just for type completion (gets passed as hello in the DB)
 }
@@ -200,12 +203,12 @@ class Dummy {
 Accepts Type: `boolean`
 
 Set it to `false` if you want to retrieve data without this property by default  
--> [Read more in mongoose's offical documentation](https://mongoosejs.com/docs/api.html#schematype_SchemaType-select)
+-> [Read more in Mongoose's offical documentation](https://mongoosejs.com/docs/api.html#schematype_SchemaType-select)
 
 ```ts
 class Dummy {
-   @prop({ select: false })
-   public hello: string;
+  @prop({ select: false })
+  public hello: string;
 }
 ```
 
@@ -223,8 +226,8 @@ Note: `select()` accepts a long string with space as a separator
 
 Accepts Type: `(input) => output`
 
-set gets & setters for fields, it is not virtual
--> both get & set must be defined all the time, even when you just want to use one, we are sorry
+set gets & setters for fields, it is not virtual  
+-> both get & set must be defined all the time, even when just wanting to use one
 
 Example:
 
@@ -239,7 +242,7 @@ class Dummy {
 
 Accepts Type: `any | () => any`
 
-Overwrite the type that is got from the `design:type` reflection
+Overwrite the type generated for the `design:type` reflection
 
 Example: Arrays (array item types can't be automatically inferred via Reflect)
 
@@ -259,16 +262,7 @@ class Dummy {
 }
 ```
 
-Example: Overwrite inferred type as last resort
-
-```ts
-class Dummy {
-  @prop({ type: mongoose.Schema.Types.Mixed }) // used for mongoose / how it is stored to the DB
-  public something: NewableFunction; // used for intellisense / TypeScript
-}
-```
-
-Example: Overwrite type for an enum
+Example: Overwrite type for an enum.
 
 ```ts
 enum SomeEnum {
@@ -281,20 +275,30 @@ class Dummy {
 }
 ```
 
+Example: Overwrite the inferred type as a last resort.
+
+```ts
+class Dummy {
+  @prop({ type: mongoose.Schema.Types.Mixed }) // used for mongoose / how it is stored to the DB
+  public something: NewableFunction; // used for intellisense / TypeScript
+}
+```
+
 ### enum
 
 Accepts Type: `enum | any[]`
 
-Only allow Values from the enum (best practice is to use TypeScript's enum).
+Only allow values from the enum (best practice is to use TypeScript's enum).
 
-Note: `design:type` will be set to `String` if the enum is full of Strings, and `Number` if full of Numbers, and `Object` if the enum contains both.
+Note: `design:type` will be set to `String` if the enum is full of Strings, and `Number` if full of Numbers, and `Object` of the enum
+contains both.
 
 Example for String-Enums:
 
 ```ts
 enum Gender {
   MALE = 'male',
-  FEMALE = 'female',
+  FEMALE = 'female'
 }
 
 class Enumed {
@@ -303,13 +307,13 @@ class Enumed {
 }
 ```
 
-Example for Number-Enums:
+Example for Number-Enums:  
 (since mongoose 5.8 and typegoose 6.2)
 
 ```ts
 enum Gender {
   MALE, // equal to "= 0"
-  FEMALE, // equal to "= 1"
+  FEMALE // equal to "= 1"
 }
 
 class Enumed {
@@ -319,16 +323,16 @@ class Enumed {
 ```
 
 Known-Issues:
-- Babel dosnt set the type for enums correctly, the need to be set manually with [the `type` option](#type)
-- If the code got transpiled with `tsc --transpile-only` or `ts-node --transpile-only` then `--transpile-only` neeeds to be removed or the type needs to be set manually with [the `type` option](#type)
+- Babel doesn't set the type for enums correctly. They need to be set manually with [the `type` option](#type)
+- If transpiling your code with `tsc --transpile-only` or `ts-node -- transpile-only`, then the `--transpile-only` needs to be removed or the type needs to be set manually with [the `type` option](#type)
 
 ### addNullToEnum
 
 Accepts Type: `boolean`
 
-Add "null" to the enum array
+Adds "null" to the enum array.
 
-Note: dosnt work if the value is `required`
+**Note**: this doesn't work if the value is `required`
 
 Example:
 
@@ -354,16 +358,16 @@ new AddNullToEnumModel({ value: null } as AddNullToEnum);
 
 Accepts Type: `() => [DiscriminatorObject | Class]`
 
-Use this function for embedded discriminators
+Use this function for embedded discriminators.
 
-Note: the `discriminatorKey` (like in the example property `type`) needs to be always set in a newly created document (via `.create({..., type: "..."})`, or `.save()`)
+**Note**: the `discriminatorKey` (like in the example property `type`) needs to be always set in a newly created document (via `.create({..., type: "..."})`, or `.save()`)
 
 Example for `[Class]`:
 
 ```ts
 @modelOptions({
   schemaOptions: {
-    discriminatorKey: 'type',
+    discriminatorKey: 'type'
   }
 })
 class Building {
@@ -403,7 +407,7 @@ Example for `[DiscriminatorObject]`:
 ```ts
 @modelOptions({
   schemaOptions: {
-    discriminatorKey: 'type',
+    discriminatorKey: 'type'
   }
 })
 class Building {
@@ -425,7 +429,13 @@ class SummerHouse extends Building {
 }
 
 class Area {
-  @prop({ type: Building, discriminators: () => [{ type: Garage, value: "G", }, { type: SummerHouse, value: "S" }] })
+  @prop({
+    type: Building,
+    discriminators: () => [
+      { type: Garage, value: 'G' },
+      { type: SummerHouse, value: 'S' }
+    ]
+  })
   public buildings: Building[];
 }
 
@@ -433,50 +443,18 @@ const AreaModel = getModelForClass(Area);
 
 // then somewhere in an async function
 const area = await AreaModel.create({});
-area.buildings.push({ type: "S", distanceToLake: 100 } as SummerHouse);
-area.buildings.push({ type: "G", slotsForCars: 20 } as Garage);
+area.buildings.push({ type: 'S', distanceToLake: 100 } as SummerHouse);
+area.buildings.push({ type: 'G', slotsForCars: 20 } as Garage);
 await area.save();
 ```
 
-<!--Below are just the Specific Options-->
+### innerOptions
 
-### Array Options
+`innerOptions` is used to overwrite options to be at the "Type" level  
+-> Use this only when absolutely necessary and please open a new
+issue about it
 
-#### items
-
-Accepts Type: `any`
-(alias for [`type`](#type) from `@prop`)
-
-Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
-
-Tell Typegoose that this is an array which consists of primitives (if `String`, `Number`, or another primitive type is given) or of subdocuments, if a class is given.
-
-```ts
-// Array of Primitives
-class Something {
-  @prop({ items: String })
-  public languages?: string[];
-}
-
-// Array of subdocuments
-class Link {
-  @prop()
-  url: string;
-
-  @prop()
-  text: string;
-}
-
-class Something {
-  @prop({ items: Link })
-  public links?: Link[];
-}
-```
-
-#### innerOptions
-
-`innerOptions` is used to overwrite here the options in this object go
--> Use this only when absolutely needed and please open a new issue about it - or for plugins
+**Note**: this option can be used everywhere `mapOptions` function is called (currently being `WhatIsIt.ARRAY` and `WhatIsIt.MAP`)
 
 Example:
 
@@ -504,10 +482,13 @@ class Something {
 }
 ```
 
-#### outerOptions
+### outerOptions
 
-`outerOptions` is used to overwrite here the options in this object go
--> Use this only when absolutely needed and please open a new issue about it - or for plugins
+`outerOptions` is used to overwrite options to be at the "Array" level  
+-> Use this only when absolutely necessary and please open a new
+issue about it
+
+**Note**: this option can be used everywhere `mapOptions` function is called (currently being `WhatIsIt.ARRAY` and `WhatIsIt.MAP`)
 
 Example:
 
@@ -535,9 +516,24 @@ class Something {
 }
 ```
 
+<!--Below are just the Specific Options-->
+
+### Array Options
+
+**Note**: option `type`(formally `items`) must be provided, otherwise the array will result in `Mixed` [read typegoose issue #300 for more](https://github.com/typegoose/typegoose/issues/300)
+
+#### items
+
+Accepts Type: `any`  
+(alias for [`type`](#type) from `@prop`)
+
+Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
+
+(see [`type`](#type) for Examples)
+
 #### dim
 
-`dim` is used to set the Dimensions this array should have (for something like an matrix)
+`dim` is used to set the Dimensions this array should have (for something like an matrix)  
 -> needs to be higher than 0
 
 Example:
@@ -558,19 +554,12 @@ class Something {
 
 #### of
 
-Accepts Type: `any`
+Accepts Type: `any`  
 (alias for [`type`](#type) from `@prop`)
 
 Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
 
-This will tell Typegoose that the Map value consists of primitives (If `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
-
-```ts
-class Car {
-  @mapProp({ of: Car })
-  public keys?: Map<string, Car>;
-}
-```
+(see [`type`](#type) for Examples)
 
 ### String Transform options
 
@@ -578,7 +567,7 @@ class Car {
 
 Accepts Type: `boolean`
 
-Set this to `true` if the value should always be lowercased.
+Set this to `true`, if the value should always be lowercased.
 
 Example:
 
@@ -593,7 +582,7 @@ class LowerCased {
 
 Accepts Type: `boolean`
 
-Set this to `true` if the value should always be UPPERCASED.
+Set this to `true`, if the value should always be UPPERCASED. <!--please dont change this to lowercased-->
 
 Example:
 
@@ -608,7 +597,7 @@ class UpperCased {
 
 Accepts Type: `boolean`
 
-Set this to `true` if the value should always be trimmed.
+Set this to `true`, if the value should always be trimmed.
 
 Example:
 
@@ -625,7 +614,7 @@ class Trimmed {
 
 Accepts Type: `number`
 
-Set the maximum length the string can have.
+Sets the maximum length the string can have.
 
 Example:
 
@@ -640,7 +629,7 @@ class MaxLengthed {
 
 Accepts Type: `number`
 
-Set the minimum length the string must have (must be above 0).
+Sets the minimum length the string can have (must be above 0).
 
 Example:
 
@@ -655,7 +644,7 @@ class MinLengthed {
 
 Accepts Type: `RegExp`
 
-Set an Regular Expression the string must match with
+Sets a Regular Expression for the string must match.
 
 Example:
 
@@ -672,7 +661,7 @@ class RegExpString {
 
 Accepts Type: `number`
 
-Set the maximum value the property can have.
+Sets the maximum value the number property can have.
 
 Example:
 
@@ -687,7 +676,7 @@ class Maxed {
 
 Accepts Type: `number`
 
-Set the minimum value the property can have.
+Sets the minimum value the number property can have.
 
 Example:
 

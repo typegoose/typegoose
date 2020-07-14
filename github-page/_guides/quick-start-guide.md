@@ -1,12 +1,12 @@
 ---
-title: "Quick Start Guide"
+title: 'Quick Start Guide'
 ---
 
-<sub>Please use [Dark-Reader](https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) for a dark version of the site</sub>
+<sub>Please use [Dark-Reader](https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) for a dark version of the site.</sub>
 
 ## Quick Overview of Typegoose
 
-Typegoose is a "wrapper" for mongoose models
+Typegoose is a "wrapper" for easily writing Mongoose models with TypeScript.
 
 Instead of writing this:
 
@@ -42,7 +42,7 @@ const UserModel = mongoose.model('User', {
 });
 ```
 
-You can just write:
+You can just write this:
 
 ```ts
 class Job {
@@ -83,7 +83,7 @@ class User {
 - NodeJS ^10.15.0
 - Mongoose ^5.9.22
 - An IDE that supports TypeScript linting (VSCode is recommended)
-- This Guide expects you to know how mongoose (or at least its models) works
+- This Guide expects you to know how Mongoose (or at least its models) works
 
 ## Install
 
@@ -91,12 +91,12 @@ class User {
 npm i -s @typegoose/typegoose # install typegoose itself
 
 npm i -s mongoose # install peer-dependency mongoose
-npm i -D @types/mongoose # install all types for mongoose - this is required for typegoose to work in typescript
+npm i -D @types/mongoose # install all types for mongoose - this is required for typegoose to work in TypeScript
 ```
 
 ### How to Use
 
-Let's say you have a mongoose model like this one:
+Let's say you have a Mongoose model like this one:
 
 ```ts
 const kittenSchema = new mongoose.Schema({
@@ -109,12 +109,12 @@ let document = await Kitten.create({ name: 'Kitty' });
 // "document" has no types
 ```
 
-With typegoose it can be converted to something like:
+With Typegoose, it can be converted to something like:
 
 ```ts
 class KittenClass {
   @prop()
-  public name: string
+  public name?: string;
 }
 
 const Kitten = getModelForClass(KittenClass);
@@ -123,12 +123,12 @@ let document = await Kitten.create({ name: 'Kitty' });
 // "document" has proper types of KittenClass
 ```
 
-Please note that `new Kitten({})` & `Kitten.create({})` has no types of KittenClass, because typegoose doesn't modify functions of mongoose
+Please note that `new Kitten({})` & `Kitten.create({})` has no types of KittenClass, because Typegoose doesn't modify functions of Mongoose.
 
 ## Do's and Don'ts of Typegoose
 
-- Typegoose is a wrapper for mongoose's models
-- Typegoose aims to not modify any functions of mongoose
-- Typegoose aims to get mongoose's models to be stable through type-information
-- Typegoose aims to make mongoose more usable by making the models more type-rich with TypeScript
-- Decorated schema configuration classes (like KittenClass above) must use explicit type declaration
+- Typegoose is a wrapper for Mongoose's models
+- Typegoose aims to not modify any functions of Mongoose
+- Typegoose aims to get Mongoose's models to be stable through type-information
+- Typegoose aims to make Mongoose more usable by making the models more type-rich with TypeScript
+- Decorated schema configuration classes (like KittenClass above) must use explicit type declarations

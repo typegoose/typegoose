@@ -1,5 +1,5 @@
 ---
-title: "Query Methods"
+title: 'Query Methods'
 redirect_from:
   - /docs/decorators/querymethod
   - /docs/decorators/querymethods
@@ -12,13 +12,15 @@ redirect_from:
 - the return type of the function needs to be `mongoose.DocumentQuery`
 
 Notes:
-- The function needs to have an name and cant be an array-function (it needs to handle and use `this`)
-- It is recommened to to not define the functions inside the decorator, like in the example below
+- The function needs to have a name and can't be an array-function (it needs to handle and use `this`)
+- It is recommended to not define the functions inside the decorator, like in the example below
 
 Example:
 
 ```ts
+// an interface is needed to add query-function types to the class
 interface QueryHelpers {
+  // use the actual function types dynamically
   findByName: QueryMethod<typeof findByName>;
   findByLastname: QueryMethod<typeof findByLastname>;
 }
@@ -34,8 +36,8 @@ class QueryMethods {
 const QueryMethodsModel = getModelForClass(QueryMethods);
 
 // thanks to "QueryHelpers" the function "findByName" should exist here and return the correct type
-const docs: DocumentType<QueryMethods>[] = await QueryMethodsModel.find().findByName('hello').orFail().exec();
+const docs: DocumentType<QueryMethods>[] = await QueryMethodsModel.find()
+  .findByName('hello')
+  .orFail()
+  .exec();
 ```
-
-Important: currently there is no practical way to add the function to the available types, so the query needs to be cast as `any` to allow the function to be used, what gets returned needs to be casted aswell
-([Tracking issue](https://github.com/typegoose/typegoose/issues/236))
