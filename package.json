@@ -59,7 +59,6 @@
     "tslint": "^6.1.2",
     "tslint-consistent-codestyle": "^1.16.0",
     "tslint-eslint-rules": "*5.4.0",
-    "typedoc": "0.17.8",
     "typescript": "3.9.6"
   },
   "dependencies": {

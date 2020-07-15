@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/typegoose/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/typegoose/typegoose?branch=master)
 [![npm](https://img.shields.io/npm/dt/@typegoose/typegoose.svg)](https://www.npmjs.com/package/@typegoose/typegoose)
 
-Define Mongoose models using TypeScript classes.
+Define Mongoose models using TypeScript classes
 
 ## Basic usage
 
