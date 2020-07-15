@@ -38,6 +38,8 @@ This class provides all the types supplied by the plugin `mongoose-findOrCreate`
 
 -> This class should only be used, if the plugin is used too
 
+[An Example can be seen in common-plugins]({{ site.baseurl }}{% link _guides/advanced/common-plugins.md %}#mongoose-findorcreate)
+
 ## Extra information
 
 Here you can find extra information.
