@@ -12,5 +12,3 @@ mv website/build/* ./
 
 # redundant, just to have it clean
 rm -rf website
-
-ls -al
