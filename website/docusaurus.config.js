@@ -6,13 +6,12 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'typegoose',
   projectName: 'typegoose',
-  // algolia: {
-  //   apiKey: 'api-key',
-  //   indexName: 'index-name',
-  //   appId: 'app-id', // Optional, if you run the DocSearch crawler on your own
-  //   algoliaOptions: {}, // Optional, if provided by Algolia
-  // },
   themeConfig: {
+    algolia: {
+      apiKey: '2c49a41064ba9b534e8417089c6cde93',
+      indexName: 'typegoose',
+      algoliaOptions: {},
+    },
     navbar: {
       title: 'typegoose',
       // logo: {
