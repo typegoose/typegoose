@@ -140,7 +140,7 @@ To ask questions or just talk with us, [join our Discord Server](https://discord
 
 ## Documentation
 
-* [Typegoose Documentation](https://typegoose.github.io/typegoose/docs)
+* [Typegoose Documentation](https://typegoose.github.io/typegoose/docs/api/index-api)
 * [Quick start guide](https://typegoose.github.io/typegoose/guides/quick-start-guide/)  
 
 ## Migrate to 6.0.0
