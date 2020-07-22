@@ -30,7 +30,7 @@ type PostArrayWithError<T> = (error: Error, result: NDA<T>, next: EmptyVoidFn) =
 
 type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
 type NumberMethod = 'count';
-type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | DocumentMethod;
+type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'findOneAndDelete' | DocumentMethod;
 type MultipleMethod = 'find' | 'update';
 type QueryMethod = 'count' | 'countDocuments' | 'estimatedDocumentCount' | 'find' | 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'update' | 'updateOne' | 'updateMany';
 type ModelMethod = 'insertMany';
