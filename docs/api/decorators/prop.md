@@ -245,6 +245,8 @@ Accepts Type: `any | () => any`
 
 Overwrite the type generated for the `design:type` reflection
 
+**Note**: Mongoose initializes arrayProp arrays with `[]` instead of `null` / `undefined`
+
 Example: Arrays (array item types can't be automatically inferred via Reflect)
 
 ```ts
