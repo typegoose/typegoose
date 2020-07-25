@@ -111,6 +111,7 @@ class User {
 * Node 10.15+
 * mongoose ^5.9.22
 * `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
+* tsconfig option `target` being `ES6`
 
 Note: it is recommended to not use babel [see here why](https://typegoose.github.io/typegoose/guides/known-issues/#babel)
 
