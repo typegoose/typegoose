@@ -113,7 +113,7 @@ class User {
 * `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
 * tsconfig option `target` being `ES6`
 
-Note: it is recommended to not use babel [see here why](https://typegoose.github.io/typegoose/guides/known-issues/#babel)
+Note: it is recommended to not use babel [see here why](https://typegoose.github.io/typegoose/docs/guides/known-issues/#babel)
 
 ## Install
 
@@ -142,19 +142,19 @@ To ask questions or just talk with us, [join our Discord Server](https://discord
 ## Documentation
 
 * [Typegoose Documentation](https://typegoose.github.io/typegoose/docs/api/index-api)
-* [Quick start guide](https://typegoose.github.io/typegoose/guides/quick-start-guide/)  
+* [Quick start guide](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide/)  
 
 ## Migrate to 6.0.0
 
-[Migrate to 6.0.0](https://typegoose.github.io/typegoose/guides/migrate-to-6/)
+[Migrate to 6.0.0](https://typegoose.github.io/typegoose/docs/guides/migrate-6/)
 
 ## Known Issues
 
-[Here are the known-issues](https://typegoose.github.io/typegoose/guides/known-issues/)
+[Here are the known-issues](https://typegoose.github.io/typegoose/docs/guides/known-issues/)
 
 ## FAQ
 
-[Here is the FAQ](https://typegoose.github.io/typegoose/guides/faq/)
+[Here is the FAQ](https://typegoose.github.io/typegoose/docs/guides/faq/)
 
 ## Notes
 
