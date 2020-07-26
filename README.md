@@ -146,7 +146,7 @@ To ask questions or just talk with us, [join our Discord Server](https://discord
 
 ## Migrate to 6.0.0
 
-[Migrate to 6.0.0](https://typegoose.github.io/typegoose/docs/guides/migrate-to-6/)
+[Migrate to 6.0.0](https://typegoose.github.io/typegoose/docs/guides/migrate-6/)
 
 ## Known Issues
 
