@@ -14,6 +14,12 @@ title: "Changelog"
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.3.1
+
+- Update Dependencies
+  - `typescript` to 3.9.7
+- Add hook-typings for `countDocuments`, `estimatedDocumentCount`, `deleteMany`, `findOneAndDelete`, `deleteOne`
+
 ## 7.3.0
 
 - Update Dependencies
