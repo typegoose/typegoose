@@ -103,6 +103,8 @@ class User {
 }
 ```
 
+[Extra Examples](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide#extra-examples)
+
 ---
 
 ## Requirements
@@ -144,10 +146,6 @@ To ask questions or just talk with us, [join our Discord Server](https://discord
 * [Typegoose Documentation](https://typegoose.github.io/typegoose/docs/api/index-api)
 * [Quick start guide](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide/)  
 
-## Migrate to 6.0.0
-
-[Migrate to 6.0.0](https://typegoose.github.io/typegoose/docs/guides/migrate-6/)
-
 ## Known Issues
 
 [Here are the known-issues](https://typegoose.github.io/typegoose/docs/guides/known-issues/)
@@ -159,5 +157,3 @@ To ask questions or just talk with us, [join our Discord Server](https://discord
 ## Notes
 
 * Please don't add `+1` or similar comments to issues. Use the reactions instead.
-* `npm run doc` generates all documentation for all files that can be used as modules (and is used for GitHub Pages)
-* `npm run doc:all` generates documentation even for internal modules
