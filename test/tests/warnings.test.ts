@@ -4,10 +4,20 @@ import { buildSchema, mongoose, prop, Ref, setGlobalOptions, Severity } from '..
 
 // Note: TDEP0003 is expected in here
 
+const origWarn = logger.warn;
+const origDeprecate = util.deprecate;
+
 beforeEach(() => {
   logger.warn = jest.fn();
   (util as any).deprecate = jest.fn(() => () => void 0);
   expect.assertions(2);
+});
+
+afterAll(() => {
+  // somehow test files are not isolated
+  expect.assertions(1);
+  (logger as any).warn = origWarn;
+  (util as any).deprecate = origDeprecate;
 });
 
 describe('prop.ts', () => {
