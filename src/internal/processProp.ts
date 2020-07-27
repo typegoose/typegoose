@@ -289,7 +289,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         // this will happen if the enum type is not "String" or "Number"
         // most likely this error happened because the code got transpiled with babel or "tsc --transpile-only"
         throw new Error(
-          `Invalid type used for map!, got: "${Type}" (${name}.${key})`
+          `Invalid type used for enums!, got: "${Type}" (${name}.${key})`
           + 'Is the code transpiled with Babel or \'tsc --transpile-only\' or \'ts-node --transpile-only\'?\n'
           + 'See https://typegoose.github.io/typegoose/docs/decorators/prop/#enum'
         );

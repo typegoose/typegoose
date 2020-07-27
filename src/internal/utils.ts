@@ -137,6 +137,7 @@ export function initProperty(name: string, key: string, whatis: WhatIsIt) {
       schemaProp[key] = {};
       break;
     default:
+      /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
       throw new TypeError('"whatis" is not supplied OR doesn\'t have a case yet!');
   }
 
