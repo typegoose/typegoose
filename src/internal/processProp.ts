@@ -291,7 +291,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         throw new Error(
           `Invalid type used for enums!, got: "${Type}" (${name}.${key})`
           + 'Is the code transpiled with Babel or \'tsc --transpile-only\' or \'ts-node --transpile-only\'?\n'
-          + 'See https://typegoose.github.io/typegoose/docs/decorators/prop/#enum'
+          + 'See https://typegoose.github.io/typegoose/docs/api/decorators/prop/#enum'
         );
       }
     }

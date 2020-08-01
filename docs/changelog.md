@@ -221,7 +221,7 @@ This Update may break some code (mongoose upgrade, inline `_id` change, `enum` c
 
 ## 6.1.7
 
-- add support for environment variables [here the new documentation](https://typegoose.github.io/typegoose/docs/environment)
+- add support for environment variables [here the new documentation](https://typegoose.github.io/typegoose/docs/api/environment-variables/)
 - [IC] `warnMixed` now uses the right `target`
 - [IC] add function `utils.getRightTarget`
 
@@ -266,7 +266,7 @@ This Update may break some code (mongoose upgrade, inline `_id` change, `enum` c
 - README now has no documentation anymore
 - `@prop({ validate })` now accepts `{ validator, message }` as an array
 - Add function `deleteModel` & `deleteModelWithClass`
-- allow Prop Option "type" to overwrite the inferred type [look here for an example](https://typegoose.github.io/typegoose/docs/decorators/prop/#type)
+- allow Prop Option "type" to overwrite the inferred type [look here for an example](https://typegoose.github.io/typegoose/docs/api/decorators/prop/#type)
 - integrate "Array Validators & Transform" tests [typegoose#29](https://github.com/typegoose/typegoose/issues/29)
 - adding global options, with `setGlobalOptions`
 - add modelOption `runSyncIndexes`
