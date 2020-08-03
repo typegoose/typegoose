@@ -525,6 +525,20 @@ class Something {
 
 **Note**: option `type`(formally `items`) must be provided, otherwise the array will result in `Mixed` [read typegoose issue #300 for more](https://github.com/typegoose/typegoose/issues/300)
 
+Example:
+
+```ts
+class Kitten {
+  @prop()
+  public name?: string;
+}
+
+class Cat {
+  @prop({ type: Kitten })
+  public kitten?: Kitten[]; // "[]" or "Array<any>" or "mongoose.Types.Array<any>" is needed to be detected as an Array
+}
+```
+
 #### items
 
 Accepts Type: `any`  
@@ -554,6 +568,15 @@ class Something {
 ```
 
 ### Map Options
+
+Example:
+
+```ts
+class SomeMapClass {
+  @prop({ type: String })
+  public lookup?: Map<string, string>; // "Map<any, any>" or "mongoose.Types.Map<any>" is needed to be detected as an Map
+}
+```
 
 #### of
 
