@@ -22,7 +22,13 @@ import type {
  * ```ts
  * class ClassName {
  *   @prop()
- *   public someprop: string;
+ *   public someProp?: string;
+ *
+ *   @prop({ type: String })
+ *   public someArrayProp: string[];
+ *
+ *   @prop({ type: String })
+ *   public someMapProp: Map<string, string>;
  * }
  * ```
  */
