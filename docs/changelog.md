@@ -14,6 +14,12 @@ title: "Changelog"
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.3.2
+
+- Update `@prop` tsdoc to show it supports Maps and Arrays
+- Update dead documentation links
+- Update enum-error to better reflect what the error is about
+
 ## 7.3.1
 
 - Update Dependencies
