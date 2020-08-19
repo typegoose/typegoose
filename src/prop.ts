@@ -1,5 +1,3 @@
-import { deprecate } from 'util';
-
 import { DecoratorKeys, WhatIsIt } from './internal/constants';
 import * as utils from './internal/utils';
 import { logger } from './logSettings';
@@ -59,7 +57,7 @@ function prop(
  */
 function mapProp(options: MapPropOptions): PropertyDecorator {
   /* istanbul ignore next */
-  return deprecate(prop.call(null, options, WhatIsIt.MAP), '"@mapProp" is deprecated, use "@prop" instead', 'TDEP0002');
+  return utils.deprecate(prop.call(null, options, WhatIsIt.MAP), '"@mapProp" is deprecated, use "@prop" instead', 'TDEP0002');
 }
 
 /**
@@ -70,7 +68,7 @@ function mapProp(options: MapPropOptions): PropertyDecorator {
  */
 function arrayProp(options: ArrayPropOptions): PropertyDecorator {
   /* istanbul ignore next */
-  return deprecate(prop.call(null, options, WhatIsIt.ARRAY), '"@arrayProp" is deprecated, use "@prop" instead', 'TDEP0001');
+  return utils.deprecate(prop.call(null, options, WhatIsIt.ARRAY), '"@arrayProp" is deprecated, use "@prop" instead', 'TDEP0001');
 }
 
 export { prop, arrayProp, mapProp };

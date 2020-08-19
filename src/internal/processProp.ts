@@ -1,4 +1,3 @@
-import { deprecate } from 'util';
 import { logger } from '../logSettings';
 import { buildSchema, mongoose } from '../typegoose';
 import {
@@ -417,15 +416,15 @@ function optionDeprecation(options: any) {
     options.type = options.refType;
     delete options.refType;
 
-    deprecate(() => undefined, 'Option "refType" is deprecated, use option "type"', 'TDEP0003')();
+    utils.deprecate(() => undefined, 'Option "refType" is deprecated, use option "type"', 'TDEP0003')();
   }
 
   if ('of' in options) {
-    deprecate(() => undefined, 'Option "of" is deprecated, use option "type"', 'TDEP0003')();
+    utils.deprecate(() => undefined, 'Option "of" is deprecated, use option "type"', 'TDEP0003')();
   }
 
   if ('items' in options) {
-    deprecate(() => undefined, 'Option "items" is deprecated, use option "type"', 'TDEP0003')();
+    utils.deprecate(() => undefined, 'Option "items" is deprecated, use option "type"', 'TDEP0003')();
   }
 }
 

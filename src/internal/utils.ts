@@ -585,3 +585,22 @@ export function getType(typeOrFunc: Func | any): any {
 export function isConstructor(obj: any): obj is AnyParamConstructor<any> {
   return !isNullOrUndefined(obj?.prototype?.constructor?.name);
 }
+
+// Below are function to wrap NodeJS functions for client compatability (tsline ignore is needed)
+
+/**
+ * Execute util.deprecate or when !process console log
+ * (if client, it dosnt cache which codes already got logged)
+ */
+/* tslint:disable-next-line:ban-types */
+export function deprecate<T extends Function>(fn: T, message: string, code: string): T {
+  if (!isNullOrUndefined(process)) {
+    /* tslint:disable-next-line:no-require-imports */
+    return require('util').deprecate(fn, message, code);
+  }
+
+  /* tslint:disable-next-line:no-console */
+  console.log(`[${code}] DeprecationWarning: ${message}`);
+
+  return fn;
+}
