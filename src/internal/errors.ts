@@ -1,4 +1,3 @@
-import { format } from 'util';
 import { allVirtualoptions } from './utils';
 
 export class InvalidPropError extends Error {
@@ -16,12 +15,10 @@ export class InvalidTypeError extends Error {
 export class NotNumberTypeError extends Error {
   constructor(targetName: string, key: string, enumKey?: string, enumValue?: string) {
     if (enumKey || enumValue) {
-      super(format(
-        'Typeof "%s.%s" is "Number", value is undefined/null or does not have a reverse mapping!\n'
-        + 'Encountered with property: %s.%s',
-        targetName, key,
-        enumKey, typeof enumValue
-      ));
+      super(
+        `Typeof "${targetName}.${key}" is "Number", value is undefined/null or does not have a reverse mapping!\n`
+        + `Encountered with property: ${enumKey}.${typeof enumValue}`
+      );
     } else {
       super(`Type of "${targetName}.${key}" property is not a number.`);
     }
@@ -31,12 +28,10 @@ export class NotNumberTypeError extends Error {
 export class NotStringTypeError extends Error {
   constructor(targetName: string, key: string, enumKey?: string, enumValue?: string) {
     if (enumKey || enumValue) {
-      super(format(
-        'Typeof "%s.%s" is "String", enum is not only Strings!\n'
-        + 'Encountered with property: %s.%s',
-        targetName, key,
-        enumKey, typeof enumValue
-      ));
+      super(
+        `Typeof "${targetName}.${key}" is "String", enum is not only Strings!\n`
+        + `Encountered with property: ${enumKey}.${typeof enumValue}`
+      );
     } else {
       super(`Type of "${targetName}.${key}" property is not a string.`);
     }

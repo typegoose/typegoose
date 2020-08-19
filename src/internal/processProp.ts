@@ -1,4 +1,4 @@
-import { deprecate, format } from 'util';
+import { deprecate } from 'util';
 import { logger } from '../logSettings';
 import { buildSchema, mongoose } from '../typegoose';
 import {
@@ -25,8 +25,8 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   let Type: any | undefined = Reflect.getMetadata(DecoratorKeys.Type, target, key);
   const propKind = input.whatis ?? detectWhatIsIt(Type);
 
-  logger.debug('Starting to process "%s.%s"', utils.getName(target), key);
-  utils.assertion(typeof key === 'string', new Error(format('Property Key in typegoose cannot be an symbol! (%s.%s)', name, key)));
+  logger.debug('Starting to process "%s.%s"', name, key);
+  utils.assertion(typeof key === 'string', new Error(`Property Key in typegoose cannot be an symbol! (${name}.${String(key)})`));
 
   optionDeprecation(rawOptions);
 
@@ -35,11 +35,11 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     switch (propKind) {
       case WhatIsIt.NONE:
         if ('items' in rawOptions) {
-          logger.warn('You might not want to use option "items" for an non-array @prop type (%s.%s)', utils.getName(target), key);
+          logger.warn('You might not want to use option "items" for an non-array @prop type (%s.%s)', name, key);
         }
 
         if ('of' in rawOptions) {
-          logger.warn('You might not want to use option "of" for an non-map @prop type (%s.%s)', utils.getName(target), key);
+          logger.warn('You might not want to use option "of" for an non-map @prop type (%s.%s)', name, key);
         }
         break;
       case WhatIsIt.ARRAY:
@@ -49,7 +49,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         }
 
         if ('of' in rawOptions) {
-          logger.warn('You might not want to use option "of" where the "design:type" is "Array" (%s.%s)', utils.getName(target), key);
+          logger.warn('You might not want to use option "of" where the "design:type" is "Array" (%s.%s)', name, key);
         }
 
         // set the "Type" to undefined, if "ref" or "refPath" are defined, otherwise the "refType" will be wrong
@@ -103,15 +103,13 @@ export function processProp(input: DecoratedPropertyMetadata): void {
           }
           if (typeof val === 'object') {
             if (!('type' in val)) {
-              throw new Error(
-                format('"%s.%s" discriminator index "%s" is an object, but does not contain the "type" property!', name, key, index)
-              );
+              throw new Error(`"${name}.${key}" discriminator index "${index}" is an object, but does not contain the "type" property!`);
             }
 
             return val;
           }
 
-          throw new Error(format('"%s.%s" discriminators index "%s" is not an object or an constructor!', name, key, index));
+          throw new Error(`"${name}.${key}" discriminators index "${index}" is not an object or an constructor!`);
         });
 
     const disMap: NestedDiscriminatorsMap = new Map(Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, target.constructor) ?? []);
@@ -126,7 +124,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     rawOptions.ref = utils.getType(rawOptions.ref);
     utils.assertion(
       !utils.isNullOrUndefined(rawOptions.ref),
-      new Error(format('Option "ref" for "%s.%s" was defined with an arrow-function, but the function returned null/undefined!', name, key))
+      new Error(`Option "ref" for "${name}.${key}" was defined with an arrow-function, but the function returned null/undefined!`)
     );
 
     rawOptions.ref = typeof rawOptions.ref === 'string' ? rawOptions.ref : utils.getName(rawOptions.ref);
@@ -169,7 +167,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   if ('ref' in rawOptions) {
     utils.assertion(
       !utils.isNullOrUndefined(rawOptions.ref),
-      new Error(format('Options "ref" is set, but is undefined/null! (%s.%s)', name, key))
+      new Error(`Options "ref" is set, but is undefined/null! (${name}.${key})`)
     );
     const ref = rawOptions.ref;
     delete rawOptions.ref;
@@ -197,7 +195,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
         break;
       default:
-        throw new TypeError(format('"ref" is not supported for "%s"! (%s, %s)', propKind, utils.getName(target), key));
+        throw new TypeError(`"ref" is not supported for "${propKind}"! (${name}, ${key})`);
     }
 
     return;
@@ -207,7 +205,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   if (refPath) {
     utils.assertion(
       typeof refPath === 'string',
-      new TypeError(format('"refPath" for "%s, %s" should be of type String!', utils.getName(target), key))
+      new TypeError(`"refPath" for "${name}, ${key}" should be of type String!`)
     );
 
     delete rawOptions.refPath;
@@ -235,7 +233,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
         break;
       default:
-        throw new TypeError(format('"refPath" is not supported for "%s"! (%s, %s)', propKind, utils.getName(target), key));
+        throw new TypeError(`"refPath" is not supported for "${propKind}"! (${name}, ${key})`);
     }
 
     return;

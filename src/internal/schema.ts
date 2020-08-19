@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
 
-import { format } from 'util';
 import { logger } from '../logSettings';
 import { buildSchema } from '../typegoose';
 import type {
@@ -81,8 +80,8 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
         logger.debug('Applying Nested Discriminators for:', key, discriminators);
 
         const path: { discriminator?: Func; } = sch.path(key) as any;
-        assertion(!isNullOrUndefined(path), new Error(format('Path "%s" does not exist on Schema of "%s"', key, name)));
-        assertion(typeof path.discriminator === 'function', new Error(format('There is no function called "discriminator" on schema-path "%s" on Schema of "%s"', key, name)));
+        assertion(!isNullOrUndefined(path), new Error(`Path "${key}" does not exist on Schema of "${name}"`));
+        assertion(typeof path.discriminator === 'function', new Error(`There is no function called "discriminator" on schema-path "${key}" on Schema of "${name}"`));
 
         for (const { type: child, value: childName } of discriminators) {
           const childSch = getName(child) === name ? sch : buildSchema(child) as mongoose.Schema & { paths: any; };

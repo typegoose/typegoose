@@ -2,7 +2,6 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
-import { format } from 'util';
 
 /* istanbul ignore next */
 if (process) { // for usage on client side
@@ -103,7 +102,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
  * ```
  */
 export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
-  assertion(typeof key === 'string', TypeError(format('Expected "key" to be a string, got "%s"', key)));
+  assertion(typeof key === 'string', TypeError(`Expected "key" to be a string, got "${key}"`));
 
   return models.get(key) as any;
 }
@@ -165,12 +164,9 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
   assertion(
     !models.has(name),
     new Error(
-      format(
-        'It seems like "addModelToTypegoose" got called twice\n' +
-        'Or multiple classes with the same name are used, which is not supported!' +
-        '(Model Name: "%s")',
-        name
-      )
+      'It seems like "addModelToTypegoose" got called twice\n' +
+      'Or multiple classes with the same name are used, which is not supported!' +
+      `(Model Name: "${name}")`
     )
   );
 
