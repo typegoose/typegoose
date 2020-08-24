@@ -14,6 +14,13 @@ title: "Changelog"
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.3.3
+
+- Dont assume that the plugin function has an name [[typegoose#353](https://github.com/typegoose/typegoose/issues/353)]
+- Only check mongoose & nodejs version if `process` is defined
+- [IC] replace all `util.format` with template strings [[typegoose#348](https://github.com/typegoose/typegoose/issues/348)]
+- [IC] add wrapper & polyfill for `util.deprecate`[[typegoose#344](https://github.com/typegoose/typegoose/issues/344)]
+
 ## 7.3.2
 
 - Update `@prop` tsdoc to show it supports Maps and Arrays
