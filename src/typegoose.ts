@@ -4,7 +4,7 @@ import 'reflect-metadata';
 import * as semver from 'semver';
 
 /* istanbul ignore next */
-if (process) { // for usage on client side
+if (process.version && mongoose.version) { // for usage on client side
   /* istanbul ignore next */
   if (semver.lt(mongoose?.version, '5.9.14')) {
     throw new Error('Please use mongoose 5.9.14 or higher');
