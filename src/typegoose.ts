@@ -3,8 +3,10 @@ import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
 
+import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+
 /* istanbul ignore next */
-if (process.version && mongoose.version) { // for usage on client side
+if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) { // for usage on client side
   /* istanbul ignore next */
   if (semver.lt(mongoose?.version, '5.9.14')) {
     throw new Error('Please use mongoose 5.9.14 or higher');
@@ -20,7 +22,6 @@ import { parseENV, setGlobalOptions } from './globalOptions';
 import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
-import { assertion, assertionIsClass, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 import { logger } from './logSettings';
 import { isModel } from './typeguards';
 import type {
