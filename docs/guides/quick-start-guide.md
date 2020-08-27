@@ -99,7 +99,7 @@ npm i -s mongoose # install peer-dependency mongoose
 npm i -D @types/mongoose # install all types for mongoose - this is required for typegoose to work in TypeScript
 ```
 
-### How to Use
+### How to use Typegoose
 
 Let's say you have a Mongoose model like this one:
 
