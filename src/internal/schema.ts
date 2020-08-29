@@ -79,7 +79,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       for (const [key, discriminators] of disMap) {
         logger.debug('Applying Nested Discriminators for:', key, discriminators);
 
-        const path: { discriminator?: Func } = sch.path(key) as any;
+        const path: { discriminator?: Func; } = sch.path(key) as any;
         assertion(!isNullOrUndefined(path), new Error(`Path "${key}" does not exist on Schema of "${name}"`));
         assertion(
           typeof path.discriminator === 'function',
@@ -87,7 +87,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
         );
 
         for (const { type: child, value: childName } of discriminators) {
-          const childSch = getName(child) === name ? sch : (buildSchema(child) as mongoose.Schema & { paths: any });
+          const childSch = getName(child) === name ? sch : (buildSchema(child) as mongoose.Schema & { paths: any; });
 
           const discriminatorKey = childSch.get('discriminatorKey');
           if (childSch.path(discriminatorKey)) {
