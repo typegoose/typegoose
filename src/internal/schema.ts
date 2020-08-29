@@ -49,7 +49,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   /** Simplify the usage */
   const Schema = mongoose.Schema;
   const ropt: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) ?? {};
-  const schemaOptions = Object.assign(ropt?.schemaOptions ?? {}, opt);
+  const schemaOptions = Object.assign({}, ropt?.schemaOptions ?? {}, opt);
 
   const decorators = Reflect.getMetadata(DecoratorKeys.PropCache, cl.prototype) as DecoratedPropertyMetadataMap;
 
@@ -81,10 +81,13 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
         const path: { discriminator?: Func; } = sch.path(key) as any;
         assertion(!isNullOrUndefined(path), new Error(`Path "${key}" does not exist on Schema of "${name}"`));
-        assertion(typeof path.discriminator === 'function', new Error(`There is no function called "discriminator" on schema-path "${key}" on Schema of "${name}"`));
+        assertion(
+          typeof path.discriminator === 'function',
+          new Error(`There is no function called "discriminator" on schema-path "${key}" on Schema of "${name}"`)
+        );
 
         for (const { type: child, value: childName } of discriminators) {
-          const childSch = getName(child) === name ? sch : buildSchema(child) as mongoose.Schema & { paths: any; };
+          const childSch = getName(child) === name ? sch : (buildSchema(child) as mongoose.Schema & { paths: any; });
 
           const discriminatorKey = childSch.get('discriminatorKey');
           if (childSch.path(discriminatorKey)) {
