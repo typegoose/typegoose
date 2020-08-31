@@ -3,7 +3,7 @@ id: index-api
 title: 'Index of Manual-Documentation'
 ---
 
-This Documentation is manually written. To view an automatically-generated up-to-date documentation, please go to our [TypeDoc-Generated Documentation](typegoose/typedoc)
+*This Documentation is manually written*
 
 When you are searching for guides, look at [the Guides Section](guides/quick-start-guide.md)
 

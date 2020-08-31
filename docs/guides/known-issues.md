@@ -13,7 +13,7 @@ Never run `ts-node --transpile-only` or `tsc --transpile-only`, otherwise someti
 
 ### tsconfig-paths
 
-TypeScript provides the option to alias paths (with `tsconfig-paths`), but is somehow incompatible with Typegoose, [more info in here]([szokodiakos#392](https://github.com/szokodiakos/typegoose/issues/392))
+TypeScript provides the option to alias paths (with `tsconfig-paths`), but is somehow incompatible with Typegoose, [more info in here](https://github.com/szokodiakos/typegoose/issues/392)
 
 ### Self-Containing classes
 
@@ -37,7 +37,7 @@ class SomeClass {
 
 ### Class-transformer
 
-Typegoose (/Mongoose) currently doesn't work well with `class-transformer`. When you want to get a POJO, use `model.operation.lean()` OR `doc.toJSON()` - but `classToPlain` (or any other method from CT) will not work and map incorrect properties (More info: [typegoose#61](https://github.com/typegoose/typegoose/issues/61), [typegoose#9 (comment)]([typegoose#96](https://github.com/typegoose/typegoose/issues/96)#issuecomment-549031131), [class-transformer#227](https://github.com/typestack/class-transformer/issues/227))
+Typegoose (/Mongoose) currently doesn't work well with `class-transformer`. When you want to get a POJO, use `model.operation.lean()` OR `doc.toJSON()` - but `classToPlain` (or any other method from CT) will not work and map incorrect properties (More info: [typegoose#61](https://github.com/typegoose/typegoose/issues/61), [typegoose#9 (comment)](https://github.com/typegoose/typegoose/issues/96#issuecomment-549031131), [class-transformer#227](https://github.com/typestack/class-transformer/issues/227))
 
 ### Babel
 
