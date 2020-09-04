@@ -1,11 +1,5 @@
 import { allVirtualoptions } from './utils';
 
-export class InvalidPropError extends Error {
-  constructor(targetName: string, key: string) {
-    super(`Property "${targetName}.${key}" has no buildSchema!`);
-  }
-}
-
 export class InvalidTypeError extends Error {
   constructor(targetName: string, key: string, Type: unknown) {
     super(`"${targetName}.${key}"'s Type is invalid! Type is: "${Type}"`);

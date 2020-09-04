@@ -14,6 +14,11 @@ title: "Changelog"
 -->
 *`[IC]` means `Internal Change`*
 
+## next
+
+- Remove never triggered Error `InvalidPropError`
+- [IC] Assing `schemaOptions` in `src/internal/schema.ts` to an black object [[typegoose#357](https://github.com/typegoose/typegoose/issues/357)]
+
 ## 7.3.4
 
 - Improved Client-side check

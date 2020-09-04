@@ -10,7 +10,7 @@ import {
 } from '../types';
 import { DecoratorKeys, WhatIsIt } from './constants';
 import { schemas } from './data';
-import { InvalidPropError, InvalidTypeError, NotAllVPOPElementsError, NotNumberTypeError, NotStringTypeError } from './errors';
+import { InvalidTypeError, NotAllVPOPElementsError, NotNumberTypeError, NotStringTypeError } from './errors';
 import * as utils from './utils';
 
 /**
@@ -318,9 +318,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   /** Is this Type (/Class) in the schemas Map? */
   const isInSchemas = schemas.has(utils.getName(Type));
-  if (!isInSchemas && !utils.isPrimitive(Type) && !utils.isObject(Type)) {
-    throw new InvalidPropError(Type.name, key); // This seems to be never thrown!
-  }
 
   if (utils.isPrimitive(Type)) {
     if (utils.isObject(Type, true)) {
