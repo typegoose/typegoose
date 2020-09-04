@@ -1,0 +1,34 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "globals": {
+    "ts-jest": {
+      "tsConfig": "<rootDir>/tsconfig.json",
+      "diagnostics": true
+    }
+  },
+  "moduleFileExtensions": [
+    "ts",
+    "js"
+  ],
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/lib/"
+  ],
+  "testRegex": ".test.ts$",
+  "collectCoverage": false,
+  "collectCoverageFrom": [
+    "**/src/**/*.ts",
+    "!**/*.{test.ts,d.ts,js}"
+  ],
+  "coverageDirectory": "./coverage",
+  "globalSetup": "<rootDir>/test/globalSetup.ts",
+  "globalTeardown": "<rootDir>/test/globalTeardown.ts",
+  "maxConcurrency": 2,
+  "setupFilesAfterEnv": [
+    "<rootDir>/test/setupFile.ts"
+  ]
+}
