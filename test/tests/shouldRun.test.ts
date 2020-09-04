@@ -1,8 +1,6 @@
-import { omit } from 'lodash';
 import * as mongoose from 'mongoose';
 
 import { DecoratorKeys } from '../../src/internal/constants';
-import { globalOptions } from '../../src/internal/data';
 import { assertion, assignMetadata, createArrayFromDimensions, getName, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 import {
@@ -16,7 +14,7 @@ import {
   prop,
   queryMethod
 } from '../../src/typegoose';
-import type { IModelOptions, QueryMethod, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
+import type { QueryMethod, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -33,18 +31,6 @@ it('should build multiple times', () => {
   class TEST { }
   buildSchema(TEST);
   buildSchema(TEST);
-});
-
-it('should use existingMongoose', async () => {
-  @modelOptions({ existingMongoose: mongoose })
-  class TESTexistingMongoose { }
-  expect(getModelForClass(TESTexistingMongoose)).not.toBeUndefined();
-});
-
-it('should use existingConnection', async () => {
-  @modelOptions({ existingConnection: mongoose.connection })
-  class TESTexistingConnection { }
-  expect(getModelForClass(TESTexistingConnection)).not.toBeUndefined();
 });
 
 it('should make use of addModelToTypegoose', async () => {
@@ -295,20 +281,6 @@ it('should run with Custom Types', async () => {
   expect(path).toBeInstanceOf(CustomInt);
 });
 
-it('should not have the same options (modelOptions deep copy) [typegoose/typegoose#100]', () => {
-  @modelOptions({ schemaOptions: { collection: '1' } })
-  class SOBase { }
-
-  @modelOptions({ schemaOptions: { collection: '2' } })
-  class SOInheritedBase extends SOBase { }
-
-  const refSOBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOBase);
-  const refSOInheritedBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOInheritedBase);
-
-  expect(refSOBase.schemaOptions!.collection).not.toEqual(refSOInheritedBase.schemaOptions!.collection);
-  expect(refSOBase).not.toEqual(refSOInheritedBase);
-});
-
 it('should return the correct model "getModelWithString"', () => {
   class GetModelWithStringClass {
     @prop()
@@ -327,36 +299,6 @@ it('should return undefined if model does not exists (getModelWithString)', () =
   const type = getModelWithString('someTestyString');
 
   expect(type).toBeUndefined();
-});
-
-it('should merge existingConnection correctly (overwrite)', () => {
-  // @ts-expect-error
-  @modelOptions({ existingConnection: { hello: 1 } })
-  class Dummy { }
-
-  const out = mergeMetadata(DecoratorKeys.ModelOptions, { existingConnection: { hi: 1 } }, Dummy);
-
-  expect(out).toEqual(Object.assign({}, omit(globalOptions, 'globalOptions'), { existingConnection: { hi: 1 } }));
-});
-
-it('should use "_id" from ModelOptions if not in @prop options [typegoose/typegoose#133]', () => {
-  @modelOptions({ schemaOptions: { _id: false } })
-  class SubID {
-    @prop()
-    public someprop: string;
-  }
-
-  class ParentID {
-    @prop()
-    public key: SubID;
-  }
-
-  const model = getModelForClass(ParentID);
-  const doc = new model({ key: {} });
-
-  expect(doc).not.toBeUndefined();
-  expect(doc.key).not.toBeUndefined();
-  expect(doc.key).not.toHaveProperty('_id');
 });
 
 it('should also allow "mongoose.Types.Array<string>" as possible type', () => {
