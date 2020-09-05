@@ -70,7 +70,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   }
 
   if (!utils.isNullOrUndefined(rawOptions.type)) {
-    logger.info('Prop Option "type" is set to', rawOptions.type);
+    logger.info('Prop Option "type" is set to ', rawOptions.type);
     Type = utils.getType(rawOptions.type);
     delete rawOptions.type;
   }
@@ -166,7 +166,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   if ('ref' in rawOptions) {
     utils.assertion(
       !utils.isNullOrUndefined(rawOptions.ref),
-      new Error(`Options "ref" is set, but is undefined/null! (${name}.${key})`)
+      new Error(`Option "ref" is set, but is undefined/null! (${name}.${key})`)
     );
     const ref = rawOptions.ref;
     delete rawOptions.ref;
@@ -301,18 +301,24 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   }
 
   {
-    // check for validation inconsistencies
-    if (utils.isWithStringValidate(rawOptions) && !utils.isString(Type)) {
-      throw new NotStringTypeError(name, key);
+    let included: string[] = utils.isWithStringValidate(rawOptions);
+    if (!utils.isString(Type)) { // warn if String-Validate options are included, but is not string
+      utils.warnNotCorrectTypeOptions(name, key, 'String', 'String-Validate', included);
     }
 
-    // check for transform inconsistencies
-    if (utils.isWithStringTransform(rawOptions) && !utils.isString(Type)) {
-      throw new NotStringTypeError(name, key);
+    included = utils.isWithStringTransform(rawOptions);
+    if (!utils.isString(Type)) { // warn if String-Transform options are included, but is not string
+      utils.warnNotCorrectTypeOptions(name, key, 'String', 'String-Transform', included);
     }
 
-    if (utils.isWithNumberValidate(rawOptions) && !utils.isNumber(Type)) {
-      throw new NotNumberTypeError(name, key);
+    included = utils.isWithNumberValidate(rawOptions);
+    if (!utils.isNumber(Type)) { // warn if Number-Validate options are included, but is not number
+      utils.warnNotCorrectTypeOptions(name, key, 'Number', 'Number-Validate', included);
+    }
+
+    included = utils.isWithEnumValidate(rawOptions);
+    if (!utils.isString(Type) && !utils.isNumber(Type)) { // warn if "enum" is included, but is not Number or String
+      utils.warnNotCorrectTypeOptions(name, key, 'String | Number', 'extra', included);
     }
   }
 

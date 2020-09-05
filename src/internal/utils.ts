@@ -1,4 +1,5 @@
-import { mergeWith, omit } from 'lodash';
+import { intersection, mergeWith, omit } from 'lodash';
+import { LogLevel } from 'loglevel';
 import * as mongoose from 'mongoose';
 
 import { logger } from '../logSettings';
@@ -180,27 +181,35 @@ export function getClass(
 }
 
 /**
- * Return true if there are Options
+ * Return an array of options that are included
  * @param options The raw Options
  */
-export function isWithStringValidate(options: PropOptionsForString): options is PropOptionsForString {
-  return !isNullOrUndefined(options.match ?? options.minlength ?? options.maxlength);
+export function isWithStringValidate(options: PropOptionsForString): string[] {
+  return intersection(Object.keys(options), ['match', 'minlength', 'maxlength']);
 }
 
 /**
- * Return true if there are Options
+ * Return an array of options that are included
  * @param options The raw Options
  */
-export function isWithStringTransform(options: PropOptionsForString): options is PropOptionsForString {
-  return !isNullOrUndefined(options.lowercase ?? options.uppercase ?? options.trim);
+export function isWithStringTransform(options: PropOptionsForString): string[] {
+  return intersection(Object.keys(options), ['lowercase', 'uppercase', 'trim']);
 }
 
 /**
- * Return true if there are Options
+ * Return an array of options that are included
  * @param options The raw Options
  */
-export function isWithNumberValidate(options: PropOptionsForNumber): options is PropOptionsForNumber {
-  return !isNullOrUndefined(options.min ?? options.max);
+export function isWithNumberValidate(options: PropOptionsForNumber): string[] {
+  return intersection(Object.keys(options), ['min', 'max']);
+}
+
+/**
+ * Return an array of options that are included
+ * @param options The raw Options
+ */
+export function isWithEnumValidate(options: PropOptionsForNumber | PropOptionsForString): string[] {
+  return intersection(Object.keys(options), ['enum']);
 }
 
 const virtualOptions = ['localField', 'foreignField'];
@@ -603,4 +612,22 @@ export function deprecate<T extends Function>(fn: T, message: string, code: stri
   console.log(`[${code}] DeprecationWarning: ${message}`);
 
   return fn;
+}
+
+/**
+ * Logs an warning if "included > 0" that the options of not the current type are included
+ * @param name Name of the Class
+ * @param key Name of the Currently Processed key
+ * @param type Name of the Expected Type
+ * @param extra Extra string to be included
+ * @param included Included Options to be listed
+ */
+export function warnNotCorrectTypeOptions(name: string, key: string, type: string, extra: string, included: string[]): void {
+  // this "if" is in this function to de-duplicate code
+  if (included.length > 0) {
+    logger.warn(
+      `Type of "${name}.${key}" is not ${type}, but includes the following ${extra} options:\n`
+      + `  [${included.join(', ')}]`
+    );
+  }
 }

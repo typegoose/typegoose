@@ -27,52 +27,13 @@ import { logger } from '../../src/logSettings';
 // disable "no-unused" for this file, because it tests for errors
 // tslint:disable:no-unused
 
-it('should error if type is not string and a transform is supplied [NotStringTypeError]', () => {
-  try {
-    class TestNSTETransform {
-      @prop({ lowercase: true })
-      public test: number;
-    }
-    getModelForClass(TestNSTETransform);
-    fail('Expected to throw "NotStringTypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(errors.NotStringTypeError);
-  }
-});
-
-it('should error if type is not string and a validate is supplied [NotStringTypeError]', () => {
-  try {
-    class TestNSTEValidate {
-      @prop({ maxlength: 10 })
-      public test: number;
-    }
-    getModelForClass(TestNSTEValidate);
-    fail('Expected to throw "NotStringTypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(errors.NotStringTypeError);
-  }
-});
-
-it('should error if type is not number and a validate is supplied [NotNumberTypeError]', () => {
-  try {
-    class TestNNTEValidate {
-      @prop({ max: 10 })
-      public test: string;
-    }
-    getModelForClass(TestNNTEValidate);
-    fail('Expected to throw "NotNumberTypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(errors.NotNumberTypeError);
-  }
-});
-
 it('should error if an non-existing(runtime) type is given [InvalidTypeError]', () => {
   try {
     class TestNME {
       @prop()
       public test: undefined;
     }
-    getModelForClass(TestNME);
+    buildSchema(TestNME);
     fail('Expected to throw "InvalidTypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.InvalidTypeError);
@@ -87,7 +48,7 @@ it('should error if no function for hooks is defined [TypeError]', () => {
       @prop()
       public test: string;
     }
-    getModelForClass(TestNoFunctionHook);
+    buildSchema(TestNoFunctionHook);
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
@@ -102,7 +63,7 @@ it('should error if no get or set function is defined for non-virtuals [TypeErro
       @prop({ set: false })
       public test: string;
     }
-    getModelForClass(TestNoGetNoSet);
+    buildSchema(TestNoGetNoSet);
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
@@ -114,7 +75,7 @@ it('should error if no get or set function is defined for non-virtuals [TypeErro
       @prop({ set: () => undefined, get: false })
       public test: string;
     }
-    getModelForClass(TestWrongGetSetType);
+    buildSchema(TestWrongGetSetType);
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
@@ -128,7 +89,7 @@ it('should error if not all needed parameters for virtual-populate are given [No
       @prop({ localField: true })
       public test: string;
     }
-    getModelForClass(TestNAEEVirtualPopulate);
+    buildSchema(TestNAEEVirtualPopulate);
     fail('Expected to throw "NotAllElementsError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.NotAllVPOPElementsError);
@@ -520,7 +481,7 @@ it('should error if ref\'s arrow-function returning type returns undefined', asy
   }
 
   try {
-    getModelForClass(Main);
+    buildSchema(Main);
 
     fail('Expected to throw "Error"');
   } catch (err) {
@@ -553,6 +514,6 @@ it('should error if ref is set but is "undefined/null"', () => {
     fail('Expect to throw "Error"');
   } catch (err) {
     expect(err).toBeInstanceOf(Error);
-    expect(err.message).toEqual('Options "ref" is set, but is undefined/null! (RefUndefined.someref)');
+    expect(err.message).toEqual('Option "ref" is set, but is undefined/null! (RefUndefined.someref)');
   }
 });

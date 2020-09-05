@@ -10,7 +10,6 @@ const origDeprecate = utils.deprecate;
 beforeEach(() => {
   logger.warn = jest.fn();
   (utils as any).deprecate = jest.fn(() => () => void 0);
-  expect.assertions(2);
 });
 
 afterAll(() => {
@@ -21,6 +20,10 @@ afterAll(() => {
 });
 
 describe('prop.ts', () => {
+  beforeEach(() => {
+    expect.assertions(2);
+  });
+
   describe('@prop', () => {
     beforeAll(() => {
       // to not have the warnings of "mixed"
@@ -88,5 +91,38 @@ describe('prop.ts', () => {
       expect((utils.deprecate as any).mock.calls.length).toEqual(1);
       expect(schema.path('test')).toBeInstanceOf(mongoose.Schema.Types.Array);
     });
+  });
+});
+
+describe('Options not for current Type', () => {
+  beforeEach(() => {
+    expect.assertions(1);
+  });
+
+  it('should warn if type is not string and a string-transform is supplied', () => {
+    class TestNSTETransform {
+      @prop({ lowercase: true })
+      public test: number;
+    }
+    buildSchema(TestNSTETransform);
+    expect((logger.warn as any).mock.calls.length).toEqual(1);
+  });
+
+  it('should warn if type is not string and a string-validate is supplied', () => {
+    class TestNSTEValidate {
+      @prop({ maxlength: 10 })
+      public test: number;
+    }
+    buildSchema(TestNSTEValidate);
+    expect((logger.warn as any).mock.calls.length).toEqual(1);
+  });
+
+  it('should error if type is not number and a number-validate is supplied', () => {
+    class TestNNTEValidate {
+      @prop({ max: 10 })
+      public test: string;
+    }
+    buildSchema(TestNNTEValidate);
+    expect((logger.warn as any).mock.calls.length).toEqual(1);
   });
 });

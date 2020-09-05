@@ -7,28 +7,20 @@ export class InvalidTypeError extends Error {
 }
 
 export class NotNumberTypeError extends Error {
-  constructor(targetName: string, key: string, enumKey?: string, enumValue?: string) {
-    if (enumKey || enumValue) {
-      super(
-        `Typeof "${targetName}.${key}" is "Number", value is undefined/null or does not have a reverse mapping!\n`
-        + `Encountered with property: ${enumKey}.${typeof enumValue}`
-      );
-    } else {
-      super(`Type of "${targetName}.${key}" property is not a number.`);
-    }
+  constructor(targetName: string, key: string, enumKey: string, enumValue: string) {
+    super(
+      `Typeof "${targetName}.${key}" is "Number", value is undefined/null or does not have a reverse mapping!\n`
+      + `  Encountered with property: ${enumKey}.${typeof enumValue}`
+    );
   }
 }
 
 export class NotStringTypeError extends Error {
-  constructor(targetName: string, key: string, enumKey?: string, enumValue?: string) {
-    if (enumKey || enumValue) {
-      super(
-        `Typeof "${targetName}.${key}" is "String", enum is not only Strings!\n`
-        + `Encountered with property: ${enumKey}.${typeof enumValue}`
-      );
-    } else {
-      super(`Type of "${targetName}.${key}" property is not a string.`);
-    }
+  constructor(targetName: string, key: string, enumKey: string, enumValue: string) {
+    super(
+      `Typeof "${targetName}.${key}" is "String", used enum is not only Strings!\n`
+      + `  Encountered with property in Enum: ${enumKey}.${typeof enumValue}`
+    );
   }
 }
 
