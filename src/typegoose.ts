@@ -9,12 +9,12 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) { // for usage on client side
   /* istanbul ignore next */
   if (semver.lt(mongoose?.version, '5.9.14')) {
-    throw new Error('Please use mongoose 5.9.14 or higher');
+    throw new Error('Please use mongoose 5.9.14 or higher [E001]');
   }
 
   /* istanbul ignore next */
   if (semver.lt(process.version.slice(1), '10.15.0')) {
-    throw new Error('You are using a NodeJS Version below 10.15.0, Please Upgrade!');
+    throw new Error('You are using a NodeJS Version below 10.15.0, Please Upgrade! [E002]');
   }
 }
 
@@ -167,7 +167,7 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
     new Error(
       'It seems like "addModelToTypegoose" got called twice\n' +
       'Or multiple classes with the same name are used, which is not supported!' +
-      `(Model Name: "${name}")`
+      `(Model Name: "${name}") [E003]`
     )
   );
 

@@ -7,7 +7,7 @@ module.exports = {
     Types: ["api/types/document-type", "api/types/return-model-type", "api/types/ref-type", "api/types/additional-types"]
   },
   guides: {
-    "Getting Started": ["guides/quick-start-guide", "guides/faq", "guides/known-issues", "guides/deprecation-codes"],
+    "Getting Started": ["guides/quick-start-guide", "guides/faq", "guides/known-issues", "guides/deprecation-codes", "guides/error-warnings-details"],
     Basics: ["guides/all-decorators", "guides/motivation", "guides/default-classes"],
     Advanced: ["guides/advanced/custom-types", "guides/advanced/models-with-same-name", "guides/advanced/logger", "guides/advanced/reference-other-classes", "guides/advanced/common-plugins", "guides/advanced/change-id-type", "guides/advanced/using-objectid-type"],
     Migration: ["guides/migrate-6", "guides/migrate-7"]

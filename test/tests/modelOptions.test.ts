@@ -22,7 +22,7 @@ describe('typegoose-specific-options', () => {
       fail('Expected to throw TypeError');
     } catch (err) {
       expect(err).toBeInstanceOf(TypeError);
-      expect((err as TypeError).message).toEqual('Setting "Mixed" is not allowed! (TestSeverityOption, error)');
+      expect((err as TypeError).message).toEqual('Setting "Mixed" is not allowed! (TestSeverityOption, error) [E017]');
     }
 
     const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, TestSeverityOption);

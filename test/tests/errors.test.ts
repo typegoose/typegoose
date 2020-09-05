@@ -67,7 +67,7 @@ it('should error if no get or set function is defined for non-virtuals [TypeErro
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
-    expect((err as TypeError).message).toEqual(`"TestNoGetNoSet.test" does not have a set function!`);
+    expect((err as TypeError).message).toEqual(`"TestNoGetNoSet.test" does not have a set function! [E007]`);
   }
   try {
     class TestWrongGetSetType {
@@ -79,7 +79,7 @@ it('should error if no get or set function is defined for non-virtuals [TypeErro
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
-    expect((err as TypeError).message).toEqual(`"TestWrongGetSetType.test" does not have a get function!`);
+    expect((err as TypeError).message).toEqual(`"TestWrongGetSetType.test" does not have a get function! [E007]`);
   }
 });
 
@@ -487,17 +487,7 @@ it('should error if ref\'s arrow-function returning type returns undefined', asy
   } catch (err) {
     expect(err).not.toBeInstanceOf(AssertionError);
     expect(err).toBeInstanceOf(Error);
-    expect(err.message).toEqual('Option "ref" for "Main.nested" was defined with an arrow-function, but the function returned null/undefined!');
-  }
-});
-
-it('should throw default error if no error is specified (assertion)', () => {
-  expect.assertions(2);
-  try {
-    assertion(false);
-  } catch (err) {
-    expect(err).toBeInstanceOf(Error);
-    expect(err.message).toEqual('Assert failed - no custom error');
+    expect(err.message).toEqual('Option "ref" for "Main.nested" is null/undefined! [E005]');
   }
 });
 
@@ -514,6 +504,16 @@ it('should error if ref is set but is "undefined/null"', () => {
     fail('Expect to throw "Error"');
   } catch (err) {
     expect(err).toBeInstanceOf(Error);
-    expect(err.message).toEqual('Option "ref" is set, but is undefined/null! (RefUndefined.someref)');
+    expect(err.message).toEqual('Option "ref" for \"RefUndefined.someref\" is null/undefined! [E005]');
+  }
+});
+
+it('should throw default error if no error is specified (assertion)', () => {
+  expect.assertions(2);
+  try {
+    assertion(false);
+  } catch (err) {
+    expect(err).toBeInstanceOf(Error);
+    expect(err.message).toEqual('Assert failed - no custom error [E019]');
   }
 });

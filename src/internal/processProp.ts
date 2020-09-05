@@ -79,7 +79,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   if (Type === target.constructor) {
     throw new TypeError(
       'It seems like the type used is the same as the target class, which is not supported\n' +
-      `Please look at https://github.com/typegoose/typegoose/issues/42 for more information`
+      `Please look at https://github.com/typegoose/typegoose/issues/42 for more information [E004]`
     );
   }
 
@@ -119,11 +119,11 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   }
 
   // allow setting the type asynchronously
-  if (!utils.isNullOrUndefined(rawOptions.ref)) {
+  if ('ref' in rawOptions) {
     rawOptions.ref = utils.getType(rawOptions.ref);
     utils.assertion(
       !utils.isNullOrUndefined(rawOptions.ref),
-      new Error(`Option "ref" for "${name}.${key}" was defined with an arrow-function, but the function returned null/undefined!`)
+      new Error(`Option "ref" for "${name}.${key}" is null/undefined! [E005]`)
     );
 
     rawOptions.ref = typeof rawOptions.ref === 'string' ? rawOptions.ref : utils.getName(rawOptions.ref);
@@ -144,8 +144,8 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const schemaProp = utils.initProperty(name, key, propKind);
 
   if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
-    utils.assertion(typeof rawOptions.set === 'function', new TypeError(`"${name}.${key}" does not have a set function!`));
-    utils.assertion(typeof rawOptions.get === 'function', new TypeError(`"${name}.${key}" does not have a get function!`));
+    utils.assertion(typeof rawOptions.set === 'function', new TypeError(`"${name}.${key}" does not have a set function! [E007]`));
+    utils.assertion(typeof rawOptions.get === 'function', new TypeError(`"${name}.${key}" does not have a get function! [E007]`));
 
     /*
      * Note:
@@ -164,10 +164,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   // use "Type" if it is an suitable ref-type, otherwise default back to "ObjectId"
   const refType = utils.isAnRefType(Type) ? Type : mongoose.Schema.Types.ObjectId;
   if ('ref' in rawOptions) {
-    utils.assertion(
-      !utils.isNullOrUndefined(rawOptions.ref),
-      new Error(`Option "ref" is set, but is undefined/null! (${name}.${key})`)
-    );
     const ref = rawOptions.ref;
     delete rawOptions.ref;
 
@@ -204,7 +200,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   if (refPath) {
     utils.assertion(
       typeof refPath === 'string',
-      new TypeError(`"refPath" for "${name}, ${key}" should be of type String!`)
+      new TypeError(`"refPath" for "${name}, ${key}" should be of type String! [E008]`)
     );
 
     delete rawOptions.refPath;
@@ -286,7 +282,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         // this will happen if the enum type is not "String" or "Number"
         // most likely this error happened because the code got transpiled with babel or "tsc --transpile-only"
         throw new Error(
-          `Invalid type used for enums!, got: "${Type}" (${name}.${key})`
+          `Invalid type used for enums!, got: "${Type}" (${name}.${key}) [E012]`
           + 'Is the code transpiled with Babel or \'tsc --transpile-only\' or \'ts-node --transpile-only\'?\n'
           + 'See https://typegoose.github.io/typegoose/docs/api/decorators/prop/#enum'
         );
@@ -357,7 +353,8 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
         return;
       default:
-        throw new Error(`"${propKind}"(whatis(primitive)) is invalid for "${name}.${key}"`);
+        /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
+        throw new Error(`"${propKind}"(whatis(primitive)) is invalid for "${name}.${key}" [E013]`);
     }
   }
 
@@ -406,7 +403,8 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
       return;
     default:
-      throw new Error(`"${propKind}"(whatis(subSchema)) is invalid for "${name}.${key}"`);
+      /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
+      throw new Error(`"${propKind}"(whatis(subSchema)) is invalid for "${name}.${key}" [E013]`);
   }
 }
 

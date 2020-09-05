@@ -1,5 +1,4 @@
 import { intersection, mergeWith, omit } from 'lodash';
-import { LogLevel } from 'loglevel';
 import * as mongoose from 'mongoose';
 
 import { logger } from '../logSettings';
@@ -138,7 +137,7 @@ export function initProperty(name: string, key: string, whatis: WhatIsIt) {
       break;
     default:
       /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-      throw new TypeError('"whatis" is not supplied OR doesn\'t have a case yet!');
+      throw new TypeError('"whatis" is not supplied OR doesn\'t have a case yet! [E013]');
   }
 
   return schemaProp;
@@ -177,7 +176,9 @@ export function getClass(
     return constructors.get(input.typegooseName());
   }
 
-  throw new ReferenceError('Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string');
+  throw new ReferenceError(
+    'Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]'
+  );
 }
 
 /**
@@ -322,7 +323,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
 
   if (typeof options.options?.customName === 'string') {
     if (options.options.customName.length <= 0) {
-      throw new TypeError(`"customName" must be a string AND at least one character ("${baseName}")`);
+      throw new TypeError(`"customName" must be a string AND at least one character ("${baseName}") [E015]`);
     }
 
     return options.options.customName;
@@ -442,9 +443,7 @@ export function mapOptions(
     OptionsCTOR = (mongoose as any).Schema.Types.Embedded.prototype.OptionsConstructor;
   }
 
-  if (isNullOrUndefined(OptionsCTOR)) {
-    throw new TypeError(`Type does not have an valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey})`);
-  }
+  assertion(!isNullOrUndefined(OptionsCTOR), new TypeError(`Type does not have an valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`));
 
   const options = Object.assign({}, rawOptions); // for sanity
   delete options.items;
@@ -506,7 +505,7 @@ export function warnMixed(target: any, key: string): void | never {
     case Severity.ALLOW:
       break;
     case Severity.ERROR:
-      throw new TypeError(`Setting "Mixed" is not allowed! (${name}, ${key})`);
+      throw new TypeError(`Setting "Mixed" is not allowed! (${name}, ${key}) [E017]`);
   }
 
   return; // always return, if "allowMixed" is not "ERROR"
@@ -542,7 +541,7 @@ export function createArrayFromDimensions(rawOptions: any, extra: any, name: str
   // dimensions start at 1 (not 0)
   const dim = typeof rawOptions.dim === 'number' ? rawOptions.dim : 1;
   if (dim < 1) {
-    throw new RangeError(`"dim" needs to be higher than 0 (${name}.${key})`);
+    throw new RangeError(`"dim" needs to be higher than 0 (${name}.${key}) [E018]`);
   }
   delete rawOptions.dim; // delete this property to not actually put it as an option
   logger.info('createArrayFromDimensions called with %d dimensions', dim);
@@ -564,7 +563,7 @@ export function createArrayFromDimensions(rawOptions: any, extra: any, name: str
  */
 export function assertion(cond: any, error?: Error): asserts cond {
   if (!cond) {
-    throw error ?? new Error('Assert failed - no custom error');
+    throw error ?? new Error('Assert failed - no custom error [E019]');
   }
 }
 
@@ -573,7 +572,7 @@ export function assertion(cond: any, error?: Error): asserts cond {
  * @param val Value to test
  */
 export function assertionIsClass(val: any): asserts val is Func {
-  assertion(typeof val === 'function', new NoValidClass(val));
+  assertion(isConstructor(val), new NoValidClass(val));
 }
 
 /**
@@ -592,7 +591,7 @@ export function getType(typeOrFunc: Func | any): any {
  * Is the provided input an class with an constructor?
  */
 export function isConstructor(obj: any): obj is AnyParamConstructor<any> {
-  return !isNullOrUndefined(obj?.prototype?.constructor?.name);
+  return typeof obj === 'function' && !isNullOrUndefined(obj.prototype?.constructor?.name);
 }
 
 // Below are function to wrap NodeJS functions for client compatability (tsline ignore is needed)
@@ -626,7 +625,7 @@ export function warnNotCorrectTypeOptions(name: string, key: string, type: strin
   // this "if" is in this function to de-duplicate code
   if (included.length > 0) {
     logger.warn(
-      `Type of "${name}.${key}" is not ${type}, but includes the following ${extra} options:\n`
+      `Type of "${name}.${key}" is not ${type}, but includes the following ${extra} options [W001]:\n`
       + `  [${included.join(', ')}]`
     );
   }
