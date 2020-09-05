@@ -14,7 +14,7 @@ title: "Changelog"
 -->
 *`[IC]` means `Internal Change`*
 
-## next
+## 7.3.5
 
 - Add Error Codes [Errors & Warnings Details](guides/error-warnings-details.md)
 - Remove never triggered Error `InvalidPropError`
