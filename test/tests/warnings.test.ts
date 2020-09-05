@@ -9,7 +9,7 @@ const origDeprecate = utils.deprecate;
 
 beforeEach(() => {
   logger.warn = jest.fn();
-  (utils as any).deprecate = jest.fn(() => () => void 0);
+  (utils as any).deprecate = jest.fn((v) => v);
 });
 
 afterAll(() => {
