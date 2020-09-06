@@ -371,6 +371,9 @@ export function mapArrayOptions(
     loggerType = Type;
   }
 
+  const dim = rawOptions.dim; // needed, otherwise it will be included (and not removed) in the returnObject
+  delete rawOptions.dim;
+
   const mapped = mapOptions(rawOptions, Type, target, pkey, loggerType);
 
   /** The Object that gets returned */
@@ -383,6 +386,8 @@ export function mapArrayOptions(
       }
     ]
   };
+
+  rawOptions.dim = dim; // re-add for "createArrayFromDimensions"
 
   returnObject.type = createArrayFromDimensions(rawOptions, returnObject.type, getName(target), pkey);
 

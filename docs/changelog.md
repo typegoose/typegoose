@@ -14,6 +14,10 @@ title: "Changelog"
 -->
 *`[IC]` means `Internal Change`*
 
+## next
+
+- [IC] Fix that `dim` is included as an option in the schema [[typegoose#366](https://github.com/typegoose/typegoose/issues/366)]
+
 ## 7.3.5
 
 - Add Error Codes [Errors & Warnings Details](guides/error-warnings-details.md)

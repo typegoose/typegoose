@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { schemas } from '../../src/internal/data';
 
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import { buildSchema, DocumentType, getClass, getModelForClass, getName, isDocumentArray, prop, Ref } from '../../src/typegoose';
@@ -386,4 +387,52 @@ it('should set outerOptions correctly', () => {
   expect(path.caster).toBeInstanceOf(mongoose.Schema.Types.String);
   expect(path.caster.options).not.toHaveProperty('hello', true);
   expect(path.options).toHaveProperty('hello', true);
+});
+
+it('should use "dim" correctly', () => {
+  class DimArrayClassNested {
+    @prop()
+    public nested?: string;
+  }
+  class DimArrayClass {
+    @prop({ type: String, dim: 2 })
+    public primitive?: string[][];
+
+    @prop({ type: DimArrayClassNested, dim: 2 })
+    public subdocument?: DimArrayClassNested[][];
+  }
+
+  const schema = buildSchema(DimArrayClass);
+  const fromSchemas = schemas.get(getName(DimArrayClass));
+
+  assertion(!isNullOrUndefined(fromSchemas), new Error('"fromSchemas" should not be undefined/null!'));
+
+  // test primitive path
+  {
+    type PrimitivePath = mongoose.Schema.Types.Array & { casterConstructor: { caster: mongoose.Schema.Types.String; }; };
+    const primitivePath: PrimitivePath = schema.path('primitive') as any;
+    expect(primitivePath).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(primitivePath.casterConstructor).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(primitivePath.casterConstructor.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+
+    const primitiveFromSchemas: { type: [[{ type: mongoose.Schema.Types.String; }]]; } = fromSchemas.primitive as any;
+    expect(primitiveFromSchemas).not.toHaveProperty('dim');
+    expect(primitiveFromSchemas.type).toBeInstanceOf(Array);
+    expect(primitiveFromSchemas.type[0][0].type).toEqual(String);
+  }
+
+  // test nested path
+  {
+    type SubDocumentPath = mongoose.Schema.Types.Array & { casterConstructor: { caster: { schema: mongoose.Schema; }; }; };
+    const subdocumentPath: SubDocumentPath = schema.path('subdocument') as any;
+    expect(subdocumentPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(subdocumentPath.casterConstructor).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(subdocumentPath.casterConstructor.caster).toBeInstanceOf(Function);
+    expect(subdocumentPath.casterConstructor.caster.schema).toBeInstanceOf(mongoose.Schema);
+
+    const subdocumentFromSchemas: { type: [[{ type: mongoose.Schema; }]]; } = fromSchemas.subdocument as any;
+    expect(subdocumentFromSchemas).not.toHaveProperty('dim');
+    expect(subdocumentFromSchemas.type).toBeInstanceOf(Array);
+    expect(subdocumentFromSchemas.type[0][0].type).toBeInstanceOf(mongoose.Schema);
+  }
 });
