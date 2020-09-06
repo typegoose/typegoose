@@ -71,7 +71,11 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   if (!utils.isNullOrUndefined(rawOptions.type)) {
     logger.info('Prop Option "type" is set to ', rawOptions.type);
-    Type = utils.getType(rawOptions.type);
+    const gotType = utils.getType(rawOptions.type);
+    Type = gotType.type;
+    if (gotType.dim > 0) {
+      rawOptions.dim = gotType.dim;
+    }
     delete rawOptions.type;
   }
 
@@ -94,8 +98,10 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   if ('discriminators' in rawOptions) {
     logger.debug('Found option "discriminators" in "%s.%s"', name, key);
+    const gotType = utils.getType(rawOptions.discriminators, true);
+    utils.assertion(gotType.dim === 1, new Error(`"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`));
     const discriminators: DiscriminatorObject[] =
-      (utils.getType(rawOptions.discriminators) as (AnyParamConstructor<any> | DiscriminatorObject)[])
+      (gotType.type as (AnyParamConstructor<any> | DiscriminatorObject)[])
         .map((val, index) => {
           if (utils.isConstructor(val)) {
             return { type: val };
@@ -120,7 +126,9 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   // allow setting the type asynchronously
   if ('ref' in rawOptions) {
-    rawOptions.ref = utils.getType(rawOptions.ref);
+    const gotType = utils.getType(rawOptions.ref);
+    utils.assertion(gotType.dim === 0, new Error(`"PropOptions.ref" dosnt support Arrays (got "${gotType.dim}" dimensions at "${name}.${key}") [E021]`));
+    rawOptions.ref = gotType.type;
     utils.assertion(
       !utils.isNullOrUndefined(rawOptions.ref),
       new Error(`Option "ref" for "${name}.${key}" is null/undefined! [E005]`)

@@ -14,8 +14,9 @@ title: "Changelog"
 -->
 *`[IC]` means `Internal Change`*
 
-## next
+## 7.4.0
 
+- Allow the NestJS / Type-GraphQl way of defining arrays (`type: () => [String]` (and nested too))
 - [IC] Fix that `dim` is included as an option in the schema [[typegoose#366](https://github.com/typegoose/typegoose/issues/366)]
 
 ## 7.3.5

@@ -5,6 +5,7 @@ import { logger } from '../logSettings';
 import type {
   AnyParamConstructor,
   Func,
+  GetTypeReturn,
   IModelOptions,
   IObjectWithTypegooseFunction,
   IObjectWithTypegooseName,
@@ -583,13 +584,37 @@ export function assertionIsClass(val: any): asserts val is Func {
 /**
  * Get Type, if input is an arrow-function, execute it and return the result
  * @param typeOrFunc Function or Type
+ * @param returnLastFoundArray Return the last found array (used for something like PropOptions.discriminators)
  */
-export function getType(typeOrFunc: Func | any): any {
-  if (typeof typeOrFunc === 'function' && !isConstructor(typeOrFunc)) {
-    return (typeOrFunc as Func)();
+export function getType(typeOrFunc: Func | any, returnLastFoundArray: boolean = false): GetTypeReturn {
+  const returnObject: GetTypeReturn = {
+    type: typeOrFunc,
+    dim: 0
+  };
+
+  if (typeof returnObject.type === 'function' && !isConstructor(returnObject.type)) {
+    returnObject.type = (returnObject.type as Func)();
   }
 
-  return typeOrFunc;
+  function getDepth(): void {
+    if (returnObject.dim > 100) { // this is arbitrary, but why would anyone have more than 10 nested arrays anyway?
+      throw new Error('getDepth recursed too much (dim > 100)');
+    }
+    if (Array.isArray(returnObject.type)) {
+      returnObject.dim++;
+      if (returnLastFoundArray && !Array.isArray(returnObject.type[0])) {
+        return;
+      }
+      returnObject.type = returnObject.type[0];
+      getDepth();
+    }
+  }
+
+  getDepth();
+
+  logger.debug('Final getType: dim: %s, type:', returnObject.dim, returnObject.type);
+
+  return returnObject;
 }
 
 /**

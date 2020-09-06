@@ -436,3 +436,18 @@ it('should use "dim" correctly', () => {
     expect(subdocumentFromSchemas.type[0][0].type).toBeInstanceOf(mongoose.Schema);
   }
 });
+
+it('should allow NestJS / Type-Graphql way of defining arrays [typegoose#365]', () => {
+  class ArrayAsType {
+    @prop({ type: () => [[String]], required: true })
+    public primitive!: string[][];
+  }
+
+  const schema = buildSchema(ArrayAsType);
+
+  type PrimitivePath = mongoose.Schema.Types.Array & { casterConstructor: { caster: mongoose.Schema.Types.String; }; };
+  const primitivePath: PrimitivePath = schema.path('primitive') as any;
+  expect(primitivePath).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(primitivePath.casterConstructor).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(primitivePath.casterConstructor.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+});

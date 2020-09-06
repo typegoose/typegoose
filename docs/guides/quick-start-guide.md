@@ -69,10 +69,10 @@ class User {
   @prop()
   public job?: Job;
 
-  @prop({ ref: Car })
+  @prop({ ref: () => Car })
   public car?: Ref<Car>;
 
-  @prop({ type: String })
+  @prop({ type: () => [String] })
   public preferences?: string[];
 }
 ```

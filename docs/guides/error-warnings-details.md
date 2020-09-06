@@ -59,10 +59,10 @@ Example of when this gets triggerd:
 
 ```ts
 class ErrorClass {
-  @prop({ ref: () => undefined })
+  @prop({ ref: () => undefined }) // <- error here
   public someProp?: Ref<ErrorClass>;
 
-  @prop({ ref: undefined })
+  @prop({ ref: undefined }) // <- error here
   public someProp?: Ref<ErrorClass>;
 }
 ```
@@ -101,10 +101,10 @@ Example of when this gets triggered:
 
 ```ts
 class ErrorClass {
-  @prop({ type: () => undefined })
+  @prop({ type: () => undefined }) // <- error here
   public someProp?: string;
 
-  @prop({ type: 'Hello' })
+  @prop({ type: 'Hello' }) // <- error here
   public someProp?: string;
 }
 ```
@@ -191,6 +191,41 @@ Error: `Assert failed - no custom error [E019]`
 
 Details:  
 This Error should never show up, if it does report it
+
+### PropOptions.discriminators dosnt support Arrays with more or less than 1 dimenion [E020]
+
+Error: `"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`
+
+Details:  
+Somewhere the option `discriminators` was defined with an array which had more or less than 1 dimension
+
+Example of when this gets triggered:
+
+```ts
+class ErrorClass {
+  @prop({ discriminators: () => [[ErrorClass]] }) // <- error here
+  public someProp?: ErrorClass; // (this is just an example)
+
+  @prop({ discriminators: () => ErrorClass }) // <- error here
+  public someProp?: ErrorClass; // (this is just an example)
+}
+```
+
+## PropOptions.ref dosnt support Arrays [E021]
+
+Error: `"PropOptions.ref" dosnt support Arrays (got "${gotType.dim}" dimensions at "${name}.${key}") [E021]`
+
+Details:  
+Somewhere the option `ref` was defined with an array, which is not supported
+
+Example of when this gets triggered:
+
+```ts
+class ErrorClass {
+  @prop({ ref: () => [ErrorClass] }) // <- error here
+  public someProp?: Ref<ErrorClass>;
+}
+```
 
 ## Warnings
 

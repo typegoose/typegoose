@@ -552,3 +552,11 @@ export interface IPrototype {
 export interface KeyStringAny {
   [key: string]: any;
 }
+
+/**
+ * The Return Type of "utils.getType"
+ */
+export interface GetTypeReturn {
+  type: unknown;
+  dim: number;
+}

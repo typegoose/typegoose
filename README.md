@@ -16,6 +16,9 @@ import * as mongoose from 'mongoose';
 class User {
   @prop()
   public name?: string;
+
+  @prop({ type: () => [String] })
+  public jobs?: string[];
 }
 
 const UserModel = getModelForClass(User); // UserModel is a regular Mongoose Model with correct types
@@ -23,7 +26,7 @@ const UserModel = getModelForClass(User); // UserModel is a regular Mongoose Mod
 (async () => {
   await mongoose.connect('mongodb://localhost:27017/', { useNewUrlParser: true, useUnifiedTopology: true, dbName: "test" });
 
-  const { _id: id } = await UserModel.create({ name: 'JohnDoe' } as User); // an "as" assertion, to have types for all properties
+  const { _id: id } = await UserModel.create({ name: 'JohnDoe', jobs: ['Cleaner'] } as User); // an "as" assertion, to have types for all properties
   const user = await UserModel.findById(id).exec();
 
   console.log(user); // prints { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
@@ -38,7 +41,7 @@ Typegoose aims to solve this problem by defining only a TypeScript interface (cl
 
 Under the hood it uses the Reflect & [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the properties, so redundancy can be significantly reduced.
 
-Instead of:
+Instead of writing this:
 
 ```ts
 interface Car {
@@ -52,27 +55,29 @@ interface Job {
 
 interface User {
   name?: string;
-  age: number;
+  age!: number;
   job?: Job;
-  car: Car | string;
+  car?: Car | string;
+  preferences?: string[];
 }
 
-mongoose.model('User', {
+const CarModel = mongoose.model('Car', {
+  model: string,
+});
+
+const UserModel = mongoose.model('User', {
   name: String,
   age: { type: Number, required: true },
   job: {
     title: String;
     position: String;
   },
-  car: { type: Schema.Types.ObjectId, ref: 'Car' }
-});
-
-mongoose.model('Car', {
-  model: string,
+  car: { type: Schema.Types.ObjectId, ref: 'Car' },
+  preferences: [{ type: String }]
 });
 ```
 
-You can just:
+You can just write this:
 
 ```ts
 class Job {
@@ -98,8 +103,11 @@ class User {
   @prop()
   public job?: Job;
 
-  @prop({ ref: Car })
+  @prop({ ref: () => Car })
   public car?: Ref<Car>;
+
+  @prop({ type: () => [String] })
+  public preferences?: string[];
 }
 ```
 

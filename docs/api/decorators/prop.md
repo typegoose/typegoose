@@ -534,7 +534,7 @@ class Kitten {
 }
 
 class Cat {
-  @prop({ type: Kitten })
+  @prop({ type: () => [Kitten] })
   public kitten?: Kitten[]; // "[]" or "Array<any>" or "mongoose.Types.Array<any>" is needed to be detected as an Array
 }
 ```
@@ -551,7 +551,8 @@ Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
 #### dim
 
 `dim` is used to set the Dimensions this array should have (for something like an matrix)  
--> needs to be higher than 0
+-> needs to be higher than 0  
+-> **This Option is overwritten by using `type () => [Type]`**
 
 Example:
 
@@ -564,6 +565,18 @@ class Something {
 // This would be mapped to
 {
   type: [[[{ type: String }]]]
+}
+```
+
+This Option can be ommitted if the following way is used: (since 7.4.0)
+
+```ts
+class ArrayInType {
+  @prop({ type: () => [[String]] }) // dim is 2
+  public propy: string[][];
+
+  @prop({ type: () => [String] }) // dim is 1
+  public propy: string[];
 }
 ```
 
