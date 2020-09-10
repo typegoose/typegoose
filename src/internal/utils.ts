@@ -138,7 +138,7 @@ export function initProperty(name: string, key: string, whatis: WhatIsIt) {
       break;
     default:
       /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-      throw new TypeError('"whatis" is not supplied OR doesn\'t have a case yet! [E013]');
+      throw new TypeError(`"${whatis}"(whatis(subSchema)) is invalid for "${name}.${key}" [E013]`);
   }
 
   return schemaProp;
