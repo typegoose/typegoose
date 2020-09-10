@@ -85,7 +85,7 @@ class User {
 
 - TypeScript ^3.9 (since 7.1)
 - NodeJS ^10.15.0
-- Mongoose ^5.9.22
+- Mongoose ^5.10.4
 - An IDE that supports TypeScript linting (VSCode is recommended)
 - This Guide expects you to know how Mongoose (or at least its models) works
 - tsconfig option `target` being `ES6`

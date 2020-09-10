@@ -37,19 +37,19 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "^5.9.22",
-    "@types/mongoose": "^5.7.30"
+    "mongoose": "^5.10.4",
+    "@types/mongoose": "^5.7.36"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.10",
-    "@types/lodash": "^4.14.157",
-    "@types/mongoose": "^5.7.30",
+    "@types/jest": "^26.0.13",
+    "@types/lodash": "^4.14.161",
+    "@types/mongoose": "^5.7.36",
     "@types/node": "^10.17.16",
-    "@types/semver": "^7.3.1",
+    "@types/semver": "^7.3.3",
     "coveralls": "^3.1.0",
     "jest": "^26.4.2",
-    "mongodb-memory-server": "^6.6.7",
-    "mongoose": "^5.9.22",
+    "mongodb-memory-server": "^6.7.2",
+    "mongoose": "^5.10.4",
     "mongoose-findorcreate": "^3.0.0",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
@@ -60,11 +60,11 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "lodash": "^4.17.19",
-    "loglevel": "^1.6.8",
+    "lodash": "^4.17.20",
+    "loglevel": "^1.7.0",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.3.2",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.1"
   },
   "publishConfig": {
     "access": "public"

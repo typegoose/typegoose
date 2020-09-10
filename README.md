@@ -119,7 +119,7 @@ class User {
 
 * TypeScript 3.9+
 * Node 10.15+
-* mongoose ^5.9.22
+* mongoose ^5.10.4
 * `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
 * tsconfig option `target` being `ES6`
 

@@ -1,4 +1,5 @@
 Typegoose Version,Mongoose Version
+7.4.x,^5.10.4
 7.3.x,^5.9.22
 7.2.x,^5.9.17
 7.1.x,^5.9.14
