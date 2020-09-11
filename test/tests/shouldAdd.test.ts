@@ -2,7 +2,17 @@ import * as mongoose from 'mongoose';
 import { schemas } from '../../src/internal/data';
 
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
-import { buildSchema, DocumentType, getClass, getModelForClass, getName, isDocumentArray, prop, Ref } from '../../src/typegoose';
+import {
+  buildSchema,
+  DocumentType,
+  getClass,
+  getModelForClass,
+  getName,
+  isDocument,
+  isDocumentArray,
+  prop,
+  Ref
+} from '../../src/typegoose';
 import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
 import { GetSet, GetSetModel } from '../models/getSet';
@@ -450,4 +460,71 @@ it('should allow NestJS / Type-Graphql way of defining arrays [typegoose#365]', 
   expect(primitivePath).toBeInstanceOf(mongoose.Schema.Types.Array);
   expect(primitivePath.casterConstructor).toBeInstanceOf(mongoose.Schema.Types.Array);
   expect(primitivePath.casterConstructor.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+});
+
+it('should allow dynamic use of "ref" (since mongoose 4.13)', async () => {
+  class NestedRef {
+    @prop({ required: true })
+    public someProp!: string;
+  }
+  class ParentRef {
+    @prop({ ref: () => (doc: DocumentType<ParentRef>) => doc.from })
+    public nested!: Ref<NestedRef>;
+
+    @prop({ required: true })
+    public from!: string;
+  }
+
+  const NestedRefModel = getModelForClass(NestedRef);
+  const ParentRefModel = getModelForClass(ParentRef);
+
+  expect((schemas.get(getName(ParentRef)) as any).nested.ref).toBeInstanceOf(Function);
+
+  const nested = await NestedRefModel.create({ someProp: 'Hello' });
+  const parent = await ParentRefModel.create({ from: getName(NestedRef), nested: nested._id });
+
+  const found = await ParentRefModel.findById(parent._id).populate('nested').orFail().exec();
+
+  assertion(isDocument(found.nested), new Error('Expected "found.nested" to be populated'));
+  expect(found.nested.someProp).toEqual('Hello');
+});
+
+it('should allow dynamic "foreignField" and "localField" (since mongoose 4.13)', async () => {
+  class NestedFFLF {
+    @prop({ required: true })
+    public someProp!: string;
+
+    @prop({ required: true })
+    public parentId!: mongoose.Types.ObjectId;
+  }
+  class ParentFFLF {
+    @prop({
+      ref: () => NestedFFLF,
+      foreignField: () => 'parentId',
+      localField: (doc: DocumentType<ParentFFLF>) => doc.local,
+      justOne: false
+    })
+    public nested?: Ref<NestedFFLF>[];
+
+    @prop({ required: true })
+    public local!: string;
+  }
+
+  const NestedFFLFModel = getModelForClass(NestedFFLF);
+  const ParentFFLFModel = getModelForClass(ParentFFLF);
+
+  const gotVirtuals: any = ParentFFLFModel.schema.virtualpath('nested');
+  expect(gotVirtuals.options.foreignField).toBeInstanceOf(Function);
+  expect(gotVirtuals.options.localField).toBeInstanceOf(Function);
+
+  const parent = await ParentFFLFModel.create({ local: '_id' });
+  await NestedFFLFModel.create({ someProp: 'Hello1', parentId: parent._id });
+  await NestedFFLFModel.create({ someProp: 'Hello2', parentId: parent._id });
+
+  const found = await ParentFFLFModel.findById(parent._id).populate('nested').orFail().exec();
+
+  assertion(isDocumentArray(found.nested), new Error('Expected "found.nested" to be populated'));
+  expect(found.nested.length).toEqual(2);
+  expect(found.nested[0].someProp).toEqual('Hello1');
+  expect(found.nested[1].someProp).toEqual('Hello2');
 });

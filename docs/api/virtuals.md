@@ -76,7 +76,7 @@ class Kittens {
 
 class Cat {
   @prop({
-    ref: Kittens,
+    ref: () => Kittens,
     foreignField: 'parent', // compare this value to the local document populate is called on
     localField: '_id' // compare this to the foreign document's value defined in "foreignField"
   })
@@ -95,13 +95,41 @@ class Sub {
 
 class Parent {
   @prop({
-    ref: Sub,
+    ref: () => Sub,
     foreignField: 'parent',
     localField: '_id',
     justOne: true // know that when this is not included, Mongoose will return an array
   })
   public one: Ref<Sub>;
 }
+```
+
+Example (since typegoose 7.4 (and mongoose 4.13)): dynamic `ref` & `localField` & `foreignField`
+
+```ts
+class Sub {
+  @prop({ required: true })
+  public parentId!: mongoose.Types.ObjectId;
+}
+class Parent {
+  @prop({
+    ref: () => (doc: DocumentType<Parent>) => doc.from, // This need to be written this way, because since "typegoose@7.1" typegoose evaluates the first ref-function
+    foreignField: () => 'parentId', // no "doc" parameter provided here
+    localField: (doc: DocumentType<Parent>) => doc.local,
+    justOne: false
+  })
+  public nested?: Ref<Sub>[];
+
+  @prop({ required: true })
+  public local!: string;
+
+  @prop({ required: true })
+  public from!: string;
+}
+
+// later in some async code
+const parent = await ParentModel.create({ local: '_id', from: getName(Sub) });
+await SubModel.create({ parentId: parent._id });
 ```
 
 ## Extra Notes

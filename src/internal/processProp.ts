@@ -134,7 +134,12 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       new Error(`Option "ref" for "${name}.${key}" is null/undefined! [E005]`)
     );
 
-    rawOptions.ref = typeof rawOptions.ref === 'string' ? rawOptions.ref : utils.getName(rawOptions.ref);
+    rawOptions.ref =
+      typeof rawOptions.ref === 'string'
+        ? rawOptions.ref
+        : utils.isConstructor(rawOptions.ref)
+          ? utils.getName(rawOptions.ref)
+          : rawOptions.ref;
   }
 
   if (utils.isWithVirtualPOP(rawOptions)) {

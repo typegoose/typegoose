@@ -54,6 +54,11 @@ export type Validator = ValidatorFunction | RegExp | ValidatorOptions | Validato
  * @param type This is just to comply with the common pattern of `type => ActualType`
  */
 export type DeferredFunc<T = any> = (...args: unknown[]) => T;
+/**
+ * Dynamic Functions, since mongoose 4.13
+ * @param doc The Document current document
+ */
+export type DynamicStringFunc<T extends AnyParamConstructor<any>> = (doc: DocumentType<T>) => string;
 
 export interface BasePropOptions {
   [key: string]: any;
@@ -185,7 +190,7 @@ export interface BasePropOptions {
   // tslint:disable-next-line:ban-types
   autopopulate?: boolean | Function | KeyStringAny;
   /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref?: DeferredFunc | string | AnyParamConstructor<any>;
+  ref?: DeferredFunc<string | AnyParamConstructor<any> | DynamicStringFunc<any>> | string | AnyParamConstructor<any>;
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
   /**
@@ -275,9 +280,9 @@ export interface VirtualOptions {
   /** Reference an other Document (you should use Ref<T> as Prop type) */
   ref: NonNullable<BasePropOptions['ref']>;
   /** Which property(on the current-Class) to match `foreignField` against */
-  localField: string;
+  localField: string | DynamicStringFunc<any>;
   /** Which property(on the ref-Class) to match `localField` against */
-  foreignField: string;
+  foreignField: string | DeferredFunc<string>;
   /** Return as One Document(true) or as Array(false) */
   justOne?: boolean;
   /** Return the number of Documents found instead of the actual Documents */
