@@ -22,6 +22,7 @@ title: "Changelog"
   - `loglevel` to 1.7.0
   - `tslib` to 2.0.1
   - `@types/mongoose` to 5.7.36
+- Allow any argument to `DeferredFunc`
 - Allow the NestJS / Type-GraphQl way of defining arrays (`type: () => [String]` (and nested too))
 - [IC] Fix that `dim` is included as an option in the schema [[typegoose#366](https://github.com/typegoose/typegoose/issues/366)]
 
