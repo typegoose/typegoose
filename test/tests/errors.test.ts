@@ -476,6 +476,7 @@ it('should error if ref\'s arrow-function returning type returns undefined', asy
   }
 
   class Main {
+    // @ts-expect-error
     @prop({ ref: () => undefined })
     public nested: Ref<Nested>;
   }
