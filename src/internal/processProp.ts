@@ -154,6 +154,13 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     return;
   }
 
+  if ('justOne' in rawOptions) {
+    logger.warn(
+      `Option "justOne" is defined in "${name}.${key}" but no Virtual-Populate-Options!\n`
+      + 'Look here for more: https://typegoose.github.io/typegoose/docs/api/virtuals#virtual-populate'
+    );
+  }
+
   const schemaProp = utils.initProperty(name, key, propKind);
 
   if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {

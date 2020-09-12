@@ -22,6 +22,7 @@ title: "Changelog"
   - `loglevel` to 1.7.0
   - `tslib` to 2.0.1
   - `@types/mongoose` to 5.7.36
+- Add warning if `justOne` is defined, but no Virtual Populate Options
 - Allow any argument to `DeferredFunc`
 - Add Type `DynamicStringFunc`
 - Allow definition of functions for `localField` & `foreignField`
