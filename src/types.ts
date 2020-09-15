@@ -314,7 +314,7 @@ export type RefType =
 // export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
 export type Ref<
   R,
-  T extends RefType = (R extends { _id?: RefType; } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined
+  T extends RefType = R extends { _id?: RefType; } ? NonNullable<R['_id']> : mongoose.Types.ObjectId
   > = R | T;
 
 /**
