@@ -1,12 +1,14 @@
 # https://github.com/actions/labeler
 
-name: Labeler
-on: [pull_request]
+# disabled until v3 comes out
 
-jobs:
-  label:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/labeler@v2
-        with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+# name: Labeler
+# on: [pull_request]
+
+# jobs:
+#   label:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/labeler@v3
+#         with:
+#           repo-token: '${{ secrets.GITHUB_TOKEN }}'
