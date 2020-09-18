@@ -22,7 +22,7 @@ import type {
  *   @prop()
  *   public someProp?: string;
  *
- *   @prop({ type: String })
+ *   @prop({ type: [String] })
  *   public someArrayProp: string[];
  *
  *   @prop({ type: String })
