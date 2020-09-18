@@ -1,0 +1,15 @@
+{
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "prettier.printWidth": 140,
+  "editor.wordWrapColumn": 140,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+}
