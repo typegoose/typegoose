@@ -1,6 +1,10 @@
 name: Node.js Tests
 
-on: [push, pull_request]
+on:
+  - push:
+      branches-ignore:
+        - 'gh-pages'
+  - pull_request
 
 jobs:
   tests:
