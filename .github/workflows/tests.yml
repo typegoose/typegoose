@@ -1,11 +1,11 @@
 name: Node.js Tests
 
 on:
-  - push:
-      branches:
-        - '*'
-        - '!gh-pages'
-  - pull_request:
+  push:
+    branches:
+      - '*'
+      - '!gh-pages'
+  pull_request:
 
 jobs:
   tests:
