@@ -1,0 +1,22 @@
+# https://github.com/actions/stale
+
+name: Mark stale issues and pull requests
+
+on:
+  schedule:
+    - cron: '30 1 * * *'
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: 'Marking Issue as stale, will be closed in 7 days if no more activity is seen'
+          close-issue-message: 'Closing Issue because it is marked as stale'
+          stale-issue-label: 'stale'
+          exempt-issue-labels: help wanted,docs,enhancement,feature,parity,discussion,roadmap
+          days-before-stale: 30
+          days-before-close: 7
+          remove-stale-when-updated: true

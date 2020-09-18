@@ -1,0 +1,67 @@
+name: Node.js Tests
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install node_modules
+        run: npm ci
+      - name: Run Audit
+        run: (npm audit || exit 0)
+      - name: Test Compiling Everything & Lint
+        run: npm run buildtests
+      - name: Test
+        run: npm run test:coverage
+        env:
+          CI: true
+      - name: Send Coverage
+        if: matrix.node-version == '12.x'
+        run: npm run coverage
+  website:
+    needs: [tests]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install & Build
+        run: sh ./ghPagesPre.sh
+      - name: Deploy to Github Pages
+        uses: JamesIves/github-pages-deploy-action@v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: . # the root, because the provided script already moves files
+# commented out for later
+# publish:
+#   if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/alpha' || github.ref == 'refs/heads/beta'
+#   needs: [tests]
+#   runs-on: ubuntu-latest
+#   steps:
+#     - uses: actions/checkout@v2
+#     - name: Use Node.js 12
+#       uses: actions/setup-node@v1
+#       with:
+#         node-version: 12.x
+#     - name: Install node_modules
+#       run: yarn install
+#     - name: Build
+#       run: yarn build
+#     - name: Semantic Release (publish to npm)
+#       run: yarn semantic-release
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
