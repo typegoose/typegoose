@@ -6,6 +6,10 @@ on:
     branches:
       - '*'
       - '!gh-pages'
+    paths: # only run this deploy if an file in the following directories are changed
+      - 'src/**'
+      - 'test/**'
+      - '*.json' # run if an ".json" file in the *root* of the repository is changed
 
 jobs:
   tests:
@@ -34,24 +38,6 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-  website:
-    needs: [tests]
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 14
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-      - name: Install & Build
-        run: bash ./ghPagesPre.sh
-      - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@3.6.1
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: . # the root, because the provided script already moves files
 # commented out for later
 # publish:
 #   if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/alpha' || github.ref == 'refs/heads/beta'
