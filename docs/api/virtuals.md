@@ -89,7 +89,7 @@ Example: for only one document
 ```ts
 // I couldn't think of a real use case example
 class Sub {
-  @prop({ requried: true, ref: () => Parent }) // providing the type deferred
+  @prop({ required: true, ref: () => Parent }) // providing the type deferred
   public parent: Ref<Parent>;
 }
 
