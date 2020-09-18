@@ -1,7 +1,7 @@
 # Typegoose
 
 <sub>(These badges are from typegoose:master)</sub>  
-[![Build Status](https://travis-ci.com/typegoose/typegoose.svg?branch=master)](https://travis-ci.com/typegoose/typegoose)
+[![Node.js Tests](https://github.com/typegoose/typegoose/workflows/Node.js%20Tests/badge.svg?branch=master)](https://github.com/typegoose/typegoose/actions?query=workflow%3A"Node.js+Tests")
 [![Coverage Status](https://coveralls.io/repos/github/typegoose/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/typegoose/typegoose?branch=master)
 [![npm](https://img.shields.io/npm/dt/@typegoose/typegoose.svg)](https://www.npmjs.com/package/@typegoose/typegoose)
 
