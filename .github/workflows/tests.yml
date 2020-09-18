@@ -14,14 +14,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install node_modules
+      - name: Install Dependencies
         run: npm ci
       - name: Run Audit
         run: (npm audit || exit 0)
       - name: Test Compiling Everything & Lint
         run: npm run buildtests
       - name: Test
-        run: npm run test:coverage
+        run: npm run test:coverage -- --colors
         env:
           CI: true
       - name: Send Coverage
@@ -42,7 +42,7 @@ jobs:
       - name: Install & Build
         run: sh ./ghPagesPre.sh
       - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v3
+        uses: JamesIves/github-pages-deploy-action@v3.6.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
