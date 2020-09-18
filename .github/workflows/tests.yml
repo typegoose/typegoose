@@ -1,11 +1,11 @@
 name: Node.js Tests
 
 on:
+  pull_request:
   push:
     branches:
       - '*'
       - '!gh-pages'
-  pull_request:
 
 jobs:
   tests:
@@ -45,7 +45,7 @@ jobs:
         with:
           node-version: 14.x
       - name: Install & Build
-        run: sh ./ghPagesPre.sh
+        run: bash ./ghPagesPre.sh
       - name: Deploy to Github Pages
         uses: JamesIves/github-pages-deploy-action@3.6.1
         with:
