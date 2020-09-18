@@ -2,8 +2,9 @@ name: Node.js Tests
 
 on:
   - push:
-      branches-ignore:
-        - 'gh-pages'
+      branches:
+        - '*'
+        - '!gh-pages'
   - pull_request:
 
 jobs:
