@@ -25,8 +25,10 @@ jobs:
         env:
           CI: true
       - name: Send Coverage
-        if: matrix.node-version == '12.x'
-        run: npm run coverage
+        if: matrix.node-version == '14.x'
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
   website:
     needs: [tests]
     runs-on: ubuntu-latest
