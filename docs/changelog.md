@@ -14,6 +14,10 @@ title: "Changelog"
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.4.1
+
+- Allow async functions in hooks [[typegoose#381](https://github.com/typegoose/typegoose/issues/381)]
+
 ## 7.4.0
 
 - Update Dependencies
