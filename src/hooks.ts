@@ -9,24 +9,27 @@ import type { DocumentType, EmptyVoidFn, IHooksArray } from './types';
 
 type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
 
-type HookNextErrorFn = (err?: Error) => void;
+// i know that some events cannot be async (like "init"), but because they are unified into bigger types, i cannot change it
+type ReturnVoid = void | Promise<void>;
 
-type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => void;
-type PreFnWithQuery<T> = (this: Query<T>, next: (error?: Error) => void, done: EmptyVoidFn) => void;
+type HookNextErrorFn = (err?: Error) => ReturnVoid;
 
-type ModelPostFn<T> = (result: any, next: EmptyVoidFn) => void;
+type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => ReturnVoid;
+type PreFnWithQuery<T> = (this: Query<T>, next: (error?: Error) => ReturnVoid, done: EmptyVoidFn) => ReturnVoid;
 
-type PostNumberResponse<T> = (result: number, next: EmptyVoidFn) => void;
-type PostSingleResponse<T> = (result: DocumentType<T>, next: EmptyVoidFn) => void;
-type PostMultipleResponse<T> = (result: DocumentType<T>[], next: EmptyVoidFn) => void;
-type PostRegExpResponse<T> = (result: NDA<T>, next: EmptyVoidFn) => void;
-type PostArrayResponse<T> = (result: NDA<T>, next: EmptyVoidFn) => void;
+type ModelPostFn<T> = (result: any, next: EmptyVoidFn) => ReturnVoid;
 
-type PostNumberWithError<T> = (error: Error, result: number, next: HookNextErrorFn) => void;
-type PostSingleWithError<T> = (error: Error, result: DocumentType<T>, next: HookNextErrorFn) => void;
-type PostMultipleWithError<T> = (error: Error, result: DocumentType<T>[], next: HookNextErrorFn) => void;
-type PostRegExpWithError<T> = (error: Error, result: NDA<T>, next: HookNextErrorFn) => void;
-type PostArrayWithError<T> = (error: Error, result: NDA<T>, next: EmptyVoidFn) => void;
+type PostNumberResponse<T> = (result: number, next: EmptyVoidFn) => ReturnVoid;
+type PostSingleResponse<T> = (result: DocumentType<T>, next: EmptyVoidFn) => ReturnVoid;
+type PostMultipleResponse<T> = (result: DocumentType<T>[], next: EmptyVoidFn) => ReturnVoid;
+type PostRegExpResponse<T> = (result: NDA<T>, next: EmptyVoidFn) => ReturnVoid;
+type PostArrayResponse<T> = (result: NDA<T>, next: EmptyVoidFn) => ReturnVoid;
+
+type PostNumberWithError<T> = (error: Error, result: number, next: HookNextErrorFn) => ReturnVoid;
+type PostSingleWithError<T> = (error: Error, result: DocumentType<T>, next: HookNextErrorFn) => ReturnVoid;
+type PostMultipleWithError<T> = (error: Error, result: DocumentType<T>[], next: HookNextErrorFn) => ReturnVoid;
+type PostRegExpWithError<T> = (error: Error, result: NDA<T>, next: HookNextErrorFn) => ReturnVoid;
+type PostArrayWithError<T> = (error: Error, result: NDA<T>, next: EmptyVoidFn) => ReturnVoid;
 
 type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
 type NumberMethod = 'count';
