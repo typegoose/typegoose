@@ -192,7 +192,7 @@ Error: `Assert failed - no custom error [E019]`
 Details:  
 This Error should never show up, if it does report it
 
-### PropOptions.discriminators dosnt support Arrays with more or less than 1 dimenion [E020]
+### PropOptions.discriminators dosnt support Arrays with more or less than 1 dimension [E020]
 
 Error: `"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`
 
