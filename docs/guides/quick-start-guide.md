@@ -194,7 +194,10 @@ Typegoose also supports hooks, they can be used like this:
 
 ```ts
 @pre<KittenClass>('save', function() {
-  this.kitten = this.age < 1
+  this.isKitten = this.age < 1
+})
+@post<KittenClass>('save', (kitten) => {
+  console.log(kitten.isKitten ? "We have a kitten here." : "We have a big kitty here.")
 })
 class KittenClass {
   @prop()
@@ -207,7 +210,7 @@ class KittenClass {
   public age?: number
   
   @prop({ default: false })
-  public kitten?: boolean
+  public isKitten?: boolean
 
   public async setSpeciesAndSave(this: DocumentType<KittenClass>, species: string) {
     this.species = species;
