@@ -216,6 +216,8 @@ class KittenClass {
 }
 ```
 
+For detailed explanation of Hooks, please see [Hooks](api/decorators/hooks.md).
+
 Note:
 - Do not use Arrow Functions, because it will break the binding of `this`
 - For ESLint users: Make sure that rule `eslint-no-use-before-defining` is disabled, otherwise you might get ESLint errors / warnings
