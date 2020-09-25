@@ -187,3 +187,35 @@ await doc.setSpeciesAndSave("SomeOtherSpecies");
 ```
 
 Note: pre-6.0 instance functions needed `@instanceMethod`, but this is not needed anymore
+
+### Hooks
+
+Typegoose also supports hooks, they can be used like this:
+
+```ts
+@pre<KittenClass>('save', function() {
+  this.kitten = this.age < 1
+})
+class KittenClass {
+  @prop()
+  public name?: string;
+
+  @prop()
+  public species?: string;
+  
+  @prop()
+  public age?: number
+  
+  @prop({ default: false })
+  public kitten?: boolean
+
+  public async setSpeciesAndSave(this: DocumentType<KittenClass>, species: string) {
+    this.species = species;
+    return await this.save();
+  }
+}
+```
+
+Note:
+- Do not use Arrow Functions, because it will break the binding of `this`
+- For ESLint users: Make sure that rule `eslint-no-use-before-defining` is disabled, otherwise you might get ESLint errors / warnings
