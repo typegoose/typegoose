@@ -1,12 +1,16 @@
+import { assertion } from '../../src/internal/utils';
 import {
   DocumentType,
   getClass,
   getDiscriminatorModelForClass,
   getModelForClass,
+  isDocument,
   ModelOptions,
   mongoose,
   Pre,
-  Prop
+  prop,
+  Prop,
+  Ref
 } from '../../src/typegoose';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 import { Default, DefaultModel, DisciminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminatorsWithGenerics';
@@ -223,4 +227,36 @@ it('should pass all mongoose discriminator tests', async () => {
   ]);
   expect(circle).toHaveProperty(['shape', 'radius'], 5);
   expect(square).toHaveProperty(['shape', 'side'], 10);
+});
+
+it('should work with references [typegoose#385]', () => {
+  // this is an typegoose version of "setting to discriminator (gh-4935)" in mongoose
+  class Buyer {
+    @prop()
+    public name?: string;
+
+    @prop({ ref: () => Vehicle })
+    public vehicle?: Ref<Vehicle>;
+  }
+  class Vehicle {
+    @prop()
+    public name?: string;
+  }
+  class Car extends Vehicle {
+    @prop()
+    public model?: string;
+  }
+
+  const BuyerModel = getModelForClass(Buyer);
+  const VehicleModel = getModelForClass(Vehicle);
+  const CarModel = getDiscriminatorModelForClass(VehicleModel, Car);
+
+  const eleanor = new CarModel({ name: 'Eleanor', model: 'Shelby Mustang GT' });
+  const nick = new BuyerModel({ name: 'Nicolas', vehicle: eleanor });
+
+  expect(nick.vehicle).not.toBeUndefined();
+  expect(nick.vehicle).toEqual(eleanor);
+  expect(nick.vehicle).toBeInstanceOf(CarModel);
+  assertion(isDocument(nick.vehicle), new Error('Expect "nick.vehicle" to be an document'));
+  expect(nick.vehicle.name).toEqual('Eleanor');
 });

@@ -50,7 +50,7 @@ class Nested {
 
 // Recommended first fix:
 class Main {
-  @prop({ ref: () => Nested) }) // since 7.1 arrow functions can be used to defer getting the type
+  @prop({ ref: () => Nested }) // since 7.1 arrow functions can be used to defer getting the type
   public nested: Ref<Nested>;
 }
 
