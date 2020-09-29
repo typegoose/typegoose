@@ -88,16 +88,4 @@ Since `@types/mongoose@5.7.22`, there are types for `.create`, but they are not 
 ```ts
 model.create<any>({ anything: anything });
 ```
-# For Edge Cases
 
-### I want to the return document with property 'id' instead of _id
-
-Just do
-```
-class Cat{
- id: mongoose.Types.ObjectId;
- _id: mongoose.Types.ObjectId;
-}
-```
-without any decorators!
-since mongoose would auto generate virtual 'id' for '_id', and a '_id' when saving.
