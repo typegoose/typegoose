@@ -90,5 +90,21 @@ describe('class-transformer', () => {
         email: 'somebody@gmail.com',
       })
     })
+    it(`should be able to use class-transformer's groups`, async () => {
+      // exec return a Mongoose Object
+      const MO = await AccountModel.findById(id).exec()
+      const options = { groups: ['admin'] }
+      // transform Mongoose Object into an instance of the Account class
+      const serialized = plainToClass(Account, MO, options)
+      // transform Account instance back to a Plain Old Javascript Object, applying class-transformer's magic
+      const deserialized = classToPlain(serialized, options)
+      expect(deserialized)
+      .toStrictEqual({
+        _id: id,
+        __v: 0,
+        email: 'somebody@gmail.com',
+        password: 'secret',
+      })
+    })
   })
 })
