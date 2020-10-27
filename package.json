@@ -46,6 +46,7 @@
     "@types/mongoose": "^5.7.36",
     "@types/node": "^10.17.16",
     "@types/semver": "^7.3.4",
+    "class-transformer": "^0.3.1",
     "coveralls": "^3.1.0",
     "jest": "^26.4.2",
     "mongodb-memory-server": "^6.7.6",
