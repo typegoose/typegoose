@@ -92,6 +92,13 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     Type = mongoose.Schema.Types.Buffer;
   }
 
+  // confirm that "WhatIsIt" is an ARRAY and that the Type is still an *ARRAY and set them to Mixed
+  // for issues like https://github.com/typegoose/typegoose/issues/300
+  if (propKind === WhatIsIt.ARRAY && detectWhatIsIt(Type) === WhatIsIt.ARRAY) {
+    logger.debug('Type is still *ARRAY, defaulting to Mixed');
+    Type = mongoose.Schema.Types.Mixed;
+  }
+
   if (utils.isNotDefined(Type)) {
     buildSchema(Type);
   }
