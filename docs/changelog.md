@@ -14,6 +14,10 @@ title: "Changelog"
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.4.2
+
+- Default to `mongoose.Schema.Types.Mixed` if Type is still `*Array` [[typegoose#300](https://github.com/typegoose/typegoose/issues/300)]
+
 ## 7.4.1
 
 - Allow async functions in hooks [[typegoose#381](https://github.com/typegoose/typegoose/issues/381)]
