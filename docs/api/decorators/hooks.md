@@ -48,3 +48,10 @@ class Car {
   public topSpeedInKmH!: number;
 }
 ```
+
+
+> Don't forget to import these hooks with:
+
+```ts
+import { pre, post } from '@typegoose/typegoose';
+```
