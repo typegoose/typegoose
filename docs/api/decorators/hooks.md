@@ -3,6 +3,14 @@ id: hooks
 title: 'Hooks'
 ---
 
+> Don't forget to import these hooks with:
+
+```ts
+import { pre, post } from '@typegoose/typegoose';
+```
+
+---
+
 ## @pre
 
 `@pre<T>(name: string | string[] | regexp | regexp[], method: () => any)` is used to set Pre-Hooks
@@ -50,8 +58,3 @@ class Car {
 ```
 
 
-> Don't forget to import these hooks with:
-
-```ts
-import { pre, post } from '@typegoose/typegoose';
-```
