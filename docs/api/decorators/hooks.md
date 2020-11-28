@@ -56,5 +56,3 @@ class Car {
   public topSpeedInKmH!: number;
 }
 ```
-
-
