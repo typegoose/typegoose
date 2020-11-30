@@ -50,4 +50,17 @@ interface Something extends Base {} // have the interface to add the types of "B
 class Something extends TimeStamps {} // have your class
 ```
 
-Note: This only works because `Base` only has types and does not modify anything.
+Note1: This only works because `Base` only has types and does not modify anything.
+
+Note2: Decorators must go right before the `Class` definition so you will need to order your code appropriately if you are using `@pre` or other hooks.
+For example:
+
+```ts
+interface Question extends defaultClasses.Base { }
+@pre<Question>('save', function () { ... }
+class Question extends defaultClasses.TimeStamps {
+```
+
+
+
+
