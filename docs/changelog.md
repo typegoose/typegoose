@@ -14,6 +14,10 @@ title: "Changelog"
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.4.3
+
+- constrain mongoose version to `5.10.0` to `5.10.18`, [read here for more](guides/faq.md#why-is-74x-constrained-to-mongoose-51018)
+
 ## 7.4.2
 
 - Default to `mongoose.Schema.Types.Mixed` if Type is still `*Array` [[typegoose#300](https://github.com/typegoose/typegoose/issues/300)]

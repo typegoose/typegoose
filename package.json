@@ -1,6 +1,6 @@
 {
   "name": "@typegoose/typegoose",
-  "version": "7.4.2",
+  "version": "7.4.3",
   "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
   "types": "lib/typegoose.d.ts",
@@ -37,20 +37,20 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "^5.10.4",
-    "@types/mongoose": "^5.7.36"
+    "mongoose": "5.10.0 - 5.10.18",
+    "@types/mongoose": "^5.10.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.14",
     "@types/lodash": "^4.14.161",
-    "@types/mongoose": "^5.7.36",
+    "@types/mongoose": "^5.10.1",
     "@types/node": "^10.17.16",
     "@types/semver": "^7.3.4",
     "class-transformer": "^0.3.1",
     "coveralls": "^3.1.0",
     "jest": "^26.4.2",
     "mongodb-memory-server": "^6.7.6",
-    "mongoose": "^5.10.4",
+    "mongoose": "5.10.0 - 5.10.18",
     "mongoose-findorcreate": "^3.0.0",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
