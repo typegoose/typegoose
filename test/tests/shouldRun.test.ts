@@ -398,3 +398,25 @@ it('should add query Methods', async () => {
   assertion(isDocumentArray(found), new Error('Found is not an document array'));
   expect(found[0].toObject()).toEqual(doc.toObject());
 });
+
+it('should be map none/array/map correctly if using get/set options [typegoose#422]', async () => {
+  class TestGetSetOptions {
+    @prop({ get: () => 0, set: () => 1 })
+    public normal?: number;
+
+    @prop({ type: Number, get: () => [0], set: () => [1] })
+    public array?: number[];
+
+    @prop({ type: Number, get: () => new Map([['0', 0]]), set: () => new Map([['1', 1]]) })
+    public map?: Map<string, number>;
+  }
+
+  const schema = buildSchema(TestGetSetOptions);
+  expect(schema.path('normal')).toBeInstanceOf(mongoose.Schema.Types.Number);
+  expect((schema.path('normal') as any)).not.toHaveProperty('caster');
+  expect(schema.path('array')).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect((schema.path('array') as any).caster).toBeInstanceOf(mongoose.Schema.Types.Number);
+  expect(schema.path('map')).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect((schema.path('map') as any).$__schemaType).toBeInstanceOf(mongoose.Schema.Types.Number);
+  expect((schema.path('map') as any)).not.toHaveProperty('caster');
+});

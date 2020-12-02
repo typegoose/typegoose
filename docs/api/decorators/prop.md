@@ -227,15 +227,27 @@ Note: `select()` accepts a long string with space as a separator
 
 Accepts Type: `(input) => output`
 
-set gets & setters for fields, it is not virtual  
+set getters & setters for fields, it is not virtual  
 -> both get & set must be defined all the time, even when just wanting to use one
 
-Example:
+Note: if the WhatIsIt (Primitive / Array / Map) is different from what is got from the reflection, it requires **explicit** setting that it is different
+
+Pre-process string to string:
 
 ```ts
 class Dummy {
   @prop({ set: (val: string) => val.toLowerCase(), get: (val: string) => val })
   public hello: string;
+}
+```
+
+Store string, runtime have string array (string array to string):
+
+```ts
+class Dummy {
+  // this value is on runtime an "string-array" and is stored in the database as an "primite-string"
+  @prop({ set: (val: string[]) => val.join(' '), get: (val: string) => val.split(' '), type: String }, WhatIsIt.NONE) // requires explicit setting of "WhatIsIt"
+  public fullName?: string[];
 }
 ```
 

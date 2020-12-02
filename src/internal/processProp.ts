@@ -174,18 +174,37 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     utils.assertion(typeof rawOptions.set === 'function', new TypeError(`"${name}.${key}" does not have a set function! [E007]`));
     utils.assertion(typeof rawOptions.get === 'function', new TypeError(`"${name}.${key}" does not have a get function! [E007]`));
 
-    /*
-     * Note:
-     * this doesn't have a check if prop & returntype of the function is the same,
-     * because it can't be accessed at runtime
-     */
-    schemaProp[key] = {
-      ...schemaProp[key],
-      type: Type,
-      ...rawOptions
-    };
+    switch (propKind) {
+      case WhatIsIt.ARRAY:
+        schemaProp[key] = {
+          ...schemaProp[key][0],
+          ...utils.mapArrayOptions(rawOptions, Type, target, key)
+        };
 
-    return;
+        return;
+      case WhatIsIt.MAP:
+        const mapped = utils.mapOptions(rawOptions, Type, target, key);
+
+        schemaProp[key] = {
+          ...schemaProp[key],
+          ...mapped.outer,
+          type: Map,
+          of: { type: Type, ...mapped.inner }
+        };
+
+        return;
+      case WhatIsIt.NONE:
+        schemaProp[key] = {
+          ...schemaProp[key],
+          ...rawOptions,
+          type: Type
+        };
+
+        return;
+      default:
+        /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
+        throw new Error(`"${propKind}"(whatis(primitive)) is invalid for "${name}.${key}" [E013]`);
+    }
   }
 
   // use "Type" if it is an suitable ref-type, otherwise default back to "ObjectId"
