@@ -37,7 +37,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "^5.10.4",
+    "mongoose": "5.10.0 - 5.10.18",
     "@types/mongoose": "^5.7.36"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "coveralls": "^3.1.0",
     "jest": "^26.4.2",
     "mongodb-memory-server": "^6.7.6",
-    "mongoose": "^5.10.4",
+    "mongoose": "5.10.0 - 5.10.18",
     "mongoose-findorcreate": "^3.0.0",
     "prettier": "^2.1.2",
     "rimraf": "^3.0.2",
