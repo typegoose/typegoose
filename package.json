@@ -12,7 +12,6 @@
     "lib/**/*.d.ts"
   ],
   "scripts": {
-    "start": "npm run build && node ./lib/typegoose.js",
     "build": "npm run lint && tsc -p tsconfig.build.json",
     "buildtests": "npm run lint && tsc -p tsconfig.json",
     "lint": "tslint --project tsconfig.json",
