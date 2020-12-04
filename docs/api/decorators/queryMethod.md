@@ -22,18 +22,18 @@ interface QueryHelpers {
   findByLastname: QueryMethod<typeof findByLastname>;
 }
 
-function findByName(this: ReturnModelType<typeof QueryMethods, QueryHelpers>, name: string) {
+function findByName(this: ReturnModelType<typeof Person, QueryHelpers>, name: string) {
   return this.find({ name }); // important to not do an "await" and ".exec"
 }
 @queryMethod(findByName)
-class QueryMethods {
+class Person {
   @prop({ required: true })
   public name: string;
 }
-const QueryMethodsModel = getModelForClass(QueryMethods);
+const PersonModel = getModelForClass(Person);
 
 // thanks to "QueryHelpers" the function "findByName" should exist here and return the correct type
-const docs: DocumentType<QueryMethods>[] = await QueryMethodsModel.find()
+const docs: DocumentType<Person>[] = await PersonModel.find()
   .findByName('hello')
   .orFail()
   .exec();

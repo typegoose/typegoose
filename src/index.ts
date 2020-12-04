@@ -5,7 +5,7 @@ import type { IIndexArray, IndexOptions } from './types';
 
 /**
  * Defines an index (most likely compound) for this schema.
- * @param fields Wich fields to give the Options
+ * @param fields Which fields to give the Options
  * @param options Options to pass to MongoDB driver's createIndex() function
  * @example Example:
  * ```

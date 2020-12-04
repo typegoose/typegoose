@@ -34,15 +34,19 @@ A: because Typegoose doesn't modify any Mongoose code, it is still the same as M
 
 **Note**: since `@types/mongoose@5.7.22` there are typings for `.create`, but are not fully compatible with Typegoose. For more information pleasae read [known-issues](guides/known-issues.md#typesmongoose5722-and-higher)
 
-## For Edge Cases
+### Why is 7.4.x constrained to mongoose 5.10.18?
 
-### I want to the return document with property 'id' instead of _id
+A: this because in mongoose 5.10.19 and higher, mongoose has its own typescript definitions, and typegoose is not upgraded for that yet
 
-Just do
+## Edge Cases
+
+### I want to the return document with property `id` instead of `_id`
+
+Mongoose automatically adds an virtual named `id`, use the following for type definitions:
+
 ```ts
 class Cat {
- id: mongoose.Types.ObjectId;
- _id: mongoose.Types.ObjectId;
+  id: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
 }
 ```
-without any decorators. Mongoose will auto generate virtual 'id' for '_id', and a '_id' when saving.
