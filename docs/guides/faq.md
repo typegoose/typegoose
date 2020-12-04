@@ -37,3 +37,16 @@ A: because Typegoose doesn't modify any Mongoose code, it is still the same as M
 ### Why is 7.4.x constrained to mongoose 5.10.18?
 
 A: this because in mongoose 5.10.19 and higher, mongoose has its own typescript definitions, and typegoose is not upgraded for that yet
+
+## Edge Cases
+
+### I want to the return document with property `id` instead of `_id`
+
+Mongoose automatically adds an virtual named `id`, use the following for type definitions:
+
+```ts
+class Cat {
+  id: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
+}
+```
