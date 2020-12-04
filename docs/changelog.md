@@ -3,15 +3,6 @@ id: changelog
 title: "Changelog"
 ---
 
-<!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
-
-<!-- 
-## 7.2.x
-
-<sub>This Version is not yet released, only changes made until now are listed here</sub>
-
-- Add here
--->
 *`[IC]` means `Internal Change`*
 
 ## 7.4.5
