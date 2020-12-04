@@ -34,16 +34,15 @@ A: because Typegoose doesn't modify any Mongoose code, it is still the same as M
 
 **Note**: since `@types/mongoose@5.7.22` there are typings for `.create`, but are not fully compatible with Typegoose. For more information pleasae read [known-issues](guides/known-issues.md#typesmongoose5722-and-higher)
 
-# For Edge Cases
+## For Edge Cases
 
 ### I want to the return document with property 'id' instead of _id
 
 Just do
-```
-class Cat{
+```ts
+class Cat {
  id: mongoose.Types.ObjectId;
  _id: mongoose.Types.ObjectId;
 }
 ```
-without any decorators!
-since mongoose would auto generate virtual 'id' for '_id', and a '_id' when saving.
+without any decorators. Mongoose will auto generate virtual 'id' for '_id', and a '_id' when saving.
