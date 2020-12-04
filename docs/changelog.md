@@ -16,6 +16,7 @@ title: "Changelog"
 
 ## 7.4.5
 
+- Rename type `NDA` to `NumberOrDocumentOrDocumentArray` to be more understandable
 - Fix `Argument of type 'string[]' is not assignable to parameter of type '"insertMany"'.ts(2769)` [[typegoose#422](https://github.com/typegoose/typegoose/issues/362)]
 
 ## 7.4.4

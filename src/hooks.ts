@@ -7,7 +7,7 @@ import { assertion, getName } from './internal/utils';
 import { logger } from './logSettings';
 import type { DocumentType, EmptyVoidFn, IHooksArray } from './types';
 
-type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
+type NumberOrDocumentOrDocumentArray<T> = number | DocumentType<T> | DocumentType<T>[];
 
 // i know that some events cannot be async (like "init"), but because they are unified into bigger types, i cannot change it
 type ReturnVoid = void | Promise<void>;
@@ -22,14 +22,14 @@ type ModelPostFn<T> = (result: any, next: EmptyVoidFn) => ReturnVoid;
 type PostNumberResponse<T> = (result: number, next: EmptyVoidFn) => ReturnVoid;
 type PostSingleResponse<T> = (result: DocumentType<T>, next: EmptyVoidFn) => ReturnVoid;
 type PostMultipleResponse<T> = (result: DocumentType<T>[], next: EmptyVoidFn) => ReturnVoid;
-type PostRegExpResponse<T> = (result: NDA<T>, next: EmptyVoidFn) => ReturnVoid;
-type PostArrayResponse<T> = (result: NDA<T>, next: EmptyVoidFn) => ReturnVoid;
+type PostRegExpResponse<T> = (result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
+type PostArrayResponse<T> = (result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
 
 type PostNumberWithError<T> = (error: Error, result: number, next: HookNextErrorFn) => ReturnVoid;
 type PostSingleWithError<T> = (error: Error, result: DocumentType<T>, next: HookNextErrorFn) => ReturnVoid;
 type PostMultipleWithError<T> = (error: Error, result: DocumentType<T>[], next: HookNextErrorFn) => ReturnVoid;
-type PostRegExpWithError<T> = (error: Error, result: NDA<T>, next: HookNextErrorFn) => ReturnVoid;
-type PostArrayWithError<T> = (error: Error, result: NDA<T>, next: EmptyVoidFn) => ReturnVoid;
+type PostRegExpWithError<T> = (error: Error, result: NumberOrDocumentOrDocumentArray<T>, next: HookNextErrorFn) => ReturnVoid;
+type PostArrayWithError<T> = (error: Error, result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
 
 type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
 type NumberMethod = 'count';
