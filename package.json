@@ -38,12 +38,12 @@
   "license": "MIT",
   "peerDependencies": {
     "mongoose": "5.10.0 - 5.10.18",
-    "@types/mongoose": "^5.10.1"
+    "@types/mongoose": "^5.10.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.16",
     "@types/lodash": "^4.14.161",
-    "@types/mongoose": "^5.10.1",
+    "@types/mongoose": "^5.10.2",
     "@types/node": "^10.17.16",
     "@types/semver": "^7.3.4",
     "class-transformer": "^0.3.1",
