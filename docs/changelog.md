@@ -3,16 +3,12 @@ id: changelog
 title: "Changelog"
 ---
 
-<!--Sorry but linking to the issue/pr can only be made so in jekyll without more clutter-->
-
-<!-- 
-## 7.2.x
-
-<sub>This Version is not yet released, only changes made until now are listed here</sub>
-
-- Add here
--->
 *`[IC]` means `Internal Change`*
+
+## 7.4.5
+
+- Rename type `NDA` to `NumberOrDocumentOrDocumentArray` to be more understandable
+- Fix `Argument of type 'string[]' is not assignable to parameter of type '"insertMany"'.ts(2769)` [[typegoose#422](https://github.com/typegoose/typegoose/issues/362)]
 
 ## 7.4.4
 
