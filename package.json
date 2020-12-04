@@ -52,7 +52,7 @@
     "mongodb-memory-server": "^6.7.6",
     "mongoose": "5.10.0 - 5.10.18",
     "mongoose-findorcreate": "^3.0.0",
-    "prettier": "^2.1.2",
+    "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.4.4",
     "tslint": "^6.1.3",
