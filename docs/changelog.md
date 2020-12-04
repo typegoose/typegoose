@@ -14,6 +14,10 @@ title: "Changelog"
 -->
 *`[IC]` means `Internal Change`*
 
+## 7.4.5
+
+- Fix `Argument of type 'string[]' is not assignable to parameter of type '"insertMany"'.ts(2769)` [[typegoose#422](https://github.com/typegoose/typegoose/issues/362)]
+
 ## 7.4.4
 
 - Apply correct processing with WhatIsIt when options "get/set" are provided [[typegoose#422](https://github.com/typegoose/typegoose/issues/422)]

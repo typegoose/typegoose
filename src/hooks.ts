@@ -49,9 +49,6 @@ interface Hooks {
   post<T>(method: RegExp, fn: PostRegExpResponse<T>): ClassDecorator;
   post<T>(method: RegExp, fn: PostRegExpWithError<T>): ClassDecorator;
 
-  post<T>(method: QDM[], fn: PostArrayResponse<T>): ClassDecorator;
-  post<T>(method: QDM[], fn: PostArrayWithError<T>): ClassDecorator;
-
   post<T>(method: NumberMethod, fn: PostNumberResponse<T>): ClassDecorator;
   post<T>(method: NumberMethod, fn: PostNumberWithError<T>): ClassDecorator;
 
@@ -62,6 +59,9 @@ interface Hooks {
   post<T>(method: MultipleMethod, fn: PostMultipleWithError<T>): ClassDecorator;
 
   post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>): ClassDecorator;
+
+  post<T>(method: QDM | QDM[], fn: PostArrayResponse<T>): ClassDecorator;
+  post<T>(method: QDM | QDM[], fn: PostArrayWithError<T>): ClassDecorator;
 }
 
 // Note: TSDoc for the hooks can't be added without adding it to *every* overload
