@@ -23,7 +23,7 @@
     "coverage": "cat ./coverage/lcov.info | coveralls",
     "clean": "rimraf lib .tsbuildinfo coverage doc build",
     "prepare": "npm run build",
-    "version:patch": "npm version patch -m 'Release %s'"
+    "version:patch": "npm version patch -m 'release: %s'"
   },
   "repository": {
     "type": "git",
