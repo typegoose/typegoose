@@ -28,7 +28,7 @@ jobs:
       - name: Run Audit
         run: (npm audit || exit 0)
       - name: Test Compiling Everything & Lint
-        run: npm run buildtests
+        run: npm run build:tests
       - name: Test
         run: npm run test:coverage -- --colors
         env:
