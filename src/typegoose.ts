@@ -165,7 +165,7 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
   cl: U,
   options?: { existingMongoose?: mongoose.Mongoose; existingConnection: any }
 ) {
-  const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base.Model || mongoose.Model;
+  const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
 
   assertion(model.prototype instanceof mongooseModel, new TypeError(`"${model}" is not a valid Model!`));
   assertionIsClass(cl);
