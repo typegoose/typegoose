@@ -89,7 +89,10 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
     compiledmodel.syncIndexes();
   }
 
-  return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl);
+  return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
+    existingMongoose: roptions?.existingMongoose,
+    existingConnection: roptions?.existingConnection
+  });
 }
 
 /**
@@ -147,6 +150,7 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
  * Note: no gurantee that the type information is fully correct
  * @param model The model to store
  * @param cl The Class to store
+ * @param options? Optional param for existingMongoose or existingConnection
  * @example
  * ```ts
  * class Name {}
@@ -156,8 +160,14 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
  * const model = addModelToTypegoose(mongoose.model("Name", schema), Name);
  * ```
  */
-export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = {}>(model: mongoose.Model<any>, cl: U) {
-  assertion(model.prototype instanceof mongoose.Model, new TypeError(`"${model}" is not a valid Model!`));
+export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = {}>(
+  model: mongoose.Model<any>,
+  cl: U,
+  options?: { existingMongoose?: mongoose.Mongoose; existingConnection: any }
+) {
+  const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base.Model || mongoose.Model;
+
+  assertion(model.prototype instanceof mongooseModel, new TypeError(`"${model}" is not a valid Model!`));
   assertionIsClass(cl);
 
   const name = getName(cl);
