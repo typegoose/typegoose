@@ -163,7 +163,7 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
 export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = {}>(
   model: mongoose.Model<any>,
   cl: U,
-  options?: { existingMongoose?: mongoose.Mongoose; existingConnection: any }
+  options?: { existingMongoose?: mongoose.Mongoose; existingConnection?: any }
 ) {
   const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
 
