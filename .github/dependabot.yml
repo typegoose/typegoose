@@ -1,9 +1,10 @@
-version: 2
-updates:
-  - package-ecosystem: 'npm'
+version: 1
+update_configs:
+  - package_manager: 'npm'
     directory: '/'
-    schedule:
-      interval: 'daily'
-    commit-message:
-      # Prefix all commit messages with "npm"
+    update_schedule: 'daily'
+    commit_message:
       prefix: 'dependencies'
+    allowed_updates:
+      - match:
+          update_type: 'security'
