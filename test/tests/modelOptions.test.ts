@@ -2,7 +2,7 @@ import { omit } from 'lodash';
 import { DecoratorKeys, Severity } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
 import { getName, mergeMetadata } from '../../src/internal/utils';
-import { buildSchema, getModelForClass, modelOptions, mongoose, prop } from '../../src/typegoose';
+import { addModelToTypegoose, buildSchema, getModelForClass, modelOptions, mongoose, prop } from '../../src/typegoose';
 import { IModelOptions } from '../../src/types';
 import { connect } from '../utils/connect';
 
@@ -75,6 +75,54 @@ describe('existingMongoose & existingConnection', () => {
     expect(defaultMongoose.modelNames().includes(getName(ExistingMongoose))).toBe(false);
 
     expect(ExistingMongooseModel.db.db).toEqual(newMongoose.connection.db);
+
+    await newMongoose.disconnect();
+  });
+
+  it('should use add correct connection for assertion', async () => {
+    const defaultConnection = mongoose.connection;
+    const newConnection = await connect({ createNewConnection: true });
+
+    expect(defaultConnection).not.toEqual(newConnection);
+
+    class AnotherExistingConnection {
+      @prop()
+      public hello: string;
+    }
+
+    const schema = buildSchema(AnotherExistingConnection);
+    schema.add({ somesecondvalue: { type: String, required: true } });
+    const model = newConnection.model.bind(newConnection);
+    const compiledModel = model('AnotherExistingConnection', buildSchema(AnotherExistingConnection, {}));
+    addModelToTypegoose(compiledModel, AnotherExistingConnection, { existingConnection: newConnection });
+
+    expect(newConnection.modelNames()).toEqual([getName(AnotherExistingConnection)]);
+    expect(defaultConnection.modelNames().includes(getName(AnotherExistingConnection))).toBe(false);
+
+    await newConnection.close();
+  });
+
+  it('should use add correct mongoose for assertion', async () => {
+    const defaultMongoose = mongoose;
+    const newMongoose = new mongoose.Mongoose();
+    await connect({ createNewConnection: true, differentMongoose: newMongoose });
+
+    expect(defaultMongoose.connection).not.toEqual(newMongoose.connection);
+    expect(defaultMongoose).not.toEqual(newMongoose);
+
+    class AnotherExistingMongoose {
+      @prop()
+      public hello: string;
+    }
+
+    const schema = buildSchema(AnotherExistingMongoose);
+    schema.add({ somesecondvalue: { type: String, required: true } });
+    const model = newMongoose.model.bind(newMongoose);
+    const compiledModel = model('AnotherExistingMongoose', buildSchema(AnotherExistingMongoose, {}));
+    addModelToTypegoose(compiledModel, AnotherExistingMongoose, { existingMongoose: newMongoose });
+
+    expect(newMongoose.modelNames()).toEqual([getName(AnotherExistingMongoose)]);
+    expect(defaultMongoose.modelNames().includes(getName(AnotherExistingMongoose))).toBe(false);
 
     await newMongoose.disconnect();
   });
