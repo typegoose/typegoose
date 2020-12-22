@@ -75,6 +75,7 @@ class Defaulted {
 You may also set the `default` schema option to a function. Mongoose will execute that function and use the return value as the default. 
 
 Example: 
+
 ```ts
 class Defaulted {
   @prop({ 
