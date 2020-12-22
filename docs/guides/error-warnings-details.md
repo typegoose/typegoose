@@ -7,7 +7,7 @@ title: "Error & Warning Details"
 
 ### Mongoose Version [E001]
 
-Error: `Please use mongoose 5.9.14 or higher [E001]`
+Error: `Using mongoose <old-version>. Please use mongoose 5.9.14 or higher [E001]`
 
 Details:  
 Typegoose requires at least mongoose version 5.9.14, because that version changed something that affected typegoose internals
