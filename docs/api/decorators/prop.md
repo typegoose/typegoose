@@ -65,6 +65,7 @@ Accepts Type: `any`
 Set a default, when no value is given at creation time.
 
 Example: 
+
 ```ts
 class Defaulted {
   @prop({ default: 'hello world' })
