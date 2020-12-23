@@ -80,7 +80,7 @@ Example:
 ```ts
 class Defaulted {
   @prop({ 
-    default (this: DocumentType<Defaulted>) {
+    default: (this: DocumentType<Defaulted>) => {
       return `${this.firstName} ${this.lastName}`
     }
   })
