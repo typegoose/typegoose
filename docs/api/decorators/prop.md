@@ -79,11 +79,13 @@ Example:
 
 ```ts
 class Defaulted {
-  @prop({ required: true }) firstName!: string
-  @prop({ required: true }) lastName!: string
+  @prop({ required: true })
+  firstName!: string
+  @prop({ required: true })
+  lastName!: string
   
   @prop({ 
-    default (this: DocumentType<Defaulted>) {
+    default: function (this: DocumentType<Defaulted>) {
       return `${this.firstName} ${this.lastName}`
     }
   })
