@@ -39,7 +39,7 @@ class Cat {
   public kittens: Ref<Cat>;
 
   public areAllKittensExisting(): boolean {
-    if (isDocumentArray(this.kittens)) {
+    if (isRefTypeArray(this.kittens)) {
       // "this.kittens" now has the type of "Cat._id"'s RefType (This case ObjectId)
       return true;
     } else {
