@@ -5,10 +5,17 @@ title: "Changelog"
 
 *`[IC]` means `Internal Change`*
 
+## 7.4.6
+
+- add param for existingMongoose/existingConnection to addModelToTypegoose [[typegoose#436](https://github.com/typegoose/typegoose/issues/436)]
+- add mongoose version diagnostic info [[typegoose#458](https://github.com/typegoose/typegoose/issues/458)]
+- update mongoose version error to currently supported range (from `5.9.x` to `5.10.x`)
+- add warning when using higher mongoose version than `5.10.18`
+
 ## 7.4.5
 
 - Rename type `NDA` to `NumberOrDocumentOrDocumentArray` to be more understandable
-- Fix `Argument of type 'string[]' is not assignable to parameter of type '"insertMany"'.ts(2769)` [[typegoose#422](https://github.com/typegoose/typegoose/issues/362)]
+- Fix `Argument of type 'string[]' is not assignable to parameter of type '"insertMany"'.ts(2769)` [[typegoose#362](https://github.com/typegoose/typegoose/issues/362)]
 
 ## 7.4.4
 
