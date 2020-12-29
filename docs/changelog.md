@@ -9,6 +9,8 @@ title: "Changelog"
 
 - add param for existingMongoose/existingConnection to addModelToTypegoose [[typegoose#436](https://github.com/typegoose/typegoose/issues/436)]
 - add mongoose version diagnostic info [[typegoose#458](https://github.com/typegoose/typegoose/issues/458)]
+- update mongoose version error to currently supported range (from `5.9.x` to `5.10.x`)
+- add warning when using higher mongoose version than `5.10.18`
 
 ## 7.4.5
 
