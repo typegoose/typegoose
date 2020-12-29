@@ -16,6 +16,11 @@ if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version
   if (semver.lt(process.version.slice(1), '10.15.0')) {
     throw new Error('You are using a NodeJS Version below 10.15.0, Please Upgrade! [E002]');
   }
+
+  /* istanbul ignore next */
+  if (semver.gt(mongoose?.version, '5.10.18')) {
+    console.warn(`Using Unsupported mongoose version, highest supported is 5.10.18 (Current version: ${mongoose.version})`);
+  }
 }
 
 import { parseENV, setGlobalOptions } from './globalOptions';
