@@ -8,18 +8,13 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '5.10.0')) {
-    throw new Error(`Please use mongoose 5.10.0 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '5.11.19')) {
+    throw new Error(`Please use mongoose 5.11.19 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
   if (semver.lt(process.version.slice(1), '10.15.0')) {
     throw new Error('You are using a NodeJS Version below 10.15.0, Please Upgrade! [E002]');
-  }
-
-  /* istanbul ignore next */
-  if (semver.gt(mongoose?.version, '5.10.18')) {
-    console.warn(`Using Unsupported mongoose version, highest supported is 5.10.18 (Current version: ${mongoose.version})`);
   }
 }
 
