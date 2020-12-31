@@ -329,11 +329,11 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
     }
   }
 
-  if (customName !== undefined && typeof customName !== 'string') {
+  if (typeof customName === 'function') {
     return customName(options);
   }
 
-  if (customName === undefined) {
+  if (isNullOrUndefined(customName)) {
     return baseName;
   }
 
