@@ -46,6 +46,26 @@ const model = getModelForClass(MultiModel);
 expect(model.modelName).to.be.equal('Something');
 ```
 
+You can generate more dynamic names, if `customName` is given a function. The parameter object of the `modelOptions` decorator is injected into the function for possible further use.  
+
+Example:
+
+```ts
+  @modelOptions(
+    {
+      schemaOptions: { collection: 'SomethingDifferent' },
+      options: {
+        automaticName: false,
+        customName: (options) => `${options.schemaOptions?.collection}_someSuffix`
+      }
+    }
+  )
+class MultiModel {}
+
+const model = getModelForClass(MultiModel);
+expect(model.modelName).to.be.equal('SomethingDifferent_someSuffix');
+```
+
 If `customName` is used with `automaticName`, it will be a suffix of the class name.
 
 Example:
