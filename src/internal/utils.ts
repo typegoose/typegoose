@@ -317,6 +317,10 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
   const baseName: string = ctor.name;
   const customName = options.options?.customName;
 
+  if (typeof customName === 'function') {
+    return customName(options);
+  }
+
   if (options.options?.automaticName) {
     const suffix = customName ?? options.schemaOptions?.collection;
 
@@ -327,10 +331,6 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
     if (customName.length <= 0) {
       throw new TypeError(`"customName" must be a string AND at least one character ("${baseName}") [E015]`);
     }
-  }
-
-  if (typeof customName === 'function') {
-    return customName(options);
   }
 
   if (isNullOrUndefined(customName)) {
