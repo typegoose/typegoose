@@ -318,7 +318,11 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
   const customName = options.options?.customName;
 
   if (typeof customName === 'function') {
-    return customName(options);
+    const name: any = customName(options);
+
+    assertion(typeof name === 'string' && name.length > 0, new TypeError(`The return type of "customName" must be a string and must not be empty! ("${baseName}") [E020]`));
+
+    return name;
   }
 
   if (options.options?.automaticName) {

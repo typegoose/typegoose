@@ -351,9 +351,10 @@ export interface IModelOptions {
 
 export interface ICustomOptions {
   /**
-   * Set the modelName of the class
-   * if it is a function, run the function.
-   * if "automaticName" is true it sets a *suffix* instead of the whole name
+   * Set the modelName of the class.
+   * If it is a function, the function will be executed. The function will override
+   * "automaticName". If "automaticName" is true and "customName" is a string, it
+   * sets a *suffix* instead of the whole name.
    * @default schemaOptions.collection
    */
   customName?: string | CustomNameFunction;

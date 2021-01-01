@@ -137,15 +137,13 @@ it('should not make an automatic name (automaticName)', () => {
 });
 
 it('should use the given function to create the custom name', () => {
-  @modelOptions(
-    {
-      schemaOptions: { collection: 'SomethingDifferent' },
-      options: {
-        automaticName: false,
-        customName: (options) => `${options.schemaOptions?.collection}_someSuffix`
-      }
+  @modelOptions({
+    schemaOptions: { collection: 'SomethingDifferent' },
+    options: {
+      automaticName: false,
+      customName: (options) => `${options.schemaOptions?.collection}_someSuffix`
     }
-  )
+  })
   class UseFunctionForName {
     @prop()
     public test: string;
