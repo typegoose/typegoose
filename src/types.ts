@@ -32,6 +32,11 @@ export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = {
 
 export type Func = (...args: any[]) => any;
 
+/**
+ * The Type of a function to generate a custom model name.
+ */
+export type CustomNameFunction = (options: IModelOptions) => string;
+
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
 
 export type ValidatorFunction = (value: any) => boolean | Promise<boolean>;
@@ -314,7 +319,7 @@ export type RefType =
 // export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
 export type Ref<
   R,
-  T extends RefType = (R extends { _id?: RefType; } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined
+  T extends RefType = (R extends { _id?: RefType } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined
   > = R | T;
 
 /**
@@ -346,12 +351,13 @@ export interface IModelOptions {
 
 export interface ICustomOptions {
   /**
-   * Set the modelName of the class
-   *
-   * if "automaticName" is true it sets a *suffix* instead of the whole name
+   * Set the modelName of the class.
+   * If it is a function, the function will be executed. The function will override
+   * "automaticName". If "automaticName" is true and "customName" is a string, it
+   * sets a *suffix* instead of the whole name.
    * @default schemaOptions.collection
    */
-  customName?: string;
+  customName?: string | CustomNameFunction;
   /**
    * Enable Automatic Name generation of a model
    * Example:
@@ -441,7 +447,7 @@ export interface IndexOptions<T> {
   trim?: boolean; // whether to always call .trim() on the value
 
   weights?: {
-    [P in keyof Partial<T>]: number;
+    [P in keyof Partial<T>]: number
   };
 }
 

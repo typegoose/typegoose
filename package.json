@@ -36,8 +36,8 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "5.10.0 - 5.10.18",
-    "@types/mongoose": "^5.10.2"
+    "@types/mongoose": "^5.10.2",
+    "mongoose": "5.10.0 - 5.10.18"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^11.0.0",

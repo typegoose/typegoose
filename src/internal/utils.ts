@@ -315,22 +315,33 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
   const ctor: any = getRightTarget(cl);
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
   const baseName: string = ctor.name;
+  const customName = options.options?.customName;
+
+  if (typeof customName === 'function') {
+    const name: any = customName(options);
+
+    assertion(typeof name === 'string' && name.length > 0, new TypeError(`The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`));
+
+    return name;
+  }
 
   if (options.options?.automaticName) {
-    const suffix = options.options?.customName ?? options.schemaOptions?.collection;
+    const suffix = customName ?? options.schemaOptions?.collection;
 
     return !isNullOrUndefined(suffix) ? `${baseName}_${suffix}` : baseName;
   }
 
-  if (typeof options.options?.customName === 'string') {
-    if (options.options.customName.length <= 0) {
+  if (typeof customName === 'string') {
+    if (customName.length <= 0) {
       throw new TypeError(`"customName" must be a string AND at least one character ("${baseName}") [E015]`);
     }
-
-    return options.options.customName;
   }
 
-  return baseName;
+  if (isNullOrUndefined(customName)) {
+    return baseName;
+  }
+
+  return customName;
 }
 
 /**
