@@ -136,6 +136,42 @@ it('should not make an automatic name (automaticName)', () => {
   expect(model.modelName).toEqual('DAN');
 });
 
+it('should use the given function to create the custom name', () => {
+  @modelOptions({
+    schemaOptions: { collection: 'SomethingDifferent' },
+    options: {
+      automaticName: false,
+      customName: (options) => `${options.schemaOptions?.collection}_someSuffix`
+    }
+  })
+  class UseFunctionForName {
+    @prop()
+    public test: string;
+  }
+
+  const model = getModelForClass(UseFunctionForName);
+  expect(model.modelName).toEqual('SomethingDifferent_someSuffix');
+});
+
+it('should use the given function to create the custom name and ignore automatic name creation', () => {
+  @modelOptions(
+    {
+      schemaOptions: { collection: 'SomethingDifferent' },
+      options: {
+        automaticName: true,
+        customName: (options) => `${options.schemaOptions?.collection}_someSuffix`
+      }
+    }
+  )
+  class UseFunctionForName2 {
+    @prop()
+    public test: string;
+  }
+
+  const model = getModelForClass(UseFunctionForName2);
+  expect(model.modelName).toEqual('SomethingDifferent_someSuffix');
+});
+
 it('should not make an automatic name if no collection or customName are defined (automaticName)', () => {
   @modelOptions({ options: { automaticName: true } })
   class NoAutomaticName {

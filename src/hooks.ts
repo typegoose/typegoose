@@ -1,6 +1,6 @@
 // disable "no-unused" for this file, to keep hooks consistent
 // tslint:disable:no-unused
-import type { Query } from 'mongoose';
+import type { Query, Aggregate } from 'mongoose';
 
 import { DecoratorKeys } from './internal/constants';
 import { assertion, getName } from './internal/utils';
@@ -14,6 +14,7 @@ type ReturnVoid = void | Promise<void>;
 
 type HookNextErrorFn = (err?: Error) => ReturnVoid;
 
+type PreFnWithAggregate<T> = (this: Aggregate<T>, next: (error?: Error) => ReturnVoid, done: EmptyVoidFn) => ReturnVoid;
 type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => ReturnVoid;
 type PreFnWithQuery<T> = (this: Query<T>, next: (error?: Error) => ReturnVoid, done: EmptyVoidFn) => ReturnVoid;
 
@@ -31,10 +32,11 @@ type PostMultipleWithError<T> = (error: Error, result: DocumentType<T>[], next: 
 type PostRegExpWithError<T> = (error: Error, result: NumberOrDocumentOrDocumentArray<T>, next: HookNextErrorFn) => ReturnVoid;
 type PostArrayWithError<T> = (error: Error, result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
 
+type AggregateMethod = 'aggregate';
 type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
 type NumberMethod = 'count';
 type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'findOneAndDelete' | 'deleteOne' | DocumentMethod;
-type MultipleMethod = 'find' | 'update' | 'deleteMany';
+type MultipleMethod = 'find' | 'update' | 'deleteMany' | 'aggregate';
 type QueryMethod = 'count' | 'countDocuments' | 'estimatedDocumentCount' | 'find' | 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'update' | 'updateOne' | 'updateMany' | 'findOneAndDelete' | 'deleteOne' | 'deleteMany';
 type ModelMethod = 'insertMany';
 type QMR = QueryMethod | ModelMethod | RegExp;
@@ -42,6 +44,8 @@ type QDM = QMR | DocumentMethod;
 type DR = DocumentMethod | RegExp;
 
 interface Hooks {
+  pre<T>(method: AggregateMethod, fn: PreFnWithAggregate<T>): ClassDecorator;
+
   pre<T>(method: DR | DR[], fn: PreFnWithDocumentType<T>): ClassDecorator;
 
   pre<T>(method: QMR | QMR[], fn: PreFnWithQuery<T>): ClassDecorator;

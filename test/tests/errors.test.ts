@@ -300,6 +300,18 @@ it('should throw when "customName" is used, but length <= 0 [TypeError]', () => 
   }
 });
 
+it('should throw when "customName" is a function, but the return value is not a string or an empty string [TypeError]', () => {
+  try {
+    // @ts-expect-error
+    @modelOptions({ options: { customName: () => 1234 } })
+    class TestCustomNameError2 { }
+    getName(TestCustomNameError2);
+    fail('Expected to throw "TypeError"');
+  } catch (err) {
+    expect(err).toBeInstanceOf(TypeError);
+  }
+});
+
 it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
   try {
     mapOptions({}, Error, undefined, 'undefined-pkey');
