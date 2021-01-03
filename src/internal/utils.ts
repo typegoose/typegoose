@@ -320,7 +320,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
   if (typeof customName === 'function') {
     const name: any = customName(options);
 
-    assertion(typeof name === 'string' && name.length > 0, new TypeError(`The return type of "customName" must be a string and must not be empty! ("${baseName}") [E020]`));
+    assertion(typeof name === 'string' && name.length > 0, new TypeError(`The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`));
 
     return name;
   }

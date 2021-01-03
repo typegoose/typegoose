@@ -226,6 +226,12 @@ class ErrorClass {
   public someProp?: Ref<ErrorClass>;
 }
 ```
+### Return type of function assigned to "customName" doesn't return a string or is empty [E022]
+
+Error: `The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`
+
+Details:  
+The function used to create a custom model name (via the `modelOptions` "option" prop) must return a string and it should not be empty. 
 
 ## Warnings
 
