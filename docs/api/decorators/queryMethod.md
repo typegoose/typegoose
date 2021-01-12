@@ -18,8 +18,8 @@ Example:
 // an interface is needed to add query-function types to the class
 interface QueryHelpers {
   // use the actual function types dynamically
-  findByName: QueryMethod<typeof findByName>;
-  findByLastname: QueryMethod<typeof findByLastname>;
+  findByName: AsQueryMethod<typeof findByName>;
+  findByLastname: AsQueryMethod<typeof findByLastname>;
 }
 
 function findByName(this: ReturnModelType<typeof Person, QueryHelpers>, name: string) {
@@ -30,7 +30,7 @@ class Person {
   @prop({ required: true })
   public name: string;
 }
-const PersonModel = getModelForClass(Person);
+const PersonModel = getModelForClass<typeof Person, QueryHelpers>(Person);
 
 // thanks to "QueryHelpers" the function "findByName" should exist here and return the correct type
 const docs: DocumentType<Person>[] = await PersonModel.find()

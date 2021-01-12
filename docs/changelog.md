@@ -5,6 +5,11 @@ title: "Changelog"
 
 *`[IC]` means `Internal Change`*
 
+## 7.4.7
+
+- Renamed type `QueryMethod` to `AsQueryMethod` to not conflict with the PascalCase export for decorator `@queryMethod` [[typegoose#465](https://github.com/typegoose/typegoose/issues/465)]
+- Add aggregate hook [[typegoose#471](https://github.com/typegoose/typegoose/issues/471)]
+
 ## 7.4.6
 
 - add param for existingMongoose/existingConnection to addModelToTypegoose [[typegoose#436](https://github.com/typegoose/typegoose/issues/436)]

@@ -14,7 +14,7 @@ import {
   prop,
   queryMethod
 } from '../../src/typegoose';
-import type { QueryMethod, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
+import type { AsQueryMethod, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -363,8 +363,8 @@ it('should add "null" to the enum (addNullToEnum)', async () => {
 
 it('should add query Methods', async () => {
   interface FindHelpers {
-    findByName: QueryMethod<typeof findByName>;
-    findByLastname: QueryMethod<typeof findByLastname>;
+    findByName: AsQueryMethod<typeof findByName>;
+    findByLastname: AsQueryMethod<typeof findByLastname>;
   }
   function findByName(this: ReturnModelType<typeof QueryMethodsClass, FindHelpers>, name: string) {
     return this.find({ name });
