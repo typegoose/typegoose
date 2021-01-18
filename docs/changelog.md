@@ -5,6 +5,10 @@ title: "Changelog"
 
 *`[IC]` means `Internal Change`*
 
+## 7.4.8
+
+- Fix when using `get/set` option to use the schema instead of the class [[typegoose#478](https://github.com/typegoose/typegoose/issues/478)]
+
 ## 7.4.7
 
 - Renamed type `QueryMethod` to `AsQueryMethod` to not conflict with the PascalCase export for decorator `@queryMethod` [[typegoose#465](https://github.com/typegoose/typegoose/issues/465)]
