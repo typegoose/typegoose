@@ -170,6 +170,15 @@ Error: `Type does not have an valid "OptionsConstructor"! (${getName(loggerType)
 Details:  
 The `Type` provided does not have an property `OptionsConstructor` (`undefined / null`), this is required to map options of an array & map
 
+Typegoose uses the property [`OptionsConstructor`](https://github.com/Automattic/mongoose/tree/master/lib/options) on types (ex `mongoose.Schema.Types.ObjectId.OptionsConstructor`) to correctly map the options (from `@prop(options)`) to the appropiate place
+
+If custom types are used and they dont have `OptionsConstructor`, and easy way to workaround this error is the following:
+
+```ts
+mongoose.Schema.Types.Custom.OptionsConstructor = {}; // only do this if really necessary
+mongoose.Schema.Types.Custom.OptionsConstructor = mongoose.SchemaTypeOptions; // prefer this if possible
+```
+
 ### Setting "Mixed" is not allowed [E017]
 
 Error: `Setting "Mixed" is not allowed! (${name}, ${key}) [E017]`
