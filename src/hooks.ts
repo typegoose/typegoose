@@ -1,6 +1,6 @@
 // disable "no-unused" for this file, to keep hooks consistent
 // tslint:disable:no-unused
-import type { Query, Aggregate } from 'mongoose';
+import type { Aggregate, Query } from 'mongoose';
 
 import { DecoratorKeys } from './internal/constants';
 import { assertion, getName } from './internal/utils';
