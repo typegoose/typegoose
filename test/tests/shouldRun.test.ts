@@ -420,3 +420,17 @@ it('should be map none/array/map correctly if using get/set options [typegoose#4
   expect((schema.path('map') as any).$__schemaType).toBeInstanceOf(mongoose.Schema.Types.Number);
   expect((schema.path('map') as any)).not.toHaveProperty('caster');
 });
+
+it('should not Error if get/set options are used and type is an class and is an array [typegoose#478]', async () => {
+  class SubGetSetClassArray {
+    @prop()
+    public dummy?: string;
+  }
+
+  class ParentGetSetClassArray {
+    @prop({ get: (v) => v, set: (v) => v, type: () => [SubGetSetClassArray] })
+    public nested?: SubGetSetClassArray[];
+  }
+
+  buildSchema(ParentGetSetClassArray);
+});
