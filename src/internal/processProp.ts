@@ -174,22 +174,25 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     utils.assertion(typeof rawOptions.set === 'function', new TypeError(`"${name}.${key}" does not have a set function! [E007]`));
     utils.assertion(typeof rawOptions.get === 'function', new TypeError(`"${name}.${key}" does not have a get function! [E007]`));
 
+    // use an compiled Schema if the type is an Nested Class
+    const useType = schemas.has(utils.getName(Type)) ? buildSchema(Type) : Type;
+
     switch (propKind) {
       case WhatIsIt.ARRAY:
         schemaProp[key] = {
           ...schemaProp[key][0],
-          ...utils.mapArrayOptions(rawOptions, Type, target, key)
+          ...utils.mapArrayOptions(rawOptions, useType, target, key)
         };
 
         return;
       case WhatIsIt.MAP:
-        const mapped = utils.mapOptions(rawOptions, Type, target, key);
+        const mapped = utils.mapOptions(rawOptions, useType, target, key);
 
         schemaProp[key] = {
           ...schemaProp[key],
           ...mapped.outer,
           type: Map,
-          of: { type: Type, ...mapped.inner }
+          of: { type: useType, ...mapped.inner }
         };
 
         return;
@@ -197,7 +200,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         schemaProp[key] = {
           ...schemaProp[key],
           ...rawOptions,
-          type: Type
+          type: useType
         };
 
         return;
