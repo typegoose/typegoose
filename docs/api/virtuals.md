@@ -5,13 +5,15 @@ title: 'Virtuals'
 
 ## get & set
 
-Mongoose offers developers the option to create [virtual properties](http://mongoosejs.com/docs/api.html#schema_Schema-virtual). This means
-that actual database read/write will not occur. These are just 'calculated properties'. A virtual property can have a setter and a getter.
-TypeScript also has a similar feature which Typegoose uses for virtual property definitions (using the `prop` decorator).
+Mongoose offers developers the option to create [virtual properties](http://mongoosejs.com/docs/api.html#schema_Schema-virtual). As virtual properties, they are just 'calculated properties', meaning, there are no actual reads or writes to the database.<br/>
+A virtual property can have a setter and a getter. ES6 Classes have `get` & `set` functions, which Mongoose uses for virtual property definitions (no Typegoose decorator can be used on them, because they are handled directly by Mongoose).
 
-*Do not confuse this "get & set" with [`@prop`'s get & set](api/decorators/prop.md#get--set)*
-
-**Know that no decorator can be used for the getter's & setter's!** *(Mongoose doesn't allow setting options for virtuals)*
+:::caution
+Do not confuse this `get` & `set` with [`@prop`'s `get` & `set`](api/decorators/prop.md#get--set)
+:::
+:::caution
+No Typegoose decorator can be used on `get` & `set` functions, because they are directly handled by mongoose
+:::
 
 Example:
 
