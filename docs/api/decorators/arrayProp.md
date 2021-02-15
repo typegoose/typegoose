@@ -7,21 +7,27 @@ title: 'Array Prop'
 
 Please note that Mongoose initializes arrayProp arrays with `[]` instead of `null` / `undefined`.
 
-**Note**: Deprecated since 7.1.1, replaced with [`@prop`](api/decorators/prop.md)  
-**Note**: This decorator will get removed in 8.0
+:::info
+Deprecated since 7.1.1, replaced with [`@prop`](./prop.md)  
+:::
+:::caution
+This decorator will get removed in 8.0
+:::
 
 ## Options
 
-*All options from [`@prop`](api/decorators/prop.md#options) are valid.*
+*All options from [`@prop`](./prop.md#options) are valid.*
 
 ### items
 
 Accepts Type: `any`  
-(alias for [`type`](api/decorators/prop.md#type) from `@prop`)
+(alias for [`type`](./prop.md#type) from `@prop`)
 
-Deprecated since `7.2.0`, use [`@prop`'s `type`](api/decorators/prop.md#type)
+:::info
+Deprecated since `7.2.0`, use [`@prop`'s `type`](./prop.md#type)
+:::
 
-(see [`type`](api/decorators/prop.md#type) for Examples)
+(see [`type`](./prop.md#type) for Examples)
 
 ### innerOptions
 
@@ -29,7 +35,7 @@ Deprecated since `7.2.0`, use [`@prop`'s `type`](api/decorators/prop.md#type)
 -> Use this only when absolutely necessary and please open a new
 issue about it
 
-[see `innerOptions` in prop](api/decorators/prop.md#innerOptions)
+[see `innerOptions` in prop](./prop.md#innerOptions)
 
 ### outerOptions
 
@@ -37,11 +43,11 @@ issue about it
 -> Use this only when absolutely necessary and please open a new
 issue about it
 
-[see `outerOptions` in prop](api/decorators/prop.md#outerOptions)
+[see `outerOptions` in prop](./prop.md#outerOptions)
 
 ### dim
 
 `dim` is used to set the Dimensions this array should have (for something like an matrix)  
 -> needs to be higher than 0
 
-[see `dim` in prop](api/decorators/prop.md#dim)
+[see `dim` in prop](./prop.md#dim)

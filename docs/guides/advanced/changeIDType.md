@@ -12,7 +12,9 @@ class SomeChangedID {
 }
 ```
 
-Note: when the type is not `ObjectID`, you need to explicitly set the `_id` before saving.
+:::note
+When the type is not `ObjectID`, the `_id` property needs to be manually set before saving.
+:::
 
 To disable the `_id` field altogether (useful in arrays of subdocuments), add [`@prop({ _id: false })`](api/decorators/prop.md#_id) or [`@modelOptions({ schemaOptions: { _id: false } })`](https://mongoosejs.com/docs/guide.html#_id).
 
@@ -39,8 +41,13 @@ class SomeChangedIDBase extends Base<string> {
 }
 ```
 
-**Notes**:
-- it needs to be duplicated, because the `Base` class only provides _types_ and doesn't actually change anything at runtime.
-- to have `_id` not be `any`, the project needs to have either `noImplicitAny` or `strict` active in the `tsconfig`.
+:::note
+The `_id` property needs to be duplicated, because the default class `Base` dosnt change runtime things (`Base` does not use `@prop`)
+:::
+:::note
+To have `_id` not be `any`, the project needs to have either `noImplicitAny` or `strict` active in the `tsconfig`.
+:::
 
-Restriction: this method (extending Base) can only be used with types that are in `RefType` (all of `mongoose.Schema.Types` should work except `Array`, `Mixed`, `Boolean`).
+:::info Restriction
+This method (extending Base) can only be used with types that are in `RefType` (all of `mongoose.Schema.Types` should work except `Array`, `Mixed`, `Boolean`).
+:::

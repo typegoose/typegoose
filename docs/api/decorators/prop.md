@@ -7,7 +7,7 @@ title: 'Prop'
 - `options` is to set [all options](#options)
 - `kind` is to overwrite what kind of prop this is (should be auto-inferred), [read more here](#whatisit)
 
-## Options
+## Single Options
 
 ### required
 
@@ -93,7 +93,9 @@ class Defaulted {
 }
 ```
 
-Note: to have the `this` keyword correctly typed, you have to pass a [this parameter](https://www.typescriptlang.org/docs/handbook/functions.html#this-parameters).
+:::note
+To have the `this` keyword correctly typed, you have to pass a [this parameter](https://www.typescriptlang.org/docs/handbook/functions.html#this-parameters).
+:::
 
 ### _id
 
@@ -252,8 +254,12 @@ In order to retrieve a prop marked as `select: false`, you must explicitly ask f
 const dummies = await DummyModel.find().select('+hello').exec();
 ```
 
-Note: `select()` accepts an array as well  
-Note: `select()` accepts a long string with space as a separator
+:::note
+`select()` accepts an array as well
+:::
+:::note
+`select()` accepts a long string with space as a separator
+:::
 
 ### get & set
 
@@ -262,7 +268,9 @@ Accepts Type: `(input) => output`
 set getters & setters for fields, it is not virtual  
 -> both get & set must be defined all the time, even when just wanting to use one
 
-Note: if the WhatIsIt (Primitive / Array / Map) is different from what is got from the reflection, it requires **explicit** setting that it is different
+:::note
+If the [WhatIsIt](#whatisit) (Primitive / Array / Map) is different from what is got from the reflection, it requires **explicit** setting that it is different
+:::
 
 Pre-process string to string:
 
@@ -289,7 +297,9 @@ Accepts Type: `any | () => any`
 
 Overwrite the type generated for the `design:type` reflection
 
-**Note**: Mongoose initializes arrayProp arrays with `[]` instead of `null` / `undefined`
+:::note
+Mongoose initializes arrayProp arrays with `[]` instead of `null` / `undefined`
+:::
 
 Example: Arrays (array item types can't be automatically inferred via Reflect)
 
@@ -337,8 +347,10 @@ Accepts Type: `enum | any[]`
 
 Only allow values from the enum (best practice is to use TypeScript's enum).
 
-Note: `design:type` will be set to `String` if the enum is full of Strings, and `Number` if full of Numbers, and `Object` of the enum
+:::note
+`design:type` will be set to `String` if the enum is full of Strings, and `Number` if full of Numbers, and `Object` of the enum
 contains both.
+:::
 
 Example for String-Enums:
 
@@ -379,7 +391,9 @@ Accepts Type: `boolean`
 
 Adds "null" to the enum array.
 
-**Note**: this doesn't work if the value is `required`
+:::note
+This doesn't work if the value is `required`
+:::
 
 Example:
 
@@ -407,7 +421,9 @@ Accepts Type: `() => [DiscriminatorObject | Class]`
 
 Use this function for embedded discriminators.
 
-**Note**: the `discriminatorKey` (like in the example property `type`) needs to be always set in a newly created document (via `.create({..., type: "..."})`, or `.save()`)
+:::note
+The `discriminatorKey` (like in the example property `type`) needs to be always set in a newly created document (via `.create({..., type: "..."})`, or `.save()`)
+:::
 
 Example for `[Class]`:
 
@@ -497,11 +513,14 @@ await area.save();
 
 ### innerOptions
 
-`innerOptions` is used to overwrite options to be at the "Type" level  
--> Use this only when absolutely necessary and please open a new
-issue about it
+`innerOptions` is used to overwrite options to be at the "Type" level
 
-**Note**: this option can be used everywhere `mapOptions` function is called (currently being `WhatIsIt.ARRAY` and `WhatIsIt.MAP`)
+:::caution
+Use this only when absolutely necessary and please open a new issue about it
+:::
+:::note
+This option can be used everywhere `mapOptions` function is called (currently being `WhatIsIt.ARRAY` and `WhatIsIt.MAP`)
+:::
 
 Example:
 
@@ -531,11 +550,14 @@ class Something {
 
 ### outerOptions
 
-`outerOptions` is used to overwrite options to be at the "Array" level  
--> Use this only when absolutely necessary and please open a new
-issue about it
+`outerOptions` is used to overwrite options to be at the "Array" level
 
-**Note**: this option can be used everywhere `mapOptions` function is called (currently being `WhatIsIt.ARRAY` and `WhatIsIt.MAP`)
+:::caution
+Use this only when absolutely necessary and please open a new issue about it
+:::
+:::note
+This option can be used everywhere `mapOptions` function is called (currently being `WhatIsIt.ARRAY` and `WhatIsIt.MAP`)
+:::
 
 Example:
 
@@ -565,9 +587,11 @@ class Something {
 
 <!--Below are just the Specific Options-->
 
-### Array Options
+## Array Options
 
-**Note**: option `type`(formally `items`) must be provided, otherwise the array will result in `Mixed` [read typegoose issue #300 for more](https://github.com/typegoose/typegoose/issues/300)
+:::note
+Option `type`(formally `items`) must be provided, otherwise the array will result in `Mixed` [read typegoose issue #300 for more](https://github.com/typegoose/typegoose/issues/300)
+:::
 
 Example:
 
@@ -583,16 +607,18 @@ class Cat {
 }
 ```
 
-#### items
+### items
 
 Accepts Type: `any`  
 (alias for [`type`](#type) from `@prop`)
 
+:::info
 Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
+:::
 
 (see [`type`](#type) for Examples)
 
-#### dim
+### dim
 
 `dim` is used to set the Dimensions this array should have (for something like an matrix)  
 -> needs to be higher than 0  
@@ -624,7 +650,7 @@ class ArrayInType {
 }
 ```
 
-### Map Options
+## Map Options
 
 Example:
 
@@ -635,18 +661,20 @@ class SomeMapClass {
 }
 ```
 
-#### of
+### of
 
 Accepts Type: `any`  
 (alias for [`type`](#type) from `@prop`)
 
+:::info
 Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
+:::
 
 (see [`type`](#type) for Examples)
 
-### String Transform options
+## String Transform options
 
-#### lowercase
+### lowercase
 
 Accepts Type: `boolean`
 
@@ -661,7 +689,7 @@ class LowerCased {
 }
 ```
 
-#### uppercase
+### uppercase
 
 Accepts Type: `boolean`
 
@@ -676,7 +704,7 @@ class UpperCased {
 }
 ```
 
-#### trim
+### trim
 
 Accepts Type: `boolean`
 
@@ -691,9 +719,9 @@ class Trimmed {
 }
 ```
 
-### String Validation options
+## String Validation options
 
-#### maxlength
+### maxlength
 
 Accepts Type: `number`
 
@@ -708,7 +736,7 @@ class MaxLengthed {
 }
 ```
 
-#### minlength
+### minlength
 
 Accepts Type: `number`
 
@@ -723,7 +751,7 @@ class MinLengthed {
 }
 ```
 
-#### match
+### match
 
 Accepts Type: `RegExp`
 
@@ -738,9 +766,9 @@ class RegExpString {
 }
 ```
 
-### Number Validation options
+## Number Validation options
 
-#### max
+### max
 
 Accepts Type: `number`
 
@@ -755,7 +783,7 @@ class Maxed {
 }
 ```
 
-#### min
+### min
 
 Accepts Type: `number`
 

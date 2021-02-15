@@ -5,18 +5,24 @@ title: "Map Prop"
 
 `@mapProp(options: object)` is a decorator which makes it possible to create map schema properties, here are just the differences listed
 
-**Note**: this decorator will get removed in 8.0
-**Note**: Deprecated since 7.1.1, replace with [`@prop`](api/decorators/prop.md)
+:::info
+Deprecated since 7.1.1, replace with [`@prop`](./prop.md)
+:::
+:::caution
+This decorator will get removed in 8.0
+:::
 
 ## Options
 
-*All options from [`@prop`](api/decorators/prop.md#options) are valid*
+*All options from [`@prop`](./prop.md#options) are valid*
 
 ### of
 
 Accepts Type: `any`  
-(alias for [`type`](api/decorators/prop.md#type) from `@prop`)
+(alias for [`type`](./prop.md#type) from `@prop`)
 
-Deprecated since `7.2.0`, use [`@prop`'s `type`](api/decorators/prop.md#type)
+:::info
+Deprecated since `7.2.0`, use [`@prop`'s `type`](./prop.md#type)
+:::
 
-(see [`type`](api/decorators/prop.md#type) for Examples)
+(see [`type`](./prop.md#type) for Examples)

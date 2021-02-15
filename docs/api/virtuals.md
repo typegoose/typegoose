@@ -164,4 +164,6 @@ class Parent {
 }
 ```
 
-Note: these options will be applied to all classes which inherit the class that got the options applied.
+:::note
+These options will be applied to all classes which inherit the class that got the options applied.
+:::

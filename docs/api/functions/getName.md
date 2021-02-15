@@ -5,7 +5,9 @@ title: 'Get Name For Class'
 
 `getName(class)` gets the name of the resulting model (accounts for `customName` & `automaticName`)
 
-**Note**: this function only works on classes, not on models or schemas.
+:::note
+This function only works on classes, not on models or schemas.
+:::
 
 ## Example
 
