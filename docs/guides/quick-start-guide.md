@@ -83,15 +83,15 @@ class User {
 
 ### Requirements
 
-- TypeScript ^3.9 (since 7.1)
-- NodeJS ^10.15.0
-- Mongoose ^5.10.4
+- TypeScript `^3.9` (since 7.1)
+- NodeJS `^10.15.0`
+- Mongoose `5.10.18` ([look here for why this version](./faq.md#why-is-74x-constrained-to-mongoose-51018))
 - An IDE that supports TypeScript linting (VSCode is recommended)
 - This Guide expects you to know how Mongoose (or at least its models) works
 - `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
 - tsconfig option `target` being `ES6`
 
-## Install
+### Install
 
 ```sh
 npm i -s @typegoose/typegoose # install typegoose itself
