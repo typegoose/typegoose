@@ -8,9 +8,12 @@ The Type `ReturnModelType<T, QueryHelpers>` is the type used to have type inform
 - `T` is the logical `AND` of `mongoose.Model<DocumentType<T>>` and `T`
 - `QueryHelpers` is for a Query-Helpers interface, [more here](api/decorators/queryMethod.md)
 
-**Notes**:
-- It has to be always with `typeof Class`, otherwise it will not work
-- This type should always be used over (the now internal) `ModelType`
+:::note
+It has to be always with `typeof Class`, otherwise it will not work
+:::
+:::note
+This type should always be used over (the now internal) `ModelType`
+:::
 
 ## Example
 
