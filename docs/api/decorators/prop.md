@@ -122,19 +122,29 @@ Set which class to use for Reference (this cannot be inferred by the type).
 Example:
 
 ```ts
-class Nested {}
+class Kitten {
+  @prop()
+  public name?: string;
+}
 
-class Parent {
-  @prop({ ref: Nested })
-  public nest: Ref<Nested>;
+class Cat {
+  // single examples
+  @prop({ ref: () => Kitten })
+  public kitten?: Ref<Kitten>;
   // or
-  @prop({ ref: 'Nested' })
-  public nest: Ref<Nested>;
+  @prop({ ref: 'Kitten' })
+  public kitten?: Ref<Kitten>;
+
+  // array examples
+  @prop({ ref: () => Kitten })
+  public kittens?: Ref<Kitten>[];
+  // or
+  @prop({ ref: 'Kitten' })
+  public kittens?: Ref<Kitten>[];
 }
 ```
 
-The `'Nested'` form is useful to avoid unintuitive errors due to circular dependencies, such as
-`Error: Options "ref" is set, but is undefined/null!`.
+The `'Nested'`(as string) form is useful to avoid unintuitive errors due to circular dependencies, such as `Error: Options "ref" is set, but is undefined/null!`.
 
 ### refPath
 
