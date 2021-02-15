@@ -32,7 +32,9 @@ A: because I (hasezoey) don't have permissions over the old `typegoose` reposito
 
 A: because Typegoose doesn't modify any Mongoose code, it is still the same as Mongoose's original `new Model()`, you would have to do `new Model({} as Class)` (or sometimes `new Model({} as Partial<Class>)`, because of functions.)
 
-**Note**: since `@types/mongoose@5.7.22` there are typings for `.create`, but are not fully compatible with Typegoose. For more information please read [known-issues](guides/known-issues.md#typesmongoose5722-and-higher)
+:::note
+since `@types/mongoose@5.7.22` there are typings for `.create`, but are not fully compatible with Typegoose. For more information please read [known-issues](guides/known-issues.md#typesmongoose5722-and-higher)
+:::
 
 ### Why is 7.4.x constrained to mongoose 5.10.18?
 
