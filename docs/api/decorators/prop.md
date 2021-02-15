@@ -5,7 +5,7 @@ title: 'Prop'
 
 `@prop(options: object, kind: WhatIsIt)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
 - `options` is to set [all options](#options)
-- `kind` is to overwrite what kind of prop this is (None = Normal, Array = for arrays, Map = for Maps) (should be auto-inferred)
+- `kind` is to overwrite what kind of prop this is (should be auto-inferred), [read more here](#whatisit)
 
 ## Options
 
@@ -64,7 +64,7 @@ Accepts Type: `any`
 
 Set a default, when no value is given at creation time.
 
-Example: 
+Example:
 
 ```ts
 class Defaulted {
@@ -73,9 +73,9 @@ class Defaulted {
 }
 ```
 
-You may also set the `default` schema option to a function. Mongoose will execute that function and use the return value as the default. 
+You may also set the `default` schema option to a function. Mongoose will execute that function and use the return value as the default.
 
-Example: 
+Example:
 
 ```ts
 class Defaulted {
@@ -92,6 +92,7 @@ class Defaulted {
   public fullName?: string; // mark as optional, because it will be defaulted
 }
 ```
+
 Note: to have the `this` keyword correctly typed, you have to pass a [this parameter](https://www.typescriptlang.org/docs/handbook/functions.html#this-parameters).
 
 ### _id
@@ -122,19 +123,29 @@ Set which class to use for Reference (this cannot be inferred by the type).
 Example:
 
 ```ts
-class Nested {}
+class Kitten {
+  @prop()
+  public name?: string;
+}
 
-class Parent {
-  @prop({ ref: Nested })
-  public nest: Ref<Nested>;
+class Cat {
+  // single examples
+  @prop({ ref: () => Kitten })
+  public kitten?: Ref<Kitten>;
   // or
-  @prop({ ref: 'Nested' })
-  public nest: Ref<Nested>;
+  @prop({ ref: 'Kitten' })
+  public kitten?: Ref<Kitten>;
+
+  // array examples
+  @prop({ ref: () => Kitten })
+  public kittens?: Ref<Kitten>[];
+  // or
+  @prop({ ref: 'Kitten' })
+  public kittens?: Ref<Kitten>[];
 }
 ```
 
-The `'Nested'` form is useful to avoid unintuitive errors due to circular dependencies, such as
-`Error: Options "ref" is set, but is undefined/null!`.
+The `'Nested'`(as string) form is useful to avoid unintuitive errors due to circular dependencies, such as `Error: Options "ref" is set, but is undefined/null!`.
 
 ### refPath
 
@@ -756,5 +767,19 @@ Example:
 class Mined {
   @prop({ min: 0 })
   public mined?: number; // the value must be at least 0
+}
+```
+
+## WhatIsIt
+
+This is an Enum to represent what the prop should be, this is in most cases automatically set, it can be overwritten in the second parameter of `@prop`
+
+Full Enum:
+
+```ts
+enum WhatIsIt {
+  ARRAY,
+  MAP,
+  NONE // default for properties if no Map / Array is detected
 }
 ```
