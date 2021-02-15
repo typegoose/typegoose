@@ -9,7 +9,9 @@ The Type `DocumentType<T>` is the type used for Documents.
 
 -> It is the logical 'AND' of the `mongoose.Document` and `T`
 
-Note: when `typeof Class` is used, it might not work.
+:::note
+When `typeof Class` is used, it might not work.
+:::
 
 ## Example
 
