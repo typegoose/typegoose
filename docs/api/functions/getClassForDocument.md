@@ -5,7 +5,9 @@ title: 'Get Class for Document'
 
 `getClassForDocument(doc: DocumentType<any>)` gets the Class used in the model creation.
 
-Note: this only works if the class / model was created with Typegoose OR added with [`addModelToTypegoose`](api/functions/addModelToTypegoose.md).
+:::note
+This only works if the class / model was created with Typegoose OR added with [`addModelToTypegoose`](api/functions/addModelToTypegoose.md).
+:::
 
 ## Example
 
