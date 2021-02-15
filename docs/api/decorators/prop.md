@@ -5,7 +5,7 @@ title: 'Prop'
 
 `@prop(options: object, kind: WhatIsIt)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
 - `options` is to set [all options](#options)
-- `kind` is to overwrite what kind of prop this is (None = Normal, Array = for arrays, Map = for Maps) (should be auto-inferred)
+- `kind` is to overwrite what kind of prop this is (should be auto-inferred), [read more here](#whatisit)
 
 ## Options
 
@@ -767,5 +767,19 @@ Example:
 class Mined {
   @prop({ min: 0 })
   public mined?: number; // the value must be at least 0
+}
+```
+
+## WhatIsIt
+
+This is an Enum to represent what the prop should be, this is in most cases automatically set, it can be overwritten in the second parameter of `@prop`
+
+Full Enum:
+
+```ts
+enum WhatIsIt {
+  ARRAY,
+  MAP,
+  NONE // default for properties if no Map / Array is detected
 }
 ```
