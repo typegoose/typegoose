@@ -9,7 +9,9 @@ title: 'Plugins'
 
 -> Typegoose has a [default-class for `findOrCreate`](guides/defaultClasses.md#findorcreate) with all the types supplied by the plugin
 
-**Note**: plugin-functions that have types and options defined, are automatically inferred, and can be manually overwritten with generic `PluginOptions`.
+:::note
+Plugin-functions that have types and options defined, are automatically inferred, and can be manually overwritten with generic `PluginOptions`.
+:::
 
 Example:
 
