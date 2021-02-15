@@ -3,7 +3,7 @@ id: hooks
 title: 'Hooks'
 ---
 
-> Don't forget to import these hooks with:
+Don't forget to import these hooks with:
 
 ```ts
 import { pre, post } from '@typegoose/typegoose';
@@ -16,7 +16,9 @@ import { pre, post } from '@typegoose/typegoose';
 `@pre<T>(name: string | string[] | regexp | regexp[], method: () => any)` is used to set Pre-Hooks
 - `@pre` supports the use of an array of method names for comfort (this is not mongoose-native)
 
-Note: Arrow Functions cannot be used here, because the binding of `this` is required to get & modify the document.
+:::note
+Arrow Functions cannot be used here, because the binding of `this` is required to get & modify the document.
+:::
 
 Example:
 
@@ -39,6 +41,10 @@ class Car {
 
 `@post<T>(name: string | string[] | regexp | regexp[], method: () => any)` is used to set Post-Hooks
 - `@post` supports the use of an array of method names for comfort (this is not mongoose-native)
+
+:::note
+Arrow Functions cannot be used here, because the binding of `this` is required to get & modify the document.
+:::
 
 Example:
 
