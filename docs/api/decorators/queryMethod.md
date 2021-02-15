@@ -8,9 +8,12 @@ title: 'Query Methods'
 - `func` is the function that should be added
 - the return type of the function needs to be `mongoose.DocumentQuery`
 
-Notes:
-- The function needs to have a name and can't be an array-function (it needs to handle and use `this`)
-- It is recommended to not define the functions inside the decorator, like in the example below
+:::note
+The function needs to have a name and can't be an array-function (it needs to handle and use `this`)
+:::
+:::note
+It is recommended to not define the functions inside the decorator, like in the example below
+:::
 
 Example:
 
