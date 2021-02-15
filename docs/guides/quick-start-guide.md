@@ -5,6 +5,10 @@ title: 'Quick Start Guide'
 
 ## Quick Overview of Typegoose
 
+:::note
+This Guide is for Typegoose version ~7.4
+:::
+
 Typegoose is a "wrapper" for easily writing Mongoose models with TypeScript.
 
 Instead of writing this:
@@ -92,8 +96,6 @@ class User {
 
 ## How to Start using it
 
-*Please note that this guide is for Typegoose 7.4+*
-
 ### Requirements
 
 - TypeScript `^3.9` (since 7.1)
@@ -142,7 +144,9 @@ let document = await Kitten.create({ name: 'Kitty' });
 // "document" has proper types of KittenClass
 ```
 
-Please note that `new Kitten({})` & `Kitten.create({})` has no types of KittenClass, because Typegoose doesn't modify functions of Mongoose.
+:::note
+`new Kitten({})` has no types of KittenClass, because Typegoose doesn't modify functions of Mongoose, [read more here](./faq.md#why-does-new-model-not-have-types)
+:::
 
 ## Do's and Don'ts of Typegoose
 
@@ -175,7 +179,9 @@ const KittenModel = getModelForClass(KittenClass);
 const docs = await KittenModel.findBySpecies("SomeSpecies");
 ```
 
-Note: pre-6.0 static functions needed `@staticMethod`, but this is not needed anymore
+:::note
+pre-6.0 static functions needed `@staticMethod`, but this is not needed anymore
+:::
 
 ### Instance Methods
 
@@ -200,7 +206,9 @@ const doc = new KittenModel({ name: "SomeCat", species: "SomeSpecies" });
 await doc.setSpeciesAndSave("SomeOtherSpecies");
 ```
 
-Note: pre-6.0 instance functions needed `@instanceMethod`, but this is not needed anymore
+:::note
+pre-6.0 static functions needed `@instanceMethod`, but this is not needed anymore
+:::
 
 ### Hooks
 
