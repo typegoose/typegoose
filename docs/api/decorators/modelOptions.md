@@ -63,7 +63,10 @@ class MultiModel {}
 const model = getModelForClass(MultiModel);
 expect(model.modelName).to.be.equal('SomethingDifferent_someSuffix');
 ```
-NOTE: If a function is used, `automaticName` will be ignored. Also, if the function doesn't return a string, an error will be thrown. 
+
+:::note
+If a function is used, `automaticName` will be ignored. Also, if the function doesn't return a string, an error will be thrown.
+:::
 
 If `customName` is used with `automaticName`, it will be a suffix of the class name.
 
@@ -94,7 +97,9 @@ const model = getModelForClass(MultiModel);
 expect(model.modelName).to.be.equal('MultiModel_Something');
 ```
 
-Note: on request, this was made "opt-in" instead of "opt-out".
+:::note
+On request, this was made "opt-in" instead of "opt-out".
+:::
 
 #### allowMixed
 
@@ -106,5 +111,7 @@ Set this to a Severity you want.
 
 #### runSyncIndexes
 
-Run "model.syncIndexes" when model is finished compiling?  
--> only run this while development, could cause race-conditions, because `getModelForClass` is not async
+Run "model.syncIndexes" when model is finished compiling?
+:::caution
+Only run this while development, could cause race-conditions because `getModelForClass` is not async
+:::
