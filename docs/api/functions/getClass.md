@@ -11,7 +11,9 @@ Overloads:
 - `getClass(input: string)`: get the class by the name directly
 - `getClass(input: { typegooseName: string })`: get the class by using some object with the key `typegooseName` of type `string`
 
-**Note**: `Embedded` & `Document` only work if the class / schema / model was created with Typegoose
+:::note
+`Embedded` & `Document` only work if the class / schema / model was created with Typegoose
+:::
 
 ## Example
 
