@@ -11,7 +11,9 @@ title: "Deprecation Codes"
 
 deprecated since: `7.2.0`
 
-Note: the option `type`(or `items`) still needs to be defined
+:::note
+the option `type`(former option `items`) still needs to be defined
+:::
 
 ### TDEP0002 - mapProp
 
@@ -19,7 +21,9 @@ Note: the option `type`(or `items`) still needs to be defined
 
 deprecated since: `7.2.0`
 
-Note: the option `type`(or `of`) still need to be defined
+:::note
+the option `type`(former option `of`) still need to be defined
+:::
 
 ### TDEP0003 - aliases of option "type"
 
