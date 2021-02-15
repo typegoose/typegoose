@@ -37,9 +37,11 @@ const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 })();
 ```
 
-**Note:** If you have a `ref` which refers back to its own class/model, like having a User class with a `createdBy` field referring
+:::caution
+If you have a `ref` which refers back to its own class/model, like having a User class with a `createdBy` field referring
 back to User, then you'll need to set the `maxDepth` prop of `autocomplete` to 1. If you don't do this, Mongoose will do recursive calls to
 the user collection 10 times, extremely delaying the output of the query. Below is an example of how to set `maxDepth`.
+:::
 
 ```ts
 // the types of "autopopulate" may change depending on the tsconfig option "esModuleInterop"
@@ -147,4 +149,6 @@ const doc = await SomeModel.create({ someIncrementedField: 10 }); // _id will be
 
 ---
 
-Please note that some or all of the listed plugins might not have a `@types` package, so you mostly have to declare it as a model.
+:::note
+Some or all of the listed plugins might not have a `@types` package, so types have to be mostly manually declared.
+:::
