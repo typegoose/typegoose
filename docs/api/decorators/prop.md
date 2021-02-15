@@ -64,7 +64,7 @@ Accepts Type: `any`
 
 Set a default, when no value is given at creation time.
 
-Example: 
+Example:
 
 ```ts
 class Defaulted {
@@ -73,9 +73,9 @@ class Defaulted {
 }
 ```
 
-You may also set the `default` schema option to a function. Mongoose will execute that function and use the return value as the default. 
+You may also set the `default` schema option to a function. Mongoose will execute that function and use the return value as the default.
 
-Example: 
+Example:
 
 ```ts
 class Defaulted {
@@ -92,6 +92,7 @@ class Defaulted {
   public fullName?: string; // mark as optional, because it will be defaulted
 }
 ```
+
 Note: to have the `this` keyword correctly typed, you have to pass a [this parameter](https://www.typescriptlang.org/docs/handbook/functions.html#this-parameters).
 
 ### _id
