@@ -10,6 +10,7 @@ Typegoose is a "wrapper" for easily writing Mongoose models with TypeScript.
 Instead of writing this:
 
 ```ts
+// This is an representation of how typegoose's compile output would look like
 interface Car {
   model?: string;
 }
@@ -22,24 +23,30 @@ interface Job {
 interface User {
   name?: string;
   age!: number;
-  job?: Job;
-  car?: Car | string;
   preferences?: string[];
+  mainJob?: Job;
+  jobs?: Job[];
+  mainCar?: Car | string;
+  cars?: (Car | string)[];
 }
+
+const JobSchema = new mongoose.Schema({
+  title: String;
+  position: String;
+});
 
 const CarModel = mongoose.model('Car', {
   model: string,
 });
 
 const UserModel = mongoose.model('User', {
-  name: String,
+  name: { type: String },
   age: { type: Number, required: true },
-  job: {
-    title: String;
-    position: String;
-  },
-  car: { type: Schema.Types.ObjectId, ref: 'Car' },
-  preferences: [{ type: String }]
+  preferences: [{ type: String }],
+  mainJob: { type: JobSchema },
+  jobs: [{ type: JobSchema }],
+  mainCar: { type: Schema.Types.ObjectId, ref: 'Car' },
+  cars: [{ type: Schema.Types.ObjectId, ref: 'Car' }],
 });
 ```
 
@@ -64,22 +71,28 @@ class User {
   public name?: string;
 
   @prop({ required: true })
-  public age!: number;
-
-  @prop()
-  public job?: Job;
-
-  @prop({ ref: () => Car })
-  public car?: Ref<Car>;
+  public age!: number; // This is an single Primitive
 
   @prop({ type: () => [String] })
-  public preferences?: string[];
+  public preferences?: string[]; // This is an Primitive Array
+
+  @prop()
+  public mainJob?: Job; // This is an single SubDocument
+
+  @prop({ type: () => Job })
+  public jobs?: Job[]; // This is an SubDocument Array
+
+  @prop({ ref: () => Car })
+  public mainCar?: Ref<Car>; // This is an single Reference
+
+  @prop({ ref: () => Car })
+  public cars?: Ref<Car>[]; // This is an Reference Array
 }
 ```
 
 ## How to Start using it
 
-*Please note that this guide is for Typegoose 7.0+*
+*Please note that this guide is for Typegoose 7.4+*
 
 ### Requirements
 
