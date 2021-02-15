@@ -147,7 +147,7 @@ Error:
 - `"whatis" is not supplied OR doesn\'t have a case yet! [E013]`
 
 Details:  
-An Value not specified by the enum `WhatIsIt` was provided (no case matched)
+An Value not specified by the enum `WhatIsIt` was provided (no case matched), [read more about it here](../api/decorators/prop.md#whatisit)
 
 ### Input was not string or have .typegooseName function/string [E014]
 
@@ -185,7 +185,7 @@ Error: `Setting "Mixed" is not allowed! (${name}, ${key}) [E017]`
 
 Details:  
 The option to change Severity is set to `Severity.ERROR`  
-[More Information](api/decorators/modelOptions.md#allowmixed)
+[read here on how to change this](api/decorators/modelOptions.md#allowmixed)
 
 ### dim needs to be 1 or higher [E018]
 
@@ -235,6 +235,7 @@ class ErrorClass {
   public someProp?: Ref<ErrorClass>;
 }
 ```
+
 ### Return type of function assigned to "customName" doesn't return a string or is empty [E022]
 
 Error: `The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`
