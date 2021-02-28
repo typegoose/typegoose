@@ -44,7 +44,7 @@ A: this because in mongoose 5.10.19 and higher, mongoose has its own typescript 
 
 ### I want to the return document with property `id` instead of `_id`
 
-Mongoose automatically adds an virtual named `id`, use the following for type definitions:
+Mongoose automatically adds a virtual named `id`, use the following for type definitions:
 
 ```ts
 class Cat {

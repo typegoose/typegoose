@@ -3,7 +3,7 @@ id: array-prop
 title: 'Array Prop'
 ---
 
-`@arrayProp(options: object)` is almost the same as `@prop`, here are just the differences listed.
+`@arrayProp(options: object)` is almost the same as `@prop`. Here are the differences.
 
 Please note that Mongoose initializes arrayProp arrays with `[]` instead of `null` / `undefined`.
 
@@ -47,7 +47,7 @@ issue about it
 
 ### dim
 
-`dim` is used to set the Dimensions this array should have (for something like an matrix)  
+`dim` is used to set the Dimensions this array should have (for something like a matrix)  
 -> needs to be higher than 0
 
 [see `dim` in prop](./prop.md#dim)

@@ -4,7 +4,7 @@ title: 'Query Methods'
 ---
 
 `@queryMethod(func: (this: ReturnModelType<U, QueryHelpers>, ...args: any[]) => mongoose.DocumentQuery)` is a decorator to add [custom query methods](https://thecodebarbarian.com/mongoose-custom-query-methods)
-- `this` needs to be defined to have the correct types inside the class (and to make it comaptible with `@queryMethod`)
+- `this` needs to be defined to have the correct types inside the class (and to make it compatible with `@queryMethod`)
 - `func` is the function that should be added
 - the return type of the function needs to be `mongoose.DocumentQuery`
 

@@ -9,7 +9,7 @@ title: 'Model Options'
 
 ### schemaOptions
 
-[Please look here for more info](https://mongoosejs.com/docs/guide.html#options)
+Please check the [Mongoose docs](https://mongoosejs.com/docs/guide.html#options) for more info about these options.
 
 Example:
 
@@ -113,5 +113,5 @@ Set this to a Severity you want.
 
 Run "model.syncIndexes" when model is finished compiling?
 :::caution
-Only run this while development, could cause race-conditions because `getModelForClass` is not async
+Only run this while in development. It could cause race-conditions because `getModelForClass` is not async.
 :::

@@ -22,7 +22,7 @@ class Kitten {
   @prop()
   public name?: string;
 
-  // this is an Model Method
+  // this is a Model Method
   public static findByName(this: ReturnModelType<typeof Kitten>, name: string) {
     return this.find({ name }).exec(); // thanks to "ReturnModelType" "this" has type information
   }

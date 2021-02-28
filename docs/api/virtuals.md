@@ -12,7 +12,7 @@ A virtual property can have a setter and a getter. ES6 Classes have `get` & `set
 Do not confuse this `get` & `set` with [`@prop`'s `get` & `set`](api/decorators/prop.md#get--set)
 :::
 :::caution
-No Typegoose decorator can be used on `get` & `set` functions, because they are directly handled by mongoose
+No Typegoose decorator can be used on `get` & `set` functions, because they are directly handled by Mongoose.
 :::
 
 Example:

@@ -42,7 +42,7 @@ class SomeChangedIDBase extends Base<string> {
 ```
 
 :::note
-The `_id` property needs to be duplicated, because the default class `Base` dosnt change runtime things (`Base` does not use `@prop`)
+The `_id` property needs to be duplicated, because the default class `Base` doesn't change anything at runtime (`Base` does not use `@prop`)
 :::
 :::note
 To have `_id` not be `any`, the project needs to have either `noImplicitAny` or `strict` active in the `tsconfig`.

@@ -43,7 +43,7 @@ Please look at https://github.com/typegoose/typegoose/issues/42 for more informa
 ```
 
 Details:  
-Because of limitations of JS, it is not possible to use an self-containing-class  
+Because of limitations of JS, it is not possible to use a self-containing-class  
 -> But Self-Referencing still works
 
 ### ref is undefined [E005]
@@ -52,7 +52,7 @@ Error: `Option "ref" for "${name}.${key}" is null/undefined! [E005]`
 
 Details:  
 Either:
-- The Option `ref` was defined with an function, but that function returned `undefined / null`
+- The Option `ref` was defined with a function, but that function returned `undefined / null`
 - The Option `ref` was defined with `undefined / null` (`{ ref: undefined }`) ([Can Be Solved with this guide](guides/../advanced/reference-other-classes.md#common-problems))
 
 Example of when this gets triggerd:
@@ -88,14 +88,14 @@ When using the `get & set` options, both are required to be specified at the sam
 Error: `"refPath" for "${name}, ${key}" should be of type String! [E008]`
 
 Details:  
-The Option `refPath` needs to be defined as an string (mongoose limitation, typegoose check)
+The Option `refPath` needs to be defined as a string (mongoose limitation, typegoose check)
 
 ### Invalid Type [E009]
 
 Error: `"${targetName}.${key}"'s Type is invalid! Type is: "${Type}" [E009]`
 
 Details:  
-The `Type` in its final state (after checking `rawOptions.type` and executing the deferring-function) is either `undefined / null` or not being an function
+The `Type` in its final state (after checking `rawOptions.type` and executing the deferring-function) is either `undefined / null` or not being a function
 
 Example of when this gets triggered:
 
@@ -147,32 +147,32 @@ Error:
 - `"whatis" is not supplied OR doesn\'t have a case yet! [E013]`
 
 Details:  
-An Value not specified by the enum `WhatIsIt` was provided (no case matched), [read more about it here](../api/decorators/prop.md#whatisit)
+A Value not specified by the enum `WhatIsIt` was provided (no case matched), [read more about it here](../api/decorators/prop.md#whatisit)
 
 ### Input was not string or have .typegooseName function/string [E014]
 
 Error: `Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]`
 
 Details:  
-The Provided Input wasnt an string and didnt have an `.typegooseName` function / string to be searched by
+The Provided Input wasnt a string and didnt have a `.typegooseName` function / string to be searched by
 
 ### customName must be string and at least one character [E015]
 
 Error: `"customName" must be a string AND at least one character ("${baseName}") [E015]`
 
 Details:  
-The `customName` option must be an String AND at least *one* character long
+The `customName` option must be a String AND at least *one* character long
 
 ### Type dosnt have "OptionsConstructor" [E016]
 
-Error: `Type does not have an valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`
+Error: `Type does not have a valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`
 
 Details:  
-The `Type` provided does not have an property `OptionsConstructor` (`undefined / null`), this is required to map options of an array & map
+The `Type` provided does not have a property `OptionsConstructor` (`undefined / null`), this is required to map options of an array & map
 
 Typegoose uses the property [`OptionsConstructor`](https://github.com/Automattic/mongoose/tree/master/lib/options) on types (ex `mongoose.Schema.Types.ObjectId.OptionsConstructor`) to correctly map the options (from `@prop(options)`) to the appropiate place
 
-If custom types are used and they dont have `OptionsConstructor`, and easy way to workaround this error is the following:
+If custom types are used and they dont have `OptionsConstructor`, and an easy way to workaround this error is the following:
 
 ```ts
 mongoose.Schema.Types.Custom.OptionsConstructor = {}; // only do this if really necessary
