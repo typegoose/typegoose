@@ -31,7 +31,7 @@ jobs:
       - name: Test Compiling Everything & Lint
         run: yarn run build:tests
       - name: Test
-        run: yarn run test:coverage -- --colors
+        run: yarn run test:coverage --colors
         env:
           CI: true
       - name: Send Coverage
