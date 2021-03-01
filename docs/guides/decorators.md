@@ -9,7 +9,6 @@ This Guide shows all the decorators that can be used for / in a class.
 
 - All Property decorators:
   - [`@prop`](api/decorators/prop.md) is the most important decorator, because it defines values(\|keys) that are then in the model & document.
-  - [`@mapProp`](api/decorators/mapProp.md) is for a Map<string, T> **[Deprecated]**
 <!--This is just a separator-->
 - All Class decorators:
   - [`@modelOptions`](api/decorators/modelOptions.md), used for Schema Options, an existing Mongoose and an existing Connection

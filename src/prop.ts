@@ -51,18 +51,7 @@ function prop(
   };
 }
 
-/**
- * Set Property(that are Maps) Options for the property below
- * @param options Options for the Map
- *
- * @deprecated use "prop"
- */
-function mapProp(options: MapPropOptions): PropertyDecorator {
-  /* istanbul ignore next */
-  return utils.deprecate(prop.call(null, options, WhatIsIt.MAP), '"@mapProp" is deprecated, use "@prop" instead', 'TDEP0002');
-}
-
-export { prop, mapProp };
+export { prop };
 
 // Export it PascalCased
-export { prop as Prop, mapProp as MapProp };
+export { prop as Prop };
