@@ -1,3 +1,3 @@
 module.exports = {
-  "**/*.{ts,js}": "tslint --fix"
+  "**/*.{ts,js}": "yarn run lint --fix"
 };

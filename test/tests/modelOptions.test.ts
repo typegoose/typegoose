@@ -35,20 +35,20 @@ describe('typegoose-specific-options', () => {
 describe('existingMongoose & existingConnection', () => {
   it('should use default-existingMongoose', () => {
     @modelOptions({ existingMongoose: mongoose })
-    class TESTexistingMongoose { }
+    class TESTexistingMongoose {}
     expect(getModelForClass(TESTexistingMongoose)).not.toBeUndefined();
   });
 
   it('should use default-existingConnection', () => {
     @modelOptions({ existingConnection: mongoose.connection })
-    class TESTexistingConnection { }
+    class TESTexistingConnection {}
     expect(getModelForClass(TESTexistingConnection)).not.toBeUndefined();
   });
 
   it('should merge existingConnection correctly (overwrite)', () => {
-    // @ts-expect-error
+    // @ts-expect-error because "hello" dosnt exist in "existingConnection"
     @modelOptions({ existingConnection: { hello: 1 } })
-    class Dummy { }
+    class Dummy {}
 
     const out = mergeMetadata(DecoratorKeys.ModelOptions, { existingConnection: { hi: 1 } }, Dummy);
 
@@ -153,10 +153,10 @@ describe('existingMongoose & existingConnection', () => {
 describe('misc', () => {
   it('should not have the same options (modelOptions deep copy) [typegoose/typegoose#100]', () => {
     @modelOptions({ schemaOptions: { collection: '1' } })
-    class SOBase { }
+    class SOBase {}
 
     @modelOptions({ schemaOptions: { collection: '2' } })
-    class SOInheritedBase extends SOBase { }
+    class SOInheritedBase extends SOBase {}
 
     const refSOBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOBase);
     const refSOInheritedBase: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, SOInheritedBase);

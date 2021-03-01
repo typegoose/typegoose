@@ -9,7 +9,7 @@ import type {
   MapPropOptions,
   PropOptionsForNumber,
   PropOptionsForString,
-  VirtualOptions
+  VirtualOptions,
 } from './types';
 
 /**
@@ -38,9 +38,11 @@ function prop(
     options = options ?? {};
 
     const existingMapForTarget = Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
+
     if (utils.isNullOrUndefined(existingMapForTarget)) {
       Reflect.defineMetadata(DecoratorKeys.PropCache, new Map<string, DecoratedPropertyMetadata>(), target);
     }
+
     const mapForTarget = existingMapForTarget ?? (Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap);
 
     mapForTarget.set(key, { options, target, key, whatis: kind });

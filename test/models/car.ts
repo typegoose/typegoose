@@ -4,6 +4,7 @@ import { getModelForClass, mongoose, pre, prop } from '../../src/typegoose';
   if (this.carModel === 'Trabant') {
     this.isSedan = true;
   }
+
   next();
 })
 export class Car {

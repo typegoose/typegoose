@@ -5,7 +5,7 @@ import { getModelForClass, prop } from '../../src/typegoose';
 export enum StringValidatorEnum {
   OPT1 = 'one',
   OPT2 = 'two',
-  OPT3 = 'three'
+  OPT3 = 'three',
 }
 
 export class StringValidators {

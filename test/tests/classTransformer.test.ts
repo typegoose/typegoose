@@ -1,5 +1,4 @@
 import { classToPlain, Exclude, Expose, plainToClass, Transform } from 'class-transformer';
-
 import { getModelForClass, mongoose, prop } from '../../src/typegoose';
 
 // re-implement base Document to allow class-transformer to serialize/deserialize its properties
@@ -8,16 +7,15 @@ class DocumentCT {
   @Expose()
   // makes sure that when deserializing from a Mongoose Object, ObjectId is serialized into a string
   @Transform((value: any) => {
-    if ("value" in value) {
+    if ('value' in value) {
       return value.value instanceof mongoose.Types.ObjectId ? value.value.toHexString() : value.value.toString();
     }
 
-    return "unknown value";
+    return 'unknown value';
   })
   public _id: string;
 
   @Expose()
-  // tslint:disable-next-line:variable-name
   public __v: number;
 }
 
@@ -39,7 +37,7 @@ describe('class-transformer', () => {
   beforeAll(async () => {
     const { _id } = await AccountModel.create({
       email: 'somebody@gmail.com',
-      password: 'secret'
+      password: 'secret',
     } as Account);
     // note here that _id is an ObjectId, hence the toString()
     // otherwise it will have the shape of : { _bsonType: 'ObjectId', id: ArrayBuffer }
@@ -58,7 +56,7 @@ describe('class-transformer', () => {
       expect(serialized).toStrictEqual({
         _id: id,
         __v: 0,
-        email: 'somebody@gmail.com'
+        email: 'somebody@gmail.com',
       });
     });
 
@@ -75,7 +73,7 @@ describe('class-transformer', () => {
         _id: id,
         __v: 0,
         email: 'somebody@gmail.com',
-        password: 'secret'
+        password: 'secret',
       });
     });
   });
@@ -92,7 +90,7 @@ describe('class-transformer', () => {
       expect(serialized).toStrictEqual({
         _id: id,
         __v: 0,
-        email: 'somebody@gmail.com'
+        email: 'somebody@gmail.com',
       });
     });
 
@@ -109,7 +107,7 @@ describe('class-transformer', () => {
         _id: id,
         __v: 0,
         email: 'somebody@gmail.com',
-        password: 'secret'
+        password: 'secret',
       });
     });
   });

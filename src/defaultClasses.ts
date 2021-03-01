@@ -1,5 +1,4 @@
 import type { Types } from 'mongoose';
-
 import { modelOptions } from './modelOptions';
 import type { AnyParamConstructor, DocumentType, RefType } from './types';
 
@@ -17,9 +16,7 @@ export abstract class TimeStamps {
  */
 export abstract class Base<T_ID extends RefType = Types.ObjectId> {
   public _id: T_ID;
-  // tslint:disable-next-line:variable-name
   public __v?: number;
-  // tslint:disable-next-line:variable-name
   public __t?: string | number;
 }
 
@@ -32,8 +29,5 @@ export interface FindOrCreateResult<T> {
  * This class contains all types for the module "mongoose-findorcreate"
  */
 export abstract class FindOrCreate {
-  public static findOrCreate: <T extends FindOrCreate>(
-    this: AnyParamConstructor<T>,
-    condition: any
-  ) => Promise<FindOrCreateResult<T>>;
+  public static findOrCreate: <T extends FindOrCreate>(this: AnyParamConstructor<T>, condition: any) => Promise<FindOrCreateResult<T>>;
 }

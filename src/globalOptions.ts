@@ -31,8 +31,8 @@ export function parseENV(): void {
       allowMixed:
         process.env.TG_ALLOW_MIXED && process.env.TG_ALLOW_MIXED in Severity
           ? mapValueToSeverity(process.env.TG_ALLOW_MIXED)
-          : globalOptions.options?.allowMixed
-    }
+          : globalOptions.options?.allowMixed,
+    },
   };
 
   setGlobalOptions(options);
@@ -53,6 +53,7 @@ export function parseENV(): void {
  */
 function mapValueToSeverity(value: string | number): Severity {
   assertion(value in Severity, new Error(`"value" is not in range of "Severity"! (got: ${value})`));
+
   if (typeof value === 'number') {
     return value;
   }

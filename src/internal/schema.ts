@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-
 import { logger } from '../logSettings';
 import { buildSchema } from '../typegoose';
 import type {
@@ -12,7 +11,7 @@ import type {
   IPluginsArray,
   NestedDiscriminatorsMap,
   QueryMethodMap,
-  VirtualPopulateMap
+  VirtualPopulateMap,
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
@@ -75,11 +74,12 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   if (isFinalSchema) {
     /** Get Metadata for Nested Discriminators */
     const disMap: NestedDiscriminatorsMap = Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, cl);
+
     if (disMap instanceof Map) {
       for (const [key, discriminators] of disMap) {
         logger.debug('Applying Nested Discriminators for:', key, discriminators);
 
-        const path: { discriminator?: Func; } = sch.path(key) as any;
+        const path: { discriminator?: Func } = sch.path(key) as any;
         assertion(!isNullOrUndefined(path), new Error(`Path "${key}" does not exist on Schema of "${name}"`));
         assertion(
           typeof path.discriminator === 'function',
@@ -87,9 +87,10 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
         );
 
         for (const { type: child, value: childName } of discriminators) {
-          const childSch = getName(child) === name ? sch : (buildSchema(child) as mongoose.Schema & { paths: any; });
+          const childSch = getName(child) === name ? sch : (buildSchema(child) as mongoose.Schema & { paths: any });
 
           const discriminatorKey = childSch.get('discriminatorKey');
+
           if (childSch.path(discriminatorKey)) {
             (childSch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
           }
@@ -103,12 +104,14 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     {
       /** Get Metadata for PreHooks */
       const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
+
       if (Array.isArray(preHooks)) {
         preHooks.forEach((obj) => sch!.pre(obj.method, obj.func));
       }
 
       /** Get Metadata for PreHooks */
       const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
+
       if (Array.isArray(postHooks)) {
         postHooks.forEach((obj) => sch!.post(obj.method, obj.func));
       }
@@ -116,6 +119,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
     /** Get Metadata for Virtual Populates */
     const virtuals: VirtualPopulateMap = Reflect.getMetadata(DecoratorKeys.VirtualPopulate, cl);
+
     if (virtuals instanceof Map) {
       for (const [key, options] of virtuals) {
         logger.debug('Applying Virtual Populates:', key, options);
@@ -125,6 +129,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
     /** Get Metadata for indices */
     const indices: IIndexArray<any>[] = Reflect.getMetadata(DecoratorKeys.Index, cl);
+
     if (Array.isArray(indices)) {
       for (const index of indices) {
         logger.debug('Applying Index:', index);
@@ -134,6 +139,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
     /** Get Metadata for Query Methods */
     const queryMethods: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, cl);
+
     if (queryMethods instanceof Map) {
       for (const [funcName, func] of queryMethods) {
         logger.debug('Applying Query Method:', funcName, func);
@@ -143,6 +149,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
     /** Get Metadata for indices */
     const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
+
     if (Array.isArray(plugins)) {
       for (const plugin of plugins) {
         logger.debug('Applying Plugin:', plugin);

@@ -6,7 +6,7 @@ import {
   DiscriminatorObject,
   KeyStringAny,
   NestedDiscriminatorsMap,
-  VirtualPopulateMap
+  VirtualPopulateMap,
 } from '../types';
 import { DecoratorKeys, WhatIsIt } from './constants';
 import { schemas } from './data';
@@ -40,6 +40,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         if ('of' in rawOptions) {
           logger.warn('You might not want to use option "of" for an non-map @prop type (%s.%s)', name, key);
         }
+
         break;
       case WhatIsIt.ARRAY:
         if ('items' in rawOptions) {
@@ -52,9 +53,10 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         }
 
         // set the "Type" to undefined, if "ref" or "refPath" are defined, otherwise the "refType" will be wrong
-        if ((('ref' in rawOptions) || ('refPath' in rawOptions)) && !('type' in rawOptions)) {
+        if (('ref' in rawOptions || 'refPath' in rawOptions) && !('type' in rawOptions)) {
           Type = undefined;
         }
+
         break;
       case WhatIsIt.MAP:
         if ('of' in rawOptions) {
@@ -65,6 +67,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         if ('items' in rawOptions) {
           logger.warn('You might not want to use option "items" where the "design:type" is "Map" (%s.%s)', name, key);
         }
+
         break;
     }
   }
@@ -73,9 +76,11 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     logger.info('Prop Option "type" is set to ', rawOptions.type);
     const gotType = utils.getType(rawOptions.type);
     Type = gotType.type;
+
     if (gotType.dim > 0) {
       rawOptions.dim = gotType.dim;
     }
+
     delete rawOptions.type;
   }
 
@@ -83,7 +88,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   if (Type === target.constructor) {
     throw new TypeError(
       'It seems like the type used is the same as the target class, which is not supported\n' +
-      `Please look at https://github.com/typegoose/typegoose/issues/42 for more information [E004]`
+        `Please look at https://github.com/typegoose/typegoose/issues/42 for more information [E004]`
     );
   }
 
@@ -106,23 +111,26 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   if ('discriminators' in rawOptions) {
     logger.debug('Found option "discriminators" in "%s.%s"', name, key);
     const gotType = utils.getType(rawOptions.discriminators, true);
-    utils.assertion(gotType.dim === 1, new Error(`"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`));
-    const discriminators: DiscriminatorObject[] =
-      (gotType.type as (AnyParamConstructor<any> | DiscriminatorObject)[])
-        .map((val, index) => {
-          if (utils.isConstructor(val)) {
-            return { type: val };
-          }
-          if (typeof val === 'object') {
-            if (!('type' in val)) {
-              throw new Error(`"${name}.${key}" discriminator index "${index}" is an object, but does not contain the "type" property!`);
-            }
+    utils.assertion(
+      gotType.dim === 1,
+      new Error(
+        `"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`
+      )
+    );
+    const discriminators: DiscriminatorObject[] = (gotType.type as (AnyParamConstructor<any> | DiscriminatorObject)[]).map((val, index) => {
+      if (utils.isConstructor(val)) {
+        return { type: val };
+      }
+      if (typeof val === 'object') {
+        if (!('type' in val)) {
+          throw new Error(`"${name}.${key}" discriminator index "${index}" is an object, but does not contain the "type" property!`);
+        }
 
-            return val;
-          }
+        return val;
+      }
 
-          throw new Error(`"${name}.${key}" discriminators index "${index}" is not an object or an constructor!`);
-        });
+      throw new Error(`"${name}.${key}" discriminators index "${index}" is not an object or an constructor!`);
+    });
 
     const disMap: NestedDiscriminatorsMap = new Map(Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, target.constructor) ?? []);
     disMap.set(key, discriminators);
@@ -134,19 +142,19 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   // allow setting the type asynchronously
   if ('ref' in rawOptions) {
     const gotType = utils.getType(rawOptions.ref);
-    utils.assertion(gotType.dim === 0, new Error(`"PropOptions.ref" dosnt support Arrays (got "${gotType.dim}" dimensions at "${name}.${key}") [E021]`));
-    rawOptions.ref = gotType.type;
     utils.assertion(
-      !utils.isNullOrUndefined(rawOptions.ref),
-      new Error(`Option "ref" for "${name}.${key}" is null/undefined! [E005]`)
+      gotType.dim === 0,
+      new Error(`"PropOptions.ref" dosnt support Arrays (got "${gotType.dim}" dimensions at "${name}.${key}") [E021]`)
     );
+    rawOptions.ref = gotType.type;
+    utils.assertion(!utils.isNullOrUndefined(rawOptions.ref), new Error(`Option "ref" for "${name}.${key}" is null/undefined! [E005]`));
 
     rawOptions.ref =
       typeof rawOptions.ref === 'string'
         ? rawOptions.ref
         : utils.isConstructor(rawOptions.ref)
-          ? utils.getName(rawOptions.ref)
-          : rawOptions.ref;
+        ? utils.getName(rawOptions.ref)
+        : rawOptions.ref;
   }
 
   if (utils.isWithVirtualPOP(rawOptions)) {
@@ -163,8 +171,8 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   if ('justOne' in rawOptions) {
     logger.warn(
-      `Option "justOne" is defined in "${name}.${key}" but no Virtual-Populate-Options!\n`
-      + 'Look here for more: https://typegoose.github.io/typegoose/docs/api/virtuals#virtual-populate'
+      `Option "justOne" is defined in "${name}.${key}" but no Virtual-Populate-Options!\n` +
+        'Look here for more: https://typegoose.github.io/typegoose/docs/api/virtuals#virtual-populate'
     );
   }
 
@@ -181,7 +189,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       case WhatIsIt.ARRAY:
         schemaProp[key] = {
           ...schemaProp[key][0],
-          ...utils.mapArrayOptions(rawOptions, useType, target, key)
+          ...utils.mapArrayOptions(rawOptions, useType, target, key),
         };
 
         return;
@@ -192,7 +200,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
           ...schemaProp[key],
           ...mapped.outer,
           type: Map,
-          of: { type: useType, ...mapped.inner }
+          of: { type: useType, ...mapped.inner },
         };
 
         return;
@@ -200,7 +208,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         schemaProp[key] = {
           ...schemaProp[key],
           ...rawOptions,
-          type: useType
+          type: useType,
         };
 
         return;
@@ -212,6 +220,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   // use "Type" if it is an suitable ref-type, otherwise default back to "ObjectId"
   const refType = utils.isAnRefType(Type) ? Type : mongoose.Schema.Types.ObjectId;
+
   if ('ref' in rawOptions) {
     const ref = rawOptions.ref;
     delete rawOptions.ref;
@@ -224,7 +233,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
             ...schemaProp[key][0],
             type: refType,
             ref,
-            ...rawOptions
+            ...rawOptions,
           },
           name,
           key
@@ -235,7 +244,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
           ...schemaProp[key],
           type: refType,
           ref,
-          ...rawOptions
+          ...rawOptions,
         };
         break;
       default:
@@ -246,11 +255,9 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   }
 
   const refPath = rawOptions.refPath;
+
   if (refPath) {
-    utils.assertion(
-      typeof refPath === 'string',
-      new TypeError(`"refPath" for "${name}, ${key}" should be of type String! [E008]`)
-    );
+    utils.assertion(typeof refPath === 'string', new TypeError(`"refPath" for "${name}, ${key}" should be of type String! [E008]`));
 
     delete rawOptions.refPath;
 
@@ -262,7 +269,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
             ...schemaProp[key][0],
             type: refType,
             refPath,
-            ...rawOptions
+            ...rawOptions,
           },
           name,
           key
@@ -273,7 +280,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
           ...schemaProp[key],
           type: refType,
           refPath,
-          ...rawOptions
+          ...rawOptions,
         };
         break;
       default:
@@ -289,6 +296,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   }
 
   const enumOption = rawOptions.enum;
+
   if (!utils.isNullOrUndefined(enumOption)) {
     // check if the supplied value is already "mongoose-consumeable"
     if (!Array.isArray(enumOption)) {
@@ -331,9 +339,9 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         // this will happen if the enum type is not "String" or "Number"
         // most likely this error happened because the code got transpiled with babel or "tsc --transpile-only"
         throw new Error(
-          `Invalid type used for enums!, got: "${Type}" (${name}.${key}) [E012]`
-          + 'Is the code transpiled with Babel or \'tsc --transpile-only\' or \'ts-node --transpile-only\'?\n'
-          + 'See https://typegoose.github.io/typegoose/docs/api/decorators/prop/#enum'
+          `Invalid type used for enums!, got: "${Type}" (${name}.${key}) [E012]` +
+            "Is the code transpiled with Babel or 'tsc --transpile-only' or 'ts-node --transpile-only'?\n" +
+            'See https://typegoose.github.io/typegoose/docs/api/decorators/prop/#enum'
         );
       }
     }
@@ -347,22 +355,30 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   {
     let included: string[] = utils.isWithStringValidate(rawOptions);
-    if (!utils.isString(Type)) { // warn if String-Validate options are included, but is not string
+
+    if (!utils.isString(Type)) {
+      // warn if String-Validate options are included, but is not string
       utils.warnNotCorrectTypeOptions(name, key, 'String', 'String-Validate', included);
     }
 
     included = utils.isWithStringTransform(rawOptions);
-    if (!utils.isString(Type)) { // warn if String-Transform options are included, but is not string
+
+    if (!utils.isString(Type)) {
+      // warn if String-Transform options are included, but is not string
       utils.warnNotCorrectTypeOptions(name, key, 'String', 'String-Transform', included);
     }
 
     included = utils.isWithNumberValidate(rawOptions);
-    if (!utils.isNumber(Type)) { // warn if Number-Validate options are included, but is not number
+
+    if (!utils.isNumber(Type)) {
+      // warn if Number-Validate options are included, but is not number
       utils.warnNotCorrectTypeOptions(name, key, 'Number', 'Number-Validate', included);
     }
 
     included = utils.isWithEnumValidate(rawOptions);
-    if (!utils.isString(Type) && !utils.isNumber(Type)) { // warn if "enum" is included, but is not Number or String
+
+    if (!utils.isString(Type) && !utils.isNumber(Type)) {
+      // warn if "enum" is included, but is not Number or String
       utils.warnNotCorrectTypeOptions(name, key, 'String | Number', 'extra', included);
     }
   }
@@ -374,11 +390,12 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     if (utils.isObject(Type, true)) {
       utils.warnMixed(target, key);
     }
+
     switch (propKind) {
       case WhatIsIt.ARRAY:
         schemaProp[key] = {
           ...schemaProp[key][0],
-          ...utils.mapArrayOptions(rawOptions, Type, target, key)
+          ...utils.mapArrayOptions(rawOptions, Type, target, key),
         };
 
         return;
@@ -389,7 +406,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
           ...schemaProp[key],
           ...mapped.outer,
           type: Map,
-          of: { type: Type, ...mapped.inner }
+          of: { type: Type, ...mapped.inner },
         };
 
         return;
@@ -397,7 +414,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         schemaProp[key] = {
           ...schemaProp[key],
           ...rawOptions,
-          type: Type
+          type: Type,
         };
 
         return;
@@ -417,7 +434,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     schemaProp[key] = {
       ...schemaProp[key],
       ...rawOptions,
-      type: mongoose.Schema.Types.Mixed
+      type: mongoose.Schema.Types.Mixed,
     };
 
     return;
@@ -428,7 +445,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     case WhatIsIt.ARRAY:
       schemaProp[key] = {
         ...schemaProp[key][0], // [0] is needed, because "initasArray" adds this (empty)
-        ...utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type)
+        ...utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type),
       };
 
       return;
@@ -439,7 +456,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         ...schemaProp[key],
         ...mapped.outer,
         type: Map,
-        of: { type: virtualSchema, ...mapped.inner }
+        of: { type: virtualSchema, ...mapped.inner },
       };
 
       return;
@@ -447,7 +464,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       schemaProp[key] = {
         ...schemaProp[key],
         ...rawOptions,
-        type: virtualSchema
+        type: virtualSchema,
       };
 
       return;

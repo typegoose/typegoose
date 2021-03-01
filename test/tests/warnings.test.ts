@@ -35,6 +35,7 @@ describe('prop.ts', () => {
         @prop({ items: String })
         public test: any;
       }
+
       buildSchema(TestItemsOnPropWithoutArray);
       expect((logger.warn as any).mock.calls.length).toEqual(1);
       expect((utils.deprecate as any).mock.calls.length).toEqual(1);
@@ -45,6 +46,7 @@ describe('prop.ts', () => {
         @prop({ of: String })
         public test: any;
       }
+
       buildSchema(TestOfOnPropWithoutMap);
       expect((logger.warn as any).mock.calls.length).toEqual(1);
       expect((utils.deprecate as any).mock.calls.length).toEqual(1);
@@ -52,14 +54,17 @@ describe('prop.ts', () => {
 
     it('should warn if option "refType" is used in an @prop', () => {
       expect.assertions(1);
+
       class SomeNest {
         @prop()
         public something?: string;
       }
+
       class TestRefType {
         @prop({ ref: () => SomeNest, refType: mongoose.Schema.Types.ObjectId })
         public test: Ref<SomeNest>;
       }
+
       buildSchema(TestRefType);
       expect((utils.deprecate as any).mock.calls.length).toEqual(1);
     });
@@ -68,10 +73,12 @@ describe('prop.ts', () => {
   describe('WhatIsIt.MAP', () => {
     it('should warn if option "items" is used in an WhatIsIt.MAP', () => {
       expect.assertions(3);
+
       class TestMapPropOptionItems {
         @prop({ items: String })
         public test: Map<any, any>;
       }
+
       const schema = buildSchema(TestMapPropOptionItems);
       expect((logger.warn as any).mock.calls.length).toEqual(1);
       expect((utils.deprecate as any).mock.calls.length).toEqual(1);
@@ -82,10 +89,12 @@ describe('prop.ts', () => {
   describe('WhatIsIt.ARRAY', () => {
     it('should warn if option "of" is used in an WhatIsIt.ARRAY', () => {
       expect.assertions(3);
+
       class TestArrayPropOptionOf {
         @prop({ of: String })
         public test: any[];
       }
+
       const schema = buildSchema(TestArrayPropOptionOf);
       expect((logger.warn as any).mock.calls.length).toEqual(1);
       expect((utils.deprecate as any).mock.calls.length).toEqual(1);
@@ -104,6 +113,7 @@ describe('Options not for current Type', () => {
       @prop({ lowercase: true })
       public test: number;
     }
+
     buildSchema(TestNSTETransform);
     expect((logger.warn as any).mock.calls.length).toEqual(1);
   });
@@ -113,6 +123,7 @@ describe('Options not for current Type', () => {
       @prop({ maxlength: 10 })
       public test: number;
     }
+
     buildSchema(TestNSTEValidate);
     expect((logger.warn as any).mock.calls.length).toEqual(1);
   });
@@ -122,6 +133,7 @@ describe('Options not for current Type', () => {
       @prop({ max: 10 })
       public test: string;
     }
+
     buildSchema(TestNNTEValidate);
     expect((logger.warn as any).mock.calls.length).toEqual(1);
   });

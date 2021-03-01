@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import { ArrayValidatorEnumNumber, ArrayValidatorEnumString, ArrayValidatorsModel } from '../models/arrayValidators';
 
@@ -8,7 +7,7 @@ import { ArrayValidatorEnumNumber, ArrayValidatorEnumString, ArrayValidatorsMode
 it('should respect maxlength [String]', async () => {
   await expect(
     ArrayValidatorsModel.create({
-      maxLength: ['this is too long']
+      maxLength: ['this is too long'],
     })
   ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
@@ -16,28 +15,28 @@ it('should respect maxlength [String]', async () => {
 it('should respect minlength [String]', async () => {
   await expect(
     ArrayValidatorsModel.create({
-      minLength: ['too short']
+      minLength: ['too short'],
     })
   ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
 
 it('should trim [String]', async () => {
   const trimmed = await ArrayValidatorsModel.create({
-    trimmed: ['trim my end    ']
+    trimmed: ['trim my end    '],
   });
   expect(trimmed.trimmed![0]).toEqual('trim my end');
 });
 
 it('should uppercase [String]', async () => {
   const uppercased = await ArrayValidatorsModel.create({
-    uppercased: ['make me uppercase']
+    uppercased: ['make me uppercase'],
   });
   expect(uppercased.uppercased![0]).toEqual('MAKE ME UPPERCASE');
 });
 
 it('should lowercase [String]', async () => {
   const lowercased = await ArrayValidatorsModel.create({
-    lowercased: ['MAKE ME LOWERCASE']
+    lowercased: ['MAKE ME LOWERCASE'],
   });
   expect(lowercased.lowercased![0]).toEqual('make me lowercase');
 });
@@ -50,7 +49,7 @@ it('should lowercase & have a default [String]', async () => {
 it('should respect max [Number]', async () => {
   await expect(
     ArrayValidatorsModel.create({
-      max: [4] // over 3
+      max: [4], // over 3
     })
   ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
@@ -58,7 +57,7 @@ it('should respect max [Number]', async () => {
 it('should respect min [Number]', async () => {
   expect(
     ArrayValidatorsModel.create({
-      min: [9] // under 10
+      min: [9], // under 10
     })
   ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
@@ -67,9 +66,9 @@ it('should respect enum [String]', async () => {
   try {
     await ArrayValidatorsModel.create({
       enumedString: [
-        // @ts-expect-error
-        'not in the enum' // string not in the enum
-      ]
+        // @ts-expect-error because value is not in enum
+        'not in the enum', // string not in the enum
+      ],
     });
 
     fail('Expected to throw ValidationError!');
@@ -78,7 +77,7 @@ it('should respect enum [String]', async () => {
   }
 
   const doc = await ArrayValidatorsModel.create({
-    enumedString: [ArrayValidatorEnumString.OPT1, ArrayValidatorEnumString.OPT2]
+    enumedString: [ArrayValidatorEnumString.OPT1, ArrayValidatorEnumString.OPT2],
   });
 
   assertion(!isNullOrUndefined(doc.enumedString), new Error('Expected "enumedString" to not be undefined/null'));
@@ -96,8 +95,8 @@ it('should respect enum [Number]', async () => {
   try {
     await ArrayValidatorsModel.create({
       enumedNumber: [
-        5 // number not in the enum
-      ]
+        5, // number not in the enum
+      ],
     });
 
     fail('Expected to throw ValidationError!');
@@ -106,7 +105,7 @@ it('should respect enum [Number]', async () => {
   }
 
   const doc = await ArrayValidatorsModel.create({
-    enumedNumber: [ArrayValidatorEnumNumber.OPT1, ArrayValidatorEnumNumber.OPT2]
+    enumedNumber: [ArrayValidatorEnumNumber.OPT1, ArrayValidatorEnumNumber.OPT2],
   });
 
   assertion(!isNullOrUndefined(doc.enumedNumber), new Error('Expected "enumedNumber" to not be undefined/null'));

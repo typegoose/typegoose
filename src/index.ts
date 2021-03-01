@@ -1,7 +1,7 @@
 import { DecoratorKeys } from './internal/constants';
 import { getName } from './internal/utils';
 import { logger } from './logSettings';
-import type { IIndexArray, IndexOptions } from './types';
+import type { BeAnObject, IIndexArray, IndexOptions } from './types';
 
 /**
  * Defines an index (most likely compound) for this schema.
@@ -13,7 +13,7 @@ import type { IIndexArray, IndexOptions } from './types';
  * class Name {}
  * ```
  */
-export function index<T = {}>(fields: T, options?: IndexOptions<T>): ClassDecorator {
+export function index<T = BeAnObject>(fields: T, options?: IndexOptions<T>): ClassDecorator {
   return (target: any) => {
     logger.info('Adding "%o" Indexes to %s', { fields, options }, getName(target));
     const indices: IIndexArray<any>[] = Array.from(Reflect.getMetadata(DecoratorKeys.Index, target) ?? []);

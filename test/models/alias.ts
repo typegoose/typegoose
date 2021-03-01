@@ -6,6 +6,7 @@ export class Alias {
 
   @prop({ required: true, alias: 'aliasProp' })
   public alias!: string;
+
   public aliasProp!: string; // its just for type completion
 }
 

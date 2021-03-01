@@ -5,6 +5,7 @@ import { config } from './utils/config';
 
 export = async function globalSetup() {
   logger.setLevel('DEBUG');
+
   if (config.Memory) {
     /** it's needed in global space, because we don't want to create a new instance every time */
     const instance = new MongoMemoryServer();

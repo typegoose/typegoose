@@ -1,7 +1,5 @@
 // disable "no-unused" for this file, to keep hooks consistent
-// tslint:disable:no-unused
 import type { Aggregate, Query } from 'mongoose';
-
 import { DecoratorKeys } from './internal/constants';
 import { assertion, getName } from './internal/utils';
 import { logger } from './logSettings';
@@ -37,7 +35,20 @@ type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
 type NumberMethod = 'count';
 type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'findOneAndDelete' | 'deleteOne' | DocumentMethod;
 type MultipleMethod = 'find' | 'update' | 'deleteMany' | 'aggregate';
-type QueryMethod = 'count' | 'countDocuments' | 'estimatedDocumentCount' | 'find' | 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'update' | 'updateOne' | 'updateMany' | 'findOneAndDelete' | 'deleteOne' | 'deleteMany';
+type QueryMethod =
+  | 'count'
+  | 'countDocuments'
+  | 'estimatedDocumentCount'
+  | 'find'
+  | 'findOne'
+  | 'findOneAndRemove'
+  | 'findOneAndUpdate'
+  | 'update'
+  | 'updateOne'
+  | 'updateMany'
+  | 'findOneAndDelete'
+  | 'deleteOne'
+  | 'deleteMany';
 type ModelMethod = 'insertMany';
 type QMR = QueryMethod | ModelMethod | RegExp;
 type QDM = QMR | DocumentMethod;
@@ -75,7 +86,7 @@ const hooks: Hooks = {
   },
   post(...args) {
     return (target: any) => addToHooks(target, 'post', args);
-  }
+  },
 };
 
 /**
