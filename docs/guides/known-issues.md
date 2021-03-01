@@ -35,10 +35,6 @@ class SomeClass {
 }
 ```
 
-### Class-transformer
-
-Typegoose (/Mongoose) currently doesn't work well with `class-transformer`. When you want to get a POJO, use `model.operation.lean()` OR `doc.toJSON()` - but `classToPlain` (or any other method from CT) will not work and map incorrect properties (More info: [typegoose#61](https://github.com/typegoose/typegoose/issues/61), [typegoose#9 (comment)](https://github.com/typegoose/typegoose/issues/96#issuecomment-549031131), [class-transformer#227](https://github.com/typestack/class-transformer/issues/227))
-
 ### Babel
 
 Using babel as a TypeScript compiler is known to cause problems (like incorrect types)  
