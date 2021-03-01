@@ -460,7 +460,7 @@ export function mapOptions(
     OptionsCTOR = (mongoose as any).Schema.Types.Embedded.prototype.OptionsConstructor;
   }
 
-  assertion(!isNullOrUndefined(OptionsCTOR), new TypeError(`Type does not have an valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`));
+  assertion(!isNullOrUndefined(OptionsCTOR), new TypeError(`Type does not have a valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`));
 
   const options = Object.assign({}, rawOptions); // for sanity
   delete options.items;

@@ -7,14 +7,14 @@ Typegoose supports mongoose plugins. Here's how to use some common plugins:
 
 ## mongoose-autopopulate
 
-Typegoose has the prop option `autopopulate` implemented, but it only has an effect if [`mongoose-autopopulate`](https://github.com/mongodb-js/mongoose-autopopulate) is installed and used too.
+Typegoose has the prop option `autopopulate` implemented, but it only has an effect, if [`mongoose-autopopulate`](https://github.com/mongodb-js/mongoose-autopopulate) is installed and used too.
 
 ```ts
 import * as mongoose from 'mongoose';
 import * as autopopulate from 'mongoose-autopopulate';
 import { plugin, prop, Ref, getModelForClass } from '@typegoose/typegoose';
 
-@plugin(autopopulate as any) // this is an dirty fix, because the types of this plugin dont work
+@plugin(autopopulate as any) // this is a dirty fix, because the types of this plugin dont work
 class SomeClass {
   @prop({ autopopulate: true, ref: 'SomeReferencedClass' })
   public populateField: Ref<SomeReferencedClass>;
@@ -38,8 +38,7 @@ const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 ```
 
 :::caution
-If you have a `ref` which refers back to its own class/model, like having a User class with a `createdBy` field referring
-back to User, then you'll need to set the `maxDepth` prop of `autocomplete` to 1. If you don't do this, Mongoose will do recursive calls to
+If you have a `ref` which refers back to its own class/model, like having a User class with a `createdBy` field referring back to User, then you'll need to set the `maxDepth` prop of `autocomplete` to 1. If you don't do this, Mongoose will do recursive calls to
 the user collection 10 times, extremely delaying the output of the query. Below is an example of how to set `maxDepth`.
 :::
 

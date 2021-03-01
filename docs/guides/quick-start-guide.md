@@ -14,7 +14,7 @@ Typegoose is a "wrapper" for easily writing Mongoose models with TypeScript.
 Instead of writing this:
 
 ```ts
-// This is an representation of how typegoose's compile output would look like
+// This is a representation of how typegoose's compile output would look
 interface Car {
   model?: string;
 }
@@ -75,22 +75,22 @@ class User {
   public name?: string;
 
   @prop({ required: true })
-  public age!: number; // This is an single Primitive
+  public age!: number; // This is a single Primitive
 
   @prop({ type: () => [String] })
-  public preferences?: string[]; // This is an Primitive Array
+  public preferences?: string[]; // This is a Primitive Array
 
   @prop()
-  public mainJob?: Job; // This is an single SubDocument
+  public mainJob?: Job; // This is a single SubDocument
 
   @prop({ type: () => Job })
-  public jobs?: Job[]; // This is an SubDocument Array
+  public jobs?: Job[]; // This is a SubDocument Array
 
   @prop({ ref: () => Car })
-  public mainCar?: Ref<Car>; // This is an single Reference
+  public mainCar?: Ref<Car>; // This is a single Reference
 
   @prop({ ref: () => Car })
-  public cars?: Ref<Car>[]; // This is an Reference Array
+  public cars?: Ref<Car>[]; // This is a Reference Array
 }
 ```
 
@@ -181,7 +181,7 @@ const docs = await KittenModel.findBySpecies("SomeSpecies");
 ```
 
 :::note
-pre-6.0 static functions needed `@staticMethod`, but this is not needed anymore
+pre-6.0 static functions needed `@staticMethod`, but this is not needed anymore.
 :::
 
 ### Instance Methods
@@ -208,12 +208,12 @@ await doc.setSpeciesAndSave("SomeOtherSpecies");
 ```
 
 :::note
-pre-6.0 static functions needed `@instanceMethod`, but this is not needed anymore
+Pre-6.0 static functions needed `@instanceMethod`, but this is not needed anymore.
 :::
 
 ### Hooks
 
-Typegoose also supports hooks, they can be used like this:
+Typegoose also supports hooks. They can be used like this:
 
 ```ts
 @pre<KittenClass>('save', function() {

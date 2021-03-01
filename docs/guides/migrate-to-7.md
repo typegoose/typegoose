@@ -30,7 +30,7 @@ All possible cache-maps that were in `data.ts` were refactored to be in the refl
 
 ## [IC] almost all "if-throw" blocks got replaced with "assertion" functions
 
-Typescript 3.7 introduced a new type-keyword [`asserts`](https://devblogs.microsoft.com/typescript/announcing-typescript-3-7/#assertion-functions) and now almost every occurence has been replaced with an custom assertion function.
+Typescript 3.7 introduced a new type-keyword [`asserts`](https://devblogs.microsoft.com/typescript/announcing-typescript-3-7/#assertion-functions) and now almost every occurence has been replaced with a custom assertion function.
 
 ---
 

@@ -55,7 +55,7 @@ You can then use, for example:
   const serialized = classToPlain(deserialized);
   ```
 
-* or an normal document:
+* or a normal document:
 
   ```ts
   // exec return a Mongoose Object
@@ -71,6 +71,6 @@ As you can see from these examples, there is:
 * a redundant step to first turn the output of the query into a full instance of `Account` : `plainToClass(..., ...)`
 * before being able to benefit from its features for serialization: `classToPlain(...)`
 
-Reason is that queries will output `DocumentType<Account>` (Mongoose Document) instead of required `Account` (Plain Object / instance of the Class) in this example.
+The reson for doing this is so queries will output `DocumentType<Account>` (Mongoose Document) instead of required `Account` (Plain Object / instance of the Class) in this example.
 
-`class-transformer` can only operates its magic on instances of annotated class.
+`class-transformer` can only operate its magic on instances of annotated classes.

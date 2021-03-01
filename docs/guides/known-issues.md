@@ -5,7 +5,7 @@ title: 'Known Issues'
 
 ## Known Issues
 
-[Please look here first, to decide if it is a Typegoose or an Mongoose issue.](https://github.com/Automattic/mongoose/issues?utf8=✓&q=is%3Aissue+involves%3Ahasezoey)
+[Please look here first, to decide if it is a Typegoose or a Mongoose issue.](https://github.com/Automattic/mongoose/issues?utf8=✓&q=is%3Aissue+involves%3Ahasezoey)
 
 ### transpile-only
 

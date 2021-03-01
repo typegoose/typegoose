@@ -101,7 +101,7 @@ To have the `this` keyword correctly typed, you have to pass a [this parameter](
 
 Accepts Type: `boolean`
 
-Set this to `false`. if you want to turn off creating IDs for sub-documents.
+Set this to `false`, if you want to turn off creating IDs for sub-documents.
 
 Example:
 
@@ -237,7 +237,7 @@ class Dummy {
 
 Accepts Type: `boolean`
 
-Set it to `false` if you want to retrieve data without this property by default  
+Set it to `false`, if you want to retrieve data without this property by default  
 -> [Read more in Mongoose's offical documentation](https://mongoosejs.com/docs/api.html#schematype_SchemaType-select)
 
 ```ts
@@ -285,7 +285,7 @@ Store string, runtime have string array (string array to string):
 
 ```ts
 class Dummy {
-  // this value is on runtime an "string-array" and is stored in the database as an "primite-string"
+  // this value is a "string-array" during runtime and is stored in the database as a "primite-string"
   @prop({ set: (val: string[]) => val.join(' '), get: (val: string) => val.split(' '), type: String }, WhatIsIt.NONE) // requires explicit setting of "WhatIsIt"
   public fullName?: string[];
 }
@@ -348,8 +348,7 @@ Accepts Type: `enum | any[]`
 Only allow values from the enum (best practice is to use TypeScript's enum).
 
 :::note
-`design:type` will be set to `String` if the enum is full of Strings, and `Number` if full of Numbers, and `Object` of the enum
-contains both.
+`design:type` will be set to `String`, if the enum is full of Strings, and `Number`, if full of Numbers and `Object` of the enum contains both.
 :::
 
 Example for String-Enums:
@@ -411,7 +410,7 @@ const AddNullToEnumModel = getModelForClass(AddNullToEnum);
 
 AddNullToEnumModel.schema.path('value').options.enum === [1, 2, null]; // true
 
-// this allows to do the following without an validation error
+// this is necessary to avoid a validation error
 new AddNullToEnumModel({ value: null } as AddNullToEnum);
 ```
 
@@ -513,7 +512,7 @@ await area.save();
 
 ### innerOptions
 
-`innerOptions` is used to overwrite options to be at the "Type" level
+`innerOptions` is used to override options at the "Type" level
 
 :::caution
 Use this only when absolutely necessary and please open a new issue about it
@@ -536,7 +535,7 @@ class Something {
   required: true
 }
 
-// when using the overwrite
+// when using the override
 class Something {
   @prop({ innerOptions: { required: true } })
   public propy: string[];
@@ -550,7 +549,7 @@ class Something {
 
 ### outerOptions
 
-`outerOptions` is used to overwrite options to be at the "Array" level
+`outerOptions` is used to override options at the "Array" level
 
 :::caution
 Use this only when absolutely necessary and please open a new issue about it
@@ -572,7 +571,7 @@ class Something {
   type: [{ type: String, maxlength: 1 }]
 }
 
-// when using the overwrite
+// when using the override
 class Something {
   @prop({ outerOptions: { maxlength: 1 } })
   public propy: string[];
@@ -590,7 +589,7 @@ class Something {
 ## Array Options
 
 :::note
-Option `type`(formally `items`) must be provided, otherwise the array will result in `Mixed` [read typegoose issue #300 for more](https://github.com/typegoose/typegoose/issues/300)
+Option `type`(formally `items`) must be provided, otherwise the array will result in `Mixed` [read typegoose issue #300 for more info](https://github.com/typegoose/typegoose/issues/300)
 :::
 
 Example:
@@ -620,9 +619,9 @@ Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
 
 ### dim
 
-`dim` is used to set the Dimensions this array should have (for something like an matrix)  
+`dim` is used to set the Dimensions this array should have (for something like a matrix)  
 -> needs to be higher than 0  
--> **This Option is overwritten by using `type () => [Type]`**
+-> **This Option is overridden by using `type () => [Type]`**
 
 Example:
 
@@ -638,7 +637,7 @@ class Something {
 }
 ```
 
-This Option can be ommitted if the following way is used: (since 7.4.0)
+This Option can be ommitted, if the following method is used: (as of 7.4.0)
 
 ```ts
 class ArrayInType {
@@ -657,7 +656,7 @@ Example:
 ```ts
 class SomeMapClass {
   @prop({ type: String })
-  public lookup?: Map<string, string>; // "Map<any, any>" or "mongoose.Types.Map<any>" is needed to be detected as an Map
+  public lookup?: Map<string, string>; // "Map<any, any>" or "mongoose.Types.Map<any>" is needed to be detected as a Map
 }
 ```
 
@@ -800,7 +799,7 @@ class Mined {
 
 ## WhatIsIt
 
-This is an Enum to represent what the prop should be, this is in most cases automatically set, it can be overwritten in the second parameter of `@prop`
+This is an Enum to represent what the prop should be, this is in most cases automatically set. It can be overridden in the second parameter of `@prop`
 
 Full Enum:
 
