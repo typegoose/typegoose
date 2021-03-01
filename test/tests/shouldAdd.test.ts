@@ -19,11 +19,11 @@ import { InternetUserModel } from '../models/internetUser';
 import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models/inventory';
 import { Job } from '../models/job';
 import { OptionsClass, OptionsModel } from '../models/options';
-import { Genders, User, UserModel } from '../models/user';
+import { Genders, UserModel } from '../models/user';
 import { NonVirtual, NonVirtualGS, NonVirtualGSModel, NonVirtualModel, VirtualModel, VirtualSubModel } from '../models/virtualprop';
 
 it('should add a language and job using instance methods', async () => {
-  const user = await UserModel.create<DocumentType<Omit<User, 'fullName'>>>({
+  const user = await UserModel.create({
     firstName: 'harry',
     lastName: 'potter',
     gender: Genders.MALE,

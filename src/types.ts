@@ -1,5 +1,4 @@
 import type * as mongoose from 'mongoose';
-import type { Base } from './defaultClasses';
 import type { Severity, WhatIsIt } from './internal/constants';
 
 /**
@@ -9,16 +8,17 @@ import type { Severity, WhatIsIt } from './internal/constants';
  * class Name {}
  * const NameModel = Name.getModelForClass(Name);
  *
- * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
+ * const t: DocumentType<Name> = await NameModel.create({});
  * ```
  */
-export type DocumentType<T> = (T extends Base<any> ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T) &
+export type DocumentType<T> = (T extends { _id: unknown } ? mongoose.Document<T['_id']> & T : mongoose.Document & T) &
   IObjectWithTypegooseFunction;
 // I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
  */
-export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T>, QueryHelpers>;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export type ModelType<T, _QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T> /* , QueryHelpers */>;
 /**
  * Any-param Constructor
  */
@@ -277,23 +277,13 @@ export interface VirtualOptions {
 export type PropOptionsForNumber = BasePropOptions & ValidateNumberOptions;
 export type PropOptionsForString = BasePropOptions & TransformStringOptions & ValidateStringOptions;
 
-export type RefType =
-  | number
-  | string
-  | Buffer
-  | undefined
-  | mongoose.Types.ObjectId
-  | mongoose.Types.Buffer
-  | typeof mongoose.Schema.Types.Number
-  | typeof mongoose.Schema.Types.String
-  | typeof mongoose.Schema.Types.Buffer
-  | typeof mongoose.Schema.Types.ObjectId;
-
-/**
- * Reference another Model
- */
-// export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
-export type Ref<R, T extends RefType = (R extends { _id?: RefType } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined> = R | T;
+export type RefType = mongoose.RefType;
+export type Ref<
+  PopulatedType,
+  RawId extends mongoose.RefType =
+    | (PopulatedType extends { _id?: mongoose.RefType } ? NonNullable<PopulatedType['_id']> : mongoose.Types.ObjectId)
+    | undefined
+> = mongoose.PopulatedDoc<PopulatedType, RawId>;
 
 /**
  * An Function type for a function that doesn't have any arguments and doesn't return anything

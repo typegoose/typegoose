@@ -30,7 +30,7 @@ import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullO
  */
 export function _buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
-  sch?: mongoose.Schema,
+  sch?: mongoose.Schema<any>,
   opt?: mongoose.SchemaOptions,
   isFinalSchema: boolean = true
 ) {
@@ -87,7 +87,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
         );
 
         for (const { type: child, value: childName } of discriminators) {
-          const childSch = getName(child) === name ? sch : (buildSchema(child) as mongoose.Schema & { paths: any });
+          const childSch = getName(child) === name ? sch : buildSchema(child);
 
           const discriminatorKey = childSch.get('discriminatorKey');
 

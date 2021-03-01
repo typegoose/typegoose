@@ -14,7 +14,7 @@ type HookNextErrorFn = (err?: Error) => ReturnVoid;
 
 type PreFnWithAggregate<T> = (this: Aggregate<T>, next: (error?: Error) => ReturnVoid, done: EmptyVoidFn) => ReturnVoid;
 type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => ReturnVoid;
-type PreFnWithQuery<T> = (this: Query<T>, next: (error?: Error) => ReturnVoid, done: EmptyVoidFn) => ReturnVoid;
+type PreFnWithQuery<T> = (this: Query<any, DocumentType<T>>, next: (error?: Error) => ReturnVoid, done: EmptyVoidFn) => ReturnVoid;
 
 type ModelPostFn<T> = (result: any, next: EmptyVoidFn) => ReturnVoid;
 

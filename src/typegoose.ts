@@ -116,14 +116,14 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
  * const NameModel = mongoose.model("Name", NameSchema);
  * ```
  */
-export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?: mongoose.SchemaOptions): mongoose.Schema<U> {
+export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?: mongoose.SchemaOptions): mongoose.Schema<DocumentType<U>> {
   assertionIsClass(cl);
 
   logger.debug('buildSchema called for "%s"', getName(cl));
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
-  let sch: mongoose.Schema<U> | undefined = undefined;
+  let sch: mongoose.Schema<DocumentType<U>> | undefined = undefined;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   // iterate trough all parents
@@ -254,7 +254,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const sch = buildSchema(cl) as mongoose.Schema & { paths: any };
+  const sch: mongoose.Schema<any> = buildSchema(cl);
 
   const discriminatorKey = sch.get('discriminatorKey');
 

@@ -6,7 +6,7 @@ import type { DocumentType, Ref, RefType } from './types';
  * Check if the given document is already populated
  * @param doc The Ref with uncertain type
  */
-export function isDocument<T, S extends RefType>(doc: Ref<T, S>): doc is DocumentType<NonNullable<T>> {
+export function isDocument<T, S extends RefType>(doc: Ref<T, S>): doc is DocumentType<T> {
   return doc instanceof mongoose.Model;
 }
 
