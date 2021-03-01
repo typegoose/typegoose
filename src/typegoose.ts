@@ -121,25 +121,25 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
  * const NameModel = mongoose.model("Name", NameSchema);
  * ```
  */
-export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?: mongoose.SchemaOptions) {
+export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?: mongoose.SchemaOptions): mongoose.Schema<U> {
   assertionIsClass(cl);
 
   logger.debug('buildSchema called for "%s"', getName(cl));
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
-  let sch: mongoose.Schema<U>;
+  let sch: mongoose.Schema<U> | undefined = undefined;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
     // extend schema
-    sch = _buildSchema(parentCtor, sch!, mergedOptions, false);
+    sch = _buildSchema(parentCtor, sch, mergedOptions, false);
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
   // get schema of current model
-  sch = _buildSchema(cl, sch!, mergedOptions);
+  sch = _buildSchema(cl, sch, mergedOptions);
 
   return sch;
 }
