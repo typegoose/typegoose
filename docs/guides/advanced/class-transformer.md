@@ -13,18 +13,22 @@ Suppose you have this `Account` class decorated with `class-transformer`:
 import { Exclude, Expose, Transform } from 'class-transformer';
 import { getModelForClass, mongoose, prop } from 'typegoose';
 
-// re-implement base Document to allow class-transformer to serialize/deserialize _id and __v
+// re-implement base Document to allow class-transformer to serialize/deserialize its properties
+// This class is needed, otherwise "_id" and "__v" would be excluded from the output
 class DocumentCT {
   @Expose()
-  @Transform(
-    // deserialize ObjectId into a string
-    (value: any) => value instanceof mongoose.Types.ObjectId
-      ? value.toHexString()
-      : value,
-    { toClassOnly: true })
+  // makes sure that when deserializing from a Mongoose Object, ObjectId is serialized into a string
+  @Transform((value: any) => {
+    if ("value" in value) {
+      return value.value instanceof mongoose.Types.ObjectId ? value.value.toHexString() : value.value.toString();
+    }
+
+    return "unknown value";
+  })
   public _id: string;
 
   @Expose()
+  // tslint:disable-next-line:variable-name
   public __v: number;
 }
 
@@ -41,6 +45,8 @@ class Account extends DocumentCT {
 
 const AccountModel = getModelForClass(Account);
 ```
+
+Side-Note: Typegoose dosnt provide an class like `DocumentCT` by default, because this would require adding `class-transformer` as an dependency
 
 You can then use, for example:
 
@@ -74,3 +80,9 @@ As you can see from these examples, there is:
 The reson for doing this is so queries will output `DocumentType<Account>` (Mongoose Document) instead of required `Account` (Plain Object / instance of the Class) in this example.
 
 `class-transformer` can only operate its magic on instances of annotated classes.
+
+---
+
+:::info
+For more information, you can always look at the [typegoose Class-Transformer tests](https://github.com/typegoose/typegoose/blob/master/test/tests/classTransformer.test.ts)
+:::

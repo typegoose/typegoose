@@ -12,18 +12,16 @@
     "lib/**/*.d.ts"
   ],
   "scripts": {
-    "build": "npm run lint && tsc -p tsconfig.build.json",
-    "build:tests": "npm run lint && tsc -p tsconfig.json",
+    "build": "yarn run lint && tsc -p tsconfig.build.json",
+    "build:tests": "yarn run lint && tsc -p tsconfig.json",
     "lint": "tslint --project tsconfig.json",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
     "test:watchCoverage": "jest --collectCoverage --watchAll",
     "watch": "tsc -w -p tsconfig.json",
-    "coverage": "cat ./coverage/lcov.info | coveralls",
     "clean": "rimraf lib .tsbuildinfo coverage doc build",
-    "prepare": "npm run build",
-    "version:patch": "npm version patch -m 'release: %s'"
+    "version:patch": "yarn version patch -m 'release: %s'"
   },
   "repository": {
     "type": "git",
@@ -40,14 +38,14 @@
     "mongoose": "5.10.0 - 5.10.18"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^11.0.0",
+    "@commitlint/config-conventional": "^12.0.1",
     "@types/jest": "^26.0.20",
     "@types/lodash": "^4.14.161",
     "@types/mongoose": "^5.10.2",
     "@types/node": "^10.17.16",
     "@types/semver": "^7.3.4",
-    "class-transformer": "^0.3.1",
-    "commitlint": "^11.0.0",
+    "class-transformer": "^0.4.0",
+    "commitlint": "^12.0.1",
     "coveralls": "^3.1.0",
     "husky": "^5.0.9",
     "jest": "^26.6.3",
@@ -61,7 +59,7 @@
     "tslint": "^6.1.3",
     "tslint-consistent-codestyle": "^1.16.0",
     "tslint-eslint-rules": "^5.4.0",
-    "typescript": "^3.9.7"
+    "typescript": "^4.2.2"
   },
   "dependencies": {
     "lodash": "^4.17.20",
