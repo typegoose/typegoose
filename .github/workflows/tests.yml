@@ -38,23 +38,22 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-# commented out for later
-# publish:
-#   if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/alpha' || github.ref == 'refs/heads/beta'
-#   needs: [tests]
-#   runs-on: ubuntu-latest
-#   steps:
-#     - uses: actions/checkout@v2
-#     - name: Use Node.js 12
-#       uses: actions/setup-node@v1
-#       with:
-#         node-version: 12.x
-#     - name: Install node_modules
-#       run: yarn install
-#     - name: Build
-#       run: yarn build
-#     - name: Semantic Release (publish to npm)
-#       run: yarn semantic-release
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  publish:
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta'
+    needs: [tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install node_modules
+        run: yarn install
+      - name: Build
+        run: yarn build
+      - name: Semantic Release (publish to npm)
+        run: yarn semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

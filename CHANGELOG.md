@@ -1,9 +1,7 @@
----
-id: changelog
-title: "Changelog"
+
 ---
 
-*`[IC]` means `Internal Change`*
+Everything Below here is manually made:
 
 ## 7.4.8
 
