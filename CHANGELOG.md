@@ -1,3 +1,23 @@
+## [7.5.0](https://github.com/typegoose/typegoose/compare/v7.4.8...v7.5.0) (2021-03-01)
+
+
+### Dependencies
+
+* **class-transformer:** upgrade to version "0.4.0" ([ead6fea](https://github.com/typegoose/typegoose/commit/ead6fead41afca0c0079dec9dedd1ab64d3ec626))
+* **commitlint:** upgrade to version "12.0.1" ([6657a0a](https://github.com/typegoose/typegoose/commit/6657a0af6cf8cf01b0a5a73890fcadc37c1d69be))
+* **typescript:** upgrade to version "4.2.2" ([8b67ac3](https://github.com/typegoose/typegoose/commit/8b67ac31362f0ae4da3b7a9e6913b39a245d2f79))
+* update dev dependencies ([922a507](https://github.com/typegoose/typegoose/commit/922a507d065762181826ec32a0a2a96b5e60236c))
+
+
+### Style
+
+* **lint:** fix lint ([64567e4](https://github.com/typegoose/typegoose/commit/64567e4c7f55d966cc8ff74c892fec7caa351643))
+
+
+### Fixes
+
+* **typegoose:** remove "non-null" assertion from "buildSchema" ([9d0a10b](https://github.com/typegoose/typegoose/commit/9d0a10b051585848b276650641c3820002d5075e))
+* **utils:** apply grammar change to error message ([a0304e0](https://github.com/typegoose/typegoose/commit/a0304e0ce6afdd45afdab49ba3b69e296f573170))
 
 ---
 
