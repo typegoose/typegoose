@@ -13,7 +13,7 @@ const staticOptions = {
   useFindAndModify: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
-  autoIndex: true
+  autoIndex: true,
 } as mongoose.ConnectionOptions;
 
 /**
@@ -24,12 +24,13 @@ export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<
   let connection: mongoose.Connection;
 
   const options = Object.assign({}, staticOptions);
+
   if (config.Memory) {
     if (config?.Auth?.User?.length > 0) {
       Object.assign(options, {
         user: config.Auth.User,
         pass: config.Auth.Passwd,
-        authSource: config.Auth.DB
+        authSource: config.Auth.DB,
       });
     }
   }

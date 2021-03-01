@@ -1,4 +1,5 @@
 import * as logger from 'loglevel';
+
 export { logger };
 
 export const setLogLevel = logger.setLevel;

@@ -28,7 +28,6 @@ class DocumentCT {
   public _id: string;
 
   @Expose()
-  // tslint:disable-next-line:variable-name
   public __v: number;
 }
 

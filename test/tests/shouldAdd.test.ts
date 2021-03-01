@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
 import { schemas } from '../../src/internal/data';
-
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import {
   buildSchema,
@@ -11,7 +10,7 @@ import {
   isDocument,
   isDocumentArray,
   prop,
-  Ref
+  Ref,
 } from '../../src/typegoose';
 import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
@@ -21,14 +20,7 @@ import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models
 import { Job } from '../models/job';
 import { OptionsClass, OptionsModel } from '../models/options';
 import { Genders, User, UserModel } from '../models/user';
-import {
-  NonVirtual,
-  NonVirtualGS,
-  NonVirtualGSModel,
-  NonVirtualModel,
-  VirtualModel,
-  VirtualSubModel
-} from '../models/virtualprop';
+import { NonVirtual, NonVirtualGS, NonVirtualGSModel, NonVirtualModel, VirtualModel, VirtualSubModel } from '../models/virtualprop';
 
 it('should add a language and job using instance methods', async () => {
   const user = await UserModel.create<DocumentType<Omit<User, 'fullName'>>>({
@@ -36,7 +28,7 @@ it('should add a language and job using instance methods', async () => {
     lastName: 'potter',
     gender: Genders.MALE,
     languages: ['english'],
-    uniqueId: 'unique-id'
+    uniqueId: 'unique-id',
   });
   await user.addJob(new Job({ position: 'Dark Wizzard', title: 'Archmage' }));
   await user.addJob();
@@ -55,21 +47,22 @@ it('should add and populate the virtual properties', async () => {
   const virtual1 = await VirtualModel.create({ dummyVirtual: 'dummyVirtual1' });
   const virtualsub1 = await VirtualSubModel.create({
     dummy: 'virtualSub1',
-    virtual: virtual1._id
+    virtual: virtual1._id,
   });
   const virtualsub2 = await VirtualSubModel.create({
     dummy: 'virtualSub2',
-    virtual: mongoose.Types.ObjectId() as Ref<any>
+    virtual: mongoose.Types.ObjectId() as Ref<any>,
   });
   const virtualsub3 = await VirtualSubModel.create({
     dummy: 'virtualSub3',
-    virtual: virtual1._id
+    virtual: virtual1._id,
   });
 
   const newfound = await VirtualModel.findById(virtual1._id).populate('virtualSubs').orFail().exec();
 
   expect(newfound.dummyVirtual).toEqual('dummyVirtual1');
   expect(newfound.virtualSubs).not.toBeUndefined();
+
   if (isDocumentArray(newfound.virtualSubs!)) {
     expect(newfound.virtualSubs[0].dummy).toEqual('virtualSub1');
     expect(newfound.virtualSubs[0]._id.toString()).toEqual(virtualsub1._id.toString());
@@ -102,19 +95,19 @@ it(`should add dynamic fields using map`, async () => {
   const user = await InternetUserModel.create({
     socialNetworks: {
       twitter: 'twitter account',
-      facebook: 'facebook account'
+      facebook: 'facebook account',
     },
     sideNotes: {
       day1: {
         content: 'day1',
-        link: 'url'
+        link: 'url',
       },
       day2: {
         content: 'day2',
-        link: 'url//2'
-      }
+        link: 'url//2',
+      },
     },
-    projects: {}
+    projects: {},
   });
   expect(user).not.toBeUndefined();
   expect(user).toHaveProperty('socialNetworks');
@@ -134,11 +127,11 @@ it(`should add dynamic fields using map`, async () => {
 it('should support dynamic references via refPath', async () => {
   const sprite = await BeverageModel.create({
     isDecaf: true,
-    isSugarFree: false
+    isSugarFree: false,
   });
 
   const vespa = await ScooterModel.create({
-    makeAndModel: 'Vespa'
+    makeAndModel: 'Vespa',
   });
 
   await InventoryModel.create({
@@ -146,7 +139,7 @@ it('should support dynamic references via refPath', async () => {
     kind: sprite,
     kindArray: [sprite],
     count: 10,
-    value: 1.99
+    value: 1.99,
   });
 
   await InventoryModel.create({
@@ -154,7 +147,7 @@ it('should support dynamic references via refPath', async () => {
     kind: vespa,
     kindArray: [vespa],
     count: 1,
-    value: 1099.98
+    value: 1099.98,
   });
 
   // I should now have two "inventory" items, with different embedded reference documents.
@@ -215,7 +208,8 @@ it('should make use of non-virtuals with pre- and post-processors', async () => 
 });
 
 it('should add options to ref [szokodiakos#379]', () => {
-  class T { }
+  class T {}
+
   class TestRef {
     @prop({ ref: T, customoption: 'custom' })
     public someprop: Ref<T>;
@@ -225,7 +219,7 @@ it('should add options to ref [szokodiakos#379]', () => {
   const someprop = schema.path('someprop');
   expect(schema).not.toBeUndefined();
   expect(someprop).not.toBeUndefined();
-  // @ts-expect-error
+  // @ts-expect-error because "options" dosnt exist on "SchemaType"
   const opt: any = someprop.options;
   expect(typeof opt.type).toEqual('function');
   expect(opt.ref).toEqual('T');
@@ -233,7 +227,8 @@ it('should add options to ref [szokodiakos#379]', () => {
 });
 
 it('should add options to refPath [szokodiakos#379]', () => {
-  class T { }
+  class T {}
+
   class TestRefPath {
     @prop({ default: 'T' })
     public something: string;
@@ -246,7 +241,7 @@ it('should add options to refPath [szokodiakos#379]', () => {
   const someprop = schema.path('someprop');
   expect(schema).not.toBeUndefined();
   expect(someprop).not.toBeUndefined();
-  // @ts-expect-error
+  // @ts-expect-error because "options" dosnt exist on "SchemaType"
   const opt: any = someprop.options;
   expect(typeof opt.type).toEqual('function');
   expect(opt.refPath).toEqual('something');
@@ -254,7 +249,8 @@ it('should add options to refPath [szokodiakos#379]', () => {
 });
 
 it('should add options to array-ref [szokodiakos#379]', () => {
-  class T { }
+  class T {}
+
   class TestArrayRef {
     @prop({ ref: T, customoption: 'custom' })
     public someprop: Ref<T>[];
@@ -264,7 +260,7 @@ it('should add options to array-ref [szokodiakos#379]', () => {
   const someprop = schema.path('someprop');
   expect(schema).not.toBeUndefined();
   expect(someprop).not.toBeUndefined();
-  // @ts-expect-error
+  // @ts-expect-error because "options" dosnt exist on "SchemaType"
   const opt: any = someprop.options.type[0];
   expect(typeof opt.type).toEqual('function');
   expect(opt.ref).toEqual('T');
@@ -272,7 +268,8 @@ it('should add options to array-ref [szokodiakos#379]', () => {
 });
 
 it('should add options to array-refPath [szokodiakos#379]', () => {
-  class EmptyClass { }
+  class EmptyClass {}
+
   class TestArrayRefPath {
     @prop({ default: getName(EmptyClass) })
     public something: string;
@@ -286,7 +283,7 @@ it('should add options to array-refPath [szokodiakos#379]', () => {
   expect(schema).not.toBeUndefined();
   expect(someprop).not.toBeUndefined();
   expect(someprop).toBeInstanceOf(mongoose.Schema.Types.Array);
-  // @ts-expect-error
+  // @ts-expect-error because "options" dosnt exist on "SchemaType"
   const opt: any = someprop.options.type[0];
   expect(typeof opt.type).toEqual('function');
   expect(opt.refPath).toEqual('something');
@@ -360,8 +357,8 @@ it('should work with both map creation types', async () => {
   const variant1 = new MapTestModel({
     prop: [
       ['key1', 1],
-      ['key2', 2]
-    ]
+      ['key2', 2],
+    ],
   });
   await variant1.validate();
 
@@ -404,6 +401,7 @@ it('should use "dim" correctly', () => {
     @prop()
     public nested?: string;
   }
+
   class DimArrayClass {
     @prop({ type: String, dim: 2 })
     public primitive?: string[][];
@@ -419,13 +417,13 @@ it('should use "dim" correctly', () => {
 
   // test primitive path
   {
-    type PrimitivePath = mongoose.Schema.Types.Array & { casterConstructor: { caster: mongoose.Schema.Types.String; }; };
+    type PrimitivePath = mongoose.Schema.Types.Array & { casterConstructor: { caster: mongoose.Schema.Types.String } };
     const primitivePath: PrimitivePath = schema.path('primitive') as any;
     expect(primitivePath).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(primitivePath.casterConstructor).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(primitivePath.casterConstructor.caster).toBeInstanceOf(mongoose.Schema.Types.String);
 
-    const primitiveFromSchemas: { type: [[{ type: mongoose.Schema.Types.String; }]]; } = fromSchemas.primitive as any;
+    const primitiveFromSchemas: { type: [[{ type: mongoose.Schema.Types.String }]] } = fromSchemas.primitive as any;
     expect(primitiveFromSchemas).not.toHaveProperty('dim');
     expect(primitiveFromSchemas.type).toBeInstanceOf(Array);
     expect(primitiveFromSchemas.type[0][0].type).toEqual(String);
@@ -433,14 +431,14 @@ it('should use "dim" correctly', () => {
 
   // test nested path
   {
-    type SubDocumentPath = mongoose.Schema.Types.Array & { casterConstructor: { caster: { schema: mongoose.Schema; }; }; };
+    type SubDocumentPath = mongoose.Schema.Types.Array & { casterConstructor: { caster: { schema: mongoose.Schema } } };
     const subdocumentPath: SubDocumentPath = schema.path('subdocument') as any;
     expect(subdocumentPath).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(subdocumentPath.casterConstructor).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(subdocumentPath.casterConstructor.caster).toBeInstanceOf(Function);
     expect(subdocumentPath.casterConstructor.caster.schema).toBeInstanceOf(mongoose.Schema);
 
-    const subdocumentFromSchemas: { type: [[{ type: mongoose.Schema; }]]; } = fromSchemas.subdocument as any;
+    const subdocumentFromSchemas: { type: [[{ type: mongoose.Schema }]] } = fromSchemas.subdocument as any;
     expect(subdocumentFromSchemas).not.toHaveProperty('dim');
     expect(subdocumentFromSchemas.type).toBeInstanceOf(Array);
     expect(subdocumentFromSchemas.type[0][0].type).toBeInstanceOf(mongoose.Schema);
@@ -455,7 +453,7 @@ it('should allow NestJS / Type-Graphql way of defining arrays [typegoose#365]', 
 
   const schema = buildSchema(ArrayAsType);
 
-  type PrimitivePath = mongoose.Schema.Types.Array & { casterConstructor: { caster: mongoose.Schema.Types.String; }; };
+  type PrimitivePath = mongoose.Schema.Types.Array & { casterConstructor: { caster: mongoose.Schema.Types.String } };
   const primitivePath: PrimitivePath = schema.path('primitive') as any;
   expect(primitivePath).toBeInstanceOf(mongoose.Schema.Types.Array);
   expect(primitivePath.casterConstructor).toBeInstanceOf(mongoose.Schema.Types.Array);
@@ -467,6 +465,7 @@ it('should allow dynamic use of "ref" (since mongoose 4.13)', async () => {
     @prop({ required: true })
     public someProp!: string;
   }
+
   class ParentRef {
     @prop({ ref: () => (doc: DocumentType<ParentRef>) => doc.from })
     public nested!: Ref<NestedRef>;
@@ -497,12 +496,13 @@ it('should allow dynamic "foreignField" and "localField" (since mongoose 4.13)',
     @prop({ required: true })
     public parentId!: mongoose.Types.ObjectId;
   }
+
   class ParentFFLF {
     @prop({
       ref: () => NestedFFLF,
       foreignField: () => 'parentId',
       localField: (doc: DocumentType<ParentFFLF>) => doc.local,
-      justOne: false
+      justOne: false,
     })
     public nested?: Ref<NestedFFLF>[];
 

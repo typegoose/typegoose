@@ -6,13 +6,13 @@ import { Job } from './job';
 
 export enum Genders {
   MALE = 'male',
-  FEMALE = 'female'
+  FEMALE = 'female',
 }
 
 export enum Role {
   Admin = 'admin',
   User = 'user',
-  Guest = 'guest'
+  Guest = 'guest',
 }
 
 @plugin(findOrCreate)
@@ -65,6 +65,7 @@ export class User extends defaultClasses.FindOrCreate {
   public get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
   }
+
   public set fullName(full: string) {
     const split = full.split(' ');
     this.firstName = split[0];

@@ -2,11 +2,11 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
-
 import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 
 /* istanbul ignore next */
-if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) { // for usage on client side
+if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
+  // for usage on client side
   /* istanbul ignore next */
   if (semver.lt(mongoose?.version, '5.10.0')) {
     throw new Error(`Please use mongoose 5.10.0 or higher (Current mongoose: ${mongoose.version}) [E001]`);
@@ -29,13 +29,7 @@ import { constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
 import { logger } from './logSettings';
 import { isModel } from './typeguards';
-import type {
-  AnyParamConstructor,
-  DocumentType,
-  IModelOptions,
-  Ref,
-  ReturnModelType
-} from './types';
+import type { AnyParamConstructor, BeAnObject, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
 
 /* exports */
 // export the internally used "mongoose", to not need to always import it
@@ -70,7 +64,7 @@ parseENV(); // call this before anything to ensure they are applied
  * const NameModel = getModelForClass(Name);
  * ```
  */
-export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = {}>(cl: U, options?: IModelOptions) {
+export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(cl: U, options?: IModelOptions) {
   assertionIsClass(cl);
   options = typeof options === 'object' ? options : {};
 
@@ -96,7 +90,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
 
   return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
     existingMongoose: roptions?.existingMongoose,
-    existingConnection: roptions?.existingConnection
+    existingConnection: roptions?.existingConnection,
   });
 }
 
@@ -165,10 +159,10 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
  * const model = addModelToTypegoose(mongoose.model("Name", schema), Name);
  * ```
  */
-export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = {}>(
+export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
   model: mongoose.Model<any>,
   cl: U,
-  options?: { existingMongoose?: mongoose.Mongoose; existingConnection?: any; }
+  options?: { existingMongoose?: mongoose.Mongoose; existingConnection?: any }
 ) {
   const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
 
@@ -181,8 +175,8 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
     !models.has(name),
     new Error(
       'It seems like "addModelToTypegoose" got called twice\n' +
-      'Or multiple classes with the same name are used, which is not supported!' +
-      `(Model Name: "${name}") [E003]`
+        'Or multiple classes with the same name are used, which is not supported!' +
+        `(Model Name: "${name}") [E003]`
     )
   );
 
@@ -251,7 +245,7 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
  * const C2Model = getDiscriminatorModelForClass(C1Model, C1);
  * ```
  */
-export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = {}>(
+export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
   from: mongoose.Model<any>,
   cl: U,
   value?: string
@@ -260,13 +254,15 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   assertionIsClass(cl);
 
   const name = getName(cl);
+
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const sch = buildSchema(cl) as mongoose.Schema & { paths: any; };
+  const sch = buildSchema(cl) as mongoose.Schema & { paths: any };
 
   const discriminatorKey = sch.get('discriminatorKey');
+
   if (sch.path(discriminatorKey)) {
     (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
   }

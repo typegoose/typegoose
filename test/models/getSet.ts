@@ -7,6 +7,7 @@ export class GetSet {
   public get someGetSet() {
     return this.actualProp;
   }
+
   public set someGetSet(v: string) {
     this.actualProp = v;
   }

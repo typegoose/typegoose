@@ -9,8 +9,8 @@ export class InvalidTypeError extends Error {
 export class NotNumberTypeError extends Error {
   constructor(targetName: string, key: string, enumKey: string, enumValue: string) {
     super(
-      `Typeof "${targetName}.${key}" is "Number", value is undefined/null or does not have a reverse mapping! [E011]\n`
-      + `  Encountered with property: ${enumKey}.${typeof enumValue}`
+      `Typeof "${targetName}.${key}" is "Number", value is undefined/null or does not have a reverse mapping! [E011]\n` +
+        `  Encountered with property: ${enumKey}.${typeof enumValue}`
     );
   }
 }
@@ -18,8 +18,8 @@ export class NotNumberTypeError extends Error {
 export class NotStringTypeError extends Error {
   constructor(targetName: string, key: string, enumKey: string, enumValue: string) {
     super(
-      `Typeof "${targetName}.${key}" is "String", used enum is not only Strings! [E010]\n`
-      + `  Encountered with property in Enum: ${enumKey}.${typeof enumValue}`
+      `Typeof "${targetName}.${key}" is "String", used enum is not only Strings! [E010]\n` +
+        `  Encountered with property in Enum: ${enumKey}.${typeof enumValue}`
     );
   }
 }

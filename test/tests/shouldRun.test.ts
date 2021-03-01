@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-
 import { DecoratorKeys } from '../../src/internal/constants';
 import { assertion, assignMetadata, createArrayFromDimensions, getName, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
@@ -12,23 +11,23 @@ import {
   isDocumentArray,
   modelOptions,
   prop,
-  queryMethod
+  queryMethod,
 } from '../../src/typegoose';
 import type { AsQueryMethod, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
 
-// tslint:disable:no-console
-
 it('should not error when trying to get model multiple times', () => {
-  class TEST { }
+  class TEST {}
+
   getModelForClass(TEST);
   getModelForClass(TEST);
 });
 
 it('should build multiple times', () => {
-  class TEST { }
+  class TEST {}
+
   buildSchema(TEST);
   buildSchema(TEST);
 });
@@ -40,6 +39,7 @@ it('should make use of addModelToTypegoose', async () => {
 
     public somesecondvalue!: string;
   }
+
   const schema = buildSchema(TestAMTT);
   schema.add({ somesecondvalue: { type: String, required: true } });
   const model = addModelToTypegoose(mongoose.model(TestAMTT.name, schema), TestAMTT);
@@ -89,7 +89,7 @@ it('should work with Objects in Class [szokodiakos#54]', async () => {
 });
 
 it('simple test for assignMetadata', () => {
-  class TestAssignMetadata { }
+  class TestAssignMetadata {}
 
   assignMetadata(DecoratorKeys.ModelOptions, { testOption: 'hello' }, TestAssignMetadata);
 
@@ -100,19 +100,22 @@ it('simple test for assignMetadata', () => {
 });
 
 it('should just run with an non existing value in "assignMetadata"', () => {
-  class Dummy { }
+  class Dummy {}
+
   assignMetadata(DecoratorKeys.ModelOptions, { test: 'hello' }, Dummy);
   assignMetadata(DecoratorKeys.ModelOptions, undefined, Dummy);
   expect(Reflect.getMetadata(DecoratorKeys.ModelOptions, Dummy)).toEqual({ test: 'hello' });
 });
 
 it('should just run with an non existing value in "mergeMetadata"', () => {
-  class Dummy { }
+  class Dummy {}
+
   assignMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
   expect(mergeMetadata(DecoratorKeys.ModelOptions, undefined, Dummy)).toEqual({ schemaOptions: { _id: false } });
 });
 it('should not modify current metadata object in "mergeMetadata"', () => {
-  class Dummy { }
+  class Dummy {}
+
   const someData = { property: 'value' };
   Reflect.defineMetadata(DecoratorKeys.ModelOptions, someData, Dummy);
   mergeMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
@@ -120,21 +123,22 @@ it('should not modify current metadata object in "mergeMetadata"', () => {
 });
 
 it('should just run with an non existing value in "mergeSchemaOptions"', () => {
-  class Dummy { }
+  class Dummy {}
+
   assignMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
   expect(mergeSchemaOptions(undefined, Dummy)).toEqual({ _id: false });
 });
 
 it('merge options with assignMetadata', () => {
   @modelOptions({ schemaOptions: { timestamps: true, _id: false } })
-  class TestAssignMetadata { }
+  class TestAssignMetadata {}
 
   const model = getModelForClass(TestAssignMetadata, {
     schemaOptions: {
       _id: true,
-      // @ts-ignore because it is only there for tests and doesn't exists on type "SchemaOptions" (from mongoose)
-      testOption: 'hello'
-    }
+      // @ts-expect-error because it is only there for tests and doesn't exists on type "SchemaOptions" (from mongoose)
+      testOption: 'hello',
+    },
   });
 
   const schemaOptions = (model.schema as any).options;
@@ -149,6 +153,7 @@ it('should make use of "@prop({ _id: false })" and have no _id', async () => {
     @prop()
     public hi: number;
   }
+
   class TestidFalse {
     @prop({ _id: false })
     public someprop?: TestidFalseNested;
@@ -176,6 +181,7 @@ it('should allow self-referencing classes', async () => {
     @prop({ ref: () => SelfReference })
     public ref?: Ref<SelfReference>;
   }
+
   const SelfReferenceModel = getModelForClass(SelfReference);
 
   const doc1 = await SelfReferenceModel.create();
@@ -197,7 +203,7 @@ it('should make use of required as function [szokodiakos#247]', async () => {
     @prop({
       required(this: DocumentType<RequiredFunction>) {
         return this.someProp > 0;
-      }
+      },
     })
     public someRequired?: string;
   }
@@ -261,6 +267,7 @@ it('should run with Custom Types', async () => {
       return Number(val);
     }
   }
+
   (mongoose.Schema.Types as any).CustomInt = CustomInt;
 
   class CustomIntClass {
@@ -345,12 +352,14 @@ it('should add "null" to the enum (addNullToEnum)', async () => {
   enum SomeNumberEnum {
     one = 1,
     two = 2,
-    three = 3
+    three = 3,
   }
+
   class AddNullToEnum {
     @prop({ enum: SomeNumberEnum, addNullToEnum: true, type: Number })
     public value?: SomeNumberEnum | null;
   }
+
   const AddNullToEnumModel = getModelForClass(AddNullToEnum);
 
   const doc = new AddNullToEnumModel({ value: null } as AddNullToEnum);
@@ -366,6 +375,7 @@ it('should add query Methods', async () => {
     findByName: AsQueryMethod<typeof findByName>;
     findByLastname: AsQueryMethod<typeof findByLastname>;
   }
+
   function findByName(this: ReturnModelType<typeof QueryMethodsClass, FindHelpers>, name: string) {
     return this.find({ name });
   }
@@ -388,8 +398,7 @@ it('should add query Methods', async () => {
 
   const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethodsClass);
   expect(Array.from(metadata)).toEqual(
-    expect.arrayContaining([['findByName', findByName]]) &&
-    expect.arrayContaining([['findByLastname', findByLastname]])
+    expect.arrayContaining([['findByName', findByName]]) && expect.arrayContaining([['findByLastname', findByLastname]])
   );
 
   const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
@@ -413,12 +422,12 @@ it('should be map none/array/map correctly if using get/set options [typegoose#4
 
   const schema = buildSchema(TestGetSetOptions);
   expect(schema.path('normal')).toBeInstanceOf(mongoose.Schema.Types.Number);
-  expect((schema.path('normal') as any)).not.toHaveProperty('caster');
+  expect(schema.path('normal') as any).not.toHaveProperty('caster');
   expect(schema.path('array')).toBeInstanceOf(mongoose.Schema.Types.Array);
   expect((schema.path('array') as any).caster).toBeInstanceOf(mongoose.Schema.Types.Number);
   expect(schema.path('map')).toBeInstanceOf(mongoose.Schema.Types.Map);
   expect((schema.path('map') as any).$__schemaType).toBeInstanceOf(mongoose.Schema.Types.Number);
-  expect((schema.path('map') as any)).not.toHaveProperty('caster');
+  expect(schema.path('map') as any).not.toHaveProperty('caster');
 });
 
 it('should not Error if get/set options are used and type is an class and is an array [typegoose#478]', async () => {

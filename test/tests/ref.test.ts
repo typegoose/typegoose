@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-
 import { assertion, getName } from '../../src/internal/utils';
 import { getModelForClass, isDocument, isDocumentArray, isRefType, prop, Ref } from '../../src/typegoose';
 import { RefTestArrayTypesModel, RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
@@ -185,7 +184,7 @@ it('check typeguards', async () => {
     refFieldNumber: 1234,
     refArrayNumber: [1234, 5678],
     refFieldBuffer: Buffer.from([1, 2, 3, 4]),
-    refArrayBuffer: [Buffer.from([1, 2, 3, 4]), Buffer.from([5, 6, 7, 8])]
+    refArrayBuffer: [Buffer.from([1, 2, 3, 4]), Buffer.from([5, 6, 7, 8])],
   });
 
   expect(isDocument(idFields.refField)).toEqual(false);
@@ -208,8 +207,8 @@ it('check typeguards', async () => {
     refFieldBuffer: await RefTestBufferModel.create({ _id: Buffer.from([1, 2, 3, 4, 5]) }),
     refArrayBuffer: [
       await RefTestBufferModel.create({ _id: Buffer.from([5, 6, 7, 8, 9]) }),
-      await RefTestBufferModel.create({ _id: Buffer.from([9, 8, 7, 6, 5]) })
-    ]
+      await RefTestBufferModel.create({ _id: Buffer.from([9, 8, 7, 6, 5]) }),
+    ],
   });
 
   const populate = Object.keys(RefTestModel.schema.obj);

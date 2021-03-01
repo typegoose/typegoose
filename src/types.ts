@@ -1,5 +1,4 @@
 import type * as mongoose from 'mongoose';
-
 import type { Base } from './defaultClasses';
 import type { Severity, WhatIsIt } from './internal/constants';
 
@@ -13,14 +12,13 @@ import type { Severity, WhatIsIt } from './internal/constants';
  * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
  * ```
  */
-export type DocumentType<T> = (
-  T extends Base<any> ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T
-) & IObjectWithTypegooseFunction;
+export type DocumentType<T> = (T extends Base<any> ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T) &
+  IObjectWithTypegooseFunction;
 // I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
  */
-export type ModelType<T, QueryHelpers = {}> = mongoose.Model<DocumentType<T>, QueryHelpers>;
+export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T>, QueryHelpers>;
 /**
  * Any-param Constructor
  */
@@ -28,7 +26,7 @@ export type AnyParamConstructor<T> = new (...args: any) => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
  */
-export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = {}> = ModelType<InstanceType<U>, QueryHelpers> & U;
+export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject> = ModelType<InstanceType<U>, QueryHelpers> & U;
 
 export type Func = (...args: any[]) => any;
 
@@ -78,7 +76,7 @@ export interface BasePropOptions {
    */
   required?: RequiredType;
   /** Only accept Values from the Enum(|Array) */
-  enum?: string[] | object;
+  enum?: string[] | BeAnObject;
   /** Add "null" to the enum array */
   addNullToEnum?: boolean;
   /** Give the Property a default Value */
@@ -161,10 +159,7 @@ export interface BasePropOptions {
    * This may be needed if get/set is used
    * (this sets the type how it is saved to the DB)
    */
-  type?:
-  | DeferredFunc<AnyParamConstructor<any>>
-  | DeferredFunc<unknown>
-  | unknown;
+  type?: DeferredFunc<AnyParamConstructor<any>> | DeferredFunc<unknown> | unknown;
   /**
    * Make a property read-only
    * @example
@@ -192,7 +187,7 @@ export interface BasePropOptions {
   /**
    * This option as only an effect when the plugin `mongoose-autopopulate` is used
    */
-  // tslint:disable-next-line:ban-types
+  // eslint-disable-next-line @typescript-eslint/ban-types
   autopopulate?: boolean | Function | KeyStringAny;
   /** Reference an other Document (you should use Ref<T> as Prop type) */
   ref?: DeferredFunc<string | AnyParamConstructor<any> | DynamicStringFunc<any>> | string | AnyParamConstructor<any>;
@@ -317,10 +312,7 @@ export type RefType =
  * Reference another Model
  */
 // export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
-export type Ref<
-  R,
-  T extends RefType = (R extends { _id?: RefType; } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined
-  > = R | T;
+export type Ref<R, T extends RefType = (R extends { _id?: RefType } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined> = R | T;
 
 /**
  * An Function type for a function that doesn't have any arguments and doesn't return anything
@@ -438,7 +430,7 @@ export interface IndexOptions<T> {
    * Creates a partial index based on the given filter object (MongoDB 3.2 or higher)
    */
   partialFilterExpression?: any;
-  collation?: object;
+  collation?: BeAnObject;
   default_language?: string;
   language_override?: string;
 
@@ -447,7 +439,7 @@ export interface IndexOptions<T> {
   trim?: boolean; // whether to always call .trim() on the value
 
   weights?: {
-    [P in keyof Partial<T>]: number
+    [P in keyof Partial<T>]: number;
   };
 }
 
@@ -483,7 +475,6 @@ export interface IPluginsArray<T> {
  * ```
  */
 export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
-
 
 /**
  * Gets the signature (parameters with their types, and the return type) of a function type.
@@ -543,7 +534,7 @@ export interface IGlobalOptions {
    * Global Options for general Typegoose
    * (There are currently none)
    */
-  globalOptions?: {};
+  globalOptions?: BeAnObject;
 }
 
 export interface IObjectWithTypegooseFunction {
@@ -571,3 +562,8 @@ export interface GetTypeReturn {
   type: unknown;
   dim: number;
 }
+
+/**
+ * This type is for lint error "ban-types"
+ */
+export type BeAnObject = Record<string, any>;

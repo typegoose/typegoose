@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-
 import { isNullOrUndefined } from './internal/utils';
 import type { DocumentType, Ref, RefType } from './types';
 
@@ -18,12 +17,9 @@ export function isDocument<T, S extends RefType>(doc: Ref<T, S>): doc is Documen
 export function isDocumentArray<T, S extends RefType>(
   docs: mongoose.Types.Array<Ref<T, S>> | undefined
 ): docs is mongoose.Types.Array<DocumentType<NonNullable<T>>>;
-export function isDocumentArray<T, S extends RefType>(
-  docs: Ref<T, S>[] | undefined
-): docs is DocumentType<NonNullable<T>>[];
-export function isDocumentArray(
-  docs: Ref<any, any>[] | undefined
-): unknown { // its "any" & "unkown" because this is not listed as an overload
+export function isDocumentArray<T, S extends RefType>(docs: Ref<T, S>[] | undefined): docs is DocumentType<NonNullable<T>>[];
+export function isDocumentArray(docs: Ref<any, any>[] | undefined): unknown {
+  // its "any" & "unkown" because this is not listed as an overload
   return Array.isArray(docs) && docs.every((v) => isDocument(v));
 }
 
@@ -42,12 +38,9 @@ export function isRefType<T, S extends RefType>(doc: Ref<T, S> | undefined): doc
 export function isRefTypeArray<T, S extends RefType>(
   docs: mongoose.Types.Array<Ref<T, S>> | undefined
 ): docs is mongoose.Types.Array<NonNullable<S>>;
-export function isRefTypeArray<T, S extends RefType>(
-  docs: Ref<T, S>[] | undefined
-): docs is NonNullable<S>[];
-export function isRefTypeArray(
-  docs: Ref<any, any>[] | undefined
-): unknown { // its "any" & "unkown" because this is not listed as an overload
+export function isRefTypeArray<T, S extends RefType>(docs: Ref<T, S>[] | undefined): docs is NonNullable<S>[];
+export function isRefTypeArray(docs: Ref<any, any>[] | undefined): unknown {
+  // its "any" & "unkown" because this is not listed as an overload
   return Array.isArray(docs) && docs.every((v) => isRefType(v));
 }
 

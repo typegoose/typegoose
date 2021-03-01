@@ -1,7 +1,7 @@
 import { getClassForDocument, getModelForClass, modelOptions, prop } from '../../src/typegoose';
 
 it('expect no changes to model Name when not using customOptions or collection', () => {
-  class NormalOptions { }
+  class NormalOptions {}
 
   const model = getModelForClass(NormalOptions);
   expect(model.modelName).toEqual('NormalOptions');
@@ -13,7 +13,7 @@ it('expect no changes to model Name when not using customOptions or collection',
 
 it('if collection is defined to be automatically used with automaticName', () => {
   @modelOptions({ schemaOptions: { collection: 'Something' }, options: { automaticName: true } })
-  class CollectionOption { }
+  class CollectionOption {}
 
   const model = getModelForClass(CollectionOption);
   expect(model.modelName).toEqual('CollectionOption_Something');
@@ -25,7 +25,7 @@ it('if collection is defined to be automatically used with automaticName', () =>
 
 it('if options.customName is defined to be used with automaticName', () => {
   @modelOptions({ options: { customName: 'CustomName', automaticName: true } })
-  class CustomNameOption { }
+  class CustomNameOption {}
 
   const model = getModelForClass(CustomNameOption);
   expect(model.modelName).toEqual('CustomNameOption_CustomName');
@@ -37,7 +37,7 @@ it('if options.customName is defined to be used with automaticName', () => {
 
 it('expect to use options.customName if both are defined with automaticName', () => {
   @modelOptions({ options: { customName: 'CustomName2', automaticName: true }, schemaOptions: { collection: 'Something2' } })
-  class BothOptions { }
+  class BothOptions {}
 
   const model = getModelForClass(BothOptions);
   expect(model.modelName).toEqual('BothOptions_CustomName2');
@@ -48,11 +48,11 @@ it('expect to use options.customName if both are defined with automaticName', ()
 });
 
 it('create multiple models depending on options with base class (extends) with automaticName', () => {
-  class MultiModelBase { }
+  class MultiModelBase {}
 
   {
     @modelOptions({ schemaOptions: { collection: 'Something' }, options: { automaticName: true } })
-    class MultiModel extends MultiModelBase { }
+    class MultiModel extends MultiModelBase {}
 
     const model = getModelForClass(MultiModel);
     expect(model.modelName).toEqual('MultiModel_Something');
@@ -63,7 +63,7 @@ it('create multiple models depending on options with base class (extends) with a
   }
   {
     @modelOptions({ schemaOptions: { collection: 'SomethingDifferent' }, options: { automaticName: true } })
-    class MultiModel extends MultiModelBase { }
+    class MultiModel extends MultiModelBase {}
 
     const model = getModelForClass(MultiModel);
     expect(model.modelName).toEqual('MultiModel_SomethingDifferent');
@@ -141,8 +141,8 @@ it('should use the given function to create the custom name', () => {
     schemaOptions: { collection: 'SomethingDifferent' },
     options: {
       automaticName: false,
-      customName: (options) => `${options.schemaOptions?.collection}_someSuffix`
-    }
+      customName: (options) => `${options.schemaOptions?.collection}_someSuffix`,
+    },
   })
   class UseFunctionForName {
     @prop()
@@ -154,15 +154,13 @@ it('should use the given function to create the custom name', () => {
 });
 
 it('should use the given function to create the custom name and ignore automatic name creation', () => {
-  @modelOptions(
-    {
-      schemaOptions: { collection: 'SomethingDifferent' },
-      options: {
-        automaticName: true,
-        customName: (options) => `${options.schemaOptions?.collection}_someSuffix`
-      }
-    }
-  )
+  @modelOptions({
+    schemaOptions: { collection: 'SomethingDifferent' },
+    options: {
+      automaticName: true,
+      customName: (options) => `${options.schemaOptions?.collection}_someSuffix`,
+    },
+  })
   class UseFunctionForName2 {
     @prop()
     public test: string;

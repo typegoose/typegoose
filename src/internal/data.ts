@@ -1,5 +1,4 @@
 import type { Model, SchemaDefinition } from 'mongoose';
-
 import type { IGlobalOptions } from '../types';
 import { Severity } from './constants';
 
@@ -12,6 +11,6 @@ export const constructors: Map<string, NewableFunction> = new Map();
 /** Global Options */
 export const globalOptions: IGlobalOptions = {
   options: {
-    allowMixed: Severity.WARN
-  }
+    allowMixed: Severity.WARN,
+  },
 };

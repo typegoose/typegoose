@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-
 import { StringValidatorEnum, StringValidatorsModel } from '../models/stringValidators';
 
 // Please try to keep this file in sync with ./arrayValidator.test.ts
@@ -8,7 +7,7 @@ it('should respect maxlength', async () => {
   expect.assertions(1);
   await expect(
     StringValidatorsModel.create({
-      maxLength: 'this is too long'
+      maxLength: 'this is too long',
     })
   ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
@@ -17,28 +16,28 @@ it('should respect minlength', async () => {
   expect.assertions(1);
   await expect(
     StringValidatorsModel.create({
-      minLength: 'too short'
+      minLength: 'too short',
     })
   ).rejects.toBeInstanceOf(mongoose.Error.ValidationError);
 });
 
 it('should trim', async () => {
   const trimmed = await StringValidatorsModel.create({
-    trimmed: 'trim my end    '
+    trimmed: 'trim my end    ',
   });
   expect(trimmed.trimmed).toEqual('trim my end');
 });
 
 it('should uppercase', async () => {
   const uppercased = await StringValidatorsModel.create({
-    uppercased: 'make me uppercase'
+    uppercased: 'make me uppercase',
   });
   expect(uppercased.uppercased).toEqual('MAKE ME UPPERCASE');
 });
 
 it('should lowercase', async () => {
   const lowercased = await StringValidatorsModel.create({
-    lowercased: 'MAKE ME LOWERCASE'
+    lowercased: 'MAKE ME LOWERCASE',
   });
   expect(lowercased.lowercased).toEqual('make me lowercase');
 });
@@ -46,8 +45,8 @@ it('should lowercase', async () => {
 it('should respect enum', async () => {
   try {
     await StringValidatorsModel.create({
-      // @ts-expect-error
-      enumed: 'not in the enum' // string not in the enum
+      // @ts-expect-error expect error because "string" is not in the enum
+      enumed: 'not in the enum', // string not in the enum
     });
 
     fail('Expected to throw ValidationError!');
@@ -56,7 +55,7 @@ it('should respect enum', async () => {
   }
 
   const doc = await StringValidatorsModel.create({
-    enumed: StringValidatorEnum.OPT2
+    enumed: StringValidatorEnum.OPT2,
   });
 
   expect(doc).not.toBeUndefined();

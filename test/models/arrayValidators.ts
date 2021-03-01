@@ -5,13 +5,13 @@ import { getModelForClass, prop } from '../../src/typegoose';
 export enum ArrayValidatorEnumString {
   OPT1 = 'one',
   OPT2 = 'two',
-  OPT3 = 'three'
+  OPT3 = 'three',
 }
 
 export enum ArrayValidatorEnumNumber {
   OPT1 = 0,
   OPT2 = 3,
-  OPT3 = 6
+  OPT3 = 6,
 }
 
 export class ArrayValidators {

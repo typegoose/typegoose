@@ -1,6 +1,5 @@
 import { intersection, mergeWith, omit } from 'lodash';
 import * as mongoose from 'mongoose';
-
 import { logger } from '../logSettings';
 import type {
   AnyParamConstructor,
@@ -13,7 +12,7 @@ import type {
   KeyStringAny,
   PropOptionsForNumber,
   PropOptionsForString,
-  VirtualOptions
+  VirtualOptions,
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
@@ -89,6 +88,7 @@ export function isObject(Type: any, once: boolean = false): boolean {
       if (once) {
         break;
       }
+
       prototype = Object.getPrototypeOf(prototype);
       name = prototype?.constructor.name;
     }
@@ -177,9 +177,7 @@ export function getClass(
     return constructors.get(input.typegooseName());
   }
 
-  throw new ReferenceError(
-    'Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]'
-  );
+  throw new ReferenceError('Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]');
 }
 
 /**
@@ -243,7 +241,7 @@ export function includesAllVirtualPOP(options: VirtualOptions): options is Virtu
  * @param cl The constructor
  * @internal
  */
-export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): any {
+export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): any {
   if (isNullOrUndefined(value)) {
     return value;
   }
@@ -262,7 +260,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
  * @param cl The constructor
  * @internal
  */
-export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: new () => {}): T {
+export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): T {
   assertion(typeof key === 'string', new TypeError(`"${key}"(key) is not a string! (mergeMetadata)`));
   assertionIsClass(cl);
 
@@ -320,7 +318,12 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
   if (typeof customName === 'function') {
     const name: any = customName(options);
 
-    assertion(typeof name === 'string' && name.length > 0, new TypeError(`The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`));
+    assertion(
+      typeof name === 'string' && name.length > 0,
+      new TypeError(
+        `The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`
+      )
+    );
 
     return name;
   }
@@ -349,12 +352,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
  * @param cl The Type
  */
 export function isNotDefined(cl: any) {
-  return (
-    typeof cl === 'function'
-    && !isPrimitive(cl)
-    && cl !== Object
-    && !schemas.has(getName(cl))
-  );
+  return typeof cl === 'function' && !isPrimitive(cl) && cl !== Object && !schemas.has(getName(cl));
 }
 
 /**
@@ -377,7 +375,7 @@ export function mapArrayOptions(
   loggerType?: AnyParamConstructor<any>
 ): mongoose.SchemaTypeOpts<any> {
   logger.debug('mapArrayOptions called');
-  loggerType = loggerType ?? Type as AnyParamConstructor<any>;
+  loggerType = loggerType ?? (Type as AnyParamConstructor<any>);
 
   if (!(Type instanceof mongoose.Schema)) {
     loggerType = Type;
@@ -394,9 +392,9 @@ export function mapArrayOptions(
     type: [
       {
         type: Type,
-        ...mapped.inner
-      }
-    ]
+        ...mapped.inner,
+      },
+    ],
   };
 
   rawOptions.dim = dim; // re-add for "createArrayFromDimensions"
@@ -426,16 +424,17 @@ export function mapOptions(
   loggerType?: AnyParamConstructor<any>
 ) {
   logger.debug('mapOptions called');
-  loggerType = loggerType ?? Type as AnyParamConstructor<any>;
+  loggerType = loggerType ?? (Type as AnyParamConstructor<any>);
 
   /** The Object that gets returned */
   const ret = {
     inner: {} as KeyStringAny,
-    outer: {} as KeyStringAny
+    outer: {} as KeyStringAny,
   };
 
   if (!(Type instanceof mongoose.Schema)) {
     loggerType = Type;
+
     if (getName(loggerType) in mongoose.Schema.Types) {
       logger.info('Converting "%s" to mongoose Type', getName(loggerType));
       Type = mongoose.Schema.Types[getName(loggerType)];
@@ -460,7 +459,10 @@ export function mapOptions(
     OptionsCTOR = (mongoose as any).Schema.Types.Embedded.prototype.OptionsConstructor;
   }
 
-  assertion(!isNullOrUndefined(OptionsCTOR), new TypeError(`Type does not have a valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`));
+  assertion(
+    !isNullOrUndefined(OptionsCTOR),
+    new TypeError(`Type does not have a valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`)
+  );
 
   const options = Object.assign({}, rawOptions); // for sanity
   delete options.items;
@@ -516,7 +518,11 @@ export function warnMixed(target: any, key: string): void | never {
   switch (modelOptions.options?.allowMixed) {
     default:
     case Severity.WARN:
-      logger.warn('Setting "Mixed" for property "%s.%s"\nLook here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed', name, key);
+      logger.warn(
+        'Setting "Mixed" for property "%s.%s"\nLook here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed',
+        name,
+        key
+      );
 
       break;
     case Severity.ALLOW:
@@ -557,9 +563,11 @@ export function assignGlobalModelOptions(target: any) {
 export function createArrayFromDimensions(rawOptions: any, extra: any, name: string, key: string) {
   // dimensions start at 1 (not 0)
   const dim = typeof rawOptions.dim === 'number' ? rawOptions.dim : 1;
+
   if (dim < 1) {
     throw new RangeError(`"dim" needs to be higher than 0 (${name}.${key}) [E018]`);
   }
+
   delete rawOptions.dim; // delete this property to not actually put it as an option
   logger.info('createArrayFromDimensions called with %d dimensions', dim);
 
@@ -600,7 +608,7 @@ export function assertionIsClass(val: any): asserts val is Func {
 export function getType(typeOrFunc: Func | any, returnLastFoundArray: boolean = false): GetTypeReturn {
   const returnObject: GetTypeReturn = {
     type: typeOrFunc,
-    dim: 0
+    dim: 0,
   };
 
   if (typeof returnObject.type === 'function' && !isConstructor(returnObject.type)) {
@@ -608,14 +616,17 @@ export function getType(typeOrFunc: Func | any, returnLastFoundArray: boolean = 
   }
 
   function getDepth(): void {
-    if (returnObject.dim > 100) { // this is arbitrary, but why would anyone have more than 10 nested arrays anyway?
+    if (returnObject.dim > 100) {
+      // this is arbitrary, but why would anyone have more than 10 nested arrays anyway?
       throw new Error('getDepth recursed too much (dim > 100)');
     }
     if (Array.isArray(returnObject.type)) {
       returnObject.dim++;
+
       if (returnLastFoundArray && !Array.isArray(returnObject.type[0])) {
         return;
       }
+
       returnObject.type = returnObject.type[0];
       getDepth();
     }
@@ -641,14 +652,13 @@ export function isConstructor(obj: any): obj is AnyParamConstructor<any> {
  * Execute util.deprecate or when !process console log
  * (if client, it dosnt cache which codes already got logged)
  */
-/* tslint:disable-next-line:ban-types */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function deprecate<T extends Function>(fn: T, message: string, code: string): T {
   if (!isNullOrUndefined(process)) {
-    /* tslint:disable-next-line:no-require-imports */
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     return require('util').deprecate(fn, message, code);
   }
 
-  /* tslint:disable-next-line:no-console */
   console.log(`[${code}] DeprecationWarning: ${message}`);
 
   return fn;
@@ -666,8 +676,7 @@ export function warnNotCorrectTypeOptions(name: string, key: string, type: strin
   // this "if" is in this function to de-duplicate code
   if (included.length > 0) {
     logger.warn(
-      `Type of "${name}.${key}" is not ${type}, but includes the following ${extra} options [W001]:\n`
-      + `  [${included.join(', ')}]`
+      `Type of "${name}.${key}" is not ${type}, but includes the following ${extra} options [W001]:\n` + `  [${included.join(', ')}]`
     );
   }
 }

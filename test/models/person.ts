@@ -6,6 +6,7 @@ import { PersistentModel } from './persistentModel';
   if (!this.createdAt) {
     this.createdAt = new Date();
   }
+
   next();
 })
 export class Person extends PersistentModel {

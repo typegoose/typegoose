@@ -14,7 +14,7 @@ it('RegEXP tests', async () => {
 
 it('should update the property using isModified during pre save hook', async () => {
   const hook = await HookModel.create({
-    material: 'steel'
+    material: 'steel',
   });
   expect(hook).toHaveProperty('shape', 'oldShape');
 

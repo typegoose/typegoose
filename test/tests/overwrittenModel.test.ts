@@ -7,9 +7,9 @@ import { NormalUser, OverwrittenUser } from './../models/overwrittenUser';
 it('should be possible to overwrite an existing model', () => {
   const options = {
     schemaOptions: {
-      collection: 'OverwriteUser'
+      collection: 'OverwriteUser',
     },
-    options: { customName: 'User' }
+    options: { customName: 'User' },
   } as types.IModelOptions;
 
   @modelOptions(options)
