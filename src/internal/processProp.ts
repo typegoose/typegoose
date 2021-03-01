@@ -33,25 +33,8 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     // soft errors & "type"-alias mapping
     switch (propKind) {
       case WhatIsIt.NONE:
-        if ('items' in rawOptions) {
-          logger.warn('You might not want to use option "items" for an non-array @prop type (%s.%s)', name, key);
-        }
-
-        if ('of' in rawOptions) {
-          logger.warn('You might not want to use option "of" for an non-map @prop type (%s.%s)', name, key);
-        }
-
         break;
       case WhatIsIt.ARRAY:
-        if ('items' in rawOptions) {
-          rawOptions.type = rawOptions.items;
-          delete rawOptions.items;
-        }
-
-        if ('of' in rawOptions) {
-          logger.warn('You might not want to use option "of" where the "design:type" is "Array" (%s.%s)', name, key);
-        }
-
         // set the "Type" to undefined, if "ref" or "refPath" are defined, otherwise the "refType" will be wrong
         if (('ref' in rawOptions || 'refPath' in rawOptions) && !('type' in rawOptions)) {
           Type = undefined;
@@ -59,15 +42,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
         break;
       case WhatIsIt.MAP:
-        if ('of' in rawOptions) {
-          rawOptions.type = rawOptions.of;
-          delete rawOptions.of;
-        }
-
-        if ('items' in rawOptions) {
-          logger.warn('You might not want to use option "items" where the "design:type" is "Map" (%s.%s)', name, key);
-        }
-
         break;
     }
   }
@@ -478,22 +452,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
  * Check for deprecated options, and if needed process them
  * @param options
  */
-function optionDeprecation(options: any) {
-  if ('refType' in options) {
-    options.type = options.refType;
-    delete options.refType;
-
-    utils.deprecate(() => undefined, 'Option "refType" is deprecated, use option "type"', 'TDEP0003')();
-  }
-
-  if ('of' in options) {
-    utils.deprecate(() => undefined, 'Option "of" is deprecated, use option "type"', 'TDEP0003')();
-  }
-
-  if ('items' in options) {
-    utils.deprecate(() => undefined, 'Option "items" is deprecated, use option "type"', 'TDEP0003')();
-  }
-}
+function optionDeprecation(options: any) {}
 
 /**
  * Detect "WhatIsIt" based on "Type"

@@ -171,24 +171,6 @@ class Another {
 }
 ```
 
-### refType
-
-<!--The "|" need to be escaped, because of some formatting from jekyll-->
-Accepts Type: `mongoose.Schema.Types.Number` \| `mongoose.Schema.Types.String` \| `mongoose.Schema.Types.Buffer` \| `mongoose.Schema.Types.ObjectId`
-
-Set which Type to use for refs.
-
-Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
-
-```ts
-class Nested {}
-
-class Parent {
-  @prop({ ref: 'Nested', refType: mongoose.Schema.Types.ObjectId }) // it is a "String" because of reference errors
-  public nest: Ref<Nested>;
-}
-```
-
 ### validate
 
 Accepts Type: `object` OR `RegExp` OR `(value) => boolean` OR `object[]` Required options of the object:
@@ -606,17 +588,6 @@ class Cat {
 }
 ```
 
-### items
-
-Accepts Type: `any`  
-(alias for [`type`](#type) from `@prop`)
-
-:::info
-Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
-:::
-
-(see [`type`](#type) for Examples)
-
 ### dim
 
 `dim` is used to set the Dimensions this array should have (for something like a matrix)  
@@ -659,17 +630,6 @@ class SomeMapClass {
   public lookup?: Map<string, string>; // "Map<any, any>" or "mongoose.Types.Map<any>" is needed to be detected as a Map
 }
 ```
-
-### of
-
-Accepts Type: `any`  
-(alias for [`type`](#type) from `@prop`)
-
-:::info
-Deprecated since `7.2.0`, use [`@prop`'s `type`](#type)
-:::
-
-(see [`type`](#type) for Examples)
 
 ## String Transform options
 

@@ -194,12 +194,6 @@ export interface BasePropOptions {
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
   /**
-   * Override the ref's type
-   * {@link BasePropOptions.type} can be used too
-   * @default ObjectId
-   */
-  refType?: NonNullable<BasePropOptions['type']> | RefType;
-  /**
    * Set the Nested Discriminators
    * Note: "_id: false" as an prop option dosnt work here
    */
@@ -225,13 +219,6 @@ export interface InnerOuterOptions {
 
 export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
   /**
-   * What array is it?
-   * {@link BasePropOptions.type} can be used too
-   * Note: this is only needed because Reflect & refelact Metadata can't give an accurate Response for an array
-   * @deprecated
-   */
-  items?: NonNullable<BasePropOptions['type']>;
-  /**
    * How many dimensions this Array should have
    * (needs to be higher than 0)
    * @default 1
@@ -239,13 +226,7 @@ export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
   dim?: number;
 }
 
-export interface MapPropOptions extends BasePropOptions, InnerOuterOptions {
-  /**
-   * The type of the Map (Map<string, THIS>)
-   * @deprecated
-   */
-  of?: NonNullable<BasePropOptions['type']>;
-}
+export interface MapPropOptions extends BasePropOptions, InnerOuterOptions {}
 
 export interface ValidateNumberOptions {
   /** Only allow numbers that are higher than this */
