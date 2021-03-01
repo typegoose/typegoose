@@ -1,12 +1,12 @@
 name: Node.js Tests
 
-# for now, always run
-# on:
-#   pull_request:
-#   push:
-#     branches:
-#       - '*'
-#       - '!gh-pages'
+on:
+  pull_request:
+  push:
+    branches:
+      - '*'
+      - '!gh-pages'
+      # for now, always run
 #     paths: # only run this deploy if an file in the following directories are changed
 #       - 'src/**'
 #       - 'test/**'
