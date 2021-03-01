@@ -1,15 +1,16 @@
 name: Node.js Tests
 
-on:
-  pull_request:
-  push:
-    branches:
-      - '*'
-      - '!gh-pages'
-    paths: # only run this deploy if an file in the following directories are changed
-      - 'src/**'
-      - 'test/**'
-      - '*.json' # run if an ".json" file in the *root* of the repository is changed
+# for now, always run
+# on:
+#   pull_request:
+#   push:
+#     branches:
+#       - '*'
+#       - '!gh-pages'
+#     paths: # only run this deploy if an file in the following directories are changed
+#       - 'src/**'
+#       - 'test/**'
+#       - '*.json' # run if an ".json" file in the *root* of the repository is changed
 
 jobs:
   tests:
