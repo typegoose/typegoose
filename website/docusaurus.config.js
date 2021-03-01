@@ -32,8 +32,7 @@ module.exports = {
           position: 'right',
         },
         {
-          to: 'docs/changelog',
-          // activeBasePath: 'api',
+          href: 'https://github.com/typegoose/typegoose/blob/master/CHANGELOG.md',
           label: 'Changelog',
           position: 'right',
         },
