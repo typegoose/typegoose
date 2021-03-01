@@ -1,3 +1,18 @@
+## [7.6.0-beta.1](https://github.com/typegoose/typegoose/compare/v7.5.0...v7.6.0-beta.1) (2021-03-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **prop:** Removing deprecated options "items", "of", "refType"
+* **prop:** Removeing deprecated function "mapProp"
+* **prop:** Removeing deprecated function "arrayProp"
+
+### Features
+
+* **prop:** remove "arrayProp" ([8a5b337](https://github.com/typegoose/typegoose/commit/8a5b337fdc4de282534ad2226e26cec65375f452)), closes [#258](https://github.com/typegoose/typegoose/issues/258)
+* **prop:** remove "mapProp" ([9e913b8](https://github.com/typegoose/typegoose/commit/9e913b87bd7faa81cff2102c22b05b2230ea75a4)), closes [#258](https://github.com/typegoose/typegoose/issues/258)
+* **prop:** remove deprecated options ([c27d2a0](https://github.com/typegoose/typegoose/commit/c27d2a0481d03e864803b912348061257228a8c3)), closes [#257](https://github.com/typegoose/typegoose/issues/257)
+
 ## [7.5.0](https://github.com/typegoose/typegoose/compare/v7.4.8...v7.5.0) (2021-03-01)
 
 
