@@ -18,7 +18,10 @@ module.exports = {
           {type: 'revert', release: false},
           // dont trigger another release on release commit
           {type: "release", release: false}
-        ]
+        ],
+        parserOpts: {
+          noteKeywords: ["BREAKING CHANGE:", "BREAKING CHANGES:"]
+        }
       }
     ],
     [
