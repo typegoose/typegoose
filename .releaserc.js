@@ -9,13 +9,13 @@ module.exports = {
           {type: "feat", release: "minor"},
           {type: "fix", release: "patch"},
           {type: "docs", release: false},
-          {type: "style", release: false},
+          {type: "style", release: "patch"},
           {type: "refactor", release: "patch"},
           {type: "perf", release: "patch"},
           {type: "test", release: false},
           {type: "chore", release: false},
           {type: "dependencies", release: "minor"},
-          {type: 'revert', release: false},
+          {type: 'revert', release: "patch"},
           // dont trigger another release on release commit
           {type: "release", release: false}
         ],
