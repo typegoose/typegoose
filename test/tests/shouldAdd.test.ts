@@ -63,7 +63,7 @@ it('should add and populate the virtual properties', async () => {
   expect(newfound.dummyVirtual).toEqual('dummyVirtual1');
   expect(newfound.virtualSubs).not.toBeUndefined();
 
-  if (isDocumentArray(newfound.virtualSubs!)) {
+  if (isDocumentArray(newfound.virtualSubs)) {
     expect(newfound.virtualSubs[0].dummy).toEqual('virtualSub1');
     expect(newfound.virtualSubs[0]._id.toString()).toEqual(virtualsub1._id.toString());
     expect(newfound.virtualSubs[1].dummy).toEqual('virtualSub3');
@@ -191,12 +191,12 @@ it('it should alias correctly', () => {
 it('should add model with createdAt and updatedAt', async () => {
   const { id: createdId } = await OptionsModel.create({ someprop: 10 } as OptionsClass);
 
-  const found = await OptionsModel.findById(createdId).exec();
+  const found = await OptionsModel.findById(createdId).orFail().exec();
 
   expect(found).not.toBeUndefined();
   expect(found).toHaveProperty('someprop', 10);
-  expect(found!.createdAt).toBeInstanceOf(Date);
-  expect(found!.updatedAt).toBeInstanceOf(Date);
+  expect(found.createdAt).toBeInstanceOf(Date);
+  expect(found.updatedAt).toBeInstanceOf(Date);
 });
 
 it('should make use of non-virtuals with pre- and post-processors', async () => {
