@@ -56,7 +56,7 @@ jobs:
       - name: Build
         run: yarn build
       - name: Semantic Release (publish to npm)
-        run: yarn semantic-release -d
+        run: yarn semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
