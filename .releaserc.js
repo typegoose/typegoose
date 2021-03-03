@@ -53,10 +53,12 @@ module.exports = {
         pkgRoot: './',
       },
     ],
-    ['@semantic-release/git', {
-      'assets': ['package.json', 'CHANGELOG.md'],
-      'message': 'release: v${nextRelease.version}'
-    }],
+    [
+      '@semantic-release/git', {
+        assets: ['package.json', 'CHANGELOG.md'],
+        message: 'release: v${nextRelease.version}'
+      }
+    ],
     '@semantic-release/github'
   ],
 };
