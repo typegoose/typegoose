@@ -12,8 +12,8 @@
     "lib/**/*.d.ts"
   ],
   "scripts": {
-    "build": "yarn run lint && tsc -p tsconfig.build.json",
-    "build:tests": "yarn run lint && tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
+    "build:tests": "tsc -p tsconfig.json",
     "lint": "eslint -c ./.eslintrc.js './**/*.{js,ts}'",
     "test": "jest",
     "test:watch": "jest --watchAll",
