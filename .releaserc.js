@@ -20,7 +20,7 @@ module.exports = {
           {type: 'release', release: false}
         ],
         parserOpts: {
-          noteKeywords: ['BREAKING CHANGE:', 'BREAKING CHANGES:']
+          noteKeywords: ['BREAKING CHANGE', 'BREAKING CHANGES']
         }
       }
     ],
