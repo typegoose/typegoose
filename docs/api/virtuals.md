@@ -41,9 +41,9 @@ Resulting Document in MongoDB:
 
 ```js
 {
-  _id: ObjectId("<some long id>"),
-  firstName: "Will",
-  lastName: "Smith"
+  _id: ObjectId('<some long id>'),
+  firstName: 'Will',
+  lastName: 'Smith'
 }
 ```
 

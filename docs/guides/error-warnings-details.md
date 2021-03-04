@@ -1,6 +1,6 @@
 ---
 id: error-warnings-details
-title: "Error & Warning Details"
+title: 'Error & Warning Details'
 ---
 
 ## Errors

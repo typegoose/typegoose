@@ -1,6 +1,6 @@
 ---
 id: map-prop
-title: "Map Prop"
+title: 'Map Prop'
 ---
 
 `@mapProp(options: object)` is a decorator which makes it possible to create map schema properties, here are just the differences listed

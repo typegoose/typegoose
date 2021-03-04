@@ -189,7 +189,7 @@ class KittenClass {
 }
 const KittenModel = getModelForClass(KittenClass);
 
-const docs = await KittenModel.findBySpecies("SomeSpecies");
+const docs = await KittenModel.findBySpecies('SomeSpecies';
 ```
 
 :::note
@@ -215,8 +215,8 @@ class KittenClass {
 }
 const KittenModel = getModelForClass(KittenClass);
 
-const doc = new KittenModel({ name: "SomeCat", species: "SomeSpecies" });
-await doc.setSpeciesAndSave("SomeOtherSpecies");
+const doc = new KittenModel({ name: 'SomeCat', species: 'SomeSpecies' });
+await doc.setSpeciesAndSave('SomeOtherSpecies');
 ```
 
 :::note
@@ -232,7 +232,7 @@ Typegoose also supports hooks. They can be used like this:
   this.isKitten = this.age < 1
 })
 @post<KittenClass>('save', (kitten) => {
-  console.log(kitten.isKitten ? "We have a kitten here." : "We have a big kitty here.")
+  console.log(kitten.isKitten ? 'We have a kitten here.' : 'We have a big kitty here.')
 })
 class KittenClass {
   @prop()
