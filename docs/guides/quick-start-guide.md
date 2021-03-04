@@ -6,7 +6,7 @@ title: 'Quick Start Guide'
 ## Quick Overview of Typegoose
 
 :::note
-This Guide is for Typegoose version ~7.4
+This Guide is for Typegoose version ~7.5
 :::
 
 Typegoose is a "wrapper" for easily writing Mongoose models with TypeScript.
@@ -94,7 +94,15 @@ class User {
 }
 ```
 
-## How to Start using it
+:::caution
+`type` / `ref` have to be defined when not using Primitives, because Reflection only returns basic information. [Look here for why](https://github.com/microsoft/TypeScript/issues/7169)  
+Like `public: string[]` is in reflection only `Array`.  
+:::
+
+[Look here for what `!` means on an property](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html#non-null-assertion-operator)  
+[Look here for what `?` means on an property](https://www.typescriptlang.org/docs/handbook/functions.html#optional-and-default-parameters)  
+
+## How to Start using typegoose
 
 ### Requirements
 
@@ -129,9 +137,9 @@ const kittenSchema = new mongoose.Schema({
   name: String
 });
 
-const Kitten = mongoose.model('Kitten', kittenSchema);
+const KittenModel = mongoose.model('Kitten', kittenSchema);
 
-let document = await Kitten.create({ name: 'Kitty' });
+let document = await KittenModel.create({ name: 'Kitty' });
 // "document" has no types
 ```
 
@@ -143,23 +151,23 @@ class KittenClass {
   public name?: string;
 }
 
-const Kitten = getModelForClass(KittenClass);
+const KittenModel = getModelForClass(KittenClass);
 
-let document = await Kitten.create({ name: 'Kitty' });
+let document = await KittenModel.create({ name: 'Kitty' });
 // "document" has proper types of KittenClass
 ```
 
 :::note
-`new Kitten({})` has no types of KittenClass, because Typegoose doesn't modify functions of Mongoose, [read more here](./faq.md#why-does-new-model-not-have-types)
+`new KittenModel({})` has no types of KittenClass, because Typegoose doesn't modify functions of Mongoose, [read more here](./faq.md#why-does-new-model-not-have-types)
 :::
 
 ## Do's and Don'ts of Typegoose
 
 - Typegoose is a wrapper for Mongoose's models
-- Typegoose aims to not modify any functions of Mongoose
+- Typegoose does not modify any functions of Mongoose
 - Typegoose aims to get Mongoose's models to be stable through type-information
 - Typegoose aims to make Mongoose more usable by making the models more type-rich with TypeScript
-- Decorated schema configuration classes (like KittenClass above) must use explicit type declarations
+- Decorated schema configuration classes (like `KittenClass` above) must use explicit type declarations
 
 ## Extra Examples
 
@@ -202,7 +210,7 @@ class KittenClass {
 
   public async setSpeciesAndSave(this: DocumentType<KittenClass>, species: string) {
     this.species = species;
-    return await this.save();
+    await this.save();
   }
 }
 const KittenModel = getModelForClass(KittenClass);
