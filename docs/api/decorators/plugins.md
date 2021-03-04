@@ -16,7 +16,7 @@ Plugin-functions that have types and options defined, are automatically inferred
 Example:
 
 ```ts
-import { plugin, getModelForClass, defaultClasses } from "@typegoose/typegoose";
+import { plugin, getModelForClass, defaultClasses } from '@typegoose/typegoose';
 import * as findOrCreate from 'mongoose-findorcreate';
 
 @plugin(findOrCreate)

@@ -1,6 +1,6 @@
 ---
 id: logger
-title: "Typegoose's Logger"
+title: 'Typegoose Logger'
 ---
 
 Typegoose uses `loglevel` to make some soft-errors & for debugging.

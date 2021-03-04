@@ -105,13 +105,13 @@ On request, this was made "opt-in" instead of "opt-out".
 
 Set this to a Severity you want.
 
-- `ALLOW`: allow the use and execution of "mongoose.Schema.Types.Mixed", if the inferred type cannot be set otherwise
+- `ALLOW`: allow the use and execution of `mongoose.Schema.Types.Mixed`, if the inferred type cannot be set otherwise
 - `WARN`: [default] Warn for it in the logger, but still allow the use of it
 - `ERROR`: Error out when it comes to it
 
 #### runSyncIndexes
 
-Run "model.syncIndexes" when model is finished compiling?
+Run `model.syncIndexes` when model is finished compiling?
 :::caution
 Only run this while in development. It could cause race-conditions because `getModelForClass` is not async.
 :::

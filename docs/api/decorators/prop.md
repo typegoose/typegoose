@@ -388,7 +388,7 @@ Known-Issues:
 
 Accepts Type: `boolean`
 
-Adds "null" to the enum array.
+Adds `null` to the enum array.
 
 :::note
 This doesn't work if the value is `required`
@@ -421,7 +421,7 @@ Accepts Type: `() => [DiscriminatorObject | Class]`
 Use this function for embedded discriminators.
 
 :::note
-The `discriminatorKey` (like in the example property `type`) needs to be always set in a newly created document (via `.create({..., type: "..."})`, or `.save()`)
+The `discriminatorKey` (like in the example property `type`) needs to be always set in a newly created document (via `.create({ type: 'yourKey' })`, or `.save()`)
 :::
 
 Example for `[Class]`:

@@ -1,6 +1,6 @@
 ---
 id: deprecation-codes
-title: "Deprecation Codes"
+title: 'Deprecation Codes'
 ---
 
 ## Deprecation Codes

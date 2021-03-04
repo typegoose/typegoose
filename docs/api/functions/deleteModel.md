@@ -1,6 +1,6 @@
 ---
 id: delete-model
-title: "Delete Models"
+title: 'Delete Models'
 ---
 
 ## deleteModel
@@ -11,7 +11,7 @@ title: "Delete Models"
 class SomeUser {}
 
 const SomeUserModel = getModelForClass(SomeUser);
-deleteModel("SomeUser");
+deleteModel('SomeUser');
 ```
 
 ## deleteModelWithClass

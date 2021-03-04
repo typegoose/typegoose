@@ -1,6 +1,6 @@
 ---
 id: indexes
-title: "Indexes"
+title: 'Indexes'
 ---
 
 `@index(fields: object, options: object)` is used to set indexes (mainly for compound indexes)

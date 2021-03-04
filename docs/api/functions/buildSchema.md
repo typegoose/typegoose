@@ -1,6 +1,6 @@
 ---
 id: build-schema
-title: "Build Schema"
+title: 'Build Schema'
 ---
 
 `buildSchema(class)` gets the schema from a class to modify the schema before making the model.

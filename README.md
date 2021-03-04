@@ -128,31 +128,15 @@ class User {
 
 ---
 
-## Requirements
+## Requirements & Install
 
-- TypeScript `^3.9` (since 7.1)
-- NodeJS `^10.15.0`
-- Mongoose `5.10.18` ([look here for why this version]([./faq.md#why-is-74x-constrained-to-mongoose-51018](https://typegoose.github.io/typegoose/docs/guides/faq#why-is-74x-constrained-to-mongoose-51018)))
-- `@types/mongoose` `5.10.x`
-- `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
-- tsconfig option `target` being `ES6`
-
-Note: it is recommended to not use babel [see here why](https://typegoose.github.io/typegoose/docs/guides/known-issues/#babel)
-
-## Install
-
-```sh
-npm i -s @typegoose/typegoose # install typegoose itself
-
-npm i -s mongoose # install peer-dependencie mongoose
-npm i -D @types/mongoose # install all types for mongoose - this is required for typegoose to work in typescript
-```
+[Typegoose's Quick Start Guide](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide)
 
 ## Testing
 
 ```sh
-npm i -D
-npm test
+yarn install
+yarn run test
 ```
 
 ## Versioning
