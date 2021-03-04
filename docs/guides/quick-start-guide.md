@@ -105,7 +105,11 @@ class User {
 - An IDE that supports TypeScript linting (VSCode is recommended)
 - This Guide expects you to know how Mongoose (or at least its models) works
 - `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
-- tsconfig option `target` being `ES6`
+- tsconfig option `target` being `ES6` (or higher)
+
+:::info
+tsconfig option `emitDecoratorMetadata` is not strictly requierd, look [here](./use-without-emitDecoratorMetadata.md) for more
+:::
 
 ### Install
 
