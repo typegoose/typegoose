@@ -49,7 +49,7 @@ Resulting Document in MongoDB:
 
 ### Difference between @prop's get & set and this get & set
 
-*This shows the difference between [`@prop`'s get & set](api/decorators/prop.md %}#get--set) and [this one](api/virtuals.md#get--set)*
+*This shows the difference between [`@prop`'s get & set](api/decorators/prop.md#get--set) and [this one](api/virtuals.md#get--set)*
 
 The difference between `@prop`'s and this one is simple, `@prop`'s get & set are ***actual properties*** that get saved to the database, only with a conversion layer.  
 The get & set of *getter's & setter's* are absolutely virtual.
