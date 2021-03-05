@@ -69,7 +69,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   options = typeof options === 'object' ? options : {};
 
   const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
-  const name = getName(cl);
+  const name = getName(cl, options);
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
@@ -89,6 +89,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   }
 
   return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
+    name,
     existingMongoose: roptions?.existingMongoose,
     existingConnection: roptions?.existingConnection,
   });
@@ -162,14 +163,14 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
 export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
   model: mongoose.Model<any>,
   cl: U,
-  options?: { existingMongoose?: mongoose.Mongoose; existingConnection?: any }
+  options?: { name?: string; existingMongoose?: mongoose.Mongoose; existingConnection?: any }
 ) {
   const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
 
   assertion(model.prototype instanceof mongooseModel, new TypeError(`"${model}" is not a valid Model!`));
   assertionIsClass(cl);
 
-  const name = getName(cl);
+  const name = options?.name ?? getName(cl);
 
   assertion(
     !models.has(name),
@@ -217,6 +218,7 @@ export function deleteModel(name: string) {
 /**
  * Delete a model, with the given class
  * Same as "deleteModel", only that it can be done with the class instead of the name
+ * Does not work when you set `options.customName` on getModelForClass
  * @param cl The Class
  * @example
  * ```ts
