@@ -180,3 +180,43 @@ it('should not make an automatic name if no collection or customName are defined
   const model = getModelForClass(NoAutomaticName);
   expect(model.modelName).toEqual('NoAutomaticName');
 });
+
+it('should use customName from getModelForClass', () => {
+  class CustomNameGetModelForClass {
+    @prop()
+    public test: string;
+  }
+
+  const model = getModelForClass(CustomNameGetModelForClass, { options: { customName: 'CustomName' }});
+  expect(model.modelName).toEqual('CustomName');
+});
+
+it('should use customName from getModelForClass over the one defined via modelOptions', () => {
+  @modelOptions({
+    options: {
+      customName: 'WrongName',
+    },
+  })
+  class CustomNameGetModelForClassOverModelOptions {
+    @prop()
+    public test: string;
+  }
+
+  const model = getModelForClass(CustomNameGetModelForClassOverModelOptions, { options: { customName: 'RightName' }});
+  expect(model.modelName).toEqual('RightName');
+});
+
+it('should use customName provided via getModelForClass with automaticName from modelOptions', () => {
+  @modelOptions({ options: { automaticName: true } })
+  class CustomNameOption {}
+
+  const model = getModelForClass(CustomNameOption, { options: { customName: 'CustomName' }});
+  expect(model.modelName).toEqual('CustomNameOption_CustomName');
+});
+
+it('should use customName and automaticName provided via getModelForClass', () => {
+  class CustomNameOption {}
+
+  const model = getModelForClass(CustomNameOption, { options: { customName: 'CustomName', automaticName: true }});
+  expect(model.modelName).toEqual('CustomNameOption_CustomName');
+});
