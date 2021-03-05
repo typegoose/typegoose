@@ -189,7 +189,7 @@ class KittenClass {
 }
 const KittenModel = getModelForClass(KittenClass);
 
-const docs = await KittenModel.findBySpecies('SomeSpecies';
+const docs = await KittenModel.findBySpecies('SomeSpecies');
 ```
 
 :::note
