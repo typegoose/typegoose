@@ -53,15 +53,14 @@ parseENV(); // call this before anything to ensure they are applied
 
 /**
  * Get a Model for a Class
- * Executes .setModelForClass if it can't find it already
  * @param cl The uninitialized Class
  * @returns The Model
  * @public
  * @example
  * ```ts
- * class Name {}
+ * class ClassName {}
  *
- * const NameModel = getModelForClass(Name);
+ * const NameModel = getModelForClass(ClassName);
  * ```
  */
 export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(cl: U, options?: IModelOptions) {
@@ -99,9 +98,9 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
  * @param key ModelName key
  * @example
  * ```ts
- * class Name {}
- * getModelForClass(Name); // build the model
- * const NameModel = getModelWithString<typeof Name>("Name");
+ * class ClassName {}
+ * getModelForClass(ClassName); // build the model
+ * const NameModel = getModelWithString<typeof ClassName>("ClassName");
  * ```
  */
 export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
@@ -116,8 +115,8 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
  * @returns Returns the Build Schema
  * @example
  * ```ts
- * class Name {}
- * const NameSchema = buildSchema(Name);
+ * class ClassName {}
+ * const NameSchema = buildSchema(ClassName);
  * const NameModel = mongoose.model("Name", NameSchema);
  * ```
  */
@@ -152,11 +151,11 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
  * @param options? Optional param for existingMongoose or existingConnection
  * @example
  * ```ts
- * class Name {}
+ * class ClassName {}
  *
- * const schema = buildSchema(Name);
+ * const schema = buildSchema(ClassName);
  * // modifications to the schame can be done
- * const model = addModelToTypegoose(mongoose.model("Name", schema), Name);
+ * const model = addModelToTypegoose(mongoose.model("Name", schema), ClassName);
  * ```
  */
 export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
@@ -191,15 +190,14 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 }
 
 /**
- * Deletes an existing model so that it can be overwritten
- * with another model
+ * Deletes an existing model so that it can be overwritten with another model
  * (deletes from mongoose.connection & typegoose models cache & typegoose constructors cache)
  * @param key
  * @example
  * ```ts
- * class Name {}
- * const NameModel = getModelForClass(Name);
- * deleteModel("Name");
+ * class ClassName {}
+ * const NameModel = getModelForClass(ClassName);
+ * deleteModel("ClassName");
  * ```
  */
 export function deleteModel(name: string) {
@@ -220,9 +218,9 @@ export function deleteModel(name: string) {
  * @param cl The Class
  * @example
  * ```ts
- * class Name {}
- * const NameModel = getModelForClass(Name);
- * deleteModelWithClass(Name);
+ * class ClassName {}
+ * const NameModel = getModelForClass(ClassName);
+ * deleteModelWithClass(ClassName);
  * ```
  */
 export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) {
@@ -238,11 +236,11 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
  * @param value The Identifier to use to differentiate documents (default: cl.name)
  * @example
  * ```ts
- * class C1 {}
- * class C2 extends C1 {}
+ * class Class1 {}
+ * class Class2 extends Class1 {}
  *
- * const C1Model = getModelForClass(C1);
- * const C2Model = getDiscriminatorModelForClass(C1Model, C1);
+ * const Class1Model = getModelForClass(Class1);
+ * const Class2Model = getDiscriminatorModelForClass(Class1Model, Class1);
  * ```
  */
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
