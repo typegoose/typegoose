@@ -7,6 +7,11 @@ import type { Func, IPluginsArray } from './types';
  * Add a Middleware-Plugin
  * @param mongoosePlugin The Plugin to plug-in
  * @param options Options for the Plugin, if any
+ * @example Example:
+ * ```ts
+ * @plugin(findOrCreate)
+ * class ClassName {}
+ * ```
  */
 export function plugin<TFunc extends Func, TParams = Parameters<TFunc>[1]>(mongoosePlugin: TFunc, options?: TParams): ClassDecorator {
   // don't check if options is an object, because any plugin could make it anything
