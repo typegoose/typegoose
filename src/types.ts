@@ -17,8 +17,7 @@ export type DocumentType<T> = (T extends { _id: unknown } ? mongoose.Document<T[
 /**
  * Used Internally for ModelTypes
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type ModelType<T, _QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T> /* , QueryHelpers */>;
+export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T>, QueryHelpers>;
 /**
  * Any-param Constructor
  */

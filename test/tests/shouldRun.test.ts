@@ -404,7 +404,6 @@ it('should add query Methods', async () => {
 
   const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
 
-  // @ts-expect-error Currently the mongoose types dosnt have QueryMethods
   const found = await QueryMethodsModel.find().findByName('hello').findByLastname('world').orFail().exec();
   assertion(isDocumentArray(found), new Error('Found is not an document array'));
   expect(found[0].toObject()).toEqual(doc.toObject());
