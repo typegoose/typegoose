@@ -13,7 +13,6 @@ import type { Severity, WhatIsIt } from './internal/constants';
  */
 export type DocumentType<T> = (T extends { _id: unknown } ? mongoose.Document<T['_id']> & T : mongoose.Document & T) &
   IObjectWithTypegooseFunction;
-// I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
  */
