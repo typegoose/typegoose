@@ -76,11 +76,3 @@ class Parent {
   public subDoc: Sub;
 }
 ```
-
-### @types/mongoose@5.7.22 and higher
-
-Since `@types/mongoose@5.7.22`, there are types for `.create`, but they are not fully compatible with Typegoose's types. So if an error comes up that cannot be fixed, the workaround is to use `<any>`
-
-```ts
-model.create<any>({ anything: anything });
-```
