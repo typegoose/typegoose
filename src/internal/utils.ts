@@ -226,7 +226,7 @@ export const allVirtualoptions = virtualOptions.slice(0); // copy "virtualOption
 allVirtualoptions.push('ref');
 
 /**
- * Check if All the required Options are present
+ * Check if all the required Options are present
  * @param options RawOptions of the Prop
  */
 export function includesAllVirtualPOP(options: VirtualOptions): options is VirtualOptions {
@@ -646,7 +646,7 @@ export function isConstructor(obj: any): obj is AnyParamConstructor<any> {
   return typeof obj === 'function' && !isNullOrUndefined(obj.prototype?.constructor?.name);
 }
 
-// Below are function to wrap NodeJS functions for client compatability (tsline ignore is needed)
+// Below are function to wrap NodeJS functions for client compatability (eslint ignore is needed)
 
 /**
  * Execute util.deprecate or when !process console log
