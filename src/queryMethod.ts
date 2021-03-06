@@ -11,7 +11,7 @@ import type { AnyParamConstructor, QueryMethodMap, ReturnModelType } from './typ
  * @example
  * ```ts
  * interface FindHelpers {
- *   findByTitle: QueryMethod<typeof findByTitle>;
+ *   findByTitle: AsQueryMethod<typeof findByTitle>;
  * }
  *
  * function findByTitle(this: ReturnModelType<typeof Event, FindHelpers>, title: string) {
