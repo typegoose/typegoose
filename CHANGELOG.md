@@ -1,3 +1,31 @@
+## [8.0.0-beta.2](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.1...v8.0.0-beta.2) (2021-03-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* Changing types from unofficial to official is an breaking change
+
+### Features
+
+* Update to work with mongoose 5.11 ([6cdfb0f](https://github.com/typegoose/typegoose/commit/6cdfb0fa889cbf6aea52e1bb8de9975f129e4136))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to version "5.11.18" ([775f44e](https://github.com/typegoose/typegoose/commit/775f44e117f89f372b6d3f4b0e839a0f0a127d92))
+
+
+### Fixes
+
+* **defaultClasses:** convert "Base" into an interface ([2071aa7](https://github.com/typegoose/typegoose/commit/2071aa73ceb6d4894e251dc54232a5b8a5375be9))
+* **types:** re-enable QueryHelpers for official types ([99071b1](https://github.com/typegoose/typegoose/commit/99071b14a2b50128df6a6f3dc101194edcb27d24))
+
+
+### Style
+
+* **types:** remove unused comment ([23d9e2a](https://github.com/typegoose/typegoose/commit/23d9e2a17d9d07871501d5d7cf27e90903eff4f7))
+* **utils:** update comments for mongoose 5.11.19 ([74e1196](https://github.com/typegoose/typegoose/commit/74e119618e5d987bd952badb7de3a122511dfa39))
+
 ## [8.0.0-beta.1](https://github.com/typegoose/typegoose/compare/v7.5.0...v8.0.0-beta.1) (2021-03-03)
 
 
