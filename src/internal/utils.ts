@@ -455,7 +455,7 @@ export function mapOptions(
 
   // Fix because "Schema" is not a valid type and doesn't have a ".prototype.OptionsConstructor"
   if (Type instanceof mongoose.Schema) {
-    // TODO: remove "as any" cast if "OptionsConstructor" is implemented in @types/mongoose
+    // TODO: remove "as any" cast if "OptionsConstructor" is implemented in mongoose https://github.com/Automattic/mongoose/issues/10001
     OptionsCTOR = (mongoose as any).Schema.Types.Embedded.prototype.OptionsConstructor;
   }
 
@@ -468,7 +468,7 @@ export function mapOptions(
   delete options.items;
 
   // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
-  // TODO: remove "as any" cast if "OptionsConstructor" is implemented in @types/mongoose
+  // TODO: remove "as any" cast if "OptionsConstructor" is implemented in mongoose https://github.com/Automattic/mongoose/issues/10001
   if (OptionsCTOR.prototype instanceof (mongoose as any).SchemaTypeOptions) {
     for (const [key, value] of Object.entries(options)) {
       if (Object.getOwnPropertyNames(OptionsCTOR.prototype).includes(key)) {
