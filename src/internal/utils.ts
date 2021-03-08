@@ -308,6 +308,7 @@ export function getRightTarget(target: any): any {
  * Get the correct name of the class's model
  * (with suffix)
  * @param cl The Class
+ * @param customOptions Extra Options that can be added in "buildSchema"
  */
 export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions?: IModelOptions) {
   const ctor: any = getRightTarget(cl);
