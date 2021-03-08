@@ -89,7 +89,6 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   }
 
   return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
-    name,
     existingMongoose: roptions?.existingMongoose,
     existingConnection: roptions?.existingConnection,
   });
@@ -163,14 +162,14 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
 export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
   model: mongoose.Model<any>,
   cl: U,
-  options?: { name?: string; existingMongoose?: mongoose.Mongoose; existingConnection?: any }
+  options?: { existingMongoose?: mongoose.Mongoose; existingConnection?: any }
 ) {
   const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
 
   assertion(model.prototype instanceof mongooseModel, new TypeError(`"${model}" is not a valid Model!`));
   assertionIsClass(cl);
 
-  const name = options?.name ?? getName(cl);
+  const name = model.modelName;
 
   assertion(
     !models.has(name),
