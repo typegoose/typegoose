@@ -217,7 +217,6 @@ export function deleteModel(name: string) {
 /**
  * Delete a model, with the given class
  * Same as "deleteModel", only that it can be done with the class instead of the name
- * Does not work when you set `options.customName` on getModelForClass
  * @param cl The Class
  * @example
  * ```ts
@@ -229,7 +228,28 @@ export function deleteModel(name: string) {
 export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) {
   assertionIsClass(cl);
 
-  return deleteModel(getName(cl));
+  let name = getName(cl);
+
+  if (!models.has(name)) {
+    logger.debug(`Class "${name}" is not in "models", trying to find in "constructors"`);
+    let found = false;
+
+    for (const [cname, constructor] of constructors) {
+      if (constructor === cl) {
+        logger.debug(`Found Class in "constructors" with class name "${name}" and entered name "${cname}""`);
+        name = cname;
+        found = true;
+      }
+    }
+
+    if (!found) {
+      logger.debug(`Could not find class "${name}" in constructors`);
+
+      return;
+    }
+  }
+
+  return deleteModel(name);
 }
 
 /**
