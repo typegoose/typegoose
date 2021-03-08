@@ -80,7 +80,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
     roptions?.existingMongoose?.model.bind(roptions.existingMongoose) ??
     mongoose.model.bind(mongoose);
 
-  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions));
+  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions, options));
   const refetchedOptions = (Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions) ?? {};
 
   if (refetchedOptions?.options?.runSyncIndexes) {
@@ -121,10 +121,14 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
  * const NameModel = mongoose.model("Name", NameSchema);
  * ```
  */
-export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?: mongoose.SchemaOptions): mongoose.Schema<U> {
+export function buildSchema<U extends AnyParamConstructor<any>>(
+  cl: U,
+  options?: mongoose.SchemaOptions,
+  overwriteOptions?: IModelOptions
+): mongoose.Schema<U> {
   assertionIsClass(cl);
 
-  logger.debug('buildSchema called for "%s"', getName(cl));
+  logger.debug('buildSchema called for "%s"', getName(cl, overwriteOptions));
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
@@ -134,12 +138,12 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
     // extend schema
-    sch = _buildSchema(parentCtor, sch, mergedOptions, false);
+    sch = _buildSchema(parentCtor, sch, mergedOptions, false, overwriteOptions);
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
   // get schema of current model
-  sch = _buildSchema(cl, sch, mergedOptions);
+  sch = _buildSchema(cl, sch, mergedOptions, true, overwriteOptions);
 
   return sch;
 }
