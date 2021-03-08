@@ -80,3 +80,17 @@ it('should delete model from different connection', async () => {
 
   await connection.close();
 });
+
+it('should delete model with class when normal name is not found in "models"', () => {
+  class CustomNameOnFunctionCall {
+    @prop()
+    public test: string;
+  }
+
+  const model = getModelForClass(CustomNameOnFunctionCall, { options: { customName: 'CustomNameFC' } });
+  expect(model.modelName).toEqual('CustomNameFC');
+  expect(models.has(model.modelName)).toBeTruthy();
+
+  deleteModelWithClass(CustomNameOnFunctionCall);
+  expect(models.has(model.modelName)).toBeFalsy();
+});

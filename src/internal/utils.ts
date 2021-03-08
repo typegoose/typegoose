@@ -308,12 +308,13 @@ export function getRightTarget(target: any): any {
  * Get the correct name of the class's model
  * (with suffix)
  * @param cl The Class
+ * @param customOptions Extra Options that can be added in "buildSchema"
  */
-export function getName<U extends AnyParamConstructor<any>>(cl: U) {
+export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions?: IModelOptions) {
   const ctor: any = getRightTarget(cl);
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
   const baseName: string = ctor.name;
-  const customName = options.options?.customName;
+  const customName = customOptions?.options?.customName ?? options.options?.customName;
 
   if (typeof customName === 'function') {
     const name: any = customName(options);
@@ -328,8 +329,10 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
     return name;
   }
 
-  if (options.options?.automaticName) {
-    const suffix = customName ?? options.schemaOptions?.collection;
+  const automaticName = customOptions?.options?.automaticName ?? options.options?.automaticName;
+
+  if (automaticName) {
+    const suffix = customName ?? customOptions?.schemaOptions?.collection ?? options.schemaOptions?.collection;
 
     return !isNullOrUndefined(suffix) ? `${baseName}_${suffix}` : baseName;
   }

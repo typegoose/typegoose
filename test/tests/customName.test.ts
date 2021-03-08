@@ -1,4 +1,5 @@
-import { getClassForDocument, getModelForClass, modelOptions, prop } from '../../src/typegoose';
+import { constructors, models, schemas } from '../../src/internal/data';
+import { getClass, getClassForDocument, getModelForClass, modelOptions, prop } from '../../src/typegoose';
 
 it('expect no changes to model Name when not using customOptions or collection', () => {
   class NormalOptions {}
@@ -179,4 +180,84 @@ it('should not make an automatic name if no collection or customName are defined
 
   const model = getModelForClass(NoAutomaticName);
   expect(model.modelName).toEqual('NoAutomaticName');
+});
+
+it('should use customName from getModelForClass', () => {
+  class CustomNameGetModelForClass {
+    @prop()
+    public test: string;
+  }
+
+  const model = getModelForClass(CustomNameGetModelForClass, { options: { customName: 'CustomName' } });
+  expect(model.modelName).toEqual('CustomName');
+  const doc = new model();
+  expect(doc.typegooseName()).toEqual('CustomName');
+  expect(schemas.get(model.modelName)).toBeUndefined();
+  expect(constructors.get(model.modelName)).toBeDefined();
+  expect(models.get(model.modelName)).toEqual(model);
+});
+
+it('should use customName from getModelForClass over the one defined via modelOptions', () => {
+  @modelOptions({
+    options: {
+      customName: 'WrongName',
+    },
+  })
+  class CustomNameGetModelForClassOverModelOptions {
+    @prop()
+    public test: string;
+  }
+
+  const model = getModelForClass(CustomNameGetModelForClassOverModelOptions, { options: { customName: 'RightName' } });
+  expect(model.modelName).toEqual('RightName');
+  const doc = new model();
+  expect(doc.typegooseName()).toEqual('RightName');
+  expect(schemas.get(model.modelName)).toBeUndefined();
+  expect(constructors.get(model.modelName)).toBeDefined();
+  expect(models.get(model.modelName)).toEqual(model);
+});
+
+it('should use customName provided via getModelForClass with automaticName from modelOptions', () => {
+  @modelOptions({ options: { automaticName: true } })
+  class CustomNameOption {}
+
+  const model = getModelForClass(CustomNameOption, { options: { customName: 'CustomName1' } });
+  expect(model.modelName).toEqual('CustomNameOption_CustomName1');
+  const doc = new model();
+  expect(doc.typegooseName()).toEqual('CustomNameOption_CustomName1');
+  expect(schemas.get(model.modelName)).toBeUndefined();
+  expect(constructors.get(model.modelName)).toBeDefined();
+  expect(models.get(model.modelName)).toEqual(model);
+});
+
+it('should use customName and automaticName provided via getModelForClass', () => {
+  class CustomNameOption {}
+
+  const model = getModelForClass(CustomNameOption, { options: { customName: 'CustomName2', automaticName: true } });
+  expect(model.modelName).toEqual('CustomNameOption_CustomName2');
+  const doc = new model();
+  expect(doc.typegooseName()).toEqual('CustomNameOption_CustomName2');
+  expect(schemas.get(model.modelName)).toBeUndefined();
+  expect(constructors.get(model.modelName)).toBeDefined();
+  expect(models.get(model.modelName)).toEqual(model);
+});
+
+it('should use customName provided via getModelForClass and work with getClass', () => {
+  class WithGetClass {}
+
+  const model = getModelForClass(WithGetClass, { options: { customName: 'CustomNameWithGetClass', automaticName: false } });
+  expect(model.modelName).toEqual('CustomNameWithGetClass');
+
+  const retrievedClass = getClass('CustomNameWithGetClass');
+  expect(retrievedClass).toBe(WithGetClass);
+});
+
+it('should use customName provided via getModelForClass and work with getClass', () => {
+  class WithAutomaticNameAndGetClass {}
+
+  const model = getModelForClass(WithAutomaticNameAndGetClass, { options: { customName: 'CustomName', automaticName: true } });
+  expect(model.modelName).toEqual('WithAutomaticNameAndGetClass_CustomName');
+
+  const retrievedClass = getClass('WithAutomaticNameAndGetClass_CustomName');
+  expect(retrievedClass).toBe(WithAutomaticNameAndGetClass);
 });
