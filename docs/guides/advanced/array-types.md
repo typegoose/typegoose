@@ -3,6 +3,8 @@ id: array-types
 title: 'Array Types & Fields'
 ---
 
+## Array types & Fields
+
 It is much easier to declare the array field's type as `type[]` instead of `Array<type>`.
 
 But in some cases, Typescript could give you a warning, when you would like to use [any mongoose array methods](https://mongoosejs.com/docs/api/array.html) on the array field.
