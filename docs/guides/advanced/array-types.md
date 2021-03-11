@@ -8,7 +8,7 @@ It is much easier to declare the array field's type as `type[]` instead of `Arra
 But in some cases, Typescript could give you a warning, when you would like to use [any mongoose array methods](https://mongoosejs.com/docs/api/array.html) on the array field.
 To avoid such behavior, you could always declare the array field via `mongoose.Types.Array<type>` or `mongoose.Schema.Types.Array<type>`
 
-Example with `Class`:
+Example:
 
 ```ts
 class Model {
