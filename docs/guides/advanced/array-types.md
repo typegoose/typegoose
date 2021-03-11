@@ -11,7 +11,7 @@ To avoid such behavior, you could always declare the array field via `mongoose.T
 Example:
 
 ```ts
-class Model {
+class ModelClass {
   //required field, with emplty array by default.
   @prop({ required: true, default: [] })
   public field!: mongoose.Types.Array<string>;
