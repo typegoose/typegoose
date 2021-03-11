@@ -12,7 +12,7 @@ Example:
 
 ```ts
 class ModelClass {
-  //required field, with emplty array by default.
+  // required field, with empty array by default.
   @prop({ required: true, default: [] })
   public field!: mongoose.Types.Array<string>;
 }
