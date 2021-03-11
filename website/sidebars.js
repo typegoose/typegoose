@@ -9,7 +9,7 @@ module.exports = {
   guides: {
     "Getting Started": ["guides/quick-start-guide", "guides/faq", "guides/known-issues", "guides/deprecation-codes", "guides/error-warnings-details"],
     Basics: ["guides/all-decorators", "guides/motivation", "guides/default-classes", "guides/use-without-emitDecoratorMetadata"],
-    Advanced: ["guides/advanced/custom-types", "guides/advanced/models-with-same-name", "guides/advanced/logger", "guides/advanced/reference-other-classes", "guides/advanced/common-plugins", "guides/advanced/change-id-type", "guides/advanced/using-objectid-type", "guides/advanced/using-with-class-transformer"],
+    Advanced: ["guides/advanced/custom-types", "guides/advanced/array-types", "guides/advanced/models-with-same-name", "guides/advanced/logger", "guides/advanced/reference-other-classes", "guides/advanced/common-plugins", "guides/advanced/change-id-type", "guides/advanced/using-objectid-type", "guides/advanced/using-with-class-transformer"],
     Migration: ["guides/migrate-6", "guides/migrate-7"]
   }
 };

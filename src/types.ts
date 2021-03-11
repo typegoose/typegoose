@@ -6,15 +6,14 @@ import type { Severity, WhatIsIt } from './internal/constants';
  * Get the Type of an instance of a Document with Class properties
  * @example
  * ```ts
- * class Name {}
- * const NameModel = Name.getModelForClass(Name);
+ * class ClassName {}
+ * const NameModel = getModelForClass(ClassName);
  *
- * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
+ * const doc: DocumentType<ClassName> = await NameModel.create({});
  * ```
  */
 export type DocumentType<T> = (T extends Base<any> ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T) &
   IObjectWithTypegooseFunction;
-// I tested "T & (T extends ? : )" already, but it didnt work out
 /**
  * Used Internally for ModelTypes
  */
@@ -47,7 +46,7 @@ export interface ValidatorFunctionMessageParam {
 }
 export interface ValidatorOptions {
   validator: ValidatorFunction;
-  // the function for message is with "any" because im (hasezoey) not sure if the type is always "ValidatorFunctionMessageParam"
+  // the function for message is with "any" because i (hasezoey) am not sure if the type is always "ValidatorFunctionMessageParam"
   message?: string | ((props: ValidatorFunctionMessageParam) => string) | ((...args: any[]) => string);
 }
 export type Validator = ValidatorFunction | RegExp | ValidatorOptions | ValidatorOptions[];
@@ -227,7 +226,6 @@ export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
   /**
    * What array is it?
    * {@link BasePropOptions.type} can be used too
-   * Note: this is only needed because Reflect & refelact Metadata can't give an accurate Response for an array
    * @deprecated
    */
   items?: NonNullable<BasePropOptions['type']>;
@@ -277,7 +275,7 @@ export interface TransformStringOptions {
 }
 
 export interface VirtualOptions {
-  /** Reference an other Document (you should use Ref<T> as Prop type) */
+  /** Reference another Document (Ref<T> should be used as property type) */
   ref: NonNullable<BasePropOptions['ref']>;
   /** Which property(on the current-Class) to match `foreignField` against */
   localField: string | DynamicStringFunc<any>;
@@ -311,7 +309,6 @@ export type RefType =
 /**
  * Reference another Model
  */
-// export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
 export type Ref<R, T extends RefType = (R extends { _id?: RefType } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined> = R | T;
 
 /**
@@ -489,7 +486,7 @@ export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
  * }
  *
  * // Both of the following types will be identical.
- * type SendMessageType = QueryMethod<typeof sendMessage>;
+ * type SendMessageType = AsQueryMethod<typeof sendMessage>;
  * type SendMessageManualType = (recipient: string, sender: string, priority: number, retryIfFails: boolean) => boolean;
  * ```
  */

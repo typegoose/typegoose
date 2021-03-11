@@ -53,15 +53,14 @@ parseENV(); // call this before anything to ensure they are applied
 
 /**
  * Get a Model for a Class
- * Executes .setModelForClass if it can't find it already
  * @param cl The uninitialized Class
  * @returns The Model
  * @public
  * @example
  * ```ts
- * class Name {}
+ * class ClassName {}
  *
- * const NameModel = getModelForClass(Name);
+ * const NameModel = getModelForClass(ClassName);
  * ```
  */
 export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(cl: U, options?: IModelOptions) {
@@ -69,7 +68,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   options = typeof options === 'object' ? options : {};
 
   const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
-  const name = getName(cl);
+  const name = getName(cl, options);
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
@@ -80,7 +79,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
     roptions?.existingMongoose?.model.bind(roptions.existingMongoose) ??
     mongoose.model.bind(mongoose);
 
-  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions));
+  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions, options));
   const refetchedOptions = (Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions) ?? {};
 
   if (refetchedOptions?.options?.runSyncIndexes) {
@@ -99,9 +98,9 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
  * @param key ModelName key
  * @example
  * ```ts
- * class Name {}
- * getModelForClass(Name); // build the model
- * const NameModel = getModelWithString<typeof Name>("Name");
+ * class ClassName {}
+ * getModelForClass(ClassName); // build the model
+ * const NameModel = getModelWithString<typeof ClassName>("ClassName");
  * ```
  */
 export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
@@ -116,15 +115,19 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
  * @returns Returns the Build Schema
  * @example
  * ```ts
- * class Name {}
- * const NameSchema = buildSchema(Name);
+ * class ClassName {}
+ * const NameSchema = buildSchema(ClassName);
  * const NameModel = mongoose.model("Name", NameSchema);
  * ```
  */
-export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?: mongoose.SchemaOptions): mongoose.Schema<U> {
+export function buildSchema<U extends AnyParamConstructor<any>>(
+  cl: U,
+  options?: mongoose.SchemaOptions,
+  overwriteOptions?: IModelOptions
+): mongoose.Schema<U> {
   assertionIsClass(cl);
 
-  logger.debug('buildSchema called for "%s"', getName(cl));
+  logger.debug('buildSchema called for "%s"', getName(cl, overwriteOptions));
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
@@ -134,12 +137,12 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
     // extend schema
-    sch = _buildSchema(parentCtor, sch, mergedOptions, false);
+    sch = _buildSchema(parentCtor, sch, mergedOptions, false, overwriteOptions);
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
   // get schema of current model
-  sch = _buildSchema(cl, sch, mergedOptions);
+  sch = _buildSchema(cl, sch, mergedOptions, true, overwriteOptions);
 
   return sch;
 }
@@ -152,11 +155,11 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
  * @param options? Optional param for existingMongoose or existingConnection
  * @example
  * ```ts
- * class Name {}
+ * class ClassName {}
  *
- * const schema = buildSchema(Name);
+ * const schema = buildSchema(ClassName);
  * // modifications to the schame can be done
- * const model = addModelToTypegoose(mongoose.model("Name", schema), Name);
+ * const model = addModelToTypegoose(mongoose.model("Name", schema), ClassName);
  * ```
  */
 export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
@@ -169,7 +172,7 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
   assertion(model.prototype instanceof mongooseModel, new TypeError(`"${model}" is not a valid Model!`));
   assertionIsClass(cl);
 
-  const name = getName(cl);
+  const name = model.modelName;
 
   assertion(
     !models.has(name),
@@ -191,15 +194,14 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 }
 
 /**
- * Deletes an existing model so that it can be overwritten
- * with another model
+ * Deletes an existing model so that it can be overwritten with another model
  * (deletes from mongoose.connection & typegoose models cache & typegoose constructors cache)
  * @param key
  * @example
  * ```ts
- * class Name {}
- * const NameModel = getModelForClass(Name);
- * deleteModel("Name");
+ * class ClassName {}
+ * const NameModel = getModelForClass(ClassName);
+ * deleteModel("ClassName");
  * ```
  */
 export function deleteModel(name: string) {
@@ -220,15 +222,36 @@ export function deleteModel(name: string) {
  * @param cl The Class
  * @example
  * ```ts
- * class Name {}
- * const NameModel = getModelForClass(Name);
- * deleteModelWithClass(Name);
+ * class ClassName {}
+ * const NameModel = getModelForClass(ClassName);
+ * deleteModelWithClass(ClassName);
  * ```
  */
 export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) {
   assertionIsClass(cl);
 
-  return deleteModel(getName(cl));
+  let name = getName(cl);
+
+  if (!models.has(name)) {
+    logger.debug(`Class "${name}" is not in "models", trying to find in "constructors"`);
+    let found = false;
+
+    for (const [cname, constructor] of constructors) {
+      if (constructor === cl) {
+        logger.debug(`Found Class in "constructors" with class name "${name}" and entered name "${cname}""`);
+        name = cname;
+        found = true;
+      }
+    }
+
+    if (!found) {
+      logger.debug(`Could not find class "${name}" in constructors`);
+
+      return;
+    }
+  }
+
+  return deleteModel(name);
 }
 
 /**
@@ -238,11 +261,11 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
  * @param value The Identifier to use to differentiate documents (default: cl.name)
  * @example
  * ```ts
- * class C1 {}
- * class C2 extends C1 {}
+ * class Class1 {}
+ * class Class2 extends Class1 {}
  *
- * const C1Model = getModelForClass(C1);
- * const C2Model = getDiscriminatorModelForClass(C1Model, C1);
+ * const Class1Model = getModelForClass(Class1);
+ * const Class2Model = getDiscriminatorModelForClass(Class1Model, Class1);
  * ```
  */
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
