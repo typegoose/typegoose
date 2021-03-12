@@ -49,7 +49,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   logger.debug('_buildSchema Called for %s with options:', finalName, opt);
 
   /** Simplify the usage */
-  const Schema = mongoose.Schema;
+  const Schema = overwriteOptions?.existingMongoose?.Schema ?? mongoose.Schema;
   const ropt: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) ?? {};
   const schemaOptions = Object.assign({}, ropt?.schemaOptions ?? {}, opt);
 
