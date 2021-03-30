@@ -455,10 +455,8 @@ export function mapOptions(
   /** The OptionsConstructor to use */
   let OptionsCTOR: undefined | AnyParamConstructor<any> = Type?.prototype?.OptionsConstructor;
 
-  // Fix because "Schema" is not a valid type and doesn't have a ".prototype.OptionsConstructor"
   if (Type instanceof mongoose.Schema) {
-    // TODO: remove "as any" cast if "OptionsConstructor" is implemented in mongoose https://github.com/Automattic/mongoose/issues/10001
-    OptionsCTOR = (mongoose as any).Schema.Types.Embedded.prototype.OptionsConstructor;
+    OptionsCTOR = mongoose.Schema.Types.Embedded.prototype.OptionsConstructor;
   }
 
   assertion(
@@ -469,9 +467,7 @@ export function mapOptions(
   const options = Object.assign({}, rawOptions); // for sanity
   delete options.items;
 
-  // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
-  // TODO: remove "as any" cast if "OptionsConstructor" is implemented in mongoose https://github.com/Automattic/mongoose/issues/10001
-  if (OptionsCTOR.prototype instanceof (mongoose as any).SchemaTypeOptions) {
+  if (OptionsCTOR.prototype instanceof mongoose.SchemaTypeOptions) {
     for (const [key, value] of Object.entries(options)) {
       if (Object.getOwnPropertyNames(OptionsCTOR.prototype).includes(key)) {
         ret.inner[key] = value;
