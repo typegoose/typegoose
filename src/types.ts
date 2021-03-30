@@ -11,12 +11,12 @@ import type { Severity, WhatIsIt } from './internal/constants';
  * const t: DocumentType<Name> = await NameModel.create({});
  * ```
  */
-export type DocumentType<T> = (T extends { _id: unknown } ? mongoose.Document<T['_id']> & T : mongoose.Document & T) &
+export type DocumentType<T, QueryHelpers = BeAnObject> = (T extends { _id: unknown } ? mongoose.Document<T['_id'], QueryHelpers> & T : mongoose.Document<any, QueryHelpers> & T) &
   IObjectWithTypegooseFunction;
 /**
  * Used Internally for ModelTypes
  */
-export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T>, QueryHelpers>;
+export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T, QueryHelpers>, QueryHelpers>;
 /**
  * Any-param Constructor
  */
