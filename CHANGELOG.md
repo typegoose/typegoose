@@ -1,3 +1,20 @@
+## [8.0.0-beta.3](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.2...v8.0.0-beta.3) (2021-03-30)
+
+
+### Dependencies
+
+* lockfile maintenance ([3486ae3](https://github.com/typegoose/typegoose/commit/3486ae35b21bc3cb2690a78e46f4f28b13c9480c))
+* **@semantic-release/release-notes-generator:** upgrade to version "9.0.2" ([c0b2a77](https://github.com/typegoose/typegoose/commit/c0b2a776c04be9c2d52bd977b7052e216208bed1))
+* **@types/jest:** upgrade to version "26.0.22" ([e7d4ef1](https://github.com/typegoose/typegoose/commit/e7d4ef177c12dd9ba023e096d27d2a5b0a8e3bd9))
+* **@types/node:** upgrade to "10.17.56" ([cc23392](https://github.com/typegoose/typegoose/commit/cc2339276163be7b4130140b70a7798956a7f1db))
+* **eslint:** upgrade to version "7.23.0" and plugins ([bf18717](https://github.com/typegoose/typegoose/commit/bf18717dc5187191ee70c9be4b8f6a07370cf618))
+* **husky:** upgrade to version "6.0.0" ([e20983b](https://github.com/typegoose/typegoose/commit/e20983bf1f0889ee791ef3091a91019fc71d6b1c))
+* **mongodb-memory-server:** upgrade to version "6.9.6" ([fb28d1d](https://github.com/typegoose/typegoose/commit/fb28d1d9c6bbf1d091baaa77f7225bd1ab199ab7))
+* **mongoose:** change from "^" to "~" until types are fixed ([b651113](https://github.com/typegoose/typegoose/commit/b651113314a24801c11fddb786444bcb09dfbe38))
+* **semantic-release:** upgrade to version "17.4.2" ([283afb1](https://github.com/typegoose/typegoose/commit/283afb15427650941236dce9583b4315152a6e36))
+* **ts-jest:** upgrade to version "26.5.4" ([047051b](https://github.com/typegoose/typegoose/commit/047051bc0bb6c280c82914ae4a13e7e733faa02d))
+* **typescript:** upgrade to version "4.2.3" ([26a17a3](https://github.com/typegoose/typegoose/commit/26a17a3fd729cf70bc3fd56e59b8856bd6327246))
+
 ## [8.0.0-beta.2](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.1...v8.0.0-beta.2) (2021-03-06)
 
 
