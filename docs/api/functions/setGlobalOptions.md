@@ -8,7 +8,7 @@ title: 'Set Global Options'
 Example:
 
 ```ts
-setGlobalOptions({ options: { allowMixed: true } });
+setGlobalOptions({ options: { allowMixed: Severity.ALLOW } });
 ```
 
 ## Options
@@ -23,7 +23,7 @@ Will be merged with every class's `modelOptions`'s `schemaOptions`.
 
 Will be merged with every class's `modelOptions`'s `options`.
 
-[Please look here for more info](api/decorators/modelOptions.md#options-1)
+[Please look here for more info](../decorators/modelOptions.md#options-1)
 
 ### globalOptions
 
