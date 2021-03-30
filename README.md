@@ -132,7 +132,7 @@ class User {
 
 - TypeScript `^3.9` (since 7.1)
 - NodeJS `^10.15.0`
-- Mongoose `5.11.19` ([look here for why this version]([./faq.md#why-is-74x-constrained-to-mongoose-51018](https://typegoose.github.io/typegoose/docs/guides/faq#why-is-74x-constrained-to-mongoose-51018)))
+- Mongoose `5.11.19 - 5.12.0`
 - `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
 - tsconfig option `target` being `ES6`
 
