@@ -1,3 +1,14 @@
+## [8.0.0-beta.4](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.3...v8.0.0-beta.4) (2021-03-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* **processProp:** "ref" and "refPath" now use "mapArrayOptions" that means that some options might be mapped differently
+
+### Features
+
+* **processProp:** use "mapArrayOptions" for "ref" and "refPath" ([b39eff9](https://github.com/typegoose/typegoose/commit/b39eff9367e6910515944a140d7c939dddc532e3)), closes [typegoose/typegoose#513](https://github.com/typegoose/typegoose/issues/513)
+
 ## [8.0.0-beta.3](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.2...v8.0.0-beta.3) (2021-03-30)
 
 
