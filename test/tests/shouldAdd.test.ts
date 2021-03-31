@@ -249,22 +249,24 @@ it('should add options to refPath [szokodiakos#379]', () => {
 });
 
 it('should add options to array-ref [szokodiakos#379]', () => {
-  class T {}
+  class TestArrayRefNested {}
 
   class TestArrayRef {
-    @prop({ ref: T, customoption: 'custom' })
-    public someprop: Ref<T>[];
+    @prop({ ref: () => TestArrayRefNested, customoption1: 'custom1', innerOptions: { customoption2: 'custom2' } })
+    public someprop: Ref<TestArrayRefNested>[];
   }
 
   const schema = buildSchema(TestArrayRef);
   const someprop = schema.path('someprop');
-  expect(schema).not.toBeUndefined();
-  expect(someprop).not.toBeUndefined();
+  expect(schema).toBeDefined();
+  expect(someprop).toBeDefined();
+  // @ts-expect-error because "options" dosnt exist on "SchemaType"
+  expect(someprop.options).toHaveProperty('customoption1', 'custom1');
   // @ts-expect-error because "options" dosnt exist on "SchemaType"
   const opt: any = someprop.options.type[0];
   expect(typeof opt.type).toEqual('function');
-  expect(opt.ref).toEqual('T');
-  expect(opt).toHaveProperty('customoption', 'custom');
+  expect(opt.ref).toEqual(getName(TestArrayRefNested));
+  expect(opt).toHaveProperty('customoption2', 'custom2');
 });
 
 it('should add options to array-refPath [szokodiakos#379]', () => {
@@ -274,20 +276,22 @@ it('should add options to array-refPath [szokodiakos#379]', () => {
     @prop({ default: getName(EmptyClass) })
     public something: string;
 
-    @prop({ refPath: 'something', customoption: 'custom' })
+    @prop({ refPath: 'something', customoption1: 'custom1', innerOptions: { customoption2: 'custom2' } })
     public someprop: Ref<EmptyClass>[];
   }
 
   const schema = buildSchema(TestArrayRefPath);
   const someprop = schema.path('someprop');
-  expect(schema).not.toBeUndefined();
-  expect(someprop).not.toBeUndefined();
+  expect(schema).toBeDefined();
+  expect(someprop).toBeDefined();
   expect(someprop).toBeInstanceOf(mongoose.Schema.Types.Array);
+  // @ts-expect-error because "options" dosnt exist on "SchemaType"
+  expect(someprop.options).toHaveProperty('customoption1', 'custom1');
   // @ts-expect-error because "options" dosnt exist on "SchemaType"
   const opt: any = someprop.options.type[0];
   expect(typeof opt.type).toEqual('function');
   expect(opt.refPath).toEqual('something');
-  expect(opt).toHaveProperty('customoption', 'custom');
+  expect(opt).toHaveProperty('customoption2', 'custom2');
 });
 
 it('should make use of virtual get- & set-ters', async () => {

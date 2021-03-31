@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { assertion, getName } from '../../src/internal/utils';
 import { getModelForClass, isDocument, isDocumentArray, isRefType, prop, Ref } from '../../src/typegoose';
+import { KeyStringAny } from '../../src/types';
 import { RefTestArrayTypesModel, RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
 
 it('check generated ref schema for ObjectID _id', async () => {
@@ -270,4 +271,128 @@ it('reference arrays should work with mongoose.Types.Array<Ref<T>>', async () =>
   expect(schemaPath.caster).toBeInstanceOf(mongoose.Schema.Types.String);
 
   expect(Array.from(found.array!.toObject())).toEqual([stringdoc._id, stringdoc._id]);
+});
+
+/** // TODO: this "as" is because "SchemaType" currently has no "options" property */
+type HelperSchemaType = mongoose.SchemaType & { options: KeyStringAny };
+
+it('should map options correctly on an ref-array', async () => {
+  const validateInner = jest.fn(() => true);
+  const validateOuter = jest.fn(() => true);
+
+  class RefArrayOptionsMappingNested {
+    @prop()
+    public dummy?: string;
+  }
+
+  // the "type" options is explicitly set to be tested later
+  class RefArrayOptionsMapping {
+    @prop({ ref: () => RefArrayOptionsMappingNested, type: () => mongoose.Schema.Types.ObjectId })
+    public normalRef?: Ref<RefArrayOptionsMappingNested>;
+
+    @prop({ ref: () => RefArrayOptionsMappingNested, type: () => mongoose.Schema.Types.ObjectId })
+    public normalRefArray?: Ref<RefArrayOptionsMappingNested>[];
+
+    @prop({ ref: () => RefArrayOptionsMappingNested, type: () => mongoose.Schema.Types.ObjectId, validate: validateInner })
+    public validatedRef?: Ref<RefArrayOptionsMappingNested>;
+
+    @prop({ ref: () => RefArrayOptionsMappingNested, type: () => mongoose.Schema.Types.ObjectId, validate: validateOuter })
+    public validatedRefArray?: Ref<RefArrayOptionsMappingNested>[];
+
+    @prop({
+      ref: () => RefArrayOptionsMappingNested,
+      type: () => mongoose.Schema.Types.ObjectId,
+      validate: validateOuter,
+      innerOptions: { validate: validateInner },
+    })
+    public explicitDoubleRefArray?: Ref<RefArrayOptionsMappingNested>[];
+  }
+
+  const RefArrayOptionsMappingNestedModel = getModelForClass(RefArrayOptionsMappingNested);
+  const RefArrayOptionsMappingModel = getModelForClass(RefArrayOptionsMapping);
+  const schema = RefArrayOptionsMappingModel.schema;
+
+  expect(RefArrayOptionsMappingNestedModel.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
+
+  {
+    // TODO: this "as" is because "SchemaType" currently has no "options" property
+    const normalRef = schema.path('normalRef') as HelperSchemaType;
+
+    expect(normalRef).toBeInstanceOf(mongoose.Schema.Types.ObjectId);
+    expect(normalRef.options.type).toEqual(mongoose.Schema.Types.ObjectId);
+    expect(normalRef.options.ref).toEqual(getName(RefArrayOptionsMappingNested));
+  }
+
+  {
+    // TODO: this "as" is because "SchemaType" currently has no "options" property
+    const normalRefArray = schema.path('normalRefArray') as HelperSchemaType;
+
+    expect(normalRefArray).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(normalRefArray.options.type).toBeInstanceOf(Array);
+    const innerOptions = normalRefArray.options.type[0];
+    expect(innerOptions.type).toEqual(mongoose.Schema.Types.ObjectId);
+    expect(innerOptions.ref).toEqual(getName(RefArrayOptionsMappingNested));
+  }
+
+  {
+    // TODO: this "as" is because "SchemaType" currently has no "options" property
+    const validatedRef = schema.path('validatedRef') as HelperSchemaType;
+
+    expect(validatedRef).toBeInstanceOf(mongoose.Schema.Types.ObjectId);
+    expect(validatedRef.options.type).toEqual(mongoose.Schema.Types.ObjectId);
+    expect(validatedRef.options.ref).toEqual(getName(RefArrayOptionsMappingNested));
+    expect(validatedRef.options.validate).toEqual(validateInner);
+  }
+
+  {
+    // TODO: this "as" is because "SchemaType" currently has no "options" property
+    const validatedRefArray = schema.path('validatedRefArray') as HelperSchemaType;
+
+    expect(validatedRefArray).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(validatedRefArray.options.type).toBeInstanceOf(Array);
+    expect(validatedRefArray.options.validate).toEqual(validateOuter);
+    const innerOptions = validatedRefArray.options.type[0];
+    expect(innerOptions.type).toEqual(mongoose.Schema.Types.ObjectId);
+    expect(innerOptions.ref).toEqual(getName(RefArrayOptionsMappingNested));
+  }
+
+  {
+    // TODO: this "as" is because "SchemaType" currently has no "options" property
+    const explicitDoubleRefArray = schema.path('explicitDoubleRefArray') as HelperSchemaType;
+
+    expect(explicitDoubleRefArray).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(explicitDoubleRefArray.options.type).toBeInstanceOf(Array);
+    expect(explicitDoubleRefArray.options.validate).toEqual(validateOuter);
+    const innerOptions = explicitDoubleRefArray.options.type[0];
+    expect(innerOptions.type).toEqual(mongoose.Schema.Types.ObjectId);
+    expect(innerOptions.ref).toEqual(getName(RefArrayOptionsMappingNested));
+    expect(innerOptions.validate).toEqual(validateInner);
+  }
+
+  const reference1 = await RefArrayOptionsMappingNestedModel.create({ dummy: 'hello1' });
+  expect(reference1).toBeDefined();
+  await RefArrayOptionsMappingModel.create({ normalRef: reference1, normalRefArray: [reference1, reference1] });
+  expect(validateInner).not.toBeCalled();
+  // array's default to "[]" instead of "undefined", so validators are called
+  expect(validateOuter).toHaveBeenNthCalledWith(1, expect.any(Array));
+  expect(validateOuter).toHaveBeenNthCalledWith(2, expect.any(Array));
+
+  jest.clearAllMocks();
+
+  const reference2 = await RefArrayOptionsMappingNestedModel.create({ dummy: 'hello2' });
+  expect(reference2).toBeDefined();
+  await RefArrayOptionsMappingModel.create({ validatedRef: reference2, validatedRefArray: [reference2, reference2] });
+  expect(validateInner).toBeCalledWith(reference2);
+  expect(validateOuter).toHaveBeenNthCalledWith(1, expect.arrayContaining([reference2, reference2]));
+  expect(validateOuter).toHaveBeenNthCalledWith(2, expect.any(Array));
+
+  jest.clearAllMocks();
+
+  const reference3 = await RefArrayOptionsMappingNestedModel.create({ dummy: 'hello3' });
+  expect(reference3).toBeDefined();
+  await RefArrayOptionsMappingModel.create({ explicitDoubleRefArray: [reference3, reference3] });
+  expect(validateInner).toBeCalledWith(reference3);
+  // the order is different, because defaults get created *after* normal values, and so validatorss of those defaults are also called later
+  expect(validateOuter).toHaveBeenNthCalledWith(1, expect.arrayContaining([reference3, reference3]));
+  expect(validateOuter).toHaveBeenNthCalledWith(2, expect.any(Array));
 });

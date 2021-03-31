@@ -201,17 +201,10 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        schemaProp[key] = utils.createArrayFromDimensions(
-          rawOptions,
-          {
-            ...schemaProp[key][0],
-            type: refType,
-            ref,
-            ...rawOptions,
-          },
-          name,
-          key
-        );
+        schemaProp[key] = {
+          ...schemaProp[key][0],
+          ...utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { ref }),
+        };
         break;
       case WhatIsIt.NONE:
         schemaProp[key] = {
@@ -237,17 +230,10 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        schemaProp[key] = utils.createArrayFromDimensions(
-          rawOptions,
-          {
-            ...schemaProp[key][0],
-            type: refType,
-            refPath,
-            ...rawOptions,
-          },
-          name,
-          key
-        );
+        schemaProp[key] = {
+          ...schemaProp[key][0],
+          ...utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { refPath }),
+        };
         break;
       case WhatIsIt.NONE:
         schemaProp[key] = {
