@@ -86,7 +86,7 @@ class Main {
 
 // Not recommended workaround (hardcoding model name):
 class Main {
-  @prop({ ref: 'Nested' }) // since 7.0 it is recommended to use "ref: getName(Class)" to dynamically get the name
+  @prop({ ref: 'Nested' }) // since 7.0 it is recommended to use "console.log(getName(Class))" to get the generated name once and hardcode like shown here
   public nested: Ref<Nested>;
 }
 ```
