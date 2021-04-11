@@ -3,6 +3,8 @@ id: reference-other-classes
 title: 'Reference other Classes'
 ---
 
+[Look here for the `Ref` type documentation](../../api/types/ref.md)
+
 ## Referencing other Classes
 
 Referencing other Classes is easy as shown by the following example:
@@ -37,6 +39,34 @@ class Main {
 ```
 
 This is useful, if the class is either defined *after* the current class, or will otherwise be `undefined` and without hardcoding strings.
+
+### Reference other classes with different _id type
+
+Sometimes the `_id` type needs to be changed (to something like `String` / `Number`) and needs to be manually defined in the reference:
+
+```ts
+class Cat {
+  @prop()
+  public _id: string;
+}
+
+class Person {
+  @prop()
+  public name: string;
+
+  @prop({ ref: () => Cat, type: () => String })
+  public pet?: Ref<Cat, string>;
+}
+```
+
+:::info
+By default typegoose sets the default for the option `type` (if not defined) to `mongoose.Schema.Types.ObjectId`
+:::
+
+:::note
+The generic-parameter `IDType` from `Ref` is not automatically inferred from the generic-parameter `Class` yet (may be in the future)  
+The option `type` is not automatically inferred at runtime, because this could cause more "Circular Dependency" issues
+:::
 
 ## Common Problems
 
