@@ -3,9 +3,13 @@ id: ref-type
 title: 'Ref'
 ---
 
-The Type `Ref<T>` is the type used for [References](https://mongoosejs.com/docs/populate.html).
+The Type `Ref<Class, IDType>` is the type used for [References](https://mongoosejs.com/docs/populate.html).  
+The `Class` generic-parameter is used to set the class that is being referenced.  
+The `IDType` generic-parameter is used to set the `_id` type of the referenced class (Default: `mongoose.Types.ObjectId`).  
 
 There are [typeguards](api/functions/typeguards/isDocument.md) to check if a Reference is populated.
+
+For an more written out guide, there is the [Reference Other Classes](../../guides/advanced/reference-other-classes.md) Guide.
 
 ## Example
 
