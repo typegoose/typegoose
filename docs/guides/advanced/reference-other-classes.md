@@ -92,3 +92,54 @@ class Main {
 ```
 
 When you get errors about references, try making the name of the referenced class a string.
+
+:::caution
+The new `() => Class` is meant to help with Circular Dependencies, but cannot remove the problems
+:::
+
+### Circular Dependencies
+
+As an warning in [Common Problems](#common-problems) already said, the `() => Class` way can help with circular dependencies, but not remove them, this is due to how javascript works.
+
+The only way known to resolve this is to do something like the following:
+
+Class file A:
+
+```ts
+import { B } from "./B";
+
+export class A {
+  @prop()
+  public name: string;
+
+  @prop({ ref: () => B })
+  public b: Ref<B>;
+}
+```
+
+Class file B:
+
+```ts
+import { A } from "./A";
+
+export class B {
+  @prop()
+  public name: string;
+
+  @prop({ ref: () => A })
+  public a: Ref<A>;
+}
+```
+
+Central processing file:
+
+```ts
+import { A } from "./A";
+import { B } from "./B";
+
+export const AModel = getModelForClass(A);
+export const BModel = getModelForClass(B);
+```
+
+This may seem like it is not changing much, but actually nodejs will resolve & load all required imports fully before trying to use any of them.  
+And because the `() => Class` way is used, the reference to `Class` will only be resolved once the function is actually called, that is why it works, but just `Class` dosnt.
