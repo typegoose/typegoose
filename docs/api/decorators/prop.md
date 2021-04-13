@@ -602,7 +602,7 @@ class Kitten {
 
 class Cat {
   @prop({ type: () => [Kitten] })
-  public kitten?: Kitten[]; // "[]" or "Array<any>" or "mongoose.Types.Array<any>" is needed to be detected as an Array
+  public kitten?: Kitten[]; // "[]" or "Array<any>" or "mongoose.Types.Array<any>" or "mongoose.Types.DocumentArray" is needed to be detected as an Array
 }
 ```
 
