@@ -5,10 +5,10 @@ import type { Severity, WhatIsIt } from './internal/constants';
  * Get the Type of an instance of a Document with Class properties
  * @example
  * ```ts
- * class Name {}
- * const NameModel = Name.getModelForClass(Name);
+ * class ClassName {}
+ * const NameModel = getModelForClass(ClassName);
  *
- * const t: DocumentType<Name> = await NameModel.create({});
+ * const doc: DocumentType<ClassName> = await NameModel.create({});
  * ```
  */
 export type DocumentType<T> = (T extends { _id: unknown } ? mongoose.Document<T['_id']> & T : mongoose.Document & T) &
@@ -45,7 +45,7 @@ export interface ValidatorFunctionMessageParam {
 }
 export interface ValidatorOptions {
   validator: ValidatorFunction;
-  // the function for message is with "any" because im (hasezoey) not sure if the type is always "ValidatorFunctionMessageParam"
+  // the function for message is with "any" because i (hasezoey) am not sure if the type is always "ValidatorFunctionMessageParam"
   message?: string | ((props: ValidatorFunctionMessageParam) => string) | ((...args: any[]) => string);
 }
 export type Validator = ValidatorFunction | RegExp | ValidatorOptions | ValidatorOptions[];
@@ -256,7 +256,7 @@ export interface TransformStringOptions {
 }
 
 export interface VirtualOptions {
-  /** Reference an other Document (you should use Ref<T> as Prop type) */
+  /** Reference another Document (Ref<T> should be used as property type) */
   ref: NonNullable<BasePropOptions['ref']>;
   /** Which property(on the current-Class) to match `foreignField` against */
   localField: string | DynamicStringFunc<any>;
@@ -276,6 +276,10 @@ export type PropOptionsForNumber = BasePropOptions & ValidateNumberOptions;
 export type PropOptionsForString = BasePropOptions & TransformStringOptions & ValidateStringOptions;
 
 export type RefType = mongoose.RefType;
+
+/**
+ * Reference another Model
+ */
 export type Ref<
   PopulatedType,
   RawId extends mongoose.RefType =
@@ -458,7 +462,7 @@ export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
  * }
  *
  * // Both of the following types will be identical.
- * type SendMessageType = QueryMethod<typeof sendMessage>;
+ * type SendMessageType = AsQueryMethod<typeof sendMessage>;
  * type SendMessageManualType = (recipient: string, sender: string, priority: number, retryIfFails: boolean) => boolean;
  * ```
  */

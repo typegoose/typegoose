@@ -19,11 +19,11 @@ class DocumentCT {
   @Expose()
   // makes sure that when deserializing from a Mongoose Object, ObjectId is serialized into a string
   @Transform((value: any) => {
-    if ("value" in value) {
+    if ('value' in value) {
       return value.value instanceof mongoose.Types.ObjectId ? value.value.toHexString() : value.value.toString();
     }
 
-    return "unknown value";
+    return 'unknown value';
   })
   public _id: string;
 

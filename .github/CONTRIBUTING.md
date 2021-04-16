@@ -92,3 +92,14 @@ The footer should contain any information about **Breaking Changes** and is also
 
 **Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines.
 The rest of the commit message is then used for this.
+
+## Documentation Guidelines
+
+When doing code examples in the documentation:
+- ensure that the spacing is `2` spaces, no tabs
+- use single-quotes (`'`), and not double-quotes (`"`) to keep the documentation consitent (only use template strings where necessary) (except comment, there use double-quotes for readability)
+- prefer the usage of template strings over `"hello " + variable + " world`
+
+When generally writing (outside of code examples):
+- use inline-code-blocks for versions, code, variable names, etc (like: `this is an inline-code-block`)
+- use double-quotes for things that dont need inline-code-blocks

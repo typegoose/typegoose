@@ -8,9 +8,9 @@ import type { BeAnObject, IIndexArray, IndexOptions } from './types';
  * @param fields Which fields to give the Options
  * @param options Options to pass to MongoDB driver's createIndex() function
  * @example Example:
- * ```
+ * ```ts
  * @index({ article: 1, user: 1 }, { unique: true })
- * class Name {}
+ * class ClassName {}
  * ```
  */
 export function index<T = BeAnObject>(fields: T, options?: IndexOptions<T>): ClassDecorator {

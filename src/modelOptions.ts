@@ -6,11 +6,11 @@ import type { IModelOptions } from './types';
  * Define Options for the Class
  * @param options Options
  * @example Example:
- * ```
+ * ```ts
  * @modelOptions({ schemaOptions: { timestamps: true } })
- * class Name {}
+ * class ClassName {}
  *
- * // Note: The default Class "TimeStamps" can be used for type information and options already set
+ * // The default Class "TimeStamps" can be used for type information and options already set
  * ```
  */
 export function modelOptions(options: IModelOptions): ClassDecorator {

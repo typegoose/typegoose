@@ -79,7 +79,7 @@ interface Hooks {
   post<T>(method: QDM | QDM[], fn: PostArrayWithError<T>): ClassDecorator;
 }
 
-// Note: TSDoc for the hooks can't be added without adding it to *every* overload
+// TSDoc for the hooks can't be added without adding it to *every* overload
 const hooks: Hooks = {
   pre(...args) {
     return (target: any) => addToHooks(target, 'pre', args);

@@ -22,11 +22,11 @@ import type {
  *   @prop()
  *   public someProp?: string;
  *
- *   @prop({ type: [String] })
- *   public someArrayProp: string[];
+ *   @prop({ type: () => [String] })
+ *   public someArrayProp?: string[];
  *
- *   @prop({ type: String })
- *   public someMapProp: Map<string, string>;
+ *   @prop({ type: () => String })
+ *   public someMapProp?: Map<string, string>;
  * }
  * ```
  */

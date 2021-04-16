@@ -9,6 +9,10 @@ This Guide shows all the possibilities for a model to use different names.
 If Classes with the same name are wanted, these methods need to be used so that Typegooes can differentiate between them
 :::
 
+:::caution
+Names can currently not be changed in an `getModelForClass`/`buildSchema` call, only with `@modelOptions`
+:::
+
 ## SchemaOptions collection
 
 For this to work, `{ options: { automaticName } }` must be true.

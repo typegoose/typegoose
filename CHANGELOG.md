@@ -79,6 +79,27 @@
 
 * update yarn.lock ([fc17dc5](https://github.com/typegoose/typegoose/commit/fc17dc58c08bdce096ade6d58bc004a54b0784fd))
 
+## [7.6.0](https://github.com/typegoose/typegoose/compare/v7.5.0...v7.6.0) (2021-03-08)
+
+
+### Features
+
+* use customName and automaticName from buildSchema ([#502](https://github.com/typegoose/typegoose/issues/502)) ([9eab528](https://github.com/typegoose/typegoose/commit/9eab528e5066c064effedb0c272b52607e7e826c))
+
+
+### Style
+
+* **hooks:** update comment ([9302e62](https://github.com/typegoose/typegoose/commit/9302e6287e60f56fb9cf4cf37136064724fcce5f))
+* **index:** update tsdoc ([f418ffa](https://github.com/typegoose/typegoose/commit/f418ffacd74d3b062656ae32fac6fa427dd8fdba))
+* **modelOptions:** update tsdoc ([ae1f1da](https://github.com/typegoose/typegoose/commit/ae1f1da769340a03b45353612d81ede4cb081a6a))
+* **plugin:** update tsdoc ([b984dc1](https://github.com/typegoose/typegoose/commit/b984dc195c4d9c4b78b6eb1e84d88d2918d0c032))
+* **prop:** update tsdoc ([fff099b](https://github.com/typegoose/typegoose/commit/fff099b5eeac7c451c84d46c658ad2cbd5763471))
+* **queryMethod:** update tsdoc ([e911c7b](https://github.com/typegoose/typegoose/commit/e911c7be3266e64898a6a47acf42d3b95c2de100))
+* **typegoose:** update tsdoc ([c277d93](https://github.com/typegoose/typegoose/commit/c277d9371143c78e0a199ed1c9e94d3d483d3284))
+* **types:** update tsdoc ([0c91bb5](https://github.com/typegoose/typegoose/commit/0c91bb5a85fa2eac48ca7996a0734b94869fbdd7))
+* **utils:** fix typos in comments ([6e8d2d0](https://github.com/typegoose/typegoose/commit/6e8d2d0da3aecfce98511fd54147a0d12a721130))
+
+
 ## [7.5.0](https://github.com/typegoose/typegoose/compare/v7.4.8...v7.5.0) (2021-03-01)
 
 

@@ -32,7 +32,8 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
   sch?: mongoose.Schema<any>,
   opt?: mongoose.SchemaOptions,
-  isFinalSchema: boolean = true
+  isFinalSchema: boolean = true,
+  overwriteOptions?: IModelOptions
 ) {
   assertionIsClass(cl);
 
@@ -41,9 +42,11 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   // Options sanity check
   opt = mergeSchemaOptions(isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt, cl);
 
-  const name = getName(cl);
+  /** used, because when trying to resolve an child, the overwriteOptions for that child are not available */
+  const className = getName(cl);
+  const finalName = getName(cl, overwriteOptions);
 
-  logger.debug('_buildSchema Called for %s with options:', name, opt);
+  logger.debug('_buildSchema Called for %s with options:', finalName, opt);
 
   /** Simplify the usage */
   const Schema = mongoose.Schema;
@@ -58,15 +61,15 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     }
   }
 
-  if (!schemas.has(name)) {
-    schemas.set(name, {});
+  if (!schemas.has(className)) {
+    schemas.set(className, {});
   }
 
   if (!(sch instanceof Schema)) {
-    sch = new Schema(schemas.get(name), schemaOptions);
+    sch = new Schema(schemas.get(className), schemaOptions);
   } else {
     sch = sch.clone();
-    sch.add(schemas.get(name)!);
+    sch.add(schemas.get(className)!);
   }
 
   sch.loadClass(cl);
@@ -80,14 +83,14 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
         logger.debug('Applying Nested Discriminators for:', key, discriminators);
 
         const path: { discriminator?: Func } = sch.path(key) as any;
-        assertion(!isNullOrUndefined(path), new Error(`Path "${key}" does not exist on Schema of "${name}"`));
+        assertion(!isNullOrUndefined(path), new Error(`Path "${key}" does not exist on Schema of "${finalName}"`));
         assertion(
           typeof path.discriminator === 'function',
-          new Error(`There is no function called "discriminator" on schema-path "${key}" on Schema of "${name}"`)
+          new Error(`There is no function called "discriminator" on schema-path "${key}" on Schema of "${finalName}"`)
         );
 
         for (const { type: child, value: childName } of discriminators) {
-          const childSch = getName(child) === name ? sch : buildSchema(child);
+          const childSch = getName(child) === finalName ? sch : buildSchema(child);
 
           const discriminatorKey = childSch.get('discriminatorKey');
 
@@ -159,12 +162,12 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
     // this method is to get the typegoose name of the model/class if it is user-handled (like buildSchema, then manually mongoose.model)
     sch.method('typegooseName', () => {
-      return name;
+      return finalName;
     });
   }
 
   // add the class to the constructors map
-  constructors.set(name, cl);
+  constructors.set(finalName, cl);
 
   return sch;
 }
