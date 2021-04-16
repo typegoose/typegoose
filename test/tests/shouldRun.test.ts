@@ -263,7 +263,6 @@ it('should run with Custom Types', async () => {
       super(key, options, 'CustomInt');
     }
 
-    // @ts-expect-error mongoose types have wrong types for this
     public cast(val) {
       return Number(val);
     }
