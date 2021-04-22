@@ -27,7 +27,7 @@ Example without `automaticName`:
 class MultiModel {}
 
 const model = getModelForClass(MultiModel);
-expect(model.modelName).to.be.equal('MultiModel');
+expect(model.modelName).to.be.equal('Something');
 ```
 
 Example with `automaticName`:
