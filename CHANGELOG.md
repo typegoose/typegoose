@@ -1,3 +1,11 @@
+## [8.0.0-beta.6](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.5...v8.0.0-beta.6) (2021-05-11)
+
+
+### Style
+
+* **schema:** add comment on why an line is necessary ([d38aa5a](https://github.com/typegoose/typegoose/commit/d38aa5a521c178d91ecd3978b0868046f00327ec))
+* **schema:** remove "as any" cast ([d9b2f24](https://github.com/typegoose/typegoose/commit/d9b2f247c84924b09f882d32ae7ec16b8c33e83b))
+
 ## [8.0.0-beta.5](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.4...v8.0.0-beta.5) (2021-04-16)
 
 
