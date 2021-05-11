@@ -1,3 +1,13 @@
+## [8.0.0-beta.7](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.6...v8.0.0-beta.7) (2021-05-11)
+
+
+### Dependencies
+
+* **@semantic-release/npm:** upgrade to "7.1.3" ([a4fa9ce](https://github.com/typegoose/typegoose/commit/a4fa9cec4bd7456bbe5a29a1a4c45a15a60b49d3))
+* **commitlint:** upgrade to "12.1.1" ([6442141](https://github.com/typegoose/typegoose/commit/6442141963e919ad5c830c98027baff156faefe6))
+* **eslint:** upgrade to "7.26.0" ([601814d](https://github.com/typegoose/typegoose/commit/601814dfad2ae1620818c339a730f283956154df))
+* **prettier:** upgrade to "2.3.0" ([13058c1](https://github.com/typegoose/typegoose/commit/13058c133c5dd943267c77311276bd8b3a443220))
+
 ## [8.0.0-beta.6](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.5...v8.0.0-beta.6) (2021-05-11)
 
 
