@@ -4,7 +4,6 @@ import { buildSchema } from '../typegoose';
 import type {
   AnyParamConstructor,
   DecoratedPropertyMetadataMap,
-  Func,
   IHooksArray,
   IIndexArray,
   IModelOptions,
@@ -82,7 +81,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       for (const [key, discriminators] of disMap) {
         logger.debug('Applying Nested Discriminators for:', key, discriminators);
 
-        const path: { discriminator?: Func } = sch.path(key) as any;
+        const path = sch.path(key) as mongoose.Schema.Types.DocumentArray;
         assertion(!isNullOrUndefined(path), new Error(`Path "${key}" does not exist on Schema of "${finalName}"`));
         assertion(
           typeof path.discriminator === 'function',
