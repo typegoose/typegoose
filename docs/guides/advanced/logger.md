@@ -23,3 +23,18 @@ import { setLogLevel, LogLevels } from '@typegoose/typegoose';
 
 setLogLevel(LogLevels.SILENT);
 ```
+
+## Enable Debug Logger
+
+The logger enable function needs to be placed before any other imports in the project entry file, because all decorators on an class are executed on the context level they are on (commonly the module root)
+
+```ts
+// Project Entry file
+import { setLogLevel } from "@typegoose/typegoose";
+setLogLevel("DEBUG");
+
+import { anythingElse } from "someModule";
+import { SomeModel } from "./someModel";
+
+// the rest of the main entry file
+```
