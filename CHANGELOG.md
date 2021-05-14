@@ -1,3 +1,10 @@
+## [8.0.0-beta.9](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.8...v8.0.0-beta.9) (2021-05-14)
+
+
+### Dependencies
+
+* **mongoose:** upgrade to version "5.12.9" ([3cc88ae](https://github.com/typegoose/typegoose/commit/3cc88aeda1f1703e32605893a0ecf48f9656d1f6))
+
 ## [8.0.0-beta.8](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.7...v8.0.0-beta.8) (2021-05-14)
 
 
