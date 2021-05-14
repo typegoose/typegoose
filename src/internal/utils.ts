@@ -16,7 +16,7 @@ import type {
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
-import { NoValidClass } from './errors';
+import { AssertionFallbackError, NoValidClass } from './errors';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -589,7 +589,7 @@ export function createArrayFromDimensions(rawOptions: any, extra: any, name: str
  */
 export function assertion(cond: any, error?: Error): asserts cond {
   if (!cond) {
-    throw error ?? new Error('Assert failed - no custom error [E019]');
+    throw error ?? new AssertionFallbackError();
   }
 }
 
