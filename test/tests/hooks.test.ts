@@ -43,7 +43,6 @@ it('should find the unexpected dummies because of pre and post hooks', async () 
 });
 
 it('should test the updateMany hook', async () => {
-  // @ts-expect-error Mongoose 5.12.1+ somehow broke this in requiring the "typegooseName" function here
   await Hook2Model.insertMany([{ text: 'foobar42' }, { text: 'foobar42' }]);
 
   await Hook2Model.updateMany({ text: 'foobar42' }, { text: 'lorem ipsum' }).exec();
