@@ -1,3 +1,10 @@
+## [8.0.0-beta.8](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.7...v8.0.0-beta.8) (2021-05-14)
+
+
+### Features
+
+* **utils:** move E019 Error into its own class to confuse less ([6ad5043](https://github.com/typegoose/typegoose/commit/6ad5043ac1a02281cc4215ba2cfaa4ce3421e28c))
+
 ## [8.0.0-beta.7](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.6...v8.0.0-beta.7) (2021-05-11)
 
 
