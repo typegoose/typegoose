@@ -1,6 +1,6 @@
 # Typegoose
 
-<sub>(These badges are from typegoose:master)</sub>  
+<sub>(These badges are from typegoose:master)</sub>
 [![Node.js Tests](https://github.com/typegoose/typegoose/workflows/Node.js%20Tests/badge.svg?branch=master)](https://github.com/typegoose/typegoose/actions?query=workflow%3A"Node.js+Tests")
 [![Coverage Status](https://coveralls.io/repos/github/typegoose/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/typegoose/typegoose?branch=master)
 [![npm](https://img.shields.io/npm/dt/@typegoose/typegoose.svg)](https://www.npmjs.com/package/@typegoose/typegoose)
@@ -44,7 +44,7 @@ Under the hood it uses the Reflect & [reflect-metadata](https://github.com/rbuck
 Instead of writing this:
 
 ```ts
-// This is an representation of how typegoose's compile output would look like
+// This is a representation of how typegoose's compile output would look like
 interface Car {
   model?: string;
 }
@@ -105,22 +105,22 @@ class User {
   public name?: string;
 
   @prop({ required: true })
-  public age!: number; // This is an single Primitive
+  public age!: number; // This is a single Primitive
 
   @prop({ type: () => [String] })
-  public preferences?: string[]; // This is an Primitive Array
+  public preferences?: string[]; // This is a Primitive Array
 
   @prop()
-  public mainJob?: Job; // This is an single SubDocument
+  public mainJob?: Job; // This is a single SubDocument
 
   @prop({ type: () => Job })
-  public jobs?: Job[]; // This is an SubDocument Array
+  public jobs?: Job[]; // This is a SubDocument Array
 
   @prop({ ref: () => Car })
-  public mainCar?: Ref<Car>; // This is an single Reference
+  public mainCar?: Ref<Car>; // This is a single Reference
 
   @prop({ ref: () => Car })
-  public cars?: Ref<Car>[]; // This is an Reference Array
+  public cars?: Ref<Car>[]; // This is a Reference Array
 }
 ```
 
@@ -150,7 +150,7 @@ To ask questions or just talk with us, [join our Discord Server](https://discord
 ## Documentation
 
 * [Typegoose Documentation](https://typegoose.github.io/typegoose/docs/api/index-api)
-* [Quick start guide](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide/)  
+* [Quick start guide](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide/)
 
 ## Known Issues
 
