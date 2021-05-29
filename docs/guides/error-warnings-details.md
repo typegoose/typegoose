@@ -241,7 +241,7 @@ class ErrorClass {
 Error: `The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`
 
 Details:  
-The function used to create a custom model name (via the `modelOptions` "option" prop) must return a string and it should not be empty. 
+The function used to create a custom model name (via the `modelOptions` "option" prop) must return a string and it should not be empty.
 
 ## Warnings
 
