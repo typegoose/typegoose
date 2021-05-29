@@ -1,4 +1,5 @@
-// disable "no-unused" for this file, to keep hooks consistent
+// disable "no-unused" for this file, to keep hooks consistent (it has to be an inline-comment, because of an problem with eslint)
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Aggregate, Query } from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
 import { assertion, getName } from './internal/utils';
