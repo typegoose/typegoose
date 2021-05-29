@@ -47,7 +47,7 @@
     "@semantic-release/release-notes-generator": "^9.0.2",
     "@types/jest": "^26.0.22",
     "@types/lodash": "^4.14.161",
-    "@types/node": "^10.17.56",
+    "@types/node": "~12.12.6",
     "@types/semver": "^7.3.4",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.23.0",
