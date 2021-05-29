@@ -14,10 +14,10 @@ Typegoose requires at least mongoose version 5.12.9, because that version change
 
 ### NodeJS Version [E002]
 
-Error: `You are using a NodeJS Version below 10.15.0, Please Upgrade! [E002]`
+Error: `You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]`
 
 Details:  
-Typegoose requires at least NodeJS Version 10.15, because NodeJS 10 is the lowest activly maintained version AND is the lowest that supports all functions needed by typegoose (without having to add polyfills)
+Typegoose requires at least NodeJS Version 12.22, because NodeJS 12 is the lowest activly maintained version AND is the lowest that supports all functions needed by typegoose (without having to add polyfills)
 
 ### addModelToTypegoose called twice [E003]
 
