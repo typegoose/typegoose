@@ -201,11 +201,12 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
  */
 export function deleteModel(name: string) {
   assertion(typeof name === 'string', new TypeError('name is not an string! (deleteModel)'));
-  assertion(models.has(name), new Error(`Model "${name}" could not be found`));
+  const model = models.get(name);
+  assertion(model, new Error(`Model "${name}" could not be found`));
 
   logger.debug('Deleting Model "%s"', name);
 
-  models.get(name)!.db.deleteModel(name);
+  model.db.deleteModel(name);
 
   models.delete(name);
   constructors.delete(name);
