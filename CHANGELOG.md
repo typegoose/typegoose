@@ -1,3 +1,10 @@
+## [8.0.0-beta.10](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.9...v8.0.0-beta.10) (2021-05-29)
+
+
+### Fixes
+
+* **typegoose:** fix lowest supported mongoose version ([90d2c2f](https://github.com/typegoose/typegoose/commit/90d2c2ffc56a2450b08158927d3f34becb13a9a8))
+
 ## [8.0.0-beta.9](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.8...v8.0.0-beta.9) (2021-05-14)
 
 
