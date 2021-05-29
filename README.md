@@ -1,7 +1,6 @@
 # Typegoose
 
-<sub>(These badges are from typegoose:master)</sub>
-
+<sub>(These badges are from typegoose:master)</sub>  
 [![Node.js Tests](https://github.com/typegoose/typegoose/workflows/Node.js%20Tests/badge.svg?branch=master)](https://github.com/typegoose/typegoose/actions?query=workflow%3A"Node.js+Tests")
 [![Coverage Status](https://coveralls.io/repos/github/typegoose/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/typegoose/typegoose?branch=master)
 [![npm](https://img.shields.io/npm/dt/@typegoose/typegoose.svg)](https://www.npmjs.com/package/@typegoose/typegoose)
@@ -36,15 +35,11 @@ const UserModel = getModelForClass(User); // UserModel is a regular Mongoose Mod
 
 ## Motivation
 
-A common problem when using Mongoose with TypeScript is that you have to define both the Mongoose model and the TypeScript interface. If the
-model changes, you also have to keep the TypeScript interface file in sync or the TypeScript interface would not represent the real data
-structure of the model.
+A common problem when using Mongoose with TypeScript is that you have to define both the Mongoose model and the TypeScript interface. If the model changes, you also have to keep the TypeScript interface file in sync or the TypeScript interface would not represent the real data structure of the model.
 
-Typegoose aims to solve this problem by defining only a TypeScript interface (class), which needs to be enhanced with special Typegoose
-decorators (like `@prop`).
+Typegoose aims to solve this problem by defining only a TypeScript interface (class), which needs to be enhanced with special Typegoose decorators (like `@prop`).
 
-Under the hood it uses the Reflect & [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the
-properties, so redundancy can be significantly reduced.
+Under the hood it uses the Reflect & [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the properties, so redundancy can be significantly reduced.
 
 Instead of writing this:
 
@@ -154,8 +149,8 @@ To ask questions or just talk with us, [join our Discord Server](https://discord
 
 ## Documentation
 
-- [Typegoose Documentation](https://typegoose.github.io/typegoose/docs/api/index-api)
-- [Quick start guide](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide/)
+* [Typegoose Documentation](https://typegoose.github.io/typegoose/docs/api/index-api)
+* [Quick start guide](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide/)
 
 ## Known Issues
 
@@ -167,4 +162,4 @@ To ask questions or just talk with us, [join our Discord Server](https://discord
 
 ## Notes
 
-- Please don't add `+1` or similar comments to issues. Use the reactions instead.
+* Please don't add `+1` or similar comments to issues. Use the reactions instead.
