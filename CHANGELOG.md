@@ -1,3 +1,41 @@
+## [8.0.0-beta.11](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.10...v8.0.0-beta.11) (2021-05-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* NodeJS 10 & 11 are now unsupported, lowest supported is now NodeJS 12
+
+### Features
+
+* unsupport nodejs 10 & 11 ([d24d6d7](https://github.com/typegoose/typegoose/commit/d24d6d7a86735603ea6bbe28503f90e0723cce8c))
+
+
+### Dependencies
+
+* **@semantic-release/github:** upgrade to version "7.2.3" ([c52195c](https://github.com/typegoose/typegoose/commit/c52195cd7157b11c15031fc63211a273ef3611b3))
+* **@semantic-release/npm:** upgrade to version "7.1.3" ([d58a074](https://github.com/typegoose/typegoose/commit/d58a07406c0cf3897b8b78bca67b02f62d2d9f13))
+* **@types/jest:** upgrade to version "26.0.23" ([ab65cce](https://github.com/typegoose/typegoose/commit/ab65cce8d32c3969acfe0d47a4be42bcbd6e0074))
+* **@types/lodash:** upgrade to version "4.14.170" ([96be5b4](https://github.com/typegoose/typegoose/commit/96be5b495de98b175b53cde5f42a94a09efe9248))
+* **@types/node:** upgrade to version "12.12.6" ([0b91f99](https://github.com/typegoose/typegoose/commit/0b91f99f2ace3eb70903a3407ed9e50a90967743))
+* **@types/semver:** upgrade to version "7.3.6" ([7e60b5c](https://github.com/typegoose/typegoose/commit/7e60b5c41eef15ea48004198f0dd74bb4179a0d1))
+* **@typescript-eslint/*:** upgrade to version "4.25.0" ([e768711](https://github.com/typegoose/typegoose/commit/e768711e817fb106dd5df10ed19981050c863139))
+* **commitlint:** upgrade to version "12.1.4" ([7e29e40](https://github.com/typegoose/typegoose/commit/7e29e4062e3d9285b113fba58d24d366242b7f56))
+* **eslint:** upgrade to version "7.27.0" ([0db5b74](https://github.com/typegoose/typegoose/commit/0db5b74574fe34f5b9fabe954569cd145859a0b8))
+* **jest:** upgrade to version "27.0.1" ([351ace3](https://github.com/typegoose/typegoose/commit/351ace32bede661b39ba5765fb2e3b6dec6c43ad))
+* **lint-staged:** upgrade to version "11.0.0" ([c8e6c13](https://github.com/typegoose/typegoose/commit/c8e6c1314f64f9d1b85ba1025dc3ded436cbef4a))
+* **semantic-release:** upgrade to version "17.4.3" ([ed4cbfc](https://github.com/typegoose/typegoose/commit/ed4cbfce8a67e18692d2de1436ecaac72bbae773))
+* **tslib:** upgrade to version "2.2.0" ([edd2581](https://github.com/typegoose/typegoose/commit/edd2581db6e572bbd7286a307ed3fcf7761ca140))
+* **typescript:** upgrade to version "4.3.2" ([ee66bc6](https://github.com/typegoose/typegoose/commit/ee66bc689adc9c3b878ffd91f1ba203be495abea))
+
+
+### Style
+
+* **eslintrc:** disable rule "@typescript-eslint/no-non-null-assertion" ([38a69d2](https://github.com/typegoose/typegoose/commit/38a69d2ee4944ad62796360096cb35b79bfa7d2d))
+* **hooks:** disable rule "@typescript-eslint/no-unused-vars" for file ([bf61ecb](https://github.com/typegoose/typegoose/commit/bf61ecb3938098f62479d340a61db212df4e1be4))
+* **processProp:** disable function "optionDeprecation" ([90955ab](https://github.com/typegoose/typegoose/commit/90955ab4304d698c6951a93d646346dc3b51194b))
+* **typegoose:** remove non-null assertion ([0413613](https://github.com/typegoose/typegoose/commit/0413613e28267d244f26f1477f712033c3fbbb35))
+* **utils:** remove unused parameters from "mergeWith" ([06df924](https://github.com/typegoose/typegoose/commit/06df924719abe0e287ddee7af892ba5fe3704ff3))
+
 ## [8.0.0-beta.10](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.9...v8.0.0-beta.10) (2021-05-29)
 
 
