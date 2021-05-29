@@ -265,9 +265,7 @@ export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: A
   assertionIsClass(cl);
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
-  return mergeWith({}, Reflect.getMetadata(key, cl), value, (_objValue, srcValue, ckey, _object, _source, _stack) =>
-    customMerger(ckey, srcValue)
-  );
+  return mergeWith({}, Reflect.getMetadata(key, cl), value, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
 }
 
 /**
