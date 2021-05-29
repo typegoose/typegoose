@@ -27,7 +27,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   logger.debug('Starting to process "%s.%s"', name, key);
   utils.assertion(typeof key === 'string', new Error(`Property Key in typegoose cannot be an symbol! (${name}.${String(key)})`));
 
-  optionDeprecation(rawOptions);
+  // optionDeprecation(rawOptions);
 
   {
     // soft errors & "type"-alias mapping
@@ -434,11 +434,12 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   }
 }
 
+// The following function ("optionDeprecation") is disabled until used again
 /**
  * Check for deprecated options, and if needed process them
  * @param options
  */
-function optionDeprecation(options: any) {}
+// function optionDeprecation(options: any) {}
 
 /**
  * Detect "WhatIsIt" based on "Type"
