@@ -1,6 +1,6 @@
 import * as utils from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
-import { buildSchema, prop, setGlobalOptions, Severity } from '../../src/typegoose';
+import { buildSchema, prop } from '../../src/typegoose';
 
 // Note: TDEP0003 is expected in here
 
@@ -17,23 +17,6 @@ afterAll(() => {
   expect.assertions(1);
   (logger as any).warn = origWarn;
   (utils as any).deprecate = origDeprecate;
-});
-
-describe('prop.ts', () => {
-  beforeEach(() => {
-    expect.assertions(2);
-  });
-
-  describe('@prop', () => {
-    beforeAll(() => {
-      // to not have the warnings of "mixed"
-      setGlobalOptions({ options: { allowMixed: Severity.ALLOW } });
-    });
-  });
-
-  describe('WhatIsIt.MAP', () => {});
-
-  describe('WhatIsIt.ARRAY', () => {});
 });
 
 describe('Options not for current Type', () => {
