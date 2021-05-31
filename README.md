@@ -24,7 +24,7 @@ class User {
 const UserModel = getModelForClass(User); // UserModel is a regular Mongoose Model with correct types
 
 (async () => {
-  await mongoose.connect('mongodb://localhost:27017/', { useNewUrlParser: true, useUnifiedTopology: true, dbName: "test" });
+  await mongoose.connect('mongodb://localhost:27017/', { useNewUrlParser: true, useUnifiedTopology: true, dbName: 'test' });
 
   const { _id: id } = await UserModel.create({ name: 'JohnDoe', jobs: ['Cleaner'] } as User); // an "as" assertion, to have types for all properties
   const user = await UserModel.findById(id).exec();
@@ -44,7 +44,7 @@ Under the hood it uses the Reflect & [reflect-metadata](https://github.com/rbuck
 Instead of writing this:
 
 ```ts
-// This is an representation of how typegoose's compile output would look like
+// This is a representation of how typegoose's compile output would look like
 interface Car {
   model?: string;
 }
@@ -105,22 +105,22 @@ class User {
   public name?: string;
 
   @prop({ required: true })
-  public age!: number; // This is an single Primitive
+  public age!: number; // This is a single Primitive
 
   @prop({ type: () => [String] })
-  public preferences?: string[]; // This is an Primitive Array
+  public preferences?: string[]; // This is a Primitive Array
 
   @prop()
-  public mainJob?: Job; // This is an single SubDocument
+  public mainJob?: Job; // This is a single SubDocument
 
   @prop({ type: () => Job })
-  public jobs?: Job[]; // This is an SubDocument Array
+  public jobs?: Job[]; // This is a SubDocument Array
 
   @prop({ ref: () => Car })
-  public mainCar?: Ref<Car>; // This is an single Reference
+  public mainCar?: Ref<Car>; // This is a single Reference
 
   @prop({ ref: () => Car })
-  public cars?: Ref<Car>[]; // This is an Reference Array
+  public cars?: Ref<Car>[]; // This is a Reference Array
 }
 ```
 
@@ -150,7 +150,7 @@ To ask questions or just talk with us, [join our Discord Server](https://discord
 ## Documentation
 
 * [Typegoose Documentation](https://typegoose.github.io/typegoose/docs/api/index-api)
-* [Quick start guide](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide/)  
+* [Quick start guide](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide/)
 
 ## Known Issues
 
