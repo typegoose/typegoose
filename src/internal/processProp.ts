@@ -215,7 +215,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
         break;
       default:
-        throw new TypeError(`"ref" is not supported for "${propKind}"! (${name}, ${key})`);
+        throw new TypeError(`"ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]`);
     }
 
     return;
@@ -244,7 +244,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
         break;
       default:
-        throw new TypeError(`"refPath" is not supported for "${propKind}"! (${name}, ${key})`);
+        throw new TypeError(`"refPath" is not supported for "${propKind}"! (${name}, ${key}) [E023]`);
     }
 
     return;
