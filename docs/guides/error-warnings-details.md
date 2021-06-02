@@ -252,6 +252,15 @@ Error:
 Details:  
 The option `ref` / `refPath` are not supported for this `propKind` (which in most cases is `MAP`)
 
+### "ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]
+
+Error:  
+- `"ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]`
+- `"refPath" is not supported for "${propKind}"! (${name}, ${key}) [E023]`
+
+Details:  
+The option `ref` / `refPath` are not supported for this `propKind` (which in most cases is `MAP`)
+
 ## Warnings
 
 ### Type is not the type for the options provided [W001]
