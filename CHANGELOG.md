@@ -1,3 +1,10 @@
+## [8.0.0-beta.13](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.12...v8.0.0-beta.13) (2021-06-02)
+
+
+### Fixes
+
+* **processProp:** add error code E023 for '"ref" is not supported for "${propKind}"!' ([8bdfcd7](https://github.com/typegoose/typegoose/commit/8bdfcd77267c219f9ee8a758526ccee20d701f77))
+
 ## [8.0.0-beta.12](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.11...v8.0.0-beta.12) (2021-05-31)
 
 
