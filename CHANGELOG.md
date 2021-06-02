@@ -176,8 +176,8 @@
 ### ⚠ BREAKING CHANGES
 
 * **prop:** Removing deprecated options "items", "of", "refType"
-* **prop:** Removeing deprecated function "mapProp"
-* **prop:** Removeing deprecated function "arrayProp"
+* **prop:** Removing deprecated function "mapProp"
+* **prop:** Removing deprecated function "arrayProp"
 
 ### Features
 
