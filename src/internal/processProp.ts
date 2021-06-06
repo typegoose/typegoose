@@ -34,14 +34,13 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     switch (propKind) {
       case WhatIsIt.NONE:
         break;
+      case WhatIsIt.MAP:
       case WhatIsIt.ARRAY:
-        // set the "Type" to undefined, if "ref" or "refPath" are defined, otherwise the "refType" will be wrong
+        // set the "Type" to undefined if "ref" or "refPath" are defined, as an fallback in case "type" is also not defined
         if (('ref' in rawOptions || 'refPath' in rawOptions) && !('type' in rawOptions)) {
           Type = undefined;
         }
 
-        break;
-      case WhatIsIt.MAP:
         break;
     }
   }
@@ -218,6 +217,20 @@ export function processProp(input: DecoratedPropertyMetadata): void {
           type: refType,
           ref,
           ...rawOptions,
+        };
+        break;
+      case WhatIsIt.MAP:
+        const mapped = utils.mapOptions(rawOptions, refType, target, key);
+
+        schemaProp[key] = {
+          ...schemaProp[key],
+          ...mapped.outer,
+          type: Map,
+          of: {
+            type: refType,
+            ref,
+            ...mapped.inner,
+          },
         };
         break;
       default:

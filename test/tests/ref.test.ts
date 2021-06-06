@@ -396,3 +396,44 @@ it('should map options correctly on an ref-array', async () => {
   expect(validateOuter).toHaveBeenNthCalledWith(1, expect.arrayContaining([reference3, reference3]));
   expect(validateOuter).toHaveBeenNthCalledWith(2, expect.any(Array));
 });
+
+it('Reference-Maps should work and be populated', async () => {
+  class RefMapDummy {
+    @prop()
+    public dummy?: string;
+  }
+
+  const RefMapDummyModel = getModelForClass(RefMapDummy);
+
+  class RefMap {
+    @prop({ ref: () => RefMapDummy })
+    public mapped!: Map<string, Ref<RefMapDummy>>;
+  }
+
+  const RefMapModel = getModelForClass(RefMap);
+
+  const dummy1 = await RefMapDummyModel.create({ dummy: '1' });
+  const dummy2 = await RefMapDummyModel.create({ dummy: '2' });
+
+  const doc1 = await RefMapModel.create({
+    mapped: [
+      ['1', dummy1],
+      ['2', dummy2],
+    ],
+  });
+
+  const found = await RefMapModel.findById(doc1).orFail().exec();
+
+  expect(found.mapped).toBeInstanceOf(Map);
+  expect(found.mapped.size).toEqual(2);
+
+  found.mapped.forEach((v) => {
+    expect(v).toBeInstanceOf(mongoose.Types.ObjectId);
+  });
+
+  await found.populate('mapped.$*').execPopulate();
+
+  const found_doc1 = found.mapped.get('1');
+  assertion(isDocument(found_doc1));
+  expect(found_doc1.dummy).toEqual('1');
+});
