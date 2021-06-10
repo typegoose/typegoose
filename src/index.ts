@@ -13,7 +13,10 @@ import type { BeAnObject, IIndexArray, IndexOptions } from './types';
  * class ClassName {}
  * ```
  */
-export function index<T = BeAnObject>(fields: Partial<Record<keyof T, any> & BeAnObject>, options?: IndexOptions<T>): ClassDecorator {
+export function index<T extends BeAnObject = BeAnObject>(
+  fields: Partial<Record<keyof T, string | -1 | 1>>,
+  options?: IndexOptions<T>
+): ClassDecorator {
   return (target: any) => {
     logger.info('Adding "%o" Indexes to %s', { fields, options }, getName(target));
     const indices: IIndexArray<any>[] = Array.from(Reflect.getMetadata(DecoratorKeys.Index, target) ?? []);
