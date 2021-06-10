@@ -1,3 +1,15 @@
+## [8.0.0-beta.14](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.13...v8.0.0-beta.14) (2021-06-10)
+
+
+### Fixes
+
+* **index:** extend typings of the index decorator ([#548](https://github.com/typegoose/typegoose/issues/548)) ([f24ee9d](https://github.com/typegoose/typegoose/commit/f24ee9d4b2f0d02d2652f5a895f7793a7eb3240c))
+
+
+### Style
+
+* **types::IndexOptions:** simplify "weights" definition ([294cfff](https://github.com/typegoose/typegoose/commit/294cfffa5068b083431cde9a9d2691fc15280ef9))
+
 ## [8.0.0-beta.13](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.12...v8.0.0-beta.13) (2021-06-02)
 
 
