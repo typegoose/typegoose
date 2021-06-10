@@ -413,9 +413,7 @@ export interface IndexOptions<T> {
   uppercase?: boolean; // whether to always call .toUpperCase() on the value
   trim?: boolean; // whether to always call .trim() on the value
 
-  weights?: {
-    [P in keyof Partial<T>]: number;
-  };
+  weights?: Partial<Record<keyof T, number>>;
 }
 
 /**
