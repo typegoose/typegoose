@@ -1,3 +1,16 @@
+## [8.0.0-beta.15](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.14...v8.0.0-beta.15) (2021-06-17)
+
+
+### Fixes
+
+* **hooks:** remove unused "done" callback ([4692976](https://github.com/typegoose/typegoose/commit/46929760d6568feff07a5a1ff1e87baccdcb00db)), closes [typegoose/typegoose#561](https://github.com/typegoose/typegoose/issues/561)
+
+
+### Dependencies
+
+* **@semantic-release/release-notes-generator:** upgrade to version "9.0.3" ([a8ba787](https://github.com/typegoose/typegoose/commit/a8ba787ac1eb833b1bb157b43e9d2ea3c5d59a2a))
+* **semantic-release:** upgrade to version "17.4.4" ([090d05f](https://github.com/typegoose/typegoose/commit/090d05f964f680767fc8321a1525e6fdf2a60078))
+
 ## [8.0.0-beta.14](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.13...v8.0.0-beta.14) (2021-06-10)
 
 
