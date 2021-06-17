@@ -34,7 +34,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "~5.12.9"
+    "mongoose": "~5.12.14"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
@@ -61,7 +61,7 @@
     "jest": "^27.0.1",
     "lint-staged": "^11.0.0",
     "mongodb-memory-server": "^6.9.6",
-    "mongoose": "~5.12.9",
+    "mongoose": "~5.12.14",
     "mongoose-findorcreate": "^3.0.0",
     "prettier": "^2.3.0",
     "rimraf": "^3.0.2",
