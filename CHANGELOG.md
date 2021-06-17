@@ -1,3 +1,20 @@
+## [8.0.0-beta.16](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.15...v8.0.0-beta.16) (2021-06-17)
+
+
+### Features
+
+* **processProp:** allow & correctly map reference-maps ([581b6b3](https://github.com/typegoose/typegoose/commit/581b6b3b372922d6df9a84711958fac98332ca38))
+
+
+### Fixes
+
+* **processProp:** set type to "Mixed" when type is still "*Map" ([e98d026](https://github.com/typegoose/typegoose/commit/e98d026dc4f231e4bf1841bbaba9df1cc705e83f))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to version "5.12.14" ([943d581](https://github.com/typegoose/typegoose/commit/943d5812732a4e0ec146e1302856023afec7c086))
+
 ## [8.0.0-beta.15](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.14...v8.0.0-beta.15) (2021-06-17)
 
 
