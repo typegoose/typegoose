@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import { isNullOrUndefined } from './internal/utils';
+import { logger } from './logSettings';
 import type { DocumentType, Ref, RefType } from './types';
 
 /**
@@ -23,12 +24,34 @@ export function isDocumentArray(docs: Ref<any, any>[] | undefined): unknown {
   return Array.isArray(docs) && docs.every((v) => isDocument(v));
 }
 
+type AllowedRefTypes = typeof String | typeof Number | typeof Buffer | typeof mongoose.Types.ObjectId | typeof mongoose.Types.Buffer;
+
 /**
  * Check if the document is not undefined/null and is not an document
  * @param doc The Ref with uncretain type
  */
-export function isRefType<T, S extends RefType>(doc: Ref<T, S> | undefined): doc is NonNullable<S> {
-  return !isNullOrUndefined(doc) && !isDocument(doc);
+export function isRefType<T, S extends RefType>(doc: Ref<T, S> | undefined, reftype: AllowedRefTypes): doc is NonNullable<S> {
+  logger.info('isRefType:', reftype);
+
+  if (isNullOrUndefined(doc) || isDocument(doc)) {
+    return false;
+  }
+
+  // this "ObjectId" test is in the front, because its the most common - to lower resource use
+  if (reftype === mongoose.Types.ObjectId) {
+    return doc instanceof mongoose.Types.ObjectId;
+  }
+  if (reftype === String) {
+    return typeof doc === 'string';
+  }
+  if (reftype === Number) {
+    return typeof doc === 'number';
+  }
+  if (reftype === Buffer || reftype === mongoose.Types.Buffer) {
+    return doc instanceof Buffer;
+  }
+
+  return false;
 }
 
 /**
@@ -36,12 +59,13 @@ export function isRefType<T, S extends RefType>(doc: Ref<T, S> | undefined): doc
  * @param docs The Ref with uncretain type
  */
 export function isRefTypeArray<T, S extends RefType>(
-  docs: mongoose.Types.Array<Ref<T, S>> | undefined
+  docs: mongoose.Types.Array<Ref<T, S>> | undefined,
+  reftype: AllowedRefTypes
 ): docs is mongoose.Types.Array<NonNullable<S>>;
-export function isRefTypeArray<T, S extends RefType>(docs: Ref<T, S>[] | undefined): docs is NonNullable<S>[];
-export function isRefTypeArray(docs: Ref<any, any>[] | undefined): unknown {
+export function isRefTypeArray<T, S extends RefType>(docs: Ref<T, S>[] | undefined, reftype: AllowedRefTypes): docs is NonNullable<S>[];
+export function isRefTypeArray(docs: Ref<any, any>[] | undefined, reftype: AllowedRefTypes): unknown {
   // its "any" & "unkown" because this is not listed as an overload
-  return Array.isArray(docs) && docs.every((v) => isRefType(v));
+  return Array.isArray(docs) && docs.every((v) => isRefType(v, reftype));
 }
 
 /**

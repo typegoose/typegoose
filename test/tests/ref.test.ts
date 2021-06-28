@@ -77,6 +77,7 @@ it('check reference with string _id', async () => {
 
   const { _id: refStringId } = await RefTestModel.create({ refFieldString: _id1 });
   const { refFieldString } = await RefTestModel.findById(refStringId).orFail().exec();
+  assertion(isRefType(refFieldString, String), new Error('Expected "refFieldString" to be "String"'));
   expect(refFieldString).toEqual(_id1);
   const { _id: refArrayId } = await RefTestModel.create({ refArrayString: [_id1, _id2] });
   const { refArrayString } = await RefTestModel.findById(refArrayId).orFail().exec();
@@ -146,6 +147,7 @@ it('check reference with number _id', async () => {
 
   const { _id: refNumberId } = await RefTestModel.create({ refFieldNumber: _id1 });
   const { refFieldNumber } = await RefTestModel.findById(refNumberId).orFail().exec();
+  assertion(isRefType(refFieldNumber, Number), new Error('Expected "refFieldNumber" to be "Number"'));
   expect(refFieldNumber).toEqual(_id1);
   const { _id: refArrayId } = await RefTestModel.create({ refArrayNumber: [_id1, _id2] });
   const { refArrayNumber } = await RefTestModel.findById(refArrayId).orFail().exec();
@@ -169,7 +171,7 @@ it('check reference with buffer _id', async () => {
 
   const { _id: refBufferId } = await RefTestModel.create({ refFieldBuffer: _id1 });
   const { refFieldBuffer } = await RefTestModel.findById(refBufferId).orFail().exec();
-  assertion(isRefType(refFieldBuffer), new Error('Expected "refFieldBuffer" to be "mongoose.Types.Buffer | Buffer"'));
+  assertion(isRefType(refFieldBuffer, Buffer), new Error('Expected "refFieldBuffer" to be "mongoose.Types.Buffer | Buffer"'));
   expect(_id1.equals(refFieldBuffer)).toEqual(true);
   const { _id: refArrayId } = await RefTestModel.create({ refArrayBuffer: [_id1, _id2] });
   const { refArrayBuffer } = await RefTestModel.findById(refArrayId).orFail().exec();
