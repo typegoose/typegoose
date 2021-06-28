@@ -1,3 +1,24 @@
+## [8.0.0-beta.17](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.16...v8.0.0-beta.17) (2021-06-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **typeguards:** `isRefType` now is way more stricter and requires an second parameter to work
+
+### Features
+
+* **typeguards:** enhance "isRefType" checks ([e3a3bf7](https://github.com/typegoose/typegoose/commit/e3a3bf7150cd9569b974c7c4322d35f66ec03957)), closes [typegoose/typegoose#569](https://github.com/typegoose/typegoose/issues/569)
+
+
+### Dependencies
+
+* **@typescript-eslint/*:** upgrade to version "4.28.0" ([7c8883b](https://github.com/typegoose/typegoose/commit/7c8883b68a8045321d093eaa59dcab6425aff183))
+* **eslint:** upgrade to version "7.29.0" ([525f1c0](https://github.com/typegoose/typegoose/commit/525f1c0055afcc94f0f4f5a6c944a2c78e7b7299))
+* **jest:** upgrade to version "27.0.5" ([45e8e00](https://github.com/typegoose/typegoose/commit/45e8e0074d21ee15a44659234e85104378c59280))
+* **prettier:** upgrade to version "2.3.2" ([5e73507](https://github.com/typegoose/typegoose/commit/5e73507809282b5e66812d58182619ca51620484))
+* **ts-jest:** upgrade to version "27.0.3" ([dc0452f](https://github.com/typegoose/typegoose/commit/dc0452ffa5f5a58de24e4bd154119571d9d7fb96))
+* **typescript:** upgrade to version "4.3.4" ([a2f4a5a](https://github.com/typegoose/typegoose/commit/a2f4a5ab1d06ea699d9bb3ff46c623ba81c52218))
+
 ## [8.0.0-beta.16](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.15...v8.0.0-beta.16) (2021-06-17)
 
 
