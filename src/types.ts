@@ -224,6 +224,19 @@ export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
    * @default 1
    */
   dim?: number;
+  /**
+   * Set if Non-Array values will be cast to an array
+   * TODO: add link to option documentation https://github.com/Automattic/mongoose/issues/10397
+   * NOTE: This option currently only really affects "DocumentArray" and not normal arrays, https://github.com/Automattic/mongoose/issues/10398
+   * @example
+   * ```ts
+   * new Model({ array: "string" });
+   * // will be cast to equal
+   * new Model({ array: ["string"] });
+   * ```
+   * @default true
+   */
+  castNonArrays?: boolean;
 }
 
 export interface MapPropOptions extends BasePropOptions, InnerOuterOptions {}
