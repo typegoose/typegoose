@@ -1,3 +1,10 @@
+## [8.0.0-beta.19](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.18...v8.0.0-beta.19) (2021-06-29)
+
+
+### Dependencies
+
+* **mongoose:** allow range "~5.12.14 || ~5.13.0" ([bcba9a2](https://github.com/typegoose/typegoose/commit/bcba9a274d03ac80c0c46ce5259a77d0294fb63a))
+
 ## [8.0.0-beta.18](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.17...v8.0.0-beta.18) (2021-06-29)
 
 
