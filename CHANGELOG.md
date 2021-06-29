@@ -1,3 +1,17 @@
+## [8.0.0-beta.18](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.17...v8.0.0-beta.18) (2021-06-29)
+
+
+### Features
+
+* **types:** add option prop option "castNonArrays" ([3a9e95a](https://github.com/typegoose/typegoose/commit/3a9e95aae4173e7b5e072ee70db470cf6b6cccf5)), closes [typegoose/typegoose#568](https://github.com/typegoose/typegoose/issues/568)
+
+
+### Dependencies
+
+* **@typescript-eslint/*:** upgrade to version "4.28.1" ([49b1c11](https://github.com/typegoose/typegoose/commit/49b1c1189388b47f15790095169dbfcb6d5561ad))
+* **coveralls:** upgrade to version "3.1.1" ([0a3211a](https://github.com/typegoose/typegoose/commit/0a3211aa821fd3885d0d7221d4e376fdb1f0c5e4))
+* **jest:** upgrade to version "27.0.6" ([8eca711](https://github.com/typegoose/typegoose/commit/8eca71174e111c6fbc1de1ecad476b82ca64424c))
+
 ## [8.0.0-beta.17](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.16...v8.0.0-beta.17) (2021-06-28)
 
 
