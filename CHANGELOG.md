@@ -1,3 +1,10 @@
+## [8.0.0-beta.20](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.19...v8.0.0-beta.20) (2021-07-01)
+
+
+### Dependencies
+
+* **mongodb-memory-server:** upgrade to version 7.0.0 ([6a5e914](https://github.com/typegoose/typegoose/commit/6a5e9142c198a0e8f787ff7f9e00a764644598b4))
+
 ## [8.0.0-beta.19](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.18...v8.0.0-beta.19) (2021-06-29)
 
 
