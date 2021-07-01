@@ -1,3 +1,12 @@
+## [8.0.0-beta.21](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.20...v8.0.0-beta.21) (2021-07-01)
+
+
+### Dependencies
+
+* **husky:** upgrade to version "7.0.0" ([5b58237](https://github.com/typegoose/typegoose/commit/5b58237be24c980f18050498edcdc940a47d1bfb))
+* **tslib:** upgrade to version "2.3.0" ([7a1ba2d](https://github.com/typegoose/typegoose/commit/7a1ba2d082c0dd581e54fd0d4d120c18a7694e87))
+* **typescript:** upgrade to version "4.3.5" ([4e87c03](https://github.com/typegoose/typegoose/commit/4e87c03221299ad2bb3a69bd0c121bae23dd079e))
+
 ## [8.0.0-beta.20](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.19...v8.0.0-beta.20) (2021-07-01)
 
 
