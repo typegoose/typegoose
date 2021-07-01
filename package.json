@@ -75,7 +75,7 @@
     "loglevel": "^1.7.0",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.3.2",
-    "tslib": "^2.2.0"
+    "tslib": "^2.3.0"
   },
   "publishConfig": {
     "access": "public"
