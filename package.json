@@ -21,7 +21,8 @@
     "test:watchCoverage": "jest --collectCoverage --watchAll",
     "watch": "tsc -w -p tsconfig.json",
     "clean": "rimraf lib .tsbuildinfo coverage doc build",
-    "version:patch": "yarn version patch -m 'release: %s'"
+    "version:patch": "yarn version patch -m 'release: %s'",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -57,7 +58,7 @@
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "husky": "^6.0.0",
+    "husky": "^7.0.0",
     "jest": "^27.0.6",
     "lint-staged": "^11.0.0",
     "mongodb-memory-server": "^7.0.0",
