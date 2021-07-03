@@ -3,7 +3,7 @@ id: reference-other-classes
 title: 'Reference other Classes'
 ---
 
-[Look here for the `Ref` type documentation](../../api/types/ref.md)
+[Look here for the `Ref` type documentation](../../api/types/ref-type.md)
 
 ## Referencing other Classes
 
