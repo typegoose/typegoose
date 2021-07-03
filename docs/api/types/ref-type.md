@@ -29,7 +29,6 @@ class Cat {
   @prop()
   public name: string;
 
-  // Use `ref` for arrays too
   @prop({ ref: 'Kitten' })
   public babies?: Ref<Kitten>[];
 }
@@ -42,7 +41,6 @@ class Person {
   @prop()
   public name: string;
 
-  // Use `ref` for single items
   @prop({ ref: 'Cat' })
   public pet?: Ref<Cat>;
 }
