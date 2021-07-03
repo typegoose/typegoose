@@ -1,15 +1,21 @@
 ---
 id: ref-type
-title: 'Ref'
+title: 'Ref (Type)'
 ---
 
-The Type `Ref<Class, IDType>` is the type used for [References](https://mongoosejs.com/docs/populate.html).  
-The `Class` generic-parameter is used to set the class that is being referenced.  
-The `IDType` generic-parameter is used to set the `_id` type of the referenced class (Default: `mongoose.Types.ObjectId`).  
+The Type `Ref<PopulatedType, RawId>` is the type used for [References](https://mongoosejs.com/docs/populate.html).
 
-There are [typeguards](../functions/typeguards/isDocument.md) to check if a Reference is populated.
+- `PopulatedType`: This is the Class being referenced.
+- `RawId`: This should be the `_id` Type of the referenced Class, by default its `mongoose.Types.ObjectId`
 
-For an more written out guide, there is the [Reference Other Classes](../../guides/advanced/reference-other-classes.md) Guide.
+There are typeguards to check if a reference if populated or an reference type:
+
+- [`isDocument`](../functions/typeguards/isDocument.md)
+- [`isRefType`](../functions/typeguards/isRefType.md)
+
+:::tip
+For more and better explained examples, look at the [Reference Other Classes](../../guides/advanced/reference-other-classes.md) Guide.
+:::
 
 ## Example
 
@@ -18,19 +24,7 @@ Referenced Class in the examples:
 ```ts
 class Kitten {
   @prop()
-  public name: string;
-}
-```
-
-Reference Array:
-
-```ts
-class Cat {
-  @prop()
-  public name: string;
-
-  @prop({ ref: 'Kitten' })
-  public babies?: Ref<Kitten>[];
+  public name?: string;
 }
 ```
 
@@ -38,29 +32,42 @@ Single Reference:
 
 ```ts
 class Person {
-  @prop()
-  public name: string;
+  @prop({ ref: () => Kitten })
+  public pet?: Ref<Kitten>;
+}
+```
 
-  @prop({ ref: 'Cat' })
-  public pet?: Ref<Cat>;
+Reference Array:
+
+```ts
+class Cat {
+  @prop({ ref: () => Kitten })
+  public babies?: Ref<Kitten>[];
 }
 ```
 
 Reference with different `_id` type:
 
 ```ts
-class Cat {
+class Kitten {
   @prop()
-  public _id: string;
+  public _id?: string;
+
+  @prop()
+  public name?: string;
 }
 
+// For Single References
 class Person {
-  @prop()
-  public name: string;
+  // The "type" options in this case refers to the "_id" type of the referenced class, by default it will be "ObjectId"
+  @prop({ ref: () => Kitten, type: () => String })
+  public pet?: Ref<Kitten, string>;
+}
 
-  // The "type" (_id type) needs to be manually set, otherwise mongoose will default to "ObjectId"
-  // which is not compatible with other types (ObjectId !== String)
-  @prop({ ref: () => Cat, type: () => String })
-  public pet?: Ref<Cat, string>;
+// For a Array of References
+class Person {
+  // The "type" options in this case refers to the "_id" type of the referenced class, by default it will be "ObjectId"
+  @prop({ ref: () => Kitten, type: () => String })
+  public pet?: Ref<Kitten, string>[];
 }
 ```
