@@ -1,3 +1,15 @@
+### [7.6.2](https://github.com/typegoose/typegoose/compare/v7.6.1...v7.6.2) (2021-07-07)
+
+
+### Style
+
+* **types:** fix a typo (an -> a) ([#564](https://github.com/typegoose/typegoose/issues/564)) ([84e282c](https://github.com/typegoose/typegoose/commit/84e282c3db690877d5e01c5b20cae3e026f1e18f))
+
+
+### Fixes
+
+* **defaultClasses:** add missing 2nd parameter for findOrCreate() ([#573](https://github.com/typegoose/typegoose/issues/573)) ([8bd1254](https://github.com/typegoose/typegoose/commit/8bd1254f629400aed66a11cfcd75fb589101efcb))
+
 ### [7.6.1](https://github.com/typegoose/typegoose/compare/v7.6.0...v7.6.1) (2021-05-31)
 
 
