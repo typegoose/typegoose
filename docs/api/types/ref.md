@@ -9,7 +9,7 @@ The `IDType` generic-parameter is used to set the `_id` type of the referenced c
 
 There are [typeguards](../functions/typeguards/isDocument.md) to check if a Reference is populated.
 
-For an more written out guide, there is the [Reference Other Classes](../../guides/advanced/reference-other-classes.md) Guide.
+For a more written out guide, there is the [Reference Other Classes](../../guides/advanced/reference-other-classes.md) Guide.
 
 ## Example
 
