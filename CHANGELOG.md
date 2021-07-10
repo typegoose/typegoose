@@ -1,3 +1,10 @@
+### [7.6.3](https://github.com/typegoose/typegoose/compare/v7.6.2...v7.6.3) (2021-07-10)
+
+
+### Fixes
+
+* **dependencies:** lock "@types/mongoose" version to 5.10 minor in dev and peer dependencies ([#574](https://github.com/typegoose/typegoose/issues/574)) ([c7e49bb](https://github.com/typegoose/typegoose/commit/c7e49bb531c458a1adf0acecc495205de0451357))
+
 ### [7.6.2](https://github.com/typegoose/typegoose/compare/v7.6.1...v7.6.2) (2021-07-07)
 
 
