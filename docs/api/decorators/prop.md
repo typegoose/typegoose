@@ -770,3 +770,40 @@ enum WhatIsIt {
   NONE // default for properties if no Map / Array is detected
 }
 ```
+
+## Passthrough Class
+
+:::caution
+It is not recommended to use this class, it should always be another class if nesting (and proper validation) like [in the quick-start-guide](../../guides/quick-start-guide.md/#quick-overview-of-typegoose) is wanted
+:::
+
+The `Passthrough` class is, like the name implies, to pass-through an schema definition directly, without "wrapping" it in a `new Schema({}` call.
+
+:::note
+It should be noted that using this method (even in plain mongoose) will result in these paths to become `mongoose.Schema.Types.Mixed`, and also no typegoose transformations or warnings will be applied to what is inside `Passthrough` (like `type: () => Class` will not be translated, it will stay as-is)
+:::
+
+The following example is what it looks like in typegoose, and what it would look like in plain mongoose:
+
+```ts
+class SomeTypegooseClass {
+  @prop()
+  public normalProp?: string;
+
+  @prop({ type: () => Passthrough({ somePath: String }) })
+  public passed?: { somePath: string };
+}
+
+// would be equal to
+
+new mongoose.Schema({
+  normalProp: {
+    type: String
+  },
+  passed: {
+    type: {
+      somePath: String
+    }
+  }
+})
+```
