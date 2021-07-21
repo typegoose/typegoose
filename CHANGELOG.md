@@ -1,3 +1,10 @@
+## [8.0.0-beta.22](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.21...v8.0.0-beta.22) (2021-07-21)
+
+
+### Features
+
+* add class "Passthrough" and functionality ([e9ee628](https://github.com/typegoose/typegoose/commit/e9ee6286537549ff9bc54ac95e77abf4e610cf79)), closes [typegoose/typegoose#382](https://github.com/typegoose/typegoose/issues/382)
+
 ## [8.0.0-beta.21](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.20...v8.0.0-beta.21) (2021-07-01)
 
 
