@@ -7,8 +7,9 @@ These are the changes made for 8.0.0 that are breaking or just important to know
 
 ## Requirements changed
 
-- Nodejs 10 & 11 are now unsupported, lowest supported version is now `12.22`
-- Typescript 4.3 is now suggested to be used
+- Nodejs `10` & `11` are now unsupported, lowest supported version is now `12.22`
+- Typescript `4.3` is now suggested to be used
+- Mongoose `5.13.3` or [higher is now required](#mongoose-version-above-513-is-now-supported)
 
 ## Deprecation removals
 
@@ -28,10 +29,10 @@ The following decorator functions got removed, and replaced with an second param
 - `arrayProp`
 
 :::info
-`@prop` can since 7.x be forced into an specific mode with an second parameter: `@prop({}, WhatIsIt.ARRAY)`
+`@prop` can since 7.x be forced into an specific mode with an second parameter: `@prop({}, WhatIsIt.ARRAY)` [Look here for an example for `WhatIsIt`](../api/decorators/prop.md#whatisit)
 :::
 
-## Mongoose Version above 5.12 is now supported
+## Mongoose Version above 5.13 is now supported
 
 Since mongoose version `5.10.19` (yes an patch version), mongoose has official typescript types, but often broke from `5.10.19` to `5.12.9`
 
