@@ -6,7 +6,7 @@ title: 'Quick Start Guide'
 ## Quick Overview of Typegoose
 
 :::note
-This Guide is for Typegoose version ~7.5
+This Guide is for Typegoose version ~8.0
 :::
 
 Typegoose is a "wrapper" for easily writing Mongoose models with TypeScript.
