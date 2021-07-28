@@ -2191,6 +2191,13 @@ debug@4, debug@^4.0.0, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.2.0, d
   dependencies:
     ms "2.1.2"
 
+debug@^4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.2.tgz#f0a49c18ac8779e31d4a0c6029dfb76873c7428b"
+  integrity sha512-mOp8wKcvj7XxC78zLgw/ZA+6TSgkoE2C/ienthhRD298T7UNwAg9diBpLRxC0mOezLl4B0xV7M0cCO6P/O0Xhw==
+  dependencies:
+    ms "2.1.2"
+
 debuglog@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/debuglog/-/debuglog-1.0.1.tgz#aa24ffb9ac3df9a2351837cfb2d279360cd78492"
@@ -2727,11 +2734,6 @@ find-cache-dir@^3.3.1:
     commondir "^1.0.1"
     make-dir "^3.0.2"
     pkg-dir "^4.1.0"
-
-find-package-json@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/find-package-json/-/find-package-json-1.2.0.tgz#4057d1b943f82d8445fe52dc9cf456f6b8b58083"
-  integrity sha512-+SOGcLGYDJHtyqHd87ysBhmaeQ95oWspDKnMXBrnQ9Eq4OkLNqejgoaD8xVWu6GPa0B6roa6KinCMEMcVeqONw==
 
 find-up@^2.0.0:
   version "2.1.0"
@@ -4576,22 +4578,22 @@ modify-values@^1.0.0:
   resolved "https://registry.yarnpkg.com/modify-values/-/modify-values-1.0.1.tgz#b3939fa605546474e3e3e3c63d64bd43b4ee6022"
   integrity sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==
 
-mongodb-memory-server-core@7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-7.0.0.tgz#e78bd1ab00d31a00cb3a6d724d759ec0867c5141"
-  integrity sha512-umdMWV2NK73lscbuEqNGiVr7CDOh53neyinrsCP4gqRgO/aNSMAR3V81uVOC0ZDU7NKxLZNUbyGXJ88Q98tqYg==
+mongodb-memory-server-core@7.3.4:
+  version "7.3.4"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-7.3.4.tgz#10dae40e21162406a3a643b82c1a348dcd943299"
+  integrity sha512-bryHNy34LWuXJui2Hs0sTWWtU5svqVragHtvKuUqLuaXirTgGGhmW5/qsnEAMa/7eZnxDJW5jle9yfM7wiBIKA==
   dependencies:
     "@types/tmp" "^0.2.0"
     async-mutex "^0.3.0"
     camelcase "^6.1.0"
     debug "^4.2.0"
     find-cache-dir "^3.3.1"
-    find-package-json "^1.2.0"
     get-port "^5.1.1"
     https-proxy-agent "^5.0.0"
     md5-file "^5.0.0"
     mkdirp "^1.0.4"
     mongodb "^3.6.9"
+    new-find-package-json "^1.1.0"
     semver "^7.3.5"
     tar-stream "^2.1.4"
     tmp "^0.2.1"
@@ -4599,12 +4601,12 @@ mongodb-memory-server-core@7.0.0:
     uuid "^8.3.1"
     yauzl "^2.10.0"
 
-mongodb-memory-server@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-7.0.0.tgz#437c9324957e8f06ab60e8805159ff73a0c7136e"
-  integrity sha512-qvHIAau83wpXHVH4Jo2mHJOQBSuwHiT1EuUjg4EaJQx45QK87Xh+Jj9K2Tw8PHDQA9xs1+C3TsLkSE4vxnQ16Q==
+mongodb-memory-server@^7.3.4:
+  version "7.3.4"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-7.3.4.tgz#044596bac7b291a727aa4b6316dc2facbdb75f24"
+  integrity sha512-W3VXLKnZZX5pdfSrLcer7m4RKISiQ8AMG4TTcfl7SMGvKELsUcSGwIWYXP7TeCQ8RkZpj9riz0OxphQow5qi3g==
   dependencies:
-    mongodb-memory-server-core "7.0.0"
+    mongodb-memory-server-core "7.3.4"
     tslib "^2.3.0"
 
 mongodb@3.6.8:
@@ -4716,6 +4718,14 @@ nerf-dart@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/nerf-dart/-/nerf-dart-1.0.0.tgz#e6dab7febf5ad816ea81cf5c629c5a0ebde72c1a"
   integrity sha1-5tq3/r9a2Bbqgc9cYpxaDr3nLBo=
+
+new-find-package-json@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/new-find-package-json/-/new-find-package-json-1.1.0.tgz#053e006b17f409b9a816d5bcf0ee2b90a50326a3"
+  integrity sha512-KOH3BNZcTKPzEkaJgG2iSUaurxKmefqRKmCOYH+8xqJytNIgjqU4J88BHfK+gy/UlEzlhccLyuJDJAcCgexSwA==
+  dependencies:
+    debug "^4.3.2"
+    tslib "^2.3.0"
 
 node-emoji@^1.10.0:
   version "1.10.0"
