@@ -21,12 +21,10 @@ class Something {}
 ### existingConnection
 
 An existing Mongoose connection can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.  
-[UNTESTED]
 
 ### existingMongoose
 
 An existing Mongoose instance can also be passed down. If given, Typegoose uses this Mongoose instance's `model` methods.  
-[UNTESTED]
 
 ### options
 
