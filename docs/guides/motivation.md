@@ -8,7 +8,3 @@ A common problem when using Mongoose with TypeScript is that you have to define 
 Typegoose aims to solve this problem by defining only an ES6 Class, which needs to be enhanced with special Typegoose decorators.
 
 Under the hood it uses the Reflect & [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the properties, so redundancy can be significantly reduced.
-
----
-
-Official Typescript types exist since `mongoose@5.10.19`, but they are still not supporting everything that the old types have, [read more on progress here](https://github.com/typegoose/typegoose/issues/432)

@@ -1,8 +1,7 @@
 import * as mongoose from 'mongoose';
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
-import { DocumentType } from '../../src/types';
 import { CarModel } from '../models/car';
-import { Genders, Role, User, UserModel } from '../models/user';
+import { Genders, Role, UserModel } from '../models/user';
 
 it(
   'should create a User with connections',
@@ -23,7 +22,7 @@ it(
       },
     ]);
 
-    const user = await UserModel.create<DocumentType<Omit<User, 'fullName'>>>({
+    const user = await UserModel.create({
       _id: mongoose.Types.ObjectId(),
       firstName: 'John',
       lastName: 'Doe',
@@ -137,7 +136,7 @@ it('should create a user with [Plugin].findOrCreate', async () => {
   expect(foundUser.doc).toHaveProperty('firstName', 'Jane');
 
   try {
-    await UserModel.create<DocumentType<Omit<User, 'fullName'>>>({
+    await UserModel.create({
       _id: mongoose.Types.ObjectId(),
       firstName: 'John',
       lastName: 'Doe',

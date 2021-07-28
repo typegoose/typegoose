@@ -1,4 +1,4 @@
-import type { DocumentQuery } from 'mongoose';
+import type { Query } from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
 import { getName } from './internal/utils';
 import { logger } from './logSettings';
@@ -28,7 +28,7 @@ import type { AnyParamConstructor, QueryMethodMap, ReturnModelType } from './typ
  * ```
  */
 export function queryMethod<QueryHelpers, U extends AnyParamConstructor<any>>(
-  func: (this: ReturnModelType<U, QueryHelpers>, ...params: any[]) => DocumentQuery<any, any>
+  func: (this: ReturnModelType<U, QueryHelpers>, ...params: any[]) => Query<any, any>
 ): ClassDecorator {
   return (target: any) => {
     logger.info('Adding query method "%s" to %s', func.name, getName(target));

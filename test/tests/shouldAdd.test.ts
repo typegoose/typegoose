@@ -19,11 +19,11 @@ import { InternetUserModel } from '../models/internetUser';
 import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models/inventory';
 import { Job } from '../models/job';
 import { OptionsClass, OptionsModel } from '../models/options';
-import { Genders, User, UserModel } from '../models/user';
+import { Genders, UserModel } from '../models/user';
 import { NonVirtual, NonVirtualGS, NonVirtualGSModel, NonVirtualModel, VirtualModel, VirtualSubModel } from '../models/virtualprop';
 
 it('should add a language and job using instance methods', async () => {
-  const user = await UserModel.create<DocumentType<Omit<User, 'fullName'>>>({
+  const user = await UserModel.create({
     firstName: 'harry',
     lastName: 'potter',
     gender: Genders.MALE,
@@ -63,7 +63,7 @@ it('should add and populate the virtual properties', async () => {
   expect(newfound.dummyVirtual).toEqual('dummyVirtual1');
   expect(newfound.virtualSubs).not.toBeUndefined();
 
-  if (isDocumentArray(newfound.virtualSubs!)) {
+  if (isDocumentArray(newfound.virtualSubs)) {
     expect(newfound.virtualSubs[0].dummy).toEqual('virtualSub1');
     expect(newfound.virtualSubs[0]._id.toString()).toEqual(virtualsub1._id.toString());
     expect(newfound.virtualSubs[1].dummy).toEqual('virtualSub3');
@@ -191,12 +191,12 @@ it('it should alias correctly', () => {
 it('should add model with createdAt and updatedAt', async () => {
   const { id: createdId } = await OptionsModel.create({ someprop: 10 } as OptionsClass);
 
-  const found = await OptionsModel.findById(createdId).exec();
+  const found = await OptionsModel.findById(createdId).orFail().exec();
 
   expect(found).not.toBeUndefined();
   expect(found).toHaveProperty('someprop', 10);
-  expect(found!.createdAt).toBeInstanceOf(Date);
-  expect(found!.updatedAt).toBeInstanceOf(Date);
+  expect(found.createdAt).toBeInstanceOf(Date);
+  expect(found.updatedAt).toBeInstanceOf(Date);
 });
 
 it('should make use of non-virtuals with pre- and post-processors', async () => {
@@ -249,22 +249,24 @@ it('should add options to refPath [szokodiakos#379]', () => {
 });
 
 it('should add options to array-ref [szokodiakos#379]', () => {
-  class T {}
+  class TestArrayRefNested {}
 
   class TestArrayRef {
-    @prop({ ref: T, customoption: 'custom' })
-    public someprop: Ref<T>[];
+    @prop({ ref: () => TestArrayRefNested, customoption1: 'custom1', innerOptions: { customoption2: 'custom2' } })
+    public someprop: Ref<TestArrayRefNested>[];
   }
 
   const schema = buildSchema(TestArrayRef);
   const someprop = schema.path('someprop');
-  expect(schema).not.toBeUndefined();
-  expect(someprop).not.toBeUndefined();
+  expect(schema).toBeDefined();
+  expect(someprop).toBeDefined();
+  // @ts-expect-error because "options" dosnt exist on "SchemaType"
+  expect(someprop.options).toHaveProperty('customoption1', 'custom1');
   // @ts-expect-error because "options" dosnt exist on "SchemaType"
   const opt: any = someprop.options.type[0];
   expect(typeof opt.type).toEqual('function');
-  expect(opt.ref).toEqual('T');
-  expect(opt).toHaveProperty('customoption', 'custom');
+  expect(opt.ref).toEqual(getName(TestArrayRefNested));
+  expect(opt).toHaveProperty('customoption2', 'custom2');
 });
 
 it('should add options to array-refPath [szokodiakos#379]', () => {
@@ -274,20 +276,22 @@ it('should add options to array-refPath [szokodiakos#379]', () => {
     @prop({ default: getName(EmptyClass) })
     public something: string;
 
-    @prop({ refPath: 'something', customoption: 'custom' })
+    @prop({ refPath: 'something', customoption1: 'custom1', innerOptions: { customoption2: 'custom2' } })
     public someprop: Ref<EmptyClass>[];
   }
 
   const schema = buildSchema(TestArrayRefPath);
   const someprop = schema.path('someprop');
-  expect(schema).not.toBeUndefined();
-  expect(someprop).not.toBeUndefined();
+  expect(schema).toBeDefined();
+  expect(someprop).toBeDefined();
   expect(someprop).toBeInstanceOf(mongoose.Schema.Types.Array);
+  // @ts-expect-error because "options" dosnt exist on "SchemaType"
+  expect(someprop.options).toHaveProperty('customoption1', 'custom1');
   // @ts-expect-error because "options" dosnt exist on "SchemaType"
   const opt: any = someprop.options.type[0];
   expect(typeof opt.type).toEqual('function');
   expect(opt.refPath).toEqual('something');
-  expect(opt).toHaveProperty('customoption', 'custom');
+  expect(opt).toHaveProperty('customoption2', 'custom2');
 });
 
 it('should make use of virtual get- & set-ters', async () => {

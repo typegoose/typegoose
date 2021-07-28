@@ -66,7 +66,6 @@ it('should respect enum [String]', async () => {
   try {
     await ArrayValidatorsModel.create({
       enumedString: [
-        // @ts-expect-error because value is not in enum
         'not in the enum', // string not in the enum
       ],
     });

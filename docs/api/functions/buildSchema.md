@@ -5,7 +5,7 @@ title: 'Build Schema'
 
 `buildSchema(class)` gets the schema from a class to modify the schema before making the model.
 
-A compiled model can be re-added with [`addModelToTypegoose`](api/functions/addModelToTypegoose.md).
+A compiled model can be re-added with [`addModelToTypegoose`](./addModelToTypegoose.md).
 
 ## Example
 

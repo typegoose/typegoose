@@ -49,7 +49,7 @@ Resulting Document in MongoDB:
 
 ### Difference between @prop's get & set and this get & set
 
-*This shows the difference between [`@prop`'s get & set](api/decorators/prop.md#get--set) and [this one](api/virtuals.md#get--set)*
+*This shows the difference between [`@prop`'s get & set](./decorators/prop.md#get--set) and [this one](#get--set)*
 
 The difference between `@prop`'s and this one is simple, `@prop`'s get & set are ***actual properties*** that get saved to the database, only with a conversion layer.  
 The get & set of *getter's & setter's* are absolutely virtual.
@@ -79,7 +79,7 @@ class Kittens {
 class Cat {
   @prop({
     ref: () => Kittens,
-    foreignField: 'parent', // compare this value to the local document populate is called on
+    foreignField: 'parent', // compare this value to the document populate is called on
     localField: '_id' // compare this to the foreign document's value defined in "foreignField"
   })
   public kittens: Ref<Kittens>[];
@@ -115,7 +115,7 @@ class Sub {
 }
 class Parent {
   @prop({
-    ref: () => (doc: DocumentType<Parent>) => doc.from, // This need to be written this way, because since "typegoose@7.1" typegoose evaluates the first ref-function
+    ref: () => (doc: DocumentType<Parent>) => doc.from, // This need to be written this way, because since typegoose "7.1", deferred function are supported
     foreignField: () => 'parentId', // no "doc" parameter provided here
     localField: (doc: DocumentType<Parent>) => doc.local,
     justOne: false
@@ -138,7 +138,7 @@ await SubModel.create({ parentId: parent._id });
 
 ### Why is my virtual not included in the output?
 
-By default Mongoose doesn't output virtuals. To archive this, you need to add `toObject` and(/or) `toObject` to `schemaOptions` in `@modelOptions`.
+By default Mongoose doesn't output virtuals. To achive this, you need to add `toObject` and(/or) `toObject` to `schemaOptions` in `@modelOptions`.
 
 Note: it can be set in `@modelOptions`, but it can be set in `getModelForClass` too (and in the `doc.toJSON()`/`doc.toObject()` functions).
 

@@ -3,7 +3,7 @@ id: change-id-type
 title: 'Change _id Type'
 ---
 
-You can easily change the type of the `_id` field:
+You can easily change the type of the `_id` field by doing:
 
 ```ts
 class SomeChangedID {
@@ -13,19 +13,20 @@ class SomeChangedID {
 ```
 
 :::note
-When the type is not `ObjectID`, the `_id` property needs to be manually set before saving.
+When the type is manually set (having an `@prop`, even for `ObjectId`), then the value need to be always defined before saving, or using the [`default`](../../api/decorators/prop.md#default) option
 :::
 
-To disable the `_id` field altogether (useful in arrays of subdocuments), add [`@prop({ _id: false })`](api/decorators/prop.md#_id) or [`@modelOptions({ schemaOptions: { _id: false } })`](https://mongoosejs.com/docs/guide.html#_id).
+To disable the `_id` field altogether (useful in arrays of subdocuments), add option [`@prop({ _id: false })`](api/decorators/prop.md#_id) or on the subdocument class [`@modelOptions({ schemaOptions: { _id: false } })`](https://mongoosejs.com/docs/guide.html#_id).
 
 ```ts
+@modelOptions({ schemaOptions: { _id: false } }) // either with the schema option
 class WithNoId {
   @prop()
   public someValue: string;
 }
 
 class SomeChangedID {
-  @prop({ type: WithNoId, _id: false })
+  @prop({ type: WithNoId, _id: false }) // or with the prop-option
   public someField: WithNoId[];
 }
 ```
@@ -43,9 +44,6 @@ class SomeChangedIDBase extends Base<string> {
 
 :::note
 The `_id` property needs to be duplicated, because the default class `Base` doesn't change anything at runtime (`Base` does not use `@prop`)
-:::
-:::note
-To have `_id` not be `any`, the project needs to have either `noImplicitAny` or `strict` active in the `tsconfig`.
 :::
 
 :::info Restriction

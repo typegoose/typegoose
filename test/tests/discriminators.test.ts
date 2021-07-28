@@ -1,3 +1,4 @@
+import { LeanDocument } from 'mongoose';
 import { assertion } from '../../src/internal/utils';
 import {
   DocumentType,
@@ -169,7 +170,7 @@ it('should pass all mongoose discriminator tests', async () => {
 
   // https://mongoosejs.com/docs/discriminators.html#using-discriminators-with-model-create
   const events = await Promise.all([
-    EventModel.create<DocumentType<ClickedLinkEvent>>({ time: Date.now(), url: 'google.com' }),
+    EventModel.create<LeanDocument<ClickedLinkEvent>>({ time: new Date(Date.now()), url: 'google.com' }),
     ClickedLinkEventModel.create({ time: Date.now(), url: 'google.com' }),
     SignedUpEventModel.create({ time: Date.now(), user: 'testuser' }),
   ]);

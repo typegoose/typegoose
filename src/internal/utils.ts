@@ -16,7 +16,7 @@ import type {
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
-import { NoValidClass } from './errors';
+import { AssertionFallbackError, NoValidClass } from './errors';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -265,9 +265,7 @@ export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: A
   assertionIsClass(cl);
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
-  return mergeWith({}, Reflect.getMetadata(key, cl), value, (_objValue, srcValue, ckey, _object, _source, _stack) =>
-    customMerger(ckey, srcValue)
-  );
+  return mergeWith({}, Reflect.getMetadata(key, cl), value, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
 }
 
 /**
@@ -375,7 +373,8 @@ export function mapArrayOptions(
   Type: AnyParamConstructor<any> | mongoose.Schema,
   target: any,
   pkey: string,
-  loggerType?: AnyParamConstructor<any>
+  loggerType?: AnyParamConstructor<any>,
+  extra?: KeyStringAny
 ): mongoose.SchemaTypeOpts<any> {
   logger.debug('mapArrayOptions called');
   loggerType = loggerType ?? (Type as AnyParamConstructor<any>);
@@ -396,6 +395,7 @@ export function mapArrayOptions(
       {
         type: Type,
         ...mapped.inner,
+        ...extra,
       },
     ],
   };
@@ -456,10 +456,8 @@ export function mapOptions(
   /** The OptionsConstructor to use */
   let OptionsCTOR: undefined | AnyParamConstructor<any> = Type?.prototype?.OptionsConstructor;
 
-  // Fix because "Schema" is not a valid type and doesn't have a ".prototype.OptionsConstructor"
   if (Type instanceof mongoose.Schema) {
-    // TODO: remove "as any" cast if "OptionsConstructor" is implemented in @types/mongoose
-    OptionsCTOR = (mongoose as any).Schema.Types.Embedded.prototype.OptionsConstructor;
+    OptionsCTOR = mongoose.Schema.Types.Embedded.prototype.OptionsConstructor;
   }
 
   assertion(
@@ -470,9 +468,7 @@ export function mapOptions(
   const options = Object.assign({}, rawOptions); // for sanity
   delete options.items;
 
-  // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
-  // TODO: remove "as any" cast if "OptionsConstructor" is implemented in @types/mongoose
-  if (OptionsCTOR.prototype instanceof (mongoose as any).SchemaTypeOptions) {
+  if (OptionsCTOR.prototype instanceof mongoose.SchemaTypeOptions) {
     for (const [key, value] of Object.entries(options)) {
       if (Object.getOwnPropertyNames(OptionsCTOR.prototype).includes(key)) {
         ret.inner[key] = value;
@@ -591,7 +587,7 @@ export function createArrayFromDimensions(rawOptions: any, extra: any, name: str
  */
 export function assertion(cond: any, error?: Error): asserts cond {
   if (!cond) {
-    throw error ?? new Error('Assert failed - no custom error [E019]');
+    throw error ?? new AssertionFallbackError();
   }
 }
 

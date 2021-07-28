@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x, 15.x] # TODO: change "15.x" to "16.x" when 16 releases
+        node-version: [12.x, 14.x, 16.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
@@ -28,10 +28,12 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Run Audit
         run: (yarn audit || exit 0)
-      - name: Test Compiling Everything & Lint
+      - name: Test Compiling Everything
         run: yarn run build:tests
+      - name: Lint
+        run: yarn run lint
       - name: Test
-        run: yarn run test:coverage -- --colors
+        run: yarn run test:coverage --colors
         env:
           CI: true
       - name: Send Coverage
