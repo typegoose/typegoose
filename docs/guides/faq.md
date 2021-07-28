@@ -15,22 +15,22 @@ A: Yes it is, but not on the main repository anymore because of [What happened t
 
 ### Why is the original project not archived?
 
-A: because a collaborator cannot archive a project, only the owner can ([What happened to the original author?](#what-happened-to-the-original-author))
+A: Because a collaborator cannot archive a project, only the owner can ([What happened to the original author?](#what-happened-to-the-original-author))
 
 ### Why is the package now released in another package?
 
-(context: from `typegoose` to `@typegoose/typegoose`)<br/>
+(context: from `typegoose` to `@typegoose/typegoose`)  
 A: Because of a Repository Switch ([reasons](#is-this-project-still-active)) and because a name cannot be used by multiple packages, except if it is scoped.
 
 ### Why @typegoose/typegoose
 
-A: because I (hasezoey) don't have permissions over the old `typegoose` repository and I dont want to touch the old npm package. It is a typical forking and continuation of an OSS project.
+A: Because I (hasezoey) don't have permissions over the old `typegoose` repository and I dont want to touch the old npm package. It is a typical forking and continuation of an OSS project.
 
 ## Functional
 
 ### Why does `new Model({})` not have types?
 
-A: because Typegoose doesn't modify any Mongoose code, it is still the same as Mongoose's original `new Model()`, you would have to do `new Model({} as Class)` (or sometimes `new Model({} as Partial<Class>)`, because of functions.)
+A: Because Typegoose doesn't modify any Mongoose code, it is still the same as Mongoose's original `new Model()`, you would have to do `new Model({} as Class)` (or sometimes `new Model({} as Partial<Class>)`, because of functions.)
 
 ## Edge Cases
 
