@@ -13,6 +13,11 @@ The Type `DocumentType<T>` is the type used for Documents.
 When `typeof Class` is used, it might not work.
 :::
 
+:::caution
+If the current project's tsconfig also includes `compilerOptions.lib` with `dom`, then the types from Typegoose and Typescript will conflict.  
+Solution is to remove `dom` from the `lib` array.
+:::
+
 ## Example
 
 ```ts
