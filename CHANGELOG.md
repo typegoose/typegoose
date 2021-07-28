@@ -331,6 +331,25 @@
 
 * update yarn.lock ([fc17dc5](https://github.com/typegoose/typegoose/commit/fc17dc58c08bdce096ade6d58bc004a54b0784fd))
 
+### [7.6.3](https://github.com/typegoose/typegoose/compare/v7.6.2...v7.6.3) (2021-07-10)
+
+
+### Fixes
+
+* **dependencies:** lock "@types/mongoose" version to 5.10 minor in dev and peer dependencies ([#574](https://github.com/typegoose/typegoose/issues/574)) ([c7e49bb](https://github.com/typegoose/typegoose/commit/c7e49bb531c458a1adf0acecc495205de0451357))
+
+### [7.6.2](https://github.com/typegoose/typegoose/compare/v7.6.1...v7.6.2) (2021-07-07)
+
+
+### Style
+
+* **types:** fix a typo (an -> a) ([#564](https://github.com/typegoose/typegoose/issues/564)) ([84e282c](https://github.com/typegoose/typegoose/commit/84e282c3db690877d5e01c5b20cae3e026f1e18f))
+
+
+### Fixes
+
+* **defaultClasses:** add missing 2nd parameter for findOrCreate() ([#573](https://github.com/typegoose/typegoose/issues/573)) ([8bd1254](https://github.com/typegoose/typegoose/commit/8bd1254f629400aed66a11cfcd75fb589101efcb))
+
 ### [7.6.1](https://github.com/typegoose/typegoose/compare/v7.6.0...v7.6.1) (2021-05-31)
 
 

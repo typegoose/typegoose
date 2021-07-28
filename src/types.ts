@@ -114,7 +114,7 @@ export interface BasePropOptions {
    */
   _id?: boolean;
   /**
-   * Set an Setter (Non-Virtual) to pre-process your value
+   * Set a Setter (Non-Virtual) to pre-process your value
    * (when using get/set both are required)
    * Please note that the option `type` is required, if get/set saves a different value than what is defined
    * @param value The Value that needs to get modified
@@ -135,7 +135,7 @@ export interface BasePropOptions {
    */
   set?(val: any): any;
   /**
-   * Set an Getter (Non-Virtual) to Post-process your value
+   * Set a Getter (Non-Virtual) to Post-process your value
    * (when using get/set both are required)
    * Please note that the option `type` is required, if get/set saves a different value than what is defined
    * @param value The Value that needs to get modified

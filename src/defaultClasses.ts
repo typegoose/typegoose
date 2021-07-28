@@ -31,5 +31,9 @@ export interface FindOrCreateResult<T> {
  * This class contains all types for the module "mongoose-findorcreate"
  */
 export abstract class FindOrCreate {
-  public static findOrCreate: <T extends FindOrCreate>(this: AnyParamConstructor<T>, condition: any) => Promise<FindOrCreateResult<T>>;
+  public static findOrCreate: <T extends FindOrCreate>(
+    this: AnyParamConstructor<T>,
+    condition: any,
+    createWith?: any
+  ) => Promise<FindOrCreateResult<T>>;
 }
