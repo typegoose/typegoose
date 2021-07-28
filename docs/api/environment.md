@@ -9,7 +9,7 @@ Typegoose allows the use of some environment variables to set global options.
 
 ### TG_ALLOW_MIXED
 
-Sets the options [`options.allowMixed`](api/decorators/modelOptions.md#allowmixed) to the given Severity.
+Sets the options [`options.allowMixed`](./decorators/modelOptions.md#allowmixed) to the given Severity.
 
 Accepts:
 
