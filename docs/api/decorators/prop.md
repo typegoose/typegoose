@@ -4,7 +4,7 @@ title: 'Prop'
 ---
 
 `@prop(options: object, kind: WhatIsIt)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
-- `options` is to set [all options](#options)
+- `options` is to set [all options](#single-options)
 - `kind` is to overwrite what kind of prop this is (should be auto-inferred), [read more here](#whatisit)
 
 ## Single Options
@@ -94,7 +94,7 @@ class Defaulted {
 ```
 
 :::note
-To have the `this` keyword correctly typed, you have to pass a [this parameter](https://www.typescriptlang.org/docs/handbook/functions.html#this-parameters).
+To have the `this` keyword correctly typed, you have to pass a defined [this parameter](https://www.typescriptlang.org/docs/handbook/functions.html#this-parameters).
 :::
 
 ### _id
@@ -120,7 +120,7 @@ Accepts Type: `Class | string`
 
 Set which class to use for Reference (this cannot be inferred by the type).
 
-[->look here where `Class` cannot be used](guides/advanced/reference-other-classes.md#common-problems)
+[Look here where `Class` cannot be used](../../guides/advanced/reference-other-classes.md#common-problems)
 
 Example:
 
@@ -147,7 +147,7 @@ class Cat {
 }
 ```
 
-The `'Nested'`(as string) form is useful to avoid unintuitive errors due to circular dependencies, such as `Error: Options "ref" is set, but is undefined/null!`.
+The `'Nested'`(as string) form is useful to avoid unintuitive errors due to circular dependencies, such as [`Option "ref" for "${name}.${key}" is null/undefined! [E005]`](../../guides/error-warnings-details.md#ref-is-undefined-e005).
 
 ### refPath
 
@@ -247,8 +247,11 @@ const dummies = await DummyModel.find().select('+hello').exec();
 
 Accepts Type: `(input) => output`
 
-set getters & setters for fields, it is not virtual  
--> both get & set must be defined all the time, even when just wanting to use one
+Set getters & setters for fields, it is not virtual.  
+
+:::note
+Both `get` & `set` must be defined all the time, even when just wanting to use one.
+:::
 
 :::note
 If the [WhatIsIt](#whatisit) (Primitive / Array / Map) is different from what is got from the reflection, it requires **explicit** setting that it is different
@@ -571,7 +574,7 @@ class Something {
 ## Array Options
 
 :::note
-Option `type`(formally `items`) must be provided, otherwise the array will result in `Mixed` [read typegoose issue #300 for more info](https://github.com/typegoose/typegoose/issues/300)
+Option `type` must be provided, otherwise the array will result in `Mixed` [read typegoose issue #300 for more info](https://github.com/typegoose/typegoose/issues/300)
 :::
 
 Example:
@@ -600,6 +603,9 @@ Example:
 class Something {
   @prop({ dim: 3, type: String })
   public propy: string[][][];
+  //or
+  @prop({ type: () => [[[String]]] })
+  public propy: string[][][];
 }
 
 // This would be mapped to
@@ -608,7 +614,7 @@ class Something {
 }
 ```
 
-This Option can be ommitted, if the following method is used: (as of 7.4.0)
+This option `dim` can be ommitted, when used with the `() => [Type]` syntax (since `7.4.0`):
 
 ```ts
 class ArrayInType {
