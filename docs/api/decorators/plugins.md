@@ -7,7 +7,7 @@ title: 'Plugins'
 - `mongoosePlugin`: the plugin itself; some plugins might have to be called first
 - `options`: the options for the plugin
 
--> Typegoose has a [default-class for `findOrCreate`](guides/defaultClasses.md#findorcreate) with all the types supplied by the plugin
+-> Typegoose has a [default-class for `findOrCreate`](../../guides/defaultClasses.md#findorcreate) with all the types supplied by the plugin
 
 :::note
 Plugin-functions that have types and options defined, are automatically inferred, and can be manually overwritten with generic `PluginOptions`.
