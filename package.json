@@ -55,7 +55,7 @@
     "class-transformer": "^0.4.0",
     "commitlint": "^13.1.0",
     "coveralls": "^3.1.1",
-    "eslint": "^7.29.0",
+    "eslint": "^7.31.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "husky": "^7.0.0",
