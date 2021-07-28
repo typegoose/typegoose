@@ -226,7 +226,7 @@ export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
   dim?: number;
   /**
    * Set if Non-Array values will be cast to an array
-   * TODO: add link to option documentation https://github.com/Automattic/mongoose/issues/10397
+   * https://mongoosejs.com/docs/api/schemaarray.html#schemaarray_SchemaArray.options
    * NOTE: This option currently only really affects "DocumentArray" and not normal arrays, https://github.com/Automattic/mongoose/issues/10398
    * @example
    * ```ts
