@@ -36,3 +36,9 @@ export class NoValidClass extends TypeError {
     super(`"${cl}" is not a function(/constructor)!`);
   }
 }
+
+export class AssertionFallbackError extends Error {
+  constructor() {
+    super('Assert failed - no custom error [E019]');
+  }
+}

@@ -7,17 +7,17 @@ title: 'Error & Warning Details'
 
 ### Mongoose Version [E001]
 
-Error: `Please use mongoose 5.10.0 or higher (Current mongoose: x.x.x) [E001]`
+Error: `Please use mongoose 5.13.3 or higher (Current mongoose: x.x.x) [E001]`
 
 Details:  
-Typegoose requires at least mongoose version 5.10.0, because that version changed something that affected typegoose internals
+Typegoose requires at least mongoose version `5.13.3`, because that version changed something that affected typegoose internals
 
 ### NodeJS Version [E002]
 
-Error: `You are using a NodeJS Version below 10.15.0, Please Upgrade! [E002]`
+Error: `You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]`
 
 Details:  
-Typegoose requires at least NodeJS Version 10.15, because NodeJS 10 is the lowest activly maintained version AND is the lowest that supports all functions needed by typegoose (without having to add polyfills)
+Typegoose requires at least NodeJS Version 12.22, because NodeJS 12 is the lowest activly maintained version AND is the lowest that supports all functions needed by typegoose (without having to add polyfills)
 
 ### addModelToTypegoose called twice [E003]
 
@@ -241,7 +241,7 @@ class ErrorClass {
 Error: `The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`
 
 Details:  
-The function used to create a custom model name (via the `modelOptions` "option" prop) must return a string and it should not be empty. 
+The function used to create a custom model name (via the `modelOptions` "option" prop) must return a string and it should not be empty.
 
 ### "ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]
 

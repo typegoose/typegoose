@@ -6,7 +6,7 @@ title: 'Quick Start Guide'
 ## Quick Overview of Typegoose
 
 :::note
-This Guide is for Typegoose version ~7.5
+This Guide is for Typegoose version ~8.0
 :::
 
 Typegoose is a "wrapper" for easily writing Mongoose models with TypeScript.
@@ -40,7 +40,7 @@ const JobSchema = new mongoose.Schema({
 });
 
 const CarModel = mongoose.model('Car', {
-  model: string,
+  model: String,
 });
 
 const UserModel = mongoose.model('User', {
@@ -95,7 +95,7 @@ class User {
 ```
 
 :::caution
-`type` / `ref` have to be defined when not using Primitives, because Reflection only returns basic information. [Look here for why](https://github.com/microsoft/TypeScript/issues/7169)  
+`type` has to be defined when working with Arrays, because Reflection only returns basic information. [Look here for why](https://github.com/microsoft/TypeScript/issues/7169)  
 Like `public: string[]` is in reflection only `Array`.  
 :::
 
@@ -106,14 +106,13 @@ Like `public: string[]` is in reflection only `Array`.
 
 ### Requirements
 
-- TypeScript `^3.9` (since 7.1)
-- NodeJS `^10.15.0`
-- Mongoose `5.10.18` ([look here for why this version](./faq.md#why-is-74x-constrained-to-mongoose-51018))
-- `@types/mongoose` `5.10.x`
-- An IDE that supports TypeScript linting (VSCode is recommended)
+- TypeScript version `^4.3` (since 8.0) is recommended, though older ones may also work
+- NodeJS `^12.22.0`
+- Mongoose `~5.13.3`
+- A IDE that supports TypeScript linting is recommended to be used (VSCode is recommended)
 - This Guide expects you to know how Mongoose (or at least its models) works
 - `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
-- tsconfig option `target` being `ES6` (or higher)
+- tsconfig option `target` being `es6` (or higher)
 
 :::info
 tsconfig option `emitDecoratorMetadata` is not strictly requierd, look [here](./use-without-emitDecoratorMetadata.md) for more
@@ -125,7 +124,12 @@ tsconfig option `emitDecoratorMetadata` is not strictly requierd, look [here](./
 npm i -s @typegoose/typegoose # install typegoose itself
 
 npm i -s mongoose # install peer-dependency mongoose
-npm i -D @types/mongoose # install all types for mongoose - this is required for typegoose to work in TypeScript
+```
+
+```sh
+yarn add @typegoose/typegoose # install typegoose itself
+
+yarn add mongoose # install peer-dependency mongoose
 ```
 
 ### How to use Typegoose
@@ -165,7 +169,7 @@ let document = await KittenModel.create({ name: 'Kitty' });
 
 - Typegoose is a wrapper for Mongoose's models
 - Typegoose does not modify any functions of Mongoose
-- Typegoose aims to get Mongoose's models to be stable through type-information
+- Typegoose aims to get Mongoose's models to be stable through type-information from classes (without defining extra interfaces)
 - Typegoose aims to make Mongoose more usable by making the models more type-rich with TypeScript
 - Decorated schema configuration classes (like `KittenClass` above) must use explicit type declarations
 
@@ -183,6 +187,7 @@ class KittenClass {
   @prop()
   public species?: string;
 
+  // the "this" definition is required to have the correct types
   public static async findBySpecies(this: ReturnModelType<typeof KittenClass>, species: string) {
     return this.find({ species }).exec();
   }
@@ -208,6 +213,7 @@ class KittenClass {
   @prop()
   public species?: string;
 
+  // the "this" definition is required to have the correct types
   public async setSpeciesAndSave(this: DocumentType<KittenClass>, species: string) {
     this.species = species;
     await this.save();
@@ -246,16 +252,18 @@ class KittenClass {
   
   @prop({ default: false })
   public isKitten?: boolean
-
-  public async setSpeciesAndSave(this: DocumentType<KittenClass>, species: string) {
-    this.species = species;
-    return await this.save();
-  }
 }
+
+const KittenModel = getModelForClass(KittenClass);
+
+const doc = new KittenModel({ name: 'SomeCat', species: 'SomeSpecies', age: 0 });
+await doc.save(); // this should output "We have a kitten here."
+const doc = new KittenModel({ name: 'SomeCat', species: 'SomeSpecies', age: 2 });
+await doc.save(); // this should output "We have a big kitty here."
 ```
 
-For detailed explanation of Hooks, please see [Hooks](api/decorators/hooks.md).
+For detailed explanation of Hooks, please see [Hooks](../api/decorators/hooks.md).
 
 Note:
 - Do not use Arrow Functions, because it will break the binding of `this`
-- For ESLint users: Make sure that rule `eslint-no-use-before-defining` is disabled, otherwise you might get ESLint errors / warnings
+- For ESLint users: Make sure that rule `eslint-no-use-before-defining` is disabled, otherwise you might get ESLint errors / warnings inside the hooks

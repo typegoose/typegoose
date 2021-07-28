@@ -1,4 +1,5 @@
-// disable "no-unused" for this file, to keep hooks consistent
+// disable "no-unused" for this file, to keep hooks consistent (it has to be an inline-comment, because of an problem with eslint)
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Aggregate, Query } from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
 import { assertion, getName } from './internal/utils';
@@ -12,9 +13,9 @@ type ReturnVoid = void | Promise<void>;
 
 type HookNextErrorFn = (err?: Error) => ReturnVoid;
 
-type PreFnWithAggregate<T> = (this: Aggregate<T>, next: (error?: Error) => ReturnVoid, done: EmptyVoidFn) => ReturnVoid;
+type PreFnWithAggregate<T> = (this: Aggregate<T>, next: (error?: Error) => ReturnVoid) => ReturnVoid;
 type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => ReturnVoid;
-type PreFnWithQuery<T> = (this: Query<T>, next: (error?: Error) => ReturnVoid, done: EmptyVoidFn) => ReturnVoid;
+type PreFnWithQuery<T> = (this: Query<any, DocumentType<T>>, next: (error?: Error) => ReturnVoid) => ReturnVoid;
 
 type ModelPostFn<T> = (result: any, next: EmptyVoidFn) => ReturnVoid;
 

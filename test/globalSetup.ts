@@ -8,8 +8,8 @@ export = async function globalSetup() {
 
   if (config.Memory) {
     /** it's needed in global space, because we don't want to create a new instance every time */
-    const instance = new MongoMemoryServer();
-    const uri = await instance.getUri();
+    const instance = await MongoMemoryServer.create();
+    const uri = instance.getUri();
     (global as any).__MONGOINSTANCE = instance;
     process.env.MONGO_URI = uri.slice(0, uri.lastIndexOf('/'));
   } else {

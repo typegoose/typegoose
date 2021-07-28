@@ -35,6 +35,7 @@ module.exports = {
     'prefer-destructuring': 0,
     'no-else-return': 1,
     'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
+    '@typescript-eslint/no-non-null-assertion': 0,
     '@typescript-eslint/explicit-member-accessibility': 0,
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/no-inferrable-types': 0,

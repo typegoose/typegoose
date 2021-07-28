@@ -1,5 +1,4 @@
 import type * as mongoose from 'mongoose';
-import type { Base } from './defaultClasses';
 import type { Severity, WhatIsIt } from './internal/constants';
 
 /**
@@ -12,12 +11,14 @@ import type { Severity, WhatIsIt } from './internal/constants';
  * const doc: DocumentType<ClassName> = await NameModel.create({});
  * ```
  */
-export type DocumentType<T> = (T extends Base<any> ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T) &
+export type DocumentType<T, QueryHelpers = BeAnObject> = (T extends { _id: unknown }
+  ? mongoose.Document<T['_id'], QueryHelpers> & T
+  : mongoose.Document<any, QueryHelpers> & T) &
   IObjectWithTypegooseFunction;
 /**
  * Used Internally for ModelTypes
  */
-export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T>, QueryHelpers>;
+export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T, QueryHelpers>, QueryHelpers>;
 /**
  * Any-param Constructor
  */
@@ -193,12 +194,6 @@ export interface BasePropOptions {
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
   /**
-   * Override the ref's type
-   * {@link BasePropOptions.type} can be used too
-   * @default ObjectId
-   */
-  refType?: NonNullable<BasePropOptions['type']> | RefType;
-  /**
    * Set the Nested Discriminators
    * Note: "_id: false" as an prop option dosnt work here
    */
@@ -224,26 +219,27 @@ export interface InnerOuterOptions {
 
 export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
   /**
-   * What array is it?
-   * {@link BasePropOptions.type} can be used too
-   * @deprecated
-   */
-  items?: NonNullable<BasePropOptions['type']>;
-  /**
    * How many dimensions this Array should have
    * (needs to be higher than 0)
    * @default 1
    */
   dim?: number;
+  /**
+   * Set if Non-Array values will be cast to an array
+   * https://mongoosejs.com/docs/api/schemaarray.html#schemaarray_SchemaArray.options
+   * NOTE: This option currently only really affects "DocumentArray" and not normal arrays, https://github.com/Automattic/mongoose/issues/10398
+   * @example
+   * ```ts
+   * new Model({ array: "string" });
+   * // will be cast to equal
+   * new Model({ array: ["string"] });
+   * ```
+   * @default true
+   */
+  castNonArrays?: boolean;
 }
 
-export interface MapPropOptions extends BasePropOptions, InnerOuterOptions {
-  /**
-   * The type of the Map (Map<string, THIS>)
-   * @deprecated
-   */
-  of?: NonNullable<BasePropOptions['type']>;
-}
+export interface MapPropOptions extends BasePropOptions, InnerOuterOptions {}
 
 export interface ValidateNumberOptions {
   /** Only allow numbers that are higher than this */
@@ -294,22 +290,17 @@ export interface VirtualOptions {
 export type PropOptionsForNumber = BasePropOptions & ValidateNumberOptions;
 export type PropOptionsForString = BasePropOptions & TransformStringOptions & ValidateStringOptions;
 
-export type RefType =
-  | number
-  | string
-  | Buffer
-  | undefined
-  | mongoose.Types.ObjectId
-  | mongoose.Types.Buffer
-  | typeof mongoose.Schema.Types.Number
-  | typeof mongoose.Schema.Types.String
-  | typeof mongoose.Schema.Types.Buffer
-  | typeof mongoose.Schema.Types.ObjectId;
+export type RefType = mongoose.RefType;
 
 /**
  * Reference another Model
  */
-export type Ref<R, T extends RefType = (R extends { _id?: RefType } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined> = R | T;
+export type Ref<
+  PopulatedType,
+  RawId extends mongoose.RefType =
+    | (PopulatedType extends { _id?: mongoose.RefType } ? NonNullable<PopulatedType['_id']> : mongoose.Types.ObjectId)
+    | undefined
+> = mongoose.PopulatedDoc<PopulatedType, RawId>;
 
 /**
  * An Function type for a function that doesn't have any arguments and doesn't return anything
@@ -435,9 +426,7 @@ export interface IndexOptions<T> {
   uppercase?: boolean; // whether to always call .toUpperCase() on the value
   trim?: boolean; // whether to always call .trim() on the value
 
-  weights?: {
-    [P in keyof Partial<T>]: number;
-  };
+  weights?: Partial<Record<keyof T, number>>;
 }
 
 /**

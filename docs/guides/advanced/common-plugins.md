@@ -20,7 +20,11 @@ class SomeClass {
   public populateField: Ref<SomeReferencedClass>;
 }
 
-class SomeReferencedClass {}
+class SomeReferencedClass {
+  // a dummy property is required, otherwise the class will equal to others
+  @prop()
+  public dummy?: string;
+}
 
 const SomeClassModel = getModelForClass(SomeClass);
 const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
@@ -28,7 +32,7 @@ const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 (async () => {
   await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: 'guides', useUnifiedTopology: true });
 
-  const reference = await SomeReferencedClassModel.create({});
+  const reference = await SomeReferencedClassModel.create({ dummy: 'hello' });
   const { _id: id } = await SomeClassModel.create({ populateField: reference } as SomeClass);
 
   console.log(await SomeClassModel.findById(id).exec()); // output will be populated

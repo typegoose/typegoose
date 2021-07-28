@@ -4,7 +4,6 @@ import { buildSchema } from '../typegoose';
 import type {
   AnyParamConstructor,
   DecoratedPropertyMetadataMap,
-  Func,
   IHooksArray,
   IIndexArray,
   IModelOptions,
@@ -30,7 +29,7 @@ import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullO
  */
 export function _buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
-  sch?: mongoose.Schema,
+  sch?: mongoose.Schema<any>,
   opt?: mongoose.SchemaOptions,
   isFinalSchema: boolean = true,
   overwriteOptions?: IModelOptions
@@ -82,7 +81,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       for (const [key, discriminators] of disMap) {
         logger.debug('Applying Nested Discriminators for:', key, discriminators);
 
-        const path: { discriminator?: Func } = sch.path(key) as any;
+        const path = sch.path(key) as mongoose.Schema.Types.DocumentArray;
         assertion(!isNullOrUndefined(path), new Error(`Path "${key}" does not exist on Schema of "${finalName}"`));
         assertion(
           typeof path.discriminator === 'function',
@@ -90,11 +89,12 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
         );
 
         for (const { type: child, value: childName } of discriminators) {
-          const childSch = getName(child) === finalName ? sch : (buildSchema(child) as mongoose.Schema & { paths: any });
+          const childSch = getName(child) === finalName ? sch : buildSchema(child);
 
           const discriminatorKey = childSch.get('discriminatorKey');
 
           if (childSch.path(discriminatorKey)) {
+            // skip this check, otherwise "extends DiscriminatorBase" would not be allowed (discriminators cannot have the discriminator key defined multiple times)
             (childSch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
           }
 

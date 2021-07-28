@@ -22,6 +22,6 @@ class ModelClass {
 
 ## Why is the long type needed?
 
-Mainly, because mongoose documents and their arrays fields have their pre-build methods, which slightly differ from `Array.method.prototype`. But at runtime, these methods already exist (because an array is always an mongoose array). So, using `type[]` is just more convenient way to write a shorter type instead of the `mongoose.Types` if the functions are not used. 
+Mainly, because mongoose documents and their arrays fields have their pre-build methods, which slightly differ from `Array.method.prototype`. But at runtime, these methods already exist (because an array is always an mongoose array). So, using `type[]` is just more convenient way to write a shorter type instead of the `mongoose.Types` if the functions are not used.
 
 For more information you could look at [GitHub issue #509](https://github.com/typegoose/typegoose/issues/509).

@@ -8,18 +8,13 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '5.10.0')) {
-    throw new Error(`Please use mongoose 5.10.0 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '5.13.3')) {
+    throw new Error(`Please use mongoose 5.13.3 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
-  if (semver.lt(process.version.slice(1), '10.15.0')) {
-    throw new Error('You are using a NodeJS Version below 10.15.0, Please Upgrade! [E002]');
-  }
-
-  /* istanbul ignore next */
-  if (semver.gt(mongoose?.version, '5.10.18')) {
-    console.warn(`Using Unsupported mongoose version, highest supported is 5.10.18 (Current version: ${mongoose.version})`);
+  if (semver.lt(process.version.slice(1), '12.22.0')) {
+    throw new Error('You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]');
   }
 }
 
@@ -124,14 +119,14 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
   options?: mongoose.SchemaOptions,
   overwriteOptions?: IModelOptions
-): mongoose.Schema<U> {
+): mongoose.Schema<DocumentType<U>> {
   assertionIsClass(cl);
 
   logger.debug('buildSchema called for "%s"', getName(cl, overwriteOptions));
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
-  let sch: mongoose.Schema<U> | undefined = undefined;
+  let sch: mongoose.Schema<DocumentType<U>> | undefined = undefined;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   // iterate trough all parents
@@ -206,11 +201,12 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
  */
 export function deleteModel(name: string) {
   assertion(typeof name === 'string', new TypeError('name is not an string! (deleteModel)'));
-  assertion(models.has(name), new Error(`Model "${name}" could not be found`));
+  const model = models.get(name);
+  assertion(model, new Error(`Model "${name}" could not be found`));
 
   logger.debug('Deleting Model "%s"', name);
 
-  models.get(name)!.db.deleteModel(name);
+  model.db.deleteModel(name);
 
   models.delete(name);
   constructors.delete(name);
@@ -282,7 +278,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const sch = buildSchema(cl) as mongoose.Schema & { paths: any };
+  const sch: mongoose.Schema<any> = buildSchema(cl);
 
   const discriminatorKey = sch.get('discriminatorKey');
 
@@ -293,4 +289,29 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   const model = from.discriminator(name, sch, value ? value : name);
 
   return addModelToTypegoose<U, QueryHelpers>(model, cl);
+}
+
+/**
+ * Use this class if raw mongoose for this path is wanted
+ * It is still recommended to use the typegoose classes directly for full type and validation support
+ * Note: using this, paths are of type "Mixed" (with some validation)
+ * @example
+ * ```ts
+ * class Dummy {
+ *   @prop({ type: () => new Passthrough({ somePath: String }) })
+ *   public somepath: { somePath: string };
+ * }
+ * ```
+ */
+// Note: for "SchemaDefinitionType", i have no clue what it does, but it is also defined on "mongoose.Schema" and kinda required for "mongoose.DocumentDefinition"
+export class Passthrough<SchemaDefinitionType = undefined> {
+  public raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>;
+
+  /**
+   * Use this like `new mongoose.Schema()`
+   * @param raw the Schema definition
+   */
+  constructor(raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>) {
+    this.raw = raw;
+  }
 }

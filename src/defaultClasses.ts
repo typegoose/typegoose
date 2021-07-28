@@ -12,12 +12,14 @@ export abstract class TimeStamps {
 }
 
 /**
- * This class provied the basic mongoose document properties
+ * This Interface can be used when "_id" and "id" need to be defined in types
  */
-export abstract class Base<T_ID extends RefType = Types.ObjectId> {
-  public _id: T_ID;
-  public __v?: number;
-  public __t?: string | number;
+export interface Base<IDType extends RefType = Types.ObjectId> {
+  _id: IDType;
+  /**
+   * This getter/setter dosnt exist if "schemaOptions.id" being set to "false"
+   */
+  id: string;
 }
 
 export interface FindOrCreateResult<T> {

@@ -3,18 +3,18 @@ id: logger
 title: 'Typegoose Logger'
 ---
 
-Typegoose uses `loglevel` to make some soft-errors & for debugging.
+Typegoose uses `loglevel` to make some soft-errors and for debugging.
 
 ## Set the LogLevel
 
 Currently available loglevels:
 
-- SILENT (logs nothing | turns the logger off [not recommended])
-- ERROR (shows only error)
-- WARN (default), used for soft errors / soft mistakes (everything below is mostly for debugging)
-- INFO
-- DEBUG
-- TRACE (shows everything)
+- `SILENT` (logs nothing | turns the logger off [not recommended])
+- `ERROR`
+- `WARN` (default), used for soft errors / soft mistakes (everything below is mostly for debugging)
+- `INFO`
+- `DEBUG`
+- `TRACE` (shows everything)
 
 To set the loglevel of Typegoose:
 

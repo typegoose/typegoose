@@ -51,29 +51,7 @@ function prop(
   };
 }
 
-/**
- * Set Property(that are Maps) Options for the property below
- * @param options Options for the Map
- *
- * @deprecated use "prop"
- */
-function mapProp(options: MapPropOptions): PropertyDecorator {
-  /* istanbul ignore next */
-  return utils.deprecate(prop.call(null, options, WhatIsIt.MAP), '"@mapProp" is deprecated, use "@prop" instead', 'TDEP0002');
-}
-
-/**
- * Set Property(that are Arrays) Options for the property below
- * @param options Options
- *
- * @deprecated use "prop"
- */
-function arrayProp(options: ArrayPropOptions): PropertyDecorator {
-  /* istanbul ignore next */
-  return utils.deprecate(prop.call(null, options, WhatIsIt.ARRAY), '"@arrayProp" is deprecated, use "@prop" instead', 'TDEP0001');
-}
-
-export { prop, arrayProp, mapProp };
+export { prop };
 
 // Export it PascalCased
-export { prop as Prop, arrayProp as ArrayProp, mapProp as MapProp };
+export { prop as Prop };

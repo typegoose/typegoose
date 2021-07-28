@@ -1,5 +1,5 @@
 import { logger } from '../logSettings';
-import { buildSchema, mongoose } from '../typegoose';
+import { buildSchema, mongoose, Passthrough } from '../typegoose';
 import {
   AnyParamConstructor,
   DecoratedPropertyMetadata,
@@ -27,45 +27,18 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   logger.debug('Starting to process "%s.%s"', name, key);
   utils.assertion(typeof key === 'string', new Error(`Property Key in typegoose cannot be an symbol! (${name}.${String(key)})`));
 
-  optionDeprecation(rawOptions);
+  // optionDeprecation(rawOptions);
 
   {
     // soft errors & "type"-alias mapping
     switch (propKind) {
       case WhatIsIt.NONE:
-        if ('items' in rawOptions) {
-          logger.warn('You might not want to use option "items" for an non-array @prop type (%s.%s)', name, key);
-        }
-
-        if ('of' in rawOptions) {
-          logger.warn('You might not want to use option "of" for an non-map @prop type (%s.%s)', name, key);
-        }
-
-        break;
-      case WhatIsIt.ARRAY:
-        if ('items' in rawOptions) {
-          rawOptions.type = rawOptions.items;
-          delete rawOptions.items;
-        }
-
-        if ('of' in rawOptions) {
-          logger.warn('You might not want to use option "of" where the "design:type" is "Array" (%s.%s)', name, key);
-        }
-
-        // set the "Type" to undefined, if "ref" or "refPath" are defined, otherwise the "refType" will be wrong
-        if (('ref' in rawOptions || 'refPath' in rawOptions) && !('type' in rawOptions)) {
-          Type = undefined;
-        }
-
         break;
       case WhatIsIt.MAP:
-        if ('of' in rawOptions) {
-          rawOptions.type = rawOptions.of;
-          delete rawOptions.of;
-        }
-
-        if ('items' in rawOptions) {
-          logger.warn('You might not want to use option "items" where the "design:type" is "Map" (%s.%s)', name, key);
+      case WhatIsIt.ARRAY:
+        // set the "Type" to undefined if "ref" or "refPath" are defined, as an fallback in case "type" is also not defined
+        if (('ref' in rawOptions || 'refPath' in rawOptions) && !('type' in rawOptions)) {
+          Type = undefined;
         }
 
         break;
@@ -97,10 +70,16 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     Type = mongoose.Schema.Types.Buffer;
   }
 
-  // confirm that "WhatIsIt" is an ARRAY and that the Type is still an *ARRAY and set them to Mixed
+  // confirm that "WhatIsIt" is an ARRAY and if that the Type is still an *ARRAY, set them to Mixed
   // for issues like https://github.com/typegoose/typegoose/issues/300
   if (propKind === WhatIsIt.ARRAY && detectWhatIsIt(Type) === WhatIsIt.ARRAY) {
     logger.debug('Type is still *ARRAY, defaulting to Mixed');
+    Type = mongoose.Schema.Types.Mixed;
+  }
+
+  // confirm that "WhatIsIt" is an MAP and if that the Type is still an *MAP, set them to Mixed
+  if (propKind === WhatIsIt.MAP && detectWhatIsIt(Type) === WhatIsIt.MAP) {
+    logger.debug('Type is still *Map, defaulting to Mixed');
     Type = mongoose.Schema.Types.Mixed;
   }
 
@@ -178,6 +157,43 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   const schemaProp = utils.initProperty(name, key, propKind);
 
+  // do this early, because the other options (enum, ref, refPath, discriminators) should not matter for this one
+  if (Type instanceof Passthrough) {
+    // this is because the check above narrows down the type, which somehow is not compatible
+    const newType: any = Type.raw;
+    switch (propKind) {
+      case WhatIsIt.ARRAY:
+        schemaProp[key] = {
+          ...schemaProp[key][0],
+          ...utils.mapArrayOptions(rawOptions, newType, target, key),
+        };
+
+        return;
+      case WhatIsIt.MAP:
+        const mapped = utils.mapOptions(rawOptions, newType, target, key);
+
+        schemaProp[key] = {
+          ...schemaProp[key],
+          ...mapped.outer,
+          type: Map,
+          of: { type: newType, ...mapped.inner },
+        };
+
+        return;
+      case WhatIsIt.NONE:
+        schemaProp[key] = {
+          ...schemaProp[key],
+          ...rawOptions,
+          type: newType,
+        };
+
+        return;
+      default:
+        /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
+        throw new Error(`"${propKind}"(whatis(primitive)) is invalid for "${name}.${key}" [E013]`);
+    }
+  }
+
   if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
     utils.assertion(typeof rawOptions.set === 'function', new TypeError(`"${name}.${key}" does not have a set function! [E007]`));
     utils.assertion(typeof rawOptions.get === 'function', new TypeError(`"${name}.${key}" does not have a get function! [E007]`));
@@ -227,17 +243,10 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        schemaProp[key] = utils.createArrayFromDimensions(
-          rawOptions,
-          {
-            ...schemaProp[key][0],
-            type: refType,
-            ref,
-            ...rawOptions,
-          },
-          name,
-          key
-        );
+        schemaProp[key] = {
+          ...schemaProp[key][0],
+          ...utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { ref }),
+        };
         break;
       case WhatIsIt.NONE:
         schemaProp[key] = {
@@ -245,6 +254,20 @@ export function processProp(input: DecoratedPropertyMetadata): void {
           type: refType,
           ref,
           ...rawOptions,
+        };
+        break;
+      case WhatIsIt.MAP:
+        const mapped = utils.mapOptions(rawOptions, refType, target, key);
+
+        schemaProp[key] = {
+          ...schemaProp[key],
+          ...mapped.outer,
+          type: Map,
+          of: {
+            type: refType,
+            ref,
+            ...mapped.inner,
+          },
         };
         break;
       default:
@@ -263,17 +286,10 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        schemaProp[key] = utils.createArrayFromDimensions(
-          rawOptions,
-          {
-            ...schemaProp[key][0],
-            type: refType,
-            refPath,
-            ...rawOptions,
-          },
-          name,
-          key
-        );
+        schemaProp[key] = {
+          ...schemaProp[key][0],
+          ...utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { refPath }),
+        };
         break;
       case WhatIsIt.NONE:
         schemaProp[key] = {
@@ -474,26 +490,12 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   }
 }
 
+// The following function ("optionDeprecation") is disabled until used again
 /**
  * Check for deprecated options, and if needed process them
  * @param options
  */
-function optionDeprecation(options: any) {
-  if ('refType' in options) {
-    options.type = options.refType;
-    delete options.refType;
-
-    utils.deprecate(() => undefined, 'Option "refType" is deprecated, use option "type"', 'TDEP0003')();
-  }
-
-  if ('of' in options) {
-    utils.deprecate(() => undefined, 'Option "of" is deprecated, use option "type"', 'TDEP0003')();
-  }
-
-  if ('items' in options) {
-    utils.deprecate(() => undefined, 'Option "items" is deprecated, use option "type"', 'TDEP0003')();
-  }
-}
+// function optionDeprecation(options: any) {}
 
 /**
  * Detect "WhatIsIt" based on "Type"

@@ -1,3 +1,356 @@
+## [8.0.0-beta.24](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.23...v8.0.0-beta.24) (2021-07-28)
+
+
+### Style
+
+* **types:** fix a typo (an -> a) ([#564](https://github.com/typegoose/typegoose/issues/564)) ([84e282c](https://github.com/typegoose/typegoose/commit/84e282c3db690877d5e01c5b20cae3e026f1e18f))
+
+
+### Fixes
+
+* **defaultClasses:** add missing 2nd parameter for findOrCreate() ([#573](https://github.com/typegoose/typegoose/issues/573)) ([8bd1254](https://github.com/typegoose/typegoose/commit/8bd1254f629400aed66a11cfcd75fb589101efcb))
+* **dependencies:** lock "@types/mongoose" version to 5.10 minor in dev and peer dependencies ([#574](https://github.com/typegoose/typegoose/issues/574)) ([c7e49bb](https://github.com/typegoose/typegoose/commit/c7e49bb531c458a1adf0acecc495205de0451357))
+
+## [8.0.0-beta.23](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.22...v8.0.0-beta.23) (2021-07-28)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to version 26.0.24 ([d9b1b69](https://github.com/typegoose/typegoose/commit/d9b1b69c8dd4ebc1a207fe5643778dddec07ebf9))
+* **@types/lodash:** upgrade to version 4.14.171 ([d6036de](https://github.com/typegoose/typegoose/commit/d6036ded91f8e4bbe2664a0669c028224e2abd19))
+* **@types/semver:** upgrade to version 7.3.8 ([2f2d60e](https://github.com/typegoose/typegoose/commit/2f2d60ed6dd5f992ae04215b800e5dcdeabf7544))
+* **@typescript-eslint/*:** upgrade to version 4.28.5 ([d7dcc92](https://github.com/typegoose/typegoose/commit/d7dcc925093e1155f3e7fdbb83066fb8861d3335))
+* **commitlint:** upgrade to version 13.1.0 ([62bbfb9](https://github.com/typegoose/typegoose/commit/62bbfb9e060ee90a751a0cccee9320d0b1afd7bd))
+* **eslint:** upgrade to version 7.31.0 ([e6ee83a](https://github.com/typegoose/typegoose/commit/e6ee83a7e6b676817f6869f0edb22e2137361d1f))
+* **husky:** upgrade to version 7.0.1 ([4decf83](https://github.com/typegoose/typegoose/commit/4decf83d22ffc9c3972bf3d1e22a12527f69c4cf))
+* **lint-staged:** upgrade to version 11.1.1 ([5f370ad](https://github.com/typegoose/typegoose/commit/5f370ad81faff038c1dad5997d018def79fc880c))
+* **mongodb-memory-server:** upgrade to version 7.3.4 ([460bdcb](https://github.com/typegoose/typegoose/commit/460bdcbc0a050c678c5eac42d8333558d07c72f5))
+* **mongoose:** upgrade to version 5.13.3 ([c7414e6](https://github.com/typegoose/typegoose/commit/c7414e649369c0198b80fffc5004d6c014600cde))
+* **ts-jest:** upgrad eto version 27.0.4 ([e20fd0c](https://github.com/typegoose/typegoose/commit/e20fd0c7f0f01442591b8f604c8fab5a8be7fc43))
+
+
+### Style
+
+* **types:** fix TODO (issue closed) ([20bd486](https://github.com/typegoose/typegoose/commit/20bd4868889953debb59ff71a8102e331865a090))
+
+## [8.0.0-beta.22](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.21...v8.0.0-beta.22) (2021-07-21)
+
+
+### Features
+
+* add class "Passthrough" and functionality ([e9ee628](https://github.com/typegoose/typegoose/commit/e9ee6286537549ff9bc54ac95e77abf4e610cf79)), closes [typegoose/typegoose#382](https://github.com/typegoose/typegoose/issues/382)
+
+## [8.0.0-beta.21](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.20...v8.0.0-beta.21) (2021-07-01)
+
+
+### Dependencies
+
+* **husky:** upgrade to version "7.0.0" ([5b58237](https://github.com/typegoose/typegoose/commit/5b58237be24c980f18050498edcdc940a47d1bfb))
+* **tslib:** upgrade to version "2.3.0" ([7a1ba2d](https://github.com/typegoose/typegoose/commit/7a1ba2d082c0dd581e54fd0d4d120c18a7694e87))
+* **typescript:** upgrade to version "4.3.5" ([4e87c03](https://github.com/typegoose/typegoose/commit/4e87c03221299ad2bb3a69bd0c121bae23dd079e))
+
+## [8.0.0-beta.20](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.19...v8.0.0-beta.20) (2021-07-01)
+
+
+### Dependencies
+
+* **mongodb-memory-server:** upgrade to version 7.0.0 ([6a5e914](https://github.com/typegoose/typegoose/commit/6a5e9142c198a0e8f787ff7f9e00a764644598b4))
+
+## [8.0.0-beta.19](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.18...v8.0.0-beta.19) (2021-06-29)
+
+
+### Dependencies
+
+* **mongoose:** allow range "~5.12.14 || ~5.13.0" ([bcba9a2](https://github.com/typegoose/typegoose/commit/bcba9a274d03ac80c0c46ce5259a77d0294fb63a))
+
+## [8.0.0-beta.18](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.17...v8.0.0-beta.18) (2021-06-29)
+
+
+### Features
+
+* **types:** add option prop option "castNonArrays" ([3a9e95a](https://github.com/typegoose/typegoose/commit/3a9e95aae4173e7b5e072ee70db470cf6b6cccf5)), closes [typegoose/typegoose#568](https://github.com/typegoose/typegoose/issues/568)
+
+
+### Dependencies
+
+* **@typescript-eslint/*:** upgrade to version "4.28.1" ([49b1c11](https://github.com/typegoose/typegoose/commit/49b1c1189388b47f15790095169dbfcb6d5561ad))
+* **coveralls:** upgrade to version "3.1.1" ([0a3211a](https://github.com/typegoose/typegoose/commit/0a3211aa821fd3885d0d7221d4e376fdb1f0c5e4))
+* **jest:** upgrade to version "27.0.6" ([8eca711](https://github.com/typegoose/typegoose/commit/8eca71174e111c6fbc1de1ecad476b82ca64424c))
+
+## [8.0.0-beta.17](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.16...v8.0.0-beta.17) (2021-06-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **typeguards:** `isRefType` now is way more stricter and requires an second parameter to work
+
+### Features
+
+* **typeguards:** enhance "isRefType" checks ([e3a3bf7](https://github.com/typegoose/typegoose/commit/e3a3bf7150cd9569b974c7c4322d35f66ec03957)), closes [typegoose/typegoose#569](https://github.com/typegoose/typegoose/issues/569)
+
+
+### Dependencies
+
+* **@typescript-eslint/*:** upgrade to version "4.28.0" ([7c8883b](https://github.com/typegoose/typegoose/commit/7c8883b68a8045321d093eaa59dcab6425aff183))
+* **eslint:** upgrade to version "7.29.0" ([525f1c0](https://github.com/typegoose/typegoose/commit/525f1c0055afcc94f0f4f5a6c944a2c78e7b7299))
+* **jest:** upgrade to version "27.0.5" ([45e8e00](https://github.com/typegoose/typegoose/commit/45e8e0074d21ee15a44659234e85104378c59280))
+* **prettier:** upgrade to version "2.3.2" ([5e73507](https://github.com/typegoose/typegoose/commit/5e73507809282b5e66812d58182619ca51620484))
+* **ts-jest:** upgrade to version "27.0.3" ([dc0452f](https://github.com/typegoose/typegoose/commit/dc0452ffa5f5a58de24e4bd154119571d9d7fb96))
+* **typescript:** upgrade to version "4.3.4" ([a2f4a5a](https://github.com/typegoose/typegoose/commit/a2f4a5ab1d06ea699d9bb3ff46c623ba81c52218))
+
+## [8.0.0-beta.16](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.15...v8.0.0-beta.16) (2021-06-17)
+
+
+### Features
+
+* **processProp:** allow & correctly map reference-maps ([581b6b3](https://github.com/typegoose/typegoose/commit/581b6b3b372922d6df9a84711958fac98332ca38))
+
+
+### Fixes
+
+* **processProp:** set type to "Mixed" when type is still "*Map" ([e98d026](https://github.com/typegoose/typegoose/commit/e98d026dc4f231e4bf1841bbaba9df1cc705e83f))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to version "5.12.14" ([943d581](https://github.com/typegoose/typegoose/commit/943d5812732a4e0ec146e1302856023afec7c086))
+
+## [8.0.0-beta.15](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.14...v8.0.0-beta.15) (2021-06-17)
+
+
+### Fixes
+
+* **hooks:** remove unused "done" callback ([4692976](https://github.com/typegoose/typegoose/commit/46929760d6568feff07a5a1ff1e87baccdcb00db)), closes [typegoose/typegoose#561](https://github.com/typegoose/typegoose/issues/561)
+
+
+### Dependencies
+
+* **@semantic-release/release-notes-generator:** upgrade to version "9.0.3" ([a8ba787](https://github.com/typegoose/typegoose/commit/a8ba787ac1eb833b1bb157b43e9d2ea3c5d59a2a))
+* **semantic-release:** upgrade to version "17.4.4" ([090d05f](https://github.com/typegoose/typegoose/commit/090d05f964f680767fc8321a1525e6fdf2a60078))
+
+## [8.0.0-beta.14](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.13...v8.0.0-beta.14) (2021-06-10)
+
+
+### Fixes
+
+* **index:** extend typings of the index decorator ([#548](https://github.com/typegoose/typegoose/issues/548)) ([f24ee9d](https://github.com/typegoose/typegoose/commit/f24ee9d4b2f0d02d2652f5a895f7793a7eb3240c))
+
+
+### Style
+
+* **types::IndexOptions:** simplify "weights" definition ([294cfff](https://github.com/typegoose/typegoose/commit/294cfffa5068b083431cde9a9d2691fc15280ef9))
+
+## [8.0.0-beta.13](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.12...v8.0.0-beta.13) (2021-06-02)
+
+
+### Fixes
+
+* **processProp:** add error code E023 for '"ref" is not supported for "${propKind}"!' ([8bdfcd7](https://github.com/typegoose/typegoose/commit/8bdfcd77267c219f9ee8a758526ccee20d701f77))
+
+## [8.0.0-beta.12](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.11...v8.0.0-beta.12) (2021-05-31)
+
+
+### Fixes
+
+* **processProp:** add error code E023 for '"ref" is not supported for "${propKind}"!' ([63a5b31](https://github.com/typegoose/typegoose/commit/63a5b3199f33ca7ff28a7653314c46fc12fc3dac))
+
+## [8.0.0-beta.11](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.10...v8.0.0-beta.11) (2021-05-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* NodeJS 10 & 11 are now unsupported, lowest supported is now NodeJS 12
+
+### Features
+
+* unsupport nodejs 10 & 11 ([d24d6d7](https://github.com/typegoose/typegoose/commit/d24d6d7a86735603ea6bbe28503f90e0723cce8c))
+
+
+### Dependencies
+
+* **@semantic-release/github:** upgrade to version "7.2.3" ([c52195c](https://github.com/typegoose/typegoose/commit/c52195cd7157b11c15031fc63211a273ef3611b3))
+* **@semantic-release/npm:** upgrade to version "7.1.3" ([d58a074](https://github.com/typegoose/typegoose/commit/d58a07406c0cf3897b8b78bca67b02f62d2d9f13))
+* **@types/jest:** upgrade to version "26.0.23" ([ab65cce](https://github.com/typegoose/typegoose/commit/ab65cce8d32c3969acfe0d47a4be42bcbd6e0074))
+* **@types/lodash:** upgrade to version "4.14.170" ([96be5b4](https://github.com/typegoose/typegoose/commit/96be5b495de98b175b53cde5f42a94a09efe9248))
+* **@types/node:** upgrade to version "12.12.6" ([0b91f99](https://github.com/typegoose/typegoose/commit/0b91f99f2ace3eb70903a3407ed9e50a90967743))
+* **@types/semver:** upgrade to version "7.3.6" ([7e60b5c](https://github.com/typegoose/typegoose/commit/7e60b5c41eef15ea48004198f0dd74bb4179a0d1))
+* **@typescript-eslint/*:** upgrade to version "4.25.0" ([e768711](https://github.com/typegoose/typegoose/commit/e768711e817fb106dd5df10ed19981050c863139))
+* **commitlint:** upgrade to version "12.1.4" ([7e29e40](https://github.com/typegoose/typegoose/commit/7e29e4062e3d9285b113fba58d24d366242b7f56))
+* **eslint:** upgrade to version "7.27.0" ([0db5b74](https://github.com/typegoose/typegoose/commit/0db5b74574fe34f5b9fabe954569cd145859a0b8))
+* **jest:** upgrade to version "27.0.1" ([351ace3](https://github.com/typegoose/typegoose/commit/351ace32bede661b39ba5765fb2e3b6dec6c43ad))
+* **lint-staged:** upgrade to version "11.0.0" ([c8e6c13](https://github.com/typegoose/typegoose/commit/c8e6c1314f64f9d1b85ba1025dc3ded436cbef4a))
+* **semantic-release:** upgrade to version "17.4.3" ([ed4cbfc](https://github.com/typegoose/typegoose/commit/ed4cbfce8a67e18692d2de1436ecaac72bbae773))
+* **tslib:** upgrade to version "2.2.0" ([edd2581](https://github.com/typegoose/typegoose/commit/edd2581db6e572bbd7286a307ed3fcf7761ca140))
+* **typescript:** upgrade to version "4.3.2" ([ee66bc6](https://github.com/typegoose/typegoose/commit/ee66bc689adc9c3b878ffd91f1ba203be495abea))
+
+
+### Style
+
+* **eslintrc:** disable rule "@typescript-eslint/no-non-null-assertion" ([38a69d2](https://github.com/typegoose/typegoose/commit/38a69d2ee4944ad62796360096cb35b79bfa7d2d))
+* **hooks:** disable rule "@typescript-eslint/no-unused-vars" for file ([bf61ecb](https://github.com/typegoose/typegoose/commit/bf61ecb3938098f62479d340a61db212df4e1be4))
+* **processProp:** disable function "optionDeprecation" ([90955ab](https://github.com/typegoose/typegoose/commit/90955ab4304d698c6951a93d646346dc3b51194b))
+* **typegoose:** remove non-null assertion ([0413613](https://github.com/typegoose/typegoose/commit/0413613e28267d244f26f1477f712033c3fbbb35))
+* **utils:** remove unused parameters from "mergeWith" ([06df924](https://github.com/typegoose/typegoose/commit/06df924719abe0e287ddee7af892ba5fe3704ff3))
+
+## [8.0.0-beta.10](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.9...v8.0.0-beta.10) (2021-05-29)
+
+
+### Fixes
+
+* **typegoose:** fix lowest supported mongoose version ([90d2c2f](https://github.com/typegoose/typegoose/commit/90d2c2ffc56a2450b08158927d3f34becb13a9a8))
+
+## [8.0.0-beta.9](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.8...v8.0.0-beta.9) (2021-05-14)
+
+
+### Dependencies
+
+* **mongoose:** upgrade to version "5.12.9" ([3cc88ae](https://github.com/typegoose/typegoose/commit/3cc88aeda1f1703e32605893a0ecf48f9656d1f6))
+
+## [8.0.0-beta.8](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.7...v8.0.0-beta.8) (2021-05-14)
+
+
+### Features
+
+* **utils:** move E019 Error into its own class to confuse less ([6ad5043](https://github.com/typegoose/typegoose/commit/6ad5043ac1a02281cc4215ba2cfaa4ce3421e28c))
+
+## [8.0.0-beta.7](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.6...v8.0.0-beta.7) (2021-05-11)
+
+
+### Dependencies
+
+* **@semantic-release/npm:** upgrade to "7.1.3" ([a4fa9ce](https://github.com/typegoose/typegoose/commit/a4fa9cec4bd7456bbe5a29a1a4c45a15a60b49d3))
+* **commitlint:** upgrade to "12.1.1" ([6442141](https://github.com/typegoose/typegoose/commit/6442141963e919ad5c830c98027baff156faefe6))
+* **eslint:** upgrade to "7.26.0" ([601814d](https://github.com/typegoose/typegoose/commit/601814dfad2ae1620818c339a730f283956154df))
+* **prettier:** upgrade to "2.3.0" ([13058c1](https://github.com/typegoose/typegoose/commit/13058c133c5dd943267c77311276bd8b3a443220))
+
+## [8.0.0-beta.6](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.5...v8.0.0-beta.6) (2021-05-11)
+
+
+### Style
+
+* **schema:** add comment on why an line is necessary ([d38aa5a](https://github.com/typegoose/typegoose/commit/d38aa5a521c178d91ecd3978b0868046f00327ec))
+* **schema:** remove "as any" cast ([d9b2f24](https://github.com/typegoose/typegoose/commit/d9b2f247c84924b09f882d32ae7ec16b8c33e83b))
+
+## [8.0.0-beta.5](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.4...v8.0.0-beta.5) (2021-04-16)
+
+
+### Features
+
+* use customName and automaticName from buildSchema ([#502](https://github.com/typegoose/typegoose/issues/502)) ([9eab528](https://github.com/typegoose/typegoose/commit/9eab528e5066c064effedb0c272b52607e7e826c))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to version "5.12.4" ([c3b7ce1](https://github.com/typegoose/typegoose/commit/c3b7ce179debaaac5c231fce029363c608133d6a))
+
+
+### Fixes
+
+* **types:** add "QueryHelpers" to "DocumentType" ([f4dba22](https://github.com/typegoose/typegoose/commit/f4dba22ee4965a1c8afadf800ee4cdf8964445a1))
+
+
+### Style
+
+* **hooks:** update comment ([9302e62](https://github.com/typegoose/typegoose/commit/9302e6287e60f56fb9cf4cf37136064724fcce5f))
+* **index:** update tsdoc ([f418ffa](https://github.com/typegoose/typegoose/commit/f418ffacd74d3b062656ae32fac6fa427dd8fdba))
+* **modelOptions:** update tsdoc ([ae1f1da](https://github.com/typegoose/typegoose/commit/ae1f1da769340a03b45353612d81ede4cb081a6a))
+* **plugin:** update tsdoc ([b984dc1](https://github.com/typegoose/typegoose/commit/b984dc195c4d9c4b78b6eb1e84d88d2918d0c032))
+* **prop:** update tsdoc ([fff099b](https://github.com/typegoose/typegoose/commit/fff099b5eeac7c451c84d46c658ad2cbd5763471))
+* **queryMethod:** update tsdoc ([e911c7b](https://github.com/typegoose/typegoose/commit/e911c7be3266e64898a6a47acf42d3b95c2de100))
+* **typegoose:** update tsdoc ([c277d93](https://github.com/typegoose/typegoose/commit/c277d9371143c78e0a199ed1c9e94d3d483d3284))
+* **types:** fix lint ([087091c](https://github.com/typegoose/typegoose/commit/087091c029a776c504068bc917db658402f778b1))
+* **types:** update tsdoc ([0c91bb5](https://github.com/typegoose/typegoose/commit/0c91bb5a85fa2eac48ca7996a0734b94869fbdd7))
+* **utils:** fix typos in comments ([6e8d2d0](https://github.com/typegoose/typegoose/commit/6e8d2d0da3aecfce98511fd54147a0d12a721130))
+* **utils:** remove "as any" for "SchemaTypeOptions" & "OptionsConstructor" ([7b5250a](https://github.com/typegoose/typegoose/commit/7b5250af7ebfdceafdbe8120bb6e0400cc562528))
+
+## [8.0.0-beta.4](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.3...v8.0.0-beta.4) (2021-03-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* **processProp:** "ref" and "refPath" now use "mapArrayOptions" that means that some options might be mapped differently
+
+### Features
+
+* **processProp:** use "mapArrayOptions" for "ref" and "refPath" ([b39eff9](https://github.com/typegoose/typegoose/commit/b39eff9367e6910515944a140d7c939dddc532e3)), closes [typegoose/typegoose#513](https://github.com/typegoose/typegoose/issues/513)
+
+## [8.0.0-beta.3](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.2...v8.0.0-beta.3) (2021-03-30)
+
+
+### Dependencies
+
+* lockfile maintenance ([3486ae3](https://github.com/typegoose/typegoose/commit/3486ae35b21bc3cb2690a78e46f4f28b13c9480c))
+* **@semantic-release/release-notes-generator:** upgrade to version "9.0.2" ([c0b2a77](https://github.com/typegoose/typegoose/commit/c0b2a776c04be9c2d52bd977b7052e216208bed1))
+* **@types/jest:** upgrade to version "26.0.22" ([e7d4ef1](https://github.com/typegoose/typegoose/commit/e7d4ef177c12dd9ba023e096d27d2a5b0a8e3bd9))
+* **@types/node:** upgrade to "10.17.56" ([cc23392](https://github.com/typegoose/typegoose/commit/cc2339276163be7b4130140b70a7798956a7f1db))
+* **eslint:** upgrade to version "7.23.0" and plugins ([bf18717](https://github.com/typegoose/typegoose/commit/bf18717dc5187191ee70c9be4b8f6a07370cf618))
+* **husky:** upgrade to version "6.0.0" ([e20983b](https://github.com/typegoose/typegoose/commit/e20983bf1f0889ee791ef3091a91019fc71d6b1c))
+* **mongodb-memory-server:** upgrade to version "6.9.6" ([fb28d1d](https://github.com/typegoose/typegoose/commit/fb28d1d9c6bbf1d091baaa77f7225bd1ab199ab7))
+* **mongoose:** change from "^" to "~" until types are fixed ([b651113](https://github.com/typegoose/typegoose/commit/b651113314a24801c11fddb786444bcb09dfbe38))
+* **semantic-release:** upgrade to version "17.4.2" ([283afb1](https://github.com/typegoose/typegoose/commit/283afb15427650941236dce9583b4315152a6e36))
+* **ts-jest:** upgrade to version "26.5.4" ([047051b](https://github.com/typegoose/typegoose/commit/047051bc0bb6c280c82914ae4a13e7e733faa02d))
+* **typescript:** upgrade to version "4.2.3" ([26a17a3](https://github.com/typegoose/typegoose/commit/26a17a3fd729cf70bc3fd56e59b8856bd6327246))
+
+## [8.0.0-beta.2](https://github.com/typegoose/typegoose/compare/v8.0.0-beta.1...v8.0.0-beta.2) (2021-03-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* Changing types from unofficial to official is an breaking change
+
+### Features
+
+* Update to work with mongoose 5.11 ([6cdfb0f](https://github.com/typegoose/typegoose/commit/6cdfb0fa889cbf6aea52e1bb8de9975f129e4136))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to version "5.11.18" ([775f44e](https://github.com/typegoose/typegoose/commit/775f44e117f89f372b6d3f4b0e839a0f0a127d92))
+
+
+### Fixes
+
+* **defaultClasses:** convert "Base" into an interface ([2071aa7](https://github.com/typegoose/typegoose/commit/2071aa73ceb6d4894e251dc54232a5b8a5375be9))
+* **types:** re-enable QueryHelpers for official types ([99071b1](https://github.com/typegoose/typegoose/commit/99071b14a2b50128df6a6f3dc101194edcb27d24))
+
+
+### Style
+
+* **types:** remove unused comment ([23d9e2a](https://github.com/typegoose/typegoose/commit/23d9e2a17d9d07871501d5d7cf27e90903eff4f7))
+* **utils:** update comments for mongoose 5.11.19 ([74e1196](https://github.com/typegoose/typegoose/commit/74e119618e5d987bd952badb7de3a122511dfa39))
+
+## [8.0.0-beta.1](https://github.com/typegoose/typegoose/compare/v7.5.0...v8.0.0-beta.1) (2021-03-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **prop:** Removing deprecated options "items", "of", "refType"
+* **prop:** Removing deprecated function "mapProp"
+* **prop:** Removing deprecated function "arrayProp"
+
+### Features
+
+* **prop:** remove "arrayProp" ([8a5b337](https://github.com/typegoose/typegoose/commit/8a5b337fdc4de282534ad2226e26cec65375f452)), closes [#258](https://github.com/typegoose/typegoose/issues/258)
+* **prop:** remove "mapProp" ([9e913b8](https://github.com/typegoose/typegoose/commit/9e913b87bd7faa81cff2102c22b05b2230ea75a4)), closes [#258](https://github.com/typegoose/typegoose/issues/258)
+* **prop:** remove deprecated options ([c27d2a0](https://github.com/typegoose/typegoose/commit/c27d2a0481d03e864803b912348061257228a8c3)), closes [#257](https://github.com/typegoose/typegoose/issues/257)
+
+
+### Reverts
+
+* "release: v7.6.0-beta.1" ([8116a7d](https://github.com/typegoose/typegoose/commit/8116a7dd5db3c1e3680edd9b97f707c3b3513e7f))
+
+
+### Dependencies
+
+* update yarn.lock ([fc17dc5](https://github.com/typegoose/typegoose/commit/fc17dc58c08bdce096ade6d58bc004a54b0784fd))
+
+### [7.6.3](https://github.com/typegoose/typegoose/compare/v7.6.2...v7.6.3) (2021-07-10)
+
+
+### Fixes
+
+* **dependencies:** lock "@types/mongoose" version to 5.10 minor in dev and peer dependencies ([#574](https://github.com/typegoose/typegoose/issues/574)) ([c7e49bb](https://github.com/typegoose/typegoose/commit/c7e49bb531c458a1adf0acecc495205de0451357))
+
 ### [7.6.2](https://github.com/typegoose/typegoose/compare/v7.6.1...v7.6.2) (2021-07-07)
 
 
@@ -36,6 +389,7 @@
 * **typegoose:** update tsdoc ([c277d93](https://github.com/typegoose/typegoose/commit/c277d9371143c78e0a199ed1c9e94d3d483d3284))
 * **types:** update tsdoc ([0c91bb5](https://github.com/typegoose/typegoose/commit/0c91bb5a85fa2eac48ca7996a0734b94869fbdd7))
 * **utils:** fix typos in comments ([6e8d2d0](https://github.com/typegoose/typegoose/commit/6e8d2d0da3aecfce98511fd54147a0d12a721130))
+
 
 ## [7.5.0](https://github.com/typegoose/typegoose/compare/v7.4.8...v7.5.0) (2021-03-01)
 

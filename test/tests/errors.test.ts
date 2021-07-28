@@ -342,10 +342,10 @@ it('should error if "refPath" is not of type string [TypeError]', () => {
   }
 });
 
-it('should error if "ref" is used with WhatIsIt.MAP [TypeError]', () => {
+it('should error if "ref" is used with unknown WhatIsIt [TypeError]', () => {
   try {
     class TestRefSwitchError {
-      @prop({ ref: 'hi' }, WhatIsIt.MAP)
+      @prop({ ref: 'hi' }, -1)
       public hello: string;
     }
 
