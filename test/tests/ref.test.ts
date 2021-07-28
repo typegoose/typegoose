@@ -312,7 +312,7 @@ it('should map options correctly on an ref-array', async () => {
 
   const RefArrayOptionsMappingNestedModel = getModelForClass(RefArrayOptionsMappingNested);
   const RefArrayOptionsMappingModel = getModelForClass(RefArrayOptionsMapping);
-  const schema = RefArrayOptionsMappingModel.schema;
+  const schema: mongoose.Schema = RefArrayOptionsMappingModel.schema; // the definition ":mongoose.Schema" is there, because `.schema` is somehow "any"
 
   expect(RefArrayOptionsMappingNestedModel.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
 
