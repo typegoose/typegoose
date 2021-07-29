@@ -9,10 +9,6 @@ interface ExtraConnectionConfig {
 
 // to not duplicate code
 const staticOptions: mongoose.ConnectOptions = {
-  useNewUrlParser: true,
-  useFindAndModify: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
   autoIndex: true,
 };
 
