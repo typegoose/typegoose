@@ -504,7 +504,7 @@ it('should allow Maps with SubDocument "Map<string SubDocument>"', async () => {
   const casterNestingPath = nestingPath['$__schemaType'];
 
   expect(nestingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
-  expect(casterNestingPath).toBeInstanceOf(mongoose.Schema.Types.Embedded);
+  expect(casterNestingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
   expect(casterNestingPath.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
   expect(casterNestingPath.schema.paths).not.toHaveProperty('_id');
 });
