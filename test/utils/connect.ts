@@ -35,7 +35,7 @@ export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<
   const connectionString = `${process.env.MONGO_URI}/${extraConfig.dbName ?? config.DataBase}`;
 
   if (extraConfig.createNewConnection) {
-    connection = mongooseInstance.createConnection(connectionString, options);
+    connection = await mongooseInstance.createConnection(connectionString, options).asPromise();
   } else {
     await mongoose.connect(connectionString, options);
     connection = mongooseInstance.connection;
