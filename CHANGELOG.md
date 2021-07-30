@@ -1,3 +1,10 @@
+### [8.0.1](https://github.com/typegoose/typegoose/compare/v8.0.0...v8.0.1) (2021-07-30)
+
+
+### Style
+
+* **typegoose:** add link to mongoose issue for "Passthrough" class ([3fd6f4f](https://github.com/typegoose/typegoose/commit/3fd6f4f3a61dc5e000e4d8726d18735bbe4f3303))
+
 ## [8.0.0](https://github.com/typegoose/typegoose/compare/v7.6.3...v8.0.0) (2021-07-28)
 
 
