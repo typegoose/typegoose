@@ -23,7 +23,8 @@ it(
     ]);
 
     const user = await UserModel.create({
-      _id: mongoose.Types.ObjectId(),
+      // this is explicitly called to test if manually defining is possible (also types)
+      _id: new mongoose.Types.ObjectId(),
       firstName: 'John',
       lastName: 'Doe',
       age: 20,
@@ -137,7 +138,7 @@ it('should create a user with [Plugin].findOrCreate', async () => {
 
   try {
     await UserModel.create({
-      _id: mongoose.Types.ObjectId(),
+      _id: new mongoose.Types.ObjectId(),
       firstName: 'John',
       lastName: 'Doe',
       age: 20,

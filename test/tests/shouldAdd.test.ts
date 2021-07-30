@@ -51,7 +51,7 @@ it('should add and populate the virtual properties', async () => {
   });
   const virtualsub2 = await VirtualSubModel.create({
     dummy: 'virtualSub2',
-    virtual: mongoose.Types.ObjectId() as Ref<any>,
+    virtual: new mongoose.Types.ObjectId(),
   });
   const virtualsub3 = await VirtualSubModel.create({
     dummy: 'virtualSub3',
