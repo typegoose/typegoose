@@ -786,7 +786,7 @@ It is not recommended to use this class, it should always be another class if ne
 The `Passthrough` class is, like the name implies, to pass-through an schema definition directly, without "wrapping" it in a `new Schema({}` call.
 
 :::note
-It should be noted that using this method (even in plain mongoose) will result in these paths to become `mongoose.Schema.Types.Mixed`, and also no typegoose transformations or warnings will be applied to what is inside `Passthrough` (like `type: () => Class` will not be translated, it will stay as-is)
+It should be noted that using this method (even in plain mongoose) will result in these paths to become `mongoose.Schema.Types.Mixed` (see [Mongoose#7181](https://github.com/Automattic/mongoose/issues/7181)), and also no typegoose transformations or warnings will be applied to what is inside `Passthrough` (like `type: () => Class` will not be translated, it will stay as-is)
 :::
 
 The following example is what it looks like in typegoose, and what it would look like in plain mongoose:
