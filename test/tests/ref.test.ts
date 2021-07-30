@@ -433,7 +433,7 @@ it('Reference-Maps should work and be populated', async () => {
     expect(v).toBeInstanceOf(mongoose.Types.ObjectId);
   });
 
-  await found.populate('mapped.$*').execPopulate();
+  await found.populate('mapped.$*');
 
   const found_doc1 = found.mapped.get('1');
   assertion(isDocument(found_doc1));

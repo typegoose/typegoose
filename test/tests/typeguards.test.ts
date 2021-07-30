@@ -24,7 +24,7 @@ describe('isDocument / isDocumentArray', () => {
 
     UserMaster.subAccounts.push(UserSub._id);
 
-    await UserMaster.populate('subAccounts').execPopulate();
+    await UserMaster.populate('subAccounts');
 
     if (isDocumentArray(UserMaster.subAccounts)) {
       expect(UserMaster.subAccounts).toHaveLength(1);
@@ -47,7 +47,7 @@ describe('isDocument / isDocumentArray', () => {
 
     UserSub.master = UserMaster._id;
 
-    await UserSub.populate('master').execPopulate();
+    await UserSub.populate('master');
 
     if (isDocument(UserSub.master)) {
       expect(UserSub.master.name).toEqual('master');
@@ -109,11 +109,11 @@ describe('isDocument / isDocumentArray', () => {
       master: User2._id,
     });
 
-    await User3.populate('master').execPopulate();
+    await User3.populate('master');
 
     if (isDocument(User3.master)) {
       // User3.master === User2
-      await User3.master.populate('master').execPopulate();
+      await User3.master.populate('master');
 
       if (isDocument(User3.master.master)) {
         // User3.master.master === User1
@@ -130,7 +130,7 @@ describe('isDocument / isDocumentArray', () => {
       populate: {
         path: 'master',
       },
-    }).execPopulate();
+    });
   });
 
   it('should handle recursive populations - single populate', async () => {
@@ -151,7 +151,7 @@ describe('isDocument / isDocumentArray', () => {
       populate: {
         path: 'master',
       },
-    }).execPopulate();
+    });
 
     if (isDocument(User3.master) && isDocument(User3.master.master)) {
       // User3.master === User2 && User3.master.master === User1
