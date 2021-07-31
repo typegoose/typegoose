@@ -13,10 +13,6 @@ A: The original author szokodiakos (github name) [has abandoned the project](htt
 
 A: Yes it is, but not on the main repository anymore because of [What happened to the original author?](#what-happened-to-the-original-author) and [Github Permissions](https://help.github.com/en/articles/permission-levels-for-a-user-account-repository) (TL;DR: a collaborator cannot add another collaborater, only the owner can)
 
-### Why is the original project not archived?
-
-A: Because a collaborator cannot archive a project, only the owner can ([What happened to the original author?](#what-happened-to-the-original-author))
-
 ### Why is the package now released in another package?
 
 (context: from `typegoose` to `@typegoose/typegoose`)  

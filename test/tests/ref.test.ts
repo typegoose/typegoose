@@ -180,8 +180,8 @@ it('check reference with buffer _id', async () => {
 
 it('check typeguards', async () => {
   const idFields = await RefTestModel.create({
-    refField: mongoose.Types.ObjectId(),
-    refArray: [mongoose.Types.ObjectId()],
+    refField: new mongoose.Types.ObjectId(),
+    refArray: [new mongoose.Types.ObjectId()],
     refFieldString: 'test1',
     refArrayString: ['test1', 'test2'],
     refFieldNumber: 1234,
