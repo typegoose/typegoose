@@ -430,10 +430,9 @@ export interface DecoratedPropertyMetadata {
 }
 export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropertyMetadata>;
 
-/*
- copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
+/**
+ * copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
  */
-
 export interface IndexOptions<T> {
   /**
    * Mongoose-specific syntactic sugar, uses ms to convert
