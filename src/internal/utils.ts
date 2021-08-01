@@ -16,7 +16,7 @@ import type {
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
-import { AssertionFallbackError, NoValidClass } from './errors';
+import { AssertionFallbackError, InvalidWhatIsItError, NoValidClass } from './errors';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -138,7 +138,7 @@ export function initProperty(name: string, key: string, whatis: WhatIsIt) {
       break;
     default:
       /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-      throw new TypeError(`"${whatis}"(whatis(subSchema)) is invalid for "${name}.${key}" [E013]`);
+      throw new InvalidWhatIsItError(whatis, name, key, 'whatis(initProperty)');
   }
 
   return schemaProp;

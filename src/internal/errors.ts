@@ -42,3 +42,10 @@ export class AssertionFallbackError extends Error {
     super('Assert failed - no custom error [E019]');
   }
 }
+
+/** Error for when an unknown WhatIsIt is passed to an switch, gets thrown in the default case */
+export class InvalidWhatIsItError extends Error {
+  constructor(whatisit: unknown, name: string, key: string, where: string) {
+    super(`"${whatisit}"(${where}) is invalid for "${name}.${key}" [E013]`);
+  }
+}

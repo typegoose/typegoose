@@ -21,6 +21,7 @@ import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import { assertion, assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
+import { InvalidWhatIsItError } from '../../src/internal/errors';
 
 it('should error if an non-existing(runtime) type is given [InvalidTypeError]', () => {
   try {
@@ -353,7 +354,7 @@ it('should error if "ref" is used with unknown WhatIsIt [TypeError]', () => {
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
+    expect(err).toBeInstanceOf(InvalidWhatIsItError);
   }
 });
 

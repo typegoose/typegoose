@@ -142,9 +142,7 @@ This Error should never be thrown if Typescript is used, it throws if the `Type`
 
 ### Invalid WhatIsIt used [E013]
 
-Error:
-- `"${propKind}"(whatis(subSchema)) is invalid for "${name}.${key}" [E013]`
-- `"whatis" is not supplied OR doesn\'t have a case yet! [E013]`
+Error: `"${whatisit}"(${where}) is invalid for "${name}.${key}" [E013]`
 
 Details:  
 A Value not specified by the enum `WhatIsIt` was provided (no case matched), [read more about it here](../api/decorators/prop.md#whatisit)

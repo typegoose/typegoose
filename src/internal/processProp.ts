@@ -10,7 +10,7 @@ import {
 } from '../types';
 import { DecoratorKeys, WhatIsIt } from './constants';
 import { schemas } from './data';
-import { InvalidTypeError, NotAllVPOPElementsError, NotNumberTypeError, NotStringTypeError } from './errors';
+import { InvalidTypeError, InvalidWhatIsItError, NotAllVPOPElementsError, NotNumberTypeError, NotStringTypeError } from './errors';
 import * as utils from './utils';
 
 /**
@@ -190,7 +190,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         return;
       default:
         /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-        throw new Error(`"${propKind}"(whatis(primitive)) is invalid for "${name}.${key}" [E013]`);
+        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(Passthrough)');
     }
   }
 
@@ -230,7 +230,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         return;
       default:
         /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-        throw new Error(`"${propKind}"(whatis(primitive)) is invalid for "${name}.${key}" [E013]`);
+        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(get/set)');
     }
   }
 
@@ -436,7 +436,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         return;
       default:
         /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-        throw new Error(`"${propKind}"(whatis(primitive)) is invalid for "${name}.${key}" [E013]`);
+        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(primitive)');
     }
   }
 
@@ -486,7 +486,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       return;
     default:
       /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-      throw new Error(`"${propKind}"(whatis(subSchema)) is invalid for "${name}.${key}" [E013]`);
+      throw new InvalidWhatIsItError(propKind, name, key, 'whatis(subSchema)');
   }
 }
 
