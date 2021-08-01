@@ -3,8 +3,8 @@ import { getModelForClass, modelOptions, prop } from '../../src/typegoose';
 @modelOptions({
   schemaOptions: {
     discriminatorKey: 'width',
-    collection: 'buildings'
-  }
+    collection: 'buildings',
+  },
 })
 export class Building {
   @prop({ default: 100 })
@@ -31,8 +31,8 @@ export class Garage extends Building {
 
 @modelOptions({
   schemaOptions: {
-    collection: 'skyscrapers'
-  }
+    collection: 'skyscrapers',
+  },
 })
 export class Skyscraper extends OfficeBuilding {
   @prop({ default: 'Some cool string' })

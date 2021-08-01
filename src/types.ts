@@ -1,24 +1,24 @@
 import type * as mongoose from 'mongoose';
-
-import type { Base } from './defaultClasses';
 import type { Severity, WhatIsIt } from './internal/constants';
 
 /**
  * Get the Type of an instance of a Document with Class properties
  * @example
  * ```ts
- * class Name {}
- * const NameModel = Name.getModelForClass(Name);
+ * class ClassName {}
+ * const NameModel = getModelForClass(ClassName);
  *
- * const t: DocumentType<Name> = await NameModel.create({} as Partitial<Name>);
+ * const doc: DocumentType<ClassName> = await NameModel.create({});
  * ```
  */
-export type DocumentType<T> = (T extends Base ? Omit<mongoose.Document, '_id'> & T : mongoose.Document & T) & IObjectWithTypegooseFunction;
-// I tested "T & (T extends ? : )" already, but it didnt work out
+export type DocumentType<T, QueryHelpers = BeAnObject> = (T extends { _id: unknown }
+  ? mongoose.Document<T['_id'], QueryHelpers> & T
+  : mongoose.Document<any, QueryHelpers> & T) &
+  IObjectWithTypegooseFunction;
 /**
  * Used Internally for ModelTypes
  */
-export type ModelType<T, QueryHelpers = {}> = mongoose.Model<DocumentType<T>, QueryHelpers>;
+export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T, QueryHelpers>, QueryHelpers>;
 /**
  * Any-param Constructor
  */
@@ -26,20 +26,42 @@ export type AnyParamConstructor<T> = new (...args: any) => T;
 /**
  * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
  */
-export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = {}> = ModelType<InstanceType<U>, QueryHelpers> & U;
+export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject> = ModelType<InstanceType<U>, QueryHelpers> & U;
 
 export type Func = (...args: any[]) => any;
+
+/**
+ * The Type of a function to generate a custom model name.
+ */
+export type CustomNameFunction = (options: IModelOptions) => string;
 
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
 
 export type ValidatorFunction = (value: any) => boolean | Promise<boolean>;
+export interface ValidatorFunctionMessageParam {
+  validator: ValidatorFunction;
+  message(...args: any[]): string;
+  type: string;
+  path: string;
+  value: any;
+}
 export interface ValidatorOptions {
   validator: ValidatorFunction;
-  message?: string;
+  // the function for message is with "any" because i (hasezoey) am not sure if the type is always "ValidatorFunctionMessageParam"
+  message?: string | ((props: ValidatorFunctionMessageParam) => string) | ((...args: any[]) => string);
 }
 export type Validator = ValidatorFunction | RegExp | ValidatorOptions | ValidatorOptions[];
 
-export type DeferredFunc<T = any> = () => T;
+/**
+ * Defer an reference with an function (or as other projects call it "Forward declaration")
+ * @param type This is just to comply with the common pattern of `type => ActualType`
+ */
+export type DeferredFunc<T = any> = (...args: unknown[]) => T;
+/**
+ * Dynamic Functions, since mongoose 4.13
+ * @param doc The Document current document
+ */
+export type DynamicStringFunc<T extends AnyParamConstructor<any>> = (doc: DocumentType<T>) => string;
 
 export interface BasePropOptions {
   [key: string]: any;
@@ -54,7 +76,7 @@ export interface BasePropOptions {
    */
   required?: RequiredType;
   /** Only accept Values from the Enum(|Array) */
-  enum?: string[] | object;
+  enum?: string[] | BeAnObject;
   /** Add "null" to the enum array */
   addNullToEnum?: boolean;
   /** Give the Property a default Value */
@@ -92,7 +114,7 @@ export interface BasePropOptions {
    */
   _id?: boolean;
   /**
-   * Set an Setter (Non-Virtual) to pre-process your value
+   * Set a Setter (Non-Virtual) to pre-process your value
    * (when using get/set both are required)
    * Please note that the option `type` is required, if get/set saves a different value than what is defined
    * @param value The Value that needs to get modified
@@ -113,7 +135,7 @@ export interface BasePropOptions {
    */
   set?(val: any): any;
   /**
-   * Set an Getter (Non-Virtual) to Post-process your value
+   * Set a Getter (Non-Virtual) to Post-process your value
    * (when using get/set both are required)
    * Please note that the option `type` is required, if get/set saves a different value than what is defined
    * @param value The Value that needs to get modified
@@ -137,10 +159,7 @@ export interface BasePropOptions {
    * This may be needed if get/set is used
    * (this sets the type how it is saved to the DB)
    */
-  type?:
-  | DeferredFunc<AnyParamConstructor<any>>
-  | DeferredFunc<unknown>
-  | unknown;
+  type?: DeferredFunc<AnyParamConstructor<any>> | DeferredFunc<unknown> | unknown;
   /**
    * Make a property read-only
    * @example
@@ -168,18 +187,12 @@ export interface BasePropOptions {
   /**
    * This option as only an effect when the plugin `mongoose-autopopulate` is used
    */
-  // tslint:disable-next-line:ban-types
+  // eslint-disable-next-line @typescript-eslint/ban-types
   autopopulate?: boolean | Function | KeyStringAny;
   /** Reference an other Document (you should use Ref<T> as Prop type) */
-  ref?: DeferredFunc | string | AnyParamConstructor<any>;
+  ref?: DeferredFunc<string | AnyParamConstructor<any> | DynamicStringFunc<any>> | string | AnyParamConstructor<any>;
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
-  /**
-   * Override the ref's type
-   * {@link BasePropOptions.type} can be used too
-   * @default ObjectId
-   */
-  refType?: NonNullable<BasePropOptions['type']> | RefType;
   /**
    * Set the Nested Discriminators
    * Note: "_id: false" as an prop option dosnt work here
@@ -187,13 +200,7 @@ export interface BasePropOptions {
   discriminators?: DeferredFunc<(AnyParamConstructor<any> | DiscriminatorObject)[]>;
 }
 
-export interface ArrayPropOptions extends BasePropOptions {
-  /**
-   * What array is it?
-   * {@link BasePropOptions.type} can be used too
-   * Note: this is only needed because Reflect & refelact Metadata can't give an accurate Response for an array
-   */
-  items?: NonNullable<BasePropOptions['type']>;
+export interface InnerOuterOptions {
   /**
    * Use this to define inner-options
    * Use this if the auto-mapping is not correct or for plugin options
@@ -208,20 +215,31 @@ export interface ArrayPropOptions extends BasePropOptions {
    * Please open a new issue if some option is mismatched or not existing / mapped
    */
   outerOptions?: KeyStringAny;
+}
+
+export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
   /**
    * How many dimensions this Array should have
    * (needs to be higher than 0)
    * @default 1
    */
   dim?: number;
+  /**
+   * Set if Non-Array values will be cast to an array
+   * https://mongoosejs.com/docs/api/schemaarray.html#schemaarray_SchemaArray.options
+   * NOTE: This option currently only really affects "DocumentArray" and not normal arrays, https://github.com/Automattic/mongoose/issues/10398
+   * @example
+   * ```ts
+   * new Model({ array: "string" });
+   * // will be cast to equal
+   * new Model({ array: ["string"] });
+   * ```
+   * @default true
+   */
+  castNonArrays?: boolean;
 }
 
-export interface MapPropOptions extends BasePropOptions {
-  /**
-   * The type of the Map (Map<string, THIS>)
-   */
-  of?: NonNullable<BasePropOptions['type']>;
-}
+export interface MapPropOptions extends BasePropOptions, InnerOuterOptions {}
 
 export interface ValidateNumberOptions {
   /** Only allow numbers that are higher than this */
@@ -253,12 +271,12 @@ export interface TransformStringOptions {
 }
 
 export interface VirtualOptions {
-  /** Reference an other Document (you should use Ref<T> as Prop type) */
+  /** Reference another Document (Ref<T> should be used as property type) */
   ref: NonNullable<BasePropOptions['ref']>;
   /** Which property(on the current-Class) to match `foreignField` against */
-  localField: string;
+  localField: string | DynamicStringFunc<any>;
   /** Which property(on the ref-Class) to match `localField` against */
-  foreignField: string;
+  foreignField: string | DeferredFunc<string>;
   /** Return as One Document(true) or as Array(false) */
   justOne?: boolean;
   /** Return the number of Documents found instead of the actual Documents */
@@ -272,25 +290,17 @@ export interface VirtualOptions {
 export type PropOptionsForNumber = BasePropOptions & ValidateNumberOptions;
 export type PropOptionsForString = BasePropOptions & TransformStringOptions & ValidateStringOptions;
 
-export type RefType =
-  | number
-  | string
-  | mongoose.Types.ObjectId
-  | Buffer
-  | undefined
-  | typeof mongoose.Schema.Types.Number
-  | typeof mongoose.Schema.Types.String
-  | typeof mongoose.Schema.Types.Buffer
-  | typeof mongoose.Schema.Types.ObjectId;
+export type RefType = mongoose.RefType;
 
 /**
  * Reference another Model
  */
-// export type Ref<R, T extends RefType = mongoose.Types.ObjectId> = R | T; // old type, kept for easy revert
 export type Ref<
-  R,
-  T extends RefType = (R extends { _id?: RefType; } ? NonNullable<R['_id']> : mongoose.Types.ObjectId) | undefined
-  > = R | T;
+  PopulatedType,
+  RawId extends mongoose.RefType =
+    | (PopulatedType extends { _id?: mongoose.RefType } ? NonNullable<PopulatedType['_id']> : mongoose.Types.ObjectId)
+    | undefined
+> = mongoose.PopulatedDoc<PopulatedType, RawId>;
 
 /**
  * An Function type for a function that doesn't have any arguments and doesn't return anything
@@ -321,12 +331,13 @@ export interface IModelOptions {
 
 export interface ICustomOptions {
   /**
-   * Set the modelName of the class
-   *
-   * if "automaticName" is true it sets a *suffix* instead of the whole name
+   * Set the modelName of the class.
+   * If it is a function, the function will be executed. The function will override
+   * "automaticName". If "automaticName" is true and "customName" is a string, it
+   * sets a *suffix* instead of the whole name.
    * @default schemaOptions.collection
    */
-  customName?: string;
+  customName?: string | CustomNameFunction;
   /**
    * Enable Automatic Name generation of a model
    * Example:
@@ -349,11 +360,11 @@ export interface DecoratedPropertyMetadata {
   /** Target Class */
   target: AnyParamConstructor<any>;
   /** Property name */
-  key: string;
+  key: string | symbol;
   /** What is it for a prop type? */
   whatis?: WhatIsIt;
 }
-export type DecoratedPropertyMetadataMap = Map<string, DecoratedPropertyMetadata>;
+export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropertyMetadata>;
 
 /*
  copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
@@ -407,7 +418,7 @@ export interface IndexOptions<T> {
    * Creates a partial index based on the given filter object (MongoDB 3.2 or higher)
    */
   partialFilterExpression?: any;
-  collation?: object;
+  collation?: BeAnObject;
   default_language?: string;
   language_override?: string;
 
@@ -415,9 +426,7 @@ export interface IndexOptions<T> {
   uppercase?: boolean; // whether to always call .toUpperCase() on the value
   trim?: boolean; // whether to always call .trim() on the value
 
-  weights?: {
-    [P in keyof Partial<T>]: number;
-  };
+  weights?: Partial<Record<keyof T, number>>;
 }
 
 /**
@@ -453,7 +462,6 @@ export interface IPluginsArray<T> {
  */
 export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
 
-
 /**
  * Gets the signature (parameters with their types, and the return type) of a function type.
  *
@@ -467,11 +475,11 @@ export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
  * }
  *
  * // Both of the following types will be identical.
- * type SendMessageType = QueryMethod<typeof sendMessage>;
+ * type SendMessageType = AsQueryMethod<typeof sendMessage>;
  * type SendMessageManualType = (recipient: string, sender: string, priority: number, retryIfFails: boolean) => boolean;
  * ```
  */
-export type QueryMethod<T extends (...args: any) => any> = (...args: Parameters<T>) => ReturnType<T>;
+export type AsQueryMethod<T extends (...args: any) => any> = (...args: Parameters<T>) => ReturnType<T>;
 
 /**
  * Used for the Reflection of Query Methods
@@ -512,7 +520,7 @@ export interface IGlobalOptions {
    * Global Options for general Typegoose
    * (There are currently none)
    */
-  globalOptions?: {};
+  globalOptions?: BeAnObject;
 }
 
 export interface IObjectWithTypegooseFunction {
@@ -532,3 +540,16 @@ export interface IPrototype {
 export interface KeyStringAny {
   [key: string]: any;
 }
+
+/**
+ * The Return Type of "utils.getType"
+ */
+export interface GetTypeReturn {
+  type: unknown;
+  dim: number;
+}
+
+/**
+ * This type is for lint error "ban-types"
+ */
+export type BeAnObject = Record<string, any>;

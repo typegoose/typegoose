@@ -1,19 +1,16 @@
 import * as mongoose from 'mongoose';
-
-import { format } from 'util';
 import { logger } from '../logSettings';
 import { buildSchema } from '../typegoose';
 import type {
   AnyParamConstructor,
   DecoratedPropertyMetadataMap,
-  Func,
   IHooksArray,
   IIndexArray,
   IModelOptions,
   IPluginsArray,
   NestedDiscriminatorsMap,
   QueryMethodMap,
-  VirtualPopulateMap
+  VirtualPopulateMap,
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
@@ -32,9 +29,10 @@ import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullO
  */
 export function _buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
-  sch?: mongoose.Schema,
+  sch?: mongoose.Schema<any>,
   opt?: mongoose.SchemaOptions,
-  isFinalSchema: boolean = true
+  isFinalSchema: boolean = true,
+  overwriteOptions?: IModelOptions
 ) {
   assertionIsClass(cl);
 
@@ -43,14 +41,16 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   // Options sanity check
   opt = mergeSchemaOptions(isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt, cl);
 
-  const name = getName(cl);
+  /** used, because when trying to resolve an child, the overwriteOptions for that child are not available */
+  const className = getName(cl);
+  const finalName = getName(cl, overwriteOptions);
 
-  logger.debug('_buildSchema Called for %s with options:', name, opt);
+  logger.debug('_buildSchema Called for %s with options:', finalName, opt);
 
   /** Simplify the usage */
   const Schema = mongoose.Schema;
   const ropt: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) ?? {};
-  const schemaOptions = Object.assign(ropt?.schemaOptions ?? {}, opt);
+  const schemaOptions = Object.assign({}, ropt?.schemaOptions ?? {}, opt);
 
   const decorators = Reflect.getMetadata(DecoratorKeys.PropCache, cl.prototype) as DecoratedPropertyMetadataMap;
 
@@ -60,15 +60,15 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     }
   }
 
-  if (!schemas.has(name)) {
-    schemas.set(name, {});
+  if (!schemas.has(className)) {
+    schemas.set(className, {});
   }
 
   if (!(sch instanceof Schema)) {
-    sch = new Schema(schemas.get(name), schemaOptions);
+    sch = new Schema(schemas.get(className), schemaOptions);
   } else {
     sch = sch.clone();
-    sch.add(schemas.get(name)!);
+    sch.add(schemas.get(className)!);
   }
 
   sch.loadClass(cl);
@@ -76,19 +76,25 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   if (isFinalSchema) {
     /** Get Metadata for Nested Discriminators */
     const disMap: NestedDiscriminatorsMap = Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, cl);
+
     if (disMap instanceof Map) {
       for (const [key, discriminators] of disMap) {
         logger.debug('Applying Nested Discriminators for:', key, discriminators);
 
-        const path: { discriminator?: Func; } = sch.path(key) as any;
-        assertion(!isNullOrUndefined(path), new Error(format('Path "%s" does not exist on Schema of "%s"', key, name)));
-        assertion(typeof path.discriminator === 'function', new Error(format('There is no function called "discriminator" on schema-path "%s" on Schema of "%s"', key, name)));
+        const path = sch.path(key) as mongoose.Schema.Types.DocumentArray;
+        assertion(!isNullOrUndefined(path), new Error(`Path "${key}" does not exist on Schema of "${finalName}"`));
+        assertion(
+          typeof path.discriminator === 'function',
+          new Error(`There is no function called "discriminator" on schema-path "${key}" on Schema of "${finalName}"`)
+        );
 
         for (const { type: child, value: childName } of discriminators) {
-          const childSch = getName(child) === name ? sch : buildSchema(child) as mongoose.Schema & { paths: any; };
+          const childSch = getName(child) === finalName ? sch : buildSchema(child);
 
           const discriminatorKey = childSch.get('discriminatorKey');
+
           if (childSch.path(discriminatorKey)) {
+            // skip this check, otherwise "extends DiscriminatorBase" would not be allowed (discriminators cannot have the discriminator key defined multiple times)
             (childSch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
           }
 
@@ -101,12 +107,14 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     {
       /** Get Metadata for PreHooks */
       const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
+
       if (Array.isArray(preHooks)) {
         preHooks.forEach((obj) => sch!.pre(obj.method, obj.func));
       }
 
       /** Get Metadata for PreHooks */
       const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
+
       if (Array.isArray(postHooks)) {
         postHooks.forEach((obj) => sch!.post(obj.method, obj.func));
       }
@@ -114,6 +122,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
     /** Get Metadata for Virtual Populates */
     const virtuals: VirtualPopulateMap = Reflect.getMetadata(DecoratorKeys.VirtualPopulate, cl);
+
     if (virtuals instanceof Map) {
       for (const [key, options] of virtuals) {
         logger.debug('Applying Virtual Populates:', key, options);
@@ -123,6 +132,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
     /** Get Metadata for indices */
     const indices: IIndexArray<any>[] = Reflect.getMetadata(DecoratorKeys.Index, cl);
+
     if (Array.isArray(indices)) {
       for (const index of indices) {
         logger.debug('Applying Index:', index);
@@ -132,6 +142,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
     /** Get Metadata for Query Methods */
     const queryMethods: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, cl);
+
     if (queryMethods instanceof Map) {
       for (const [funcName, func] of queryMethods) {
         logger.debug('Applying Query Method:', funcName, func);
@@ -141,6 +152,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
     /** Get Metadata for indices */
     const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
+
     if (Array.isArray(plugins)) {
       for (const plugin of plugins) {
         logger.debug('Applying Plugin:', plugin);
@@ -150,12 +162,12 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
     // this method is to get the typegoose name of the model/class if it is user-handled (like buildSchema, then manually mongoose.model)
     sch.method('typegooseName', () => {
-      return name;
+      return finalName;
     });
   }
 
   // add the class to the constructors map
-  constructors.set(name, cl);
+  constructors.set(finalName, cl);
 
   return sch;
 }

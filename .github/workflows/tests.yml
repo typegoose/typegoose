@@ -1,0 +1,62 @@
+name: Node.js Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - '*'
+      - '!gh-pages'
+      # for now, always run
+#     paths: # only run this deploy if an file in the following directories are changed
+#       - 'src/**'
+#       - 'test/**'
+#       - '*.json' # run if an ".json" file in the *root* of the repository is changed
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Run Audit
+        run: (yarn audit || exit 0)
+      - name: Test Compiling Everything
+        run: yarn run build:tests
+      - name: Lint
+        run: yarn run lint
+      - name: Test
+        run: yarn run test:coverage --colors
+        env:
+          CI: true
+      - name: Send Coverage
+        if: matrix.node-version == '14.x'
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+  publish:
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta'
+    needs: [tests]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install node_modules
+        run: yarn install
+      - name: Build
+        run: yarn build
+      - name: Semantic Release (publish to npm)
+        run: yarn semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -48,19 +48,19 @@ export enum DecoratorKeys {
    * Storage location for Nested Discriminators
    * -> Use only for a class
    */
-  NestedDiscriminators = 'typegoose:nestedDiscriminators'
+  NestedDiscriminators = 'typegoose:nestedDiscriminators',
 }
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
 export enum WhatIsIt {
   ARRAY,
   MAP,
-  NONE
+  NONE,
 }
 
 /** Severity levels for soft-warnings */
 export enum Severity {
   ALLOW,
   WARN,
-  ERROR
+  ERROR,
 }

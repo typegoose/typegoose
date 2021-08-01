@@ -16,8 +16,8 @@ it('should merge all parent schema options', async () => {
 it('should set all parent props for nested schemas', async () => {
   const input = {
     mainGarage: {
-      slotsForCars: 3
-    }
+      slotsForCars: 3,
+    },
   } as Skyscraper;
   const instance = await SkyscraperModel.create(input);
 
@@ -34,9 +34,9 @@ it('should set all parent props for nested array items', async () => {
   const input = {
     garagesInArea: [
       {
-        slotsForCars: 2
-      }
-    ]
+        slotsForCars: 2,
+      },
+    ],
   } as Skyscraper;
   const instance = await SkyscraperModel.create(input);
 

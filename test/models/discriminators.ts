@@ -5,7 +5,6 @@ export class DisMain {
   public main1!: string;
 
   @prop({ default: undefined })
-  // tslint:disable-next-line:variable-name
   public __t?: string;
 }
 
@@ -14,7 +13,6 @@ export class DisAbove extends DisMain {
   public above1!: string;
 
   @prop({ default: 'DisAbove' })
-  // tslint:disable-next-line:variable-name
   public __t?: string;
 }
 

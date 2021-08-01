@@ -7,9 +7,9 @@ import { NormalUser, OverwrittenUser } from './../models/overwrittenUser';
 it('should be possible to overwrite an existing model', () => {
   const options = {
     schemaOptions: {
-      collection: 'OverwriteUser'
+      collection: 'OverwriteUser',
     },
-    options: { customName: 'User' }
+    options: { customName: 'User' },
   } as types.IModelOptions;
 
   @modelOptions(options)
@@ -79,4 +79,18 @@ it('should delete model from different connection', async () => {
   expect(constructors.has(name)).toEqual(false);
 
   await connection.close();
+});
+
+it('should delete model with class when normal name is not found in "models"', () => {
+  class CustomNameOnFunctionCall {
+    @prop()
+    public test: string;
+  }
+
+  const model = getModelForClass(CustomNameOnFunctionCall, { options: { customName: 'CustomNameFC' } });
+  expect(model.modelName).toEqual('CustomNameFC');
+  expect(models.has(model.modelName)).toBeTruthy();
+
+  deleteModelWithClass(CustomNameOnFunctionCall);
+  expect(models.has(model.modelName)).toBeFalsy();
 });

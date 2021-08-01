@@ -1,19 +1,19 @@
 import * as findOrCreate from 'mongoose-findorcreate';
+import { isNullOrUndefined } from '../../src/internal/utils';
 import { defaultClasses, DocumentType, getModelForClass, plugin, prop, Ref, ReturnModelType } from '../../src/typegoose';
 import { Car } from './car';
 import { Job } from './job';
 
 export enum Genders {
   MALE = 'male',
-  FEMALE = 'female'
+  FEMALE = 'female',
 }
 
 export enum Role {
   Admin = 'admin',
   User = 'user',
-  Guest = 'guest'
+  Guest = 'guest',
 }
-
 
 @plugin(findOrCreate)
 export class User extends defaultClasses.FindOrCreate {
@@ -22,15 +22,6 @@ export class User extends defaultClasses.FindOrCreate {
 
   @prop({ required: true })
   public lastName!: string;
-
-  public get fullName(): string {
-    return `${this.firstName} ${this.lastName}`;
-  }
-  public set fullName(full: string) {
-    const split = full.split(' ');
-    this.firstName = split[0];
-    this.lastName = split[1];
-  }
 
   @prop({ default: 'Nothing' })
   public nick?: string;
@@ -57,7 +48,7 @@ export class User extends defaultClasses.FindOrCreate {
   public roles?: Role[];
 
   @prop()
-  public job!: Job;
+  public job?: Job;
 
   @prop({ ref: Car })
   public car?: Ref<Car>;
@@ -66,10 +57,20 @@ export class User extends defaultClasses.FindOrCreate {
   public languages!: string[];
 
   @prop({ type: Job, _id: false })
-  public previousJobs!: Job[];
+  public previousJobs?: Job[];
 
   @prop({ ref: Car })
-  public previousCars!: Ref<Car>[];
+  public previousCars?: Ref<Car>[];
+
+  public get fullName(): string {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
+  public set fullName(full: string) {
+    const split = full.split(' ');
+    this.firstName = split[0];
+    this.lastName = split[1];
+  }
 
   public static async findByAge(this: ReturnModelType<typeof User>, age: number) {
     return this.findOne({ age }).exec();
@@ -89,6 +90,10 @@ export class User extends defaultClasses.FindOrCreate {
   }
 
   public async addJob(this: DocumentType<User>, job: Job = new Job()) {
+    if (isNullOrUndefined(this.previousJobs)) {
+      this.previousJobs = [];
+    }
+
     this.previousJobs.push(job);
 
     return this.save();

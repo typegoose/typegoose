@@ -31,17 +31,17 @@ it('should create and find indexes with weights', async () => {
   const docMongoDB = await IndexWeightsModel.create({
     about: 'NodeJS module for MongoDB',
     content: 'MongoDB-native is the default driver for MongoDB in NodeJS',
-    keywords: ['mongodb', 'js', 'nodejs']
+    keywords: ['mongodb', 'js', 'nodejs'],
   } as IndexWeights);
   const docMongoose = await IndexWeightsModel.create({
     about: 'NodeJS module for MongoDB',
     content: 'Mongoose is a Module for NodeJS that interfaces with MongoDB',
-    keywords: ['mongoose', 'js', 'nodejs']
+    keywords: ['mongoose', 'js', 'nodejs'],
   } as IndexWeights);
   const docTypegoose = await IndexWeightsModel.create({
     about: 'TypeScript Module for Mongoose',
     content: 'Typegoose is a Module for NodeJS that makes Mongoose more compatible with Typescript',
-    keywords: ['typegoose', 'ts', 'nodejs', 'mongoose']
+    keywords: ['typegoose', 'ts', 'nodejs', 'mongoose'],
   } as IndexWeights);
 
   {

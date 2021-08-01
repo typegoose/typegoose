@@ -1,0 +1,6 @@
+# https://github.com/actions/labeler
+
+docs:
+  - any: ['docs/*', 'website/*']
+tests:
+  - any: ['test/*']

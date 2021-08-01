@@ -2,7 +2,7 @@ import { getModelForClass, getName, mongoose, prop, Ref } from '../../src/typego
 
 export class RefTestBuffer {
   @prop()
-  public _id!: mongoose.Schema.Types.Buffer;
+  public _id!: mongoose.Types.Buffer;
 }
 
 export class RefTestNumber {
@@ -46,10 +46,10 @@ export class RefTest {
 
   // ref string
   @prop({ ref: RefTestString, type: mongoose.Schema.Types.String })
-  public refFieldString?: Ref<RefTestString/* , string */>; // RefType not set, to know if automatic Ref is brocken
+  public refFieldString?: Ref<RefTestString /* , string */>; // RefType not set, to know if automatic Ref is brocken
 
   @prop({ ref: getName(RefTestString), type: mongoose.Schema.Types.String })
-  public refFieldString2?: Ref<RefTestString/* , string */>; // RefType not set, to know if automatic Ref is brocken
+  public refFieldString2?: Ref<RefTestString /* , string */>; // RefType not set, to know if automatic Ref is brocken
 
   // ref string array
   @prop({ ref: RefTestString, type: mongoose.Schema.Types.String })
@@ -88,17 +88,17 @@ export class RefTest {
 
   // ref buffer
   @prop({ ref: RefTestBuffer, type: mongoose.Schema.Types.Buffer })
-  public refFieldBuffer?: Ref<RefTestBuffer, Buffer>;
+  public refFieldBuffer?: Ref<RefTestBuffer, mongoose.Types.Buffer | Buffer>;
 
   @prop({ ref: getName(RefTestBuffer), type: mongoose.Schema.Types.Buffer })
-  public refFieldBuffer2?: Ref<RefTestBuffer, Buffer>;
+  public refFieldBuffer2?: Ref<RefTestBuffer, mongoose.Types.Buffer | Buffer>;
 
   // ref buffer array
   @prop({ ref: RefTestBuffer, type: mongoose.Schema.Types.Buffer })
-  public refArrayBuffer?: Ref<RefTestBuffer, Buffer>[];
+  public refArrayBuffer?: Ref<RefTestBuffer, mongoose.Types.Buffer | Buffer>[];
 
   @prop({ ref: getName(RefTestBuffer), type: mongoose.Schema.Types.Buffer })
-  public refArrayBuffer2?: Ref<RefTestBuffer, Buffer>[];
+  public refArrayBuffer2?: Ref<RefTestBuffer, mongoose.Types.Buffer | Buffer>[];
 }
 
 export const RefTestModel = getModelForClass(RefTest);

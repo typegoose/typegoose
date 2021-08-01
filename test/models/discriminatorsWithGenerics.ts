@@ -2,7 +2,7 @@ import { getDiscriminatorModelForClass, getModelForClass, modelOptions, prop } f
 
 export enum ROLE {
   VISITOR = 'VISITOR',
-  DEFAULT = 'DEFAULT'
+  DEFAULT = 'DEFAULT',
 }
 
 export class Profile {
@@ -13,8 +13,8 @@ export class Profile {
 @modelOptions({
   schemaOptions: {
     collection: 'discriminated',
-    discriminatorKey: 'role'
-  }
+    discriminatorKey: 'role',
+  },
 })
 export class DisciminatedUser<T extends Profile = Profile> {
   @prop({ required: true, enum: ROLE })

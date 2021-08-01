@@ -1,11 +1,10 @@
-import { mergeWith, omit } from 'lodash';
+import { intersection, mergeWith, omit } from 'lodash';
 import * as mongoose from 'mongoose';
-import { format } from 'util';
-
 import { logger } from '../logSettings';
 import type {
   AnyParamConstructor,
   Func,
+  GetTypeReturn,
   IModelOptions,
   IObjectWithTypegooseFunction,
   IObjectWithTypegooseName,
@@ -13,11 +12,11 @@ import type {
   KeyStringAny,
   PropOptionsForNumber,
   PropOptionsForString,
-  VirtualOptions
+  VirtualOptions,
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
-import { NoValidClass } from './errors';
+import { AssertionFallbackError, NoValidClass } from './errors';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -89,6 +88,7 @@ export function isObject(Type: any, once: boolean = false): boolean {
       if (once) {
         break;
       }
+
       prototype = Object.getPrototypeOf(prototype);
       name = prototype?.constructor.name;
     }
@@ -137,7 +137,8 @@ export function initProperty(name: string, key: string, whatis: WhatIsIt) {
       schemaProp[key] = {};
       break;
     default:
-      throw new TypeError('"whatis" is not supplied OR doesn\'t have a case yet!');
+      /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
+      throw new TypeError(`"${whatis}"(whatis(subSchema)) is invalid for "${name}.${key}" [E013]`);
   }
 
   return schemaProp;
@@ -176,31 +177,39 @@ export function getClass(
     return constructors.get(input.typegooseName());
   }
 
-  throw new ReferenceError('Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string');
+  throw new ReferenceError('Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]');
 }
 
 /**
- * Return true if there are Options
+ * Return an array of options that are included
  * @param options The raw Options
  */
-export function isWithStringValidate(options: PropOptionsForString): options is PropOptionsForString {
-  return !isNullOrUndefined(options.match ?? options.minlength ?? options.maxlength);
+export function isWithStringValidate(options: PropOptionsForString): string[] {
+  return intersection(Object.keys(options), ['match', 'minlength', 'maxlength']);
 }
 
 /**
- * Return true if there are Options
+ * Return an array of options that are included
  * @param options The raw Options
  */
-export function isWithStringTransform(options: PropOptionsForString): options is PropOptionsForString {
-  return !isNullOrUndefined(options.lowercase ?? options.uppercase ?? options.trim);
+export function isWithStringTransform(options: PropOptionsForString): string[] {
+  return intersection(Object.keys(options), ['lowercase', 'uppercase', 'trim']);
 }
 
 /**
- * Return true if there are Options
+ * Return an array of options that are included
  * @param options The raw Options
  */
-export function isWithNumberValidate(options: PropOptionsForNumber): options is PropOptionsForNumber {
-  return !isNullOrUndefined(options.min ?? options.max);
+export function isWithNumberValidate(options: PropOptionsForNumber): string[] {
+  return intersection(Object.keys(options), ['min', 'max']);
+}
+
+/**
+ * Return an array of options that are included
+ * @param options The raw Options
+ */
+export function isWithEnumValidate(options: PropOptionsForNumber | PropOptionsForString): string[] {
+  return intersection(Object.keys(options), ['enum']);
 }
 
 const virtualOptions = ['localField', 'foreignField'];
@@ -217,7 +226,7 @@ export const allVirtualoptions = virtualOptions.slice(0); // copy "virtualOption
 allVirtualoptions.push('ref');
 
 /**
- * Check if All the required Options are present
+ * Check if all the required Options are present
  * @param options RawOptions of the Prop
  */
 export function includesAllVirtualPOP(options: VirtualOptions): options is VirtualOptions {
@@ -232,7 +241,7 @@ export function includesAllVirtualPOP(options: VirtualOptions): options is Virtu
  * @param cl The constructor
  * @internal
  */
-export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () => {}): any {
+export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): any {
   if (isNullOrUndefined(value)) {
     return value;
   }
@@ -251,14 +260,12 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: new () =>
  * @param cl The constructor
  * @internal
  */
-export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: new () => {}): T {
+export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): T {
   assertion(typeof key === 'string', new TypeError(`"${key}"(key) is not a string! (mergeMetadata)`));
   assertionIsClass(cl);
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
-  return mergeWith({}, Reflect.getMetadata(key, cl), value, (_objValue, srcValue, ckey, _object, _source, _stack) =>
-    customMerger(ckey, srcValue)
-  );
+  return mergeWith({}, Reflect.getMetadata(key, cl), value, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
 }
 
 /**
@@ -299,27 +306,46 @@ export function getRightTarget(target: any): any {
  * Get the correct name of the class's model
  * (with suffix)
  * @param cl The Class
+ * @param customOptions Extra Options that can be added in "buildSchema"
  */
-export function getName<U extends AnyParamConstructor<any>>(cl: U) {
+export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions?: IModelOptions) {
   const ctor: any = getRightTarget(cl);
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
   const baseName: string = ctor.name;
+  const customName = customOptions?.options?.customName ?? options.options?.customName;
 
-  if (options.options?.automaticName) {
-    const suffix = options.options?.customName ?? options.schemaOptions?.collection;
+  if (typeof customName === 'function') {
+    const name: any = customName(options);
+
+    assertion(
+      typeof name === 'string' && name.length > 0,
+      new TypeError(
+        `The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`
+      )
+    );
+
+    return name;
+  }
+
+  const automaticName = customOptions?.options?.automaticName ?? options.options?.automaticName;
+
+  if (automaticName) {
+    const suffix = customName ?? customOptions?.schemaOptions?.collection ?? options.schemaOptions?.collection;
 
     return !isNullOrUndefined(suffix) ? `${baseName}_${suffix}` : baseName;
   }
 
-  if (typeof options.options?.customName === 'string') {
-    if (options.options.customName.length <= 0) {
-      throw new TypeError(`"customName" must be a string AND at least one character ("${baseName}")`);
+  if (typeof customName === 'string') {
+    if (customName.length <= 0) {
+      throw new TypeError(`"customName" must be a string AND at least one character ("${baseName}") [E015]`);
     }
-
-    return options.options.customName;
   }
 
-  return baseName;
+  if (isNullOrUndefined(customName)) {
+    return baseName;
+  }
+
+  return customName;
 }
 
 /**
@@ -327,7 +353,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U) {
  * @param cl The Type
  */
 export function isNotDefined(cl: any) {
-  return typeof cl === 'function' && !isPrimitive(cl) && cl !== Object && cl !== mongoose.Schema.Types.Buffer && !schemas.has(getName(cl));
+  return typeof cl === 'function' && !isPrimitive(cl) && cl !== Object && !schemas.has(getName(cl));
 }
 
 /**
@@ -347,20 +373,20 @@ export function mapArrayOptions(
   Type: AnyParamConstructor<any> | mongoose.Schema,
   target: any,
   pkey: string,
-  loggerType?: AnyParamConstructor<any>
+  loggerType?: AnyParamConstructor<any>,
+  extra?: KeyStringAny
 ): mongoose.SchemaTypeOpts<any> {
   logger.debug('mapArrayOptions called');
+  loggerType = loggerType ?? (Type as AnyParamConstructor<any>);
 
   if (!(Type instanceof mongoose.Schema)) {
     loggerType = Type;
   }
 
-  if (isNullOrUndefined(loggerType)) {
-    logger.info('mapArrayOptions loggerType is undefined!');
-  }
+  const dim = rawOptions.dim; // needed, otherwise it will be included (and not removed) in the returnObject
+  delete rawOptions.dim;
 
-  const options = Object.assign({}, rawOptions); // for sanity
-  const mapped = mapOptions(rawOptions, Type, target, pkey, false, loggerType);
+  const mapped = mapOptions(rawOptions, Type, target, pkey, loggerType);
 
   /** The Object that gets returned */
   const returnObject: KeyStringAny = {
@@ -368,23 +394,13 @@ export function mapArrayOptions(
     type: [
       {
         type: Type,
-        ...mapped.inner
-      }
-    ]
+        ...mapped.inner,
+        ...extra,
+      },
+    ],
   };
 
-  if (typeof options?.innerOptions === 'object') {
-    delete returnObject.innerOptions;
-    for (const [key, value] of Object.entries(options.innerOptions)) {
-      returnObject.type[0][key] = value;
-    }
-  }
-  if (typeof options?.outerOptions === 'object') {
-    delete returnObject.outerOptions;
-    for (const [key, value] of Object.entries(options.outerOptions)) {
-      returnObject[key] = value;
-    }
-  }
+  rawOptions.dim = dim; // re-add for "createArrayFromDimensions"
 
   returnObject.type = createArrayFromDimensions(rawOptions, returnObject.type, getName(target), pkey);
 
@@ -401,7 +417,6 @@ export function mapArrayOptions(
  * @param Type The Type of the array
  * @param target The Target class
  * @param pkey Key of the Property
- * @param errorOC Error instead of doing nothing
  * @param loggerType Type to use for logging
  */
 export function mapOptions(
@@ -409,19 +424,20 @@ export function mapOptions(
   Type: AnyParamConstructor<any> | (mongoose.Schema & IPrototype),
   target: any,
   pkey: string,
-  errorOC: boolean = true,
   loggerType?: AnyParamConstructor<any>
 ) {
   logger.debug('mapOptions called');
+  loggerType = loggerType ?? (Type as AnyParamConstructor<any>);
 
   /** The Object that gets returned */
   const ret = {
-    inner: {},
-    outer: {}
+    inner: {} as KeyStringAny,
+    outer: {} as KeyStringAny,
   };
 
   if (!(Type instanceof mongoose.Schema)) {
     loggerType = Type;
+
     if (getName(loggerType) in mongoose.Schema.Types) {
       logger.info('Converting "%s" to mongoose Type', getName(loggerType));
       Type = mongoose.Schema.Types[getName(loggerType)];
@@ -440,27 +456,19 @@ export function mapOptions(
   /** The OptionsConstructor to use */
   let OptionsCTOR: undefined | AnyParamConstructor<any> = Type?.prototype?.OptionsConstructor;
 
-  // Fix because "Schema" is not a valid type and doesn't have a ".prototype.OptionsConstructor"
   if (Type instanceof mongoose.Schema) {
-    // TODO: remove "as any" cast if "OptionsConstructor" is implemented in @types/mongoose
-    OptionsCTOR = (mongoose as any).Schema.Types.Embedded.prototype.OptionsConstructor;
+    OptionsCTOR = mongoose.Schema.Types.Embedded.prototype.OptionsConstructor;
   }
 
-  if (isNullOrUndefined(OptionsCTOR)) {
-    if (errorOC && loggerType) {
-      throw new TypeError(`Type does not have an valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey})`);
-    }
-
-    return ret;
-  }
+  assertion(
+    !isNullOrUndefined(OptionsCTOR),
+    new TypeError(`Type does not have a valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`)
+  );
 
   const options = Object.assign({}, rawOptions); // for sanity
   delete options.items;
 
-  // "mongoose as any" is because the types package does not yet have an entry for "SchemaTypeOptions"
-  // TODO: remove "as any" cast if "OptionsConstructor" is implemented in @types/mongoose
-  if (OptionsCTOR.prototype instanceof (mongoose as any).SchemaTypeOptions) {
-    // console.log("test2", target, pkey, Type, OptionsCTR.prototype);
+  if (OptionsCTOR.prototype instanceof mongoose.SchemaTypeOptions) {
     for (const [key, value] of Object.entries(options)) {
       if (Object.getOwnPropertyNames(OptionsCTOR.prototype).includes(key)) {
         ret.inner[key] = value;
@@ -470,7 +478,22 @@ export function mapOptions(
     }
   } else {
     if (loggerType) {
-      logger.info('The Type "%s" has a property "OptionsConstructor" but it does not extend "SchemaTypeOptions', getName(loggerType));
+      logger.info('The Type "%s" has a property "OptionsConstructor" but it does not extend "SchemaTypeOptions"', getName(loggerType));
+    }
+
+    ret.outer = options;
+  }
+
+  if (typeof options?.innerOptions === 'object') {
+    delete ret.outer.innerOptions;
+    for (const [key, value] of Object.entries(options.innerOptions)) {
+      ret.inner[key] = value;
+    }
+  }
+  if (typeof options?.outerOptions === 'object') {
+    delete ret.outer.outerOptions;
+    for (const [key, value] of Object.entries(options.outerOptions)) {
+      ret.outer[key] = value;
     }
   }
 
@@ -487,20 +510,24 @@ export function mapOptions(
  * @param target Target Class
  * @param key Property key
  */
-export function warnMixed(target: any, key: string | symbol): void | never {
+export function warnMixed(target: any, key: string): void | never {
   const name = getName(target);
   const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, getRightTarget(target)) ?? {};
 
-  switch (modelOptions?.options?.allowMixed) {
+  switch (modelOptions.options?.allowMixed) {
     default:
     case Severity.WARN:
-      logger.warn('Setting "Mixed" for property "%s.%s"\nLook here for how to disable this message: https://typegoose.github.io/typegoose/docs/decorators/modelOptions/#allowmixed', name, key);
+      logger.warn(
+        'Setting "Mixed" for property "%s.%s"\nLook here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed',
+        name,
+        key
+      );
 
       break;
     case Severity.ALLOW:
       break;
     case Severity.ERROR:
-      throw new TypeError(format('Setting "Mixed" is not allowed! (%s, %s)', name, key));
+      throw new TypeError(`Setting "Mixed" is not allowed! (${name}, ${key}) [E017]`);
   }
 
   return; // always return, if "allowMixed" is not "ERROR"
@@ -535,9 +562,11 @@ export function assignGlobalModelOptions(target: any) {
 export function createArrayFromDimensions(rawOptions: any, extra: any, name: string, key: string) {
   // dimensions start at 1 (not 0)
   const dim = typeof rawOptions.dim === 'number' ? rawOptions.dim : 1;
+
   if (dim < 1) {
-    throw new RangeError(format('"dim" needs to be higher than 0 (%s.%s)', name, key));
+    throw new RangeError(`"dim" needs to be higher than 0 (${name}.${key}) [E018]`);
   }
+
   delete rawOptions.dim; // delete this property to not actually put it as an option
   logger.info('createArrayFromDimensions called with %d dimensions', dim);
 
@@ -558,7 +587,7 @@ export function createArrayFromDimensions(rawOptions: any, extra: any, name: str
  */
 export function assertion(cond: any, error?: Error): asserts cond {
   if (!cond) {
-    throw error ?? new Error('Assert failed - no custom error');
+    throw error ?? new AssertionFallbackError();
   }
 }
 
@@ -567,24 +596,86 @@ export function assertion(cond: any, error?: Error): asserts cond {
  * @param val Value to test
  */
 export function assertionIsClass(val: any): asserts val is Func {
-  assertion(typeof val === 'function', new NoValidClass(val));
+  assertion(isConstructor(val), new NoValidClass(val));
 }
 
 /**
  * Get Type, if input is an arrow-function, execute it and return the result
  * @param typeOrFunc Function or Type
+ * @param returnLastFoundArray Return the last found array (used for something like PropOptions.discriminators)
  */
-export function getType(typeOrFunc: Func | any): any {
-  if (typeof typeOrFunc === 'function' && !isConstructor(typeOrFunc)) {
-    return (typeOrFunc as Func)();
+export function getType(typeOrFunc: Func | any, returnLastFoundArray: boolean = false): GetTypeReturn {
+  const returnObject: GetTypeReturn = {
+    type: typeOrFunc,
+    dim: 0,
+  };
+
+  if (typeof returnObject.type === 'function' && !isConstructor(returnObject.type)) {
+    returnObject.type = (returnObject.type as Func)();
   }
 
-  return typeOrFunc;
+  function getDepth(): void {
+    if (returnObject.dim > 100) {
+      // this is arbitrary, but why would anyone have more than 10 nested arrays anyway?
+      throw new Error('getDepth recursed too much (dim > 100)');
+    }
+    if (Array.isArray(returnObject.type)) {
+      returnObject.dim++;
+
+      if (returnLastFoundArray && !Array.isArray(returnObject.type[0])) {
+        return;
+      }
+
+      returnObject.type = returnObject.type[0];
+      getDepth();
+    }
+  }
+
+  getDepth();
+
+  logger.debug('Final getType: dim: %s, type:', returnObject.dim, returnObject.type);
+
+  return returnObject;
 }
 
 /**
  * Is the provided input an class with an constructor?
  */
 export function isConstructor(obj: any): obj is AnyParamConstructor<any> {
-  return !isNullOrUndefined(obj?.prototype?.constructor?.name);
+  return typeof obj === 'function' && !isNullOrUndefined(obj.prototype?.constructor?.name);
+}
+
+// Below are function to wrap NodeJS functions for client compatability (eslint ignore is needed)
+
+/**
+ * Execute util.deprecate or when !process console log
+ * (if client, it dosnt cache which codes already got logged)
+ */
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function deprecate<T extends Function>(fn: T, message: string, code: string): T {
+  if (!isNullOrUndefined(process)) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    return require('util').deprecate(fn, message, code);
+  }
+
+  console.log(`[${code}] DeprecationWarning: ${message}`);
+
+  return fn;
+}
+
+/**
+ * Logs an warning if "included > 0" that the options of not the current type are included
+ * @param name Name of the Class
+ * @param key Name of the Currently Processed key
+ * @param type Name of the Expected Type
+ * @param extra Extra string to be included
+ * @param included Included Options to be listed
+ */
+export function warnNotCorrectTypeOptions(name: string, key: string, type: string, extra: string, included: string[]): void {
+  // this "if" is in this function to de-duplicate code
+  if (included.length > 0) {
+    logger.warn(
+      `Type of "${name}.${key}" is not ${type}, but includes the following ${extra} options [W001]:\n` + `  [${included.join(', ')}]`
+    );
+  }
 }

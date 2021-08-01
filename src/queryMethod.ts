@@ -1,7 +1,7 @@
+import type { Query } from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
 import { getName } from './internal/utils';
 import { logger } from './logSettings';
-import { mongoose } from './typegoose';
 import type { AnyParamConstructor, QueryMethodMap, ReturnModelType } from './types';
 
 /**
@@ -11,7 +11,7 @@ import type { AnyParamConstructor, QueryMethodMap, ReturnModelType } from './typ
  * @example
  * ```ts
  * interface FindHelpers {
- *   findByTitle: QueryMethod<typeof findByTitle>;
+ *   findByTitle: AsQueryMethod<typeof findByTitle>;
  * }
  *
  * function findByTitle(this: ReturnModelType<typeof Event, FindHelpers>, title: string) {
@@ -28,8 +28,8 @@ import type { AnyParamConstructor, QueryMethodMap, ReturnModelType } from './typ
  * ```
  */
 export function queryMethod<QueryHelpers, U extends AnyParamConstructor<any>>(
-  func: (this: ReturnModelType<U, QueryHelpers>, ...params: any[]) => mongoose.DocumentQuery<any, any>
-) {
+  func: (this: ReturnModelType<U, QueryHelpers>, ...params: any[]) => Query<any, any>
+): ClassDecorator {
   return (target: any) => {
     logger.info('Adding query method "%s" to %s', func.name, getName(target));
     const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target) ?? []);

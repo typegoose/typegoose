@@ -2,33 +2,29 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
-import { format } from 'util';
+import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata, mergeSchemaOptions } from './internal/utils';
 
 /* istanbul ignore next */
-if (semver.lt(mongoose.version, '5.9.14')) {
-  throw new Error('Please use mongoose 5.9.14 or higher');
-}
+if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
+  // for usage on client side
+  /* istanbul ignore next */
+  if (semver.lt(mongoose?.version, '5.13.3')) {
+    throw new Error(`Please use mongoose 5.13.3 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  }
 
-import { logger } from './logSettings';
-
-/* istanbul ignore next */
-if (semver.lt(process.version.slice(1), '10.15.0')) {
-  logger.warn('You are using a NodeJS Version below 10.15.0, Please Upgrade!');
+  /* istanbul ignore next */
+  if (semver.lt(process.version.slice(1), '12.22.0')) {
+    throw new Error('You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]');
+  }
 }
 
 import { parseENV, setGlobalOptions } from './globalOptions';
 import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
-import { assertion, assertionIsClass, getName, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import { logger } from './logSettings';
 import { isModel } from './typeguards';
-import type {
-  AnyParamConstructor,
-  DocumentType,
-  IModelOptions,
-  Ref,
-  ReturnModelType
-} from './types';
+import type { AnyParamConstructor, BeAnObject, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
 
 /* exports */
 // export the internally used "mongoose", to not need to always import it
@@ -52,23 +48,22 @@ parseENV(); // call this before anything to ensure they are applied
 
 /**
  * Get a Model for a Class
- * Executes .setModelForClass if it can't find it already
  * @param cl The uninitialized Class
  * @returns The Model
  * @public
  * @example
  * ```ts
- * class Name {}
+ * class ClassName {}
  *
- * const NameModel = getModelForClass(Name);
+ * const NameModel = getModelForClass(ClassName);
  * ```
  */
-export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = {}>(cl: U, options?: IModelOptions) {
+export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(cl: U, options?: IModelOptions) {
   assertionIsClass(cl);
   options = typeof options === 'object' ? options : {};
 
   const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
-  const name = getName(cl);
+  const name = getName(cl, options);
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
@@ -79,7 +74,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
     roptions?.existingMongoose?.model.bind(roptions.existingMongoose) ??
     mongoose.model.bind(mongoose);
 
-  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions));
+  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions, options));
   const refetchedOptions = (Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions) ?? {};
 
   if (refetchedOptions?.options?.runSyncIndexes) {
@@ -87,7 +82,10 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
     compiledmodel.syncIndexes();
   }
 
-  return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl);
+  return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
+    existingMongoose: roptions?.existingMongoose,
+    existingConnection: roptions?.existingConnection,
+  });
 }
 
 /**
@@ -95,13 +93,13 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
  * @param key ModelName key
  * @example
  * ```ts
- * class Name {}
- * getModelForClass(Name); // build the model
- * const NameModel = getModelWithString<typeof Name>("Name");
+ * class ClassName {}
+ * getModelForClass(ClassName); // build the model
+ * const NameModel = getModelWithString<typeof ClassName>("ClassName");
  * ```
  */
 export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
-  assertion(typeof key === 'string', TypeError(format('Expected "key" to be a string, got "%s"', key)));
+  assertion(typeof key === 'string', TypeError(`Expected "key" to be a string, got "${key}"`));
 
   return models.get(key) as any;
 }
@@ -112,19 +110,23 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
  * @returns Returns the Build Schema
  * @example
  * ```ts
- * class Name {}
- * const NameSchema = buildSchema(Name);
+ * class ClassName {}
+ * const NameSchema = buildSchema(ClassName);
  * const NameModel = mongoose.model("Name", NameSchema);
  * ```
  */
-export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?: mongoose.SchemaOptions) {
+export function buildSchema<U extends AnyParamConstructor<any>>(
+  cl: U,
+  options?: mongoose.SchemaOptions,
+  overwriteOptions?: IModelOptions
+): mongoose.Schema<DocumentType<U>> {
   assertionIsClass(cl);
 
-  logger.debug('buildSchema called for "%s"', getName(cl));
+  logger.debug('buildSchema called for "%s"', getName(cl, overwriteOptions));
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
-  let sch: mongoose.Schema<U>;
+  let sch: mongoose.Schema<DocumentType<U>> | undefined = undefined;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   const parentClasses: AnyParamConstructor<any>[] = [];
@@ -145,7 +147,7 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
   }
 
   // get schema of current model
-  sch = _buildSchema(cl, sch!, mergedOptions);
+  sch = _buildSchema(cl, sch, mergedOptions, true, overwriteOptions);
 
   return sch;
 }
@@ -155,30 +157,34 @@ export function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?:
  * Note: no gurantee that the type information is fully correct
  * @param model The model to store
  * @param cl The Class to store
+ * @param options? Optional param for existingMongoose or existingConnection
  * @example
  * ```ts
- * class Name {}
+ * class ClassName {}
  *
- * const schema = buildSchema(Name);
+ * const schema = buildSchema(ClassName);
  * // modifications to the schame can be done
- * const model = addModelToTypegoose(mongoose.model("Name", schema), Name);
+ * const model = addModelToTypegoose(mongoose.model("Name", schema), ClassName);
  * ```
  */
-export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = {}>(model: mongoose.Model<any>, cl: U) {
-  assertion(model.prototype instanceof mongoose.Model, new TypeError(`"${model}" is not a valid Model!`));
+export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
+  model: mongoose.Model<any>,
+  cl: U,
+  options?: { existingMongoose?: mongoose.Mongoose; existingConnection?: any }
+) {
+  const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
+
+  assertion(model.prototype instanceof mongooseModel, new TypeError(`"${model}" is not a valid Model!`));
   assertionIsClass(cl);
 
-  const name = getName(cl);
+  const name = model.modelName;
 
   assertion(
     !models.has(name),
     new Error(
-      format(
-        'It seems like "addModelToTypegoose" got called twice\n' +
+      'It seems like "addModelToTypegoose" got called twice\n' +
         'Or multiple classes with the same name are used, which is not supported!' +
-        '(Model Name: "%s")',
-        name
-      )
+        `(Model Name: "${name}") [E003]`
     )
   );
 
@@ -193,24 +199,24 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 }
 
 /**
- * Deletes an existing model so that it can be overwritten
- * with another model
+ * Deletes an existing model so that it can be overwritten with another model
  * (deletes from mongoose.connection & typegoose models cache & typegoose constructors cache)
  * @param key
  * @example
  * ```ts
- * class Name {}
- * const NameModel = getModelForClass(Name);
- * deleteModel("Name");
+ * class ClassName {}
+ * const NameModel = getModelForClass(ClassName);
+ * deleteModel("ClassName");
  * ```
  */
 export function deleteModel(name: string) {
   assertion(typeof name === 'string', new TypeError('name is not an string! (deleteModel)'));
-  assertion(models.has(name), new Error(`Model "${name}" could not be found`));
+  const model = models.get(name);
+  assertion(model, new Error(`Model "${name}" could not be found`));
 
   logger.debug('Deleting Model "%s"', name);
 
-  models.get(name)!.db.deleteModel(name);
+  model.db.deleteModel(name);
 
   models.delete(name);
   constructors.delete(name);
@@ -222,15 +228,36 @@ export function deleteModel(name: string) {
  * @param cl The Class
  * @example
  * ```ts
- * class Name {}
- * const NameModel = getModelForClass(Name);
- * deleteModelWithClass(Name);
+ * class ClassName {}
+ * const NameModel = getModelForClass(ClassName);
+ * deleteModelWithClass(ClassName);
  * ```
  */
 export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) {
   assertionIsClass(cl);
 
-  return deleteModel(getName(cl));
+  let name = getName(cl);
+
+  if (!models.has(name)) {
+    logger.debug(`Class "${name}" is not in "models", trying to find in "constructors"`);
+    let found = false;
+
+    for (const [cname, constructor] of constructors) {
+      if (constructor === cl) {
+        logger.debug(`Found Class in "constructors" with class name "${name}" and entered name "${cname}""`);
+        name = cname;
+        found = true;
+      }
+    }
+
+    if (!found) {
+      logger.debug(`Could not find class "${name}" in constructors`);
+
+      return;
+    }
+  }
+
+  return deleteModel(name);
 }
 
 /**
@@ -240,14 +267,14 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
  * @param value The Identifier to use to differentiate documents (default: cl.name)
  * @example
  * ```ts
- * class C1 {}
- * class C2 extends C1 {}
+ * class Class1 {}
+ * class Class2 extends Class1 {}
  *
- * const C1Model = getModelForClass(C1);
- * const C2Model = getDiscriminatorModelForClass(C1Model, C1);
+ * const Class1Model = getModelForClass(Class1);
+ * const Class2Model = getDiscriminatorModelForClass(Class1Model, Class1);
  * ```
  */
-export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = {}>(
+export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
   from: mongoose.Model<any>,
   cl: U,
   value?: string
@@ -256,13 +283,15 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   assertionIsClass(cl);
 
   const name = getName(cl);
+
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const sch = buildSchema(cl) as mongoose.Schema & { paths: any; };
+  const sch: mongoose.Schema<any> = buildSchema(cl);
 
   const discriminatorKey = sch.get('discriminatorKey');
+
   if (sch.path(discriminatorKey)) {
     (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
   }
@@ -270,4 +299,29 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   const model = from.discriminator(name, sch, value ? value : name);
 
   return addModelToTypegoose<U, QueryHelpers>(model, cl);
+}
+
+/**
+ * Use this class if raw mongoose for this path is wanted
+ * It is still recommended to use the typegoose classes directly for full type and validation support
+ * @see Using `Passthrough`, the paths created will result in `Mixed`, see {@link https://github.com/Automattic/mongoose/issues/7181 Mongoose#7181}
+ * @example
+ * ```ts
+ * class Dummy {
+ *   @prop({ type: () => new Passthrough({ somePath: String }) })
+ *   public somepath: { somePath: string };
+ * }
+ * ```
+ */
+// Note: for "SchemaDefinitionType", i have no clue what it does, but it is also defined on "mongoose.Schema" and kinda required for "mongoose.DocumentDefinition"
+export class Passthrough<SchemaDefinitionType = undefined> {
+  public raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>;
+
+  /**
+   * Use this like `new mongoose.Schema()`
+   * @param raw the Schema definition
+   */
+  constructor(raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>) {
+    this.raw = raw;
+  }
 }

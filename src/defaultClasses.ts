@@ -1,5 +1,4 @@
 import type { Types } from 'mongoose';
-
 import { modelOptions } from './modelOptions';
 import type { AnyParamConstructor, DocumentType, RefType } from './types';
 
@@ -8,19 +7,19 @@ import type { AnyParamConstructor, DocumentType, RefType } from './types';
  * This class can be used for already existing type information for the Timestamps
  */
 export abstract class TimeStamps {
-  public createdAt!: Readonly<Date>;
-  public updatedAt!: Readonly<Date>;
+  public createdAt?: Date;
+  public updatedAt?: Date;
 }
 
 /**
- * This class provied the basic mongoose document properties
+ * This Interface can be used when "_id" and "id" need to be defined in types
  */
-export abstract class Base<T_ID extends RefType = Types.ObjectId> {
-  public _id: T_ID;
-  // tslint:disable-next-line:variable-name
-  public __v?: number;
-  // tslint:disable-next-line:variable-name
-  public __t?: string | number;
+export interface Base<IDType extends RefType = Types.ObjectId> {
+  _id: IDType;
+  /**
+   * This getter/setter dosnt exist if "schemaOptions.id" being set to "false"
+   */
+  id: string;
 }
 
 export interface FindOrCreateResult<T> {
@@ -34,6 +33,7 @@ export interface FindOrCreateResult<T> {
 export abstract class FindOrCreate {
   public static findOrCreate: <T extends FindOrCreate>(
     this: AnyParamConstructor<T>,
-    condition: any
+    condition: any,
+    createWith?: any
   ) => Promise<FindOrCreateResult<T>>;
 }

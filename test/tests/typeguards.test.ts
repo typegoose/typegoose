@@ -1,25 +1,26 @@
-import { assertion } from '../../src/internal/utils';
+import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose';
 import {
   IsRefType,
-  IsRefTypeArray,
   IsRefTypeArrayModel,
   IsRefTypeModel,
   IsRefTypeNestedObjectIdModel,
   IsRefTypeNestedStringModel,
   MTypesArrayRefModel,
-  SubModel
+  SubModel,
+  UserRefModel,
 } from '../models/typeguards';
-import { UserRefModel } from '../models/userRefs';
 
 describe('isDocument / isDocumentArray', () => {
   it('should guarantee array of document types', async () => {
     const UserMaster = await UserRefModel.create({
-      name: 'master'
+      name: 'master',
     });
     const UserSub = await UserRefModel.create({
-      name: 'sub'
+      name: 'sub',
     });
+
+    assertion(!isNullOrUndefined(UserMaster.subAccounts), new Error('Expected "subAccounts" to not be undefined/null'));
 
     UserMaster.subAccounts.push(UserSub._id);
 
@@ -38,10 +39,10 @@ describe('isDocument / isDocumentArray', () => {
 
   it('should guarantee single document type', async () => {
     const UserMaster = await UserRefModel.create({
-      name: 'master'
+      name: 'master',
     });
     const UserSub = await UserRefModel.create({
-      name: 'sub'
+      name: 'sub',
     });
 
     UserSub.master = UserMaster._id;
@@ -58,11 +59,14 @@ describe('isDocument / isDocumentArray', () => {
 
   it('should detect if array of refs is not populated', async () => {
     const UserMaster = await UserRefModel.create({
-      name: 'master'
+      name: 'master',
     });
     const UserSub = await UserRefModel.create({
-      name: 'sub'
+      name: 'sub',
     });
+
+    assertion(!isNullOrUndefined(UserMaster.subAccounts), new Error('Expected "subAccounts" to not be undefined/null'));
+
     UserMaster.subAccounts.push(UserSub._id);
 
     if (!isDocumentArray(UserMaster.subAccounts)) {
@@ -77,10 +81,10 @@ describe('isDocument / isDocumentArray', () => {
 
   it('should detect if ref is not populated', async () => {
     const UserMaster = await UserRefModel.create({
-      name: 'master'
+      name: 'master',
     });
     const UserSub = await UserRefModel.create({
-      name: 'sub'
+      name: 'sub',
     });
 
     UserSub.master = UserMaster._id;
@@ -94,21 +98,23 @@ describe('isDocument / isDocumentArray', () => {
 
   it('should handle recursive populations - multiple populates', async () => {
     const User1 = await UserRefModel.create({
-      name: '1'
+      name: '1',
     });
     const User2 = await UserRefModel.create({
       name: '2',
-      master: User1._id
+      master: User1._id,
     });
     const User3 = await UserRefModel.create({
       name: '3',
-      master: User2._id
+      master: User2._id,
     });
 
     await User3.populate('master').execPopulate();
+
     if (isDocument(User3.master)) {
       // User3.master === User2
       await User3.master.populate('master').execPopulate();
+
       if (isDocument(User3.master.master)) {
         // User3.master.master === User1
         expect(User3.master.master.name).toEqual(User1.name);
@@ -122,30 +128,31 @@ describe('isDocument / isDocumentArray', () => {
     await User3.populate({
       path: 'master',
       populate: {
-        path: 'master'
-      }
+        path: 'master',
+      },
     }).execPopulate();
   });
 
   it('should handle recursive populations - single populate', async () => {
     const User1 = await UserRefModel.create({
-      name: '1'
+      name: '1',
     });
     const User2 = await UserRefModel.create({
       name: '2',
-      master: User1._id
+      master: User1._id,
     });
     const User3 = await UserRefModel.create({
       name: '3',
-      master: User2._id
+      master: User2._id,
     });
 
     await User3.populate({
       path: 'master',
       populate: {
-        path: 'master'
-      }
+        path: 'master',
+      },
     }).execPopulate();
+
     if (isDocument(User3.master) && isDocument(User3.master.master)) {
       // User3.master === User2 && User3.master.master === User1
       expect(User3.master.name).toEqual(User2.name);
@@ -160,13 +167,13 @@ describe('isRefType / isRefTypeArray', () => {
   describe('isRefType', () => {
     it('should guarantee the RefType - String', async () => {
       const doc = await IsRefTypeModel.create({
-        nestedString: await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType' })
+        nestedString: await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType' }),
       } as IsRefType);
       doc.depopulate('nestedString');
 
       expect(doc.nestedString).not.toBeUndefined();
 
-      if (isRefType(doc.nestedString)) {
+      if (isRefType(doc.nestedString, String)) {
         expect(typeof doc.nestedString).toBe('string');
       } else {
         fail('Expected isRefType to be returning true');
@@ -175,13 +182,13 @@ describe('isRefType / isRefTypeArray', () => {
 
     it('should guarantee the RefType - ObjectId', async () => {
       const doc = await IsRefTypeModel.create({
-        nestedObjectId: await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() })
+        nestedObjectId: await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() }),
       } as IsRefType);
       doc.depopulate('nestedObjectId');
 
       expect(doc.nestedObjectId).not.toBeUndefined();
 
-      if (isRefType(doc.nestedObjectId)) {
+      if (isRefType(doc.nestedObjectId, mongoose.Types.ObjectId)) {
         expect(doc.nestedObjectId).toBeInstanceOf(mongoose.Types.ObjectId);
       } else {
         fail('Expected isRefType to be returning true');
@@ -192,13 +199,13 @@ describe('isRefType / isRefTypeArray', () => {
   describe('isRefTypeArray', () => {
     it('should guarantee the RefType - String', async () => {
       const doc = await IsRefTypeArrayModel.create({
-        nestedString: [await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType - Array' })]
-      } as IsRefTypeArray);
+        nestedString: [await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType - Array' })],
+      });
       doc.depopulate('nestedString');
 
       expect(doc.nestedString).not.toBeUndefined();
 
-      if (isRefTypeArray(doc.nestedString!)) {
+      if (isRefTypeArray(doc.nestedString, String)) {
         expect(Array.isArray(doc.nestedString)).toBe(true);
         expect(typeof doc.nestedString![0]).toBe('string');
       } else {
@@ -208,13 +215,13 @@ describe('isRefType / isRefTypeArray', () => {
 
     it('should guarantee the RefType - ObjectId', async () => {
       const doc = await IsRefTypeArrayModel.create({
-        nestedObjectId: [await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() })]
-      } as IsRefTypeArray);
+        nestedObjectId: [await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() })],
+      });
       doc.depopulate('nestedObjectId');
 
       expect(doc.nestedObjectId).not.toBeUndefined();
 
-      if (isRefTypeArray(doc.nestedObjectId!)) {
+      if (isRefTypeArray(doc.nestedObjectId, mongoose.Types.ObjectId)) {
         expect(Array.isArray(doc.nestedString)).toBe(true);
         expect(doc.nestedObjectId![0]).toBeInstanceOf(mongoose.Types.ObjectId);
       } else {
@@ -242,6 +249,6 @@ it('should support mongoose.Types.Array<Ref<>> for isRefTypeArray', async () => 
 
   const found = await MTypesArrayRefModel.findById(mtarefdoc).orFail().exec();
 
-  assertion(isRefTypeArray(found.subs), new Error('Expected found.subs to not be populated'));
+  assertion(isRefTypeArray(found.subs, mongoose.Types.ObjectId), new Error('Expected found.subs to not be populated'));
   expect(found.subs[0]).toBeInstanceOf(mongoose.Types.ObjectId);
 });

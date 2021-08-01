@@ -23,7 +23,7 @@
       "type": "npm",
       "script": "lint",
       "problemMatcher": [
-        "$tslint5"
+        "$eslint-stylish"
       ]
     }
   ]

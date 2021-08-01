@@ -1,12 +1,17 @@
+import { LeanDocument } from 'mongoose';
+import { assertion } from '../../src/internal/utils';
 import {
   DocumentType,
   getClass,
   getDiscriminatorModelForClass,
   getModelForClass,
+  isDocument,
   ModelOptions,
   mongoose,
   Pre,
-  Prop
+  prop,
+  Prop,
+  Ref,
 } from '../../src/typegoose';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 import { Default, DefaultModel, DisciminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminatorsWithGenerics';
@@ -26,7 +31,7 @@ it('should make use of discriminators', async () => {
 });
 
 it('"getDiscriminatorModelForClass" should return the same model if already defined', () => {
-  class TestSameModelDiscriminator { }
+  class TestSameModelDiscriminator {}
 
   const model = getModelForClass(TestSameModelDiscriminator);
 
@@ -43,7 +48,7 @@ describe('Generic Discriminators', () => {
       role: ROLE.DEFAULT,
       visitor: 'sth',
       default: 'sth',
-      profile: { test: 'sth', lastName: 'sth' }
+      profile: { test: 'sth', lastName: 'sth' },
     } as Default);
     expect(instance.constructor).toEqual(DefaultModel);
     expect(instance.schema.path('profile')).not.toBeInstanceOf(mongoose.Schema.Types.Mixed);
@@ -57,7 +62,7 @@ describe('Generic Discriminators', () => {
     const instance: DocumentType<Default> = await DefaultModel.create({
       visitor: 'sth',
       default: 'sth',
-      profile: { test: 'sth', lastName: 'sth' }
+      profile: { test: 'sth', lastName: 'sth' },
     } as Default);
     expect(instance.constructor).toEqual(DefaultModel);
     expect(instance.schema.path('profile')).not.toBeInstanceOf(mongoose.Schema.Types.Mixed);
@@ -73,7 +78,7 @@ describe('Generic Discriminators', () => {
       role: ROLE.VISITOR,
       visitor: 'sth',
       default: 'sth',
-      profile: { test: 'sth', firstName: 'sth' }
+      profile: { test: 'sth', firstName: 'sth' },
     } as Visitor);
     expect(instance.constructor).toEqual(VisitorModel);
     expect(instance.schema.path('profile')).not.toBeInstanceOf(mongoose.Schema.Types.Mixed);
@@ -86,7 +91,6 @@ describe('Generic Discriminators', () => {
   });
 });
 
-
 it('should pass all mongoose discriminator tests', async () => {
   // Repeat tests on https://mongoosejs.com/docs/discriminators.html
 
@@ -95,15 +99,15 @@ it('should pass all mongoose discriminator tests', async () => {
 
   @ModelOptions({
     schemaOptions: {
-      discriminatorKey: 'kind'
-    }
+      discriminatorKey: 'kind',
+    },
   })
   @Pre('validate', (next) => {
     ++eventValidationCalls;
     next();
   })
   class Event {
-    public kind: string;
+    public kind?: string;
 
     @Prop()
     public time?: Date;
@@ -166,9 +170,9 @@ it('should pass all mongoose discriminator tests', async () => {
 
   // https://mongoosejs.com/docs/discriminators.html#using-discriminators-with-model-create
   const events = await Promise.all([
-    EventModel.create({ time: Date.now(), url: 'google.com' }),
+    EventModel.create<LeanDocument<ClickedLinkEvent>>({ time: new Date(Date.now()), url: 'google.com' }),
     ClickedLinkEventModel.create({ time: Date.now(), url: 'google.com' }),
-    SignedUpEventModel.create({ time: Date.now(), user: 'testuser' })
+    SignedUpEventModel.create({ time: Date.now(), user: 'testuser' }),
   ]);
 
   const [genericEvent, clickedEvent, signedUpEvent] = events;
@@ -208,10 +212,7 @@ it('should pass all mongoose discriminator tests', async () => {
 
   // https://mongoosejs.com/docs/discriminators.html#recursive-embedded-discriminators-in-arrays
   const subEvent = await SubEventModel.create({
-    events: [
-      ...events,
-      await SubEventModel.create({ events })
-    ]
+    events: [...events, await SubEventModel.create({ events })],
   });
   expect(subEvent.events).toHaveLength(4);
   expect(subEvent.events[3]).toHaveProperty('events');
@@ -219,8 +220,42 @@ it('should pass all mongoose discriminator tests', async () => {
   // https://mongoosejs.com/docs/discriminators.html#single-nested-discriminators
   const [circle, square] = await Promise.all([
     ShapeTestModel.create({ shape: new CircleModel({ radius: 5 }) }),
-    ShapeTestModel.create({ shape: new SquareModel({ side: 10 }) })
+    ShapeTestModel.create({ shape: new SquareModel({ side: 10 }) }),
   ]);
   expect(circle).toHaveProperty(['shape', 'radius'], 5);
   expect(square).toHaveProperty(['shape', 'side'], 10);
+});
+
+it('should work with references [typegoose#385]', () => {
+  // this is an typegoose version of "setting to discriminator (gh-4935)" in mongoose
+  class Buyer {
+    @prop()
+    public name?: string;
+
+    @prop({ ref: () => Vehicle })
+    public vehicle?: Ref<Vehicle>;
+  }
+
+  class Vehicle {
+    @prop()
+    public name?: string;
+  }
+
+  class Car extends Vehicle {
+    @prop()
+    public model?: string;
+  }
+
+  const BuyerModel = getModelForClass(Buyer);
+  const VehicleModel = getModelForClass(Vehicle);
+  const CarModel = getDiscriminatorModelForClass(VehicleModel, Car);
+
+  const eleanor = new CarModel({ name: 'Eleanor', model: 'Shelby Mustang GT' });
+  const nick = new BuyerModel({ name: 'Nicolas', vehicle: eleanor });
+
+  expect(nick.vehicle).not.toBeUndefined();
+  expect(nick.vehicle).toEqual(eleanor);
+  expect(nick.vehicle).toBeInstanceOf(CarModel);
+  assertion(isDocument(nick.vehicle), new Error('Expect "nick.vehicle" to be an document'));
+  expect(nick.vehicle.name).toEqual('Eleanor');
 });

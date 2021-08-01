@@ -1,54 +1,69 @@
-// disable "no-unused" for this file, to keep hooks consistent
-// tslint:disable:no-unused
-import type { Query } from 'mongoose';
-
+// disable "no-unused" for this file, to keep hooks consistent (it has to be an inline-comment, because of an problem with eslint)
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Aggregate, Query } from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
 import { assertion, getName } from './internal/utils';
 import { logger } from './logSettings';
 import type { DocumentType, EmptyVoidFn, IHooksArray } from './types';
 
-type NDA<T> = number | DocumentType<T> | DocumentType<T>[];
+type NumberOrDocumentOrDocumentArray<T> = number | DocumentType<T> | DocumentType<T>[];
 
-type ClassDecorator = (target: any) => void;
-type HookNextErrorFn = (err?: Error) => void;
+// i know that some events cannot be async (like "init"), but because they are unified into bigger types, i cannot change it
+type ReturnVoid = void | Promise<void>;
 
-type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => void;
-type PreFnWithQuery<T> = (this: Query<T>, next: (error?: Error) => void, done: EmptyVoidFn) => void;
+type HookNextErrorFn = (err?: Error) => ReturnVoid;
 
-type ModelPostFn<T> = (result: any, next: EmptyVoidFn) => void;
+type PreFnWithAggregate<T> = (this: Aggregate<T>, next: (error?: Error) => ReturnVoid) => ReturnVoid;
+type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => ReturnVoid;
+type PreFnWithQuery<T> = (this: Query<any, DocumentType<T>>, next: (error?: Error) => ReturnVoid) => ReturnVoid;
 
-type PostNumberResponse<T> = (result: number, next: EmptyVoidFn) => void;
-type PostSingleResponse<T> = (result: DocumentType<T>, next: EmptyVoidFn) => void;
-type PostMultipleResponse<T> = (result: DocumentType<T>[], next: EmptyVoidFn) => void;
-type PostRegExpResponse<T> = (result: NDA<T>, next: EmptyVoidFn) => void;
-type PostArrayResponse<T> = (result: NDA<T>, next: EmptyVoidFn) => void;
+type ModelPostFn<T> = (result: any, next: EmptyVoidFn) => ReturnVoid;
 
-type PostNumberWithError<T> = (error: Error, result: number, next: HookNextErrorFn) => void;
-type PostSingleWithError<T> = (error: Error, result: DocumentType<T>, next: HookNextErrorFn) => void;
-type PostMultipleWithError<T> = (error: Error, result: DocumentType<T>[], next: HookNextErrorFn) => void;
-type PostRegExpWithError<T> = (error: Error, result: NDA<T>, next: HookNextErrorFn) => void;
-type PostArrayWithError<T> = (error: Error, result: NDA<T>, next: EmptyVoidFn) => void;
+type PostNumberResponse<T> = (result: number, next: EmptyVoidFn) => ReturnVoid;
+type PostSingleResponse<T> = (result: DocumentType<T>, next: EmptyVoidFn) => ReturnVoid;
+type PostMultipleResponse<T> = (result: DocumentType<T>[], next: EmptyVoidFn) => ReturnVoid;
+type PostRegExpResponse<T> = (result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
+type PostArrayResponse<T> = (result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
 
+type PostNumberWithError<T> = (error: Error, result: number, next: HookNextErrorFn) => ReturnVoid;
+type PostSingleWithError<T> = (error: Error, result: DocumentType<T>, next: HookNextErrorFn) => ReturnVoid;
+type PostMultipleWithError<T> = (error: Error, result: DocumentType<T>[], next: HookNextErrorFn) => ReturnVoid;
+type PostRegExpWithError<T> = (error: Error, result: NumberOrDocumentOrDocumentArray<T>, next: HookNextErrorFn) => ReturnVoid;
+type PostArrayWithError<T> = (error: Error, result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
+
+type AggregateMethod = 'aggregate';
 type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
 type NumberMethod = 'count';
-type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | DocumentMethod;
-type MultipleMethod = 'find' | 'update';
-type QueryMethod = 'count' | 'find' | 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'update' | 'updateOne' | 'updateMany';
+type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'findOneAndDelete' | 'deleteOne' | DocumentMethod;
+type MultipleMethod = 'find' | 'update' | 'deleteMany' | 'aggregate';
+type QueryMethod =
+  | 'count'
+  | 'countDocuments'
+  | 'estimatedDocumentCount'
+  | 'find'
+  | 'findOne'
+  | 'findOneAndRemove'
+  | 'findOneAndUpdate'
+  | 'update'
+  | 'updateOne'
+  | 'updateMany'
+  | 'findOneAndDelete'
+  | 'deleteOne'
+  | 'deleteMany';
 type ModelMethod = 'insertMany';
 type QMR = QueryMethod | ModelMethod | RegExp;
 type QDM = QMR | DocumentMethod;
 type DR = DocumentMethod | RegExp;
 
 interface Hooks {
+  pre<T>(method: AggregateMethod, fn: PreFnWithAggregate<T>): ClassDecorator;
+
   pre<T>(method: DR | DR[], fn: PreFnWithDocumentType<T>): ClassDecorator;
 
   pre<T>(method: QMR | QMR[], fn: PreFnWithQuery<T>): ClassDecorator;
 
   post<T>(method: RegExp, fn: PostRegExpResponse<T>): ClassDecorator;
   post<T>(method: RegExp, fn: PostRegExpWithError<T>): ClassDecorator;
-
-  post<T>(method: QDM[], fn: PostArrayResponse<T>): ClassDecorator;
-  post<T>(method: QDM[], fn: PostArrayWithError<T>): ClassDecorator;
 
   post<T>(method: NumberMethod, fn: PostNumberResponse<T>): ClassDecorator;
   post<T>(method: NumberMethod, fn: PostNumberWithError<T>): ClassDecorator;
@@ -60,16 +75,19 @@ interface Hooks {
   post<T>(method: MultipleMethod, fn: PostMultipleWithError<T>): ClassDecorator;
 
   post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>): ClassDecorator;
+
+  post<T>(method: QDM | QDM[], fn: PostArrayResponse<T>): ClassDecorator;
+  post<T>(method: QDM | QDM[], fn: PostArrayWithError<T>): ClassDecorator;
 }
 
-// Note: TSDoc for the hooks can't be added without adding it to *every* overload
+// TSDoc for the hooks can't be added without adding it to *every* overload
 const hooks: Hooks = {
   pre(...args) {
     return (target: any) => addToHooks(target, 'pre', args);
   },
   post(...args) {
     return (target: any) => addToHooks(target, 'post', args);
-  }
+  },
 };
 
 /**
@@ -78,7 +96,7 @@ const hooks: Hooks = {
  * @param hookType What type is it
  * @param args All Arguments, that should be passed-throught
  */
-function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]) {
+function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
   // Convert Method to array if only a string is provided
   const methods: QDM[] = Array.isArray(args[0]) ? args[0] : [args[0]];
   assertion(

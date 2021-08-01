@@ -3,7 +3,7 @@ import { getModelForClass, prop } from '../../src/typegoose';
 export enum SelectStrings {
   test1 = 'testing 1 should not default include',
   test2 = 'testing 2 should default include',
-  test3 = 'testing 3 should not default include'
+  test3 = 'testing 3 should not default include',
 }
 
 // Note: "select: true" is just to test if it works, and doesn't give an error
