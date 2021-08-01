@@ -55,3 +55,12 @@ export class CannotBeSymbol extends Error {
     super(`A property key in Typegoose cannot be an symbol! (${name}.${String(key)}) [E024]`);
   }
 }
+
+export class SelfContainingClassError extends TypeError {
+  constructor(name: string, key: string) {
+    super(
+      'It seems like the type used is the same as the target class, which is not supported\n' +
+        `Please look at https://github.com/typegoose/typegoose/issues/42 for more information (${name}.${key}) [E004]`
+    );
+  }
+}

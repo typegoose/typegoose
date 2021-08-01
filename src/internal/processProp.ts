@@ -17,6 +17,7 @@ import {
   NotAllVPOPElementsError,
   NotNumberTypeError,
   NotStringTypeError,
+  SelfContainingClassError,
 } from './errors';
 import * as utils from './utils';
 
@@ -66,10 +67,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
   if (Type === target.constructor) {
-    throw new TypeError(
-      'It seems like the type used is the same as the target class, which is not supported\n' +
-        `Please look at https://github.com/typegoose/typegoose/issues/42 for more information [E004]`
-    );
+    throw new SelfContainingClassError(name, key);
   }
 
   // map to correct buffer type, otherwise it would result in "Mixed"

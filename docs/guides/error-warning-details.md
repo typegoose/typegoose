@@ -39,7 +39,7 @@ Error:
 
 ```txt
 It seems like the type used is the same as the target class, which is not supported
-Please look at https://github.com/typegoose/typegoose/issues/42 for more information [E004]
+Please look at https://github.com/typegoose/typegoose/issues/42 for more information (${name}.${key}) [E004]
 ```
 
 Details:  
