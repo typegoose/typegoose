@@ -218,7 +218,7 @@ class ErrorClass {
 }
 ```
 
-## PropOptions.ref dosnt support Arrays [E021]
+### PropOptions.ref dosnt support Arrays [E021]
 
 Error: `"PropOptions.ref" dosnt support Arrays (got "${gotType.dim}" dimensions at "${name}.${key}") [E021]`
 
