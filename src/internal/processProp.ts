@@ -10,7 +10,14 @@ import type {
 } from '../types';
 import { DecoratorKeys, WhatIsIt } from './constants';
 import { schemas } from './data';
-import { InvalidTypeError, InvalidWhatIsItError, NotAllVPOPElementsError, NotNumberTypeError, NotStringTypeError } from './errors';
+import {
+  CannotBeSymbol,
+  InvalidTypeError,
+  InvalidWhatIsItError,
+  NotAllVPOPElementsError,
+  NotNumberTypeError,
+  NotStringTypeError,
+} from './errors';
 import * as utils from './utils';
 
 /**
@@ -25,7 +32,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const propKind = input.whatis ?? detectWhatIsIt(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);
-  utils.assertion(typeof key === 'string', new Error(`Property Key in typegoose cannot be an symbol! (${name}.${String(key)})`));
+  utils.assertion(typeof key === 'string', new CannotBeSymbol(name, key));
 
   // optionDeprecation(rawOptions);
 

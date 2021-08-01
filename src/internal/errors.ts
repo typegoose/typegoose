@@ -49,3 +49,9 @@ export class InvalidWhatIsItError extends Error {
     super(`"${whatisit}"(${where}) is invalid for "${name}.${key}" [E013]`);
   }
 }
+
+export class CannotBeSymbol extends Error {
+  constructor(name: string, key: string | symbol) {
+    super(`A property key in Typegoose cannot be an symbol! (${name}.${String(key)}) [E024]`);
+  }
+}

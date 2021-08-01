@@ -250,6 +250,13 @@ Error:
 Details:  
 The option `ref` / `refPath` are not supported for this `propKind` (which in most cases is `MAP`)
 
+### A property key in Typegoose cannot be an symbol! [E024]
+
+Error: `A property key in Typegoose cannot be an symbol! (${name}.${String(key)}) [E024]`
+
+Details:  
+A Property Key in Typegoose cannot be a Symbol, it must be a String (also a limitation of mongoose)
+
 ## Warnings
 
 ### Type is not the type for the options provided [W001]
