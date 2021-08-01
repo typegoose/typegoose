@@ -16,7 +16,7 @@ import type {
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
-import { AssertionFallbackError, InvalidWhatIsItError, NoValidClass } from './errors';
+import { AssertionFallbackError, InvalidWhatIsItError, NoValidClassError } from './errors';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -596,7 +596,7 @@ export function assertion(cond: any, error?: Error): asserts cond {
  * @param val Value to test
  */
 export function assertionIsClass(val: any): asserts val is Func {
-  assertion(isConstructor(val), new NoValidClass(val));
+  assertion(isConstructor(val), new NoValidClassError(val));
 }
 
 /**
