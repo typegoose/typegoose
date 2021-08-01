@@ -35,23 +35,6 @@ export type Func = (...args: any[]) => any;
  */
 export type CustomNameFunction = (options: IModelOptions) => string;
 
-export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
-
-export type ValidatorFunction = (value: any) => boolean | Promise<boolean>;
-export interface ValidatorFunctionMessageParam {
-  validator: ValidatorFunction;
-  message(...args: any[]): string;
-  type: string;
-  path: string;
-  value: any;
-}
-export interface ValidatorOptions {
-  validator: ValidatorFunction;
-  // the function for message is with "any" because i (hasezoey) am not sure if the type is always "ValidatorFunctionMessageParam"
-  message?: string | ((props: ValidatorFunctionMessageParam) => string) | ((...args: any[]) => string);
-}
-export type Validator = ValidatorFunction | RegExp | ValidatorOptions | ValidatorOptions[];
-
 /**
  * Defer an reference with an function (or as other projects call it "Forward declaration")
  * @param type This is just to comply with the common pattern of `type => ActualType`
@@ -63,56 +46,64 @@ export type DeferredFunc<T = any> = (...args: unknown[]) => T;
  */
 export type DynamicStringFunc<T extends AnyParamConstructor<any>> = (doc: DocumentType<T>) => string;
 
+/**
+ * This Interface for most properties uses "mongoose.SchemaTypeOptions<any>['']", but for some special (or typegoose custom) options, it is not used
+ *
+ * Example: `index` is directly from mongoose, where as `type` is from typegoose
+ */
+// TODO: when "@inheritDoc" becomes working, change all "Copied from mongoose"
 export interface BasePropOptions {
-  [key: string]: any;
   /**
    * include this value?
    * @default true (Implicitly)
    */
-  select?: boolean;
+  select?: mongoose.SchemaTypeOptions<any>['select'];
   /**
    * is this value required?
    * @default false (Implicitly)
    */
-  required?: RequiredType;
+  required?: mongoose.SchemaTypeOptions<any>['required'];
   /** Only accept Values from the Enum(|Array) */
   enum?: string[] | BeAnObject;
-  /** Add "null" to the enum array */
+  /**
+   * Add "null" to the enum array
+   * Note: Custom Typegoose Option
+   */
   addNullToEnum?: boolean;
   /** Give the Property a default Value */
-  default?: any;
+  default?: mongoose.SchemaTypeOptions<any>['default']; // i know this one does not have much of an effect, because of "any"
   /** Give an Validator RegExp or Function */
-  validate?: Validator | Validator[];
+  validate?: mongoose.SchemaTypeOptions<any>['validate'];
   /**
    * Should this property have an "unique" index?
    * @link https://docs.mongodb.com/manual/indexes/#unique-indexes
    */
-  unique?: boolean;
+  unique?: mongoose.SchemaTypeOptions<any>['unique'];
   /**
    * Should this property have an index?
    * Note: dont use this if you want to do an compound index
    * @link https://docs.mongodb.com/manual/indexes
    */
-  index?: boolean;
+  index?: mongoose.SchemaTypeOptions<any>['index'];
   /**
    * Should this property have an "sparse" index?
    * @link https://docs.mongodb.com/manual/indexes/#sparse-indexes
    */
-  sparse?: boolean;
+  sparse?: mongoose.SchemaTypeOptions<any>['sparse'];
   /**
    * Should this property have an "expires" index?
    * @link https://docs.mongodb.com/manual/tutorial/expire-data
    */
-  expires?: string | number;
+  expires?: string | number /* mongoose.SchemaTypeOptions<any>['expires'] */; // TODO: change to get from mongoose, when https://github.com/Automattic/mongoose/issues/10529 resolved
   /**
    * Should this property have an "text" index?
    * @link https://mongoosejs.com/docs/api.html#schematype_SchemaType-text
    */
-  text?: boolean;
+  text?: mongoose.SchemaTypeOptions<any>['text'];
   /** Should subdocuments get their own id?
    * @default true (Implicitly)
    */
-  _id?: boolean;
+  _id?: mongoose.SchemaTypeOptions<any>['_id'];
   /**
    * Set a Setter (Non-Virtual) to pre-process your value
    * (when using get/set both are required)
@@ -170,9 +161,10 @@ export interface BasePropOptions {
    * }
    * ```
    */
-  immutable?: boolean;
+  immutable?: mongoose.SchemaTypeOptions<any>['immutable'];
   /**
    * Give the Property an alias in the output
+   *
    * Note: you should include the alias as a variable in the class, but not with a prop decorator
    * @example
    * ```ts
@@ -183,7 +175,7 @@ export interface BasePropOptions {
    * }
    * ```
    */
-  alias?: string;
+  alias?: mongoose.SchemaTypeOptions<any>['alias'];
   /**
    * This option as only an effect when the plugin `mongoose-autopopulate` is used
    */
@@ -195,9 +187,46 @@ export interface BasePropOptions {
   refPath?: string;
   /**
    * Set the Nested Discriminators
+   *
    * Note: "_id: false" as an prop option dosnt work here
+   *
+   * Note: Custom Typegoose Option
    */
   discriminators?: DeferredFunc<(AnyParamConstructor<any> | DiscriminatorObject)[]>;
+  /**
+   * Use option {@link BasePropOptions.type}
+   * @see https://typegoose.github.io/typegoose/docs/api/decorators/prop#map-options
+   * @see https://typegoose.github.io/typegoose/docs/api/decorators/prop#whatisit
+   */
+  of?: never;
+  /**
+   * If true, uses Mongoose's default `_id` settings. Only allowed for ObjectIds
+   *
+   * Note: Copied from mongoose's "index.d.ts"#SchemaTypeOptions
+   */
+  auto?: mongoose.SchemaTypeOptions<any>['auto'];
+  /**
+   * The default [subtype](http://bsonspec.org/spec.html) associated with this buffer when it is stored in MongoDB. Only allowed for buffer paths
+   *
+   * Note: Copied from mongoose's "index.d.ts"#SchemaTypeOptions
+   */
+  subtype?: mongoose.SchemaTypeOptions<any>['subtype'];
+  /**
+   * If `true`, Mongoose will skip gathering indexes on subpaths. Only allowed for subdocuments and subdocument arrays.
+   *
+   * Note: Copied from mongoose's "index.d.ts"#SchemaTypeOptions
+   */
+  excludeIndexes?: mongoose.SchemaTypeOptions<any>['excludeIndexes'];
+  /**
+   * Define a transform function for this individual schema type.
+   * Only called when calling `toJSON()` or `toObject()`.
+   *
+   * Note: Copied from mongoose's "index.d.ts"#SchemaTypeOptions
+   */
+  transform?: mongoose.SchemaTypeOptions<any>['transform'];
+
+  // for plugins / undocumented types
+  [extra: string]: any;
 }
 
 export interface InnerOuterOptions {
@@ -221,13 +250,16 @@ export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
   /**
    * How many dimensions this Array should have
    * (needs to be higher than 0)
+   *
+   * Note: Custom Typegoose Option
    * @default 1
    */
   dim?: number;
   /**
    * Set if Non-Array values will be cast to an array
-   * https://mongoosejs.com/docs/api/schemaarray.html#schemaarray_SchemaArray.options
+   *
    * NOTE: This option currently only really affects "DocumentArray" and not normal arrays, https://github.com/Automattic/mongoose/issues/10398
+   * @see https://mongoosejs.com/docs/api/schemaarray.html#schemaarray_SchemaArray.options
    * @example
    * ```ts
    * new Model({ array: "string" });
@@ -243,9 +275,9 @@ export interface MapPropOptions extends BasePropOptions, InnerOuterOptions {}
 
 export interface ValidateNumberOptions {
   /** Only allow numbers that are higher than this */
-  min?: number | [number, string];
+  min?: mongoose.SchemaTypeOptions<any>['min'];
   /** Only allow numbers lower than this */
-  max?: number | [number, string];
+  max?: mongoose.SchemaTypeOptions<any>['max'];
   /** Only allow Values from the enum */
   enum?: number[];
 }
@@ -256,20 +288,21 @@ export interface ValidateStringOptions {
   /** Only allow Values from the enum */
   enum?: string[];
   /** Only allow values that have at least this length */
-  minlength?: number | [number, string];
+  minlength?: mongoose.SchemaTypeOptions<any>['minlength'];
   /** Only allow values that have at max this length */
-  maxlength?: number | [number, string];
+  maxlength?: mongoose.SchemaTypeOptions<any>['maxlength'];
 }
 
 export interface TransformStringOptions {
   /** Should it be lowercased before save? */
-  lowercase?: boolean;
+  lowercase?: mongoose.SchemaTypeOptions<any>['lowercase'];
   /** Should it be uppercased before save? */
-  uppercase?: boolean;
+  uppercase?: mongoose.SchemaTypeOptions<any>['uppercase'];
   /** Should it be trimmed before save? */
-  trim?: boolean;
+  trim?: mongoose.SchemaTypeOptions<any>['trim'];
 }
 
+// TODO: when "@inheritDoc" becomes working, change all "Copied from mongoose"
 export interface VirtualOptions {
   /** Reference another Document (Ref<T> should be used as property type) */
   ref: NonNullable<BasePropOptions['ref']>;
@@ -278,13 +311,44 @@ export interface VirtualOptions {
   /** Which property(on the ref-Class) to match `localField` against */
   foreignField: string | DeferredFunc<string>;
   /** Return as One Document(true) or as Array(false) */
-  justOne?: boolean;
+  justOne?: mongoose.VirtualTypeOptions['justOne'];
   /** Return the number of Documents found instead of the actual Documents */
-  count?: boolean;
+  count?: mongoose.VirtualTypeOptions['count'];
   /** Extra Query Options */
-  options?: KeyStringAny;
+  options?: mongoose.VirtualTypeOptions['options'];
   /** Match Options */
   match?: KeyStringAny | ((doc) => KeyStringAny);
+  /**
+   * If you set this to `true`, Mongoose will call any custom getters you defined on this virtual.
+   *
+   * Note: Copied from mongoose's "index.d.ts"#VirtualTypeOptions
+   */
+  getters?: mongoose.VirtualTypeOptions['getters'];
+  /**
+   * Add a default `limit` to the `populate()` query.
+   *
+   * Note: Copied from mongoose's "index.d.ts"#VirtualTypeOptions
+   */
+  limit?: mongoose.VirtualTypeOptions['limit'];
+  /**
+   * Add a default `skip` to the `populate()` query.
+   *
+   * Note: Copied from mongoose's "index.d.ts"#VirtualTypeOptions
+   */
+  skip?: mongoose.VirtualTypeOptions['skip'];
+  /**
+   * For legacy reasons, `limit` with `populate()` may give incorrect results because it only
+   * executes a single query for every document being populated. If you set `perDocumentLimit`,
+   * Mongoose will ensure correct `limit` per document by executing a separate query for each
+   * document to `populate()`. For example, `.find().populate({ path: 'test', perDocumentLimit: 2 })`
+   * will execute 2 additional queries if `.find()` returns 2 documents.
+   *
+   * Note: Copied from mongoose's "index.d.ts"#VirtualTypeOptions
+   */
+  perDocumentLimit?: mongoose.VirtualTypeOptions['perDocumentLimit'];
+
+  // for plugins / undocumented types
+  [extra: string]: any;
 }
 
 export type PropOptionsForNumber = BasePropOptions & ValidateNumberOptions;
