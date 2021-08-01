@@ -1,6 +1,6 @@
 import { logger } from '../logSettings';
 import { buildSchema, mongoose, Passthrough } from '../typegoose';
-import {
+import type {
   AnyParamConstructor,
   DecoratedPropertyMetadata,
   DiscriminatorObject,
