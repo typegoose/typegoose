@@ -25,7 +25,7 @@ Error:
 
 ```txt
 It seems like "addModelToTypegoose" got called twice
-Or multiple classes with the same name are used, which is not supported!
+Or multiple classes with the same name are used, which is not supported! (Model Name: "${name}") [E003]
 ```
 
 Details:  
