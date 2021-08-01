@@ -1,5 +1,5 @@
 ---
-id: error-warnings-details
+id: error-warning-details
 title: 'Error & Warning Details'
 ---
 

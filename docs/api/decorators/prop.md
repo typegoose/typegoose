@@ -166,7 +166,7 @@ class Cat {
 }
 ```
 
-The `'Nested'`(as string) form is useful to avoid unintuitive errors due to circular dependencies, such as [`Option "ref" for "${name}.${key}" is null/undefined! [E005]`](../../guides/error-warnings-details.md#ref-is-undefined-e005).
+The `'Nested'`(as string) form is useful to avoid unintuitive errors due to circular dependencies, such as [`Option "ref" for "${name}.${key}" is null/undefined! [E005]`](../../guides/error-warning-details.md#ref-is-undefined-e005).
 
 ### refPath
 

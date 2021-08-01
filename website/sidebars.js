@@ -7,7 +7,7 @@ module.exports = {
     Types: ["api/types/document-type", "api/types/return-model-type", "api/types/ref-type", "api/types/additional-types"]
   },
   guides: {
-    "Getting Started": ["guides/quick-start-guide", "guides/faq", "guides/known-issues", "guides/deprecation-codes", "guides/error-warnings-details"],
+    "Getting Started": ["guides/quick-start-guide", "guides/faq", "guides/known-issues", "guides/deprecation-codes", "guides/error-warning-details"],
     Basics: ["guides/all-decorators", "guides/motivation", "guides/default-classes", "guides/use-without-emitDecoratorMetadata"],
     Advanced: ["guides/advanced/custom-types", "guides/advanced/array-types", "guides/advanced/models-with-same-name", "guides/advanced/logger", "guides/advanced/reference-other-classes", "guides/advanced/common-plugins", "guides/advanced/change-id-type", "guides/advanced/using-objectid-type", "guides/advanced/using-with-class-transformer", "guides/advanced/non-nested-discriminators"],
     Migration: ["guides/mongoose-compatibility", "guides/migrate-8", "guides/migrate-7", "guides/migrate-6"]
