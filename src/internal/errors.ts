@@ -32,7 +32,7 @@ export class NotAllVPOPElementsError extends Error {
 }
 
 export class NoValidClassError extends TypeError {
-  constructor(cl: any) {
+  constructor(cl: unknown) {
     super(`"${cl}" is not a function(/constructor)!`);
   }
 }
