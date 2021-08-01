@@ -259,9 +259,14 @@ A Property Key in Typegoose cannot be a Symbol, it must be a String (also a limi
 
 ## Warnings
 
-### Type is not the type for the options provided [W001]
+### Type is not ${type}, but includes the following ${extra} options [W001]
 
-Warning: `Type of "${name}.${key}" is not ${type}, but includes the following ${extra} options [W001]`
+Warning:
+
+```txt
+Type of "${name}.${key}" is not ${type}, but includes the following ${extra} options [W001]:
+  [${included.join(', ')}]
+```
 
 Details:  
 The provided options (listed in the warning) do nothing with the provided `Type`
