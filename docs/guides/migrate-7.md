@@ -5,6 +5,10 @@ title: 'Migrate to 7.0.0'
 
 These are the changes made for 7.0.0 that are breaking or just important to know
 
+:::caution Important, Read this first
+This Guide is written for migration from version `6.5.0` to `7.0.0`, for versions `>7.0.0 <8.0.0`, please consult the [CHANGELOG](https://github.com/typegoose/typegoose/blob/master/CHANGELOG.md)
+:::
+
 ## Requirements changed
 
 - Nodejs 8 & 9 are now unsupported, lowest supported version is now `10.15`
