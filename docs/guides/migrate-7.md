@@ -12,7 +12,8 @@ This Guide is written for migration from version `6.5.0` to `7.0.0`, for version
 ## Requirements changed
 
 - Nodejs 8 & 9 are now unsupported, lowest supported version is now `10.15`
-- Typescript 3.8 is now required
+- Typescript `3.8` is now required (`4.9` is recommended)
+- Mongoose `5.9.10` or higher is now required
 
 ## Deprecation removals
 
