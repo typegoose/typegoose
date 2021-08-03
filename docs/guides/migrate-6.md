@@ -9,6 +9,11 @@ These are the changes made for 6.0.0 that are breaking or just important to know
 This Guide is written for migration from version `5.9.2` to `6.0.0`, for versions `>6.0.0 <7.0.0`, please consult the [CHANGELOG](https://github.com/typegoose/typegoose/blob/master/CHANGELOG.md)
 :::
 
+## Requirements changed
+
+- Typescript `3.5` is now required / recommended
+- Mongoose `5.7.1` or higher is now required
+
 ## InstanceType changed
 
 `InstanceType<T>` was renamed to `DocumentType<T>`
