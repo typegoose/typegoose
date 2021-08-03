@@ -1,3 +1,30 @@
+## [8.1.0](https://github.com/typegoose/typegoose/compare/v8.0.1...v8.1.0) (2021-08-01)
+
+
+### Features
+
+* add error "CannotBeSymbol" to replace custom error ([f6754cb](https://github.com/typegoose/typegoose/commit/f6754cb39f3ab8ff59e7b2a28cdf60fb1bf12e12))
+* add error "InvalidWhatIsItError" to replace custom error ([cc30146](https://github.com/typegoose/typegoose/commit/cc3014684738c63c8fcdf5cc295d71b84aad1956))
+* add error "SelfContainingClassError" to replace custom error ([3a32dde](https://github.com/typegoose/typegoose/commit/3a32dde03545b5f398f95c4e5c3763e6bc6e59be))
+* rename error "NoValidClass" to "NoValidClassError" ([2ec44af](https://github.com/typegoose/typegoose/commit/2ec44af01457e58b119c34d2b2345439709dd7b4))
+* **types:** passthrough some mongoose option-types ([50370d1](https://github.com/typegoose/typegoose/commit/50370d13abc0097b1cba7e761023fb3330bf23d8)), closes [typegoose/typegoose#259](https://github.com/typegoose/typegoose/issues/259)
+
+
+### Style
+
+* **processProp:** change to "import type" from "../types" ([94b8046](https://github.com/typegoose/typegoose/commit/94b8046aa8b948ac1c3a82d6bc54600864f9b6c0))
+* **types:** fix comment / tsdoc for "IndexOptions" ([75cbb27](https://github.com/typegoose/typegoose/commit/75cbb2754e0ceccd8960fd3070ad4fbb0eb35d93))
+
+
+### Fixes
+
+* **errors:** change parameter for "NoValidClassError" from "any" to "unknown" ([dbb95d8](https://github.com/typegoose/typegoose/commit/dbb95d8a9c093d7b51e81997abceda7cc06a06e2))
+
+
+### Dependencies
+
+* **eslint:** upgrade to version 7.32.0 ([cd56ce6](https://github.com/typegoose/typegoose/commit/cd56ce6706be4106194c92f78e1f09fb977e4d49))
+
 ### [8.0.1](https://github.com/typegoose/typegoose/compare/v8.0.0...v8.0.1) (2021-07-30)
 
 
