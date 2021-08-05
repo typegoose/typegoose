@@ -655,7 +655,7 @@ class ArrayInType {
 Example:
 
 ```ts
-class SomeMapClass {
+class SomeMapClass1 {
   @prop({ type: String })
   public lookup?: Map<string, string>; // "Map<any, any>" or "mongoose.Types.Map<any>" is needed to be detected as a Map
 }
@@ -664,7 +664,38 @@ class SomeMapClass2 {
   @prop({ type: () => String }, WhatIsIt.MAP) // explicitly define the "WhatIsIt"
   public lookup?: Map<string, string>;
 }
+
+// Extra Examples with different types
+// Example: Primitive-Arrays
+class SomeMapClass3 {
+  @prop({ type: () => [String] })
+  public lookup?: Map<string, string[]>;
+}
+
+// Example: SubDocuments
+class Nested {
+  @prop()
+  public dummy?: string;
+}
+class SomeMapClass3 {
+  @prop({ type: () => Nested, _id: false })
+  public lookup?: Map<string, Nested>;
+}
+
+// Example: SubDocument-Arrays (since 8.1.1)
+class Nested {
+  @prop()
+  public dummy?: string;
+}
+class SomeMapClass3 {
+  @prop({ type: () => [Nested], _id: false })
+  public lookup?: Map<string, Nested[]>;
+}
 ```
+
+:::note
+`type` can be Primitives, Primitive-Arrays, SubDocuments(Classes) and SubDocument(Class)-Arrays
+:::
 
 ## String Transform options
 
