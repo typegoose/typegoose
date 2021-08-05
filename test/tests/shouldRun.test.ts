@@ -486,3 +486,49 @@ it('should make use of the "Passthrough" class', async () => {
     })
   );
 });
+
+it('should allow Maps with SubDocument "Map<string SubDocument>"', async () => {
+  class NestedMapSubDocument {
+    @prop()
+    public dummy?: string;
+  }
+
+  class TestMapSubDocument {
+    @prop({ type: () => NestedMapSubDocument, _id: false })
+    public nesting?: Map<string, NestedMapSubDocument>;
+  }
+
+  const schema = buildSchema(TestMapSubDocument);
+  const nestingPath = schema.path('nesting');
+  // "$__schemaType" is an mongoose internal property (does not have types) which holds the type of a "Map"
+  const casterNestingPath = nestingPath['$__schemaType'];
+
+  expect(nestingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(casterNestingPath).toBeInstanceOf(mongoose.Schema.Types.Embedded);
+  expect(casterNestingPath.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(casterNestingPath.schema.paths).not.toHaveProperty('_id');
+});
+
+it('should allow Maps with SubDocument Array "Map<string SubDocument[]>"', async () => {
+  class NestedMapSubDocumentArray {
+    @prop()
+    public dummy?: string;
+  }
+
+  class TestMapSubDocumentArray {
+    @prop({ type: () => [NestedMapSubDocumentArray], _id: false })
+    public nesting?: Map<string, NestedMapSubDocumentArray[]>;
+  }
+
+  const schema = buildSchema(TestMapSubDocumentArray);
+  const nestingPath = schema.path('nesting');
+  // "$__schemaType" is an mongoose internal property (does not have types) which holds the type of a "Map"
+  const casterNestingPath = nestingPath['$__schemaType'];
+
+  expect(nestingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(casterNestingPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+  // this somehow does not work
+  // expect(casterNestingPath.caster).toEqual(mongoose.Schema.Types.Embedded);
+  expect(casterNestingPath.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(casterNestingPath.schema.paths).not.toHaveProperty('_id');
+});
