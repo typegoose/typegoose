@@ -471,6 +471,22 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
       return;
     case WhatIsIt.MAP:
+      // special handling if the lower type should be an array
+      if ('dim' in rawOptions) {
+        logger.debug('Map SubDocument Array for "%s.%s"', name, key);
+
+        const { type, ...outer } = utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type);
+
+        schemaProp[key] = {
+          ...schemaProp[key],
+          ...outer,
+          type: Map,
+          of: type,
+        };
+
+        return;
+      }
+
       const mapped = utils.mapOptions(rawOptions, virtualSchema, target, key, Type);
 
       schemaProp[key] = {
