@@ -1,3 +1,10 @@
+### [8.1.1](https://github.com/typegoose/typegoose/compare/v8.1.0...v8.1.1) (2021-08-05)
+
+
+### Fixes
+
+* **processProp:** support Maps with SubDocument-Arrays ([94fb0b9](https://github.com/typegoose/typegoose/commit/94fb0b9a146722ee6368622061d8351fe9e28515))
+
 ## [8.1.0](https://github.com/typegoose/typegoose/compare/v8.0.1...v8.1.0) (2021-08-01)
 
 

@@ -237,7 +237,7 @@ Typegoose also supports hooks. They can be used like this:
 @pre<KittenClass>('save', function() {
   this.isKitten = this.age < 1
 })
-@post<KittenClass>('save', (kitten) => {
+@post<KittenClass>('save', function(kitten) {
   console.log(kitten.isKitten ? 'We have a kitten here.' : 'We have a big kitty here.')
 })
 class KittenClass {
