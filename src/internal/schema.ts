@@ -93,7 +93,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
           const discriminatorKey = childSch.get('discriminatorKey');
 
-          if (childSch.path(discriminatorKey)) {
+          if (!!discriminatorKey && childSch.path(discriminatorKey)) {
             // skip this check, otherwise "extends DiscriminatorBase" would not be allowed (discriminators cannot have the discriminator key defined multiple times)
             (childSch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
           }

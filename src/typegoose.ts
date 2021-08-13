@@ -282,7 +282,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 
   const discriminatorKey = sch.get('discriminatorKey');
 
-  if (sch.path(discriminatorKey)) {
+  if (!!discriminatorKey && sch.path(discriminatorKey)) {
     (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
   }
 
