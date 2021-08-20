@@ -90,8 +90,6 @@ describe('existingMongoose & existingConnection', () => {
       public hello: string;
     }
 
-    const schema = buildSchema(AnotherExistingConnection);
-    schema.add({ somesecondvalue: { type: String, required: true } });
     const model = newConnection.model.bind(newConnection);
     const compiledModel = model('AnotherExistingConnection', buildSchema(AnotherExistingConnection, {}));
     addModelToTypegoose(compiledModel, AnotherExistingConnection, { existingConnection: newConnection });
@@ -115,8 +113,6 @@ describe('existingMongoose & existingConnection', () => {
       public hello: string;
     }
 
-    const schema = buildSchema(AnotherExistingMongoose);
-    schema.add({ somesecondvalue: { type: String, required: true } });
     const model = newMongoose.model.bind(newMongoose);
     const compiledModel = model('AnotherExistingMongoose', buildSchema(AnotherExistingMongoose, {}));
     addModelToTypegoose(compiledModel, AnotherExistingMongoose, { existingMongoose: newMongoose });
