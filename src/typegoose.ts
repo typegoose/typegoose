@@ -119,14 +119,14 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
   options?: mongoose.SchemaOptions,
   overwriteOptions?: IModelOptions
-): mongoose.Schema<DocumentType<U>> {
+): mongoose.Schema<DocumentType<InstanceType<U>>> {
   assertionIsClass(cl);
 
   logger.debug('buildSchema called for "%s"', getName(cl, overwriteOptions));
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
-  let sch: mongoose.Schema<DocumentType<U>> | undefined = undefined;
+  let sch: mongoose.Schema<DocumentType<InstanceType<U>>> | undefined = undefined;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   // iterate trough all parents
