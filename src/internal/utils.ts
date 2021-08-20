@@ -375,7 +375,7 @@ export function mapArrayOptions(
   pkey: string,
   loggerType?: AnyParamConstructor<any>,
   extra?: KeyStringAny
-): mongoose.SchemaTypeOpts<any> {
+): mongoose.SchemaTypeOptions<any> {
   logger.debug('mapArrayOptions called');
   loggerType = loggerType ?? (Type as AnyParamConstructor<any>);
 
