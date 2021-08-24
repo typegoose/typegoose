@@ -1,3 +1,30 @@
+## [8.2.0](https://github.com/typegoose/typegoose/compare/v8.1.1...v8.2.0) (2021-08-24)
+
+
+### Style
+
+* **utils:** change "SchemaTypeOpts" to "SchemaTypeOptions" ([402fe7a](https://github.com/typegoose/typegoose/commit/402fe7aef192454eda44ef402acde47492ec9fc1))
+
+
+### Fixes
+
+* **typegoose:** buildSchema: fix return type ([ce5bf45](https://github.com/typegoose/typegoose/commit/ce5bf456eb52283ea31084bde5c3819c452c98a3))
+* **types:** change "IndexOptions" to extend from "mongoose.IndexOptions" ([968338e](https://github.com/typegoose/typegoose/commit/968338ee480c62038d007e7dbd555a3a08b2f1cf))
+* apply changes for "Schema.get" returning "string | undefined" instead of any ([76b9799](https://github.com/typegoose/typegoose/commit/76b979920be32b6a407966062ee3004c282e1bf0))
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to version 27.0.1 ([9b29aa7](https://github.com/typegoose/typegoose/commit/9b29aa7968684e0291224c289023347c82284bf4))
+* **@types/lodash:** upgrade to version 4.14.172 ([316b56d](https://github.com/typegoose/typegoose/commit/316b56d05ab62e86352804d82a9bf2b26a09d396))
+* **@typescript-eslint/*:** upgrade to version 4.29.3 ([352c90a](https://github.com/typegoose/typegoose/commit/352c90aa6daf9cd357ee1342644cf7bb40d15aec))
+* **eslint-plugin-prettier:** upgrade to version 3.4.1 ([fc357fc](https://github.com/typegoose/typegoose/commit/fc357fc43aba928df49d8a5e58c178d645ef62a1))
+* **lint-staged:** upgrade to version 11.1.2 ([82fca54](https://github.com/typegoose/typegoose/commit/82fca54b1f4b6351fe46d8becb6a68161b9f7d95))
+* **mongodb-memory-server:** upgrade to version 7.3.6 ([096e0b6](https://github.com/typegoose/typegoose/commit/096e0b6ae1253195594ca45058ebd255a4671600))
+* **mongoose:** upgrade to version 5.13.8 ([e2ae6f9](https://github.com/typegoose/typegoose/commit/e2ae6f94be8c81ee1603a7f496071e70318aa8f3))
+* **semantic-release:** upgrade to version 17.4.6 ([297a9e7](https://github.com/typegoose/typegoose/commit/297a9e7f79a0a3c62dfb306c81b708f650ae0dd8))
+* **ts-jest:** upgrade to version 27.0.5 ([7bccb36](https://github.com/typegoose/typegoose/commit/7bccb367acc35c45785abeff0f7d890b65c08d62))
+
 ### [8.1.1](https://github.com/typegoose/typegoose/compare/v8.1.0...v8.1.1) (2021-08-05)
 
 
