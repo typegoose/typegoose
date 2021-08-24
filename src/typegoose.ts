@@ -8,8 +8,8 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '5.13.3')) {
-    throw new Error(`Please use mongoose 5.13.3 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '5.13.8')) {
+    throw new Error(`Please use mongoose 5.13.8 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
@@ -119,14 +119,14 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
   options?: mongoose.SchemaOptions,
   overwriteOptions?: IModelOptions
-): mongoose.Schema<DocumentType<U>> {
+): mongoose.Schema<DocumentType<InstanceType<U>>> {
   assertionIsClass(cl);
 
   logger.debug('buildSchema called for "%s"', getName(cl, overwriteOptions));
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
-  let sch: mongoose.Schema<DocumentType<U>> | undefined = undefined;
+  let sch: mongoose.Schema<DocumentType<InstanceType<U>>> | undefined = undefined;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   // iterate trough all parents
@@ -282,7 +282,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 
   const discriminatorKey = sch.get('discriminatorKey');
 
-  if (sch.path(discriminatorKey)) {
+  if (!!discriminatorKey && sch.path(discriminatorKey)) {
     (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
   }
 

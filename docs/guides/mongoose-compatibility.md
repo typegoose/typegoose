@@ -8,6 +8,8 @@ title: 'Mongoose Compatibility'
 <!--Everything below here is generated as stated above-->
 | Typegoose Version | Mongoose Version |
 | ----------------- | ---------------- |
+| 8.2.x             | ~5.13.8          |
+| 8.1.x             | ~5.13.3          |
 | 8.0.x             | ~5.13.3          |
 | 7.6.x             | 5.10.0 - 5.10.18 |
 | 7.5.x             | 5.10.0 - 5.10.18 |
