@@ -219,8 +219,7 @@ it('should add options to ref [szokodiakos#379]', () => {
   const someprop = schema.path('someprop');
   expect(schema).not.toBeUndefined();
   expect(someprop).not.toBeUndefined();
-  // @ts-expect-error because "options" dosnt exist on "SchemaType"
-  const opt: any = someprop.options;
+  const opt: mongoose.SchemaTypeOptions<any> = someprop.options;
   expect(typeof opt.type).toEqual('function');
   expect(opt.ref).toEqual('T');
   expect(opt).toHaveProperty('customoption', 'custom');
@@ -241,8 +240,7 @@ it('should add options to refPath [szokodiakos#379]', () => {
   const someprop = schema.path('someprop');
   expect(schema).not.toBeUndefined();
   expect(someprop).not.toBeUndefined();
-  // @ts-expect-error because "options" dosnt exist on "SchemaType"
-  const opt: any = someprop.options;
+  const opt: mongoose.SchemaTypeOptions<any> = someprop.options;
   expect(typeof opt.type).toEqual('function');
   expect(opt.refPath).toEqual('something');
   expect(opt).toHaveProperty('customoption', 'custom');
@@ -260,10 +258,9 @@ it('should add options to array-ref [szokodiakos#379]', () => {
   const someprop = schema.path('someprop');
   expect(schema).toBeDefined();
   expect(someprop).toBeDefined();
-  // @ts-expect-error because "options" dosnt exist on "SchemaType"
-  expect(someprop.options).toHaveProperty('customoption1', 'custom1');
-  // @ts-expect-error because "options" dosnt exist on "SchemaType"
-  const opt: any = someprop.options.type[0];
+  const preopts: mongoose.SchemaTypeOptions<any> = someprop.options;
+  expect(preopts).toHaveProperty('customoption1', 'custom1');
+  const opt: mongoose.SchemaTypeOptions<any> = preopts.type![0];
   expect(typeof opt.type).toEqual('function');
   expect(opt.ref).toEqual(getName(TestArrayRefNested));
   expect(opt).toHaveProperty('customoption2', 'custom2');
@@ -285,10 +282,9 @@ it('should add options to array-refPath [szokodiakos#379]', () => {
   expect(schema).toBeDefined();
   expect(someprop).toBeDefined();
   expect(someprop).toBeInstanceOf(mongoose.Schema.Types.Array);
-  // @ts-expect-error because "options" dosnt exist on "SchemaType"
-  expect(someprop.options).toHaveProperty('customoption1', 'custom1');
-  // @ts-expect-error because "options" dosnt exist on "SchemaType"
-  const opt: any = someprop.options.type[0];
+  const preopts: mongoose.SchemaTypeOptions<any> = someprop.options;
+  expect(preopts).toHaveProperty('customoption1', 'custom1');
+  const opt: mongoose.SchemaTypeOptions<any> = preopts.type![0];
   expect(typeof opt.type).toEqual('function');
   expect(opt.refPath).toEqual('something');
   expect(opt).toHaveProperty('customoption2', 'custom2');

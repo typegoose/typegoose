@@ -21,6 +21,7 @@ import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import { assertion, assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
+import { InvalidWhatIsItError } from '../../src/internal/errors';
 
 it('should error if an non-existing(runtime) type is given [InvalidTypeError]', () => {
   try {
@@ -129,7 +130,7 @@ describe('tests for "NoValidClass"', () => {
       addModelToTypegoose(model('hello', new Schema()), 'not class');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClass);
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
     }
   });
 
@@ -139,7 +140,7 @@ describe('tests for "NoValidClass"', () => {
       buildSchema('hello');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClass);
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
     }
   });
 
@@ -149,7 +150,7 @@ describe('tests for "NoValidClass"', () => {
       _buildSchema('hello');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClass);
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
     }
   });
 
@@ -159,7 +160,7 @@ describe('tests for "NoValidClass"', () => {
       getModelForClass('hello');
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClass);
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
     }
   });
 
@@ -169,7 +170,7 @@ describe('tests for "NoValidClass"', () => {
       deleteModelWithClass(true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClass);
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
     }
   });
 
@@ -179,7 +180,7 @@ describe('tests for "NoValidClass"', () => {
       mergeSchemaOptions({}, true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClass);
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
     }
   });
 
@@ -189,7 +190,7 @@ describe('tests for "NoValidClass"', () => {
       getDiscriminatorModelForClass(model('NoValidClassgetDiscriminatorModelForClass', {}), true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClass);
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
     }
   });
 });
@@ -248,7 +249,7 @@ describe('tests for "assignMetadata"', () => {
       assignMetadata(DecoratorKeys.Index, {}, true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClass);
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
     }
   });
 });
@@ -353,7 +354,7 @@ it('should error if "ref" is used with unknown WhatIsIt [TypeError]', () => {
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
+    expect(err).toBeInstanceOf(InvalidWhatIsItError);
   }
 });
 

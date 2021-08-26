@@ -3,11 +3,11 @@
 exports[`should create a User with connections 1`] = `
 Object {
   "__v": 0,
-  "_id": Any<ObjectID>,
+  "_id": Any<ObjectId>,
   "age": 20,
   "car": Object {
     "__v": 0,
-    "_id": Any<ObjectID>,
+    "_id": Any<ObjectId>,
     "carModel": "Tesla",
     "id": Any<String>,
     "price": Object {
@@ -20,10 +20,8 @@ Object {
   "gender": "male",
   "id": Any<String>,
   "job": Object {
-    "id": null,
     "jobType": Object {
       "field": "IT",
-      "id": null,
       "salery": 5000,
     },
     "position": "Lead",

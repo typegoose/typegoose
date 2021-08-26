@@ -1,6 +1,6 @@
 import { logger } from '../logSettings';
 import { buildSchema, mongoose, Passthrough } from '../typegoose';
-import {
+import type {
   AnyParamConstructor,
   DecoratedPropertyMetadata,
   DiscriminatorObject,
@@ -10,7 +10,15 @@ import {
 } from '../types';
 import { DecoratorKeys, WhatIsIt } from './constants';
 import { schemas } from './data';
-import { InvalidTypeError, NotAllVPOPElementsError, NotNumberTypeError, NotStringTypeError } from './errors';
+import {
+  CannotBeSymbol,
+  InvalidTypeError,
+  InvalidWhatIsItError,
+  NotAllVPOPElementsError,
+  NotNumberTypeError,
+  NotStringTypeError,
+  SelfContainingClassError,
+} from './errors';
 import * as utils from './utils';
 
 /**
@@ -25,7 +33,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const propKind = input.whatis ?? detectWhatIsIt(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);
-  utils.assertion(typeof key === 'string', new Error(`Property Key in typegoose cannot be an symbol! (${name}.${String(key)})`));
+  utils.assertion(typeof key === 'string', new CannotBeSymbol(name, key));
 
   // optionDeprecation(rawOptions);
 
@@ -59,10 +67,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
   if (Type === target.constructor) {
-    throw new TypeError(
-      'It seems like the type used is the same as the target class, which is not supported\n' +
-        `Please look at https://github.com/typegoose/typegoose/issues/42 for more information [E004]`
-    );
+    throw new SelfContainingClassError(name, key);
   }
 
   // map to correct buffer type, otherwise it would result in "Mixed"
@@ -190,7 +195,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         return;
       default:
         /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-        throw new Error(`"${propKind}"(whatis(primitive)) is invalid for "${name}.${key}" [E013]`);
+        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(Passthrough)');
     }
   }
 
@@ -230,7 +235,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         return;
       default:
         /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-        throw new Error(`"${propKind}"(whatis(primitive)) is invalid for "${name}.${key}" [E013]`);
+        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(get/set)');
     }
   }
 
@@ -436,7 +441,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         return;
       default:
         /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-        throw new Error(`"${propKind}"(whatis(primitive)) is invalid for "${name}.${key}" [E013]`);
+        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(primitive)');
     }
   }
 
@@ -466,6 +471,22 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
       return;
     case WhatIsIt.MAP:
+      // special handling if the lower type should be an array
+      if ('dim' in rawOptions) {
+        logger.debug('Map SubDocument Array for "%s.%s"', name, key);
+
+        const { type, ...outer } = utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type);
+
+        schemaProp[key] = {
+          ...schemaProp[key],
+          ...outer,
+          type: Map,
+          of: type,
+        };
+
+        return;
+      }
+
       const mapped = utils.mapOptions(rawOptions, virtualSchema, target, key, Type);
 
       schemaProp[key] = {
@@ -486,7 +507,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       return;
     default:
       /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-      throw new Error(`"${propKind}"(whatis(subSchema)) is invalid for "${name}.${key}" [E013]`);
+      throw new InvalidWhatIsItError(propKind, name, key, 'whatis(subSchema)');
   }
 }
 

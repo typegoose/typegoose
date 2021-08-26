@@ -1,3 +1,89 @@
+## [9.0.0-beta.1](https://github.com/typegoose/typegoose/compare/v8.2.0...v9.0.0-beta.1) (2021-08-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* **mongoose:** Upgrade to Mongoose 6.0.0 (major version upgrade)
+
+### Fixes
+
+* rename "Schema.Types.Embedded" to "Schema.Types.Subdocument" ([bdbbc9c](https://github.com/typegoose/typegoose/commit/bdbbc9c4f5e7f3e0b0e64136cf63772cf4fca61e))
+
+
+### Style
+
+* **types:** use mongoose's types because mongoose issue 10529 got resolved ([176063f](https://github.com/typegoose/typegoose/commit/176063fcdd58a8120d7007622f0060270b52b39c))
+* update documentation about "Passthrough" class for mongoose 6.0 ([6a4393e](https://github.com/typegoose/typegoose/commit/6a4393ec386c3a22fae33cbf219da0add3d1ee9c))
+
+
+### Dependencies
+
+* **husky:** upgrade to 7.0.2 ([1759907](https://github.com/typegoose/typegoose/commit/17599075436d4b3acf00c05d6598eb18a29a6b67))
+* **mongoose:** upgrade to version 6.0.1 ([bc6fa61](https://github.com/typegoose/typegoose/commit/bc6fa612bc7fe902140f6f6a8b05a306716fc372))
+* **semantic-release:** upgrade to 17.4.7 ([6e78e00](https://github.com/typegoose/typegoose/commit/6e78e009456e54a8fe0fe1cd8d6e1f5245d1ae4b))
+* **tslib:** upgrade to 2.3.1 ([1b3d9f5](https://github.com/typegoose/typegoose/commit/1b3d9f5ae08f02ad00c59d6fcf389355e2076e87))
+
+## [8.2.0](https://github.com/typegoose/typegoose/compare/v8.1.1...v8.2.0) (2021-08-24)
+
+
+### Style
+
+* **utils:** change "SchemaTypeOpts" to "SchemaTypeOptions" ([402fe7a](https://github.com/typegoose/typegoose/commit/402fe7aef192454eda44ef402acde47492ec9fc1))
+
+
+### Fixes
+
+* **typegoose:** buildSchema: fix return type ([ce5bf45](https://github.com/typegoose/typegoose/commit/ce5bf456eb52283ea31084bde5c3819c452c98a3))
+* **types:** change "IndexOptions" to extend from "mongoose.IndexOptions" ([968338e](https://github.com/typegoose/typegoose/commit/968338ee480c62038d007e7dbd555a3a08b2f1cf))
+* apply changes for "Schema.get" returning "string | undefined" instead of any ([76b9799](https://github.com/typegoose/typegoose/commit/76b979920be32b6a407966062ee3004c282e1bf0))
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to version 27.0.1 ([9b29aa7](https://github.com/typegoose/typegoose/commit/9b29aa7968684e0291224c289023347c82284bf4))
+* **@types/lodash:** upgrade to version 4.14.172 ([316b56d](https://github.com/typegoose/typegoose/commit/316b56d05ab62e86352804d82a9bf2b26a09d396))
+* **@typescript-eslint/*:** upgrade to version 4.29.3 ([352c90a](https://github.com/typegoose/typegoose/commit/352c90aa6daf9cd357ee1342644cf7bb40d15aec))
+* **eslint-plugin-prettier:** upgrade to version 3.4.1 ([fc357fc](https://github.com/typegoose/typegoose/commit/fc357fc43aba928df49d8a5e58c178d645ef62a1))
+* **lint-staged:** upgrade to version 11.1.2 ([82fca54](https://github.com/typegoose/typegoose/commit/82fca54b1f4b6351fe46d8becb6a68161b9f7d95))
+* **mongodb-memory-server:** upgrade to version 7.3.6 ([096e0b6](https://github.com/typegoose/typegoose/commit/096e0b6ae1253195594ca45058ebd255a4671600))
+* **mongoose:** upgrade to version 5.13.8 ([e2ae6f9](https://github.com/typegoose/typegoose/commit/e2ae6f94be8c81ee1603a7f496071e70318aa8f3))
+* **semantic-release:** upgrade to version 17.4.6 ([297a9e7](https://github.com/typegoose/typegoose/commit/297a9e7f79a0a3c62dfb306c81b708f650ae0dd8))
+* **ts-jest:** upgrade to version 27.0.5 ([7bccb36](https://github.com/typegoose/typegoose/commit/7bccb367acc35c45785abeff0f7d890b65c08d62))
+
+### [8.1.1](https://github.com/typegoose/typegoose/compare/v8.1.0...v8.1.1) (2021-08-05)
+
+
+### Fixes
+
+* **processProp:** support Maps with SubDocument-Arrays ([94fb0b9](https://github.com/typegoose/typegoose/commit/94fb0b9a146722ee6368622061d8351fe9e28515))
+
+## [8.1.0](https://github.com/typegoose/typegoose/compare/v8.0.1...v8.1.0) (2021-08-01)
+
+
+### Features
+
+* add error "CannotBeSymbol" to replace custom error ([f6754cb](https://github.com/typegoose/typegoose/commit/f6754cb39f3ab8ff59e7b2a28cdf60fb1bf12e12))
+* add error "InvalidWhatIsItError" to replace custom error ([cc30146](https://github.com/typegoose/typegoose/commit/cc3014684738c63c8fcdf5cc295d71b84aad1956))
+* add error "SelfContainingClassError" to replace custom error ([3a32dde](https://github.com/typegoose/typegoose/commit/3a32dde03545b5f398f95c4e5c3763e6bc6e59be))
+* rename error "NoValidClass" to "NoValidClassError" ([2ec44af](https://github.com/typegoose/typegoose/commit/2ec44af01457e58b119c34d2b2345439709dd7b4))
+* **types:** passthrough some mongoose option-types ([50370d1](https://github.com/typegoose/typegoose/commit/50370d13abc0097b1cba7e761023fb3330bf23d8)), closes [typegoose/typegoose#259](https://github.com/typegoose/typegoose/issues/259)
+
+
+### Style
+
+* **processProp:** change to "import type" from "../types" ([94b8046](https://github.com/typegoose/typegoose/commit/94b8046aa8b948ac1c3a82d6bc54600864f9b6c0))
+* **types:** fix comment / tsdoc for "IndexOptions" ([75cbb27](https://github.com/typegoose/typegoose/commit/75cbb2754e0ceccd8960fd3070ad4fbb0eb35d93))
+
+
+### Fixes
+
+* **errors:** change parameter for "NoValidClassError" from "any" to "unknown" ([dbb95d8](https://github.com/typegoose/typegoose/commit/dbb95d8a9c093d7b51e81997abceda7cc06a06e2))
+
+
+### Dependencies
+
+* **eslint:** upgrade to version 7.32.0 ([cd56ce6](https://github.com/typegoose/typegoose/commit/cd56ce6706be4106194c92f78e1f09fb977e4d49))
+
 ### [8.0.1](https://github.com/typegoose/typegoose/compare/v8.0.0...v8.0.1) (2021-07-30)
 
 

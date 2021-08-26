@@ -31,8 +31,8 @@ export class NotAllVPOPElementsError extends Error {
   }
 }
 
-export class NoValidClass extends TypeError {
-  constructor(cl: any) {
+export class NoValidClassError extends TypeError {
+  constructor(cl: unknown) {
     super(`"${cl}" is not a function(/constructor)!`);
   }
 }
@@ -40,5 +40,27 @@ export class NoValidClass extends TypeError {
 export class AssertionFallbackError extends Error {
   constructor() {
     super('Assert failed - no custom error [E019]');
+  }
+}
+
+/** Error for when an unknown WhatIsIt is passed to an switch, gets thrown in the default case */
+export class InvalidWhatIsItError extends Error {
+  constructor(whatisit: unknown, name: string, key: string, where: string) {
+    super(`"${whatisit}"(${where}) is invalid for "${name}.${key}" [E013]`);
+  }
+}
+
+export class CannotBeSymbol extends Error {
+  constructor(name: string, key: string | symbol) {
+    super(`A property key in Typegoose cannot be an symbol! (${name}.${String(key)}) [E024]`);
+  }
+}
+
+export class SelfContainingClassError extends TypeError {
+  constructor(name: string, key: string) {
+    super(
+      'It seems like the type used is the same as the target class, which is not supported\n' +
+        `Please look at https://github.com/typegoose/typegoose/issues/42 for more information (${name}.${key}) [E004]`
+    );
   }
 }

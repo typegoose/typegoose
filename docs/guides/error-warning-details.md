@@ -1,5 +1,5 @@
 ---
-id: error-warnings-details
+id: error-warning-details
 title: 'Error & Warning Details'
 ---
 
@@ -7,10 +7,10 @@ title: 'Error & Warning Details'
 
 ### Mongoose Version [E001]
 
-Error: `Please use mongoose 5.13.3 or higher (Current mongoose: x.x.x) [E001]`
+Error: `Please use mongoose 5.13.8 or higher (Current mongoose: x.x.x) [E001]`
 
 Details:  
-Typegoose requires at least mongoose version `5.13.3`, because that version changed something that affected typegoose internals
+Typegoose requires at least mongoose version `5.13.8`, because that version changed something that affected typegoose internals
 
 ### NodeJS Version [E002]
 
@@ -25,7 +25,7 @@ Error:
 
 ```txt
 It seems like "addModelToTypegoose" got called twice
-Or multiple classes with the same name are used, which is not supported!
+Or multiple classes with the same name are used, which is not supported! (Model Name: "${name}") [E003]
 ```
 
 Details:  
@@ -39,7 +39,7 @@ Error:
 
 ```txt
 It seems like the type used is the same as the target class, which is not supported
-Please look at https://github.com/typegoose/typegoose/issues/42 for more information [E004]
+Please look at https://github.com/typegoose/typegoose/issues/42 for more information (${name}.${key}) [E004]
 ```
 
 Details:  
@@ -142,9 +142,7 @@ This Error should never be thrown if Typescript is used, it throws if the `Type`
 
 ### Invalid WhatIsIt used [E013]
 
-Error:
-- `"${propKind}"(whatis(subSchema)) is invalid for "${name}.${key}" [E013]`
-- `"whatis" is not supplied OR doesn\'t have a case yet! [E013]`
+Error: `"${whatisit}"(${where}) is invalid for "${name}.${key}" [E013]`
 
 Details:  
 A Value not specified by the enum `WhatIsIt` was provided (no case matched), [read more about it here](../api/decorators/prop.md#whatisit)
@@ -220,7 +218,7 @@ class ErrorClass {
 }
 ```
 
-## PropOptions.ref dosnt support Arrays [E021]
+### PropOptions.ref dosnt support Arrays [E021]
 
 Error: `"PropOptions.ref" dosnt support Arrays (got "${gotType.dim}" dimensions at "${name}.${key}") [E021]`
 
@@ -252,11 +250,23 @@ Error:
 Details:  
 The option `ref` / `refPath` are not supported for this `propKind` (which in most cases is `MAP`)
 
+### A property key in Typegoose cannot be an symbol! [E024]
+
+Error: `A property key in Typegoose cannot be an symbol! (${name}.${String(key)}) [E024]`
+
+Details:  
+A Property Key in Typegoose cannot be a Symbol, it must be a String (also a limitation of mongoose)
+
 ## Warnings
 
-### Type is not the type for the options provided [W001]
+### Type is not ${type}, but includes the following ${extra} options [W001]
 
-Warning: `Type of "${name}.${key}" is not ${type}, but includes the following ${extra} options [W001]`
+Warning:
+
+```txt
+Type of "${name}.${key}" is not ${type}, but includes the following ${extra} options [W001]:
+  [${included.join(', ')}]
+```
 
 Details:  
 The provided options (listed in the warning) do nothing with the provided `Type`

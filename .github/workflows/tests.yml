@@ -36,11 +36,9 @@ jobs:
         run: yarn run test:coverage --colors
         env:
           CI: true
-      - name: Send Coverage
+      - name: Send codecov.io stats
         if: matrix.node-version == '14.x'
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        uses: codecov/codecov-action@v2
   publish:
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta'
     needs: [tests]

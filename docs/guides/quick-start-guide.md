@@ -108,7 +108,7 @@ Like `public: string[]` is in reflection only `Array`.
 
 - TypeScript version `^4.3` (since 8.0) is recommended, though older ones may also work
 - NodeJS `^12.22.0`
-- Mongoose `~5.13.3`
+- Mongoose `~5.13.8`
 - A IDE that supports TypeScript linting is recommended to be used (VSCode is recommended)
 - This Guide expects you to know how Mongoose (or at least its models) works
 - `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
@@ -237,7 +237,7 @@ Typegoose also supports hooks. They can be used like this:
 @pre<KittenClass>('save', function() {
   this.isKitten = this.age < 1
 })
-@post<KittenClass>('save', (kitten) => {
+@post<KittenClass>('save', function(kitten) {
   console.log(kitten.isKitten ? 'We have a kitten here.' : 'We have a big kitty here.')
 })
 class KittenClass {

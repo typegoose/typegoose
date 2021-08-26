@@ -5,9 +5,14 @@ title: 'Migrate to 6.0.0'
 
 These are the changes made for 6.0.0 that are breaking or just important to know.
 
-## Important, Read this first
+:::caution Important, Read this first
+This Guide is written for migration from version `5.9.2` to `6.0.0`, for versions `>6.0.0 <7.0.0`, please consult the [CHANGELOG](https://github.com/typegoose/typegoose/blob/master/CHANGELOG.md)
+:::
 
-To migrate "seamlessly", you should be on the latest Typegoose Version of 5.x (Currently 5.9.0) and then upgrade to 6.0.x (not 6.x), because in version 6.1+ the deprecated functions will be removed!
+## Requirements changed
+
+- Typescript `3.5` is now required / recommended
+- Mongoose `5.7.1` or higher is now required
 
 ## InstanceType changed
 

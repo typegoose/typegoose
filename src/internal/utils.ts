@@ -16,7 +16,7 @@ import type {
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
-import { AssertionFallbackError, NoValidClass } from './errors';
+import { AssertionFallbackError, InvalidWhatIsItError, NoValidClassError } from './errors';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -138,7 +138,7 @@ export function initProperty(name: string, key: string, whatis: WhatIsIt) {
       break;
     default:
       /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-      throw new TypeError(`"${whatis}"(whatis(subSchema)) is invalid for "${name}.${key}" [E013]`);
+      throw new InvalidWhatIsItError(whatis, name, key, 'whatis(initProperty)');
   }
 
   return schemaProp;
@@ -161,7 +161,7 @@ export function getClassForDocument(document: mongoose.Document): NewableFunctio
 export function getClass(
   input:
     | (mongoose.Document & IObjectWithTypegooseFunction)
-    | (mongoose.Schema.Types.Embedded & IObjectWithTypegooseFunction)
+    | (mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction)
     | string
     | IObjectWithTypegooseName
     | any
@@ -375,7 +375,7 @@ export function mapArrayOptions(
   pkey: string,
   loggerType?: AnyParamConstructor<any>,
   extra?: KeyStringAny
-): mongoose.SchemaTypeOpts<any> {
+): mongoose.SchemaTypeOptions<any> {
   logger.debug('mapArrayOptions called');
   loggerType = loggerType ?? (Type as AnyParamConstructor<any>);
 
@@ -457,7 +457,7 @@ export function mapOptions(
   let OptionsCTOR: undefined | AnyParamConstructor<any> = Type?.prototype?.OptionsConstructor;
 
   if (Type instanceof mongoose.Schema) {
-    OptionsCTOR = mongoose.Schema.Types.Embedded.prototype.OptionsConstructor;
+    OptionsCTOR = mongoose.Schema.Types.Subdocument.prototype.OptionsConstructor;
   }
 
   assertion(
@@ -596,7 +596,7 @@ export function assertion(cond: any, error?: Error): asserts cond {
  * @param val Value to test
  */
 export function assertionIsClass(val: any): asserts val is Func {
-  assertion(isConstructor(val), new NoValidClass(val));
+  assertion(isConstructor(val), new NoValidClassError(val));
 }
 
 /**

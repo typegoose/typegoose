@@ -9,6 +9,25 @@ title: 'Prop'
 
 ## Single Options
 
+Example:
+
+```ts
+class Cat {
+  @prop()
+  public name?: string;
+}
+
+class Cat2 {
+  @prop({ type: () => String }) // explicitly define the Type
+  public name?: string;
+}
+
+class Cat3 {
+  @prop({ type: () => String }, WhatIsIt) // explicitly define the "WhatIsIt"
+  public name?: string;
+}
+```
+
 ### required
 
 Accepts Type: `boolean`
@@ -147,7 +166,7 @@ class Cat {
 }
 ```
 
-The `'Nested'`(as string) form is useful to avoid unintuitive errors due to circular dependencies, such as [`Option "ref" for "${name}.${key}" is null/undefined! [E005]`](../../guides/error-warnings-details.md#ref-is-undefined-e005).
+The `'Nested'`(as string) form is useful to avoid unintuitive errors due to circular dependencies, such as [`Option "ref" for "${name}.${key}" is null/undefined! [E005]`](../../guides/error-warning-details.md#ref-is-undefined-e005).
 
 ### refPath
 
@@ -589,6 +608,11 @@ class Cat {
   @prop({ type: () => [Kitten] })
   public kitten?: Kitten[]; // "[]" or "Array<any>" or "mongoose.Types.Array<any>" or "mongoose.Types.DocumentArray" is needed to be detected as an Array
 }
+
+class Cat2 {
+  @prop({ type: () => [Kitten] }, WhatIsIt.ARRAY) // explicitly define the "WhatIsIt"
+  public kitten?: Kitten[];
+}
 ```
 
 ### dim
@@ -631,11 +655,47 @@ class ArrayInType {
 Example:
 
 ```ts
-class SomeMapClass {
+class SomeMapClass1 {
   @prop({ type: String })
   public lookup?: Map<string, string>; // "Map<any, any>" or "mongoose.Types.Map<any>" is needed to be detected as a Map
 }
+
+class SomeMapClass2 {
+  @prop({ type: () => String }, WhatIsIt.MAP) // explicitly define the "WhatIsIt"
+  public lookup?: Map<string, string>;
+}
+
+// Extra Examples with different types
+// Example: Primitive-Arrays
+class SomeMapClass3 {
+  @prop({ type: () => [String] })
+  public lookup?: Map<string, string[]>;
+}
+
+// Example: SubDocuments
+class Nested {
+  @prop()
+  public dummy?: string;
+}
+class SomeMapClass3 {
+  @prop({ type: () => Nested, _id: false })
+  public lookup?: Map<string, Nested>;
+}
+
+// Example: SubDocument-Arrays (since 8.1.1)
+class Nested {
+  @prop()
+  public dummy?: string;
+}
+class SomeMapClass3 {
+  @prop({ type: () => [Nested], _id: false })
+  public lookup?: Map<string, Nested[]>;
+}
 ```
+
+:::note
+`type` can be Primitives, Primitive-Arrays, SubDocuments(Classes) and SubDocument(Class)-Arrays
+:::
 
 ## String Transform options
 
@@ -777,16 +837,22 @@ enum WhatIsIt {
 }
 ```
 
+For Examples, look at:
+
+- [Single Options](#single-options) - `NONE`
+- [Array Options](#array-options) - `ARRAY`
+- [Map Options](#map-options) - `MAP`
+
 ## Passthrough Class
 
 :::caution
-It is not recommended to use this class, it should always be another class if nesting (and proper validation) like [in the quick-start-guide](../../guides/quick-start-guide.md/#quick-overview-of-typegoose) is wanted
+It is not recommended to use this class, it should always be another class if nesting, like [in the quick-start-guide](../../guides/quick-start-guide.md/#quick-overview-of-typegoose) is wanted
 :::
 
-The `Passthrough` class is, like the name implies, to pass-through an schema definition directly, without "wrapping" it in a `new Schema({}` call.
+The `Passthrough` class is, like the name implies, to pass-through an schema definition directly, without "wrapping" it in a `new Schema({}` by typegoose call, but since mongoose 6.0 this is the same as doing another class (see [Mongoose#7181](https://github.com/Automattic/mongoose/issues/7181).
 
 :::note
-It should be noted that using this method (even in plain mongoose) will result in these paths to become `mongoose.Schema.Types.Mixed` (see [Mongoose#7181](https://github.com/Automattic/mongoose/issues/7181)), and also no typegoose transformations or warnings will be applied to what is inside `Passthrough` (like `type: () => Class` will not be translated, it will stay as-is)
+It should be noted that using this method no typegoose transformations or warnings will be applied to what is inside `Passthrough` (like `type: () => Class` will not be translated, it will stay as-is)
 :::
 
 The following example is what it looks like in typegoose, and what it would look like in plain mongoose:

@@ -8,8 +8,8 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '5.13.3')) {
-    throw new Error(`Please use mongoose 5.13.3 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '5.13.8')) {
+    throw new Error(`Please use mongoose 5.13.8 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
@@ -119,14 +119,14 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
   options?: mongoose.SchemaOptions,
   overwriteOptions?: IModelOptions
-): mongoose.Schema<DocumentType<U>> {
+): mongoose.Schema<DocumentType<InstanceType<U>>> {
   assertionIsClass(cl);
 
   logger.debug('buildSchema called for "%s"', getName(cl, overwriteOptions));
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
-  let sch: mongoose.Schema<DocumentType<U>> | undefined = undefined;
+  let sch: mongoose.Schema<DocumentType<InstanceType<U>>> | undefined = undefined;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   /* This array is to execute from lowest class to highest (when extending) */
@@ -293,7 +293,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 
   const discriminatorKey = sch.get('discriminatorKey');
 
-  if (sch.path(discriminatorKey)) {
+  if (!!discriminatorKey && sch.path(discriminatorKey)) {
     (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
   }
 
@@ -304,8 +304,8 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 
 /**
  * Use this class if raw mongoose for this path is wanted
- * It is still recommended to use the typegoose classes directly for full type and validation support
- * @see Using `Passthrough`, the paths created will result in `Mixed`, see {@link https://github.com/Automattic/mongoose/issues/7181 Mongoose#7181}
+ * It is still recommended to use the typegoose classes directly
+ * @see Using `Passthrough`, the paths created will also result as an `Schema` (since mongoose 6.0), see {@link https://github.com/Automattic/mongoose/issues/7181 Mongoose#7181}
  * @example
  * ```ts
  * class Dummy {

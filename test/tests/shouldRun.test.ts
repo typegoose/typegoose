@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
 import { DecoratorKeys } from '../../src/internal/constants';
+import { SelfContainingClassError } from '../../src/internal/errors';
 import { assertion, assignMetadata, createArrayFromDimensions, getName, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 import {
@@ -168,14 +169,18 @@ it('should make use of "@prop({ _id: false })" and have no _id', async () => {
   expect(doc.someprop).not.toHaveProperty('_id');
 });
 
-// it('should run with a self-containing-class [typegoose#42]', () => {
-//   class SelfContaining {
-//     @prop()
-//     public nest?: SelfContaining;
-//   }
+it('should throw a error with a self-containing-class [typegoose#42]', () => {
+  try {
+    class SelfContaining {
+      @prop()
+      public nest?: SelfContaining;
+    }
 
-//   getModelForClass(SelfContaining);
-// });
+    buildSchema(SelfContaining);
+  } catch (err) {
+    expect(err).toBeInstanceOf(SelfContainingClassError);
+  }
+});
 
 it('should allow self-referencing classes', async () => {
   class SelfReference {
@@ -489,25 +494,83 @@ it('should make use of the "Passthrough" class', async () => {
     public somethingExtra?: { someExtraPath: string[] };
   }
 
-  const sch = buildSchema(SomeTestClass);
-  const somethingPath = sch.path('something');
-  const somethingExtraPath = sch.path('somethingExtra');
+  const typegooseSchema = buildSchema(SomeTestClass);
+  const somethingPath = typegooseSchema.path('something');
+  const somethingExtraPath = typegooseSchema.path('somethingExtra');
   const alsoSomethingPath = alsoSchema.path('something');
   const alsoSomethingExtraPath = alsoSchema.path('somethingExtra');
 
-  expect(somethingPath).toBeInstanceOf(mongoose.Schema.Types.Mixed);
-  expect(somethingExtraPath).toBeInstanceOf(mongoose.Schema.Types.Mixed);
-  expect(somethingPath).toStrictEqual(alsoSomethingPath);
-  expect(somethingExtraPath).toStrictEqual(alsoSomethingExtraPath);
+  // Since mongoose 6.0, this results in an actual Schema, see https://github.com/Automattic/mongoose/issues/7181
+  expect(somethingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+  expect(somethingExtraPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
 
-  expect(somethingPath).toEqual(
-    expect.objectContaining({
-      options: { type: { somePath: String } },
-    })
+  /** Type to shorten using another type */
+  type SubDocumentAlias = mongoose.Schema.Types.Subdocument;
+
+  expect((somethingPath as SubDocumentAlias).schema.path('somePath')).toMatchObject(
+    (alsoSomethingPath as SubDocumentAlias).schema.path('somePath')
   );
-  expect(somethingExtraPath).toEqual(
-    expect.objectContaining({
-      options: { type: { someExtraPath: [String] } },
-    })
+
+  expect((somethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect((alsoSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
+
+  /** Type to shorten using another type and to add "caster", because it does not exist on the type */
+  type ArrayWithCaster = mongoose.Schema.Types.Array & { caster: any };
+  expect((somethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
+    mongoose.Schema.Types.String
   );
+  expect((alsoSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
+    mongoose.Schema.Types.String
+  );
+
+  // This is somehow not working, because somehow these 2 variables are not equal (maybe because of Symbols?)
+  // expect((somethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toMatchObject(
+  //   (alsoSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')
+  // );
+});
+
+it('should allow Maps with SubDocument "Map<string SubDocument>"', async () => {
+  class NestedMapSubDocument {
+    @prop()
+    public dummy?: string;
+  }
+
+  class TestMapSubDocument {
+    @prop({ type: () => NestedMapSubDocument, _id: false })
+    public nesting?: Map<string, NestedMapSubDocument>;
+  }
+
+  const schema = buildSchema(TestMapSubDocument);
+  const nestingPath = schema.path('nesting');
+  // "$__schemaType" is an mongoose internal property (does not have types) which holds the type of a "Map"
+  const casterNestingPath = nestingPath['$__schemaType'];
+
+  expect(nestingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(casterNestingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+  expect(casterNestingPath.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(casterNestingPath.schema.paths).not.toHaveProperty('_id');
+});
+
+it('should allow Maps with SubDocument Array "Map<string SubDocument[]>"', async () => {
+  class NestedMapSubDocumentArray {
+    @prop()
+    public dummy?: string;
+  }
+
+  class TestMapSubDocumentArray {
+    @prop({ type: () => [NestedMapSubDocumentArray], _id: false })
+    public nesting?: Map<string, NestedMapSubDocumentArray[]>;
+  }
+
+  const schema = buildSchema(TestMapSubDocumentArray);
+  const nestingPath = schema.path('nesting');
+  // "$__schemaType" is an mongoose internal property (does not have types) which holds the type of a "Map"
+  const casterNestingPath = nestingPath['$__schemaType'];
+
+  expect(nestingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(casterNestingPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+  // this somehow does not work
+  // expect(casterNestingPath.caster).toEqual(mongoose.Schema.Types.Embedded);
+  expect(casterNestingPath.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(casterNestingPath.schema.paths).not.toHaveProperty('_id');
 });
