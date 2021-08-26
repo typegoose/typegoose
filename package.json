@@ -54,7 +54,6 @@
     "@typescript-eslint/parser": "^4.29.3",
     "class-transformer": "^0.4.0",
     "commitlint": "^13.1.0",
-    "coveralls": "^3.1.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.1",

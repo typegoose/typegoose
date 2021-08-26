@@ -2,7 +2,7 @@
 
 <sub>(These badges are from typegoose:master)</sub>  
 [![Node.js Tests](https://github.com/typegoose/typegoose/workflows/Node.js%20Tests/badge.svg?branch=master)](https://github.com/typegoose/typegoose/actions?query=workflow%3A"Node.js+Tests")
-[![Coverage Status](https://coveralls.io/repos/github/typegoose/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/typegoose/typegoose?branch=master)
+[![codecov.io](https://codecov.io/github/typegoose/typegoose/coverage.svg?branch=master)](https://codecov.io/github/typegoose/typegoose?branch=master)
 [![npm](https://img.shields.io/npm/dt/@typegoose/typegoose.svg)](https://www.npmjs.com/package/@typegoose/typegoose)
 
 Define Mongoose models using TypeScript classes
