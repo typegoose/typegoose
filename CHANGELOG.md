@@ -1,3 +1,16 @@
+## [9.0.0-beta.2](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.1...v9.0.0-beta.2) (2021-08-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* Build order for Classes to Schemas is changed to bottom-up, which can affect some environments
+
+Co-authored-by: hasezoey <hasezoey@gmail.com>
+
+### Features
+
+* change build order to bottom-up (when extending classes) ([#243](https://github.com/typegoose/typegoose/issues/243)) ([79977ee](https://github.com/typegoose/typegoose/commit/79977ee675a48fda280be5a10bc9b962721cd5dc))
+
 ## [9.0.0-beta.1](https://github.com/typegoose/typegoose/compare/v8.2.0...v9.0.0-beta.1) (2021-08-26)
 
 
