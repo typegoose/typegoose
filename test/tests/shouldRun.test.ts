@@ -414,6 +414,36 @@ it('should add query Methods', async () => {
   expect(found[0].toObject()).toEqual(doc.toObject());
 });
 
+it('should output correct defaults with multiple inheritance [typegoose/typegoose#292]', () => {
+  class Parent {
+    // put default as a function if it needs to be dynamic
+    @prop({ default: () => 'base' })
+    public UID?: string;
+  }
+
+  class Child extends Parent {
+    @prop({ default: () => 'overwritten' })
+    public UID?: string;
+  }
+
+  class GrandChild extends Child {
+    @prop()
+    public something?: string;
+  }
+
+  const BaseModel = getModelForClass(Parent);
+  const ChildModel = getModelForClass(Child);
+  const GrandChildModel = getModelForClass(GrandChild);
+
+  const baseDoc = new BaseModel();
+  const childDoc = new ChildModel();
+  const grandChildDoc = new GrandChildModel();
+
+  expect(baseDoc.UID).toEqual('base');
+  expect(childDoc.UID).toEqual('overwritten');
+  expect(grandChildDoc.UID).toEqual('overwritten');
+});
+
 it('should be map none/array/map correctly if using get/set options [typegoose#422]', async () => {
   class TestGetSetOptions {
     @prop({ get: () => 0, set: () => 1 })

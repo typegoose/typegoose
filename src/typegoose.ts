@@ -129,13 +129,24 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   let sch: mongoose.Schema<DocumentType<InstanceType<U>>> | undefined = undefined;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
+  /* This array is to execute from lowest class to highest (when extending) */
+  const parentClasses: AnyParamConstructor<any>[] = [];
+
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
-    // extend schema
-    sch = _buildSchema(parentCtor, sch, mergedOptions, false, overwriteOptions);
+    // add lower classes (when extending) to the front of the arrray to be processed first
+    parentClasses.unshift(parentCtor);
+
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
+
+  // iterate and build class schemas from lowest to highest (when extending classes, the lower class will get build first) see https://github.com/typegoose/typegoose/pull/243
+  for (const parentClass of parentClasses) {
+    // extend schema
+    sch = _buildSchema(parentClass, sch!, mergedOptions, false);
+  }
+
   // get schema of current model
   sch = _buildSchema(cl, sch, mergedOptions, true, overwriteOptions);
 
