@@ -1,3 +1,28 @@
+## [9.0.0-beta.1](https://github.com/typegoose/typegoose/compare/v8.2.0...v9.0.0-beta.1) (2021-08-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* **mongoose:** Upgrade to Mongoose 6.0.0 (major version upgrade)
+
+### Fixes
+
+* rename "Schema.Types.Embedded" to "Schema.Types.Subdocument" ([bdbbc9c](https://github.com/typegoose/typegoose/commit/bdbbc9c4f5e7f3e0b0e64136cf63772cf4fca61e))
+
+
+### Style
+
+* **types:** use mongoose's types because mongoose issue 10529 got resolved ([176063f](https://github.com/typegoose/typegoose/commit/176063fcdd58a8120d7007622f0060270b52b39c))
+* update documentation about "Passthrough" class for mongoose 6.0 ([6a4393e](https://github.com/typegoose/typegoose/commit/6a4393ec386c3a22fae33cbf219da0add3d1ee9c))
+
+
+### Dependencies
+
+* **husky:** upgrade to 7.0.2 ([1759907](https://github.com/typegoose/typegoose/commit/17599075436d4b3acf00c05d6598eb18a29a6b67))
+* **mongoose:** upgrade to version 6.0.1 ([bc6fa61](https://github.com/typegoose/typegoose/commit/bc6fa612bc7fe902140f6f6a8b05a306716fc372))
+* **semantic-release:** upgrade to 17.4.7 ([6e78e00](https://github.com/typegoose/typegoose/commit/6e78e009456e54a8fe0fe1cd8d6e1f5245d1ae4b))
+* **tslib:** upgrade to 2.3.1 ([1b3d9f5](https://github.com/typegoose/typegoose/commit/1b3d9f5ae08f02ad00c59d6fcf389355e2076e87))
+
 ## [8.2.0](https://github.com/typegoose/typegoose/compare/v8.1.1...v8.2.0) (2021-08-24)
 
 
