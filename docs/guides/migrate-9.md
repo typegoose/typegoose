@@ -5,6 +5,10 @@ title: 'Migrate to 9.0.0'
 
 These are the changes made for 9.0.0 that are breaking or just important to know
 
+:::caution Important, Read this first
+This Guide is written for migration from version `8.2.0` to `9.0.0`, for versions `>9.0.0 <10.0.0`, please consult the [CHANGELOG](https://github.com/typegoose/typegoose/blob/master/CHANGELOG.md)
+:::
+
 ## Requirements changed
 
 - Mongoose `6.0.1` or [higher is now required](#mongoose-60-is-now-supported)
