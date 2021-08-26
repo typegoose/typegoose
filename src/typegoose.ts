@@ -293,8 +293,8 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 
 /**
  * Use this class if raw mongoose for this path is wanted
- * It is still recommended to use the typegoose classes directly for full type and validation support
- * @see Using `Passthrough`, the paths created will result in `Mixed`, see {@link https://github.com/Automattic/mongoose/issues/7181 Mongoose#7181}
+ * It is still recommended to use the typegoose classes directly
+ * @see Using `Passthrough`, the paths created will also result as an `Schema` (since mongoose 6.0), see {@link https://github.com/Automattic/mongoose/issues/7181 Mongoose#7181}
  * @example
  * ```ts
  * class Dummy {

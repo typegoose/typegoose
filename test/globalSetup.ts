@@ -1,7 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import * as mongoose from 'mongoose';
 import { logger } from '../src/logSettings';
 import { config } from './utils/config';
+import { connect } from './utils/connect';
 
 export = async function globalSetup() {
   logger.setLevel('DEBUG');
@@ -16,7 +16,7 @@ export = async function globalSetup() {
     process.env.MONGO_URI = `mongodb://${config.IP}:${config.Port}`;
   }
 
-  await mongoose.connect(`${process.env.MONGO_URI}/${config.DataBase}`, { useNewUrlParser: true, useUnifiedTopology: true });
-  await mongoose.connection.db.dropDatabase();
-  await mongoose.disconnect();
+  const connection = await connect({ dbName: config.DataBase });
+  await connection.db.dropDatabase();
+  await connection.close();
 };

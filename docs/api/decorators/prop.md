@@ -846,13 +846,13 @@ For Examples, look at:
 ## Passthrough Class
 
 :::caution
-It is not recommended to use this class, it should always be another class if nesting (and proper validation) like [in the quick-start-guide](../../guides/quick-start-guide.md#quick-overview-of-typegoose) is wanted
+It is not recommended to use this class, it should always be another class if nesting, like [in the quick-start-guide](../../guides/quick-start-guide.md/#quick-overview-of-typegoose) is wanted
 :::
 
-The `Passthrough` class is, like the name implies, to pass-through an schema definition directly, without "wrapping" it in a `new Schema({}` call.
+The `Passthrough` class is, like the name implies, to pass-through an schema definition directly, without "wrapping" it in a `new Schema({}` by typegoose call, but since mongoose 6.0 this is the same as doing another class (see [Mongoose#7181](https://github.com/Automattic/mongoose/issues/7181).
 
 :::note
-It should be noted that using this method (even in plain mongoose) will result in these paths to become `mongoose.Schema.Types.Mixed` (see [Mongoose#7181](https://github.com/Automattic/mongoose/issues/7181)), and also no typegoose transformations or warnings will be applied to what is inside `Passthrough` (like `type: () => Class` will not be translated, it will stay as-is)
+It should be noted that using this method no typegoose transformations or warnings will be applied to what is inside `Passthrough` (like `type: () => Class` will not be translated, it will stay as-is)
 :::
 
 The following example is what it looks like in typegoose, and what it would look like in plain mongoose:

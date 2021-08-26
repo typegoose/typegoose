@@ -18,9 +18,11 @@ import { getModelForClass, mongoose, prop } from 'typegoose';
 class DocumentCT {
   @Expose()
   // makes sure that when deserializing from a Mongoose Object, ObjectId is serialized into a string
-  @Transform((value: any) => {
+  @Transform((value) => {
     if ('value' in value) {
-      return value.value instanceof mongoose.Types.ObjectId ? value.value.toHexString() : value.value.toString();
+      // HACK: this is changed because of https://github.com/typestack/class-transformer/issues/879
+      // return value.value.toString(); // because "toString" is also a wrapper for "toHexString"
+      return value.obj[value.key].toString();
     }
 
     return 'unknown value';

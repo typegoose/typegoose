@@ -94,7 +94,7 @@ export interface BasePropOptions {
    * Should this property have an "expires" index?
    * @link https://docs.mongodb.com/manual/tutorial/expire-data
    */
-  expires?: string | number /* mongoose.SchemaTypeOptions<any>['expires'] */; // TODO: change to get from mongoose, when https://github.com/Automattic/mongoose/issues/10529 resolved
+  expires?: mongoose.SchemaTypeOptions<any>['expires'];
   /**
    * Should this property have an "text" index?
    * @link https://mongoosejs.com/docs/api.html#schematype_SchemaType-text

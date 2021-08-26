@@ -161,7 +161,7 @@ export function getClassForDocument(document: mongoose.Document): NewableFunctio
 export function getClass(
   input:
     | (mongoose.Document & IObjectWithTypegooseFunction)
-    | (mongoose.Schema.Types.Embedded & IObjectWithTypegooseFunction)
+    | (mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction)
     | string
     | IObjectWithTypegooseName
     | any
@@ -457,7 +457,7 @@ export function mapOptions(
   let OptionsCTOR: undefined | AnyParamConstructor<any> = Type?.prototype?.OptionsConstructor;
 
   if (Type instanceof mongoose.Schema) {
-    OptionsCTOR = mongoose.Schema.Types.Embedded.prototype.OptionsConstructor;
+    OptionsCTOR = mongoose.Schema.Types.Subdocument.prototype.OptionsConstructor;
   }
 
   assertion(
