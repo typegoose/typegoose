@@ -51,6 +51,7 @@ describe('@deepkit/type transforms', () => {
       // need to remove the password property, as it is not available due to our @t.group confidential exclusion definition
       delete accountClassObject.confidentialProperty;
       expect(deserialized).toStrictEqual(accountClassObject);
+      expect(deserialized).not.toHaveProperty('confidentialProperty');
     });
 
     it(`should be able to use @deepkit/type's groups to allow access`, async () => {
@@ -61,6 +62,7 @@ describe('@deepkit/type transforms', () => {
       // deserialize pojo back to an Account instance
       const deserialized = plainToClass(Account, pojo, access);
       expect(deserialized).toStrictEqual(accountClassObject);
+      expect(deserialized).toHaveProperty('confidentialProperty');
     });
   });
 
@@ -76,6 +78,7 @@ describe('@deepkit/type transforms', () => {
         __v: 0,
         email: 'somebody@gmail.com',
       });
+      expect(serialized).not.toHaveProperty('confidentialProperty');
     });
 
     it(`should be able to use @deepkit/type's groups to allow access`, async () => {
@@ -90,6 +93,7 @@ describe('@deepkit/type transforms', () => {
         email: 'somebody@gmail.com',
         confidentialProperty: 'secret',
       });
+      expect(serialized).toHaveProperty('confidentialProperty');
     });
   });
 });
