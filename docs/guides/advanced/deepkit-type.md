@@ -81,7 +81,6 @@ class Account {
   @t
   @prop()
   public email: string;
-  
 }
 ```
 
