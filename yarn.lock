@@ -1504,12 +1504,12 @@ astral-regex@^2.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-2.0.0.tgz#483143c567aeed4785759c0865786dc77d7d2e31"
   integrity sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==
 
-async-mutex@^0.3.0:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/async-mutex/-/async-mutex-0.3.1.tgz#7033af665f1c7cebed8b878267a43ba9e77c5f67"
-  integrity sha512-vRfQwcqBnJTLzVQo72Sf7KIUbcSUP5hNchx6udI1U6LuPQpfePgdjJzlCe76yFZ8pxlLjn9lwcl/Ya0TSOv0Tw==
+async-mutex@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/async-mutex/-/async-mutex-0.3.2.tgz#1485eda5bda1b0ec7c8df1ac2e815757ad1831df"
+  integrity sha512-HuTK7E7MT7jZEh1P9GtRW9+aTWiDWWi9InbZ5hjxrnRa39KS4BW04+xLBhYNS2aXhHUIKZSw3gj4Pn1pj+qGAA==
   dependencies:
-    tslib "^2.1.0"
+    tslib "^2.3.1"
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -2702,10 +2702,10 @@ fill-range@^7.0.1:
   dependencies:
     to-regex-range "^5.0.1"
 
-find-cache-dir@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/find-cache-dir/-/find-cache-dir-3.3.1.tgz#89b33fad4a4670daa94f855f7fbe31d6d84fe880"
-  integrity sha512-t2GDMt3oGC/v+BMwzmllWDuJF/xcDtE5j/fCGbqDD7OLuJkj0cfh1YSA5VKPvwMeLFLNDBkwOKZ2X85jGLVftQ==
+find-cache-dir@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/find-cache-dir/-/find-cache-dir-3.3.2.tgz#b30c5b6eff0730731aea9bbd9dbecbd80256d64b"
+  integrity sha512-wXZV5emFEjrridIgED11OoUKLxiYjAcqot/NJdAkOhlJ+vGzwhOAfcG5OX1jP+S0PcjEn8bdMJv+g2jwQ3Onig==
   dependencies:
     commondir "^1.0.1"
     make-dir "^3.0.2"
@@ -4575,16 +4575,16 @@ mongodb-connection-string-url@^2.0.0:
     "@types/whatwg-url" "^8.2.1"
     whatwg-url "^9.1.0"
 
-mongodb-memory-server-core@7.3.6:
-  version "7.3.6"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-7.3.6.tgz#9c16cf120e498011a8702e7735271cbe878dd6e5"
-  integrity sha512-dxprJ5Xqb0y/9nqv709BGf8Cz4dnInhG3sTuYvMJijK4cAHYxk0xkKrvZX2X9PrYiCQqKix59hHMBGyBetN3hg==
+mongodb-memory-server-core@7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-7.4.0.tgz#5fd5bf6ecef0a3753d1ccd399c12e5bcb335257b"
+  integrity sha512-y7/F+foGefthQVMhloHycjtkqStQtNvDRbpjkMN54FXm0+aE3qgUssFfBhfrxIhRHD2/g3Jm4Ms47WmLUPVQlA==
   dependencies:
     "@types/tmp" "^0.2.0"
-    async-mutex "^0.3.0"
+    async-mutex "^0.3.2"
     camelcase "^6.1.0"
     debug "^4.2.0"
-    find-cache-dir "^3.3.1"
+    find-cache-dir "^3.3.2"
     get-port "^5.1.1"
     https-proxy-agent "^5.0.0"
     md5-file "^5.0.0"
@@ -4598,12 +4598,12 @@ mongodb-memory-server-core@7.3.6:
     uuid "^8.3.1"
     yauzl "^2.10.0"
 
-mongodb-memory-server@^7.3.6:
-  version "7.3.6"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-7.3.6.tgz#6df78425aaa01439556ba3f53e3042f82b3fa5c4"
-  integrity sha512-JfuY7uJD9TZxq6C4YVuCjiP2v0V/NYb19Wki6rFovdJvkgxGp5/KXKaazu47leECYAtJc2ajW1c009M3hRM+6A==
+mongodb-memory-server@^7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-7.4.0.tgz#25ca8455bb03c73da871de8fb8339d4fdbe36d90"
+  integrity sha512-V9sCsPprJxPMK68ZodidL6Z/J4DOziyGpGlx/VCIJfT6XcZ/907I8ZWGn3J92CWXPStsuIgW5wgFhPCH1RK35w==
   dependencies:
-    mongodb-memory-server-core "7.3.6"
+    mongodb-memory-server-core "7.4.0"
     tslib "^2.3.0"
 
 mongodb@4.1.1:
@@ -6323,7 +6323,7 @@ tslib@^1.8.1, tslib@^1.9.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.1.0, tslib@^2.3.0:
+tslib@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
   integrity sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==
