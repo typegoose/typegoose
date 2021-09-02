@@ -403,8 +403,13 @@ it('should add query Methods', async () => {
   const QueryMethodsModel = getModelForClass<typeof QueryMethodsClass, FindHelpers>(QueryMethodsClass);
 
   const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethodsClass);
-  expect(Array.from(metadata)).toEqual(
-    expect.arrayContaining([['findByName', findByName]]) && expect.arrayContaining([['findByLastname', findByLastname]])
+  expect(metadata).toBeDefined();
+  expect(metadata.size).toStrictEqual(2);
+  expect(metadata).toStrictEqual(
+    new Map([
+      [findByName.name, findByName],
+      [findByLastname.name, findByLastname],
+    ])
   );
 
   const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
