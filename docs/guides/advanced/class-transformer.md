@@ -85,5 +85,5 @@ The reson for doing this is so queries will output `DocumentType<Account>` (Mong
 ---
 
 :::info
-For more information, you can always look at the [typegoose Class-Transformer tests](https://github.com/typegoose/typegoose/blob/master/test/tests/classTransformer.test.ts)
+For more information, you can always look at the [typegoose `class-transformer` tests](https://github.com/typegoose/typegoose/blob/master/test/tests/classTransformer.test.ts)
 :::
