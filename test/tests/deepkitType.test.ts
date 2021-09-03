@@ -33,8 +33,6 @@ describe('@deepkit/type transforms', () => {
     accountClassObject.email = 'somebody@gmail.com';
     accountClassObject.confidentialProperty = 'secret';
     account = await AccountModel.create(accountClassObject);
-    // note here that _id is an ObjectId, hence the toString()
-    // otherwise it will have the shape of : { _bsonType: 'ObjectId', id: ArrayBuffer }
     id = account._id;
     accountClassObject._id = account._id;
     accountClassObject.__v = account.__v;
