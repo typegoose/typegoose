@@ -15,7 +15,7 @@ import {
   prop,
   queryMethod,
 } from '../../src/typegoose';
-import type { AsQueryMethod, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
+import type { AsQueryMethod, Func, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -403,13 +403,82 @@ it('should add query Methods', async () => {
   const QueryMethodsModel = getModelForClass<typeof QueryMethodsClass, FindHelpers>(QueryMethodsClass);
 
   const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethodsClass);
-  expect(Array.from(metadata)).toEqual(
-    expect.arrayContaining([['findByName', findByName]]) && expect.arrayContaining([['findByLastname', findByLastname]])
+  expect(metadata).toBeDefined();
+  expect(metadata.size).toStrictEqual(2);
+  expect(metadata).toStrictEqual(
+    new Map([
+      [findByName.name, findByName],
+      [findByLastname.name, findByLastname],
+    ])
   );
 
   const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
 
   const found = await QueryMethodsModel.find().findByName('hello').findByLastname('world').orFail().exec();
+  assertion(isDocumentArray(found), new Error('Found is not an document array'));
+  expect(found[0].toObject()).toEqual(doc.toObject());
+});
+
+it('should add query Methods with inheritance', async () => {
+  interface FindHelpersBase {
+    findByName: AsQueryMethod<typeof findByName>;
+    findByLastname: AsQueryMethod<typeof findByLastname>;
+  }
+
+  function findByName(this: ReturnModelType<typeof QueryMethodsClassBase, FindHelpersBase>, name: string) {
+    return this.find({ name });
+  }
+
+  function findByLastname(this: ReturnModelType<typeof QueryMethodsClassBase, FindHelpersBase>, lastname: string) {
+    return this.find({ lastname });
+  }
+
+  @queryMethod(findByName)
+  @queryMethod(findByLastname)
+  class QueryMethodsClassBase {
+    @prop({ required: true })
+    public name: string;
+
+    @prop({ required: true })
+    public lastname: string;
+  }
+
+  interface FindHelpersExtended extends FindHelpersBase {
+    findByAge: AsQueryMethod<typeof findByAge>;
+  }
+
+  function findByAge(this: ReturnModelType<typeof QueryMethodsClassExtended, FindHelpersExtended>, age: number) {
+    return this.find({ age });
+  }
+
+  @queryMethod(findByAge)
+  class QueryMethodsClassExtended extends QueryMethodsClassBase {
+    @prop({ required: true })
+    public age: number;
+  }
+
+  const QueryMethodsExtendedModel = getModelForClass<typeof QueryMethodsClassExtended, FindHelpersExtended>(QueryMethodsClassExtended);
+
+  const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethodsClassExtended);
+  expect(metadata).toBeDefined();
+  expect(metadata.size).toStrictEqual(3);
+  expect(metadata).toStrictEqual(
+    new Map<string, Func>([
+      [findByName.name, findByName],
+      [findByLastname.name, findByLastname],
+      [findByAge.name, findByAge],
+    ])
+  );
+
+  const doc = await QueryMethodsExtendedModel.create({ name: 'hello', lastname: 'world', age: 10 });
+
+  const found = await QueryMethodsExtendedModel.find()
+    .findByName('hello')
+    .findByLastname('world')
+    // @ts-expect-error I (hasezoey) could not get all functions to work with each other type-wise (typegoose 9.0, mongoose 6.0, typescript 4.4)
+    .findByAge(10)
+    .orFail()
+    .exec();
   assertion(isDocumentArray(found), new Error('Found is not an document array'));
   expect(found[0].toObject()).toEqual(doc.toObject());
 });
