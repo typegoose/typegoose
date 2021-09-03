@@ -1,5 +1,5 @@
 import { classToPlain, t, plainToClass } from '@deepkit/type';
-import { getModelForClass, prop } from '../../src/typegoose';
+import { DocumentType, getModelForClass, prop } from '../../src/typegoose';
 
 enum Group {
   confidential = 'confidential',
@@ -27,7 +27,7 @@ const AccountModel = getModelForClass(Account);
 describe('@deepkit/type transforms', () => {
   let id: string;
   let accountClassObject: Account;
-  let account: Account;
+  let account: DocumentType<Account>;
   beforeEach(async () => {
     accountClassObject = new Account();
     accountClassObject.email = 'somebody@gmail.com';
