@@ -7,11 +7,11 @@ This guide shows how to use `typegoose` with `@deepkit/type`.
 
 ## Implementation
 
-Suppose you have this `Account` class decorated with `@deepkit/type`:
-
 :::note
 It is better to have [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object) to separate your API logic (decorated with @deepkit/type decorators) from your Entities (decorated with Typgoose decorators). This may seem like extra code, verbosity and work, but it is smart, because it will allow you to change your API and Entities separate from each other.
 :::
+
+Suppose you have this `Account` class decorated with `@deepkit/type`:
 
 ```ts
 import { classToPlain, t, plainToClass } from '@deepkit/type';
