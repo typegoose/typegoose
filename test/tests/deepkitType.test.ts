@@ -39,7 +39,7 @@ describe('@deepkit/type transforms', () => {
   });
 
   describe('lean query', () => {
-    it(`should be able to use @deepkit/type to transform to class instance`, async () => {
+    it('should be able to use @deepkit/type to transform to class instance', async () => {
       // lean return a Plain Old Javascript Object
       const pojo = await AccountModel.findById(id).orFail().lean().exec();
       // groupsExclude option excludes the property group
@@ -52,7 +52,7 @@ describe('@deepkit/type transforms', () => {
       expect(deserialized).not.toHaveProperty('confidentialProperty');
     });
 
-    it(`should be able to use @deepkit/type's groups to allow access`, async () => {
+    it("should be able to use @deepkit/type's groups to allow access", async () => {
       // lean return a Plain Old Javascript Object
       const pojo = await AccountModel.findById(id).orFail().lean().exec();
       // groups option includes the property group
@@ -79,7 +79,7 @@ describe('@deepkit/type transforms', () => {
       expect(serialized).not.toHaveProperty('confidentialProperty');
     });
 
-    it(`should be able to use @deepkit/type's groups to allow access`, async () => {
+    it("should be able to use @deepkit/type's groups to allow access", async () => {
       // exec return a Mongoose Object
       const doc = await AccountModel.findById(id).orFail().exec();
       const access = { groups: [Group.confidential, Group.public] };
