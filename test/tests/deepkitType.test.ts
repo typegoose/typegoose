@@ -1,5 +1,5 @@
 import { classToPlain, t, plainToClass } from '@deepkit/type';
-import { DocumentType, getModelForClass, prop } from '../../src/typegoose';
+import { DocumentType, getModelForClass, mongoose, prop } from '../../src/typegoose';
 
 enum Group {
   confidential = 'confidential',
@@ -93,5 +93,21 @@ describe('@deepkit/type transforms', () => {
       });
       expect(serialized).toHaveProperty('confidentialProperty');
     });
+  });
+
+  it('should create a Document from a Class', async () => {
+    const origData = new Account(); // data without any mongoose properties (like "__v" and "_id")
+    origData.confidentialProperty = 'confident';
+    origData.email = 'nobody@someone.org';
+    // the following is to have a copy of the original, just to test "@deepkit/type"'s ability to transform
+    const copied = plainToClass(Account, classToPlain(Account, origData));
+    // this is here, because in the transition from mongoose 5.x to mongoose 6.x, class-transformer suddenly started having different values after one transform
+    expect(copied).toStrictEqual(origData);
+    const createdDoc = await AccountModel.create(copied);
+
+    // Expect "createdDoc" to have the properties of "origData" exactly matching, ignoring extra properties that were not in "origData"
+    expect(createdDoc).toStrictEqual(expect.objectContaining(origData));
+    const docPOJO = classToPlain(Account, createdDoc);
+    expect(docPOJO).toMatchSnapshot({ _id: expect.any(mongoose.Types.ObjectId) });
   });
 });

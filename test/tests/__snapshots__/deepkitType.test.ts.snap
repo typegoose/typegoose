@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`@deepkit/type transforms should create a Document from a Class 1`] = `
+Object {
+  "__v": 0,
+  "_id": Any<ObjectId>,
+  "confidentialProperty": "confident",
+  "email": "nobody@someone.org",
+}
+`;
