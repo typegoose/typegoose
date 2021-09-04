@@ -15,7 +15,7 @@ Suppose you have this `Account` class decorated with `@deepkit/type`:
 
 ```ts
 import { classToPlain, t, plainToClass } from '@deepkit/type';
-import { getModelForClass, prop } from '../../src/typegoose';
+import { getModelForClass, prop } from '@typegoose/typegoose';
 
 enum Group {
   confidential = 'confidential',

@@ -11,7 +11,7 @@ Suppose you have this `Account` class decorated with `class-transformer`:
 
 ```ts
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { getModelForClass, mongoose, prop } from 'typegoose';
+import { getModelForClass, mongoose, prop } from '@typegoose/typegoose';
 
 // re-implement base Document to allow class-transformer to serialize/deserialize its properties
 // This class is needed, otherwise "_id" and "__v" would be excluded from the output
