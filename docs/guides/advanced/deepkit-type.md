@@ -75,7 +75,7 @@ You can then do, for example:
 
 As you can see from these code examples, there is:
 
-* an `access` or `grouping` definition needed to ouput the required properties for any serializing or deserializing. The `@deepkit/type` author suggests not using groupings at all, as they cause `@deepkit/type`'s performance to deteriorate. [See Offical Documentation for Reference](https://deepkit.io/documentation/type/serialization#groups), official quote:
+* an `access` or `grouping` (`@t.group(group)`) definition needed to ouput the required properties for any serializing or deserializing. The `@deepkit/type` author suggests not using groupings at all, as they cause `@deepkit/type`'s performance to deteriorate. [See Offical Documentation for Reference](https://deepkit.io/documentation/type/serialization#groups), official quote:
   >  Note: Using grouped serialization is much slower than regular serialization. If performance is important, consider rearranging your data into multiple classes instead.
 * a `Mongodb.ObjectId` decorator (`@t.mongoId`) is built into `@deepkit/type`'s decorators to handle the type conversion to string and back to a MongoId.
 
