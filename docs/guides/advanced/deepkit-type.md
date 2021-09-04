@@ -81,7 +81,7 @@ As you can see from these code examples, there is:
 
 The `@deepkit/type`'s author also suggests not putting passwords or other confidential data directly inside entities that have mainly public access. It is better to put them in their own class or classes, so they can be handled without the grouping feature. This allows for the performance of serialization and deserialization to be much better and you can control who sees the confidential data more appropriately i.e. not via serialization steps.
 
-Also, you'll only need `@t` to decorate your Entity, so your code will be cleaner too. This is what the `Account` entity would look like without the grouping/ access code.
+Also, you'll only need `@t` to decorate your Entity (compared to `class-transformer`, which commonly needs 2 or more), so your code will be cleaner too. This is what the `Account` entity would look like without the grouping/ access code.
 
 ```ts
 class Account {
