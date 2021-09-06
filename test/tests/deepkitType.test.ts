@@ -108,7 +108,6 @@ describe('@deepkit/type transforms', () => {
       const access = { groups: [Group.confidential, Group.public] };
       // serialize Account instance back to a Plain Old Javascript Object
       const serialized = classToPlain(Account, doc, access);
-      console.log('serialized: ', serialized)
       expect(serialized).toStrictEqual({
         _id: id,
         __v: 0,
