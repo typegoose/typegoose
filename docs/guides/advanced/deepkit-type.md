@@ -17,6 +17,8 @@ Suppose you have this `Account` class decorated with `@deepkit/type`:
 import { t } from '@deepkit/type';
 import { getModelForClass, prop } from '@typegoose/typegoose';
 
+// We have to use custom "classToPlain" and "plainToClass" functions, see "Known Issues" below
+
 enum Group {
   confidential = 'confidential',
   public = 'public',
@@ -101,12 +103,50 @@ The `confidentialProperty` property would be in a different entity/ class.
 
 And again, as was mentioned above, an even better tip is to not use the entity class at all for the serialization and deserialization definitions (i.e. with decorator metadata). It is much better to use [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object) for this purpose.
 
+## Known Issues
+
+### The "mongoId" option is not actually translating to and from string
+
+The `t.mongoId` decorator only works for `@deepkit/orm`, so we have to use a custom serializer to either overwrite that function or use a custom function.
+
+Example:
+
+```ts
+import { t, jsonSerializer } from '@deepkit/type';
+import { ObjectId } from 'bson'; // or from mongodb or mongoose
+
+// Create a Custom Serializer to add custom transfrom functions to types
+const mySerializer = new (class CustomSerializer extends jsonSerializer.fork('mySerializer') {})();
+
+// Note: A custom Serializer has to be used, because the included "mongoId" "decorator" only works with "@deepkit/orm"
+
+// We overwrite mongoId and correctly convert from Mongo ObjectID to string when deserializing
+mySerializer.toClass.register('objectId', (property, state) => {
+  state.setContext({ ObjectId: ObjectId });
+  state.addSetter(`${state.accessor} instanceof String ? ObjectId.createFromHexString(${state.accessor}) : ${state.accessor}`);
+});
+
+// We overwrite mongoId and correctly convert string to Mongo ObjectID when serializing
+mySerializer.fromClass.register('objectId', (property, state) => {
+  state.setContext({ ObjectId: ObjectId });
+  state.addSetter(`${state.accessor} instanceof ObjectId ? ${state.accessor}.toHexString() : ${state.accessor}`);
+});
+
+// Create a custom "classToPlain" function, using "mySerializer" instead of the function provided by "@deepkit/type"
+const classToPlain = function (schemaCls: any, clsObj: any, access?: any) {
+  return mySerializer.for(schemaCls).serialize(clsObj, access);
+};
+
+// Create a custom "plainToClass" function, using "mySerializer" instead of the function provided by "@deepkit/type"
+const plainToClass = function (schemaCls: any, obj: any, access?: any) {
+  return mySerializer.for(schemaCls).deserialize(obj, access);
+};
+```
+
+Also see the [typegoose `@deepkit/type` tests](https://github.com/typegoose/typegoose/blob/master/test/tests/deepkitType.test.ts)
+
 ---
 
 :::info
 For more information, you can always look at the [typegoose `@deepkit/type` tests](https://github.com/typegoose/typegoose/blob/master/test/tests/deepkitType.test.ts)
-:::
-
-:::note
-Please see the test code to understand what was needed to create the `plainToClass` and `classToPlain` functions used above. They are not from `@deepkit/type`.  
 :::
