@@ -14,7 +14,7 @@ It is better to have [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object) 
 Suppose you have this `Account` class decorated with `@deepkit/type`:
 
 ```ts
-import { classToPlain, t, plainToClass } from '@deepkit/type';
+import { t } from '@deepkit/type';
 import { getModelForClass, prop } from '@typegoose/typegoose';
 
 enum Group {
@@ -99,10 +99,14 @@ class Account {
 
 The `confidentialProperty` property would be in a different entity/ class.
 
-And again, as was mentioned above, an even better tip is to not use the entity class at all for the serialization and deserialization definitions (i.e. with decorator metadata). It is much better to use [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object) for this purpose.  
+And again, as was mentioned above, an even better tip is to not use the entity class at all for the serialization and deserialization definitions (i.e. with decorator metadata). It is much better to use [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object) for this purpose. 
 
 ---
 
 :::info
 For more information, you can always look at the [typegoose `@deepkit/type` tests](https://github.com/typegoose/typegoose/blob/master/test/tests/deepkitType.test.ts)
 :::
+
+:::note
+Please see the test code to understand what was needed to create the `plainToClass` and `classToPlain` functions used above. They are not from `@deepkit/type`.  
+::: 
