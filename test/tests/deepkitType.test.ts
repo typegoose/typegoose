@@ -2,7 +2,7 @@ import { t, jsonSerializer } from '@deepkit/type';
 import { DocumentType, getModelForClass, prop } from '../../src/typegoose';
 import { ObjectId } from 'bson';
 
-const mySerializer = new (class extends jsonSerializer.fork('mySerializer') {})();
+const mySerializer = new (class CustomSerializer extends jsonSerializer.fork('mySerializer') {})();
 
 //We overwrite mongoId and correctly convert from Mongo ObjectID to string when deserializing
 mySerializer.toClass.register('objectId', (property, state) => {
