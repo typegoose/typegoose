@@ -120,8 +120,8 @@ describe('@deepkit/type transforms', () => {
 
   it('should create a Document from a Class', async () => {
     const origData = new Account(); // data without any mongoose properties (like "__v" and "_id")
-    origData.confidentialProperty = 'confident';
-    origData.email = 'nobody@someone.org';
+    origData.confidentialProperty = 'confident1';
+    origData.email = 'nobody1@someone.org';
     // the following is to have a copy of the original, just to test "@deepkit/type"'s ability to transform
     const copied = plainToClass(Account, classToPlain(Account, origData));
     // this is here, because in the transition from mongoose 5.x to mongoose 6.x, class-transformer suddenly started having different values after one transform
@@ -136,8 +136,8 @@ describe('@deepkit/type transforms', () => {
 
   it('should transform a POJO to a Class, store it, retrieve it, and transform it back to a POJO', async () => {
     const origData = new Account(); // data without any mongoose properties (like "__v" and "_id")
-    origData.confidentialProperty = 'confident';
-    origData.email = 'nobody@someone.org';
+    origData.confidentialProperty = 'confident2';
+    origData.email = 'nobody2@someone.org';
     // create our definition for groupings of properties to transform
     const access = { groups: [Group.confidential, Group.public] };
     // transform our "fake" incoming DTO to a Class instance
