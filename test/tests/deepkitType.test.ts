@@ -139,16 +139,15 @@ describe('@deepkit/type transforms', () => {
     const origData = new Account(); // data without any mongoose properties (like "__v" and "_id")
     origData.confidentialProperty = 'confident';
     origData.email = 'nobody@someone.org';
-
+    // create our definition for groupings of properties to transform
     const access = { groups: [Group.confidential, Group.public] };
-
-    const copied = plainToClass(Account, origData, access);
-    // this is here, because in the transition from mongoose 5.x to mongoose 6.x, class-transformer suddenly started having different values after one transform
-    const createdDoc = await AccountModel.create(copied);
+    // transform our "fake" incoming DTO to a Class instance
+    const incomingDataTransformedToClass = plainToClass(Account, origData, access);
+    // Strre the class object
+    const createdDoc = await AccountModel.create(incomingDataTransformedToClass);
+    // retrieve the document 
     const docFound = await AccountModel.findById(createdDoc._id).orFail().exec();
-
-    // Expect "createdDoc" to have the properties of "origData" exactly matching, ignoring extra properties that were not in "origData"
-    // expect(createdDoc).toStrictEqual(expect.objectContaining(origData));
+    // transform it back to a DTO
     const outboundDTO = classToPlain(Account, docFound, access);
     expect(outboundDTO).toMatchSnapshot({ _id: expect.any(String) });
   });
