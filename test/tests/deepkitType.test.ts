@@ -1,28 +1,28 @@
 import { t, jsonSerializer } from '@deepkit/type';
-import { DocumentType, getModelForClass, mongoose, prop } from '../../src/typegoose';
+import { DocumentType, getModelForClass, prop } from '../../src/typegoose';
 import { ObjectId } from 'bson';
 
-const mySerializer = new class extends jsonSerializer.fork('mySerializer') {};
+const mySerializer = new (class extends jsonSerializer.fork('mySerializer') {})();
 
 //We overwrite mongoId and correctly convert from Mongo ObjectID to string when deserializing
 mySerializer.toClass.register('objectId', (property, state) => {
-    state.setContext({ObjectId: ObjectId});
-    state.addSetter(`${state.accessor} instanceof String ? ObjectId.createFromHexString(${state.accessor}) : ${state.accessor}`);
+  state.setContext({ ObjectId: ObjectId });
+  state.addSetter(`${state.accessor} instanceof String ? ObjectId.createFromHexString(${state.accessor}) : ${state.accessor}`);
 });
 
 //We overwrite mongoId and correctly convert string to Mongo ObjectID when serializing
 mySerializer.fromClass.register('objectId', (property, state) => {
-    state.setContext({ObjectId: ObjectId});
-    state.addSetter(`${state.accessor} instanceof ObjectId ? ${state.accessor}.toHexString() : ${state.accessor}`);
+  state.setContext({ ObjectId: ObjectId });
+  state.addSetter(`${state.accessor} instanceof ObjectId ? ${state.accessor}.toHexString() : ${state.accessor}`);
 });
 
-const classToPlain = function(schemaCls: any, clsObj: any, access?: any) {
+const classToPlain = function (schemaCls: any, clsObj: any, access?: any) {
   return mySerializer.for(schemaCls).serialize(clsObj, access);
-}
+};
 
-const plainToClass = function(schemaCls: any, obj: any, access?: any) {
+const plainToClass = function (schemaCls: any, obj: any, access?: any) {
   return mySerializer.for(schemaCls).deserialize(obj, access);
-}
+};
 
 enum Group {
   confidential = 'confidential',
@@ -32,7 +32,7 @@ enum Group {
 class Account {
   @t.mongoId.group(Group.public)
   public _id: string;
- 
+
   @t.group(Group.public)
   public __v: number;
 
@@ -144,7 +144,7 @@ describe('@deepkit/type transforms', () => {
     const incomingDataTransformedToClass = plainToClass(Account, origData, access);
     // Strre the class object
     const createdDoc = await AccountModel.create(incomingDataTransformedToClass);
-    // retrieve the document 
+    // retrieve the document
     const docFound = await AccountModel.findById(createdDoc._id).orFail().exec();
     // transform it back to a DTO
     const outboundDTO = classToPlain(Account, docFound, access);
