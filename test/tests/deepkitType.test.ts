@@ -1,5 +1,28 @@
-import { classToPlain, t, plainToClass } from '@deepkit/type';
+import { t, jsonSerializer } from '@deepkit/type';
 import { DocumentType, getModelForClass, mongoose, prop } from '../../src/typegoose';
+import { ObjectId } from 'bson';
+
+const mySerializer = new class extends jsonSerializer.fork('mySerializer') {};
+
+//We overwrite mongoId and correctly convert from Mongo ObjectID to string when deserializing
+mySerializer.toClass.register('objectId', (property, state) => {
+    state.setContext({ObjectId: ObjectId});
+    state.addSetter(`${state.accessor} instanceof String ? ObjectId.createFromHexString(${state.accessor}) : ${state.accessor}`);
+});
+
+//We overwrite mongoId and correctly convert string to Mongo ObjectID when serializing
+mySerializer.fromClass.register('objectId', (property, state) => {
+    state.setContext({ObjectId: ObjectId});
+    state.addSetter(`${state.accessor} instanceof ObjectId ? ${state.accessor}.toHexString() : ${state.accessor}`);
+});
+
+const classToPlain = function(schemaCls: any, clsObj: any, access?: any) {
+  return mySerializer.for(schemaCls).serialize(clsObj, access);
+}
+
+const plainToClass = function(schemaCls: any, obj: any, access?: any) {
+  return mySerializer.for(schemaCls).deserialize(obj, access);
+}
 
 enum Group {
   confidential = 'confidential',
@@ -9,7 +32,7 @@ enum Group {
 class Account {
   @t.mongoId.group(Group.public)
   public _id: string;
-
+ 
   @t.group(Group.public)
   public __v: number;
 
@@ -33,9 +56,9 @@ describe('@deepkit/type transforms', () => {
     accountClassObject.email = 'somebody@gmail.com';
     accountClassObject.confidentialProperty = 'secret';
     account = await AccountModel.create(accountClassObject);
-    id = account._id;
     accountClassObject._id = account._id;
     accountClassObject.__v = account.__v;
+    id = account._id.toString();
   });
 
   describe('lean query', () => {
@@ -85,6 +108,7 @@ describe('@deepkit/type transforms', () => {
       const access = { groups: [Group.confidential, Group.public] };
       // serialize Account instance back to a Plain Old Javascript Object
       const serialized = classToPlain(Account, doc, access);
+      console.log('serialized: ', serialized)
       expect(serialized).toStrictEqual({
         _id: id,
         __v: 0,
@@ -108,6 +132,24 @@ describe('@deepkit/type transforms', () => {
     // Expect "createdDoc" to have the properties of "origData" exactly matching, ignoring extra properties that were not in "origData"
     expect(createdDoc).toStrictEqual(expect.objectContaining(origData));
     const docPOJO = classToPlain(Account, createdDoc);
-    expect(docPOJO).toMatchSnapshot({ _id: expect.any(mongoose.Types.ObjectId) });
+    expect(docPOJO).toMatchSnapshot({ _id: expect.any(String) });
+  });
+
+  it('should transform a POJO to a Class, store it, retrieve it, and transform it back to a POJO', async () => {
+    const origData = new Account(); // data without any mongoose properties (like "__v" and "_id")
+    origData.confidentialProperty = 'confident';
+    origData.email = 'nobody@someone.org';
+
+    const access = { groups: [Group.confidential, Group.public] };
+
+    const copied = plainToClass(Account, origData, access);
+    // this is here, because in the transition from mongoose 5.x to mongoose 6.x, class-transformer suddenly started having different values after one transform
+    const createdDoc = await AccountModel.create(copied);
+    const docFound = await AccountModel.findById(createdDoc._id).orFail().exec();
+
+    // Expect "createdDoc" to have the properties of "origData" exactly matching, ignoring extra properties that were not in "origData"
+    // expect(createdDoc).toStrictEqual(expect.objectContaining(origData));
+    const outboundDTO = classToPlain(Account, docFound, access);
+    expect(outboundDTO).toMatchSnapshot({ _id: expect.any(String) });
   });
 });

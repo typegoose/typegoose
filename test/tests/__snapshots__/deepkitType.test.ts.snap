@@ -3,7 +3,16 @@
 exports[`@deepkit/type transforms should create a Document from a Class 1`] = `
 Object {
   "__v": 0,
-  "_id": Any<ObjectId>,
+  "_id": Any<String>,
+  "confidentialProperty": "confident",
+  "email": "nobody@someone.org",
+}
+`;
+
+exports[`@deepkit/type transforms should transform a POJO to a Class, store it, retrieve it, and transform it back to a POJO 1`] = `
+Object {
+  "__v": 0,
+  "_id": Any<String>,
   "confidentialProperty": "confident",
   "email": "nobody@someone.org",
 }
