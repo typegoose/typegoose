@@ -99,7 +99,7 @@ class Account {
 
 The `confidentialProperty` property would be in a different entity/ class.
 
-And again, as was mentioned above, an even better tip is to not use the entity class at all for the serialization and deserialization definitions (i.e. with decorator metadata). It is much better to use [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object) for this purpose. 
+And again, as was mentioned above, an even better tip is to not use the entity class at all for the serialization and deserialization definitions (i.e. with decorator metadata). It is much better to use [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object) for this purpose.
 
 ---
 
@@ -109,4 +109,4 @@ For more information, you can always look at the [typegoose `@deepkit/type` test
 
 :::note
 Please see the test code to understand what was needed to create the `plainToClass` and `classToPlain` functions used above. They are not from `@deepkit/type`.  
-::: 
+:::
