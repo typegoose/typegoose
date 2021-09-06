@@ -2,24 +2,29 @@ import { t, jsonSerializer } from '@deepkit/type';
 import { DocumentType, getModelForClass, prop } from '../../src/typegoose';
 import { ObjectId } from 'bson';
 
+// Create a Custom Serializer to add custom transfrom functions to types
 const mySerializer = new (class CustomSerializer extends jsonSerializer.fork('mySerializer') {})();
 
-//We overwrite mongoId and correctly convert from Mongo ObjectID to string when deserializing
+// Note: A custom Serializer has to be used, because the included "mongoId" "decorator" only works with "@deepkit/orm"
+
+// We overwrite mongoId and correctly convert from Mongo ObjectID to string when deserializing
 mySerializer.toClass.register('objectId', (property, state) => {
   state.setContext({ ObjectId: ObjectId });
   state.addSetter(`${state.accessor} instanceof String ? ObjectId.createFromHexString(${state.accessor}) : ${state.accessor}`);
 });
 
-//We overwrite mongoId and correctly convert string to Mongo ObjectID when serializing
+// We overwrite mongoId and correctly convert string to Mongo ObjectID when serializing
 mySerializer.fromClass.register('objectId', (property, state) => {
   state.setContext({ ObjectId: ObjectId });
   state.addSetter(`${state.accessor} instanceof ObjectId ? ${state.accessor}.toHexString() : ${state.accessor}`);
 });
 
+// Create a custom "classToPlain" function, using "mySerializer" instead of the function provided by "@deepkit/type"
 const classToPlain = function (schemaCls: any, clsObj: any, access?: any) {
   return mySerializer.for(schemaCls).serialize(clsObj, access);
 };
 
+// Create a custom "plainToClass" function, using "mySerializer" instead of the function provided by "@deepkit/type"
 const plainToClass = function (schemaCls: any, obj: any, access?: any) {
   return mySerializer.for(schemaCls).deserialize(obj, access);
 };
