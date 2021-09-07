@@ -1,6 +1,6 @@
 ---
 id: assertions
-title: 'Assertions'
+title: 'assertion'
 ---
 
 ## assertion

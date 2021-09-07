@@ -1,6 +1,6 @@
 ---
 id: set-global-options
-title: 'Set Global Options'
+title: 'setGlobalOptions'
 ---
 
 `setGlobalOptions(options)` is used to set the global Options.

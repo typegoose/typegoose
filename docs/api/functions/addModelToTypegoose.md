@@ -1,6 +1,6 @@
 ---
 id: add-model-to-typegoose
-title: 'Add Model To Typegoose'
+title: 'addModelToTypegoose'
 ---
 
 `addModelToTypegoose(model: mongoose.model<any>, class)` is used to get a model with TypeScript type information and to allow `getClassForDocument` to work.
