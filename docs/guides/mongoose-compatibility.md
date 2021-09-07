@@ -3,9 +3,8 @@ id: mongoose-compatibility
 title: 'Mongoose Compatibility'
 ---
 
-<!--Use https://www.tablesgenerator.com/markdown_tables and modify the .csv-->
 *<sub>The version values use [npm's semver convention](https://www.npmjs.com/package/semver).</sub>*
-<!--Everything below here is generated as stated above-->
+
 | Typegoose Version | Mongoose Version |
 | ----------------- | ---------------- |
 | 9.0.x             | ~6.0.1           |
