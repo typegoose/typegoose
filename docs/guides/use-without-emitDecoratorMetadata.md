@@ -3,15 +3,19 @@ id: use-without-emitDecoratorMetadata
 title: 'Use Without "emitDecoratorMetadata"'
 ---
 
-Typegoose can be used without the option [`emitDecoratorMetadata`](https://www.typescriptlang.org/tsconfig#emitDecoratorMetadata), but it is generally recommeneded to enable it for auto-inferring from the typescript type
+Typegoose can be used without the option [`emitDecoratorMetadata`](https://www.typescriptlang.org/tsconfig#emitDecoratorMetadata), but it is generally recommeneded to enable it for auto-inferring from the typescript type.
 
 ## Advantages to "emitDecoratorMetadata"
 
-With the use of `emitDecoratorMetadata`, it is not needed to be explicit about *everything*, like
+When using `emitDecoratorMetadata`, it is not needed to be explicit about *everything*, like the following example would simply "compile" into the appropiate types.
+
+:::info
+Some Properties (like Arrays & Maps) need to be always explicit, see [`@prop` Array Options](../api/decorators/prop.md#array-options).
+:::
 
 ```ts
 class Kitten {
-  @prop({ required: true })
+  @prop({ required: true }) // Not needed to be explicit that this property is a "String"
   public name!: string;
 
   @prop({ type: () => [String], required: true })
@@ -22,13 +26,11 @@ class Kitten {
 }
 ```
 
-would simply "compile" into the appropiate types, like `Primitve`, `Array` and `Map`
-
-but when not having `emitDecoratorMetadata` enabled, everything needs to be explicitly defined:
+But when not using `emitDecoratorMetadata`, every property needs to be explicitly defined:
 
 ```ts
 class Kitten {
-  @prop({ type: () => String, required: true })
+  @prop({ type: () => String, required: true }) // Needs to be explicitly defined, because "emitDecoratorMetadata" is not enabled
   public name!: string;
 
   @prop({ type: () => [String], required: true }, WhatIsIt.ARRAY)
@@ -39,10 +41,9 @@ class Kitten {
 }
 ```
 
-[look here for what `WhatIsIt` is](../api/decorators/prop.md#whatisit)
+[Look here for what `WhatIsIt` is](../api/decorators/prop.md#whatisit)
 
----
+## References
 
-References:
 - [tsconfig option `emitDecoratorMetadata`](https://www.typescriptlang.org/tsconfig#emitDecoratorMetadata)
 - [Typescript explanation to decorators and Reflection](https://www.typescriptlang.org/docs/handbook/decorators.html#metadata)
