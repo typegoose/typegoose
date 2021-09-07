@@ -1,6 +1,6 @@
 ---
 id: return-model-type
-title: 'Return Model Type'
+title: 'ReturnModelType<T, QueryHelpers>'
 ---
 
 The Type `ReturnModelType<T, QueryHelpers>` is the type used to have type information for a class converted to a Mongoose Model.

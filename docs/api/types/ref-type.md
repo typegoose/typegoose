@@ -1,6 +1,6 @@
 ---
 id: ref-type
-title: 'Ref (Type)'
+title: 'Ref<PopulatedType, RawId>'
 ---
 
 The Type `Ref<PopulatedType, RawId>` is the type used for [References](https://mongoosejs.com/docs/populate.html).
