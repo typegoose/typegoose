@@ -1,6 +1,7 @@
 flow-typed/*
 lib/*
 build/*
-website/*
+#website/* #dont ignore website (like sidebars.js)
+website/build/*
 coverage/*
-*.js
+#*.js # dont ignore top-level js files
