@@ -14,7 +14,7 @@ class Kitten {
   @prop({ required: true })
   public name!: string;
 
-  @prop({ type: () => String, required: true })
+  @prop({ type: () => [String], required: true })
   public friendNames!: string[];
 
   @prop({ type: () => Number, required: true })
@@ -28,10 +28,10 @@ but when not having `emitDecoratorMetadata` enabled, everything needs to be expl
 
 ```ts
 class Kitten {
-  @prop({ type: () => String, required: true }) // Default type is "Primitive"
+  @prop({ type: () => String, required: true })
   public name!: string;
 
-  @prop({ type: () => String, required: true }, WhatIsIt.ARRAY)
+  @prop({ type: () => [String], required: true }, WhatIsIt.ARRAY)
   public friendNames!: string[];
 
   @prop({ type: () => Number, required: true }, WhatIsIt.MAP)
