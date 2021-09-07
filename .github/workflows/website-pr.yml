@@ -1,0 +1,21 @@
+name: Deploy Github Pages
+
+on:
+  pull_request:
+
+jobs:
+  website:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: change to "website"
+        run: cd website
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Build the Website
+        run: yarn run build
