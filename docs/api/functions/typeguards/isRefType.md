@@ -1,6 +1,6 @@
 ---
 id: is-ref-type
-title: 'Is Ref-Type'
+title: 'isRefType & isRefTypeArray'
 ---
 
 ## isRefType
