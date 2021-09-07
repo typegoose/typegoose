@@ -11,7 +11,7 @@ Suppose you have this `Account` class decorated with `class-transformer`:
 
 ```ts
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { getModelForClass, mongoose, prop } from 'typegoose';
+import { getModelForClass, mongoose, prop } from '@typegoose/typegoose';
 
 // re-implement base Document to allow class-transformer to serialize/deserialize its properties
 // This class is needed, otherwise "_id" and "__v" would be excluded from the output
@@ -47,7 +47,7 @@ class Account extends DocumentCT {
 const AccountModel = getModelForClass(Account);
 ```
 
-Side-Note: Typegoose dosnt provide an class like `DocumentCT` by default, because this would require adding `class-transformer` as an dependency
+Side-Note: Typegoose doesn't provide a class like `DocumentCT` by default, because this would require adding `class-transformer` as a dependency.
 
 You can then use, for example:
 
@@ -65,7 +65,7 @@ You can then use, for example:
 * or a normal document:
 
   ```ts
-  // exec return a Mongoose Object
+  // exec returns a Mongoose Object
   const mo = await AccountModel.findById(id).orFail().exec();
   // deserialize Mongoose Object into an instance of the Account class
   const deserialized = plainToClass(Account, mo);
@@ -78,7 +78,7 @@ As you can see from these examples, there is:
 * a redundant step to first turn the output of the query into a full instance of `Account` : `plainToClass(..., ...)`
 * before being able to benefit from its features for serialization: `classToPlain(...)`
 
-The reson for doing this is so queries will output `DocumentType<Account>` (Mongoose Document) instead of required `Account` (Plain Object / instance of the Class) in this example.
+The reason for doing this is so queries will output `DocumentType<Account>` (Mongoose Document) instead of required `Account` (Plain Object / instance of the Class) in this example.
 
 `class-transformer` can only operate its magic on instances of annotated classes.
 
