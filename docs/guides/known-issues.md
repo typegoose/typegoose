@@ -37,11 +37,16 @@ class SomeClass {
 
 ### Babel
 
-Using babel as a TypeScript compiler is known to cause problems (like incorrect types)  
-We recommened you use `tsc` directly, or `ts-node` or `ts-jest` for jest-testing
+Using babel as a TypeScript compiler is known to cause problems (like incorrect types), we recommened you use `tsc` directly, or `ts-node` or `ts-jest` for jest-testing.
 
-If Babel is still needed, then read [Babel TypeScript preset](https://babeljs.io/docs/en/babel-preset-typescript) and install the following plugins:
-you will need to reproduce the `--experimentalDecorators` and `--emitDecoratorMetadata` [TypeScript compiler options](https://babeljs.io/docs/en/babel-plugin-transform-typescript#typescript-compiler-options) by using the corresponding plugins for [enabling decorators](https://babeljs.io/docs/en/babel-plugin-proposal-decorators) and [emitting decorator metadata](https://github.com/leonardfactory/babel-plugin-transform-typescript-metadata):
+If Babel is still needed, then read [Babel TypeScript preset](https://babeljs.io/docs/en/babel-preset-typescript) and install the following plugins:  
+
+- To reproduce the typescript decorators (`experimentalDecorators`), use [`@babel/plugin-proposal-decorators`](https://babeljs.io/docs/en/babel-plugin-proposal-decorators)
+- To reproduce the decorator metadata output (`emitDecoratorMetadata`), use [`babel-plugin-transform-typescript-metadata`](https://github.com/leonardfactory/babel-plugin-transform-typescript-metadata)
+
+:::info
+`emitDecoratorMetadata` is not strictly needed, see [Use Without `emitDecoratorMetadata`](./use-without-emitDecoratorMetadata.md)
+:::
 
 ```js
 module.exports = {
