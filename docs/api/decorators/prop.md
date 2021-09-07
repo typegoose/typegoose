@@ -1,6 +1,6 @@
 ---
 id: prop
-title: 'Prop'
+title: '@prop'
 ---
 
 `@prop(options: object, kind: WhatIsIt)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)

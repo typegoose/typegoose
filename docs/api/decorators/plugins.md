@@ -1,6 +1,6 @@
 ---
 id: plugins
-title: 'Plugins'
+title: '@plugins'
 ---
 
 `@plugin<PluginOptions>(mongoosePlugin: (...args: any) => any, options: object)` is used to add plugins to a class
