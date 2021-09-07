@@ -1,3 +1,10 @@
+## [9.0.0-beta.4](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.3...v9.0.0-beta.4) (2021-09-07)
+
+
+### Style
+
+* apply eslint rules to top level and website js files ([c6aa5cc](https://github.com/typegoose/typegoose/commit/c6aa5cca8b8d5f307d38aa32f1b46f043a1f902e))
+
 ## [9.0.0-beta.3](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.2...v9.0.0-beta.3) (2021-09-02)
 
 
