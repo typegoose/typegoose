@@ -30,9 +30,9 @@ module.exports = {
     Guides: [
       {
         'Integration Examples': [
-          'guides/advanced/using-with-class-transformer',
-          'guides/advanced/using-with-deepkit-type',
-          'guides/advanced/common-plugins',
+          'guides/integration-examples/using-with-class-transformer',
+          'guides/integration-examples/using-with-deepkit-type',
+          'guides/integration-examples/common-plugins',
         ],
         Miscellaneous: [
           'guides/advanced/logger',

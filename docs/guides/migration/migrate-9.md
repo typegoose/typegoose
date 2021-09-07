@@ -19,7 +19,7 @@ Mongoose version `6.0.1` (and possibly higher) is now supported, for mongoose sp
 
 ## Class-transformer transform of "ObjectId" became broken
 
-Since mongodb 5.0 (mongoose 6.0) the `value` in `@Transform` is not equals to `obj[key]` anymore, see [the updated Class-Transformer Guide](../advanced/class-transformer.md#implementation) and [the Issue about this](https://github.com/typestack/class-transformer/issues/879)
+Since mongodb 5.0 (mongoose 6.0) the `value` in `@Transform` is not equals to `obj[key]` anymore, see [the updated Class-Transformer Guide](../integration-examples/class-transformer.md#implementation) and [the Issue about this](https://github.com/typestack/class-transformer/issues/879)
 
 ## Build order for Class-to-Schema changed
 
