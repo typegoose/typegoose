@@ -1,3 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`should log a warning if "addToHooks" parameter "args" is longer than 2 1`] = `
+Array [
+  Array [
+    "\\"addToHooks\\" parameter \\"args\\" has a length of over 2 (length: 3)",
+  ],
+]
+`;
+
 exports[`should throw a Error when a hooks second parameter is not a function 1`] = `"\\"TestHookFunctionNotFunction.pre.save\\"'s function is not a function!"`;

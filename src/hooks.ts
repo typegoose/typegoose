@@ -107,6 +107,10 @@ function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
     new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s function is not a function!`)
   );
 
+  if (args.length > 2) {
+    logger.warn(`"addToHooks" parameter "args" has a length of over 2 (length: ${args.length})`);
+  }
+
   logger.info('Adding hooks for "[%s]" to "%s" as type "%s"', methods.join(','), getName(target), hookType);
 
   for (const method of methods) {

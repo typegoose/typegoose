@@ -1,3 +1,4 @@
+import { logger } from '../../src/logSettings';
 import { pre, prop } from '../../src/typegoose';
 import { ExtendedHookModel, Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
 import { Hook2Model } from '../models/hook2';
@@ -94,4 +95,20 @@ it('should throw a Error when a hooks second parameter is not a function', async
     expect(err).toBeInstanceOf(TypeError);
     expect(err.message).toMatchSnapshot();
   }
+});
+
+it('should log a warning if "addToHooks" parameter "args" is longer than 2', async () => {
+  const loggerSpy = jest.spyOn(logger, 'warn').mockImplementationOnce(() => void 0);
+
+  const customPre = jest.fn(() => fail('Expected this function to not be executed'));
+
+  // @ts-expect-error a third argument is not allowed, but will be tested for the warning
+  @pre<TestAddToHooksArgsLengthWarning>('save', customPre, 'somethingElse')
+  class TestAddToHooksArgsLengthWarning {
+    @prop()
+    public dummy?: string;
+  }
+
+  expect(loggerSpy).toHaveBeenCalledTimes(1);
+  expect(loggerSpy.mock.calls).toMatchSnapshot();
 });
