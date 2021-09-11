@@ -1,3 +1,26 @@
+## [8.3.0](https://github.com/typegoose/typegoose/compare/v8.2.0...v8.3.0) (2021-09-11)
+
+
+### Features
+
+* **hooks:** add ability to set hook options ([8b6c202](https://github.com/typegoose/typegoose/commit/8b6c202e64486875a65560b27ffe3012a56a7e2a)), closes [typegoose/typegoose#605](https://github.com/typegoose/typegoose/issues/605)
+
+
+### Fixes
+
+* **hooks::addToHooks:** add warning when "args" is over supported length ([c928d33](https://github.com/typegoose/typegoose/commit/c928d332074f4094dab5e303f7293aa13f0bd496))
+
+
+### Style
+
+* apply eslint rules to top level and website js files ([7404c44](https://github.com/typegoose/typegoose/commit/7404c44c844481888a358415be12099b48f19b7e))
+* **types::IHooksArray:** add testdoc to all properties ([fa20dcc](https://github.com/typegoose/typegoose/commit/fa20dcc5ec459c4619e68be019e091f68cb6b6de))
+
+
+### Dependencies
+
+* **semantic-release:** upgrade to 17.4.7 ([0675c68](https://github.com/typegoose/typegoose/commit/0675c68bf1458e2c02e99a9059b51145a57f4188))
+
 ## [8.2.0](https://github.com/typegoose/typegoose/compare/v8.1.1...v8.2.0) (2021-08-24)
 
 
