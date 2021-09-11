@@ -1,3 +1,4 @@
+import { pre, prop } from '../../src/typegoose';
 import { ExtendedHookModel, Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
 import { Hook2Model } from '../models/hook2';
 
@@ -77,4 +78,20 @@ it('should execute post hooks only twice in case inheritance is being used [type
 
   const docFromDb = await ExtendedHookModel.findOne({ _id: doc._id }).orFail().exec();
   expect(docFromDb.hooksMessages.length).toEqual(4);
+});
+
+it('should throw a Error when a hooks second parameter is not a function', async () => {
+  try {
+    // @ts-expect-error The second argument should be a function (test a warning)
+    @pre<TestHookFunctionNotFunction>('save', 'string')
+    class TestHookFunctionNotFunction {
+      @prop()
+      public dummy?: string;
+    }
+
+    fail('Expected this to fail');
+  } catch (err) {
+    expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
+  }
 });

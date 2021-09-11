@@ -99,11 +99,13 @@ const hooks: Hooks = {
 function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
   // Convert Method to array if only a string is provided
   const methods: QDM[] = Array.isArray(args[0]) ? args[0] : [args[0]];
+  const func: EmptyVoidFn = args[1];
+
+  // REFACTOR: re-write this to be a Error inside errors.ts
   assertion(
-    typeof args[1] === 'function',
+    typeof func === 'function',
     new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s function is not a function!`)
   );
-  const func: EmptyVoidFn = args[1];
 
   logger.info('Adding hooks for "[%s]" to "%s" as type "%s"', methods.join(','), getName(target), hookType);
 

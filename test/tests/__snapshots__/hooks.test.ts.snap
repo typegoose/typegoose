@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should throw a Error when a hooks second parameter is not a function 1`] = `"\\"TestHookFunctionNotFunction.pre.save\\"'s function is not a function!"`;
