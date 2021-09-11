@@ -29,11 +29,7 @@ module.exports = {
     // 'guides/known-issues' is included in both "Getting Started" and "Guides", because it fits into both categories
     Guides: [
       {
-        'Integration Examples': [
-          'guides/advanced/using-with-class-transformer',
-          'guides/advanced/using-with-deepkit-type',
-          'guides/advanced/common-plugins',
-        ],
+        'Integration Examples': ['guides/advanced/using-with-class-transformer', 'guides/advanced/common-plugins'],
         Miscellaneous: [
           'guides/advanced/logger',
           'guides/mongoose-compatibility',
