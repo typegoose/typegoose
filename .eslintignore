@@ -1,6 +1,0 @@
-flow-typed/*
-lib/*
-build/*
-website/*
-coverage/*
-*.js
