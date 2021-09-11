@@ -3,8 +3,6 @@ name: Node.js Tests
 on:
   pull_request:
   push:
-    branches:
-      - '*'
     branches-ignore:
       - 'gh-pages'
 #     paths: # only run this deploy if an file in the following directories are changed
