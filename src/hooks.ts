@@ -2,9 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Aggregate, Query } from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
-import { assertion, getName } from './internal/utils';
+import { assertion, getName, isNullOrUndefined } from './internal/utils';
 import { logger } from './logSettings';
-import type { DocumentType, EmptyVoidFn, IHooksArray } from './types';
+import { mongoose } from './typegoose';
+import type { DocumentType, EmptyVoidFn, HookOptionsEither, IHooksArray } from './types';
 
 type NumberOrDocumentOrDocumentArray<T> = number | DocumentType<T> | DocumentType<T>[];
 
@@ -56,28 +57,28 @@ type QDM = QMR | DocumentMethod;
 type DR = DocumentMethod | RegExp;
 
 interface Hooks {
-  pre<T>(method: AggregateMethod, fn: PreFnWithAggregate<T>): ClassDecorator;
+  pre<T>(method: AggregateMethod, fn: PreFnWithAggregate<T>, options?: mongoose.SchemaPreOptions): ClassDecorator;
 
-  pre<T>(method: DR | DR[], fn: PreFnWithDocumentType<T>): ClassDecorator;
+  pre<T>(method: DR | DR[], fn: PreFnWithDocumentType<T>, options?: mongoose.SchemaPreOptions): ClassDecorator;
 
-  pre<T>(method: QMR | QMR[], fn: PreFnWithQuery<T>): ClassDecorator;
+  pre<T>(method: QMR | QMR[], fn: PreFnWithQuery<T>, options?: mongoose.SchemaPreOptions): ClassDecorator;
 
-  post<T>(method: RegExp, fn: PostRegExpResponse<T>): ClassDecorator;
-  post<T>(method: RegExp, fn: PostRegExpWithError<T>): ClassDecorator;
+  post<T>(method: RegExp, fn: PostRegExpResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
+  post<T>(method: RegExp, fn: PostRegExpWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
 
-  post<T>(method: NumberMethod, fn: PostNumberResponse<T>): ClassDecorator;
-  post<T>(method: NumberMethod, fn: PostNumberWithError<T>): ClassDecorator;
+  post<T>(method: NumberMethod, fn: PostNumberResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
+  post<T>(method: NumberMethod, fn: PostNumberWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
 
-  post<T>(method: SingleMethod, fn: PostSingleResponse<T>): ClassDecorator;
-  post<T>(method: SingleMethod, fn: PostSingleWithError<T>): ClassDecorator;
+  post<T>(method: SingleMethod, fn: PostSingleResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
+  post<T>(method: SingleMethod, fn: PostSingleWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
 
-  post<T>(method: MultipleMethod, fn: PostMultipleResponse<T>): ClassDecorator;
-  post<T>(method: MultipleMethod, fn: PostMultipleWithError<T>): ClassDecorator;
+  post<T>(method: MultipleMethod, fn: PostMultipleResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
+  post<T>(method: MultipleMethod, fn: PostMultipleWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
 
-  post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>): ClassDecorator;
+  post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
 
-  post<T>(method: QDM | QDM[], fn: PostArrayResponse<T>): ClassDecorator;
-  post<T>(method: QDM | QDM[], fn: PostArrayWithError<T>): ClassDecorator;
+  post<T>(method: QDM | QDM[], fn: PostArrayResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
+  post<T>(method: QDM | QDM[], fn: PostArrayWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
 }
 
 // TSDoc for the hooks can't be added without adding it to *every* overload
@@ -100,15 +101,21 @@ function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
   // Convert Method to array if only a string is provided
   const methods: QDM[] = Array.isArray(args[0]) ? args[0] : [args[0]];
   const func: EmptyVoidFn = args[1];
+  const hookOptions: HookOptionsEither = args[2] ?? {};
 
   // REFACTOR: re-write this to be a Error inside errors.ts
   assertion(
     typeof func === 'function',
     new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s function is not a function!`)
   );
+  // REFACTOR: re-write this to be a Error inside errors.ts
+  assertion(
+    typeof hookOptions === 'object' && !isNullOrUndefined(hookOptions),
+    new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s hookOptions is not a normal object!`)
+  );
 
-  if (args.length > 2) {
-    logger.warn(`"addToHooks" parameter "args" has a length of over 2 (length: ${args.length})`);
+  if (args.length > 3) {
+    logger.warn(`"addToHooks" parameter "args" has a length of over 3 (length: ${args.length})`);
   }
 
   logger.info('Adding hooks for "[%s]" to "%s" as type "%s"', methods.join(','), getName(target), hookType);
@@ -117,12 +124,12 @@ function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
     switch (hookType) {
       case 'post':
         const postHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPost, target) ?? []);
-        postHooks.push({ func, method });
+        postHooks.push({ func, method, options: hookOptions });
         Reflect.defineMetadata(DecoratorKeys.HooksPost, postHooks, target);
         break;
       case 'pre':
         const preHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPre, target) ?? []);
-        preHooks.push({ func, method });
+        preHooks.push({ func, method, options: hookOptions });
         Reflect.defineMetadata(DecoratorKeys.HooksPre, preHooks, target);
         break;
     }
