@@ -521,7 +521,9 @@ export type NestedDiscriminatorsMap = Map<string, DiscriminatorObject[]>;
  * ```
  */
 export interface IHooksArray {
+  /** The Function to add as a hooks */
   func: Func;
+  /** The Method to where this hook gets triggered */
   method: string | RegExp;
 }
 
