@@ -513,6 +513,9 @@ export type QueryMethodMap = Map<string, Func>;
  */
 export type NestedDiscriminatorsMap = Map<string, DiscriminatorObject[]>;
 
+/** A Helper type to combine both mongoose Hook Option types */
+export type HookOptionsEither = mongoose.SchemaPreOptions | mongoose.SchemaPostOptions;
+
 /**
  * Used for the Reflection of Hooks
  * @example
@@ -521,8 +524,15 @@ export type NestedDiscriminatorsMap = Map<string, DiscriminatorObject[]>;
  * ```
  */
 export interface IHooksArray {
+  /** The Function to add as a hooks */
   func: Func;
+  /** The Method to where this hook gets triggered */
   method: string | RegExp;
+  /**
+   * Options for Hooks
+   * @see https://mongoosejs.com/docs/middleware.html#naming
+   */
+  options: HookOptionsEither;
 }
 
 export interface IGlobalOptions {

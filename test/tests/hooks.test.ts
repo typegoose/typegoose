@@ -1,3 +1,7 @@
+import { DecoratorKeys } from '../../src/internal/constants';
+import { logger } from '../../src/logSettings';
+import { buildSchema, post, pre, prop } from '../../src/typegoose';
+import { HookOptionsEither, IHooksArray } from '../../src/types';
 import { ExtendedHookModel, Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
 import { Hook2Model } from '../models/hook2';
 
@@ -77,4 +81,105 @@ it('should execute post hooks only twice in case inheritance is being used [type
 
   const docFromDb = await ExtendedHookModel.findOne({ _id: doc._id }).orFail().exec();
   expect(docFromDb.hooksMessages.length).toEqual(4);
+});
+
+it('should throw a Error when a hooks second parameter is not a function', async () => {
+  try {
+    // @ts-expect-error The second argument should be a function (test a warning)
+    @pre<TestHookFunctionNotFunction>('save', 'string')
+    class TestHookFunctionNotFunction {
+      @prop()
+      public dummy?: string;
+    }
+
+    fail('Expected this to fail');
+  } catch (err) {
+    expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
+  }
+});
+
+it('should log a warning if "addToHooks" parameter "args" is longer than 3', async () => {
+  const loggerSpy = jest.spyOn(logger, 'warn').mockImplementationOnce(() => void 0);
+
+  const customPre = jest.fn(() => fail('Expected this function to not be executed'));
+
+  // @ts-expect-error only 3 arguments are supported, but more will be tested for the warning
+  @pre<TestAddToHooksArgsLengthWarning>('save', customPre, {}, 'somethingElse')
+  class TestAddToHooksArgsLengthWarning {
+    @prop()
+    public dummy?: string;
+  }
+
+  expect(loggerSpy).toHaveBeenCalledTimes(1);
+  expect(loggerSpy.mock.calls).toMatchSnapshot();
+});
+
+it('should allow usage of hook-options [typegoose/typegoose#605]', async () => {
+  // this is combined, because currently both "Post" and "Pre" hooks have the same options with the same meaning
+  const fullHookOptions: HookOptionsEither = { document: false, query: false };
+  const customPre = jest.fn(() => fail('Expected this function to not be executed'));
+  const customPost = jest.fn(() => fail('Expected this function to not be executed'));
+
+  @pre<TestHookOptions>('save', customPre, fullHookOptions)
+  @post<TestHookOptions>('save', customPost, fullHookOptions)
+  class TestHookOptions {
+    @prop()
+    public dummy?: string;
+  }
+
+  const reflectHooksPre: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, TestHookOptions);
+  const reflectHooksPost: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, TestHookOptions);
+
+  expect(reflectHooksPre).toHaveLength(1);
+  expect(reflectHooksPre[0]).toStrictEqual<IHooksArray>({
+    method: 'save',
+    func: customPre,
+    options: fullHookOptions,
+  });
+
+  expect(reflectHooksPost).toHaveLength(1);
+  expect(reflectHooksPost[0]).toStrictEqual<IHooksArray>({
+    method: 'save',
+    func: customPost,
+    options: fullHookOptions,
+  });
+
+  const schema = buildSchema(TestHookOptions);
+  // @ts-expect-error "s" is not in the types, but is used for something like "hooks"
+  const schemaHooks: { _pres: Map<string, any>; _posts: Map<string, any> } = schema.s.hooks;
+
+  expect(schemaHooks._pres.size).toStrictEqual(1);
+  expect(schemaHooks._posts.size).toStrictEqual(1);
+
+  // this is using "objectContaining", because mongoose could at any point in time just add more options, which would not matter here
+  expect(schemaHooks._pres.get('save')[0]).toStrictEqual(
+    expect.objectContaining({
+      ...fullHookOptions,
+      fn: customPre,
+    })
+  );
+  expect(schemaHooks._posts.get('save')[0]).toStrictEqual(
+    expect.objectContaining({
+      ...fullHookOptions,
+      fn: customPost,
+    })
+  );
+});
+
+it('should throw a Error when a hooks options argument is not a object', async () => {
+  try {
+    const customPre = jest.fn(() => fail('Expected this function to not be executed'));
+    // @ts-expect-error The second argument should be a function (test a warning)
+    @pre<TestHookFunctionNotFunction>('save', customPre, 'SomethingElse')
+    class TestHookFunctionNotFunction {
+      @prop()
+      public dummy?: string;
+    }
+
+    fail('Expected this to fail');
+  } catch (err) {
+    expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
+  }
 });
