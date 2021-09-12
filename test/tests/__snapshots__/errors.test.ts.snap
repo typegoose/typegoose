@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should throw a Error when the property is a Symbol [CannotBeSymbolError] 1`] = `"A property key in Typegoose cannot be an symbol! (TestPropertySymbol.Symbol()) [E024]"`;

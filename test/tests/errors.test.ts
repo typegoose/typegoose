@@ -21,7 +21,7 @@ import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import { assertion, assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
-import { InvalidWhatIsItError } from '../../src/internal/errors';
+import { CannotBeSymbolError, InvalidWhatIsItError } from '../../src/internal/errors';
 
 it('should error if an non-existing(runtime) type is given [InvalidTypeError]', () => {
   try {
@@ -533,5 +533,25 @@ it('should throw default error if no error is specified (assertion)', () => {
   } catch (err) {
     expect(err).toBeInstanceOf(Error);
     expect(err.message).toEqual('Assert failed - no custom error [E019]');
+  }
+});
+
+it('should throw a Error when the property is a Symbol [CannotBeSymbolError]', async () => {
+  const sym = Symbol();
+
+  class TestPropertySymbol {
+    @prop()
+    public dummy?: string;
+
+    @prop()
+    public [sym]?: string;
+  }
+
+  try {
+    buildSchema(TestPropertySymbol);
+    fail('Expected to fail with "CannotBeSymbolError"');
+  } catch (err) {
+    expect(err).toBeInstanceOf(CannotBeSymbolError);
+    expect(err.message).toMatchSnapshot();
   }
 });
