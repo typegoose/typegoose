@@ -46,7 +46,7 @@ it('should error if no function for hooks is defined [TypeError]', () => {
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
-    expect((err as TypeError).message).toEqual(`"TestNoFunctionHook.pre."'s function is not a function!`);
+    expect(err.message).toEqual(`"TestNoFunctionHook.pre."'s function is not a function!`);
   }
 });
 
@@ -62,7 +62,7 @@ it('should error if no get or set function is defined for non-virtuals [TypeErro
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
-    expect((err as TypeError).message).toEqual(`"TestNoGetNoSet.test" does not have a set function! [E007]`);
+    expect(err.message).toEqual(`"TestNoGetNoSet.test" does not have a set function! [E007]`);
   }
   try {
     class TestWrongGetSetType {
@@ -75,7 +75,7 @@ it('should error if no get or set function is defined for non-virtuals [TypeErro
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
-    expect((err as TypeError).message).toEqual(`"TestWrongGetSetType.test" does not have a get function! [E007]`);
+    expect(err.message).toEqual(`"TestWrongGetSetType.test" does not have a get function! [E007]`);
   }
 });
 
@@ -219,7 +219,7 @@ describe('tests for "assignMetadata"', () => {
       fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).toBeInstanceOf(TypeError);
-      expect((err as TypeError).message).toEqual(`"true"(key) is not a string! (mergeMetadata)`);
+      expect(err.message).toEqual(`"true"(key) is not a string! (mergeMetadata)`);
     }
   });
 
@@ -355,7 +355,8 @@ it('should error if "refPath" is used with WhatIsIt.MAP [TypeError]', () => {
 
 it('should error if the options provide to "setGlobalOptions" are not an object [TypeError]', () => {
   try {
-    setGlobalOptions(undefined as any);
+    // @ts-expect-error "undefined" does not match the restriction "IGlobalOptions"
+    setGlobalOptions(undefined);
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
