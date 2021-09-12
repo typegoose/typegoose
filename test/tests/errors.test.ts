@@ -535,3 +535,25 @@ it('should throw a Error when the property is a Symbol [CannotBeSymbolError]', a
     expect(err.message).toMatchSnapshot();
   }
 });
+
+it('should throw a Error when "ref" is a array [OptionRefDoesNotSupportArraysError]', async () => {
+  class Sub {
+    @prop()
+    public dummy?: string;
+  }
+
+  class TestOptionRefDoesNotSupportArraysError {
+    // @ts-expect-error option "ref" does not accept a array
+    @prop({ ref: () => [Sub] })
+    public nested?: any;
+  }
+
+  try {
+    buildSchema(TestOptionRefDoesNotSupportArraysError);
+
+    fail('Expected to throw "OptionRefDoesNotSupportArraysError"');
+  } catch (err) {
+    expect(err).toBeInstanceOf(errors.OptionRefDoesNotSupportArraysError);
+    expect(err.message).toMatchSnapshot();
+  }
+});

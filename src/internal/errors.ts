@@ -64,3 +64,9 @@ export class SelfContainingClassError extends TypeError {
     );
   }
 }
+
+export class OptionRefDoesNotSupportArraysError extends TypeError {
+  constructor(dim: number, name: string, key: string) {
+    super(`Prop-Option "ref" does not support Arrays! (got "${dim}" dimensions, for property "${name}.${key}") [E021]`);
+  }
+}

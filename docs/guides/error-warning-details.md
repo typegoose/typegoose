@@ -220,7 +220,7 @@ class ErrorClass {
 
 ### PropOptions.ref dosnt support Arrays [E021]
 
-Error: `"PropOptions.ref" dosnt support Arrays (got "${gotType.dim}" dimensions at "${name}.${key}") [E021]`
+Error: `Prop-Option "ref" does not support Arrays! (got "${dim}" dimensions, for property "${name}.${key}") [E021]`
 
 Details:  
 Somewhere the option `ref` was defined with an array, which is not supported
