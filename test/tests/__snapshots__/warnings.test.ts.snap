@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Options not for current Type should error if type is not number and a number-validate is supplied 1`] = `
+Array [
+  Array [
+    "Type of \\"TestNNTEValidate.test\\" is not Number, but includes the following Number-Validate options [W001]:
+  [max]",
+  ],
+]
+`;
+
+exports[`Options not for current Type should warn if type is not string and a string-transform is supplied 1`] = `
+Array [
+  Array [
+    "Type of \\"TestNSTETransform.test\\" is not String, but includes the following String-Transform options [W001]:
+  [lowercase]",
+  ],
+]
+`;
+
+exports[`Options not for current Type should warn if type is not string and a string-validate is supplied 1`] = `
+Array [
+  Array [
+    "Type of \\"TestNSTEValidate.test\\" is not String, but includes the following String-Validate options [W001]:
+  [maxlength]",
+  ],
+]
+`;

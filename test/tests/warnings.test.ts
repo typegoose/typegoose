@@ -1,29 +1,17 @@
-import * as utils from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 import { buildSchema, prop } from '../../src/typegoose';
 
-// Note: TDEP0003 is expected in here
-
-const origWarn = logger.warn;
-const origDeprecate = utils.deprecate;
+let spyWarn: jest.SpyInstance;
+// "deprecate" is commented out, because there is currently nothing to test for deprecation
+// let spyDeprecate: jest.SpyInstance;
 
 beforeEach(() => {
-  logger.warn = jest.fn();
-  (utils as any).deprecate = jest.fn((v) => v);
-});
-
-afterAll(() => {
-  // somehow test files are not isolated
-  expect.assertions(1);
-  (logger as any).warn = origWarn;
-  (utils as any).deprecate = origDeprecate;
+  jest.restoreAllMocks();
+  spyWarn = jest.spyOn(logger, 'warn').mockImplementation(() => void 0);
+  // spyDeprecate = jest.spyOn(utils, 'deprecate').mockImplementation((v) => v);
 });
 
 describe('Options not for current Type', () => {
-  beforeEach(() => {
-    expect.assertions(1);
-  });
-
   it('should warn if type is not string and a string-transform is supplied', () => {
     class TestNSTETransform {
       @prop({ lowercase: true })
@@ -31,7 +19,8 @@ describe('Options not for current Type', () => {
     }
 
     buildSchema(TestNSTETransform);
-    expect((logger.warn as any).mock.calls.length).toEqual(1);
+    expect(spyWarn).toHaveBeenCalledTimes(1);
+    expect(spyWarn.mock.calls).toMatchSnapshot();
   });
 
   it('should warn if type is not string and a string-validate is supplied', () => {
@@ -41,7 +30,8 @@ describe('Options not for current Type', () => {
     }
 
     buildSchema(TestNSTEValidate);
-    expect((logger.warn as any).mock.calls.length).toEqual(1);
+    expect(spyWarn).toHaveBeenCalledTimes(1);
+    expect(spyWarn.mock.calls).toMatchSnapshot();
   });
 
   it('should error if type is not number and a number-validate is supplied', () => {
@@ -51,6 +41,7 @@ describe('Options not for current Type', () => {
     }
 
     buildSchema(TestNNTEValidate);
-    expect((logger.warn as any).mock.calls.length).toEqual(1);
+    expect(spyWarn).toHaveBeenCalledTimes(1);
+    expect(spyWarn.mock.calls).toMatchSnapshot();
   });
 });
