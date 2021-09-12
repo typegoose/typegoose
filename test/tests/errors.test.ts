@@ -19,7 +19,6 @@ import {
 import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import { assertion, assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
-import { logger } from '../../src/logSettings';
 
 it('should error if an non-existing(runtime) type is given [InvalidTypeError]', () => {
   try {
@@ -105,20 +104,17 @@ it('should error if no valid model is supplied to "addModelToTypegoose" [TypeErr
 });
 
 it('should not modify an immutable', async () => {
-  logger.warn = jest.fn();
-
   class TestImmutable {
-    @prop({ required: true, immutable: true })
+    @prop({ type: String, required: true, immutable: true })
     public someprop: Readonly<string>;
   }
 
   const TIModel = getModelForClass(TestImmutable);
-  const doc = await TIModel.create({ someprop: 'Hello' } as TestImmutable);
+  const doc = await TIModel.create({ someprop: 'Hello' });
   expect(doc).not.toBeUndefined();
   doc.someprop = 'Hello2';
   await doc.save();
   expect(doc.someprop).toEqual('Hello');
-  expect((logger.warn as any).mock.calls.length).toEqual(1);
 });
 
 describe('tests for "NoValidClass"', () => {
