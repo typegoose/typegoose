@@ -1,3 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`should error if ref's arrow-function returning type returns undefined [Error] 1`] = `"Option \\"ref\\" for \\"Main.nested\\" is null/undefined! [E005]"`;
+
 exports[`should throw a Error when the property is a Symbol [CannotBeSymbolError] 1`] = `"A property key in Typegoose cannot be an symbol! (TestPropertySymbol.Symbol()) [E024]"`;
+
+exports[`should throw an error if a self-contained class is used [SelfContainingClassError] 1`] = `
+"It seems like the type used is the same as the target class, which is not supported
+Please look at https://github.com/typegoose/typegoose/issues/42 for more information (TestSelfContained.self) [E004]"
+`;
+
+exports[`should throw default error if no error is specified (assertion) [AssertionFallbackError] 1`] = `"Assert failed - no custom error [E019]"`;
+
+exports[`should throw when "addModelToTypegoose" is called twice for the same class [Error] 1`] = `
+"It seems like \\"addModelToTypegoose\\" got called twice
+Or multiple classes with the same name are used, which is not supported!(Model Name: \\"TestDouble\\") [E003]"
+`;

@@ -1,4 +1,3 @@
-import { AssertionError } from 'assert';
 import { model, Schema } from 'mongoose';
 import {
   addModelToTypegoose,
@@ -21,7 +20,7 @@ import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import { assertion, assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
-import { CannotBeSymbolError, InvalidWhatIsItError } from '../../src/internal/errors';
+import { CannotBeSymbolError, InvalidWhatIsItError, AssertionFallbackError, SelfContainingClassError } from '../../src/internal/errors';
 
 it('should error if an non-existing(runtime) type is given [InvalidTypeError]', () => {
   try {
@@ -254,7 +253,7 @@ describe('tests for "assignMetadata"', () => {
   });
 });
 
-it('should throw an error if a self-contained class is used', () => {
+it('should throw an error if a self-contained class is used [SelfContainingClassError]', () => {
   try {
     class TestSelfContained {
       @prop()
@@ -265,8 +264,8 @@ it('should throw an error if a self-contained class is used', () => {
 
     fail('Expected to throw "Error"');
   } catch (err) {
-    expect(err).not.toBeInstanceOf(AssertionError);
-    expect(err).toBeInstanceOf(Error);
+    expect(err).toBeInstanceOf(SelfContainingClassError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -289,8 +288,8 @@ it('should throw when "addModelToTypegoose" is called twice for the same class [
     addModelToTypegoose(gotmodel, TestDouble);
     fail('Expected to throw "Error"');
   } catch (err) {
-    expect(err).not.toBeInstanceOf(AssertionError);
     expect(err).toBeInstanceOf(Error);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -503,9 +502,8 @@ it("should error if ref's arrow-function returning type returns undefined [Error
 
     fail('Expected to throw "Error"');
   } catch (err) {
-    expect(err).not.toBeInstanceOf(AssertionError);
     expect(err).toBeInstanceOf(Error);
-    expect(err.message).toEqual('Option "ref" for "Main.nested" is null/undefined! [E005]');
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -526,13 +524,13 @@ it('should error if ref is set but is "undefined/null" [Error]', () => {
   }
 });
 
-it('should throw default error if no error is specified (assertion) [Error]', () => {
+it('should throw default error if no error is specified (assertion) [AssertionFallbackError]', () => {
   expect.assertions(2);
   try {
     assertion(false);
   } catch (err) {
-    expect(err).toBeInstanceOf(Error);
-    expect(err.message).toEqual('Assert failed - no custom error [E019]');
+    expect(err).toBeInstanceOf(AssertionFallbackError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
