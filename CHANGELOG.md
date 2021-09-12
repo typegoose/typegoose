@@ -1,3 +1,23 @@
+## [9.0.0-beta.6](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.5...v9.0.0-beta.6) (2021-09-12)
+
+
+### Features
+
+* **errors:** create custom error for "E005", called "RefOptionIsUndefinedError" ([586c3f2](https://github.com/typegoose/typegoose/commit/586c3f29b93a163a3f58e592f192b9b6c5c851d5))
+* **errors:** create custom error for "E021", called "OptionRefDoesNotSupportArraysError" ([eabadae](https://github.com/typegoose/typegoose/commit/eabadae6da522b0892d46717d8146b68199a9d33))
+* **errors:** rename "CannotBeSymbol" to "CannotBeSymbolError" to match style ([454c23b](https://github.com/typegoose/typegoose/commit/454c23b0d4de4dc95dea48316339c33697ca0c5b))
+
+
+### Fixes
+
+* **utils:** comment out the "deprecate" function, because unsued currently ([ccfbca0](https://github.com/typegoose/typegoose/commit/ccfbca0d12f0f3979bb5b4f77fc20059f1ede594))
+
+
+### Style
+
+* **utils::deprecate:** update tsdoc to be better readable ([9d49c43](https://github.com/typegoose/typegoose/commit/9d49c4353496ef829b0dd705a652aa8dd5528958))
+* add REFACTOR comments for errors to be re-done ([32aa7ad](https://github.com/typegoose/typegoose/commit/32aa7ad6de6fa6b0107abcfb97e3fa11ff7177e5))
+
 ## [9.0.0-beta.5](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.4...v9.0.0-beta.5) (2021-09-11)
 
 
