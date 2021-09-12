@@ -629,3 +629,17 @@ it('should allow Maps with SubDocument Array "Map<string SubDocument[]>"', async
   expect(casterNestingPath.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
   expect(casterNestingPath.schema.paths).not.toHaveProperty('_id');
 });
+
+it('should not modify an immutable', async () => {
+  class TestImmutable {
+    @prop({ type: String, required: true, immutable: true })
+    public someprop: Readonly<string>;
+  }
+
+  const TIModel = getModelForClass(TestImmutable);
+  const doc = await TIModel.create({ someprop: 'Hello' });
+  expect(doc).not.toBeUndefined();
+  doc.someprop = 'Hello2';
+  await doc.save();
+  expect(doc.someprop).toEqual('Hello');
+});

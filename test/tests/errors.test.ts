@@ -103,20 +103,6 @@ it('should error if no valid model is supplied to "addModelToTypegoose" [TypeErr
   }
 });
 
-it('should not modify an immutable', async () => {
-  class TestImmutable {
-    @prop({ type: String, required: true, immutable: true })
-    public someprop: Readonly<string>;
-  }
-
-  const TIModel = getModelForClass(TestImmutable);
-  const doc = await TIModel.create({ someprop: 'Hello' });
-  expect(doc).not.toBeUndefined();
-  doc.someprop = 'Hello2';
-  await doc.save();
-  expect(doc.someprop).toEqual('Hello');
-});
-
 describe('tests for "NoValidClass"', () => {
   it('should error if no valid class is supplied to "addModelToTypegoose" [NoValidClass]', () => {
     try {
