@@ -647,21 +647,21 @@ export function isConstructor(obj: any): obj is AnyParamConstructor<any> {
 
 // Below are function to wrap NodeJS functions for client compatability (eslint ignore is needed)
 
-/**
- * Execute util.deprecate or when !process console log
- * (if client, it dosnt cache which codes already got logged)
- */
+// /**
+//  * Execute util.deprecate or when !process console log
+//  * (if client, it dosnt cache which codes already got logged)
+//  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function deprecate<T extends Function>(fn: T, message: string, code: string): T {
-  if (!isNullOrUndefined(process)) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    return require('util').deprecate(fn, message, code);
-  }
+// export function deprecate<T extends Function>(fn: T, message: string, code: string): T {
+//   if (!isNullOrUndefined(process)) {
+//     // eslint-disable-next-line @typescript-eslint/no-var-requires
+//     return require('util').deprecate(fn, message, code);
+//   }
 
-  console.log(`[${code}] DeprecationWarning: ${message}`);
+//   console.log(`[${code}] DeprecationWarning: ${message}`);
 
-  return fn;
-}
+//   return fn;
+// }
 
 /**
  * Logs an warning if "included > 0" that the options of not the current type are included
