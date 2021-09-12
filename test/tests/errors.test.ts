@@ -486,7 +486,7 @@ it('should error if 0 or less dimensions are given (createArrayFromDimensions) [
   }
 });
 
-it("should error if ref's arrow-function returning type returns undefined", async () => {
+it("should error if ref's arrow-function returning type returns undefined [Error]", async () => {
   class Nested {
     @prop()
     public someNestedProperty: string;
@@ -509,7 +509,7 @@ it("should error if ref's arrow-function returning type returns undefined", asyn
   }
 });
 
-it('should error if ref is set but is "undefined/null"', () => {
+it('should error if ref is set but is "undefined/null" [Error]', () => {
   expect.assertions(2);
   try {
     class RefUndefined {
@@ -526,7 +526,7 @@ it('should error if ref is set but is "undefined/null"', () => {
   }
 });
 
-it('should throw default error if no error is specified (assertion)', () => {
+it('should throw default error if no error is specified (assertion) [Error]', () => {
   expect.assertions(2);
   try {
     assertion(false);
