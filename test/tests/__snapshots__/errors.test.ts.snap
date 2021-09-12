@@ -4,7 +4,7 @@ exports[`should error if ref's arrow-function returning type returns undefined [
 
 exports[`should throw a Error when the property is a Symbol [CannotBeSymbolError] 1`] = `"A property key in Typegoose cannot be an symbol! (TestPropertySymbol.Symbol()) [E024]"`;
 
-exports[`should throw an error if a self-contained class is used [SelfContainingClassError] 1`] = `
+exports[`should throw an error if a self-contained class is used [typegoose#42] [SelfContainingClassError] 1`] = `
 "It seems like the type used is the same as the target class, which is not supported
 Please look at https://github.com/typegoose/typegoose/issues/42 for more information (TestSelfContained.self) [E004]"
 `;

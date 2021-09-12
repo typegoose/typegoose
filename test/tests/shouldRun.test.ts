@@ -1,6 +1,5 @@
 import * as mongoose from 'mongoose';
 import { DecoratorKeys } from '../../src/internal/constants';
-import { SelfContainingClassError } from '../../src/internal/errors';
 import { assertion, assignMetadata, createArrayFromDimensions, getName, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 import {
@@ -167,19 +166,6 @@ it('should make use of "@prop({ _id: false })" and have no _id', async () => {
   expect(doc).not.toBeUndefined();
   expect(doc.someprop).toHaveProperty('hi', 10);
   expect(doc.someprop).not.toHaveProperty('_id');
-});
-
-it('should throw a error with a self-containing-class [typegoose#42]', () => {
-  try {
-    class SelfContaining {
-      @prop()
-      public nest?: SelfContaining;
-    }
-
-    buildSchema(SelfContaining);
-  } catch (err) {
-    expect(err).toBeInstanceOf(SelfContainingClassError);
-  }
 });
 
 it('should allow self-referencing classes', async () => {

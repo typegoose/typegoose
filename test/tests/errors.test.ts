@@ -253,7 +253,7 @@ describe('tests for "assignMetadata"', () => {
   });
 });
 
-it('should throw an error if a self-contained class is used [SelfContainingClassError]', () => {
+it('should throw an error if a self-contained class is used [typegoose#42] [SelfContainingClassError]', () => {
   try {
     class TestSelfContained {
       @prop()
