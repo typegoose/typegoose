@@ -645,11 +645,10 @@ export function isConstructor(obj: any): obj is AnyParamConstructor<any> {
   return typeof obj === 'function' && !isNullOrUndefined(obj.prototype?.constructor?.name);
 }
 
-// Below are function to wrap NodeJS functions for client compatability (eslint ignore is needed)
-
 // /**
-//  * Execute util.deprecate or when !process console log
-//  * (if client, it dosnt cache which codes already got logged)
+//  * Execute util.deprecate or when "process" does not exist use "console.log"
+//  * (if "process" does not exist, the codes are not cached, and are always logged again)
+//  * This Function is here to try to make typegoose compatible with the browser (see https://github.com/typegoose/typegoose/issues/33)
 //  */
 // eslint-disable-next-line @typescript-eslint/ban-types
 // export function deprecate<T extends Function>(fn: T, message: string, code: string): T {
