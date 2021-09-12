@@ -70,3 +70,9 @@ export class OptionRefDoesNotSupportArraysError extends TypeError {
     super(`Prop-Option "ref" does not support Arrays! (got "${dim}" dimensions, for property "${name}.${key}") [E021]`);
   }
 }
+
+export class RefOptionIsUndefinedError extends Error {
+  constructor(name: string, key: string) {
+    super(`Prop-Option "ref"'s value is "null" or "undefined" for "${name}.${key}" [E005]`);
+  }
+}

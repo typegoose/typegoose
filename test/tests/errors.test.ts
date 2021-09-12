@@ -13,7 +13,6 @@ import {
   modelOptions,
   pre,
   prop,
-  Ref,
   setGlobalOptions,
 } from '../../src/typegoose'; // import order is important with jest
 import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
@@ -467,42 +466,36 @@ it('should error if 0 or less dimensions are given (createArrayFromDimensions) [
   }
 });
 
-it("should error if ref's arrow-function returning type returns undefined [Error]", async () => {
-  class Nested {
-    @prop()
-    public someNestedProperty: string;
-  }
-
+it('should error if "ref" is set to a function, but returns "null" or "undefined" [RefOptionIsUndefinedError]', () => {
   class Main {
     // @ts-expect-error expect that "ref" is an function and returns an "string"
     @prop({ ref: () => undefined })
-    public nested: Ref<Nested>;
+    public nested: any; // not setting type to "Ref", because this is a unsupported way for the type
   }
 
   try {
     buildSchema(Main);
 
-    fail('Expected to throw "Error"');
+    fail('Expected to throw "RefOptionIsUndefinedError"');
   } catch (err) {
-    expect(err).toBeInstanceOf(Error);
+    expect(err).toBeInstanceOf(errors.RefOptionIsUndefinedError);
     expect(err.message).toMatchSnapshot();
   }
 });
 
-it('should error if ref is set but is "undefined/null" [Error]', () => {
-  expect.assertions(2);
+it('should error if ref is set but is "null" or "undefined" [RefOptionIsUndefinedError]', () => {
   try {
     class RefUndefined {
       @prop({ ref: undefined })
-      public someref?: Ref<undefined>;
+      public someref?: any; // not setting type to "Ref", because this is a unsupported way for the type
     }
 
     buildSchema(RefUndefined);
 
-    fail('Expect to throw "Error"');
+    fail('Expect to throw "RefOptionIsUndefinedError"');
   } catch (err) {
-    expect(err).toBeInstanceOf(Error);
-    expect(err.message).toEqual('Option "ref" for "RefUndefined.someref" is null/undefined! [E005]');
+    expect(err).toBeInstanceOf(errors.RefOptionIsUndefinedError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 

@@ -18,6 +18,7 @@ import {
   NotNumberTypeError,
   NotStringTypeError,
   OptionRefDoesNotSupportArraysError,
+  RefOptionIsUndefinedError,
   SelfContainingClassError,
 } from './errors';
 import * as utils from './utils';
@@ -129,8 +130,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     const gotType = utils.getType(rawOptions.ref);
     utils.assertion(gotType.dim === 0, new OptionRefDoesNotSupportArraysError(gotType.dim, name, key));
     rawOptions.ref = gotType.type;
-    // REFACTOR: change the following Error to be one in errors.ts
-    utils.assertion(!utils.isNullOrUndefined(rawOptions.ref), new Error(`Option "ref" for "${name}.${key}" is null/undefined! [E005]`));
+    utils.assertion(!utils.isNullOrUndefined(rawOptions.ref), new RefOptionIsUndefinedError(name, key));
 
     rawOptions.ref =
       typeof rawOptions.ref === 'string'

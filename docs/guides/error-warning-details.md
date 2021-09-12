@@ -48,7 +48,7 @@ Because of limitations of JS, it is not possible to use a self-containing-class
 
 ### ref is undefined [E005]
 
-Error: `Option "ref" for "${name}.${key}" is null/undefined! [E005]`
+Error: `Prop-Option "ref"'s value is "null" or "undefined" for "${name}.${key}" [E005]`
 
 Details:  
 Either:
