@@ -50,7 +50,7 @@ export class InvalidWhatIsItError extends Error {
   }
 }
 
-export class CannotBeSymbol extends Error {
+export class CannotBeSymbolError extends Error {
   constructor(name: string, key: string | symbol) {
     super(`A property key in Typegoose cannot be an symbol! (${name}.${String(key)}) [E024]`);
   }

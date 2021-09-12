@@ -11,7 +11,7 @@ import type {
 import { DecoratorKeys, WhatIsIt } from './constants';
 import { schemas } from './data';
 import {
-  CannotBeSymbol,
+  CannotBeSymbolError,
   InvalidTypeError,
   InvalidWhatIsItError,
   NotAllVPOPElementsError,
@@ -33,7 +33,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const propKind = input.whatis ?? detectWhatIsIt(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);
-  utils.assertion(typeof key === 'string', new CannotBeSymbol(name, key));
+  utils.assertion(typeof key === 'string', new CannotBeSymbolError(name, key));
 
   // optionDeprecation(rawOptions);
 
