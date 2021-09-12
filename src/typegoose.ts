@@ -175,11 +175,13 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 ) {
   const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
 
+  // REFACTOR: change the following Error to be one in errors.ts
   assertion(model.prototype instanceof mongooseModel, new TypeError(`"${model}" is not a valid Model!`));
   assertionIsClass(cl);
 
   const name = model.modelName;
 
+  // REFACTOR: change the following Error to be one in errors.ts
   assertion(
     !models.has(name),
     new Error(

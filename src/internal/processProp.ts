@@ -126,11 +126,13 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   // allow setting the type asynchronously
   if ('ref' in rawOptions) {
     const gotType = utils.getType(rawOptions.ref);
+    // REFACTOR: change the following Error to be one in errors.ts
     utils.assertion(
       gotType.dim === 0,
       new Error(`"PropOptions.ref" dosnt support Arrays (got "${gotType.dim}" dimensions at "${name}.${key}") [E021]`)
     );
     rawOptions.ref = gotType.type;
+    // REFACTOR: change the following Error to be one in errors.ts
     utils.assertion(!utils.isNullOrUndefined(rawOptions.ref), new Error(`Option "ref" for "${name}.${key}" is null/undefined! [E005]`));
 
     rawOptions.ref =
