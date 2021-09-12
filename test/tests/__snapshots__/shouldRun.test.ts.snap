@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should give a warning when type is "any" [typegoose/typegoose#152] 1`] = `
+Array [
+  Array [
+    "Setting \\"Mixed\\" for property \\"%s.%s\\"
+Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
+    "TestANY",
+    "someANY",
+  ],
+]
+`;
+
+exports[`should work with Objects in Class [szokodiakos#54] 1`] = `
+Array [
+  Array [
+    "Setting \\"Mixed\\" for property \\"%s.%s\\"
+Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
+    "TESTObject",
+    "test",
+  ],
+]
+`;

@@ -19,6 +19,10 @@ import type { AsQueryMethod, Func, QueryMethodMap, Ref, ReturnModelType } from '
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
 
+beforeEach(() => {
+  jest.restoreAllMocks();
+});
+
 it('should not error when trying to get model multiple times', () => {
   class TEST {}
 
@@ -71,6 +75,8 @@ it('should make use of Map default', async () => {
 });
 
 it('should work with Objects in Class [szokodiakos#54]', async () => {
+  const spyWarn = jest.spyOn(logger, 'warn').mockImplementationOnce(() => void 0);
+
   class TESTObject {
     @prop()
     public test: {
@@ -78,12 +84,11 @@ it('should work with Objects in Class [szokodiakos#54]', async () => {
     };
   }
 
-  logger.warn = jest.fn();
-
   const model = getModelForClass(TESTObject);
   const doc = await model.create({ test: { anotherTest: 'hello' } } as TESTObject);
 
-  expect((logger.warn as any).mock.calls.length).toEqual(1);
+  expect(spyWarn).toHaveBeenCalledTimes(1);
+  expect(spyWarn.mock.calls).toMatchSnapshot();
   expect(doc).not.toBeUndefined();
   expect(typeof doc.test).toBe('object');
   expect(doc.test.anotherTest).toEqual('hello');
@@ -312,8 +317,8 @@ it('should also allow "mongoose.Types.Array<string>" as possible type', () => {
   expect((schema.path('someString') as any).caster).toBeInstanceOf(mongoose.Schema.Types.String);
 });
 
-it('should give a warning [typegoose/typegoose#152]', () => {
-  logger.warn = jest.fn();
+it('should give a warning when type is "any" [typegoose/typegoose#152]', () => {
+  const spyWarn = jest.spyOn(logger, 'warn').mockImplementationOnce(() => void 0);
 
   class TestANY {
     @prop()
@@ -321,8 +326,9 @@ it('should give a warning [typegoose/typegoose#152]', () => {
   }
 
   const schema = buildSchema(TestANY);
-  expect((logger.warn as any).mock.calls.length).toEqual(1);
   expect(schema.path('someANY')).toBeInstanceOf(mongoose.Schema.Types.Mixed);
+  expect(spyWarn).toHaveBeenCalledTimes(1);
+  expect(spyWarn.mock.calls).toMatchSnapshot();
 });
 
 it('should create 1D Array (createArrayFromDimensions)', () => {
