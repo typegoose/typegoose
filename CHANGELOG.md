@@ -1,3 +1,15 @@
+## [9.0.0-beta.7](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.6...v9.0.0-beta.7) (2021-09-13)
+
+
+### Features
+
+* **processProp:** remove Error E007 ([928f51d](https://github.com/typegoose/typegoose/commit/928f51df82d8ccc845ecb5bf0c67c66fa61347e7)), closes [typegoose/typegoose#599](https://github.com/typegoose/typegoose/issues/599)
+
+
+### Refactor
+
+* **processProp:** remove redundant code ([5575b97](https://github.com/typegoose/typegoose/commit/5575b97ab3789550db8069bcb1de0c65fe88a11e))
+
 ## [9.0.0-beta.6](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.5...v9.0.0-beta.6) (2021-09-12)
 
 
