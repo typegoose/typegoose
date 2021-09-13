@@ -199,9 +199,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   }
 
   if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
-    utils.assertion(typeof rawOptions.set === 'function', new TypeError(`"${name}.${key}" does not have a set function! [E007]`));
-    utils.assertion(typeof rawOptions.get === 'function', new TypeError(`"${name}.${key}" does not have a get function! [E007]`));
-
     // use an compiled Schema if the type is an Nested Class
     const useType = schemas.has(utils.getName(Type)) ? buildSchema(Type) : Type;
 

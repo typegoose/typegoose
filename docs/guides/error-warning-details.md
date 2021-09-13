@@ -76,6 +76,8 @@ Not all required Virtual-Populate options were provided, required are: `localFie
 
 ### Get & Set Options [E007]
 
+<span class="badge badge--warning">This Error got removed in 9.0.0</span>
+
 Error:
 - `"${name}.${key}" does not have a set function! [E007]`
 - `"${name}.${key}" does not have a get function! [E007]`

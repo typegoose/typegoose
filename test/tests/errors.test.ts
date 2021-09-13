@@ -49,35 +49,6 @@ it('should error if no function for hooks is defined [TypeError]', () => {
   }
 });
 
-it('should error if no get or set function is defined for non-virtuals [TypeError]', () => {
-  try {
-    class TestNoGetNoSet {
-      // @ts-expect-error expect error because "set" only accepts functions
-      @prop({ set: false })
-      public test: string;
-    }
-
-    buildSchema(TestNoGetNoSet);
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toEqual(`"TestNoGetNoSet.test" does not have a set function! [E007]`);
-  }
-  try {
-    class TestWrongGetSetType {
-      // @ts-expect-error expect error because "get" only accepts functions
-      @prop({ set: () => undefined, get: false })
-      public test: string;
-    }
-
-    buildSchema(TestWrongGetSetType);
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toEqual(`"TestWrongGetSetType.test" does not have a get function! [E007]`);
-  }
-});
-
 it('should error if not all needed parameters for virtual-populate are given [NotAllElementsError]', () => {
   try {
     class TestNAEEVirtualPopulate {

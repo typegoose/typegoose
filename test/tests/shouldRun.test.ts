@@ -505,40 +505,74 @@ it('should output correct defaults with multiple inheritance [typegoose/typegoos
   expect(grandChildDoc.UID).toEqual('overwritten');
 });
 
-it('should be map none/array/map correctly if using get/set options [typegoose#422]', async () => {
-  class TestGetSetOptions {
-    @prop({ get: () => 0, set: () => 1 })
-    public normal?: number;
+describe('get/set options', () => {
+  it('should map WhatIsIt (none/array/map) correctly when using get/set options [typegoose#422]', async () => {
+    class TestGetSetOptions {
+      @prop({ get: () => 0, set: () => 1 })
+      public normal?: number;
 
-    @prop({ type: Number, get: () => [0], set: () => [1] })
-    public array?: number[];
+      @prop({ type: Number, get: () => [0], set: () => [1] })
+      public array?: number[];
 
-    @prop({ type: Number, get: () => new Map([['0', 0]]), set: () => new Map([['1', 1]]) })
-    public map?: Map<string, number>;
-  }
+      @prop({ type: Number, get: () => new Map([['0', 0]]), set: () => new Map([['1', 1]]) })
+      public map?: Map<string, number>;
+    }
 
-  const schema = buildSchema(TestGetSetOptions);
-  expect(schema.path('normal')).toBeInstanceOf(mongoose.Schema.Types.Number);
-  expect(schema.path('normal') as any).not.toHaveProperty('caster');
-  expect(schema.path('array')).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect((schema.path('array') as any).caster).toBeInstanceOf(mongoose.Schema.Types.Number);
-  expect(schema.path('map')).toBeInstanceOf(mongoose.Schema.Types.Map);
-  expect((schema.path('map') as any).$__schemaType).toBeInstanceOf(mongoose.Schema.Types.Number);
-  expect(schema.path('map') as any).not.toHaveProperty('caster');
-});
+    const schema = buildSchema(TestGetSetOptions);
+    expect(schema.path('normal')).toBeInstanceOf(mongoose.Schema.Types.Number);
+    expect(schema.path('normal')).not.toHaveProperty('caster');
+    expect(schema.path('array')).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect((schema.path('array') as any).caster).toBeInstanceOf(mongoose.Schema.Types.Number);
+    expect(schema.path('map')).toBeInstanceOf(mongoose.Schema.Types.Map);
+    expect((schema.path('map') as any).$__schemaType).toBeInstanceOf(mongoose.Schema.Types.Number);
+    expect(schema.path('map')).not.toHaveProperty('caster');
+  });
 
-it('should not Error if get/set options are used and type is an class and is an array [typegoose#478]', async () => {
-  class SubGetSetClassArray {
-    @prop()
-    public dummy?: string;
-  }
+  it('should not Error if get/set options are used and type is an class and is an array [typegoose#478]', async () => {
+    class SubGetSetClassArray {
+      @prop()
+      public dummy?: string;
+    }
 
-  class ParentGetSetClassArray {
-    @prop({ get: (v) => v, set: (v) => v, type: () => [SubGetSetClassArray] })
-    public nested?: SubGetSetClassArray[];
-  }
+    class ParentGetSetClassArray {
+      @prop({ get: (v) => v, set: (v) => v, type: () => [SubGetSetClassArray] })
+      public nested?: SubGetSetClassArray[];
+    }
 
-  buildSchema(ParentGetSetClassArray);
+    buildSchema(ParentGetSetClassArray);
+  });
+
+  it('should allow being used with just one of the options (either set or get)', async () => {
+    const setString = 'SetApplied';
+    const getString = 'GetApplied';
+    const origValue = 'someValue';
+
+    // Test Set with no Get
+    {
+      class TestWithSetNoGet {
+        @prop({ set: (v) => `${setString} ${v}` })
+        public setted?: string;
+      }
+
+      const TestWithSetNoGetModel = getModelForClass(TestWithSetNoGet);
+
+      const setNoGetDoc = new TestWithSetNoGetModel({ setted: origValue });
+      expect(setNoGetDoc.setted).toStrictEqual(`${setString} ${origValue}`);
+    }
+
+    // Test Get with no Set
+    {
+      class TestWithGetNoSet {
+        @prop({ get: (v) => `${getString} ${v}` })
+        public getted?: string;
+      }
+
+      const TestWithGetNoSetModel = getModelForClass(TestWithGetNoSet);
+
+      const getNoSetDoc = new TestWithGetNoSetModel({ getted: origValue });
+      expect(getNoSetDoc.getted).toStrictEqual(`${getString} ${origValue}`);
+    }
+  });
 });
 
 it('should make use of the "Passthrough" class', async () => {
