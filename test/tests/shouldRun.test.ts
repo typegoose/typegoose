@@ -529,17 +529,31 @@ describe('get/set options', () => {
   });
 
   it('should not Error if get/set options are used and type is an class and is an array [typegoose#478]', async () => {
+    const origValue = 'hello';
+    const changedValue = 'helloThere';
+
     class SubGetSetClassArray {
       @prop()
       public dummy?: string;
     }
 
     class ParentGetSetClassArray {
-      @prop({ get: (v) => v, set: (v) => v, type: () => [SubGetSetClassArray] })
+      @prop({
+        get: (v) => v,
+        set: (v: any[]) =>
+          v.map((v) => {
+            return { ...v, dummy: changedValue };
+          }),
+        type: () => [SubGetSetClassArray],
+      })
       public nested?: SubGetSetClassArray[];
     }
 
-    buildSchema(ParentGetSetClassArray);
+    const ParentGetSetClassArrayModel = getModelForClass(ParentGetSetClassArray);
+
+    const doc = new ParentGetSetClassArrayModel({ nested: [{ dummy: origValue }] });
+    await doc.validate();
+    expect(doc.nested?.[0].dummy).toStrictEqual(changedValue);
   });
 
   it('should allow being used with just one of the options (either set or get)', async () => {
