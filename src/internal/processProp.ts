@@ -198,43 +198,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     }
   }
 
-  if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
-    // use an compiled Schema if the type is an Nested Class
-    const useType = schemas.has(utils.getName(Type)) ? buildSchema(Type) : Type;
-
-    switch (propKind) {
-      case WhatIsIt.ARRAY:
-        schemaProp[key] = {
-          ...schemaProp[key][0],
-          ...utils.mapArrayOptions(rawOptions, useType, target, key),
-        };
-
-        return;
-      case WhatIsIt.MAP:
-        const mapped = utils.mapOptions(rawOptions, useType, target, key);
-
-        schemaProp[key] = {
-          ...schemaProp[key],
-          ...mapped.outer,
-          type: Map,
-          of: { type: useType, ...mapped.inner },
-        };
-
-        return;
-      case WhatIsIt.NONE:
-        schemaProp[key] = {
-          ...schemaProp[key],
-          ...rawOptions,
-          type: useType,
-        };
-
-        return;
-      default:
-        /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(get/set)');
-    }
-  }
-
   // use "Type" if it is an suitable ref-type, otherwise default back to "ObjectId"
   const refType = utils.isAnRefType(Type) ? Type : mongoose.Schema.Types.ObjectId;
 
