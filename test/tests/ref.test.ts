@@ -1,7 +1,6 @@
 import * as mongoose from 'mongoose';
 import { assertion, getName } from '../../src/internal/utils';
 import { getModelForClass, isDocument, isDocumentArray, isRefType, prop, Ref } from '../../src/typegoose';
-import { KeyStringAny } from '../../src/types';
 import { RefTestArrayTypesModel, RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
 
 it('check generated ref schema for ObjectID _id', async () => {
@@ -275,9 +274,6 @@ it('reference arrays should work with mongoose.Types.Array<Ref<T>>', async () =>
   expect(Array.from(found.array!.toObject())).toEqual([stringdoc._id, stringdoc._id]);
 });
 
-/** // TODO: this "as" is because "SchemaType" currently has no "options" property */
-type HelperSchemaType = mongoose.SchemaType & { options: KeyStringAny };
-
 it('should map options correctly on an ref-array', async () => {
   const validateInner = jest.fn(() => true);
   const validateOuter = jest.fn(() => true);
@@ -317,8 +313,7 @@ it('should map options correctly on an ref-array', async () => {
   expect(RefArrayOptionsMappingNestedModel.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
 
   {
-    // TODO: this "as" is because "SchemaType" currently has no "options" property
-    const normalRef = schema.path('normalRef') as HelperSchemaType;
+    const normalRef = schema.path('normalRef');
 
     expect(normalRef).toBeInstanceOf(mongoose.Schema.Types.ObjectId);
     expect(normalRef.options.type).toEqual(mongoose.Schema.Types.ObjectId);
@@ -326,8 +321,7 @@ it('should map options correctly on an ref-array', async () => {
   }
 
   {
-    // TODO: this "as" is because "SchemaType" currently has no "options" property
-    const normalRefArray = schema.path('normalRefArray') as HelperSchemaType;
+    const normalRefArray = schema.path('normalRefArray');
 
     expect(normalRefArray).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(normalRefArray.options.type).toBeInstanceOf(Array);
@@ -337,8 +331,7 @@ it('should map options correctly on an ref-array', async () => {
   }
 
   {
-    // TODO: this "as" is because "SchemaType" currently has no "options" property
-    const validatedRef = schema.path('validatedRef') as HelperSchemaType;
+    const validatedRef = schema.path('validatedRef');
 
     expect(validatedRef).toBeInstanceOf(mongoose.Schema.Types.ObjectId);
     expect(validatedRef.options.type).toEqual(mongoose.Schema.Types.ObjectId);
@@ -347,8 +340,7 @@ it('should map options correctly on an ref-array', async () => {
   }
 
   {
-    // TODO: this "as" is because "SchemaType" currently has no "options" property
-    const validatedRefArray = schema.path('validatedRefArray') as HelperSchemaType;
+    const validatedRefArray = schema.path('validatedRefArray');
 
     expect(validatedRefArray).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(validatedRefArray.options.type).toBeInstanceOf(Array);
@@ -359,8 +351,7 @@ it('should map options correctly on an ref-array', async () => {
   }
 
   {
-    // TODO: this "as" is because "SchemaType" currently has no "options" property
-    const explicitDoubleRefArray = schema.path('explicitDoubleRefArray') as HelperSchemaType;
+    const explicitDoubleRefArray = schema.path('explicitDoubleRefArray');
 
     expect(explicitDoubleRefArray).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(explicitDoubleRefArray.options.type).toBeInstanceOf(Array);
