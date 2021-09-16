@@ -11,13 +11,18 @@ import {
   getModelWithString,
   getName,
   modelOptions,
+  Passthrough,
   pre,
   prop,
   setGlobalOptions,
 } from '../../src/typegoose'; // import order is important with jest
 import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
-import { assertion, assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
+import * as utils from '../../src/internal/utils';
+
+beforeEach(() => {
+  jest.restoreAllMocks();
+});
 
 it('should error if an non-existing(runtime) type is given [InvalidTypeError]', () => {
   try {
@@ -155,7 +160,7 @@ describe('tests for "NoValidClassError"', () => {
   it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the second argument should be an class
-      mergeSchemaOptions({}, true);
+      utils.mergeSchemaOptions({}, true);
 
       fail('Expected to throw "NoValidClassError"');
     } catch (err) {
@@ -219,7 +224,7 @@ describe('tests for "assignMetadata"', () => {
       class Dummy {}
 
       // @ts-expect-error expect that the first argument is in "DecoratorKeys"
-      assignMetadata(true, {}, Dummy);
+      utils.assignMetadata(true, {}, Dummy);
       fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).toBeInstanceOf(TypeError);
@@ -230,7 +235,7 @@ describe('tests for "assignMetadata"', () => {
   it('should error if no valid class is supplied [NoValidClass]', () => {
     try {
       // @ts-expect-error expect that the third argument is an class
-      assignMetadata(DecoratorKeys.Index, {}, true);
+      utils.assignMetadata(DecoratorKeys.Index, {}, true);
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
@@ -316,7 +321,7 @@ it('should throw when "customName" is a function, but the return value is not a 
 
 it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
   try {
-    mapOptions({}, Error, undefined, 'undefined-pkey');
+    utils.mapOptions({}, Error, undefined, 'undefined-pkey');
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -342,36 +347,91 @@ it('should error if "refPath" is not of type string [TypeError]', () => {
   }
 });
 
-it('should error if "ref" is used with unknown WhatIsIt [InvalidWhatIsItError]', () => {
-  try {
-    class TestRefSwitchError {
-      @prop({ ref: 'hi' }, -1)
-      public hello: string;
-    }
+describe('tests for "InvalidWhatIsItError"', () => {
+  describe('WhatIsIt unknown (processProp)', () => {
+    beforeEach(() => {
+      // Mock implementation of "utils.initProperty", otherwise "InvalidWhatIsItError.whatisit(initProperty)" always gets thrown
+      const origInitProperty = utils.initProperty;
+      jest.spyOn(utils, 'initProperty').mockImplementation((...args) => {
+        return origInitProperty(
+          args[0],
+          args[1],
+          // @ts-expect-error "-1" does not exist in WhatIsIt
+          args[2] === -1 ? WhatIsIt.NONE : args[2] // map "-1" to "NONE" just to have "utils.initProperty" not throw a Error, but still use it
+        );
+      });
+    });
 
-    buildSchema(TestRefSwitchError);
+    it('should throw a Error when a unknown WhatIsIt is used for "processProp#Passthrough" [InvalidWhatIsItError]', () => {
+      class ProcessPropPassthroughWhatIsIt {
+        @prop({ type: () => new Passthrough({}) }, -1)
+        public test?: any;
+      }
 
-    fail('Expected to throw "InvalidWhatIsItError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
-    expect(err.message).toMatchSnapshot();
-  }
-});
+      try {
+        buildSchema(ProcessPropPassthroughWhatIsIt);
 
-it('should error if "refPath" is used with WhatIsIt.MAP [TypeError]', () => {
-  try {
-    class TestRefPathSwitchError {
+        fail('Expected to throw "InvalidWhatIsItError"');
+      } catch (err) {
+        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('should throw a Error when a unknown WhatIsIt is used for "processProp#ref" [InvalidWhatIsItError]', () => {
+      class ProcessPropRefWhatIsIt {
+        @prop({ ref: 'hi' }, -1)
+        public test?: any;
+      }
+
+      try {
+        buildSchema(ProcessPropRefWhatIsIt);
+
+        fail('Expected to throw "InvalidWhatIsItError"');
+      } catch (err) {
+        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('should throw a Error when a unknown WhatIsIt is used for "processProp#refPath" [InvalidWhatIsItError]', () => {
+      class ProcessPropRefWhatIsIt {
+        @prop()
+        public hi?: string;
+
+        @prop({ refPath: 'hi' }, -1)
+        public test?: any;
+      }
+
+      try {
+        buildSchema(ProcessPropRefWhatIsIt);
+
+        fail('Expected to throw "InvalidWhatIsItError"');
+      } catch (err) {
+        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+  });
+
+  it('should throw a Error when "WhatIsIt.MAP" is used for "processProp#refPath" [InvalidWhatIsItError]', () => {
+    class ProcessPropRefWhatIsIt {
+      @prop()
+      public hi?: string;
+
       @prop({ refPath: 'hi' }, WhatIsIt.MAP)
-      public hello: string;
+      public test?: any;
     }
 
-    buildSchema(TestRefPathSwitchError);
+    try {
+      buildSchema(ProcessPropRefWhatIsIt);
 
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
+      fail('Expected to throw "InvalidWhatIsItError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });
 
 it('should error if the options provide to "setGlobalOptions" are not an object [TypeError]', () => {
@@ -453,7 +513,7 @@ it('should error if a non-valid object is passed to "getClass" [ReferenceError]'
 
 it('should error if 0 or less dimensions are given (createArrayFromDimensions) [RangeError]', () => {
   try {
-    createArrayFromDimensions({ dim: 0 }, { someThing: true }, '', '');
+    utils.createArrayFromDimensions({ dim: 0 }, { someThing: true }, '', '');
 
     fail('Expected to throw "RangeError"');
   } catch (err) {
@@ -462,7 +522,7 @@ it('should error if 0 or less dimensions are given (createArrayFromDimensions) [
   }
 
   try {
-    createArrayFromDimensions({ dim: -100 }, { someThing: true }, '', '');
+    utils.createArrayFromDimensions({ dim: -100 }, { someThing: true }, '', '');
 
     fail('Expected to throw "RangeError"');
   } catch (err) {
@@ -507,7 +567,7 @@ it('should error if ref is set but is "null" or "undefined" [RefOptionIsUndefine
 it('should throw default error if no error is specified (assertion) [AssertionFallbackError]', () => {
   expect.assertions(2);
   try {
-    assertion(false);
+    utils.assertion(false);
 
     // The following is unreachable (by types), but still there just in case something happens
     fail('Expected to throw "AssertionFallbackError"');

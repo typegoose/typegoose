@@ -236,7 +236,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
         break;
       default:
-        throw new TypeError(`"ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]`); // TODO: refactor to existing Error
+        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(ref)');
     }
 
     return;
@@ -266,7 +266,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
         break;
       default:
-        throw new TypeError(`"refPath" is not supported for "${propKind}"! (${name}, ${key}) [E023]`);
+        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(refPath)');
     }
 
     return;

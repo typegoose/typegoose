@@ -145,7 +145,7 @@ This Error should never be thrown if Typescript is used, it throws if the `Type`
 Error: `"${whatisit}"(${where}) is invalid for "${name}.${key}" [E013]`
 
 Details:  
-A Value not specified by the enum `WhatIsIt` was provided (no case matched), [read more about it here](../api/decorators/prop.md#whatisit)
+The Value `${whatisit}` is not supported in `${where}` or does not exist in the [`WhatIsIt`](../api/decorators/prop.md#whatisit) enum.
 
 ### Input was not string or have .typegooseName function/string [E014]
 
@@ -242,6 +242,12 @@ Details:
 The function used to create a custom model name (via the `modelOptions` "option" prop) must return a string and it should not be empty.
 
 ### "ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]
+
+<span class="badge badge--warning">This Error got removed in 9.0.0</span>
+
+:::info
+This Error got merged with [`E013`](#invalid-whatisit-used-e013) in 9.0.0
+:::
 
 Error:  
 - `"ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]`
