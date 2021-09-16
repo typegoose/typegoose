@@ -30,6 +30,7 @@ it('should error if an non-existing(runtime) type is given [InvalidTypeError]', 
     fail('Expected to throw "InvalidTypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.InvalidTypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -45,11 +46,11 @@ it('should error if no function for hooks is defined [TypeError]', () => {
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toEqual(`"TestNoFunctionHook.pre."'s function is not a function!`);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
-it('should error if not all needed parameters for virtual-populate are given [NotAllElementsError]', () => {
+it('should error if not all needed parameters for virtual-populate are given [NotAllVPOPElementsError]', () => {
   try {
     class TestNAEEVirtualPopulate {
       @prop({ localField: true })
@@ -57,9 +58,10 @@ it('should error if not all needed parameters for virtual-populate are given [No
     }
 
     buildSchema(TestNAEEVirtualPopulate);
-    fail('Expected to throw "NotAllElementsError"');
+    fail('Expected to throw "NotAllVPOPElementsError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.NotAllVPOPElementsError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -89,74 +91,88 @@ describe('tests for "NotValidModelError"', () => {
   });
 });
 
-describe('tests for "NoValidClass"', () => {
-  it('should error if no valid class is supplied to "addModelToTypegoose" [NoValidClass]', () => {
+describe('tests for "NoValidClassError"', () => {
+  it('should error if no valid class is supplied to "addModelToTypegoose" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the second argument should be an "class"
       addModelToTypegoose(model('hello', new Schema()), 'not class');
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "buildSchema" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "buildSchema" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       buildSchema('hello');
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "_buildSchema" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "_buildSchema" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       _buildSchema('hello');
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "getModelForClass" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "getModelForClass" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       getModelForClass('hello');
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "deleteModelWithClass" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "deleteModelWithClass" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       deleteModelWithClass(true);
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the second argument should be an class
       mergeSchemaOptions({}, true);
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the second argument should be an class
       getDiscriminatorModelForClass(model('NoValidClassgetDiscriminatorModelForClass', {}), true);
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 });
@@ -176,6 +192,7 @@ describe('tests for "InvalidTypeError"', () => {
       fail('Expected to throw "InvalidTypeError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.InvalidTypeError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
@@ -191,6 +208,7 @@ describe('tests for "InvalidTypeError"', () => {
       fail('Expected to throw "InvalidTypeError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.InvalidTypeError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 });
@@ -205,7 +223,7 @@ describe('tests for "assignMetadata"', () => {
       fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).toBeInstanceOf(TypeError);
-      expect(err.message).toEqual(`"true"(key) is not a string! (mergeMetadata)`);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
@@ -216,6 +234,7 @@ describe('tests for "assignMetadata"', () => {
       fail('Expected to throw "NoValidClass"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 });
@@ -240,9 +259,11 @@ it('should throw when "deleteModel" is called with no string [TypeError]', () =>
   try {
     // @ts-expect-error expect that the first argument should be an class
     deleteModel(true);
+
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -271,9 +292,11 @@ it('should throw when "customName" is used, but length <= 0 [TypeError]', () => 
     @modelOptions({ options: { customName: '' } })
     class TestCustomNameError {}
     getName(TestCustomNameError);
+
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -283,9 +306,11 @@ it('should throw when "customName" is a function, but the return value is not a 
     @modelOptions({ options: { customName: () => 1234 } })
     class TestCustomNameError2 {}
     getName(TestCustomNameError2);
+
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -296,6 +321,7 @@ it('should error if the Type does not have a valid "OptionsConstructor" [TypeErr
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -312,10 +338,11 @@ it('should error if "refPath" is not of type string [TypeError]', () => {
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
-it('should error if "ref" is used with unknown WhatIsIt [TypeError]', () => {
+it('should error if "ref" is used with unknown WhatIsIt [InvalidWhatIsItError]', () => {
   try {
     class TestRefSwitchError {
       @prop({ ref: 'hi' }, -1)
@@ -324,9 +351,10 @@ it('should error if "ref" is used with unknown WhatIsIt [TypeError]', () => {
 
     buildSchema(TestRefSwitchError);
 
-    fail('Expected to throw "TypeError"');
+    fail('Expected to throw "InvalidWhatIsItError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -342,6 +370,7 @@ it('should error if "refPath" is used with WhatIsIt.MAP [TypeError]', () => {
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -353,6 +382,7 @@ it('should error if the options provide to "setGlobalOptions" are not an object 
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -368,6 +398,7 @@ it('should error if trying to use circular classes [TypeError]', () => {
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot(); // TODO: inspect this test
   }
 });
 
@@ -388,6 +419,7 @@ it('should fail when using Number-Enum on an String Type [NotStringTypeError]', 
     fail('Expected to throw "NotStringTypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.NotStringTypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -408,6 +440,7 @@ it('should fail when using String-Enum on an Number Type [NotNumberTypeError]', 
     fail('Expected to throw "NotNumberTypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.NotNumberTypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -415,9 +448,11 @@ it('should error if no valid key is supplied to "getModelWithString" [TypeError]
   try {
     // @ts-expect-error expect the first argument to be an "string"
     getModelWithString(true);
+
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -428,6 +463,7 @@ it('should error if a non-valid object is passed to "getClass" [ReferenceError]'
     fail('Expected to throw "ReferenceError"');
   } catch (err) {
     expect(err).toBeInstanceOf(ReferenceError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -438,6 +474,7 @@ it('should error if 0 or less dimensions are given (createArrayFromDimensions) [
     fail('Expected to throw "RangeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(RangeError);
+    expect(err.message).toMatchSnapshot();
   }
 
   try {
@@ -446,6 +483,7 @@ it('should error if 0 or less dimensions are given (createArrayFromDimensions) [
     fail('Expected to throw "RangeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(RangeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -486,6 +524,9 @@ it('should throw default error if no error is specified (assertion) [AssertionFa
   expect.assertions(2);
   try {
     assertion(false);
+
+    // The following is unreachable (by types), but still there just in case something happens
+    fail('Expected to throw "AssertionFallbackError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.AssertionFallbackError);
     expect(err.message).toMatchSnapshot();
