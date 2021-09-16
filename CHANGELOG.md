@@ -1,3 +1,28 @@
+## [9.0.0-beta.8](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.7...v9.0.0-beta.8) (2021-09-16)
+
+
+### Features
+
+* merge errors "E023" into "E013" ([c8ce9b8](https://github.com/typegoose/typegoose/commit/c8ce9b8c36d82f9d23e66d4cdda86cb86567b4fa))
+* **errors:** add error "E025", called "NotValidModelError" ([cd88aab](https://github.com/typegoose/typegoose/commit/cd88aab8b256dc3b76da1ff8708e158b574ece15))
+* **errors:** create custom error for "E003", called "FunctionCalledMoreThanSupportedError" ([a93651e](https://github.com/typegoose/typegoose/commit/a93651e02ee19367e531f3908df44c8192fcdbdc))
+
+
+### Style
+
+* add more Error "REFACTOR" comments ([12ccf9e](https://github.com/typegoose/typegoose/commit/12ccf9e0f8b26fdf36eab24092d4159b5d2a8582))
+
+
+### Refactor
+
+* **utils::mapOptions:** reduce "getName" calls for the same object ([c68e415](https://github.com/typegoose/typegoose/commit/c68e41570066ebfa6bd977576c947e39f0aae7f7))
+
+
+### Fixes
+
+* escape some error message "class.key" ([af9af27](https://github.com/typegoose/typegoose/commit/af9af275bd73de6a226f9b35807bd630b05bcd2e))
+* **utils::getName:** check if "cl" is null or undefined ([6e795e1](https://github.com/typegoose/typegoose/commit/6e795e187a6ac78a9ff790a1144a32b54ccce8df))
+
 ## [9.0.0-beta.7](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.6...v9.0.0-beta.7) (2021-09-13)
 
 
