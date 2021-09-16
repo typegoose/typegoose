@@ -20,7 +20,7 @@ exports[`should error if not all needed parameters for virtual-populate are give
 
 exports[`should error if ref is set but is "null" or "undefined" [RefOptionIsUndefinedError] 1`] = `"Prop-Option \\"ref\\"'s value is \\"null\\" or \\"undefined\\" for \\"RefUndefined.someref\\" [E005]"`;
 
-exports[`should error if the Type does not have a valid "OptionsConstructor" [TypeError] 1`] = `"Cannot read property 'constructor' of undefined"`;
+exports[`should error if the Type does not have a valid "OptionsConstructor" [TypeError] 1`] = `"Type does not have a valid \\"OptionsConstructor\\"! (Error on Error.undefined-pkey) [E016]"`;
 
 exports[`should error if the options provide to "setGlobalOptions" are not an object [TypeError] 1`] = `"\\"options\\" argument needs to be an object!"`;
 
@@ -87,6 +87,8 @@ exports[`tests for "NoValidClassError" should error if no valid class is supplie
 exports[`tests for "NoValidClassError" should error if no valid class is supplied to "getModelForClass" [NoValidClassError] 1`] = `"\\"hello\\" is not a function(/constructor)!"`;
 
 exports[`tests for "NoValidClassError" should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClassError] 1`] = `"\\"true\\" is not a function(/constructor)!"`;
+
+exports[`tests for "NoValidClassError" should throw a Error when "cl" in "getName" is null or undefined [NoValidClassError] 1`] = `"\\"undefined\\" is not a function(/constructor)!"`;
 
 exports[`tests for "NotValidModelError" should throw a Error when no valid model is passed to "addModelToTypegoose" [NotValidModelError] 1`] = `"Expected \\"addModelToTypegoose.model\\" to be a valid mongoose.Model! (got: \\"string\\") [E025]"`;
 

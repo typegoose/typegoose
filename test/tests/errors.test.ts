@@ -180,6 +180,18 @@ describe('tests for "NoValidClassError"', () => {
       expect(err.message).toMatchSnapshot();
     }
   });
+
+  it('should throw a Error when "cl" in "getName" is null or undefined [NoValidClassError]', () => {
+    try {
+      // @ts-expect-error "getName" only accepts classes (and types that are not null / undefined)
+      getName(undefined);
+
+      fail('Expected to throw "NoValidClassError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });
 
 describe('tests for "InvalidTypeError"', () => {
@@ -321,7 +333,7 @@ it('should throw when "customName" is a function, but the return value is not a 
 
 it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
   try {
-    utils.mapOptions({}, Error, undefined, 'undefined-pkey');
+    utils.mapOptions({}, Error, Error, 'undefined-pkey');
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
