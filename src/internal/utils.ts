@@ -441,10 +441,11 @@ export function mapOptions(
 
   if (!(Type instanceof mongoose.Schema)) {
     loggerType = Type;
+    const loggerTypeName = getName(loggerType);
 
-    if (getName(loggerType) in mongoose.Schema.Types) {
-      logger.info('Converting "%s" to mongoose Type', getName(loggerType));
-      Type = mongoose.Schema.Types[getName(loggerType)];
+    if (loggerTypeName in mongoose.Schema.Types) {
+      logger.info('Converting "%s" to mongoose Type', loggerTypeName);
+      Type = mongoose.Schema.Types[loggerTypeName];
 
       /* istanbul ignore next */
       if (Type === mongoose.Schema.Types.Mixed) {
