@@ -471,7 +471,7 @@ export function mapOptions(
   // REFACTOR: re-write this to be a Error inside errors.ts
   assertion(
     !isNullOrUndefined(OptionsCTOR),
-    new TypeError(`Type does not have a valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`)
+    new TypeError(`Type does not have a valid "OptionsConstructor"! ("${getName(loggerType)}" on "${getName(target)}.${pkey}") [E016]`)
   );
 
   const options = Object.assign({}, rawOptions); // for sanity

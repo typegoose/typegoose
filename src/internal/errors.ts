@@ -10,7 +10,7 @@ export class NotNumberTypeError extends Error {
   constructor(targetName: string, key: string, enumKey: string, enumValue: string) {
     super(
       `Typeof "${targetName}.${key}" is "Number", value is undefined/null or does not have a reverse mapping! [E011]\n` +
-        `  Encountered with property: ${enumKey}.${typeof enumValue}`
+        `  Encountered with property: "${enumKey}.${typeof enumValue}"`
     );
   }
 }
@@ -19,7 +19,7 @@ export class NotStringTypeError extends Error {
   constructor(targetName: string, key: string, enumKey: string, enumValue: string) {
     super(
       `Typeof "${targetName}.${key}" is "String", used enum is not only Strings! [E010]\n` +
-        `  Encountered with property in Enum: ${enumKey}.${typeof enumValue}`
+        `  Encountered with property in Enum: "${enumKey}.${typeof enumValue}"`
     );
   }
 }
@@ -52,7 +52,7 @@ export class InvalidWhatIsItError extends Error {
 
 export class CannotBeSymbolError extends Error {
   constructor(name: string, key: string | symbol) {
-    super(`A property key in Typegoose cannot be an symbol! (${name}.${String(key)}) [E024]`);
+    super(`A property key in Typegoose cannot be an symbol! ("${name}.${String(key)}") [E024]`);
   }
 }
 
@@ -60,7 +60,7 @@ export class SelfContainingClassError extends TypeError {
   constructor(name: string, key: string) {
     super(
       'It seems like the type used is the same as the target class, which is not supported\n' +
-        `Please look at https://github.com/typegoose/typegoose/issues/42 for more information (${name}.${key}) [E004]`
+        `Please look at https://github.com/typegoose/typegoose/issues/42 for more information ("${name}.${key}") [E004]`
     );
   }
 }

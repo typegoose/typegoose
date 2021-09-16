@@ -20,27 +20,27 @@ exports[`should error if not all needed parameters for virtual-populate are give
 
 exports[`should error if ref is set but is "null" or "undefined" [RefOptionIsUndefinedError] 1`] = `"Prop-Option \\"ref\\"'s value is \\"null\\" or \\"undefined\\" for \\"RefUndefined.someref\\" [E005]"`;
 
-exports[`should error if the Type does not have a valid "OptionsConstructor" [TypeError] 1`] = `"Type does not have a valid \\"OptionsConstructor\\"! (Error on Error.undefined-pkey) [E016]"`;
+exports[`should error if the Type does not have a valid "OptionsConstructor" [TypeError] 1`] = `"Type does not have a valid \\"OptionsConstructor\\"! (\\"Error\\" on \\"Error.undefined-pkey\\") [E016]"`;
 
 exports[`should error if the options provide to "setGlobalOptions" are not an object [TypeError] 1`] = `"\\"options\\" argument needs to be an object!"`;
 
 exports[`should fail when using Number-Enum on an String Type [NotStringTypeError] 1`] = `
 "Typeof \\"NumberEnumOnStringType.someEnum\\" is \\"String\\", used enum is not only Strings! [E010]
-  Encountered with property in Enum: One.string"
+  Encountered with property in Enum: \\"One.string\\""
 `;
 
 exports[`should fail when using String-Enum on an Number Type [NotNumberTypeError] 1`] = `
 "Typeof \\"NumberEnumOnStringType.someEnum\\" is \\"Number\\", value is undefined/null or does not have a reverse mapping! [E011]
-  Encountered with property: One.string"
+  Encountered with property: \\"One.string\\""
 `;
 
 exports[`should throw a Error when "ref" is a array [OptionRefDoesNotSupportArraysError] 1`] = `"Prop-Option \\"ref\\" does not support Arrays! (got \\"1\\" dimensions, for property \\"TestOptionRefDoesNotSupportArraysError.nested\\") [E021]"`;
 
-exports[`should throw a Error when the property is a Symbol [CannotBeSymbolError] 1`] = `"A property key in Typegoose cannot be an symbol! (TestPropertySymbol.Symbol()) [E024]"`;
+exports[`should throw a Error when the property is a Symbol [CannotBeSymbolError] 1`] = `"A property key in Typegoose cannot be an symbol! (\\"TestPropertySymbol.Symbol()\\") [E024]"`;
 
 exports[`should throw an error if a self-contained class is used [typegoose#42] [SelfContainingClassError] 1`] = `
 "It seems like the type used is the same as the target class, which is not supported
-Please look at https://github.com/typegoose/typegoose/issues/42 for more information (TestSelfContained.self) [E004]"
+Please look at https://github.com/typegoose/typegoose/issues/42 for more information (\\"TestSelfContained.self\\") [E004]"
 `;
 
 exports[`should throw default error if no error is specified (assertion) [AssertionFallbackError] 1`] = `"Assert failed - no custom error [E019]"`;
