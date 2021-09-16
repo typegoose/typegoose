@@ -97,6 +97,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   if ('discriminators' in rawOptions) {
     logger.debug('Found option "discriminators" in "%s.%s"', name, key);
     const gotType = utils.getType(rawOptions.discriminators, true);
+    // REFACTOR: re-write this to be a Error inside errors.ts
     utils.assertion(
       gotType.dim === 1,
       new Error(
@@ -235,7 +236,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
         break;
       default:
-        throw new TypeError(`"ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]`);
+        throw new TypeError(`"ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]`); // TODO: refactor to existing Error
     }
 
     return;
@@ -244,6 +245,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const refPath = rawOptions.refPath;
 
   if (refPath) {
+    // REFACTOR: re-write this to be a Error inside errors.ts
     utils.assertion(typeof refPath === 'string', new TypeError(`"refPath" for "${name}, ${key}" should be of type String! [E008]`));
 
     delete rawOptions.refPath;
@@ -318,6 +320,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       } else {
         // this will happen if the enum type is not "String" or "Number"
         // most likely this error happened because the code got transpiled with babel or "tsc --transpile-only"
+        // REFACTOR: re-write this to be a Error inside errors.ts
         throw new Error(
           `Invalid type used for enums!, got: "${Type}" (${name}.${key}) [E012]` +
             "Is the code transpiled with Babel or 'tsc --transpile-only' or 'ts-node --transpile-only'?\n" +

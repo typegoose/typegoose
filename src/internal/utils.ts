@@ -177,6 +177,7 @@ export function getClass(
     return constructors.get(input.typegooseName());
   }
 
+  // REFACTOR: re-write this to be a Error inside errors.ts
   throw new ReferenceError('Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]');
 }
 
@@ -261,6 +262,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamC
  * @internal
  */
 export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): T {
+  // REFACTOR: re-write this to be a Error inside errors.ts
   assertion(typeof key === 'string', new TypeError(`"${key}"(key) is not a string! (mergeMetadata)`));
   assertionIsClass(cl);
 
@@ -317,6 +319,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions
   if (typeof customName === 'function') {
     const name: any = customName(options);
 
+    // REFACTOR: re-write this to be a Error inside errors.ts
     assertion(
       typeof name === 'string' && name.length > 0,
       new TypeError(
@@ -337,6 +340,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions
 
   if (typeof customName === 'string') {
     if (customName.length <= 0) {
+      // REFACTOR: re-write this to be a Error inside errors.ts
       throw new TypeError(`"customName" must be a string AND at least one character ("${baseName}") [E015]`);
     }
   }
@@ -460,6 +464,7 @@ export function mapOptions(
     OptionsCTOR = mongoose.Schema.Types.Subdocument.prototype.OptionsConstructor;
   }
 
+  // REFACTOR: re-write this to be a Error inside errors.ts
   assertion(
     !isNullOrUndefined(OptionsCTOR),
     new TypeError(`Type does not have a valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`)
