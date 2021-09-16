@@ -25,6 +25,7 @@ import { _buildSchema } from './internal/schema';
 import { logger } from './logSettings';
 import { isModel } from './typeguards';
 import type { AnyParamConstructor, BeAnObject, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
+import { NotValidModelError } from './internal/errors';
 
 /* exports */
 // export the internally used "mongoose", to not need to always import it
@@ -175,8 +176,7 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 ) {
   const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
 
-  // REFACTOR: change the following Error to be one in errors.ts
-  assertion(model.prototype instanceof mongooseModel, new TypeError(`"${model}" is not a valid Model!`));
+  assertion(model.prototype instanceof mongooseModel, new NotValidModelError(model, 'addModelToTypegoose.model'));
   assertionIsClass(cl);
 
   const name = model.modelName;
@@ -282,7 +282,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   cl: U,
   value?: string
 ) {
-  assertion(isModel(from), new TypeError(`"${from}" is not a valid Model!`));
+  assertion(isModel(from), new NotValidModelError(from, 'getDiscriminatorModelForClass.from'));
   assertionIsClass(cl);
 
   const name = getName(cl);

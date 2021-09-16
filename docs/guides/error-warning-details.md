@@ -259,6 +259,13 @@ Error: `A property key in Typegoose cannot be an symbol! (${name}.${String(key)}
 Details:  
 A Property Key in Typegoose cannot be a Symbol, it must be a String (also a limitation of mongoose)
 
+### Expected "${where}" to be a valid mongoose.Model! [E025]
+
+Error: `Expected "${where}" to be a valid mongoose.Model! (got: "${model}") [E025]`
+
+Details:  
+A Valid instance of `mongoose.Model` was expected at `where`, but was not given a valid model.
+
 ## Warnings
 
 ### Type is not ${type}, but includes the following ${extra} options [W001]

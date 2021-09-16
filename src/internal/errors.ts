@@ -76,3 +76,9 @@ export class RefOptionIsUndefinedError extends Error {
     super(`Prop-Option "ref"'s value is "null" or "undefined" for "${name}.${key}" [E005]`);
   }
 }
+
+export class NotValidModelError extends TypeError {
+  constructor(model: unknown, where: string) {
+    super(`Expected "${where}" to be a valid mongoose.Model! (got: "${model}") [E025]`);
+  }
+}

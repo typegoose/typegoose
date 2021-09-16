@@ -19,3 +19,7 @@ exports[`should throw when "addModelToTypegoose" is called twice for the same cl
 "It seems like \\"addModelToTypegoose\\" got called twice
 Or multiple classes with the same name are used, which is not supported!(Model Name: \\"TestDouble\\") [E003]"
 `;
+
+exports[`tests for "NotValidModelError" should throw a Error when no valid model is passed to "addModelToTypegoose" [NotValidModelError] 1`] = `"Expected \\"addModelToTypegoose.model\\" to be a valid mongoose.Model! (got: \\"string\\") [E025]"`;
+
+exports[`tests for "NotValidModelError" should throw a Error when no valid model is passed to "getDiscriminatorModelForClass" [NotValidModelError] 1`] = `"Expected \\"getDiscriminatorModelForClass.from\\" to be a valid mongoose.Model! (got: \\"string\\") [E025]"`;

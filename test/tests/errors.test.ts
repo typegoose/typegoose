@@ -63,14 +63,30 @@ it('should error if not all needed parameters for virtual-populate are given [No
   }
 });
 
-it('should error if no valid model is supplied to "addModelToTypegoose" [TypeError]', () => {
-  try {
-    // @ts-expect-error expect error because "addModelToTypegoose" only accepts models
-    addModelToTypegoose('hello');
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-  }
+describe('tests for "NotValidModelError"', () => {
+  it('should throw a Error when no valid model is passed to "addModelToTypegoose" [NotValidModelError]', () => {
+    try {
+      // @ts-expect-error "addModelToTypegoose" does not support a string as the first argument
+      addModelToTypegoose('string', Error);
+
+      fail('Expected to throw "NotValidModelError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.NotValidModelError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error when no valid model is passed to "getDiscriminatorModelForClass" [NotValidModelError]', () => {
+    try {
+      // @ts-expect-error "getDiscriminatorModelForClass" does not support a string as the first argument
+      getDiscriminatorModelForClass('string', Error);
+
+      fail('Expected to throw "NotValidModelError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.NotValidModelError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });
 
 describe('tests for "NoValidClass"', () => {
@@ -386,16 +402,6 @@ it('should fail when using String-Enum on an Number Type [NotNumberTypeError]', 
     fail('Expected to throw "NotNumberTypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.NotNumberTypeError);
-  }
-});
-
-it('should error if no valid model is supplied to "getDiscriminatorModelForClass" [TypeError]', () => {
-  try {
-    // @ts-expect-error expect the first argument to be an model
-    getDiscriminatorModelForClass(true);
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
   }
 });
 
