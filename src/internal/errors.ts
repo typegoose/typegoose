@@ -82,3 +82,9 @@ export class NotValidModelError extends TypeError {
     super(`Expected "${where}" to be a valid mongoose.Model! (got: "${model}") [E025]`);
   }
 }
+
+export class FunctionCalledMoreThanSupportedError extends Error {
+  constructor(functionName: string, supported: number, extra: string) {
+    super(`Function "${functionName}" only supports to be called "${supported}" times with the same parameters [E003]\n${extra}`);
+  }
+}

@@ -25,7 +25,7 @@ import { _buildSchema } from './internal/schema';
 import { logger } from './logSettings';
 import { isModel } from './typeguards';
 import type { AnyParamConstructor, BeAnObject, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
-import { NotValidModelError } from './internal/errors';
+import { FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
 /* exports */
 // export the internally used "mongoose", to not need to always import it
@@ -181,13 +181,12 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 
   const name = model.modelName;
 
-  // REFACTOR: change the following Error to be one in errors.ts
   assertion(
     !models.has(name),
-    new Error(
-      'It seems like "addModelToTypegoose" got called twice\n' +
-        'Or multiple classes with the same name are used, which is not supported!' +
-        `(Model Name: "${name}") [E003]`
+    new FunctionCalledMoreThanSupportedError(
+      'addModelToTypegoose',
+      1,
+      `This was caused because the model name "${name}" already exists in the typegoose-internal "models" cache`
     )
   );
 

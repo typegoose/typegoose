@@ -19,19 +19,17 @@ Error: `You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]`
 Details:  
 Typegoose requires at least NodeJS Version 12.22, because NodeJS 12 is the lowest activly maintained version AND is the lowest that supports all functions needed by typegoose (without having to add polyfills)
 
-### addModelToTypegoose called twice [E003]
+### Function only supports to be called "${supported}" times [E003]
 
 Error:
 
 ```txt
-It seems like "addModelToTypegoose" got called twice
-Or multiple classes with the same name are used, which is not supported! (Model Name: "${name}") [E003]
+Function "${functionName}" only supports to be called "${supported}" times with the same parameters [E003]
+${extra}
 ```
 
 Details:  
-`addModelToTypegoose` can only be called once with one name, mongoose dosnt support multiple models with the same name on the same connection / mongoose instance and typegoose has an internal cache where the key is the name (needs to be unique)  
-
--> [More Information on how to solve it](guides/../advanced/models-with-same-name.md)
+For example [`addModelToTypegoose`](../api/functions/addModelToTypegoose.md) only supports to be called once (1) with the same model name, [this problem has a specific Guide](./advanced/models-with-same-name.md).
 
 ### Self Containg Class [E004]
 

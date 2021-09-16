@@ -246,18 +246,24 @@ it('should throw when "deleteModel" is called with no string [TypeError]', () =>
   }
 });
 
-it('should throw when "addModelToTypegoose" is called twice for the same class [Error]', () => {
-  class TestDouble {}
+describe('tests for "FunctionCalledMoreThanSupportedError"', () => {
+  it('should throw a Error when "addModelToTypegoose" got called more than once with the same model name [FunctionCalledMoreThanSupportedError]', () => {
+    class TestMoreThanOnce {
+      @prop()
+      public dummy?: string;
+    }
 
-  const gotmodel = getModelForClass(TestDouble);
+    const model = getModelForClass(TestMoreThanOnce);
 
-  try {
-    addModelToTypegoose(gotmodel, TestDouble);
-    fail('Expected to throw "Error"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(Error);
-    expect(err.message).toMatchSnapshot();
-  }
+    try {
+      addModelToTypegoose(model, TestMoreThanOnce);
+
+      fail('Expected to throw "FunctionCalledMoreThanSupportedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.FunctionCalledMoreThanSupportedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });
 
 it('should throw when "customName" is used, but length <= 0 [TypeError]', () => {

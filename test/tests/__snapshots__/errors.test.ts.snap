@@ -15,9 +15,9 @@ Please look at https://github.com/typegoose/typegoose/issues/42 for more informa
 
 exports[`should throw default error if no error is specified (assertion) [AssertionFallbackError] 1`] = `"Assert failed - no custom error [E019]"`;
 
-exports[`should throw when "addModelToTypegoose" is called twice for the same class [Error] 1`] = `
-"It seems like \\"addModelToTypegoose\\" got called twice
-Or multiple classes with the same name are used, which is not supported!(Model Name: \\"TestDouble\\") [E003]"
+exports[`tests for "FunctionCalledMoreThanSupportedError" should throw a Error when "addModelToTypegoose" got called more than once with the same model name [FunctionCalledMoreThanSupportedError] 1`] = `
+"Function \\"addModelToTypegoose\\" only supports to be called \\"1\\" times with the same parameters [E003]
+This was caused because the model name \\"TestMoreThanOnce\\" already exists in the typegoose-internal \\"models\\" cache"
 `;
 
 exports[`tests for "NotValidModelError" should throw a Error when no valid model is passed to "addModelToTypegoose" [NotValidModelError] 1`] = `"Expected \\"addModelToTypegoose.model\\" to be a valid mongoose.Model! (got: \\"string\\") [E025]"`;
