@@ -386,22 +386,6 @@ it('should error if the options provide to "setGlobalOptions" are not an object 
   }
 });
 
-it('should error if trying to use circular classes [TypeError]', () => {
-  try {
-    class TestCircular {
-      @prop()
-      public hello: TestCircular;
-    }
-
-    buildSchema(TestCircular);
-
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot(); // TODO: inspect this test
-  }
-});
-
 it('should fail when using Number-Enum on an String Type [NotStringTypeError]', () => {
   try {
     enum NumberEnum {

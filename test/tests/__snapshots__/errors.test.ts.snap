@@ -28,11 +28,6 @@ exports[`should error if the Type does not have a valid "OptionsConstructor" [Ty
 
 exports[`should error if the options provide to "setGlobalOptions" are not an object [TypeError] 1`] = `"\\"options\\" argument needs to be an object!"`;
 
-exports[`should error if trying to use circular classes [TypeError] 1`] = `
-"It seems like the type used is the same as the target class, which is not supported
-Please look at https://github.com/typegoose/typegoose/issues/42 for more information (TestCircular.hello) [E004]"
-`;
-
 exports[`should fail when using Number-Enum on an String Type [NotStringTypeError] 1`] = `
 "Typeof \\"NumberEnumOnStringType.someEnum\\" is \\"String\\", used enum is not only Strings! [E010]
   Encountered with property in Enum: One.string"
