@@ -348,6 +348,17 @@ it('should error if "refPath" is not of type string [TypeError]', () => {
 });
 
 describe('tests for "InvalidWhatIsItError"', () => {
+  it('should throw a Error when a unknown WhatIsIt is used for "utils#initProperty" [InvalidWhatIsItError]', () => {
+    try {
+      utils.initProperty('a1', 'a2', -1);
+
+      fail('Expected to throw "InvalidWhatIsItError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
   describe('WhatIsIt unknown (processProp)', () => {
     beforeEach(() => {
       // Mock implementation of "utils.initProperty", otherwise "InvalidWhatIsItError.whatisit(initProperty)" always gets thrown
@@ -401,6 +412,43 @@ describe('tests for "InvalidWhatIsItError"', () => {
 
         @prop({ refPath: 'hi' }, -1)
         public test?: any;
+      }
+
+      try {
+        buildSchema(ProcessPropRefWhatIsIt);
+
+        fail('Expected to throw "InvalidWhatIsItError"');
+      } catch (err) {
+        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('should throw a Error when a unknown WhatIsIt is used for "processProp#primitive" [InvalidWhatIsItError]', () => {
+      class ProcessPropRefWhatIsIt {
+        @prop({ type: () => String }, -1)
+        public test?: string;
+      }
+
+      try {
+        buildSchema(ProcessPropRefWhatIsIt);
+
+        fail('Expected to throw "InvalidWhatIsItError"');
+      } catch (err) {
+        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('should throw a Error when a unknown WhatIsIt is used for "processProp#subSchema" [InvalidWhatIsItError]', () => {
+      class Sub {
+        @prop()
+        public dummy?: string;
+      }
+
+      class ProcessPropRefWhatIsIt {
+        @prop({ type: () => Sub }, -1)
+        public test?: Sub;
       }
 
       try {

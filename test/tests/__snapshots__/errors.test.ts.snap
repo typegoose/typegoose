@@ -62,11 +62,17 @@ exports[`tests for "InvalidTypeError" should error if no valid type is supplied 
 
 exports[`tests for "InvalidWhatIsItError" WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#Passthrough" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(Passthrough)) is invalid for \\"ProcessPropPassthroughWhatIsIt.test\\" [E013]"`;
 
+exports[`tests for "InvalidWhatIsItError" WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#primitive" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(primitive)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+
 exports[`tests for "InvalidWhatIsItError" WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#ref" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(ref)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
 
 exports[`tests for "InvalidWhatIsItError" WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#refPath" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(refPath)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
 
+exports[`tests for "InvalidWhatIsItError" WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#subSchema" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(subSchema)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+
 exports[`tests for "InvalidWhatIsItError" should throw a Error when "WhatIsIt.MAP" is used for "processProp#refPath" [InvalidWhatIsItError] 1`] = `"\\"1\\"(whatis(refPath)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+
+exports[`tests for "InvalidWhatIsItError" should throw a Error when a unknown WhatIsIt is used for "utils#initProperty" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(initProperty)) is invalid for \\"a1.a2\\" [E013]"`;
 
 exports[`tests for "NoValidClassError" should error if no valid class is supplied to "_buildSchema" [NoValidClassError] 1`] = `"\\"hello\\" is not a function(/constructor)!"`;
 
