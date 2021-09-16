@@ -697,3 +697,22 @@ it('should not modify an immutable', async () => {
   await doc.save();
   expect(doc.someprop).toEqual('Hello');
 });
+
+it('should allow creating a property named "id" [typegoose#476]', async () => {
+  const shouldCreate = { normalProp: 'hello', id: 10 };
+  @modelOptions({ schemaOptions: { id: false } }) // Disable the internal "id" virtual
+  class ClassWithIDProperty {
+    @prop()
+    public normalProp?: string;
+
+    @prop()
+    public id?: number;
+  }
+
+  const model = getModelForClass(ClassWithIDProperty);
+
+  const doc = await model.create(shouldCreate);
+
+  // Add many options, to ensure that the "id" virtual does actually not exist
+  expect(doc.toObject({ virtuals: true, getters: true, aliases: true })).toMatchSnapshot({ _id: expect.any(mongoose.Types.ObjectId) });
+});

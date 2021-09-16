@@ -1,5 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`should allow creating a property named "id" [typegoose#476] 1`] = `
+Object {
+  "__v": 0,
+  "_id": Any<ObjectId>,
+  "id": 10,
+  "normalProp": "hello",
+}
+`;
+
 exports[`should give a warning when type is "any" [typegoose/typegoose#152] 1`] = `
 Array [
   Array [
