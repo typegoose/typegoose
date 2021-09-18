@@ -45,3 +45,14 @@ describe('Options not for current Type', () => {
     expect(spyWarn.mock.calls).toMatchSnapshot();
   });
 });
+
+it('should warn if "justOne" is defined, but no Virtual Populate Options', () => {
+  class TestJustOneWarning {
+    @prop({ justOne: true })
+    public test?: string;
+  }
+
+  buildSchema(TestJustOneWarning);
+  expect(spyWarn).toHaveBeenCalledTimes(1);
+  expect(spyWarn.mock.calls).toMatchSnapshot();
+});

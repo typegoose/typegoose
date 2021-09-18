@@ -26,3 +26,12 @@ Array [
   ],
 ]
 `;
+
+exports[`should warn if "justOne" is defined, but no Virtual Populate Options 1`] = `
+Array [
+  Array [
+    "Option \\"justOne\\" is defined in \\"TestJustOneWarning.test\\" but no Virtual-Populate-Options!
+Look here for more: https://typegoose.github.io/typegoose/docs/api/virtuals#virtual-populate",
+  ],
+]
+`;
