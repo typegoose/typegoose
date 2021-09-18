@@ -1,5 +1,5 @@
 import { logger } from '../../src/logSettings';
-import { buildSchema, prop } from '../../src/typegoose';
+import { buildSchema, mongoose, prop } from '../../src/typegoose';
 
 let spyWarn: jest.SpyInstance;
 // "deprecate" is commented out, because there is currently nothing to test for deprecation
@@ -53,6 +53,17 @@ it('should warn if "justOne" is defined, but no Virtual Populate Options', () =>
   }
 
   buildSchema(TestJustOneWarning);
+  expect(spyWarn).toHaveBeenCalledTimes(1);
+  expect(spyWarn.mock.calls).toMatchSnapshot();
+});
+
+it('should warn if property is "Mixed"', () => {
+  class TestMixedWarning {
+    @prop({ type: () => mongoose.Schema.Types.Mixed })
+    public test?: any;
+  }
+
+  buildSchema(TestMixedWarning);
   expect(spyWarn).toHaveBeenCalledTimes(1);
   expect(spyWarn.mock.calls).toMatchSnapshot();
 });

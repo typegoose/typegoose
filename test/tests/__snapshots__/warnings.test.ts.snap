@@ -35,3 +35,14 @@ Look here for more: https://typegoose.github.io/typegoose/docs/api/virtuals#virt
   ],
 ]
 `;
+
+exports[`should warn if property is "Mixed" 1`] = `
+Array [
+  Array [
+    "Setting \\"Mixed\\" for property \\"%s.%s\\"
+Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
+    "TestMixedWarning",
+    "test",
+  ],
+]
+`;
