@@ -591,7 +591,7 @@ describe('get/set options', () => {
 
 describe('test the Passthrough class', () => {
   it('should make use of the "Passthrough" class (WhatIsIt.NONE)', async () => {
-    const alsoSchema = new mongoose.Schema({
+    const mongooseSchema = new mongoose.Schema({
       something: { type: { somePath: String } },
       somethingExtra: { type: { someExtraPath: [String] } },
     });
@@ -605,31 +605,31 @@ describe('test the Passthrough class', () => {
     }
 
     const typegooseSchema = buildSchema(SomeTestClass);
-    const somethingPath = typegooseSchema.path('something');
-    const somethingExtraPath = typegooseSchema.path('somethingExtra');
-    const alsoSomethingPath = alsoSchema.path('something');
-    const alsoSomethingExtraPath = alsoSchema.path('somethingExtra');
+    const typegooseSomethingPath = typegooseSchema.path('something');
+    const typegooseSomethingExtraPath = typegooseSchema.path('somethingExtra');
+    const mongooseSomethingPath = mongooseSchema.path('something');
+    const mongooseSomethingExtraPath = mongooseSchema.path('somethingExtra');
 
     // Since mongoose 6.0, this results in an actual Schema, see https://github.com/Automattic/mongoose/issues/7181
-    expect(somethingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
-    expect(somethingExtraPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+    expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+    expect(typegooseSomethingExtraPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
 
     /** Type to shorten using another type */
     type SubDocumentAlias = mongoose.Schema.Types.Subdocument;
 
-    expect((somethingPath as SubDocumentAlias).schema.path('somePath')).toMatchObject(
-      (alsoSomethingPath as SubDocumentAlias).schema.path('somePath')
+    expect((typegooseSomethingPath as SubDocumentAlias).schema.path('somePath')).toMatchObject(
+      (mongooseSomethingPath as SubDocumentAlias).schema.path('somePath')
     );
 
-    expect((somethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
-    expect((alsoSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect((typegooseSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect((mongooseSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
 
     /** Type to shorten using another type and to add "caster", because it does not exist on the type */
     type ArrayWithCaster = mongoose.Schema.Types.Array & { caster: any };
-    expect((somethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
+    expect((typegooseSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
       mongoose.Schema.Types.String
     );
-    expect((alsoSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
+    expect((mongooseSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
       mongoose.Schema.Types.String
     );
 
