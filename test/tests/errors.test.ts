@@ -24,21 +24,6 @@ beforeEach(() => {
   jest.restoreAllMocks();
 });
 
-it('should error if an non-existing(runtime) type is given [InvalidTypeError]', () => {
-  try {
-    class TestNME {
-      @prop()
-      public test: undefined;
-    }
-
-    buildSchema(TestNME);
-    fail('Expected to throw "InvalidTypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(errors.InvalidTypeError);
-    expect(err.message).toMatchSnapshot();
-  }
-});
-
 it('should error if no function for hooks is defined [TypeError]', () => {
   try {
     // @ts-expect-error expect that the first argument needs to be an function
@@ -196,6 +181,20 @@ describe('tests for "NoValidClassError"', () => {
 
 describe('tests for "InvalidTypeError"', () => {
   // test for @prop will return a "NoMetadataError", which is already tested above
+  it('should error if no valid type is supplied to WhatIsIt.NONE [InvalidTypeError]', () => {
+    try {
+      class TestNME {
+        @prop({ type: undefined })
+        public test: undefined;
+      }
+
+      buildSchema(TestNME);
+      fail('Expected to throw "InvalidTypeError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.InvalidTypeError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 
   it('should error if no valid type is supplied to WhatIsIt.ARRAY [InvalidTypeError]', () => {
     try {

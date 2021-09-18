@@ -10,8 +10,6 @@ exports[`should error if 0 or less dimensions are given (createArrayFromDimensio
 
 exports[`should error if a non-valid object is passed to "getClass" [ReferenceError] 1`] = `"Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]"`;
 
-exports[`should error if an non-existing(runtime) type is given [InvalidTypeError] 1`] = `"\\"TestNME.test\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
-
 exports[`should error if no function for hooks is defined [TypeError] 1`] = `"\\"TestNoFunctionHook.pre.\\"'s function is not a function!"`;
 
 exports[`should error if no valid key is supplied to "getModelWithString" [TypeError] 1`] = `"Expected \\"key\\" to be a string, got \\"true\\""`;
@@ -59,6 +57,8 @@ This was caused because the model name \\"TestMoreThanOnce\\" already exists in 
 exports[`tests for "InvalidTypeError" should error if no valid type is supplied to WhatIsIt.ARRAY [InvalidTypeError] 1`] = `"\\"TestNoMetadataErrorAP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
 
 exports[`tests for "InvalidTypeError" should error if no valid type is supplied to WhatIsIt.MAP [InvalidTypeError] 1`] = `"\\"TestNoMetadataErrorMP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
+
+exports[`tests for "InvalidTypeError" should error if no valid type is supplied to WhatIsIt.NONE [InvalidTypeError] 1`] = `"\\"TestNME.test\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
 
 exports[`tests for "InvalidWhatIsItError" WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#Passthrough" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(Passthrough)) is invalid for \\"ProcessPropPassthroughWhatIsIt.test\\" [E013]"`;
 
