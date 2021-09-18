@@ -60,24 +60,3 @@ module.exports = {
 ### prop on get & set
 
 `@prop` cannot be applied to `get` & `set` (ES6), because virtuals do not accept options & schema.loadClass wouldn't load these.
-
-## Known Mongoose incompatibilities
-
-### typePojoToMixed
-
-This option will **NOT** work, because there is no neat / simple way of defining such a thing in the same class.
-
-Workaround:  
-Create multiple classes:
-
-```ts
-class Sub {
-  @prop()
-  public name: string;
-}
-
-class Parent {
-  @prop()
-  public subDoc: Sub;
-}
-```
