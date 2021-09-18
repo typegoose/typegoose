@@ -78,6 +78,8 @@ exports[`tests for "NoValidClassError" should error if no valid class is supplie
 
 exports[`tests for "NoValidClassError" should error if no valid class is supplied to "addModelToTypegoose" [NoValidClassError] 1`] = `"\\"not class\\" is not a function(/constructor)!"`;
 
+exports[`tests for "NoValidClassError" should error if no valid class is supplied to "assignMetadata" (and "mergeMetadata") [NoValidClassError] 1`] = `"\\"true\\" is not a function(/constructor)!"`;
+
 exports[`tests for "NoValidClassError" should error if no valid class is supplied to "buildSchema" [NoValidClassError] 1`] = `"\\"hello\\" is not a function(/constructor)!"`;
 
 exports[`tests for "NoValidClassError" should error if no valid class is supplied to "deleteModelWithClass" [NoValidClassError] 1`] = `"\\"true\\" is not a function(/constructor)!"`;
@@ -93,7 +95,5 @@ exports[`tests for "NoValidClassError" should throw a Error when "cl" in "getNam
 exports[`tests for "NotValidModelError" should throw a Error when no valid model is passed to "addModelToTypegoose" [NotValidModelError] 1`] = `"Expected \\"addModelToTypegoose.model\\" to be a valid mongoose.Model! (got: \\"string\\") [E025]"`;
 
 exports[`tests for "NotValidModelError" should throw a Error when no valid model is passed to "getDiscriminatorModelForClass" [NotValidModelError] 1`] = `"Expected \\"getDiscriminatorModelForClass.from\\" to be a valid mongoose.Model! (got: \\"string\\") [E025]"`;
-
-exports[`tests for "assignMetadata" should error if no valid class is supplied [NoValidClass] 1`] = `"\\"true\\" is not a function(/constructor)!"`;
 
 exports[`tests for "assignMetadata" should error if no valid key is supplied [TypeError] 1`] = `"\\"true\\"(key) is not a string! (mergeMetadata)"`;

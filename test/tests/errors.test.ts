@@ -177,6 +177,18 @@ describe('tests for "NoValidClassError"', () => {
       expect(err.message).toMatchSnapshot();
     }
   });
+
+  it('should error if no valid class is supplied to "assignMetadata" (and "mergeMetadata") [NoValidClassError]', () => {
+    try {
+      // @ts-expect-error expect that the third argument is an class
+      utils.assignMetadata(DecoratorKeys.Index, {}, true);
+
+      fail('Expected to throw "NoValidClassError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });
 
 describe('tests for "InvalidTypeError"', () => {
@@ -235,20 +247,10 @@ describe('tests for "assignMetadata"', () => {
 
       // @ts-expect-error expect that the first argument is in "DecoratorKeys"
       utils.assignMetadata(true, {}, Dummy);
+
       fail('Expected to throw "TypeError"');
     } catch (err) {
       expect(err).toBeInstanceOf(TypeError);
-      expect(err.message).toMatchSnapshot();
-    }
-  });
-
-  it('should error if no valid class is supplied [NoValidClass]', () => {
-    try {
-      // @ts-expect-error expect that the third argument is an class
-      utils.assignMetadata(DecoratorKeys.Index, {}, true);
-      fail('Expected to throw "NoValidClass"');
-    } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClassError);
       expect(err.message).toMatchSnapshot();
     }
   });
