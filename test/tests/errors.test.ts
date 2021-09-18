@@ -591,37 +591,39 @@ it('should error if 0 or less dimensions are given (createArrayFromDimensions) [
   }
 });
 
-it('should error if "ref" is set to a function, but returns "null" or "undefined" [RefOptionIsUndefinedError]', () => {
-  class Main {
-    // @ts-expect-error expect that "ref" is an function and returns an "string"
-    @prop({ ref: () => undefined })
-    public nested: any; // not setting type to "Ref", because this is a unsupported way for the type
-  }
-
-  try {
-    buildSchema(Main);
-
-    fail('Expected to throw "RefOptionIsUndefinedError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(errors.RefOptionIsUndefinedError);
-    expect(err.message).toMatchSnapshot();
-  }
-});
-
-it('should error if ref is set but is "null" or "undefined" [RefOptionIsUndefinedError]', () => {
-  try {
-    class RefUndefined {
-      @prop({ ref: undefined })
-      public someref?: any; // not setting type to "Ref", because this is a unsupported way for the type
+describe('tests for "RefOptionIsUndefinedError"', () => {
+  it('should error if "ref" is set to a function, but returns "null" or "undefined" [RefOptionIsUndefinedError]', () => {
+    class Main {
+      // @ts-expect-error expect that "ref" is an function and returns an "string"
+      @prop({ ref: () => undefined })
+      public nested: any; // not setting type to "Ref", because this is a unsupported way for the type
     }
 
-    buildSchema(RefUndefined);
+    try {
+      buildSchema(Main);
 
-    fail('Expect to throw "RefOptionIsUndefinedError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(errors.RefOptionIsUndefinedError);
-    expect(err.message).toMatchSnapshot();
-  }
+      fail('Expected to throw "RefOptionIsUndefinedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.RefOptionIsUndefinedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should error if ref is set but is "null" or "undefined" [RefOptionIsUndefinedError]', () => {
+    try {
+      class RefUndefined {
+        @prop({ ref: undefined })
+        public someref?: any; // not setting type to "Ref", because this is a unsupported way for the type
+      }
+
+      buildSchema(RefUndefined);
+
+      fail('Expect to throw "RefOptionIsUndefinedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.RefOptionIsUndefinedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });
 
 it('should throw default error if no error is specified (assertion) [AssertionFallbackError]', () => {
