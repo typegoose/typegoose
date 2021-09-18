@@ -22,7 +22,8 @@
     "watch": "tsc -w -p tsconfig.json",
     "clean": "rimraf lib .tsbuildinfo coverage doc build",
     "version:patch": "yarn version patch -m 'release: %s'",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "website": "yarn --cwd website/ run start"
   },
   "repository": {
     "type": "git",
