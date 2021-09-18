@@ -180,7 +180,6 @@ describe('tests for "NoValidClassError"', () => {
 });
 
 describe('tests for "InvalidTypeError"', () => {
-  // test for @prop will return a "NoMetadataError", which is already tested above
   it('should error if no valid type is supplied to WhatIsIt.NONE [InvalidTypeError]', () => {
     try {
       class TestNME {
