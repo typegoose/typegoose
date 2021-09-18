@@ -475,7 +475,6 @@ export function mapOptions(
   );
 
   const options = Object.assign({}, rawOptions); // for sanity
-  delete options.items;
 
   if (OptionsCTOR.prototype instanceof mongoose.SchemaTypeOptions) {
     for (const [key, value] of Object.entries(options)) {
