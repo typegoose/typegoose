@@ -28,6 +28,36 @@ A: Because I (hasezoey) don't have permissions over the old `typegoose` reposito
 
 A: Because Typegoose doesn't modify any Mongoose code, it is still the same as Mongoose's original `new Model()`, you would have to do `new Model({} as Class)` (or sometimes `new Model({} as Partial<Class>)`, because of functions.)
 
+### Do all Classes get compiled to their own `mongoose.Schema`?
+
+A: Yes, all classes compiled through typegoose (like `type: () => SubClass`, or by reflection) will be their own `mongoose.Schema`.
+
+This means that the following is equal:
+
+```ts
+// Native Mongoose
+const subSchema = new mongoose.Schema({ someprop: { type: String } });
+const mainSchema = new mongoose.Schema({
+  subDoc: subSchema
+})
+
+// Typegoose
+class Sub {
+  @prop()
+  public someprop: string;
+}
+
+class Main {
+  @prop()
+  public subDoc: Sub; // by reflection, not explicitly defining option "type"
+  // OR
+  @prop({ type: () => Sub }) // defining option "type" explicitly
+  public subDoc: Sub;
+}
+```
+
+There is also a option to not use sub-classes, called [the `Passthrough` class](../api/decorators/prop.md#passthrough-class)
+
 ## Edge Cases
 
 ### I want to the return document with property `id` instead of `_id`
