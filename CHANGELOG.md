@@ -1,3 +1,15 @@
+## [9.0.0-beta.9](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.8...v9.0.0-beta.9) (2021-09-18)
+
+
+### Refactor
+
+* **utils:** remove removed options workaround ([e9996fd](https://github.com/typegoose/typegoose/commit/e9996fd50fec4542c0a61566908c0c3f8170cf3c))
+
+
+### Style
+
+* **processProp:** remove "istanbul-ignore" on tested lines ([967cb41](https://github.com/typegoose/typegoose/commit/967cb41066a20e22f71dc229a2ad90bb1b795003))
+
 ## [9.0.0-beta.8](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.7...v9.0.0-beta.8) (2021-09-16)
 
 
