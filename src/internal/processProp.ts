@@ -194,7 +194,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
         return;
       default:
-        /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
         throw new InvalidWhatIsItError(propKind, name, key, 'whatis(Passthrough)');
     }
   }
