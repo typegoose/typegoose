@@ -589,53 +589,55 @@ describe('get/set options', () => {
   });
 });
 
-it('should make use of the "Passthrough" class', async () => {
-  const alsoSchema = new mongoose.Schema({
-    something: { type: { somePath: String } },
-    somethingExtra: { type: { someExtraPath: [String] } },
+describe('test the Passthrough class', () => {
+  it('should make use of the "Passthrough" class (WhatIsIt.NONE)', async () => {
+    const alsoSchema = new mongoose.Schema({
+      something: { type: { somePath: String } },
+      somethingExtra: { type: { someExtraPath: [String] } },
+    });
+
+    class SomeTestClass {
+      @prop({ type: () => new Passthrough({ somePath: String }) })
+      public something?: { somePath: string };
+
+      @prop({ type: new Passthrough({ someExtraPath: [String] }) })
+      public somethingExtra?: { someExtraPath: string[] };
+    }
+
+    const typegooseSchema = buildSchema(SomeTestClass);
+    const somethingPath = typegooseSchema.path('something');
+    const somethingExtraPath = typegooseSchema.path('somethingExtra');
+    const alsoSomethingPath = alsoSchema.path('something');
+    const alsoSomethingExtraPath = alsoSchema.path('somethingExtra');
+
+    // Since mongoose 6.0, this results in an actual Schema, see https://github.com/Automattic/mongoose/issues/7181
+    expect(somethingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+    expect(somethingExtraPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+
+    /** Type to shorten using another type */
+    type SubDocumentAlias = mongoose.Schema.Types.Subdocument;
+
+    expect((somethingPath as SubDocumentAlias).schema.path('somePath')).toMatchObject(
+      (alsoSomethingPath as SubDocumentAlias).schema.path('somePath')
+    );
+
+    expect((somethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect((alsoSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
+
+    /** Type to shorten using another type and to add "caster", because it does not exist on the type */
+    type ArrayWithCaster = mongoose.Schema.Types.Array & { caster: any };
+    expect((somethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
+      mongoose.Schema.Types.String
+    );
+    expect((alsoSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
+      mongoose.Schema.Types.String
+    );
+
+    // This is somehow not working, because somehow these 2 variables are not equal (maybe because of Symbols?)
+    // expect((somethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toMatchObject(
+    //   (alsoSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')
+    // );
   });
-
-  class SomeTestClass {
-    @prop({ type: () => new Passthrough({ somePath: String }) })
-    public something?: { somePath: string };
-
-    @prop({ type: new Passthrough({ someExtraPath: [String] }) })
-    public somethingExtra?: { someExtraPath: string[] };
-  }
-
-  const typegooseSchema = buildSchema(SomeTestClass);
-  const somethingPath = typegooseSchema.path('something');
-  const somethingExtraPath = typegooseSchema.path('somethingExtra');
-  const alsoSomethingPath = alsoSchema.path('something');
-  const alsoSomethingExtraPath = alsoSchema.path('somethingExtra');
-
-  // Since mongoose 6.0, this results in an actual Schema, see https://github.com/Automattic/mongoose/issues/7181
-  expect(somethingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
-  expect(somethingExtraPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
-
-  /** Type to shorten using another type */
-  type SubDocumentAlias = mongoose.Schema.Types.Subdocument;
-
-  expect((somethingPath as SubDocumentAlias).schema.path('somePath')).toMatchObject(
-    (alsoSomethingPath as SubDocumentAlias).schema.path('somePath')
-  );
-
-  expect((somethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect((alsoSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
-
-  /** Type to shorten using another type and to add "caster", because it does not exist on the type */
-  type ArrayWithCaster = mongoose.Schema.Types.Array & { caster: any };
-  expect((somethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
-    mongoose.Schema.Types.String
-  );
-  expect((alsoSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
-    mongoose.Schema.Types.String
-  );
-
-  // This is somehow not working, because somehow these 2 variables are not equal (maybe because of Symbols?)
-  // expect((somethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toMatchObject(
-  //   (alsoSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')
-  // );
 });
 
 it('should allow Maps with SubDocument "Map<string SubDocument>"', async () => {
