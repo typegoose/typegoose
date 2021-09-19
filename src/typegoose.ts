@@ -244,6 +244,7 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
     logger.debug(`Class "${name}" is not in "models", trying to find in "constructors"`);
     let found = false;
 
+    // type "Map" does not have a "find" function, and using "get" would maybe result in the incorrect values
     for (const [cname, constructor] of constructors) {
       if (constructor === cl) {
         logger.debug(`Found Class in "constructors" with class name "${name}" and entered name "${cname}""`);
