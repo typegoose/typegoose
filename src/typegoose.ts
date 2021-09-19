@@ -314,17 +314,25 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
  *   @prop({ type: () => new Passthrough({ somePath: String }) })
  *   public somepath: { somePath: string };
  * }
+ *
+ * class Dummy {
+ *   @prop({ type: () => new Passthrough({ somePath: String }, true) })
+ *   public somepath: { somePath: string };
+ * }
  * ```
  */
 // Note: for "SchemaDefinitionType", i have no clue what it does, but it is also defined on "mongoose.Schema" and kinda required for "mongoose.DocumentDefinition"
 export class Passthrough<SchemaDefinitionType = undefined> {
   public raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>;
+  public direct: boolean;
 
   /**
    * Use this like `new mongoose.Schema()`
-   * @param raw the Schema definition
+   * @param raw The Schema definition
+   * @param direct Directly insert "raw", instead of using "type" (this will not apply any other inner options)
    */
-  constructor(raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>) {
+  constructor(raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>, direct?: boolean) {
     this.raw = raw;
+    this.direct = direct ?? false;
   }
 }

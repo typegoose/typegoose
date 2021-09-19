@@ -31,7 +31,7 @@ Look here for how to disable this message: https://typegoose.github.io/typegoose
 ]
 `;
 
-exports[`test the Passthrough class should make use of the "Passthrough" class (WhatIsIt.MAP) 1`] = `
+exports[`test the Passthrough class (non "direct") should make use of the "Passthrough" class (WhatIsIt.MAP) 1`] = `
 Array [
   Array [
     "Setting \\"Mixed\\" for property \\"%s.%s\\"

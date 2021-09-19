@@ -590,7 +590,7 @@ describe('get/set options', () => {
   });
 });
 
-describe('test the Passthrough class', () => {
+describe('test the Passthrough class (non "direct")', () => {
   it('should make use of the "Passthrough" class (WhatIsIt.NONE)', async () => {
     const mongooseSchema = new mongoose.Schema({
       something: { type: { somePath: String } },
@@ -689,6 +689,86 @@ describe('test the Passthrough class', () => {
     expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
     expect(spyWarn).toHaveBeenCalledTimes(1);
     expect(spyWarn.mock.calls).toMatchSnapshot();
+  });
+});
+
+describe('test the Passthrough class with "direct"', () => {
+  it('should make use of the "Passthrough" class with "direct" (WhatIsIt.NONE)', () => {
+    const mongooseSchema = new mongoose.Schema({
+      child: { somePath: String },
+    });
+
+    class TestPassthroughWhatIsItNONEDirect {
+      @prop({ type: () => new Passthrough({ somePath: String }, true) })
+      public child?: { somePath: string };
+    }
+
+    const typegooseSchema = buildSchema(TestPassthroughWhatIsItNONEDirect);
+
+    expect(mongooseSchema.path('child')).toBeUndefined();
+    expect(typegooseSchema.path('child')).toBeUndefined();
+
+    expect(mongooseSchema.path('child.somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect(typegooseSchema.path('child.somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+  });
+
+  it('should make use of the "Passthrough" class with "direct" (WhatIsIt.ARRAY)', () => {
+    const mongooseSchema = new mongoose.Schema({
+      child: [{ somePath: String }],
+    });
+
+    class TestPassthroughWhatIsItARRAYDirect {
+      @prop({ type: () => new Passthrough([{ somePath: String }], true) })
+      public child?: [{ somePath: string }];
+    }
+
+    const typegooseSchema = buildSchema(TestPassthroughWhatIsItARRAYDirect);
+
+    const mongooseChildPath = mongooseSchema.path('child');
+    const typegooeChildPath = typegooseSchema.path('child');
+
+    expect(mongooseChildPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+    expect(typegooeChildPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+
+    expect((mongooseChildPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
+    expect((typegooeChildPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
+
+    expect((mongooseChildPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect((typegooeChildPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+  });
+
+  it('should make use of the "Passthrough" class with "direct" (WhatIsIt.MAP)', () => {
+    const mongooseSchema = new mongoose.Schema({
+      child: {
+        type: Map,
+        of: { somePath: String },
+      },
+    });
+
+    class TestPassthroughWhatIsItMAPDirect {
+      @prop({ type: () => new Passthrough({ type: Map, of: { somePath: String } }, true) })
+      public child?: Map<string, { somePath: string }>;
+    }
+
+    const typegooseSchema = buildSchema(TestPassthroughWhatIsItMAPDirect);
+
+    const mongooseChildPath = mongooseSchema.path('child');
+    const typegooeChildPath = typegooseSchema.path('child');
+
+    expect(mongooseChildPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+    expect(typegooeChildPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+
+    const mongooseChildMapType = mongooseChildPath['$__schemaType'];
+    const typegooseChildMapType = typegooeChildPath['$__schemaType'];
+
+    expect(mongooseChildMapType).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+    expect(typegooseChildMapType).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+
+    expect(mongooseChildMapType.schema).toBeInstanceOf(mongoose.Schema);
+    expect(typegooseChildMapType.schema).toBeInstanceOf(mongoose.Schema);
+
+    expect(mongooseChildMapType.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect(typegooseChildMapType.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
   });
 });
 

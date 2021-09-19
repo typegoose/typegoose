@@ -164,9 +164,16 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   // do this early, because the other options (enum, ref, refPath, discriminators) should not matter for this one
   if (Type instanceof Passthrough) {
-    logger.debug('Type is "instanceof Passthrough" ("%s.%s", %s)', name, key, propKind);
+    logger.debug('Type is "instanceof Passthrough" ("%s.%s", %s, direct: %s)', name, key, propKind, Type.direct);
     // this is because the check above narrows down the type, which somehow is not compatible
     const newType: any = Type.raw;
+
+    if (Type.direct) {
+      schemaProp[key] = newType;
+
+      return;
+    }
+
     switch (propKind) {
       case WhatIsIt.ARRAY:
         // TODO: somehow this does not work, see https://github.com/Automattic/mongoose/issues/10750
