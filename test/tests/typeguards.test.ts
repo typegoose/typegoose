@@ -169,6 +169,7 @@ describe('isRefType / isRefTypeArray', () => {
         nestedString: await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType' }),
       });
 
+      expect(isRefType(doc.nestedString, String)).toStrictEqual(false);
       doc.depopulate('nestedString');
 
       expect(doc.nestedString).not.toBeUndefined();
@@ -185,6 +186,7 @@ describe('isRefType / isRefTypeArray', () => {
         nestedObjectId: await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() }),
       });
 
+      expect(isRefType(doc.nestedObjectId, mongoose.Types.ObjectId)).toStrictEqual(false);
       doc.depopulate('nestedObjectId');
 
       expect(doc.nestedObjectId).not.toBeUndefined();
