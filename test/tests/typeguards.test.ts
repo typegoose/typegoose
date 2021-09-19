@@ -1,7 +1,6 @@
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose';
 import {
-  IsRefType,
   IsRefTypeArrayModel,
   IsRefTypeModel,
   IsRefTypeNestedObjectIdModel,
@@ -168,7 +167,8 @@ describe('isRefType / isRefTypeArray', () => {
     it('should guarantee the RefType - String', async () => {
       const doc = await IsRefTypeModel.create({
         nestedString: await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType' }),
-      } as IsRefType);
+      });
+
       doc.depopulate('nestedString');
 
       expect(doc.nestedString).not.toBeUndefined();
@@ -183,7 +183,8 @@ describe('isRefType / isRefTypeArray', () => {
     it('should guarantee the RefType - ObjectId', async () => {
       const doc = await IsRefTypeModel.create({
         nestedObjectId: await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() }),
-      } as IsRefType);
+      });
+
       doc.depopulate('nestedObjectId');
 
       expect(doc.nestedObjectId).not.toBeUndefined();
