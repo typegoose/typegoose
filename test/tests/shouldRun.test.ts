@@ -596,7 +596,7 @@ describe('test the Passthrough class', () => {
       somethingExtra: { type: { someExtraPath: [String] } },
     });
 
-    class SomeTestClass {
+    class PassthroughWhatIsItNONE {
       @prop({ type: () => new Passthrough({ somePath: String }) })
       public something?: { somePath: string };
 
@@ -604,7 +604,7 @@ describe('test the Passthrough class', () => {
       public somethingExtra?: { someExtraPath: string[] };
     }
 
-    const typegooseSchema = buildSchema(SomeTestClass);
+    const typegooseSchema = buildSchema(PassthroughWhatIsItNONE);
     const typegooseSomethingPath = typegooseSchema.path('something');
     const typegooseSomethingExtraPath = typegooseSchema.path('somethingExtra');
     const mongooseSomethingPath = mongooseSchema.path('something');
@@ -613,6 +613,9 @@ describe('test the Passthrough class', () => {
     // Since mongoose 6.0, this results in an actual Schema, see https://github.com/Automattic/mongoose/issues/7181
     expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
     expect(typegooseSomethingExtraPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+
+    expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+    expect(mongooseSomethingExtraPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
 
     /** Type to shorten using another type */
     type SubDocumentAlias = mongoose.Schema.Types.Subdocument;
@@ -637,6 +640,54 @@ describe('test the Passthrough class', () => {
     // expect((somethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toMatchObject(
     //   (alsoSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')
     // );
+  });
+
+  // currently does not work, see https://github.com/Automattic/mongoose/issues/10750
+  it.skip('should make use of the "Passthrough" class (WhatIsIt.ARRAY)', () => {
+    const mongooseSchema = new mongoose.Schema({
+      something: [{ type: { somePath: String } }],
+    });
+
+    class PassthroughWhatIsItARRAY {
+      @prop({ type: () => new Passthrough({ somePath: String }) })
+      public something?: [{ somePath: string }];
+    }
+
+    const typegooseSchema = buildSchema(PassthroughWhatIsItARRAY);
+    const typegooseSomethingPath = typegooseSchema.path('something');
+    const mongooseSomethingPath = mongooseSchema.path('something');
+
+    console.log(
+      'test1',
+      typegooseSomethingPath instanceof mongoose.Schema.Types.Array,
+      typegooseSomethingPath instanceof mongoose.Schema.Types.DocumentArray
+    );
+    expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+  });
+
+  it('should make use of the "Passthrough" class (WhatIsIt.MAP)', () => {
+    const spyWarn = jest.spyOn(logger, 'warn').mockImplementation(() => void 0);
+    const mongooseSchema = new mongoose.Schema({
+      something: {
+        type: Map,
+        of: { type: { somePath: String } },
+      },
+    });
+
+    class PassthroughWhatIsItMAP {
+      @prop({ type: () => new Passthrough({ somePath: String }) })
+      public something?: Map<string, { somePath: string }>;
+    }
+
+    const typegooseSchema = buildSchema(PassthroughWhatIsItMAP);
+    const typegooseSomethingPath = typegooseSchema.path('something');
+    const mongooseSomethingPath = mongooseSchema.path('something');
+
+    expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+    expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+    expect(spyWarn).toHaveBeenCalledTimes(1);
+    expect(spyWarn.mock.calls).toMatchSnapshot();
   });
 });
 

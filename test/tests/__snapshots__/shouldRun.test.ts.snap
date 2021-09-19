@@ -30,3 +30,14 @@ Look here for how to disable this message: https://typegoose.github.io/typegoose
   ],
 ]
 `;
+
+exports[`test the Passthrough class should make use of the "Passthrough" class (WhatIsIt.MAP) 1`] = `
+Array [
+  Array [
+    "Setting \\"Mixed\\" for property \\"%s.%s\\"
+Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
+    "PassthroughWhatIsItMAP",
+    "something",
+  ],
+]
+`;
