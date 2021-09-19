@@ -450,7 +450,6 @@ export function mapOptions(
       logger.info('Converting "%s" to mongoose Type', loggerTypeName);
       Type = mongoose.Schema.Types[loggerTypeName];
 
-      /* istanbul ignore next */
       if (Type === mongoose.Schema.Types.Mixed) {
         warnMixed(target, pkey);
       }
