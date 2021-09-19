@@ -1,3 +1,32 @@
+## [9.0.0-beta.10](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.9...v9.0.0-beta.10) (2021-09-19)
+
+
+### Features
+
+* **typegoose:** add option to use "Passthrough" directly (no "type" property inbetween) ([7379810](https://github.com/typegoose/typegoose/commit/73798104c8865e80ababba1663946fda6fefdb11))
+
+
+### Dependencies
+
+* **@semantic-release/git:** upgrade to 9.0.1 ([d2caa84](https://github.com/typegoose/typegoose/commit/d2caa847f705d077ea6bdc0a4be409010f08071f))
+* **@types/lodash:** upgrade to 4.14.173 ([43496aa](https://github.com/typegoose/typegoose/commit/43496aaf5e0d54f123370ed8e96db36b17e298f2))
+* **@typescript-eslint/*:** upgrade to 4.31.1 ([214f825](https://github.com/typegoose/typegoose/commit/214f8253720e6152efd410d5b7562143faf56350))
+* **jest:** upgrade to 27.2.0 ([b5572dd](https://github.com/typegoose/typegoose/commit/b5572dd33b7a2291043f50b0af8b254820e456c3))
+* **prettier:** upgrade to 2.4.1 ([7c08b76](https://github.com/typegoose/typegoose/commit/7c08b76987a19fe9143fade680b948d7248c501e))
+* **typescript:** upgrade to 4.4.3 ([fed16aa](https://github.com/typegoose/typegoose/commit/fed16aaabc666821e825b25a226c556940cee76f))
+
+
+### Fixes
+
+* **globalOptions:** export function "mapValueToSeverity" to be used in tests ([6b77dd7](https://github.com/typegoose/typegoose/commit/6b77dd7b80ec37a295c64e513d8a2b28203f7e9e))
+
+
+### Style
+
+* **processProp:** add warning when using "Passthrough" on WhatIsIt.ARRAY ([0366fb8](https://github.com/typegoose/typegoose/commit/0366fb8785170ade951d01618b66f2d86d06d1f0))
+* **typegoose:** add comment for "for of Map" ([a4200b8](https://github.com/typegoose/typegoose/commit/a4200b8e9c2d59dd2922ec99f53be0c2359a14cf))
+* **utils:** remove "instanbul-ignore" ([ac5184a](https://github.com/typegoose/typegoose/commit/ac5184ad5f9851ab1eae30b9e567b9f6902f7003))
+
 ## [9.0.0-beta.9](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.8...v9.0.0-beta.9) (2021-09-18)
 
 
