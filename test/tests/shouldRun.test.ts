@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
-import { DecoratorKeys } from '../../src/internal/constants';
+import { mapValueToSeverity } from '../../src/globalOptions';
+import { DecoratorKeys, Severity } from '../../src/internal/constants';
 import { assertion, assignMetadata, createArrayFromDimensions, getName, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 import {
@@ -768,4 +769,18 @@ it('should allow creating a property named "id" [typegoose#476]', async () => {
 
   // Add many options, to ensure that the "id" virtual does actually not exist
   expect(doc.toObject({ virtuals: true, getters: true, aliases: true })).toMatchSnapshot({ _id: expect.any(mongoose.Types.ObjectId) });
+});
+
+describe('tests for "mapValueToSeverity"', () => {
+  it('should map string to enum (mapValueToSeverity)', () => {
+    expect(mapValueToSeverity(0)).toStrictEqual(Severity.ALLOW);
+    expect(mapValueToSeverity(1)).toStrictEqual(Severity.WARN);
+    expect(mapValueToSeverity(2)).toStrictEqual(Severity.ERROR);
+  });
+
+  it('should map number to enum (mapValueToSeverity)', () => {
+    expect(mapValueToSeverity('ALLOW')).toStrictEqual(Severity.ALLOW);
+    expect(mapValueToSeverity('WARN')).toStrictEqual(Severity.WARN);
+    expect(mapValueToSeverity('ERROR')).toStrictEqual(Severity.ERROR);
+  });
 });
