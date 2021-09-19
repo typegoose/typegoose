@@ -19,6 +19,7 @@ import {
 import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import * as utils from '../../src/internal/utils';
+import { mapValueToSeverity } from '../../src/globalOptions';
 
 beforeEach(() => {
   jest.restoreAllMocks();
@@ -677,6 +678,17 @@ it('should throw a Error when "ref" is a array [OptionRefDoesNotSupportArraysErr
     fail('Expected to throw "OptionRefDoesNotSupportArraysError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.OptionRefDoesNotSupportArraysError);
+    expect(err.message).toMatchSnapshot();
+  }
+});
+
+it('should throw a Error when "mapValueToSeverity" gets called but is not in "Severity" [Error]', () => {
+  try {
+    mapValueToSeverity(-1);
+
+    fail('Expected to throw "Error"');
+  } catch (err) {
+    expect(err).toBeInstanceOf(Error);
     expect(err.message).toMatchSnapshot();
   }
 });

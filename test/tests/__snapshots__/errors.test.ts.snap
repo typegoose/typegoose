@@ -28,6 +28,8 @@ exports[`should fail when using String-Enum on an Number Type [NotNumberTypeErro
   Encountered with property: \\"One.string\\""
 `;
 
+exports[`should throw a Error when "mapValueToSeverity" gets called but is not in "Severity" [Error] 1`] = `"\\"value\\" is not in range of \\"Severity\\"! (got: -1)"`;
+
 exports[`should throw a Error when "ref" is a array [OptionRefDoesNotSupportArraysError] 1`] = `"Prop-Option \\"ref\\" does not support Arrays! (got \\"1\\" dimensions, for property \\"TestOptionRefDoesNotSupportArraysError.nested\\") [E021]"`;
 
 exports[`should throw a Error when the property is a Symbol [CannotBeSymbolError] 1`] = `"A property key in Typegoose cannot be an symbol! (\\"TestPropertySymbol.Symbol()\\") [E024]"`;
