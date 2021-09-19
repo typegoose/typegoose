@@ -197,6 +197,15 @@ describe('isRefType / isRefTypeArray', () => {
         fail('Expected isRefType to be returning true');
       }
     });
+
+    it('should return "false" if all other fail', async () => {
+      const obj = { hello: String };
+      expect(isDocument(obj)).toStrictEqual(false);
+      expect(
+        // @ts-expect-error "Array" is not a supported type for param2, but is used to test the fallback-case
+        isRefType(obj, Array)
+      ).toStrictEqual(false);
+    });
   });
 
   describe('isRefTypeArray', () => {
