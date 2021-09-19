@@ -50,8 +50,9 @@ export function parseENV(): void {
  * mapValueToSeverity(1) === 1
  * ```
  * @param value The value to check for
+ * @internal
  */
-function mapValueToSeverity(value: string | number): Severity {
+export function mapValueToSeverity(value: string | number): Severity {
   assertion(value in Severity, new Error(`"value" is not in range of "Severity"! (got: ${value})`));
 
   if (typeof value === 'number') {
