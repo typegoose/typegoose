@@ -59,4 +59,4 @@ module.exports = {
 
 ### prop on get & set
 
-`@prop` cannot be applied to `get` & `set` (ES6), because virtuals do not accept options & schema.loadClass wouldn't load these.
+`@prop` cannot be applied to `get` & `set` (ES6), because virtuals do not accept options & [`schema.loadClass`](https://mongoosejs.com/docs/advanced_schemas.html#creating-from-es6-classes-using-loadclass) wouldn't load these.
