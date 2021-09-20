@@ -7,6 +7,17 @@ Typegoose supports mongoose plugins. Here's how to use some common plugins:
 
 ## mongoose-autopopulate
 
+Last updated for:
+
+```txt
+@typegoose/typegoose@9.0.0-beta.10
+mongoose-autopopulate@0.14.0
+```
+
+```bash npm2yarn
+npm install --save mongoose-autopopulate
+```
+
 Typegoose has the prop option `autopopulate` implemented, but it only has an effect, if [`mongoose-autopopulate`](https://github.com/mongodb-js/mongoose-autopopulate) is installed and used too.
 
 ```ts
@@ -57,6 +68,17 @@ class SomeClass {
 
 ## mongoose-findorcreate
 
+Last updated for:
+
+```txt
+@typegoose/typegoose@9.0.0-beta.10
+mongoose-findorcreate@3.0.0
+```
+
+```bash npm2yarn
+npm install --save mongoose-findorcreate
+```
+
 Typegoose has a default class for `mongoose-findorcreate` that has all the types it needs. Here's how to use it:
 
 ```ts
@@ -84,7 +106,18 @@ const SomeClassModel = getModelForClass(SomeClass);
 
 ## mongoose-sequence
 
-To use [mongoose-sequence](https://github.com/ramiel/mongoose-sequence), import the plugin and use it like this:
+Last updated for:
+
+```txt
+@typegoose/typegoose@7.1.0
+mongoose-sequence@5.0.0
+```
+
+```bash npm2yarn
+npm install --save mongoose-sequence
+```
+
+To use [`mongoose-sequence`](https://github.com/ramiel/mongoose-sequence), import the plugin and use it like this:
 
 ```ts
 import AutoIncrementFactory from 'mongoose-sequence';
@@ -110,6 +143,17 @@ class SomeClass extends defaultClasses.Base<number> {
 For more details, see [this issue](https://github.com/ramiel/mongoose-sequence/issues/83).
 
 ## @typegoose/auto-increment
+
+Last updated for:
+
+```txt
+@typegoose/typegoose@8.3.0
+@typegoose/auto-increment@0.9.0
+```
+
+```bash npm2yarn
+npm install --save @typegoose/auto-increment
+```
 
 The Typegoose project provides an [`auto-increment` plugin](https://github.com/typegoose/auto-increment) for Mongoose. Here is how to use it:
 
