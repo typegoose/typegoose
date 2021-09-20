@@ -30,9 +30,15 @@ class Cat extends Animal {
   public nameTag!: string;
 }
 
+class Parrot extends Animal {
+  @prop()
+  public commonMessage?: string;
+}
+
 const AnimalModel = getModelForClass(Animal);
 const DogModel = getModelForClass(Dog);
 const CatModel = getModelForClass(Cat);
+const ParrotModel = getModelForClass(Parrot);
 ```
 
 and then in some querying code:
@@ -41,10 +47,10 @@ and then in some querying code:
 await CatModel.create({ patientNumber: 0, nameTag: "Catty-1" });
 await DogModel.create({ patientNumber: 1, cageNumber: 1 });
 
-// for this example its an "findOne" to lower the example code
+// for this example its a "findOne" to lower the example code
 const found = await ParrotModel.findOne({}).exec();
 
-// this will find should log one of the 2 created above
+// this will "find" should log one of the 2 created above
 console.log("found", found);
 ```
 
