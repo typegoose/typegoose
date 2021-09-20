@@ -106,9 +106,9 @@ Like `public: string[]` is in reflection only `Array`.
 
 ### Requirements
 
-- TypeScript version `^4.3` (since 8.0) is recommended, though older ones may also work
+- TypeScript version `^4.4` (since 9.0) is recommended, though older ones may also work
 - NodeJS `^12.22.0`
-- Mongoose `~5.13.8`
+- Mongoose `~6.0.1`
 - A IDE that supports TypeScript linting is recommended to be used (VSCode is recommended)
 - This Guide expects you to know how Mongoose (or at least its models) works
 - `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
@@ -120,16 +120,10 @@ tsconfig option `emitDecoratorMetadata` is not strictly requierd, look [here](./
 
 ### Install
 
-```sh
-npm i -s @typegoose/typegoose # install typegoose itself
+```bash npm2yarn
+npm install --save @typegoose/typegoose # install typegoose itself
 
-npm i -s mongoose # install peer-dependency mongoose
-```
-
-```sh
-yarn add @typegoose/typegoose # install typegoose itself
-
-yarn add mongoose # install peer-dependency mongoose
+npm install --save mongoose # install peer-dependency mongoose
 ```
 
 ### How to use Typegoose
