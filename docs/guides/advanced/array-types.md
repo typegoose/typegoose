@@ -15,7 +15,7 @@ Example:
 ```ts
 class ModelClass {
   // required field, with empty array by default.
-  @prop({ required: true, default: [] })
+  @prop({ type: String, required: true, default: [] })
   public field!: mongoose.Types.Array<string>;
 }
 ```
