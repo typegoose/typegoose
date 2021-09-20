@@ -3,7 +3,21 @@ id: using-with-deepkit-type
 title: 'Using with @deepkit/type'
 ---
 
+Last updated for:
+
+```txt
+@typegoose/typegoose@9.0.0-beta.10
+@deepkit/core@1.0.1-alpha.52
+@deepkit/type@1.0.1-alpha.56
+```
+
+---
+
 This guide shows how to use `typegoose` with `@deepkit/type`.
+
+```bash npm2yarn
+npm install --save @deepkit/core@~1.0.1-alpha.52 @deepkit/type@~1.0.1-alpha.56
+```
 
 ## Implementation
 

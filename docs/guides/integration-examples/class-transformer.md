@@ -3,7 +3,20 @@ id: using-with-class-transformer
 title: 'Using with class-transformer'
 ---
 
+Last updated for:
+
+```txt
+@typegoose/typegoose@9.0.0-beta.10
+class-transformer@0.4.0
+```
+
+---
+
 This guide shows how to use `typegoose` with `class-transformer`.
+
+```bash npm2yarn
+npm install --save class-transformer@~0.4.0
+```
 
 ## Implementation
 
