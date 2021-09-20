@@ -13,16 +13,20 @@ All properties provided are just types to show which are available from Mongoose
 
 The `TimeStamps` class provides the following fields:
 
-- `createdAt`: Date
-- `updatedAt`: Date
+| Field Name  |  Type  |
+| :---------: | :----: |
+| `createdAt` | `Date` |
+| `updatedAt` | `Date` |
 
 ### Base
 
 The Base Class provides the following fields:
 
-- `_id`: ObjectId
-- `__v`: number
-- `__t`: undefined \| string \| number
+| Field Name |             Type              |
+| :--------: | :---------------------------: |
+|   `_id`    |   `mongoose.Types.ObjectId`   |
+|   `__v`    |           `number`            |
+|   `__t`    | undefined \| string \| number | <!--This has to not be a inline-block, because docusaurus does not like " | "--> |
 
 How to override `_id` type:  
 <sub>This only works with typegoose 6.0.2+</sub>
@@ -33,7 +37,7 @@ class Something extends Base<mongoose.Schema.Type.String> {} // _id is now of ty
 
 ### FindOrCreate
 
-This class provides all the types supplied by the plugin `mongoose-findOrCreate`.
+This class provides all the types supplied by the plugin [`mongoose-findorcreate`](./integration-examples/common-plugins.md#mongoose-findorcreate).
 
 :::note
 This class should only be used, if the plugin is used too
