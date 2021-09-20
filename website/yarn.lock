@@ -1406,6 +1406,13 @@
   dependencies:
     prop-types "^15.6.2"
 
+"@docusaurus/remark-plugin-npm2yarn@^2.0.0-beta.6":
+  version "2.0.0-beta.6"
+  resolved "https://registry.yarnpkg.com/@docusaurus/remark-plugin-npm2yarn/-/remark-plugin-npm2yarn-2.0.0-beta.6.tgz#233a69867fbc8b23a0da2eb25e5acecb31e12913"
+  integrity sha512-R617/fZdXiFDK/aMQJ2hUUNcIp2u5Oj0mezRRE+7IB/jLkszRoaERclQPzVd5TWGYl8QkRZCI7ZGhz2VWYmEqg==
+  dependencies:
+    npm-to-yarn "^1.0.1"
+
 "@docusaurus/theme-classic@2.0.0-beta.6":
   version "2.0.0-beta.6"
   resolved "https://registry.yarnpkg.com/@docusaurus/theme-classic/-/theme-classic-2.0.0-beta.6.tgz#4ae476e90cf875bb13eba5daedbd71d0cfdd8194"
@@ -5856,6 +5863,11 @@ npm-run-path@^4.0.1:
   integrity sha512-S48WzZW777zhNIrn7gxOlISNAqi9ZC/uQFnRdbeIHhZhCA6UqpkOT8T1G7BvfdgP4Er8gF4sUbaS0i7QvIfCWw==
   dependencies:
     path-key "^3.0.0"
+
+npm-to-yarn@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/npm-to-yarn/-/npm-to-yarn-1.0.1.tgz#6cdb95114c4ff0be50a7a2381d4d16131a5f52df"
+  integrity sha512-bp8T8oNMfLW+N/fE0itFfSu7RReytwhqNd9skbkfHfzGYC+5CCdzS2HnaXz6JiG4AlK2eA0qlT6NJN1SoFvcWQ==
 
 nprogress@^0.2.0:
   version "0.2.0"
