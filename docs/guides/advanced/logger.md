@@ -3,7 +3,7 @@ id: logger
 title: 'Typegoose Logger'
 ---
 
-Typegoose uses `loglevel` to make some soft-errors and for debugging.
+Typegoose uses [`loglevel`](https://www.npmjs.com/package/loglevel) to make some soft-errors and for debugging.
 
 ## Set the LogLevel
 
@@ -22,11 +22,13 @@ To set the loglevel of Typegoose:
 import { setLogLevel, LogLevels } from '@typegoose/typegoose';
 
 setLogLevel(LogLevels.SILENT);
+// or
+setLogLevel("SILENT");
 ```
 
 ## Enable Debug Logger
 
-The logger enable function needs to be placed before any other imports in the project entry file, because all decorators on an class are executed on the context level they are on (commonly the module root)
+The import and call of `setLogLevel` needs to be placed before any other imports of the project entries file, because all decorators on a Class are executed on the context level they are on (commonly the module root).
 
 ```ts
 // Project Entry file
