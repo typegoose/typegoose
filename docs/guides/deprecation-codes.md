@@ -9,8 +9,9 @@ title: 'Deprecation Codes'
 
 `@arrayProp` is deprecated and will be removed in 8.0, use `@prop` instead
 
-deprecated since: `7.2.0`  
-removed since: `8.0.0`
+| Deprecated in | Removed in |
+| :-----------: | :--------: |
+|    `7.2.0`    |  `8.0.0`   |
 
 :::note
 the option `type`(former option `items`) still needs to be defined
@@ -20,8 +21,9 @@ the option `type`(former option `items`) still needs to be defined
 
 `@mapProp` is deprecated and will be removed in 8.0, use `@prop` instead
 
-deprecated since: `7.2.0`  
-removed since: `8.0.0`
+| Deprecated in | Removed in |
+| :-----------: | :--------: |
+|    `7.2.0`    |  `8.0.0`   |
 
 :::note
 the option `type`(former option `of`) still need to be defined
@@ -31,5 +33,6 @@ the option `type`(former option `of`) still need to be defined
 
 PropOptions `of` & `items` & `refType` are deprecated and will be removed in 8.0, use option `type` instead
 
-deprecated since: `7.2.0`  
-removed since: `8.0.0`
+| Deprecated in | Removed in |
+| :-----------: | :--------: |
+|    `7.2.0`    |  `8.0.0`   |
