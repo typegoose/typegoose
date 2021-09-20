@@ -47,8 +47,6 @@ This class should only be used, if the plugin is used too
 
 ## Extra information
 
-Here you can find extra information.
-
 ### Use multiple classes together
 
 Because Typescript & JavaScript don't have functions for multiple inheritance, it can only be achieved by the following
