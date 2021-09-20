@@ -7,7 +7,7 @@ title: 'Reference other Classes'
 
 ## Referencing other Classes
 
-Referencing other Classes is easy as shown by the following example:
+Referencing other Classes can be as easy as shown in the following example:
 
 ```ts
 class Nested {
@@ -16,29 +16,18 @@ class Nested {
 }
 
 class Main {
-  @prop({ ref: Nested }) // for one
+  @prop({ ref: () => Nested }) // for one
   public nested: Ref<Nested>;
 
-  @prop({ ref: Nested }) // for an array of references
+  @prop({ ref: () => Nested }) // for an array of references
   public nestedArray: Ref<Nested>[];
 }
 ```
 
-Since 7.1.0, you can also use arrow-functions to return the type:
-
-```ts
-class Nested {
-  @prop()
-  public someNestedProperty: string;
-}
-
-class Main {
-  @prop({ ref: () => Nested })
-  public nested: Ref<Nested>;
-}
-```
-
-This is useful, if the class is either defined *after* the current class, or will otherwise be `undefined` and without hardcoding strings.
+:::note
+Options `ref` and `type` can both also be defined without `() =>`, but is generally recommended to be used with.  
+If `() =>` is not used, there can be problems when the class (/ variable) is defined *after* the decorator that requires it.
+:::
 
 ### Reference other classes with different _id type
 
@@ -65,7 +54,8 @@ By default typegoose sets the default for the option `type` (if not defined) to 
 
 :::note
 The generic-parameter `IDType` from `Ref` is not automatically inferred from the generic-parameter `Class` yet (may be in the future)  
-The option `type` is not automatically inferred at runtime, because this could cause more "Circular Dependency" issues
+The option `type` is not automatically inferred at runtime, because this could cause more "Circular Dependency" issues.  
+See [Common Problems](#common-problems) for more.
 :::
 
 ## Common Problems
