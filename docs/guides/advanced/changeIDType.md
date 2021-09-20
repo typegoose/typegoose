@@ -16,7 +16,7 @@ class SomeChangedID {
 When the type is manually set (having an `@prop`, even for `ObjectId`), then the value need to be always defined before saving, or using the [`default`](../../api/decorators/prop.md#default) option
 :::
 
-To disable the `_id` field altogether (useful in arrays of subdocuments), add option [`@prop({ _id: false })`](api/decorators/prop.md#_id) or on the subdocument class [`@modelOptions({ schemaOptions: { _id: false } })`](https://mongoosejs.com/docs/guide.html#_id).
+To disable the `_id` field altogether (useful in arrays of subdocuments), add option [`@prop({ _id: false })`](api/decorators/prop.md#_id) or on the subdocument class [`@modelOptions({ schemaOptions: { _id: false } })`](https://mongoosejs.com/docs/guide.html#_id) (This option has no effect when the class / schema is the root schema).
 
 ```ts
 @modelOptions({ schemaOptions: { _id: false } }) // either with the schema option
