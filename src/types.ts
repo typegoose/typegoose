@@ -51,7 +51,6 @@ export type DynamicStringFunc<T extends AnyParamConstructor<any>> = (doc: Docume
  *
  * Example: `index` is directly from mongoose, where as `type` is from typegoose
  */
-// TODO: when "@inheritDoc" becomes working, change all "Copied from mongoose"
 export interface BasePropOptions {
   /**
    * include this value?
@@ -302,7 +301,6 @@ export interface TransformStringOptions {
   trim?: mongoose.SchemaTypeOptions<any>['trim'];
 }
 
-// TODO: when "@inheritDoc" becomes working, change all "Copied from mongoose"
 export interface VirtualOptions {
   /** Reference another Document (Ref<T> should be used as property type) */
   ref: NonNullable<BasePropOptions['ref']>;
