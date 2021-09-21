@@ -1,3 +1,32 @@
+## [9.0.0-beta.11](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.10...v9.0.0-beta.11) (2021-09-21)
+
+
+### Features
+
+* **errors:** add error "StringLengthExpectedError" as "E026", merge "E015" and "E022" into "E026" ([92be716](https://github.com/typegoose/typegoose/commit/92be71618f58d950fafbafcdcbe972e8bafd32c7))
+* **processProp:** merge Error "E008" into "E026" ([3469a22](https://github.com/typegoose/typegoose/commit/3469a22e847d1ad4833b8bf263c759018e9a1224))
+* **utils::mergeMetadata:** change custom error to use "StringLengthExpectedError" ([9ad3013](https://github.com/typegoose/typegoose/commit/9ad30133a5967fe2b889c00ad1e97314a03f6401))
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 27.0.2 ([257ce66](https://github.com/typegoose/typegoose/commit/257ce667bfe8782f716230fece5365f03577b5ca))
+* **@typescript-eslint/*:** upgrade to 4.31.2 ([b5e2bce](https://github.com/typegoose/typegoose/commit/b5e2bceb8b8bdc1429f988dda25089c6ef616f6b))
+* **jest:** upgrade to 27.2.1 ([5f0c7fd](https://github.com/typegoose/typegoose/commit/5f0c7fd2c29c30a522fe83c412b8fdb13fcbedc1))
+* **mongodb-memory-server:** upgrade to 7.4.1 ([41cee76](https://github.com/typegoose/typegoose/commit/41cee76945ea6e5549705cb6b726e9ea4c8e3152))
+* **mongoose:** upgrade to 6.0.7 ([4cb5b2f](https://github.com/typegoose/typegoose/commit/4cb5b2f1523329499de36a47a09d6a1abd5c0f0c))
+
+
+### Refactor
+
+* **processProp:** remove unnecessary object creation & spreads ([1c36776](https://github.com/typegoose/typegoose/commit/1c36776912d3e752f8a1125e7108e11b20fde7aa))
+
+
+### Style
+
+* **types:** remove TODO's that probably never happen ([e9926c0](https://github.com/typegoose/typegoose/commit/e9926c0dea8cc9a1addcc0a54536c67621fb2c66))
+* **utils:** remove "instanbul-ignore" for tested path ([f1d9dc9](https://github.com/typegoose/typegoose/commit/f1d9dc99ffd8885a0afcd7e104775943a193277f))
+
 ## [9.0.0-beta.10](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.9...v9.0.0-beta.10) (2021-09-19)
 
 
