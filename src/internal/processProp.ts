@@ -184,7 +184,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
           key
         );
         schemaProp[key] = {
-          ...schemaProp[key][0],
           ...utils.mapArrayOptions(rawOptions, newType, target, key),
         };
 
@@ -193,7 +192,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         const mapped = utils.mapOptions(rawOptions, newType, target, key);
 
         schemaProp[key] = {
-          ...schemaProp[key],
           ...mapped.outer,
           type: Map,
           of: { type: newType, ...mapped.inner },
@@ -202,7 +200,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         return;
       case WhatIsIt.NONE:
         schemaProp[key] = {
-          ...schemaProp[key],
           ...rawOptions,
           type: newType,
         };
@@ -223,13 +220,11 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     switch (propKind) {
       case WhatIsIt.ARRAY:
         schemaProp[key] = {
-          ...schemaProp[key][0],
           ...utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { ref }),
         };
         break;
       case WhatIsIt.NONE:
         schemaProp[key] = {
-          ...schemaProp[key],
           type: refType,
           ref,
           ...rawOptions,
@@ -239,7 +234,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         const mapped = utils.mapOptions(rawOptions, refType, target, key);
 
         schemaProp[key] = {
-          ...schemaProp[key],
           ...mapped.outer,
           type: Map,
           of: {
@@ -268,13 +262,11 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     switch (propKind) {
       case WhatIsIt.ARRAY:
         schemaProp[key] = {
-          ...schemaProp[key][0],
           ...utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { refPath }),
         };
         break;
       case WhatIsIt.NONE:
         schemaProp[key] = {
-          ...schemaProp[key],
           type: refType,
           refPath,
           ...rawOptions,
@@ -392,7 +384,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     switch (propKind) {
       case WhatIsIt.ARRAY:
         schemaProp[key] = {
-          ...schemaProp[key][0],
           ...utils.mapArrayOptions(rawOptions, Type, target, key),
         };
 
@@ -401,7 +392,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         const mapped = utils.mapOptions(rawOptions, Type, target, key);
 
         schemaProp[key] = {
-          ...schemaProp[key],
           ...mapped.outer,
           type: Map,
           of: { type: Type, ...mapped.inner },
@@ -410,7 +400,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         return;
       case WhatIsIt.NONE:
         schemaProp[key] = {
-          ...schemaProp[key],
           ...rawOptions,
           type: Type,
         };
@@ -429,7 +418,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       'if someone can see this message, please open an new issue at https://github.com/typegoose/typegoose/issues with reproduction code for tests'
     );
     schemaProp[key] = {
-      ...schemaProp[key],
       ...rawOptions,
       type: mongoose.Schema.Types.Mixed,
     };
@@ -441,7 +429,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   switch (propKind) {
     case WhatIsIt.ARRAY:
       schemaProp[key] = {
-        ...schemaProp[key][0], // [0] is needed, because "initasArray" adds this (empty)
         ...utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type),
       };
 
@@ -454,7 +441,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         const { type, ...outer } = utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type);
 
         schemaProp[key] = {
-          ...schemaProp[key],
           ...outer,
           type: Map,
           of: type,
@@ -466,7 +452,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       const mapped = utils.mapOptions(rawOptions, virtualSchema, target, key, Type);
 
       schemaProp[key] = {
-        ...schemaProp[key],
         ...mapped.outer,
         type: Map,
         of: { type: virtualSchema, ...mapped.inner },
@@ -475,7 +460,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       return;
     case WhatIsIt.NONE:
       schemaProp[key] = {
-        ...schemaProp[key],
         ...rawOptions,
         type: virtualSchema,
       };

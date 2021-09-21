@@ -11,11 +11,11 @@ This Guide is written for migration from version `8.2.0` to `9.0.0`, for version
 
 ## Requirements changed
 
-- Mongoose `6.0.1` or [higher is now required](#mongoose-60-is-now-supported)
+- Mongoose `6.0.7` or [higher is now required](#mongoose-60-is-now-supported)
 
 ## Mongoose 6.0 is now supported
 
-Mongoose version `6.0.1` (and possibly higher) is now supported, for mongoose specific migration, look at the [6.0 migration guide](https://mongoosejs.com/docs/migrating_to_6.html)
+Mongoose version `6.0.7` (and possibly higher) is now supported, for mongoose specific migration, look at the [6.0 migration guide](https://mongoosejs.com/docs/migrating_to_6.html)
 
 ## Class-transformer transform of "ObjectId" became broken
 
