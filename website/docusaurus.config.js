@@ -10,7 +10,6 @@ module.exports = {
     algolia: {
       apiKey: '2c49a41064ba9b534e8417089c6cde93',
       indexName: 'typegoose',
-      algoliaOptions: {},
     },
     navbar: {
       title: 'typegoose',
