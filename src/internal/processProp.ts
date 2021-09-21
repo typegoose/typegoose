@@ -183,9 +183,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
           name,
           key
         );
-        schemaProp[key] = {
-          ...utils.mapArrayOptions(rawOptions, newType, target, key),
-        };
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, target, key);
 
         return;
       case WhatIsIt.MAP:
@@ -219,9 +217,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        schemaProp[key] = {
-          ...utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { ref }),
-        };
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { ref });
         break;
       case WhatIsIt.NONE:
         schemaProp[key] = {
@@ -261,9 +257,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        schemaProp[key] = {
-          ...utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { refPath }),
-        };
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { refPath });
         break;
       case WhatIsIt.NONE:
         schemaProp[key] = {
@@ -383,9 +377,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        schemaProp[key] = {
-          ...utils.mapArrayOptions(rawOptions, Type, target, key),
-        };
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, Type, target, key);
 
         return;
       case WhatIsIt.MAP:
@@ -428,9 +420,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const virtualSchema = buildSchema(Type);
   switch (propKind) {
     case WhatIsIt.ARRAY:
-      schemaProp[key] = {
-        ...utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type),
-      };
+      schemaProp[key] = utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type);
 
       return;
     case WhatIsIt.MAP:
