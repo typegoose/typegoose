@@ -20,6 +20,7 @@ import {
   OptionRefDoesNotSupportArraysError,
   RefOptionIsUndefinedError,
   SelfContainingClassError,
+  StringLengthExpectedError,
 } from './errors';
 import * as utils from './utils';
 
@@ -255,13 +256,14 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     return;
   }
 
-  const refPath = rawOptions.refPath;
-
-  if (refPath) {
-    // REFACTOR: re-write this to be a Error inside errors.ts
-    utils.assertion(typeof refPath === 'string', new TypeError(`"refPath" for "${name}, ${key}" should be of type String! [E008]`));
-
+  if ('refPath' in rawOptions) {
+    const refPath = rawOptions.refPath;
     delete rawOptions.refPath;
+
+    utils.assertion(
+      typeof refPath === 'string' && refPath.length > 0,
+      new StringLengthExpectedError(1, refPath, `${name}.${key}`, 'refPath')
+    );
 
     switch (propKind) {
       case WhatIsIt.ARRAY:

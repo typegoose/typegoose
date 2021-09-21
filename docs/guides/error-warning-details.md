@@ -85,6 +85,12 @@ When using the `get & set` options, both are required to be specified at the sam
 
 ### refPath must be of type String [E008]
 
+<span class="badge badge--warning">This Error got removed in 9.0.0</span>
+
+:::info
+This Error got merged with [`E026`](#expected-string-to-have-length-e026) in 9.0.0
+:::
+
 Error: `"refPath" for "${name}, ${key}" should be of type String! [E008]`
 
 Details:  
@@ -293,6 +299,7 @@ This Error gets most commonly thrown when:
 
 - [`customName`](../api/decorators/modelOptions.md#customname) is a Function, but the function does not return a String or the returned String does not have the required length.
 - [`customName`](../api/decorators/modelOptions.md#customname) is defined, but is not a String or the defined String does not have the required length.
+- [`refPath`](../api/decorators/prop.md#refpath) is defined, but is not a String or the defined String does not have the required length.
 
 ## Warnings
 

@@ -19,6 +19,7 @@ import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import * as utils from '../../src/internal/utils';
 import { mapValueToSeverity } from '../../src/globalOptions';
+import { BasePropOptions } from '../../src/types';
 
 beforeEach(() => {
   jest.restoreAllMocks();
@@ -291,23 +292,6 @@ describe('tests for "FunctionCalledMoreThanSupportedError"', () => {
 it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
   try {
     utils.mapOptions({}, Error, Error, 'undefined-pkey');
-
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
-});
-
-it('should error if "refPath" is not of type string [TypeError]', () => {
-  try {
-    class TestRefPathError {
-      // @ts-expect-error expect that "refPath" only accepts an "string"
-      @prop({ refPath: 1 })
-      public hello: string;
-    }
-
-    buildSchema(TestRefPathError);
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
@@ -738,6 +722,43 @@ describe('tests for "StringLengthExpectedError"', () => {
         undefined,
         DummyClass
       );
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "processProp" when "refPath" is not a string [StringLengthExpectedError]', () => {
+    try {
+      class TestRefPathString {
+        @prop(
+          // @ts-expect-error "refPath" only accepts strings
+          {
+            refPath: 10,
+          } as BasePropOptions
+        )
+        public test?: string;
+      }
+
+      buildSchema(TestRefPathString);
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "processProp" when "refPath" is a string but does not meet the required length [StringLengthExpectedError]', () => {
+    try {
+      class TestRefPathString {
+        @prop({ refPath: '' })
+        public test?: string;
+      }
+
+      buildSchema(TestRefPathString);
 
       fail('Expected to throw "StringLengthExpectedError"');
     } catch (err) {
