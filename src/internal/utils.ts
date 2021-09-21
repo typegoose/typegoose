@@ -16,7 +16,7 @@ import type {
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
-import { AssertionFallbackError, InvalidWhatIsItError, NoValidClassError } from './errors';
+import { AssertionFallbackError, InvalidWhatIsItError, NoValidClassError, StringLengthExpectedError } from './errors';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -320,14 +320,11 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions
   const customName = customOptions?.options?.customName ?? options.options?.customName;
 
   if (typeof customName === 'function') {
-    const name: any = customName(options);
+    const name = customName(options);
 
-    // REFACTOR: re-write this to be a Error inside errors.ts
     assertion(
       typeof name === 'string' && name.length > 0,
-      new TypeError(
-        `The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`
-      )
+      new StringLengthExpectedError(1, name, baseName, 'options.customName(function)')
     );
 
     return name;
@@ -341,16 +338,14 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions
     return !isNullOrUndefined(suffix) ? `${baseName}_${suffix}` : baseName;
   }
 
-  if (typeof customName === 'string') {
-    if (customName.length <= 0) {
-      // REFACTOR: re-write this to be a Error inside errors.ts
-      throw new TypeError(`"customName" must be a string AND at least one character ("${baseName}") [E015]`);
-    }
-  }
-
   if (isNullOrUndefined(customName)) {
     return baseName;
   }
+
+  assertion(
+    typeof customName === 'string' && customName.length > 0,
+    new StringLengthExpectedError(1, customName, baseName, 'options.customName')
+  );
 
   return customName;
 }

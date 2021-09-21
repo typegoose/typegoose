@@ -10,7 +10,6 @@ import {
   getModelForClass,
   getModelWithString,
   getName,
-  modelOptions,
   Passthrough,
   pre,
   prop,
@@ -303,33 +302,6 @@ describe('tests for "FunctionCalledMoreThanSupportedError"', () => {
       expect(err.message).toMatchSnapshot();
     }
   });
-});
-
-it('should throw when "customName" is used, but length <= 0 [TypeError]', () => {
-  try {
-    @modelOptions({ options: { customName: '' } })
-    class TestCustomNameError {}
-    getName(TestCustomNameError);
-
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
-});
-
-it('should throw when "customName" is a function, but the return value is not a string or an empty string [TypeError]', () => {
-  try {
-    // @ts-expect-error expect that "customname" only accepts an "string"
-    @modelOptions({ options: { customName: () => 1234 } })
-    class TestCustomNameError2 {}
-    getName(TestCustomNameError2);
-
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
 });
 
 it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
@@ -691,4 +663,70 @@ it('should throw a Error when "mapValueToSeverity" gets called but is not in "Se
     expect(err).toBeInstanceOf(Error);
     expect(err.message).toMatchSnapshot();
   }
+});
+
+describe('tests for "StringLengthExpectedError"', () => {
+  class DummyClass {}
+
+  it('should throw a Error in "utils.getName" when "customName" is defined but not a String [StringLengthExpectedError]', () => {
+    try {
+      utils.getName(DummyClass, {
+        options: {
+          // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
+          customName: 10,
+        },
+      });
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "utils.getName" when "customName" is defined but string does not meet the required length [StringLengthExpectedError]', () => {
+    try {
+      utils.getName(DummyClass, {
+        options: {
+          customName: '',
+        },
+      });
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "utils.getName" when "customName" is defined as a function but does not return a String [StringLengthExpectedError]', () => {
+    try {
+      utils.getName(DummyClass, {
+        options: {
+          // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
+          customName: () => 10,
+        },
+      });
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "utils.getName" when "customName" is defined as a function but return does not meet the required length [StringLengthExpectedError]', () => {
+    try {
+      utils.getName(DummyClass, {
+        options: {
+          customName: () => '',
+        },
+      });
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });

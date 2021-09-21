@@ -41,10 +41,6 @@ Please look at https://github.com/typegoose/typegoose/issues/42 for more informa
 
 exports[`should throw default error if no error is specified (assertion) [AssertionFallbackError] 1`] = `"Assert failed - no custom error [E019]"`;
 
-exports[`should throw when "customName" is a function, but the return value is not a string or an empty string [TypeError] 1`] = `"The return type of the function assigned to \\"customName\\" must be a string and must not be empty! (\\"TestCustomNameError2\\") [E022]"`;
-
-exports[`should throw when "customName" is used, but length <= 0 [TypeError] 1`] = `"\\"customName\\" must be a string AND at least one character (\\"TestCustomNameError\\") [E015]"`;
-
 exports[`should throw when "deleteModel" is called with no string [TypeError] 1`] = `"name is not an string! (deleteModel)"`;
 
 exports[`tests for "FunctionCalledMoreThanSupportedError" should throw a Error when "addModelToTypegoose" got called more than once with the same model name [FunctionCalledMoreThanSupportedError] 1`] = `
@@ -97,5 +93,13 @@ exports[`tests for "NotValidModelError" should throw a Error when no valid model
 exports[`tests for "RefOptionIsUndefinedError" should error if "ref" is set to a function, but returns "null" or "undefined" [RefOptionIsUndefinedError] 1`] = `"Prop-Option \\"ref\\"'s value is \\"null\\" or \\"undefined\\" for \\"Main.nested\\" [E005]"`;
 
 exports[`tests for "RefOptionIsUndefinedError" should error if ref is set but is "null" or "undefined" [RefOptionIsUndefinedError] 1`] = `"Prop-Option \\"ref\\"'s value is \\"null\\" or \\"undefined\\" for \\"RefUndefined.someref\\" [E005]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.getName" when "customName" is defined as a function but does not return a String [StringLengthExpectedError] 1`] = `"Expected \\"options.customName(function)\\" to have at least length of \\"1\\" (got: (not-String: \\"10\\"), where: \\"DummyClass\\") [E026]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.getName" when "customName" is defined as a function but return does not meet the required length [StringLengthExpectedError] 1`] = `"Expected \\"options.customName(function)\\" to have at least length of \\"1\\" (got: (String: \\"0\\"), where: \\"DummyClass\\") [E026]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.getName" when "customName" is defined but not a String [StringLengthExpectedError] 1`] = `"Expected \\"options.customName\\" to have at least length of \\"1\\" (got: (not-String: \\"10\\"), where: \\"DummyClass\\") [E026]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.getName" when "customName" is defined but string does not meet the required length [StringLengthExpectedError] 1`] = `"Expected \\"options.customName\\" to have at least length of \\"1\\" (got: (String: \\"0\\"), where: \\"DummyClass\\") [E026]"`;
 
 exports[`tests for "assignMetadata" should error if no valid key is supplied [TypeError] 1`] = `"\\"true\\"(key) is not a string! (mergeMetadata)"`;

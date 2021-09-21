@@ -156,6 +156,12 @@ The Provided Input wasnt a string and didnt have a `.typegooseName` function / s
 
 ### customName must be string and at least one character [E015]
 
+<span class="badge badge--warning">This Error got removed in 9.0.0</span>
+
+:::info
+This Error got merged with [`E026`](#expected-string-to-have-length-e026) in 9.0.0
+:::
+
 Error: `"customName" must be a string AND at least one character ("${baseName}") [E015]`
 
 Details:  
@@ -236,6 +242,12 @@ class ErrorClass {
 
 ### Return type of function assigned to "customName" doesn't return a string or is empty [E022]
 
+<span class="badge badge--warning">This Error got removed in 9.0.0</span>
+
+:::info
+This Error got merged with [`E026`](#expected-string-to-have-length-e026) in 9.0.0
+:::
+
 Error: `The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`
 
 Details:  
@@ -269,6 +281,18 @@ Error: `Expected "${where}" to be a valid mongoose.Model! (got: "${model}") [E02
 
 Details:  
 A Valid instance of `mongoose.Model` was expected at `where`, but was not given a valid model.
+
+### Expected String to have length [E026]
+
+Error: `Expected "${valueName}" to have at least length of "${length}" (got: "${got}", where: "${where}") [E026]`
+
+Details:  
+Expected `valueName` to be a String and have at least the length of `length`, but got length / value `got` at `where`.
+
+This Error gets most commonly thrown when:
+
+- [`customName`](../api/decorators/modelOptions.md#customname) is a Function, but the function does not return a String or the returned String does not have the required length.
+- [`customName`](../api/decorators/modelOptions.md#customname) is defined, but is not a String or the defined String does not have the required length.
 
 ## Warnings
 
