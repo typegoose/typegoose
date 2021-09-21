@@ -102,4 +102,6 @@ exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.ge
 
 exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.getName" when "customName" is defined but string does not meet the required length [StringLengthExpectedError] 1`] = `"Expected \\"options.customName\\" to have at least length of \\"1\\" (got: (String: \\"0\\"), where: \\"DummyClass\\") [E026]"`;
 
-exports[`tests for "assignMetadata" should error if no valid key is supplied [TypeError] 1`] = `"\\"true\\"(key) is not a string! (mergeMetadata)"`;
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.mergeMetadata" when "key" is a string but does not meet the required length [StringLengthExpectedError] 1`] = `"Expected \\"key\\" to have at least length of \\"1\\" (got: (String: \\"0\\"), where: \\"DummyClass\\") [E026]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.mergeMetadata" when "key" is not a string [StringLengthExpectedError] 1`] = `"Expected \\"key\\" to have at least length of \\"1\\" (got: (not-String: \\"undefined\\"), where: \\"DummyClass\\") [E026]"`;

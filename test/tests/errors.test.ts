@@ -240,22 +240,6 @@ describe('tests for "InvalidTypeError"', () => {
   });
 });
 
-describe('tests for "assignMetadata"', () => {
-  it('should error if no valid key is supplied [TypeError]', () => {
-    try {
-      class Dummy {}
-
-      // @ts-expect-error expect that the first argument is in "DecoratorKeys"
-      utils.assignMetadata(true, {}, Dummy);
-
-      fail('Expected to throw "TypeError"');
-    } catch (err) {
-      expect(err).toBeInstanceOf(TypeError);
-      expect(err.message).toMatchSnapshot();
-    }
-  });
-});
-
 it('should throw an error if a self-contained class is used [typegoose#42] [SelfContainingClassError]', () => {
   try {
     class TestSelfContained {
@@ -722,6 +706,38 @@ describe('tests for "StringLengthExpectedError"', () => {
           customName: () => '',
         },
       });
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "utils.mergeMetadata" when "key" is not a string [StringLengthExpectedError]', () => {
+    try {
+      utils.mergeMetadata(
+        // @ts-expect-error "undefined" is not a key in "DecoratorKeys"
+        undefined,
+        undefined,
+        DummyClass
+      );
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "utils.mergeMetadata" when "key" is a string but does not meet the required length [StringLengthExpectedError]', () => {
+    try {
+      utils.mergeMetadata(
+        // @ts-expect-error "" is not a key in "DecoratorKeys"
+        '',
+        undefined,
+        DummyClass
+      );
 
       fail('Expected to throw "StringLengthExpectedError"');
     } catch (err) {

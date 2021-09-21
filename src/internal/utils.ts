@@ -262,8 +262,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamC
  * @internal
  */
 export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): T {
-  // REFACTOR: re-write this to be a Error inside errors.ts
-  assertion(typeof key === 'string', new TypeError(`"${key}"(key) is not a string! (mergeMetadata)`));
+  assertion(typeof key === 'string' && key.length > 0, new StringLengthExpectedError(1, key, getName(cl), 'key'));
   assertionIsClass(cl);
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
