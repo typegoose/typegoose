@@ -10,7 +10,7 @@ Typegoose supports mongoose plugins. Here's how to use some common plugins:
 Last updated for:
 
 ```txt
-@typegoose/typegoose@9.0.0-beta.10
+@typegoose/typegoose@9.0.0
 mongoose-autopopulate@0.14.0
 ```
 
@@ -71,7 +71,7 @@ class SomeClass {
 Last updated for:
 
 ```txt
-@typegoose/typegoose@9.0.0-beta.10
+@typegoose/typegoose@9.0.0
 mongoose-findorcreate@3.0.0
 ```
 

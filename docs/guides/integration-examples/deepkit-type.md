@@ -6,7 +6,7 @@ title: 'Using with @deepkit/type'
 Last updated for:
 
 ```txt
-@typegoose/typegoose@9.0.0-beta.10
+@typegoose/typegoose@9.0.0
 @deepkit/core@1.0.1-alpha.52
 @deepkit/type@1.0.1-alpha.56
 ```
