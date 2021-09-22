@@ -1,3 +1,85 @@
+## [9.0.0](https://github.com/typegoose/typegoose/compare/v8.3.0...v9.0.0) (2021-09-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* Build order for Classes to Schemas is changed to bottom-up, which can affect some environments
+
+Co-authored-by: hasezoey <hasezoey@gmail.com>
+* **mongoose:** Upgrade to Mongoose 6.0.0 (major version upgrade)
+
+### Features
+
+* **errors:** add error "E025", called "NotValidModelError" ([cd88aab](https://github.com/typegoose/typegoose/commit/cd88aab8b256dc3b76da1ff8708e158b574ece15))
+* **errors:** add error "StringLengthExpectedError" as "E026", merge "E015" and "E022" into "E026" ([92be716](https://github.com/typegoose/typegoose/commit/92be71618f58d950fafbafcdcbe972e8bafd32c7))
+* **errors:** create custom error for "E003", called "FunctionCalledMoreThanSupportedError" ([a93651e](https://github.com/typegoose/typegoose/commit/a93651e02ee19367e531f3908df44c8192fcdbdc))
+* **errors:** create custom error for "E005", called "RefOptionIsUndefinedError" ([586c3f2](https://github.com/typegoose/typegoose/commit/586c3f29b93a163a3f58e592f192b9b6c5c851d5))
+* **errors:** create custom error for "E021", called "OptionRefDoesNotSupportArraysError" ([eabadae](https://github.com/typegoose/typegoose/commit/eabadae6da522b0892d46717d8146b68199a9d33))
+* **errors:** rename "CannotBeSymbol" to "CannotBeSymbolError" to match style ([454c23b](https://github.com/typegoose/typegoose/commit/454c23b0d4de4dc95dea48316339c33697ca0c5b))
+* **processProp:** merge Error "E008" into "E026" ([3469a22](https://github.com/typegoose/typegoose/commit/3469a22e847d1ad4833b8bf263c759018e9a1224))
+* **processProp:** remove Error E007 ([928f51d](https://github.com/typegoose/typegoose/commit/928f51df82d8ccc845ecb5bf0c67c66fa61347e7)), closes [typegoose/typegoose#599](https://github.com/typegoose/typegoose/issues/599)
+* **typegoose:** add option to use "Passthrough" directly (no "type" property inbetween) ([7379810](https://github.com/typegoose/typegoose/commit/73798104c8865e80ababba1663946fda6fefdb11))
+* **utils::mergeMetadata:** change custom error to use "StringLengthExpectedError" ([9ad3013](https://github.com/typegoose/typegoose/commit/9ad30133a5967fe2b889c00ad1e97314a03f6401))
+* change build order to bottom-up (when extending classes) ([#243](https://github.com/typegoose/typegoose/issues/243)) ([79977ee](https://github.com/typegoose/typegoose/commit/79977ee675a48fda280be5a10bc9b962721cd5dc))
+* merge errors "E023" into "E013" ([c8ce9b8](https://github.com/typegoose/typegoose/commit/c8ce9b8c36d82f9d23e66d4cdda86cb86567b4fa))
+
+
+### Fixes
+
+* **globalOptions:** export function "mapValueToSeverity" to be used in tests ([6b77dd7](https://github.com/typegoose/typegoose/commit/6b77dd7b80ec37a295c64e513d8a2b28203f7e9e))
+* escape some error message "class.key" ([af9af27](https://github.com/typegoose/typegoose/commit/af9af275bd73de6a226f9b35807bd630b05bcd2e))
+* **utils:** comment out the "deprecate" function, because unsued currently ([ccfbca0](https://github.com/typegoose/typegoose/commit/ccfbca0d12f0f3979bb5b4f77fc20059f1ede594))
+* **utils::getName:** check if "cl" is null or undefined ([6e795e1](https://github.com/typegoose/typegoose/commit/6e795e187a6ac78a9ff790a1144a32b54ccce8df))
+* rename "Schema.Types.Embedded" to "Schema.Types.Subdocument" ([bdbbc9c](https://github.com/typegoose/typegoose/commit/bdbbc9c4f5e7f3e0b0e64136cf63772cf4fca61e))
+
+
+### Dependencies
+
+* **@semantic-release/git:** upgrade to 9.0.1 ([d2caa84](https://github.com/typegoose/typegoose/commit/d2caa847f705d077ea6bdc0a4be409010f08071f))
+* **@types/jest:** upgrade to 27.0.2 ([257ce66](https://github.com/typegoose/typegoose/commit/257ce667bfe8782f716230fece5365f03577b5ca))
+* **@types/lodash:** upgrade to 4.14.173 ([43496aa](https://github.com/typegoose/typegoose/commit/43496aaf5e0d54f123370ed8e96db36b17e298f2))
+* **@typescript-eslint/*:** upgrade to 4.30.0 ([85eb727](https://github.com/typegoose/typegoose/commit/85eb727a171033349c2156083b95dd236349def0))
+* **@typescript-eslint/*:** upgrade to 4.31.1 ([214f825](https://github.com/typegoose/typegoose/commit/214f8253720e6152efd410d5b7562143faf56350))
+* **@typescript-eslint/*:** upgrade to 4.31.2 ([b5e2bce](https://github.com/typegoose/typegoose/commit/b5e2bceb8b8bdc1429f988dda25089c6ef616f6b))
+* **eslint-plugin-prettier:** upgrade to 4.0.0 ([643f4e0](https://github.com/typegoose/typegoose/commit/643f4e01cd440d85f40f4ed4c24c6772b3cb27d3))
+* **husky:** upgrade to 7.0.2 ([1759907](https://github.com/typegoose/typegoose/commit/17599075436d4b3acf00c05d6598eb18a29a6b67))
+* **jest:** upgrade to 27.1.0 ([ea94f98](https://github.com/typegoose/typegoose/commit/ea94f9821b38444989662f9dd85882c33b5448be))
+* **jest:** upgrade to 27.2.0 ([b5572dd](https://github.com/typegoose/typegoose/commit/b5572dd33b7a2291043f50b0af8b254820e456c3))
+* **jest:** upgrade to 27.2.1 ([5f0c7fd](https://github.com/typegoose/typegoose/commit/5f0c7fd2c29c30a522fe83c412b8fdb13fcbedc1))
+* **mongodb-memory-server:** upgrade to 7.4.0 ([1b51547](https://github.com/typegoose/typegoose/commit/1b5154762409e4f58c77468f4d440265c8f2a856))
+* **mongodb-memory-server:** upgrade to 7.4.1 ([41cee76](https://github.com/typegoose/typegoose/commit/41cee76945ea6e5549705cb6b726e9ea4c8e3152))
+* **mongoose:** upgrade to 6.0.7 ([4cb5b2f](https://github.com/typegoose/typegoose/commit/4cb5b2f1523329499de36a47a09d6a1abd5c0f0c))
+* **mongoose:** upgrade to version 6.0.1 ([bc6fa61](https://github.com/typegoose/typegoose/commit/bc6fa612bc7fe902140f6f6a8b05a306716fc372))
+* **prettier:** upgrade to 2.4.1 ([7c08b76](https://github.com/typegoose/typegoose/commit/7c08b76987a19fe9143fade680b948d7248c501e))
+* **semantic-release:** upgrade to 17.4.7 ([6e78e00](https://github.com/typegoose/typegoose/commit/6e78e009456e54a8fe0fe1cd8d6e1f5245d1ae4b))
+* **tslib:** upgrade to 2.3.1 ([1b3d9f5](https://github.com/typegoose/typegoose/commit/1b3d9f5ae08f02ad00c59d6fcf389355e2076e87))
+* **typescript:** upgrade to 4.4.2 ([6420bfd](https://github.com/typegoose/typegoose/commit/6420bfd639fb6da64f83bd64b56cea2fe4c012af))
+* **typescript:** upgrade to 4.4.3 ([fed16aa](https://github.com/typegoose/typegoose/commit/fed16aaabc666821e825b25a226c556940cee76f))
+
+
+### Refactor
+
+* **processProp:** remove redundant code ([5575b97](https://github.com/typegoose/typegoose/commit/5575b97ab3789550db8069bcb1de0c65fe88a11e))
+* **processProp:** remove unnecessary object creation & spreads ([1c36776](https://github.com/typegoose/typegoose/commit/1c36776912d3e752f8a1125e7108e11b20fde7aa))
+* **utils:** remove removed options workaround ([e9996fd](https://github.com/typegoose/typegoose/commit/e9996fd50fec4542c0a61566908c0c3f8170cf3c))
+* **utils::mapOptions:** reduce "getName" calls for the same object ([c68e415](https://github.com/typegoose/typegoose/commit/c68e41570066ebfa6bd977576c947e39f0aae7f7))
+
+
+### Style
+
+* **processProp:** add warning when using "Passthrough" on WhatIsIt.ARRAY ([0366fb8](https://github.com/typegoose/typegoose/commit/0366fb8785170ade951d01618b66f2d86d06d1f0))
+* **processProp:** remove "istanbul-ignore" on tested lines ([967cb41](https://github.com/typegoose/typegoose/commit/967cb41066a20e22f71dc229a2ad90bb1b795003))
+* **typegoose:** add comment for "for of Map" ([a4200b8](https://github.com/typegoose/typegoose/commit/a4200b8e9c2d59dd2922ec99f53be0c2359a14cf))
+* **types:** remove TODO's that probably never happen ([e9926c0](https://github.com/typegoose/typegoose/commit/e9926c0dea8cc9a1addcc0a54536c67621fb2c66))
+* **types:** use mongoose's types because mongoose issue 10529 got resolved ([176063f](https://github.com/typegoose/typegoose/commit/176063fcdd58a8120d7007622f0060270b52b39c))
+* **utils:** remove "instanbul-ignore" ([ac5184a](https://github.com/typegoose/typegoose/commit/ac5184ad5f9851ab1eae30b9e567b9f6902f7003))
+* **utils:** remove "instanbul-ignore" for tested path ([f1d9dc9](https://github.com/typegoose/typegoose/commit/f1d9dc99ffd8885a0afcd7e104775943a193277f))
+* add more Error "REFACTOR" comments ([12ccf9e](https://github.com/typegoose/typegoose/commit/12ccf9e0f8b26fdf36eab24092d4159b5d2a8582))
+* **utils::deprecate:** update tsdoc to be better readable ([9d49c43](https://github.com/typegoose/typegoose/commit/9d49c4353496ef829b0dd705a652aa8dd5528958))
+* add REFACTOR comments for errors to be re-done ([32aa7ad](https://github.com/typegoose/typegoose/commit/32aa7ad6de6fa6b0107abcfb97e3fa11ff7177e5))
+* apply eslint rules to top level and website js files ([c6aa5cc](https://github.com/typegoose/typegoose/commit/c6aa5cca8b8d5f307d38aa32f1b46f043a1f902e))
+* update documentation about "Passthrough" class for mongoose 6.0 ([6a4393e](https://github.com/typegoose/typegoose/commit/6a4393ec386c3a22fae33cbf219da0add3d1ee9c))
+
 ## [9.0.0-beta.11](https://github.com/typegoose/typegoose/compare/v9.0.0-beta.10...v9.0.0-beta.11) (2021-09-21)
 
 
