@@ -1,6 +1,6 @@
 ---
 id: get-model-for-class
-title: 'Get Model For Class'
+title: 'getModelForClass'
 ---
 
 `getModelForClass(class, overwriteOptions)` gets a model for a given class. If no Mongoose Model exists for this class yet, one will be created automatically.

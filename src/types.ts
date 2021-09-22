@@ -51,7 +51,6 @@ export type DynamicStringFunc<T extends AnyParamConstructor<any>> = (doc: Docume
  *
  * Example: `index` is directly from mongoose, where as `type` is from typegoose
  */
-// TODO: when "@inheritDoc" becomes working, change all "Copied from mongoose"
 export interface BasePropOptions {
   /**
    * include this value?
@@ -94,7 +93,7 @@ export interface BasePropOptions {
    * Should this property have an "expires" index?
    * @link https://docs.mongodb.com/manual/tutorial/expire-data
    */
-  expires?: string | number /* mongoose.SchemaTypeOptions<any>['expires'] */; // TODO: change to get from mongoose, when https://github.com/Automattic/mongoose/issues/10529 resolved
+  expires?: mongoose.SchemaTypeOptions<any>['expires'];
   /**
    * Should this property have an "text" index?
    * @link https://mongoosejs.com/docs/api.html#schematype_SchemaType-text
@@ -302,7 +301,6 @@ export interface TransformStringOptions {
   trim?: mongoose.SchemaTypeOptions<any>['trim'];
 }
 
-// TODO: when "@inheritDoc" becomes working, change all "Copied from mongoose"
 export interface VirtualOptions {
   /** Reference another Document (Ref<T> should be used as property type) */
   ref: NonNullable<BasePropOptions['ref']>;

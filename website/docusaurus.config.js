@@ -10,7 +10,6 @@ module.exports = {
     algolia: {
       apiKey: '2c49a41064ba9b534e8417089c6cde93',
       indexName: 'typegoose',
-      algoliaOptions: {},
     },
     navbar: {
       title: 'typegoose',
@@ -80,6 +79,7 @@ module.exports = {
           routeBasePath: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/typegoose/typegoose/edit/master/docs',
+          remarkPlugins: [[require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }]],
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

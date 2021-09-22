@@ -1,6 +1,6 @@
 ---
 id: is-document
-title: 'Is Document'
+title: 'isDocument & isDocumentArray'
 ---
 
 ## isDocument

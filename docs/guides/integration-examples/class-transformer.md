@@ -3,7 +3,20 @@ id: using-with-class-transformer
 title: 'Using with class-transformer'
 ---
 
+Last updated for:
+
+```txt
+@typegoose/typegoose@9.0.0
+class-transformer@0.4.0
+```
+
+---
+
 This guide shows how to use `typegoose` with `class-transformer`.
+
+```bash npm2yarn
+npm install --save class-transformer@~0.4.0
+```
 
 ## Implementation
 
@@ -11,16 +24,18 @@ Suppose you have this `Account` class decorated with `class-transformer`:
 
 ```ts
 import { Exclude, Expose, Transform } from 'class-transformer';
-import { getModelForClass, mongoose, prop } from 'typegoose';
+import { getModelForClass, mongoose, prop } from '@typegoose/typegoose';
 
 // re-implement base Document to allow class-transformer to serialize/deserialize its properties
 // This class is needed, otherwise "_id" and "__v" would be excluded from the output
 class DocumentCT {
   @Expose()
   // makes sure that when deserializing from a Mongoose Object, ObjectId is serialized into a string
-  @Transform((value: any) => {
+  @Transform((value) => {
     if ('value' in value) {
-      return value.value instanceof mongoose.Types.ObjectId ? value.value.toHexString() : value.value.toString();
+      // HACK: this is changed because of https://github.com/typestack/class-transformer/issues/879
+      // return value.value.toString(); // because "toString" is also a wrapper for "toHexString"
+      return value.obj[value.key].toString();
     }
 
     return 'unknown value';
@@ -45,7 +60,7 @@ class Account extends DocumentCT {
 const AccountModel = getModelForClass(Account);
 ```
 
-Side-Note: Typegoose dosnt provide an class like `DocumentCT` by default, because this would require adding `class-transformer` as an dependency
+Side-Note: Typegoose doesn't provide a class like `DocumentCT` by default, because this would require adding `class-transformer` as a dependency.
 
 You can then use, for example:
 
@@ -63,7 +78,7 @@ You can then use, for example:
 * or a normal document:
 
   ```ts
-  // exec return a Mongoose Object
+  // exec returns a Mongoose Object
   const mo = await AccountModel.findById(id).orFail().exec();
   // deserialize Mongoose Object into an instance of the Account class
   const deserialized = plainToClass(Account, mo);
@@ -76,7 +91,7 @@ As you can see from these examples, there is:
 * a redundant step to first turn the output of the query into a full instance of `Account` : `plainToClass(..., ...)`
 * before being able to benefit from its features for serialization: `classToPlain(...)`
 
-The reson for doing this is so queries will output `DocumentType<Account>` (Mongoose Document) instead of required `Account` (Plain Object / instance of the Class) in this example.
+The reason for doing this is so queries will output `DocumentType<Account>` (Mongoose Document) instead of required `Account` (Plain Object / instance of the Class) in this example.
 
 `class-transformer` can only operate its magic on instances of annotated classes.
 

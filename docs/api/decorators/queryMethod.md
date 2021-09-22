@@ -1,6 +1,6 @@
 ---
 id: query-method
-title: 'Query Methods'
+title: '@queryMethod'
 ---
 
 `@queryMethod(func: (this: ReturnModelType<U, QueryHelpers>, ...args: any[]) => mongoose.DocumentQuery)` is a decorator to add [custom query methods](https://thecodebarbarian.com/mongoose-custom-query-methods)

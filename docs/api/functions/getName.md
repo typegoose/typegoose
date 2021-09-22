@@ -1,6 +1,6 @@
 ---
 id: get-name
-title: 'Get Name For Class'
+title: 'getName'
 ---
 
 `getName(class)` gets the name of the resulting model (accounts for `customName` & `automaticName`)

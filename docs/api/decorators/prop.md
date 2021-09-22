@@ -1,6 +1,6 @@
 ---
 id: prop
-title: 'Prop'
+title: '@prop'
 ---
 
 `@prop(options: object, kind: WhatIsIt)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
@@ -846,24 +846,31 @@ For Examples, look at:
 ## Passthrough Class
 
 :::caution
-It is not recommended to use this class, it should always be another class if nesting (and proper validation) like [in the quick-start-guide](../../guides/quick-start-guide.md#quick-overview-of-typegoose) is wanted
+It is not recommended to use this class, it should always be another class if nesting, like [in the quick-start-guide](../../guides/quick-start-guide.md/#quick-overview-of-typegoose) is wanted
 :::
 
-The `Passthrough` class is, like the name implies, to pass-through an schema definition directly, without "wrapping" it in a `new Schema({}` call.
+The `Passthrough` class is, like the name implies, is to pass-through a schema definition directly, without "wrapping" it in a `new Schema({})` explicitly.
+
+### Non-Direct {#passthrough-nondirect}
+
+Using the `Passthrough` class this way will be from mongoose 6.0 onward the same as doing another class (see [Mongoose#7181](https://github.com/Automattic/mongoose/issues/7181)).  
+Also see the [FAQ `Do all Classes get compiled to their own "mongoose.Schema"?`](../../guides/faq.md#do-all-classes-get-compiled-to-their-own-mongooseschema).
 
 :::note
-It should be noted that using this method (even in plain mongoose) will result in these paths to become `mongoose.Schema.Types.Mixed` (see [Mongoose#7181](https://github.com/Automattic/mongoose/issues/7181)), and also no typegoose transformations or warnings will be applied to what is inside `Passthrough` (like `type: () => Class` will not be translated, it will stay as-is)
+It should be noted that using this method no typegoose transformations or warnings will be applied to what is inside `Passthrough.raw` (like `type: () => Class` will not be translated, it will stay as-is).
 :::
 
-The following example is what it looks like in typegoose, and what it would look like in plain mongoose:
+There is also a option to set the `Passthrough` class to `direct` mode (with the second parameter), this will mean that absolutlely no typegoose process is applied (everything has to be done manually), see [Passthrough-Class#Direct](#passthrough-direct).
+
+Example for `WhatIsIt.NONE`:
 
 ```ts
-class SomeTypegooseClass {
+class PassthroughNoDirect {
   @prop()
   public normalProp?: string;
 
-  @prop({ type: () => Passthrough({ somePath: String }) })
-  public passed?: { somePath: string };
+  @prop({ type: () => new Passthrough({ somePath: String }) })
+  public child?: { somePath: string };
 }
 
 // would be equal to
@@ -872,8 +879,95 @@ new mongoose.Schema({
   normalProp: {
     type: String
   },
-  passed: {
+  child: {
     type: {
+      somePath: String
+    }
+  }
+})
+```
+
+Example for `WhatIsIt.ARRAY`:
+
+*This currently does not work, see [this issue](https://github.com/Automattic/mongoose/issues/10750)*
+
+Example for `WhatIsIt.MAP`:
+
+```ts
+class PassthroughNoDirect {
+  @prop({ type: () => new Passthrough({ someProp: String }) })
+  public child?: Map<string, { someProp: string }>;
+}
+
+// would be equal to
+new mongoose.Schema({
+  child: {
+    type: Map,
+    of: {
+      type: {
+        someProp: String
+      }
+    }
+  }
+})
+```
+
+### Direct {#passthrough-direct}
+
+The option `direct` (second parameter to `Passthrough`, default `false`), is used to set assigning the contents of `raw` (first parameter to `Passthrough`) directly, with no processing on the typegoose side or preceding `type:`.
+
+:::note
+With the option `direct` set to `true`, no other option will be applied (even when defined) (like defining `required`, will have no effect).  
+
+The most obvious one being that no `type:` will be in-front of what `Passthrough` holds.
+:::
+
+Example for `WhatIsIt.NONE`:
+
+```ts
+class PassthroughWithDirect {
+  @prop({ type: () => new Passthrough({ somePath: String }, true) })
+  public child?: { somePath: string; };
+}
+
+// would be equal to
+
+new mongoose.Schema({
+  child: {
+    somePath: String
+  }
+})
+```
+
+Example for `WhatIsIt.ARRAY`:
+
+```ts
+class PassthroughWithDirect {
+  @prop({ type: () => new Passthrough([{ somePath: String }], true) })
+  public child?: [{ somePath: string; }];
+}
+
+// would be equal to
+
+new mongoose.Schema({
+  child: [{ somePath: String }]
+})
+```
+
+Example for `WhatIsIt.MAP`:
+
+```ts
+class PassthroughWithDirect {
+  @prop({ type: () => new Passthrough({ type: Map, of: { somePath: String } }, true) })
+  public child?: Map<string, { somePath: string }>;
+}
+
+// would be equal to
+
+new mongoose.Schema({
+  child: {
+    type: Map,
+    of: {
       somePath: String
     }
   }

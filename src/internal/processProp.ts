@@ -11,13 +11,16 @@ import type {
 import { DecoratorKeys, WhatIsIt } from './constants';
 import { schemas } from './data';
 import {
-  CannotBeSymbol,
+  CannotBeSymbolError,
   InvalidTypeError,
   InvalidWhatIsItError,
   NotAllVPOPElementsError,
   NotNumberTypeError,
   NotStringTypeError,
+  OptionRefDoesNotSupportArraysError,
+  RefOptionIsUndefinedError,
   SelfContainingClassError,
+  StringLengthExpectedError,
 } from './errors';
 import * as utils from './utils';
 
@@ -33,7 +36,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const propKind = input.whatis ?? detectWhatIsIt(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);
-  utils.assertion(typeof key === 'string', new CannotBeSymbol(name, key));
+  utils.assertion(typeof key === 'string', new CannotBeSymbolError(name, key));
 
   // optionDeprecation(rawOptions);
 
@@ -95,6 +98,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   if ('discriminators' in rawOptions) {
     logger.debug('Found option "discriminators" in "%s.%s"', name, key);
     const gotType = utils.getType(rawOptions.discriminators, true);
+    // REFACTOR: re-write this to be a Error inside errors.ts
     utils.assertion(
       gotType.dim === 1,
       new Error(
@@ -126,12 +130,9 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   // allow setting the type asynchronously
   if ('ref' in rawOptions) {
     const gotType = utils.getType(rawOptions.ref);
-    utils.assertion(
-      gotType.dim === 0,
-      new Error(`"PropOptions.ref" dosnt support Arrays (got "${gotType.dim}" dimensions at "${name}.${key}") [E021]`)
-    );
+    utils.assertion(gotType.dim === 0, new OptionRefDoesNotSupportArraysError(gotType.dim, name, key));
     rawOptions.ref = gotType.type;
-    utils.assertion(!utils.isNullOrUndefined(rawOptions.ref), new Error(`Option "ref" for "${name}.${key}" is null/undefined! [E005]`));
+    utils.assertion(!utils.isNullOrUndefined(rawOptions.ref), new RefOptionIsUndefinedError(name, key));
 
     rawOptions.ref =
       typeof rawOptions.ref === 'string'
@@ -164,21 +165,31 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   // do this early, because the other options (enum, ref, refPath, discriminators) should not matter for this one
   if (Type instanceof Passthrough) {
+    logger.debug('Type is "instanceof Passthrough" ("%s.%s", %s, direct: %s)', name, key, propKind, Type.direct);
     // this is because the check above narrows down the type, which somehow is not compatible
     const newType: any = Type.raw;
+
+    if (Type.direct) {
+      schemaProp[key] = newType;
+
+      return;
+    }
+
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        schemaProp[key] = {
-          ...schemaProp[key][0],
-          ...utils.mapArrayOptions(rawOptions, newType, target, key),
-        };
+        // TODO: somehow this does not work, see https://github.com/Automattic/mongoose/issues/10750
+        logger.warn(
+          'Passthrough was used for "%s.%s", with WhatIsIt.ARRAY, which currently does not work, see https://github.com/Automattic/mongoose/issues/10750',
+          name,
+          key
+        );
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, target, key);
 
         return;
       case WhatIsIt.MAP:
         const mapped = utils.mapOptions(rawOptions, newType, target, key);
 
         schemaProp[key] = {
-          ...schemaProp[key],
           ...mapped.outer,
           type: Map,
           of: { type: newType, ...mapped.inner },
@@ -187,55 +198,13 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         return;
       case WhatIsIt.NONE:
         schemaProp[key] = {
-          ...schemaProp[key],
           ...rawOptions,
           type: newType,
         };
 
         return;
       default:
-        /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
         throw new InvalidWhatIsItError(propKind, name, key, 'whatis(Passthrough)');
-    }
-  }
-
-  if (!utils.isNullOrUndefined(rawOptions.set) || !utils.isNullOrUndefined(rawOptions.get)) {
-    utils.assertion(typeof rawOptions.set === 'function', new TypeError(`"${name}.${key}" does not have a set function! [E007]`));
-    utils.assertion(typeof rawOptions.get === 'function', new TypeError(`"${name}.${key}" does not have a get function! [E007]`));
-
-    // use an compiled Schema if the type is an Nested Class
-    const useType = schemas.has(utils.getName(Type)) ? buildSchema(Type) : Type;
-
-    switch (propKind) {
-      case WhatIsIt.ARRAY:
-        schemaProp[key] = {
-          ...schemaProp[key][0],
-          ...utils.mapArrayOptions(rawOptions, useType, target, key),
-        };
-
-        return;
-      case WhatIsIt.MAP:
-        const mapped = utils.mapOptions(rawOptions, useType, target, key);
-
-        schemaProp[key] = {
-          ...schemaProp[key],
-          ...mapped.outer,
-          type: Map,
-          of: { type: useType, ...mapped.inner },
-        };
-
-        return;
-      case WhatIsIt.NONE:
-        schemaProp[key] = {
-          ...schemaProp[key],
-          ...rawOptions,
-          type: useType,
-        };
-
-        return;
-      default:
-        /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
-        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(get/set)');
     }
   }
 
@@ -248,14 +217,10 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        schemaProp[key] = {
-          ...schemaProp[key][0],
-          ...utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { ref }),
-        };
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { ref });
         break;
       case WhatIsIt.NONE:
         schemaProp[key] = {
-          ...schemaProp[key],
           type: refType,
           ref,
           ...rawOptions,
@@ -265,7 +230,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         const mapped = utils.mapOptions(rawOptions, refType, target, key);
 
         schemaProp[key] = {
-          ...schemaProp[key],
           ...mapped.outer,
           type: Map,
           of: {
@@ -276,36 +240,34 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
         break;
       default:
-        throw new TypeError(`"ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]`);
+        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(ref)');
     }
 
     return;
   }
 
-  const refPath = rawOptions.refPath;
-
-  if (refPath) {
-    utils.assertion(typeof refPath === 'string', new TypeError(`"refPath" for "${name}, ${key}" should be of type String! [E008]`));
-
+  if ('refPath' in rawOptions) {
+    const refPath = rawOptions.refPath;
     delete rawOptions.refPath;
+
+    utils.assertion(
+      typeof refPath === 'string' && refPath.length > 0,
+      new StringLengthExpectedError(1, refPath, `${name}.${key}`, 'refPath')
+    );
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        schemaProp[key] = {
-          ...schemaProp[key][0],
-          ...utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { refPath }),
-        };
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { refPath });
         break;
       case WhatIsIt.NONE:
         schemaProp[key] = {
-          ...schemaProp[key],
           type: refType,
           refPath,
           ...rawOptions,
         };
         break;
       default:
-        throw new TypeError(`"refPath" is not supported for "${propKind}"! (${name}, ${key}) [E023]`);
+        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(refPath)');
     }
 
     return;
@@ -359,6 +321,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       } else {
         // this will happen if the enum type is not "String" or "Number"
         // most likely this error happened because the code got transpiled with babel or "tsc --transpile-only"
+        // REFACTOR: re-write this to be a Error inside errors.ts
         throw new Error(
           `Invalid type used for enums!, got: "${Type}" (${name}.${key}) [E012]` +
             "Is the code transpiled with Babel or 'tsc --transpile-only' or 'ts-node --transpile-only'?\n" +
@@ -414,17 +377,13 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        schemaProp[key] = {
-          ...schemaProp[key][0],
-          ...utils.mapArrayOptions(rawOptions, Type, target, key),
-        };
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, Type, target, key);
 
         return;
       case WhatIsIt.MAP:
         const mapped = utils.mapOptions(rawOptions, Type, target, key);
 
         schemaProp[key] = {
-          ...schemaProp[key],
           ...mapped.outer,
           type: Map,
           of: { type: Type, ...mapped.inner },
@@ -433,14 +392,12 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         return;
       case WhatIsIt.NONE:
         schemaProp[key] = {
-          ...schemaProp[key],
           ...rawOptions,
           type: Type,
         };
 
         return;
       default:
-        /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
         throw new InvalidWhatIsItError(propKind, name, key, 'whatis(primitive)');
     }
   }
@@ -453,7 +410,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       'if someone can see this message, please open an new issue at https://github.com/typegoose/typegoose/issues with reproduction code for tests'
     );
     schemaProp[key] = {
-      ...schemaProp[key],
       ...rawOptions,
       type: mongoose.Schema.Types.Mixed,
     };
@@ -464,10 +420,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const virtualSchema = buildSchema(Type);
   switch (propKind) {
     case WhatIsIt.ARRAY:
-      schemaProp[key] = {
-        ...schemaProp[key][0], // [0] is needed, because "initasArray" adds this (empty)
-        ...utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type),
-      };
+      schemaProp[key] = utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type);
 
       return;
     case WhatIsIt.MAP:
@@ -478,7 +431,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         const { type, ...outer } = utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type);
 
         schemaProp[key] = {
-          ...schemaProp[key],
           ...outer,
           type: Map,
           of: type,
@@ -490,7 +442,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       const mapped = utils.mapOptions(rawOptions, virtualSchema, target, key, Type);
 
       schemaProp[key] = {
-        ...schemaProp[key],
         ...mapped.outer,
         type: Map,
         of: { type: virtualSchema, ...mapped.inner },
@@ -499,14 +450,12 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       return;
     case WhatIsIt.NONE:
       schemaProp[key] = {
-        ...schemaProp[key],
         ...rawOptions,
         type: virtualSchema,
       };
 
       return;
     default:
-      /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
       throw new InvalidWhatIsItError(propKind, name, key, 'whatis(subSchema)');
   }
 }

@@ -10,7 +10,7 @@ export class NotNumberTypeError extends Error {
   constructor(targetName: string, key: string, enumKey: string, enumValue: string) {
     super(
       `Typeof "${targetName}.${key}" is "Number", value is undefined/null or does not have a reverse mapping! [E011]\n` +
-        `  Encountered with property: ${enumKey}.${typeof enumValue}`
+        `  Encountered with property: "${enumKey}.${typeof enumValue}"`
     );
   }
 }
@@ -19,7 +19,7 @@ export class NotStringTypeError extends Error {
   constructor(targetName: string, key: string, enumKey: string, enumValue: string) {
     super(
       `Typeof "${targetName}.${key}" is "String", used enum is not only Strings! [E010]\n` +
-        `  Encountered with property in Enum: ${enumKey}.${typeof enumValue}`
+        `  Encountered with property in Enum: "${enumKey}.${typeof enumValue}"`
     );
   }
 }
@@ -50,9 +50,9 @@ export class InvalidWhatIsItError extends Error {
   }
 }
 
-export class CannotBeSymbol extends Error {
+export class CannotBeSymbolError extends Error {
   constructor(name: string, key: string | symbol) {
-    super(`A property key in Typegoose cannot be an symbol! (${name}.${String(key)}) [E024]`);
+    super(`A property key in Typegoose cannot be an symbol! ("${name}.${String(key)}") [E024]`);
   }
 }
 
@@ -60,7 +60,41 @@ export class SelfContainingClassError extends TypeError {
   constructor(name: string, key: string) {
     super(
       'It seems like the type used is the same as the target class, which is not supported\n' +
-        `Please look at https://github.com/typegoose/typegoose/issues/42 for more information (${name}.${key}) [E004]`
+        `Please look at https://github.com/typegoose/typegoose/issues/42 for more information ("${name}.${key}") [E004]`
     );
+  }
+}
+
+export class OptionRefDoesNotSupportArraysError extends TypeError {
+  constructor(dim: number, name: string, key: string) {
+    super(`Prop-Option "ref" does not support Arrays! (got "${dim}" dimensions, for property "${name}.${key}") [E021]`);
+  }
+}
+
+export class RefOptionIsUndefinedError extends Error {
+  constructor(name: string, key: string) {
+    super(`Prop-Option "ref"'s value is "null" or "undefined" for "${name}.${key}" [E005]`);
+  }
+}
+
+export class NotValidModelError extends TypeError {
+  constructor(model: unknown, where: string) {
+    super(`Expected "${where}" to be a valid mongoose.Model! (got: "${model}") [E025]`);
+  }
+}
+
+export class FunctionCalledMoreThanSupportedError extends Error {
+  constructor(functionName: string, supported: number, extra: string) {
+    super(`Function "${functionName}" only supports to be called "${supported}" times with the same parameters [E003]\n${extra}`);
+  }
+}
+
+export class StringLengthExpectedError extends TypeError {
+  constructor(length: number, got: any, where: string, valueName: string) {
+    // create the "got:" message, when string say it was a string, but not the length
+    // if not string, then say it is not a string plus the value
+    const gotMessage = typeof got === 'string' ? `(String: "${got.length}")` : `(not-String: "${got}")`;
+
+    super(`Expected "${valueName}" to have at least length of "${length}" (got: ${gotMessage}, where: "${where}") [E026]`);
   }
 }

@@ -1,6 +1,6 @@
 ---
 id: delete-model
-title: 'Delete Models'
+title: 'buildSchema'
 ---
 
 ## deleteModel

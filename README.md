@@ -2,10 +2,20 @@
 
 <sub>(These badges are from typegoose:master)</sub>  
 [![Node.js Tests](https://github.com/typegoose/typegoose/workflows/Node.js%20Tests/badge.svg?branch=master)](https://github.com/typegoose/typegoose/actions?query=workflow%3A"Node.js+Tests")
-[![Coverage Status](https://coveralls.io/repos/github/typegoose/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/typegoose/typegoose?branch=master)
+[![codecov.io](https://codecov.io/github/typegoose/typegoose/coverage.svg?branch=master)](https://codecov.io/github/typegoose/typegoose?branch=master)
 [![npm](https://img.shields.io/npm/dt/@typegoose/typegoose.svg)](https://www.npmjs.com/package/@typegoose/typegoose)
 
 Define Mongoose models using TypeScript classes
+
+## Migration
+
+Migration Guides:  
+(Date format: `dd-mm-yyyy`)
+
+- [8 to 9](https://typegoose.github.io/typegoose/docs/guides/migration/migrate-8) (released on `22-09-2021`)
+- [7 to 8](https://typegoose.github.io/typegoose/docs/guides/migration/migrate-8) (released on `28-07-2021`)
+- [6 to 7](https://typegoose.github.io/typegoose/docs/guides/migration/migrate-7) (released on `01-04-2020`)
+- [5 to 6](https://typegoose.github.io/typegoose/docs/guides/migration/migrate-6) (released on `30-09-2019`)
 
 ## Basic usage
 

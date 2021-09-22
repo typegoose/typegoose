@@ -1,4 +1,3 @@
-import { AssertionError } from 'assert';
 import { model, Schema } from 'mongoose';
 import {
   addModelToTypegoose,
@@ -11,30 +10,19 @@ import {
   getModelForClass,
   getModelWithString,
   getName,
-  modelOptions,
+  Passthrough,
   pre,
   prop,
-  Ref,
   setGlobalOptions,
 } from '../../src/typegoose'; // import order is important with jest
 import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
-import { assertion, assignMetadata, createArrayFromDimensions, mapOptions, mergeSchemaOptions } from '../../src/internal/utils';
-import { logger } from '../../src/logSettings';
-import { InvalidWhatIsItError } from '../../src/internal/errors';
+import * as utils from '../../src/internal/utils';
+import { mapValueToSeverity } from '../../src/globalOptions';
+import { BasePropOptions } from '../../src/types';
 
-it('should error if an non-existing(runtime) type is given [InvalidTypeError]', () => {
-  try {
-    class TestNME {
-      @prop()
-      public test: undefined;
-    }
-
-    buildSchema(TestNME);
-    fail('Expected to throw "InvalidTypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(errors.InvalidTypeError);
-  }
+beforeEach(() => {
+  jest.restoreAllMocks();
 });
 
 it('should error if no function for hooks is defined [TypeError]', () => {
@@ -49,40 +37,11 @@ it('should error if no function for hooks is defined [TypeError]', () => {
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
-    expect((err as TypeError).message).toEqual(`"TestNoFunctionHook.pre."'s function is not a function!`);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
-it('should error if no get or set function is defined for non-virtuals [TypeError]', () => {
-  try {
-    class TestNoGetNoSet {
-      // @ts-expect-error expect error because "set" only accepts functions
-      @prop({ set: false })
-      public test: string;
-    }
-
-    buildSchema(TestNoGetNoSet);
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect((err as TypeError).message).toEqual(`"TestNoGetNoSet.test" does not have a set function! [E007]`);
-  }
-  try {
-    class TestWrongGetSetType {
-      // @ts-expect-error expect error because "get" only accepts functions
-      @prop({ set: () => undefined, get: false })
-      public test: string;
-    }
-
-    buildSchema(TestWrongGetSetType);
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect((err as TypeError).message).toEqual(`"TestWrongGetSetType.test" does not have a get function! [E007]`);
-  }
-});
-
-it('should error if not all needed parameters for virtual-populate are given [NotAllElementsError]', () => {
+it('should error if not all needed parameters for virtual-populate are given [NotAllVPOPElementsError]', () => {
   try {
     class TestNAEEVirtualPopulate {
       @prop({ localField: true })
@@ -90,113 +49,164 @@ it('should error if not all needed parameters for virtual-populate are given [No
     }
 
     buildSchema(TestNAEEVirtualPopulate);
-    fail('Expected to throw "NotAllElementsError"');
+    fail('Expected to throw "NotAllVPOPElementsError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.NotAllVPOPElementsError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
-it('should error if no valid model is supplied to "addModelToTypegoose" [TypeError]', () => {
-  try {
-    // @ts-expect-error expect error because "addModelToTypegoose" only accepts models
-    addModelToTypegoose('hello');
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-  }
+describe('tests for "NotValidModelError"', () => {
+  it('should throw a Error when no valid model is passed to "addModelToTypegoose" [NotValidModelError]', () => {
+    try {
+      // @ts-expect-error "addModelToTypegoose" does not support a string as the first argument
+      addModelToTypegoose('string', Error);
+
+      fail('Expected to throw "NotValidModelError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.NotValidModelError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error when no valid model is passed to "getDiscriminatorModelForClass" [NotValidModelError]', () => {
+    try {
+      // @ts-expect-error "getDiscriminatorModelForClass" does not support a string as the first argument
+      getDiscriminatorModelForClass('string', Error);
+
+      fail('Expected to throw "NotValidModelError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.NotValidModelError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });
 
-it('should not modify an immutable', async () => {
-  logger.warn = jest.fn();
-
-  class TestImmutable {
-    @prop({ required: true, immutable: true })
-    public someprop: Readonly<string>;
-  }
-
-  const TIModel = getModelForClass(TestImmutable);
-  const doc = await TIModel.create({ someprop: 'Hello' } as TestImmutable);
-  expect(doc).not.toBeUndefined();
-  doc.someprop = 'Hello2';
-  await doc.save();
-  expect(doc.someprop).toEqual('Hello');
-  expect((logger.warn as any).mock.calls.length).toEqual(1);
-});
-
-describe('tests for "NoValidClass"', () => {
-  it('should error if no valid class is supplied to "addModelToTypegoose" [NoValidClass]', () => {
+describe('tests for "NoValidClassError"', () => {
+  it('should error if no valid class is supplied to "addModelToTypegoose" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the second argument should be an "class"
       addModelToTypegoose(model('hello', new Schema()), 'not class');
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "buildSchema" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "buildSchema" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       buildSchema('hello');
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "_buildSchema" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "_buildSchema" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       _buildSchema('hello');
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "getModelForClass" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "getModelForClass" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       getModelForClass('hello');
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "deleteModelWithClass" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "deleteModelWithClass" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       deleteModelWithClass(true);
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the second argument should be an class
-      mergeSchemaOptions({}, true);
-      fail('Expected to throw "NoValidClass"');
+      utils.mergeSchemaOptions({}, true);
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
-  it('should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClass]', () => {
+  it('should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClassError]', () => {
     try {
       // @ts-expect-error expect that the second argument should be an class
       getDiscriminatorModelForClass(model('NoValidClassgetDiscriminatorModelForClass', {}), true);
-      fail('Expected to throw "NoValidClass"');
+
+      fail('Expected to throw "NoValidClassError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error when "cl" in "getName" is null or undefined [NoValidClassError]', () => {
+    try {
+      // @ts-expect-error "getName" only accepts classes (and types that are not null / undefined)
+      getName(undefined);
+
+      fail('Expected to throw "NoValidClassError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should error if no valid class is supplied to "assignMetadata" (and "mergeMetadata") [NoValidClassError]', () => {
+    try {
+      // @ts-expect-error expect that the third argument is an class
+      utils.assignMetadata(DecoratorKeys.Index, {}, true);
+
+      fail('Expected to throw "NoValidClassError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.NoValidClassError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 });
 
 describe('tests for "InvalidTypeError"', () => {
-  // test for @prop will return a "NoMetadataError", which is already tested above
+  it('should error if no valid type is supplied to WhatIsIt.NONE [InvalidTypeError]', () => {
+    try {
+      class TestNME {
+        @prop({ type: undefined })
+        public test: undefined;
+      }
+
+      buildSchema(TestNME);
+      fail('Expected to throw "InvalidTypeError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.InvalidTypeError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 
   it('should error if no valid type is supplied to WhatIsIt.ARRAY [InvalidTypeError]', () => {
     try {
@@ -210,6 +220,7 @@ describe('tests for "InvalidTypeError"', () => {
       fail('Expected to throw "InvalidTypeError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.InvalidTypeError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 
@@ -225,36 +236,12 @@ describe('tests for "InvalidTypeError"', () => {
       fail('Expected to throw "InvalidTypeError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.InvalidTypeError);
+      expect(err.message).toMatchSnapshot();
     }
   });
 });
 
-describe('tests for "assignMetadata"', () => {
-  it('should error if no valid key is supplied [TypeError]', () => {
-    try {
-      class Dummy {}
-
-      // @ts-expect-error expect that the first argument is in "DecoratorKeys"
-      assignMetadata(true, {}, Dummy);
-      fail('Expected to throw "TypeError"');
-    } catch (err) {
-      expect(err).toBeInstanceOf(TypeError);
-      expect((err as TypeError).message).toEqual(`"true"(key) is not a string! (mergeMetadata)`);
-    }
-  });
-
-  it('should error if no valid class is supplied [NoValidClass]', () => {
-    try {
-      // @ts-expect-error expect that the third argument is an class
-      assignMetadata(DecoratorKeys.Index, {}, true);
-      fail('Expected to throw "NoValidClass"');
-    } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClassError);
-    }
-  });
-});
-
-it('should throw an error if a self-contained class is used', () => {
+it('should throw an error if a self-contained class is used [typegoose#42] [SelfContainingClassError]', () => {
   try {
     class TestSelfContained {
       @prop()
@@ -265,8 +252,8 @@ it('should throw an error if a self-contained class is used', () => {
 
     fail('Expected to throw "Error"');
   } catch (err) {
-    expect(err).not.toBeInstanceOf(AssertionError);
-    expect(err).toBeInstanceOf(Error);
+    expect(err).toBeInstanceOf(errors.SelfContainingClassError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -274,127 +261,189 @@ it('should throw when "deleteModel" is called with no string [TypeError]', () =>
   try {
     // @ts-expect-error expect that the first argument should be an class
     deleteModel(true);
+
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
-it('should throw when "addModelToTypegoose" is called twice for the same class [Error]', () => {
-  class TestDouble {}
+describe('tests for "FunctionCalledMoreThanSupportedError"', () => {
+  it('should throw a Error when "addModelToTypegoose" got called more than once with the same model name [FunctionCalledMoreThanSupportedError]', () => {
+    class TestMoreThanOnce {
+      @prop()
+      public dummy?: string;
+    }
 
-  const gotmodel = getModelForClass(TestDouble);
+    const model = getModelForClass(TestMoreThanOnce);
 
-  try {
-    addModelToTypegoose(gotmodel, TestDouble);
-    fail('Expected to throw "Error"');
-  } catch (err) {
-    expect(err).not.toBeInstanceOf(AssertionError);
-    expect(err).toBeInstanceOf(Error);
-  }
-});
+    try {
+      addModelToTypegoose(model, TestMoreThanOnce);
 
-it('should throw when "customName" is used, but length <= 0 [TypeError]', () => {
-  try {
-    @modelOptions({ options: { customName: '' } })
-    class TestCustomNameError {}
-    getName(TestCustomNameError);
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-  }
-});
-
-it('should throw when "customName" is a function, but the return value is not a string or an empty string [TypeError]', () => {
-  try {
-    // @ts-expect-error expect that "customname" only accepts an "string"
-    @modelOptions({ options: { customName: () => 1234 } })
-    class TestCustomNameError2 {}
-    getName(TestCustomNameError2);
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-  }
+      fail('Expected to throw "FunctionCalledMoreThanSupportedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.FunctionCalledMoreThanSupportedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });
 
 it('should error if the Type does not have a valid "OptionsConstructor" [TypeError]', () => {
   try {
-    mapOptions({}, Error, undefined, 'undefined-pkey');
+    utils.mapOptions({}, Error, Error, 'undefined-pkey');
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
-it('should error if "refPath" is not of type string [TypeError]', () => {
-  try {
-    class TestRefPathError {
-      // @ts-expect-error expect that "refPath" only accepts an "string"
-      @prop({ refPath: 1 })
-      public hello: string;
+describe('tests for "InvalidWhatIsItError"', () => {
+  it('should throw a Error when a unknown WhatIsIt is used for "utils#initProperty" [InvalidWhatIsItError]', () => {
+    try {
+      utils.initProperty('a1', 'a2', -1);
+
+      fail('Expected to throw "InvalidWhatIsItError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+      expect(err.message).toMatchSnapshot();
     }
+  });
 
-    buildSchema(TestRefPathError);
+  describe('WhatIsIt unknown (processProp)', () => {
+    beforeEach(() => {
+      // Mock implementation of "utils.initProperty", otherwise "InvalidWhatIsItError.whatisit(initProperty)" always gets thrown
+      const origInitProperty = utils.initProperty;
+      jest.spyOn(utils, 'initProperty').mockImplementation((...args) => {
+        return origInitProperty(
+          args[0],
+          args[1],
+          // @ts-expect-error "-1" does not exist in WhatIsIt
+          args[2] === -1 ? WhatIsIt.NONE : args[2] // map "-1" to "NONE" just to have "utils.initProperty" not throw a Error, but still use it
+        );
+      });
+    });
 
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-  }
-});
+    it('should throw a Error when a unknown WhatIsIt is used for "processProp#Passthrough" [InvalidWhatIsItError]', () => {
+      class ProcessPropPassthroughWhatIsIt {
+        @prop({ type: () => new Passthrough({}) }, -1)
+        public test?: any;
+      }
 
-it('should error if "ref" is used with unknown WhatIsIt [TypeError]', () => {
-  try {
-    class TestRefSwitchError {
-      @prop({ ref: 'hi' }, -1)
-      public hello: string;
-    }
+      try {
+        buildSchema(ProcessPropPassthroughWhatIsIt);
 
-    buildSchema(TestRefSwitchError);
+        fail('Expected to throw "InvalidWhatIsItError"');
+      } catch (err) {
+        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err.message).toMatchSnapshot();
+      }
+    });
 
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(InvalidWhatIsItError);
-  }
-});
+    it('should throw a Error when a unknown WhatIsIt is used for "processProp#ref" [InvalidWhatIsItError]', () => {
+      class ProcessPropRefWhatIsIt {
+        @prop({ ref: 'hi' }, -1)
+        public test?: any;
+      }
 
-it('should error if "refPath" is used with WhatIsIt.MAP [TypeError]', () => {
-  try {
-    class TestRefPathSwitchError {
+      try {
+        buildSchema(ProcessPropRefWhatIsIt);
+
+        fail('Expected to throw "InvalidWhatIsItError"');
+      } catch (err) {
+        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('should throw a Error when a unknown WhatIsIt is used for "processProp#refPath" [InvalidWhatIsItError]', () => {
+      class ProcessPropRefWhatIsIt {
+        @prop()
+        public hi?: string;
+
+        @prop({ refPath: 'hi' }, -1)
+        public test?: any;
+      }
+
+      try {
+        buildSchema(ProcessPropRefWhatIsIt);
+
+        fail('Expected to throw "InvalidWhatIsItError"');
+      } catch (err) {
+        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('should throw a Error when a unknown WhatIsIt is used for "processProp#primitive" [InvalidWhatIsItError]', () => {
+      class ProcessPropRefWhatIsIt {
+        @prop({ type: () => String }, -1)
+        public test?: string;
+      }
+
+      try {
+        buildSchema(ProcessPropRefWhatIsIt);
+
+        fail('Expected to throw "InvalidWhatIsItError"');
+      } catch (err) {
+        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+
+    it('should throw a Error when a unknown WhatIsIt is used for "processProp#subSchema" [InvalidWhatIsItError]', () => {
+      class Sub {
+        @prop()
+        public dummy?: string;
+      }
+
+      class ProcessPropRefWhatIsIt {
+        @prop({ type: () => Sub }, -1)
+        public test?: Sub;
+      }
+
+      try {
+        buildSchema(ProcessPropRefWhatIsIt);
+
+        fail('Expected to throw "InvalidWhatIsItError"');
+      } catch (err) {
+        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err.message).toMatchSnapshot();
+      }
+    });
+  });
+
+  it('should throw a Error when "WhatIsIt.MAP" is used for "processProp#refPath" [InvalidWhatIsItError]', () => {
+    class ProcessPropRefWhatIsIt {
+      @prop()
+      public hi?: string;
+
       @prop({ refPath: 'hi' }, WhatIsIt.MAP)
-      public hello: string;
+      public test?: any;
     }
 
-    buildSchema(TestRefPathSwitchError);
+    try {
+      buildSchema(ProcessPropRefWhatIsIt);
 
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-  }
+      fail('Expected to throw "InvalidWhatIsItError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });
 
 it('should error if the options provide to "setGlobalOptions" are not an object [TypeError]', () => {
   try {
-    setGlobalOptions(undefined as any);
+    // @ts-expect-error "undefined" does not match the restriction "IGlobalOptions"
+    setGlobalOptions(undefined);
 
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
-  }
-});
-
-it('should error if trying to use circular classes [TypeError]', () => {
-  try {
-    class TestCircular {
-      @prop()
-      public hello: TestCircular;
-    }
-
-    buildSchema(TestCircular);
-
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -415,6 +464,7 @@ it('should fail when using Number-Enum on an String Type [NotStringTypeError]', 
     fail('Expected to throw "NotStringTypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.NotStringTypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -435,16 +485,7 @@ it('should fail when using String-Enum on an Number Type [NotNumberTypeError]', 
     fail('Expected to throw "NotNumberTypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(errors.NotNumberTypeError);
-  }
-});
-
-it('should error if no valid model is supplied to "getDiscriminatorModelForClass" [TypeError]', () => {
-  try {
-    // @ts-expect-error expect the first argument to be an model
-    getDiscriminatorModelForClass(true);
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -452,9 +493,11 @@ it('should error if no valid key is supplied to "getModelWithString" [TypeError]
   try {
     // @ts-expect-error expect the first argument to be an "string"
     getModelWithString(true);
+
     fail('Expected to throw "TypeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(TypeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
@@ -465,73 +508,262 @@ it('should error if a non-valid object is passed to "getClass" [ReferenceError]'
     fail('Expected to throw "ReferenceError"');
   } catch (err) {
     expect(err).toBeInstanceOf(ReferenceError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
 it('should error if 0 or less dimensions are given (createArrayFromDimensions) [RangeError]', () => {
   try {
-    createArrayFromDimensions({ dim: 0 }, { someThing: true }, '', '');
+    utils.createArrayFromDimensions({ dim: 0 }, { someThing: true }, '', '');
 
     fail('Expected to throw "RangeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(RangeError);
+    expect(err.message).toMatchSnapshot();
   }
 
   try {
-    createArrayFromDimensions({ dim: -100 }, { someThing: true }, '', '');
+    utils.createArrayFromDimensions({ dim: -100 }, { someThing: true }, '', '');
 
     fail('Expected to throw "RangeError"');
   } catch (err) {
     expect(err).toBeInstanceOf(RangeError);
+    expect(err.message).toMatchSnapshot();
   }
 });
 
-it("should error if ref's arrow-function returning type returns undefined", async () => {
-  class Nested {
-    @prop()
-    public someNestedProperty: string;
-  }
+describe('tests for "RefOptionIsUndefinedError"', () => {
+  it('should error if "ref" is set to a function, but returns "null" or "undefined" [RefOptionIsUndefinedError]', () => {
+    class Main {
+      // @ts-expect-error expect that "ref" is an function and returns an "string"
+      @prop({ ref: () => undefined })
+      public nested: any; // not setting type to "Ref", because this is a unsupported way for the type
+    }
 
-  class Main {
-    // @ts-expect-error expect that "ref" is an function and returns an "string"
-    @prop({ ref: () => undefined })
-    public nested: Ref<Nested>;
+    try {
+      buildSchema(Main);
+
+      fail('Expected to throw "RefOptionIsUndefinedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.RefOptionIsUndefinedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should error if ref is set but is "null" or "undefined" [RefOptionIsUndefinedError]', () => {
+    try {
+      class RefUndefined {
+        @prop({ ref: undefined })
+        public someref?: any; // not setting type to "Ref", because this is a unsupported way for the type
+      }
+
+      buildSchema(RefUndefined);
+
+      fail('Expect to throw "RefOptionIsUndefinedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.RefOptionIsUndefinedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+});
+
+it('should throw default error if no error is specified (assertion) [AssertionFallbackError]', () => {
+  expect.assertions(2);
+  try {
+    utils.assertion(false);
+
+    // The following is unreachable (by types), but still there just in case something happens
+    fail('Expected to throw "AssertionFallbackError"');
+  } catch (err) {
+    expect(err).toBeInstanceOf(errors.AssertionFallbackError);
+    expect(err.message).toMatchSnapshot();
+  }
+});
+
+it('should throw a Error when the property is a Symbol [CannotBeSymbolError]', async () => {
+  const sym = Symbol();
+
+  class TestPropertySymbol {
+    @prop()
+    public dummy?: string;
+
+    @prop()
+    public [sym]?: string;
   }
 
   try {
-    buildSchema(Main);
+    buildSchema(TestPropertySymbol);
+    fail('Expected to fail with "CannotBeSymbolError"');
+  } catch (err) {
+    expect(err).toBeInstanceOf(errors.CannotBeSymbolError);
+    expect(err.message).toMatchSnapshot();
+  }
+});
+
+it('should throw a Error when "ref" is a array [OptionRefDoesNotSupportArraysError]', async () => {
+  class Sub {
+    @prop()
+    public dummy?: string;
+  }
+
+  class TestOptionRefDoesNotSupportArraysError {
+    // @ts-expect-error option "ref" does not accept a array
+    @prop({ ref: () => [Sub] })
+    public nested?: any;
+  }
+
+  try {
+    buildSchema(TestOptionRefDoesNotSupportArraysError);
+
+    fail('Expected to throw "OptionRefDoesNotSupportArraysError"');
+  } catch (err) {
+    expect(err).toBeInstanceOf(errors.OptionRefDoesNotSupportArraysError);
+    expect(err.message).toMatchSnapshot();
+  }
+});
+
+it('should throw a Error when "mapValueToSeverity" gets called but is not in "Severity" [Error]', () => {
+  try {
+    mapValueToSeverity(-1);
 
     fail('Expected to throw "Error"');
   } catch (err) {
-    expect(err).not.toBeInstanceOf(AssertionError);
     expect(err).toBeInstanceOf(Error);
-    expect(err.message).toEqual('Option "ref" for "Main.nested" is null/undefined! [E005]');
+    expect(err.message).toMatchSnapshot();
   }
 });
 
-it('should error if ref is set but is "undefined/null"', () => {
-  expect.assertions(2);
-  try {
-    class RefUndefined {
-      @prop({ ref: undefined })
-      public someref?: Ref<undefined>;
+describe('tests for "StringLengthExpectedError"', () => {
+  class DummyClass {}
+
+  it('should throw a Error in "utils.getName" when "customName" is defined but not a String [StringLengthExpectedError]', () => {
+    try {
+      utils.getName(DummyClass, {
+        options: {
+          // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
+          customName: 10,
+        },
+      });
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
     }
+  });
 
-    buildSchema(RefUndefined);
+  it('should throw a Error in "utils.getName" when "customName" is defined but string does not meet the required length [StringLengthExpectedError]', () => {
+    try {
+      utils.getName(DummyClass, {
+        options: {
+          customName: '',
+        },
+      });
 
-    fail('Expect to throw "Error"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(Error);
-    expect(err.message).toEqual('Option "ref" for "RefUndefined.someref" is null/undefined! [E005]');
-  }
-});
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 
-it('should throw default error if no error is specified (assertion)', () => {
-  expect.assertions(2);
-  try {
-    assertion(false);
-  } catch (err) {
-    expect(err).toBeInstanceOf(Error);
-    expect(err.message).toEqual('Assert failed - no custom error [E019]');
-  }
+  it('should throw a Error in "utils.getName" when "customName" is defined as a function but does not return a String [StringLengthExpectedError]', () => {
+    try {
+      utils.getName(DummyClass, {
+        options: {
+          // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
+          customName: () => 10,
+        },
+      });
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "utils.getName" when "customName" is defined as a function but return does not meet the required length [StringLengthExpectedError]', () => {
+    try {
+      utils.getName(DummyClass, {
+        options: {
+          customName: () => '',
+        },
+      });
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "utils.mergeMetadata" when "key" is not a string [StringLengthExpectedError]', () => {
+    try {
+      utils.mergeMetadata(
+        // @ts-expect-error "undefined" is not a key in "DecoratorKeys"
+        undefined,
+        undefined,
+        DummyClass
+      );
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "utils.mergeMetadata" when "key" is a string but does not meet the required length [StringLengthExpectedError]', () => {
+    try {
+      utils.mergeMetadata(
+        // @ts-expect-error "" is not a key in "DecoratorKeys"
+        '',
+        undefined,
+        DummyClass
+      );
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "processProp" when "refPath" is not a string [StringLengthExpectedError]', () => {
+    try {
+      class TestRefPathString {
+        @prop(
+          // @ts-expect-error "refPath" only accepts strings
+          {
+            refPath: 10,
+          } as BasePropOptions
+        )
+        public test?: string;
+      }
+
+      buildSchema(TestRefPathString);
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error in "processProp" when "refPath" is a string but does not meet the required length [StringLengthExpectedError]', () => {
+    try {
+      class TestRefPathString {
+        @prop({ refPath: '' })
+        public test?: string;
+      }
+
+      buildSchema(TestRefPathString);
+
+      fail('Expected to throw "StringLengthExpectedError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });

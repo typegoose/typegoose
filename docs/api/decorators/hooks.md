@@ -1,6 +1,6 @@
 ---
 id: hooks
-title: 'Hooks'
+title: '@pre & @post'
 ---
 
 Don't forget to import these hooks with:

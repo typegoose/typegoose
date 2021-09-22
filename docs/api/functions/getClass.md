@@ -1,6 +1,6 @@
 ---
 id: get-class
-title: 'Get Class'
+title: 'getClass'
 ---
 
 `getClass(input: any)` gets the class in a variety of ways.  

@@ -1,6 +1,6 @@
 ---
 id: model-options
-title: 'Model Options'
+title: '@modelOptions'
 ---
 
 `@modelOptions(options: object)` is used for setting options like schema options, an existing connect and/or an existing Mongoose.

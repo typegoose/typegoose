@@ -15,7 +15,7 @@ export class IsRefType {
   @prop({ ref: IsRefTypeNestedString, type: String })
   public nestedString?: Ref<IsRefTypeNestedString>;
 
-  @prop({ ref: IsRefTypeNestedString })
+  @prop({ ref: IsRefTypeNestedObjectId })
   public nestedObjectId?: Ref<IsRefTypeNestedObjectId>;
 }
 

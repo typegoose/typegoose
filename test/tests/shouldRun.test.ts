@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
-import { DecoratorKeys } from '../../src/internal/constants';
-import { SelfContainingClassError } from '../../src/internal/errors';
+import { mapValueToSeverity } from '../../src/globalOptions';
+import { DecoratorKeys, Severity } from '../../src/internal/constants';
 import { assertion, assignMetadata, createArrayFromDimensions, getName, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 import {
@@ -15,10 +15,14 @@ import {
   prop,
   queryMethod,
 } from '../../src/typegoose';
-import type { AsQueryMethod, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
+import type { AsQueryMethod, Func, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
+
+beforeEach(() => {
+  jest.restoreAllMocks();
+});
 
 it('should not error when trying to get model multiple times', () => {
   class TEST {}
@@ -72,6 +76,8 @@ it('should make use of Map default', async () => {
 });
 
 it('should work with Objects in Class [szokodiakos#54]', async () => {
+  const spyWarn = jest.spyOn(logger, 'warn').mockImplementationOnce(() => void 0);
+
   class TESTObject {
     @prop()
     public test: {
@@ -79,12 +85,11 @@ it('should work with Objects in Class [szokodiakos#54]', async () => {
     };
   }
 
-  logger.warn = jest.fn();
-
   const model = getModelForClass(TESTObject);
   const doc = await model.create({ test: { anotherTest: 'hello' } } as TESTObject);
 
-  expect((logger.warn as any).mock.calls.length).toEqual(1);
+  expect(spyWarn).toHaveBeenCalledTimes(1);
+  expect(spyWarn.mock.calls).toMatchSnapshot();
   expect(doc).not.toBeUndefined();
   expect(typeof doc.test).toBe('object');
   expect(doc.test.anotherTest).toEqual('hello');
@@ -167,19 +172,6 @@ it('should make use of "@prop({ _id: false })" and have no _id', async () => {
   expect(doc).not.toBeUndefined();
   expect(doc.someprop).toHaveProperty('hi', 10);
   expect(doc.someprop).not.toHaveProperty('_id');
-});
-
-it('should throw a error with a self-containing-class [typegoose#42]', () => {
-  try {
-    class SelfContaining {
-      @prop()
-      public nest?: SelfContaining;
-    }
-
-    buildSchema(SelfContaining);
-  } catch (err) {
-    expect(err).toBeInstanceOf(SelfContainingClassError);
-  }
 });
 
 it('should allow self-referencing classes', async () => {
@@ -326,8 +318,8 @@ it('should also allow "mongoose.Types.Array<string>" as possible type', () => {
   expect((schema.path('someString') as any).caster).toBeInstanceOf(mongoose.Schema.Types.String);
 });
 
-it('should give a warning [typegoose/typegoose#152]', () => {
-  logger.warn = jest.fn();
+it('should give a warning when type is "any" [typegoose/typegoose#152]', () => {
+  const spyWarn = jest.spyOn(logger, 'warn').mockImplementationOnce(() => void 0);
 
   class TestANY {
     @prop()
@@ -335,8 +327,9 @@ it('should give a warning [typegoose/typegoose#152]', () => {
   }
 
   const schema = buildSchema(TestANY);
-  expect((logger.warn as any).mock.calls.length).toEqual(1);
   expect(schema.path('someANY')).toBeInstanceOf(mongoose.Schema.Types.Mixed);
+  expect(spyWarn).toHaveBeenCalledTimes(1);
+  expect(spyWarn.mock.calls).toMatchSnapshot();
 });
 
 it('should create 1D Array (createArrayFromDimensions)', () => {
@@ -403,8 +396,13 @@ it('should add query Methods', async () => {
   const QueryMethodsModel = getModelForClass<typeof QueryMethodsClass, FindHelpers>(QueryMethodsClass);
 
   const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethodsClass);
-  expect(Array.from(metadata)).toEqual(
-    expect.arrayContaining([['findByName', findByName]]) && expect.arrayContaining([['findByLastname', findByLastname]])
+  expect(metadata).toBeDefined();
+  expect(metadata.size).toStrictEqual(2);
+  expect(metadata).toStrictEqual(
+    new Map([
+      [findByName.name, findByName],
+      [findByLastname.name, findByLastname],
+    ])
   );
 
   const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
@@ -414,77 +412,364 @@ it('should add query Methods', async () => {
   expect(found[0].toObject()).toEqual(doc.toObject());
 });
 
-it('should be map none/array/map correctly if using get/set options [typegoose#422]', async () => {
-  class TestGetSetOptions {
-    @prop({ get: () => 0, set: () => 1 })
-    public normal?: number;
-
-    @prop({ type: Number, get: () => [0], set: () => [1] })
-    public array?: number[];
-
-    @prop({ type: Number, get: () => new Map([['0', 0]]), set: () => new Map([['1', 1]]) })
-    public map?: Map<string, number>;
+it('should add query Methods with inheritance', async () => {
+  interface FindHelpersBase {
+    findByName: AsQueryMethod<typeof findByName>;
+    findByLastname: AsQueryMethod<typeof findByLastname>;
   }
 
-  const schema = buildSchema(TestGetSetOptions);
-  expect(schema.path('normal')).toBeInstanceOf(mongoose.Schema.Types.Number);
-  expect(schema.path('normal') as any).not.toHaveProperty('caster');
-  expect(schema.path('array')).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect((schema.path('array') as any).caster).toBeInstanceOf(mongoose.Schema.Types.Number);
-  expect(schema.path('map')).toBeInstanceOf(mongoose.Schema.Types.Map);
-  expect((schema.path('map') as any).$__schemaType).toBeInstanceOf(mongoose.Schema.Types.Number);
-  expect(schema.path('map') as any).not.toHaveProperty('caster');
+  function findByName(this: ReturnModelType<typeof QueryMethodsClassBase, FindHelpersBase>, name: string) {
+    return this.find({ name });
+  }
+
+  function findByLastname(this: ReturnModelType<typeof QueryMethodsClassBase, FindHelpersBase>, lastname: string) {
+    return this.find({ lastname });
+  }
+
+  @queryMethod(findByName)
+  @queryMethod(findByLastname)
+  class QueryMethodsClassBase {
+    @prop({ required: true })
+    public name: string;
+
+    @prop({ required: true })
+    public lastname: string;
+  }
+
+  interface FindHelpersExtended extends FindHelpersBase {
+    findByAge: AsQueryMethod<typeof findByAge>;
+  }
+
+  function findByAge(this: ReturnModelType<typeof QueryMethodsClassExtended, FindHelpersExtended>, age: number) {
+    return this.find({ age });
+  }
+
+  @queryMethod(findByAge)
+  class QueryMethodsClassExtended extends QueryMethodsClassBase {
+    @prop({ required: true })
+    public age: number;
+  }
+
+  const QueryMethodsExtendedModel = getModelForClass<typeof QueryMethodsClassExtended, FindHelpersExtended>(QueryMethodsClassExtended);
+
+  const metadata: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, QueryMethodsClassExtended);
+  expect(metadata).toBeDefined();
+  expect(metadata.size).toStrictEqual(3);
+  expect(metadata).toStrictEqual(
+    new Map<string, Func>([
+      [findByName.name, findByName],
+      [findByLastname.name, findByLastname],
+      [findByAge.name, findByAge],
+    ])
+  );
+
+  const doc = await QueryMethodsExtendedModel.create({ name: 'hello', lastname: 'world', age: 10 });
+
+  const found = await QueryMethodsExtendedModel.find()
+    .findByName('hello')
+    .findByLastname('world')
+    // @ts-expect-error I (hasezoey) could not get all functions to work with each other type-wise (typegoose 9.0, mongoose 6.0, typescript 4.4)
+    .findByAge(10)
+    .orFail()
+    .exec();
+  assertion(isDocumentArray(found), new Error('Found is not an document array'));
+  expect(found[0].toObject()).toEqual(doc.toObject());
 });
 
-it('should not Error if get/set options are used and type is an class and is an array [typegoose#478]', async () => {
-  class SubGetSetClassArray {
+it('should output correct defaults with multiple inheritance [typegoose/typegoose#292]', () => {
+  class Parent {
+    // put default as a function if it needs to be dynamic
+    @prop({ default: () => 'base' })
+    public UID?: string;
+  }
+
+  class Child extends Parent {
+    @prop({ default: () => 'overwritten' })
+    public UID?: string;
+  }
+
+  class GrandChild extends Child {
     @prop()
-    public dummy?: string;
+    public something?: string;
   }
 
-  class ParentGetSetClassArray {
-    @prop({ get: (v) => v, set: (v) => v, type: () => [SubGetSetClassArray] })
-    public nested?: SubGetSetClassArray[];
-  }
+  const BaseModel = getModelForClass(Parent);
+  const ChildModel = getModelForClass(Child);
+  const GrandChildModel = getModelForClass(GrandChild);
 
-  buildSchema(ParentGetSetClassArray);
+  const baseDoc = new BaseModel();
+  const childDoc = new ChildModel();
+  const grandChildDoc = new GrandChildModel();
+
+  expect(baseDoc.UID).toEqual('base');
+  expect(childDoc.UID).toEqual('overwritten');
+  expect(grandChildDoc.UID).toEqual('overwritten');
 });
 
-it('should make use of the "Passthrough" class', async () => {
-  const alsoSchema = new mongoose.Schema({
-    something: { type: { somePath: String } },
-    somethingExtra: { type: { someExtraPath: [String] } },
+describe('get/set options', () => {
+  it('should map WhatIsIt (none/array/map) correctly when using get/set options [typegoose#422]', async () => {
+    class TestGetSetOptions {
+      @prop({ get: () => 0, set: () => 1 })
+      public normal?: number;
+
+      @prop({ type: Number, get: () => [0], set: () => [1] })
+      public array?: number[];
+
+      @prop({ type: Number, get: () => new Map([['0', 0]]), set: () => new Map([['1', 1]]) })
+      public map?: Map<string, number>;
+    }
+
+    const schema = buildSchema(TestGetSetOptions);
+    expect(schema.path('normal')).toBeInstanceOf(mongoose.Schema.Types.Number);
+    expect(schema.path('normal')).not.toHaveProperty('caster');
+    expect(schema.path('array')).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect((schema.path('array') as any).caster).toBeInstanceOf(mongoose.Schema.Types.Number);
+    expect(schema.path('map')).toBeInstanceOf(mongoose.Schema.Types.Map);
+    expect((schema.path('map') as any).$__schemaType).toBeInstanceOf(mongoose.Schema.Types.Number);
+    expect(schema.path('map')).not.toHaveProperty('caster');
   });
 
-  class SomeTestClass {
-    @prop({ type: () => new Passthrough({ somePath: String }) })
-    public something?: { somePath: string };
+  it('should not Error if get/set options are used and type is an class and is an array [typegoose#478]', async () => {
+    const origValue = 'hello';
+    const changedValue = 'helloThere';
 
-    @prop({ type: new Passthrough({ someExtraPath: [String] }) })
-    public somethingExtra?: { someExtraPath: string[] };
-  }
+    class SubGetSetClassArray {
+      @prop()
+      public dummy?: string;
+    }
 
-  const sch = buildSchema(SomeTestClass);
-  const somethingPath = sch.path('something');
-  const somethingExtraPath = sch.path('somethingExtra');
-  const alsoSomethingPath = alsoSchema.path('something');
-  const alsoSomethingExtraPath = alsoSchema.path('somethingExtra');
+    class ParentGetSetClassArray {
+      @prop({
+        get: (v) => v,
+        set: (v: any[]) =>
+          v.map((v) => {
+            return { ...v, dummy: changedValue };
+          }),
+        type: () => [SubGetSetClassArray],
+      })
+      public nested?: SubGetSetClassArray[];
+    }
 
-  expect(somethingPath).toBeInstanceOf(mongoose.Schema.Types.Mixed);
-  expect(somethingExtraPath).toBeInstanceOf(mongoose.Schema.Types.Mixed);
-  expect(somethingPath).toStrictEqual(alsoSomethingPath);
-  expect(somethingExtraPath).toStrictEqual(alsoSomethingExtraPath);
+    const ParentGetSetClassArrayModel = getModelForClass(ParentGetSetClassArray);
 
-  expect(somethingPath).toEqual(
-    expect.objectContaining({
-      options: { type: { somePath: String } },
-    })
-  );
-  expect(somethingExtraPath).toEqual(
-    expect.objectContaining({
-      options: { type: { someExtraPath: [String] } },
-    })
-  );
+    const doc = new ParentGetSetClassArrayModel({ nested: [{ dummy: origValue }] });
+    await doc.validate();
+    expect(doc.nested?.[0].dummy).toStrictEqual(changedValue);
+  });
+
+  it('should allow being used with just one of the options (either set or get)', async () => {
+    const setString = 'SetApplied';
+    const getString = 'GetApplied';
+    const origValue = 'someValue';
+
+    // Test Set with no Get
+    {
+      class TestWithSetNoGet {
+        @prop({ set: (v) => `${setString} ${v}` })
+        public setted?: string;
+      }
+
+      const TestWithSetNoGetModel = getModelForClass(TestWithSetNoGet);
+
+      const setNoGetDoc = new TestWithSetNoGetModel({ setted: origValue });
+      expect(setNoGetDoc.setted).toStrictEqual(`${setString} ${origValue}`);
+    }
+
+    // Test Get with no Set
+    {
+      class TestWithGetNoSet {
+        @prop({ get: (v) => `${getString} ${v}` })
+        public getted?: string;
+      }
+
+      const TestWithGetNoSetModel = getModelForClass(TestWithGetNoSet);
+
+      const getNoSetDoc = new TestWithGetNoSetModel({ getted: origValue });
+      expect(getNoSetDoc.getted).toStrictEqual(`${getString} ${origValue}`);
+    }
+  });
+});
+
+describe('test the Passthrough class (non "direct")', () => {
+  it('should make use of the "Passthrough" class (WhatIsIt.NONE)', async () => {
+    const mongooseSchema = new mongoose.Schema({
+      something: { type: { somePath: String } },
+      somethingExtra: { type: { someExtraPath: [String] } },
+    });
+
+    class PassthroughWhatIsItNONE {
+      @prop({ type: () => new Passthrough({ somePath: String }) })
+      public something?: { somePath: string };
+
+      @prop({ type: new Passthrough({ someExtraPath: [String] }) })
+      public somethingExtra?: { someExtraPath: string[] };
+    }
+
+    const typegooseSchema = buildSchema(PassthroughWhatIsItNONE);
+    const typegooseSomethingPath = typegooseSchema.path('something');
+    const typegooseSomethingExtraPath = typegooseSchema.path('somethingExtra');
+    const mongooseSomethingPath = mongooseSchema.path('something');
+    const mongooseSomethingExtraPath = mongooseSchema.path('somethingExtra');
+
+    // Since mongoose 6.0, this results in an actual Schema, see https://github.com/Automattic/mongoose/issues/7181
+    expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+    expect(typegooseSomethingExtraPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+
+    expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+    expect(mongooseSomethingExtraPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+
+    /** Type to shorten using another type */
+    type SubDocumentAlias = mongoose.Schema.Types.Subdocument;
+
+    expect((typegooseSomethingPath as SubDocumentAlias).schema.path('somePath')).toMatchObject(
+      (mongooseSomethingPath as SubDocumentAlias).schema.path('somePath')
+    );
+
+    expect((typegooseSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect((mongooseSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
+
+    /** Type to shorten using another type and to add "caster", because it does not exist on the type */
+    type ArrayWithCaster = mongoose.Schema.Types.Array & { caster: any };
+    expect((typegooseSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
+      mongoose.Schema.Types.String
+    );
+    expect((mongooseSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
+      mongoose.Schema.Types.String
+    );
+
+    // This is somehow not working, because somehow these 2 variables are not equal (maybe because of Symbols?)
+    // expect((somethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toMatchObject(
+    //   (alsoSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')
+    // );
+  });
+
+  // currently does not work, see https://github.com/Automattic/mongoose/issues/10750
+  it.skip('should make use of the "Passthrough" class (WhatIsIt.ARRAY)', () => {
+    const mongooseSchema = new mongoose.Schema({
+      something: [{ type: { somePath: String } }],
+    });
+
+    class PassthroughWhatIsItARRAY {
+      @prop({ type: () => new Passthrough({ somePath: String }) })
+      public something?: [{ somePath: string }];
+    }
+
+    const typegooseSchema = buildSchema(PassthroughWhatIsItARRAY);
+    const typegooseSomethingPath = typegooseSchema.path('something');
+    const mongooseSomethingPath = mongooseSchema.path('something');
+
+    console.log(
+      'test1',
+      typegooseSomethingPath instanceof mongoose.Schema.Types.Array,
+      typegooseSomethingPath instanceof mongoose.Schema.Types.DocumentArray
+    );
+    expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+  });
+
+  it('should make use of the "Passthrough" class (WhatIsIt.MAP)', () => {
+    const spyWarn = jest.spyOn(logger, 'warn').mockImplementation(() => void 0);
+    const mongooseSchema = new mongoose.Schema({
+      something: {
+        type: Map,
+        of: { type: { somePath: String } },
+      },
+    });
+
+    class PassthroughWhatIsItMAP {
+      @prop({ type: () => new Passthrough({ somePath: String }) })
+      public something?: Map<string, { somePath: string }>;
+    }
+
+    const typegooseSchema = buildSchema(PassthroughWhatIsItMAP);
+    const typegooseSomethingPath = typegooseSchema.path('something');
+    const mongooseSomethingPath = mongooseSchema.path('something');
+
+    expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+    expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+    expect(spyWarn).toHaveBeenCalledTimes(1);
+    expect(spyWarn.mock.calls).toMatchSnapshot();
+  });
+});
+
+describe('test the Passthrough class with "direct"', () => {
+  it('should make use of the "Passthrough" class with "direct" (WhatIsIt.NONE)', () => {
+    const mongooseSchema = new mongoose.Schema({
+      child: { somePath: String },
+    });
+
+    class TestPassthroughWhatIsItNONEDirect {
+      @prop({ type: () => new Passthrough({ somePath: String }, true) })
+      public child?: { somePath: string };
+    }
+
+    const typegooseSchema = buildSchema(TestPassthroughWhatIsItNONEDirect);
+
+    expect(mongooseSchema.path('child')).toBeUndefined();
+    expect(typegooseSchema.path('child')).toBeUndefined();
+
+    expect(mongooseSchema.path('child.somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect(typegooseSchema.path('child.somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+  });
+
+  it('should make use of the "Passthrough" class with "direct" (WhatIsIt.ARRAY)', () => {
+    const mongooseSchema = new mongoose.Schema({
+      child: [{ somePath: String }],
+    });
+
+    class TestPassthroughWhatIsItARRAYDirect {
+      @prop({ type: () => new Passthrough([{ somePath: String }], true) })
+      public child?: [{ somePath: string }];
+    }
+
+    const typegooseSchema = buildSchema(TestPassthroughWhatIsItARRAYDirect);
+
+    const mongooseChildPath = mongooseSchema.path('child');
+    const typegooeChildPath = typegooseSchema.path('child');
+
+    expect(mongooseChildPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+    expect(typegooeChildPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+
+    expect((mongooseChildPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
+    expect((typegooeChildPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
+
+    expect((mongooseChildPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect((typegooeChildPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+  });
+
+  it('should make use of the "Passthrough" class with "direct" (WhatIsIt.MAP)', () => {
+    const mongooseSchema = new mongoose.Schema({
+      child: {
+        type: Map,
+        of: { somePath: String },
+      },
+    });
+
+    class TestPassthroughWhatIsItMAPDirect {
+      @prop({ type: () => new Passthrough({ type: Map, of: { somePath: String } }, true) })
+      public child?: Map<string, { somePath: string }>;
+    }
+
+    const typegooseSchema = buildSchema(TestPassthroughWhatIsItMAPDirect);
+
+    const mongooseChildPath = mongooseSchema.path('child');
+    const typegooeChildPath = typegooseSchema.path('child');
+
+    expect(mongooseChildPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+    expect(typegooeChildPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+
+    const mongooseChildMapType = mongooseChildPath['$__schemaType'];
+    const typegooseChildMapType = typegooeChildPath['$__schemaType'];
+
+    expect(mongooseChildMapType).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+    expect(typegooseChildMapType).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
+
+    expect(mongooseChildMapType.schema).toBeInstanceOf(mongoose.Schema);
+    expect(typegooseChildMapType.schema).toBeInstanceOf(mongoose.Schema);
+
+    expect(mongooseChildMapType.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect(typegooseChildMapType.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+  });
 });
 
 it('should allow Maps with SubDocument "Map<string SubDocument>"', async () => {
@@ -504,7 +789,7 @@ it('should allow Maps with SubDocument "Map<string SubDocument>"', async () => {
   const casterNestingPath = nestingPath['$__schemaType'];
 
   expect(nestingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
-  expect(casterNestingPath).toBeInstanceOf(mongoose.Schema.Types.Embedded);
+  expect(casterNestingPath).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
   expect(casterNestingPath.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
   expect(casterNestingPath.schema.paths).not.toHaveProperty('_id');
 });
@@ -531,4 +816,51 @@ it('should allow Maps with SubDocument Array "Map<string SubDocument[]>"', async
   // expect(casterNestingPath.caster).toEqual(mongoose.Schema.Types.Embedded);
   expect(casterNestingPath.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
   expect(casterNestingPath.schema.paths).not.toHaveProperty('_id');
+});
+
+it('should not modify an immutable', async () => {
+  class TestImmutable {
+    @prop({ type: String, required: true, immutable: true })
+    public someprop: Readonly<string>;
+  }
+
+  const TIModel = getModelForClass(TestImmutable);
+  const doc = await TIModel.create({ someprop: 'Hello' });
+  expect(doc).not.toBeUndefined();
+  doc.someprop = 'Hello2';
+  await doc.save();
+  expect(doc.someprop).toEqual('Hello');
+});
+
+it('should allow creating a property named "id" [typegoose#476]', async () => {
+  const shouldCreate = { normalProp: 'hello', id: 10 };
+  @modelOptions({ schemaOptions: { id: false } }) // Disable the internal "id" virtual
+  class ClassWithIDProperty {
+    @prop()
+    public normalProp?: string;
+
+    @prop()
+    public id?: number;
+  }
+
+  const model = getModelForClass(ClassWithIDProperty);
+
+  const doc = await model.create(shouldCreate);
+
+  // Add many options, to ensure that the "id" virtual does actually not exist
+  expect(doc.toObject({ virtuals: true, getters: true, aliases: true })).toMatchSnapshot({ _id: expect.any(mongoose.Types.ObjectId) });
+});
+
+describe('tests for "mapValueToSeverity"', () => {
+  it('should map string to enum (mapValueToSeverity)', () => {
+    expect(mapValueToSeverity(0)).toStrictEqual(Severity.ALLOW);
+    expect(mapValueToSeverity(1)).toStrictEqual(Severity.WARN);
+    expect(mapValueToSeverity(2)).toStrictEqual(Severity.ERROR);
+  });
+
+  it('should map number to enum (mapValueToSeverity)', () => {
+    expect(mapValueToSeverity('ALLOW')).toStrictEqual(Severity.ALLOW);
+    expect(mapValueToSeverity('WARN')).toStrictEqual(Severity.WARN);
+    expect(mapValueToSeverity('ERROR')).toStrictEqual(Severity.ERROR);
+  });
 });

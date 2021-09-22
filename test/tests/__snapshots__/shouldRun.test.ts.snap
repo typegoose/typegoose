@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should allow creating a property named "id" [typegoose#476] 1`] = `
+Object {
+  "__v": 0,
+  "_id": Any<ObjectId>,
+  "id": 10,
+  "normalProp": "hello",
+}
+`;
+
+exports[`should give a warning when type is "any" [typegoose/typegoose#152] 1`] = `
+Array [
+  Array [
+    "Setting \\"Mixed\\" for property \\"%s.%s\\"
+Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
+    "TestANY",
+    "someANY",
+  ],
+]
+`;
+
+exports[`should work with Objects in Class [szokodiakos#54] 1`] = `
+Array [
+  Array [
+    "Setting \\"Mixed\\" for property \\"%s.%s\\"
+Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
+    "TESTObject",
+    "test",
+  ],
+]
+`;
+
+exports[`test the Passthrough class (non "direct") should make use of the "Passthrough" class (WhatIsIt.MAP) 1`] = `
+Array [
+  Array [
+    "Setting \\"Mixed\\" for property \\"%s.%s\\"
+Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
+    "PassthroughWhatIsItMAP",
+    "something",
+  ],
+]
+`;

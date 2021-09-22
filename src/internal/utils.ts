@@ -16,7 +16,7 @@ import type {
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
-import { AssertionFallbackError, InvalidWhatIsItError, NoValidClassError } from './errors';
+import { AssertionFallbackError, InvalidWhatIsItError, NoValidClassError, StringLengthExpectedError } from './errors';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -137,7 +137,6 @@ export function initProperty(name: string, key: string, whatis: WhatIsIt) {
       schemaProp[key] = {};
       break;
     default:
-      /* istanbul ignore next */ // ignore because this case should really never happen (typescript prevents this)
       throw new InvalidWhatIsItError(whatis, name, key, 'whatis(initProperty)');
   }
 
@@ -161,7 +160,7 @@ export function getClassForDocument(document: mongoose.Document): NewableFunctio
 export function getClass(
   input:
     | (mongoose.Document & IObjectWithTypegooseFunction)
-    | (mongoose.Schema.Types.Embedded & IObjectWithTypegooseFunction)
+    | (mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction)
     | string
     | IObjectWithTypegooseName
     | any
@@ -177,6 +176,7 @@ export function getClass(
     return constructors.get(input.typegooseName());
   }
 
+  // REFACTOR: re-write this to be a Error inside errors.ts
   throw new ReferenceError('Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]');
 }
 
@@ -261,7 +261,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamC
  * @internal
  */
 export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): T {
-  assertion(typeof key === 'string', new TypeError(`"${key}"(key) is not a string! (mergeMetadata)`));
+  assertion(typeof key === 'string' && key.length > 0, new StringLengthExpectedError(1, key, getName(cl), 'key'));
   assertionIsClass(cl);
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
@@ -309,19 +309,20 @@ export function getRightTarget(target: any): any {
  * @param customOptions Extra Options that can be added in "buildSchema"
  */
 export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions?: IModelOptions) {
+  // this case can happen when type casting (or type being "any") happened and wanting to throw a Error (and there using "getName" to help)
+  assertion(!isNullOrUndefined(cl), new NoValidClassError(cl));
+
   const ctor: any = getRightTarget(cl);
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
   const baseName: string = ctor.name;
   const customName = customOptions?.options?.customName ?? options.options?.customName;
 
   if (typeof customName === 'function') {
-    const name: any = customName(options);
+    const name = customName(options);
 
     assertion(
       typeof name === 'string' && name.length > 0,
-      new TypeError(
-        `The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`
-      )
+      new StringLengthExpectedError(1, name, baseName, 'options.customName(function)')
     );
 
     return name;
@@ -335,15 +336,14 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions
     return !isNullOrUndefined(suffix) ? `${baseName}_${suffix}` : baseName;
   }
 
-  if (typeof customName === 'string') {
-    if (customName.length <= 0) {
-      throw new TypeError(`"customName" must be a string AND at least one character ("${baseName}") [E015]`);
-    }
-  }
-
   if (isNullOrUndefined(customName)) {
     return baseName;
   }
+
+  assertion(
+    typeof customName === 'string' && customName.length > 0,
+    new StringLengthExpectedError(1, customName, baseName, 'options.customName')
+  );
 
   return customName;
 }
@@ -437,12 +437,12 @@ export function mapOptions(
 
   if (!(Type instanceof mongoose.Schema)) {
     loggerType = Type;
+    const loggerTypeName = getName(loggerType);
 
-    if (getName(loggerType) in mongoose.Schema.Types) {
-      logger.info('Converting "%s" to mongoose Type', getName(loggerType));
-      Type = mongoose.Schema.Types[getName(loggerType)];
+    if (loggerTypeName in mongoose.Schema.Types) {
+      logger.info('Converting "%s" to mongoose Type', loggerTypeName);
+      Type = mongoose.Schema.Types[loggerTypeName];
 
-      /* istanbul ignore next */
       if (Type === mongoose.Schema.Types.Mixed) {
         warnMixed(target, pkey);
       }
@@ -457,16 +457,16 @@ export function mapOptions(
   let OptionsCTOR: undefined | AnyParamConstructor<any> = Type?.prototype?.OptionsConstructor;
 
   if (Type instanceof mongoose.Schema) {
-    OptionsCTOR = mongoose.Schema.Types.Embedded.prototype.OptionsConstructor;
+    OptionsCTOR = mongoose.Schema.Types.Subdocument.prototype.OptionsConstructor;
   }
 
+  // REFACTOR: re-write this to be a Error inside errors.ts
   assertion(
     !isNullOrUndefined(OptionsCTOR),
-    new TypeError(`Type does not have a valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`)
+    new TypeError(`Type does not have a valid "OptionsConstructor"! ("${getName(loggerType)}" on "${getName(target)}.${pkey}") [E016]`)
   );
 
   const options = Object.assign({}, rawOptions); // for sanity
-  delete options.items;
 
   if (OptionsCTOR.prototype instanceof mongoose.SchemaTypeOptions) {
     for (const [key, value] of Object.entries(options)) {
@@ -645,23 +645,22 @@ export function isConstructor(obj: any): obj is AnyParamConstructor<any> {
   return typeof obj === 'function' && !isNullOrUndefined(obj.prototype?.constructor?.name);
 }
 
-// Below are function to wrap NodeJS functions for client compatability (eslint ignore is needed)
-
-/**
- * Execute util.deprecate or when !process console log
- * (if client, it dosnt cache which codes already got logged)
- */
+// /**
+//  * Execute util.deprecate or when "process" does not exist use "console.log"
+//  * (if "process" does not exist, the codes are not cached, and are always logged again)
+//  * This Function is here to try to make typegoose compatible with the browser (see https://github.com/typegoose/typegoose/issues/33)
+//  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export function deprecate<T extends Function>(fn: T, message: string, code: string): T {
-  if (!isNullOrUndefined(process)) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    return require('util').deprecate(fn, message, code);
-  }
+// export function deprecate<T extends Function>(fn: T, message: string, code: string): T {
+//   if (!isNullOrUndefined(process)) {
+//     // eslint-disable-next-line @typescript-eslint/no-var-requires
+//     return require('util').deprecate(fn, message, code);
+//   }
 
-  console.log(`[${code}] DeprecationWarning: ${message}`);
+//   console.log(`[${code}] DeprecationWarning: ${message}`);
 
-  return fn;
-}
+//   return fn;
+// }
 
 /**
  * Logs an warning if "included > 0" that the options of not the current type are included

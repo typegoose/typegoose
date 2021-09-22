@@ -7,10 +7,10 @@ title: 'Error & Warning Details'
 
 ### Mongoose Version [E001]
 
-Error: `Please use mongoose 5.13.8 or higher (Current mongoose: x.x.x) [E001]`
+Error: `Please use mongoose 6.0.7 or higher (Current mongoose: x.x.x) [E001]`
 
 Details:  
-Typegoose requires at least mongoose version `5.13.8`, because that version changed something that affected typegoose internals
+Typegoose requires at least mongoose version `6.0.7`, because that version changed something that affected typegoose internals
 
 ### NodeJS Version [E002]
 
@@ -19,19 +19,17 @@ Error: `You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]`
 Details:  
 Typegoose requires at least NodeJS Version 12.22, because NodeJS 12 is the lowest activly maintained version AND is the lowest that supports all functions needed by typegoose (without having to add polyfills)
 
-### addModelToTypegoose called twice [E003]
+### Function only supports to be called "${supported}" times [E003]
 
 Error:
 
 ```txt
-It seems like "addModelToTypegoose" got called twice
-Or multiple classes with the same name are used, which is not supported! (Model Name: "${name}") [E003]
+Function "${functionName}" only supports to be called "${supported}" times with the same parameters [E003]
+${extra}
 ```
 
 Details:  
-`addModelToTypegoose` can only be called once with one name, mongoose dosnt support multiple models with the same name on the same connection / mongoose instance and typegoose has an internal cache where the key is the name (needs to be unique)  
-
--> [More Information on how to solve it](guides/../advanced/models-with-same-name.md)
+For example [`addModelToTypegoose`](../api/functions/addModelToTypegoose.md) only supports to be called once (1) with the same model name, [this problem has a specific Guide](./advanced/models-with-same-name.md).
 
 ### Self Containg Class [E004]
 
@@ -48,7 +46,7 @@ Because of limitations of JS, it is not possible to use a self-containing-class
 
 ### ref is undefined [E005]
 
-Error: `Option "ref" for "${name}.${key}" is null/undefined! [E005]`
+Error: `Prop-Option "ref"'s value is "null" or "undefined" for "${name}.${key}" [E005]`
 
 Details:  
 Either:
@@ -76,6 +74,8 @@ Not all required Virtual-Populate options were provided, required are: `localFie
 
 ### Get & Set Options [E007]
 
+<span class="badge badge--warning">This Error got removed in 9.0.0</span>
+
 Error:
 - `"${name}.${key}" does not have a set function! [E007]`
 - `"${name}.${key}" does not have a get function! [E007]`
@@ -84,6 +84,12 @@ Details:
 When using the `get & set` options, both are required to be specified at the same time
 
 ### refPath must be of type String [E008]
+
+<span class="badge badge--warning">This Error got removed in 9.0.0</span>
+
+:::info
+This Error got merged with [`E026`](#expected-string-to-have-length-e026) in 9.0.0
+:::
 
 Error: `"refPath" for "${name}, ${key}" should be of type String! [E008]`
 
@@ -145,7 +151,7 @@ This Error should never be thrown if Typescript is used, it throws if the `Type`
 Error: `"${whatisit}"(${where}) is invalid for "${name}.${key}" [E013]`
 
 Details:  
-A Value not specified by the enum `WhatIsIt` was provided (no case matched), [read more about it here](../api/decorators/prop.md#whatisit)
+The Value `${whatisit}` is not supported in `${where}` or does not exist in the [`WhatIsIt`](../api/decorators/prop.md#whatisit) enum.
 
 ### Input was not string or have .typegooseName function/string [E014]
 
@@ -155,6 +161,12 @@ Details:
 The Provided Input wasnt a string and didnt have a `.typegooseName` function / string to be searched by
 
 ### customName must be string and at least one character [E015]
+
+<span class="badge badge--warning">This Error got removed in 9.0.0</span>
+
+:::info
+This Error got merged with [`E026`](#expected-string-to-have-length-e026) in 9.0.0
+:::
 
 Error: `"customName" must be a string AND at least one character ("${baseName}") [E015]`
 
@@ -220,7 +232,7 @@ class ErrorClass {
 
 ### PropOptions.ref dosnt support Arrays [E021]
 
-Error: `"PropOptions.ref" dosnt support Arrays (got "${gotType.dim}" dimensions at "${name}.${key}") [E021]`
+Error: `Prop-Option "ref" does not support Arrays! (got "${dim}" dimensions, for property "${name}.${key}") [E021]`
 
 Details:  
 Somewhere the option `ref` was defined with an array, which is not supported
@@ -236,12 +248,24 @@ class ErrorClass {
 
 ### Return type of function assigned to "customName" doesn't return a string or is empty [E022]
 
+<span class="badge badge--warning">This Error got removed in 9.0.0</span>
+
+:::info
+This Error got merged with [`E026`](#expected-string-to-have-length-e026) in 9.0.0
+:::
+
 Error: `The return type of the function assigned to "customName" must be a string and must not be empty! ("${baseName}") [E022]`
 
 Details:  
 The function used to create a custom model name (via the `modelOptions` "option" prop) must return a string and it should not be empty.
 
 ### "ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]
+
+<span class="badge badge--warning">This Error got removed in 9.0.0</span>
+
+:::info
+This Error got merged with [`E013`](#invalid-whatisit-used-e013) in 9.0.0
+:::
 
 Error:  
 - `"ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]`
@@ -256,6 +280,26 @@ Error: `A property key in Typegoose cannot be an symbol! (${name}.${String(key)}
 
 Details:  
 A Property Key in Typegoose cannot be a Symbol, it must be a String (also a limitation of mongoose)
+
+### Expected "${where}" to be a valid mongoose.Model! [E025]
+
+Error: `Expected "${where}" to be a valid mongoose.Model! (got: "${model}") [E025]`
+
+Details:  
+A Valid instance of `mongoose.Model` was expected at `where`, but was not given a valid model.
+
+### Expected String to have length [E026]
+
+Error: `Expected "${valueName}" to have at least length of "${length}" (got: "${got}", where: "${where}") [E026]`
+
+Details:  
+Expected `valueName` to be a String and have at least the length of `length`, but got length / value `got` at `where`.
+
+This Error gets most commonly thrown when:
+
+- [`customName`](../api/decorators/modelOptions.md#customname) is a Function, but the function does not return a String or the returned String does not have the required length.
+- [`customName`](../api/decorators/modelOptions.md#customname) is defined, but is not a String or the defined String does not have the required length.
+- [`refPath`](../api/decorators/prop.md#refpath) is defined, but is not a String or the defined String does not have the required length.
 
 ## Warnings
 

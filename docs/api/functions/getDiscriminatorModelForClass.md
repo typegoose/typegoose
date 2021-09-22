@@ -1,6 +1,6 @@
 ---
 id: get-discriminator-model-for-class
-title: 'Get Discriminator Model For Class'
+title: 'getDiscriminatorModelForClass'
 ---
 
 `getDiscriminatorModelForClass(from: mongoose.model<any>, class, discriminator?: string)` gets a model for a given discriminator.

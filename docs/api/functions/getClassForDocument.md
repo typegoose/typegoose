@@ -1,6 +1,6 @@
 ---
 id: get-class-for-document
-title: 'Get Class for Document'
+title: 'getClassForDocument'
 ---
 
 `getClassForDocument(doc: DocumentType<any>)` gets the Class used in the model creation.

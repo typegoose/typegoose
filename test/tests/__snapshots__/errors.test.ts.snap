@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should error if 0 or less dimensions are given (createArrayFromDimensions) [RangeError] 1`] = `"\\"dim\\" needs to be higher than 0 (.) [E018]"`;
+
+exports[`should error if 0 or less dimensions are given (createArrayFromDimensions) [RangeError] 2`] = `"\\"dim\\" needs to be higher than 0 (.) [E018]"`;
+
+exports[`should error if a non-valid object is passed to "getClass" [ReferenceError] 1`] = `"Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]"`;
+
+exports[`should error if no function for hooks is defined [TypeError] 1`] = `"\\"TestNoFunctionHook.pre.\\"'s function is not a function!"`;
+
+exports[`should error if no valid key is supplied to "getModelWithString" [TypeError] 1`] = `"Expected \\"key\\" to be a string, got \\"true\\""`;
+
+exports[`should error if not all needed parameters for virtual-populate are given [NotAllVPOPElementsError] 1`] = `"\\"TestNAEEVirtualPopulate.test\\" has not all needed Virtual Populate Options! Needed are: localField, foreignField, ref [E006]"`;
+
+exports[`should error if the Type does not have a valid "OptionsConstructor" [TypeError] 1`] = `"Type does not have a valid \\"OptionsConstructor\\"! (\\"Error\\" on \\"Error.undefined-pkey\\") [E016]"`;
+
+exports[`should error if the options provide to "setGlobalOptions" are not an object [TypeError] 1`] = `"\\"options\\" argument needs to be an object!"`;
+
+exports[`should fail when using Number-Enum on an String Type [NotStringTypeError] 1`] = `
+"Typeof \\"NumberEnumOnStringType.someEnum\\" is \\"String\\", used enum is not only Strings! [E010]
+  Encountered with property in Enum: \\"One.string\\""
+`;
+
+exports[`should fail when using String-Enum on an Number Type [NotNumberTypeError] 1`] = `
+"Typeof \\"NumberEnumOnStringType.someEnum\\" is \\"Number\\", value is undefined/null or does not have a reverse mapping! [E011]
+  Encountered with property: \\"One.string\\""
+`;
+
+exports[`should throw a Error when "mapValueToSeverity" gets called but is not in "Severity" [Error] 1`] = `"\\"value\\" is not in range of \\"Severity\\"! (got: -1)"`;
+
+exports[`should throw a Error when "ref" is a array [OptionRefDoesNotSupportArraysError] 1`] = `"Prop-Option \\"ref\\" does not support Arrays! (got \\"1\\" dimensions, for property \\"TestOptionRefDoesNotSupportArraysError.nested\\") [E021]"`;
+
+exports[`should throw a Error when the property is a Symbol [CannotBeSymbolError] 1`] = `"A property key in Typegoose cannot be an symbol! (\\"TestPropertySymbol.Symbol()\\") [E024]"`;
+
+exports[`should throw an error if a self-contained class is used [typegoose#42] [SelfContainingClassError] 1`] = `
+"It seems like the type used is the same as the target class, which is not supported
+Please look at https://github.com/typegoose/typegoose/issues/42 for more information (\\"TestSelfContained.self\\") [E004]"
+`;
+
+exports[`should throw default error if no error is specified (assertion) [AssertionFallbackError] 1`] = `"Assert failed - no custom error [E019]"`;
+
+exports[`should throw when "deleteModel" is called with no string [TypeError] 1`] = `"name is not an string! (deleteModel)"`;
+
+exports[`tests for "FunctionCalledMoreThanSupportedError" should throw a Error when "addModelToTypegoose" got called more than once with the same model name [FunctionCalledMoreThanSupportedError] 1`] = `
+"Function \\"addModelToTypegoose\\" only supports to be called \\"1\\" times with the same parameters [E003]
+This was caused because the model name \\"TestMoreThanOnce\\" already exists in the typegoose-internal \\"models\\" cache"
+`;
+
+exports[`tests for "InvalidTypeError" should error if no valid type is supplied to WhatIsIt.ARRAY [InvalidTypeError] 1`] = `"\\"TestNoMetadataErrorAP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
+
+exports[`tests for "InvalidTypeError" should error if no valid type is supplied to WhatIsIt.MAP [InvalidTypeError] 1`] = `"\\"TestNoMetadataErrorMP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
+
+exports[`tests for "InvalidTypeError" should error if no valid type is supplied to WhatIsIt.NONE [InvalidTypeError] 1`] = `"\\"TestNME.test\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
+
+exports[`tests for "InvalidWhatIsItError" WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#Passthrough" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(Passthrough)) is invalid for \\"ProcessPropPassthroughWhatIsIt.test\\" [E013]"`;
+
+exports[`tests for "InvalidWhatIsItError" WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#primitive" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(primitive)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+
+exports[`tests for "InvalidWhatIsItError" WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#ref" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(ref)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+
+exports[`tests for "InvalidWhatIsItError" WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#refPath" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(refPath)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+
+exports[`tests for "InvalidWhatIsItError" WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#subSchema" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(subSchema)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+
+exports[`tests for "InvalidWhatIsItError" should throw a Error when "WhatIsIt.MAP" is used for "processProp#refPath" [InvalidWhatIsItError] 1`] = `"\\"1\\"(whatis(refPath)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+
+exports[`tests for "InvalidWhatIsItError" should throw a Error when a unknown WhatIsIt is used for "utils#initProperty" [InvalidWhatIsItError] 1`] = `"\\"-1\\"(whatis(initProperty)) is invalid for \\"a1.a2\\" [E013]"`;
+
+exports[`tests for "NoValidClassError" should error if no valid class is supplied to "_buildSchema" [NoValidClassError] 1`] = `"\\"hello\\" is not a function(/constructor)!"`;
+
+exports[`tests for "NoValidClassError" should error if no valid class is supplied to "addModelToTypegoose" [NoValidClassError] 1`] = `"\\"not class\\" is not a function(/constructor)!"`;
+
+exports[`tests for "NoValidClassError" should error if no valid class is supplied to "assignMetadata" (and "mergeMetadata") [NoValidClassError] 1`] = `"\\"true\\" is not a function(/constructor)!"`;
+
+exports[`tests for "NoValidClassError" should error if no valid class is supplied to "buildSchema" [NoValidClassError] 1`] = `"\\"hello\\" is not a function(/constructor)!"`;
+
+exports[`tests for "NoValidClassError" should error if no valid class is supplied to "deleteModelWithClass" [NoValidClassError] 1`] = `"\\"true\\" is not a function(/constructor)!"`;
+
+exports[`tests for "NoValidClassError" should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClassError] 1`] = `"\\"true\\" is not a function(/constructor)!"`;
+
+exports[`tests for "NoValidClassError" should error if no valid class is supplied to "getModelForClass" [NoValidClassError] 1`] = `"\\"hello\\" is not a function(/constructor)!"`;
+
+exports[`tests for "NoValidClassError" should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClassError] 1`] = `"\\"true\\" is not a function(/constructor)!"`;
+
+exports[`tests for "NoValidClassError" should throw a Error when "cl" in "getName" is null or undefined [NoValidClassError] 1`] = `"\\"undefined\\" is not a function(/constructor)!"`;
+
+exports[`tests for "NotValidModelError" should throw a Error when no valid model is passed to "addModelToTypegoose" [NotValidModelError] 1`] = `"Expected \\"addModelToTypegoose.model\\" to be a valid mongoose.Model! (got: \\"string\\") [E025]"`;
+
+exports[`tests for "NotValidModelError" should throw a Error when no valid model is passed to "getDiscriminatorModelForClass" [NotValidModelError] 1`] = `"Expected \\"getDiscriminatorModelForClass.from\\" to be a valid mongoose.Model! (got: \\"string\\") [E025]"`;
+
+exports[`tests for "RefOptionIsUndefinedError" should error if "ref" is set to a function, but returns "null" or "undefined" [RefOptionIsUndefinedError] 1`] = `"Prop-Option \\"ref\\"'s value is \\"null\\" or \\"undefined\\" for \\"Main.nested\\" [E005]"`;
+
+exports[`tests for "RefOptionIsUndefinedError" should error if ref is set but is "null" or "undefined" [RefOptionIsUndefinedError] 1`] = `"Prop-Option \\"ref\\"'s value is \\"null\\" or \\"undefined\\" for \\"RefUndefined.someref\\" [E005]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "processProp" when "refPath" is a string but does not meet the required length [StringLengthExpectedError] 1`] = `"Expected \\"refPath\\" to have at least length of \\"1\\" (got: (String: \\"0\\"), where: \\"TestRefPathString.test\\") [E026]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "processProp" when "refPath" is not a string [StringLengthExpectedError] 1`] = `"Expected \\"refPath\\" to have at least length of \\"1\\" (got: (not-String: \\"10\\"), where: \\"TestRefPathString.test\\") [E026]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.getName" when "customName" is defined as a function but does not return a String [StringLengthExpectedError] 1`] = `"Expected \\"options.customName(function)\\" to have at least length of \\"1\\" (got: (not-String: \\"10\\"), where: \\"DummyClass\\") [E026]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.getName" when "customName" is defined as a function but return does not meet the required length [StringLengthExpectedError] 1`] = `"Expected \\"options.customName(function)\\" to have at least length of \\"1\\" (got: (String: \\"0\\"), where: \\"DummyClass\\") [E026]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.getName" when "customName" is defined but not a String [StringLengthExpectedError] 1`] = `"Expected \\"options.customName\\" to have at least length of \\"1\\" (got: (not-String: \\"10\\"), where: \\"DummyClass\\") [E026]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.getName" when "customName" is defined but string does not meet the required length [StringLengthExpectedError] 1`] = `"Expected \\"options.customName\\" to have at least length of \\"1\\" (got: (String: \\"0\\"), where: \\"DummyClass\\") [E026]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.mergeMetadata" when "key" is a string but does not meet the required length [StringLengthExpectedError] 1`] = `"Expected \\"key\\" to have at least length of \\"1\\" (got: (String: \\"0\\"), where: \\"DummyClass\\") [E026]"`;
+
+exports[`tests for "StringLengthExpectedError" should throw a Error in "utils.mergeMetadata" when "key" is not a string [StringLengthExpectedError] 1`] = `"Expected \\"key\\" to have at least length of \\"1\\" (got: (not-String: \\"undefined\\"), where: \\"DummyClass\\") [E026]"`;

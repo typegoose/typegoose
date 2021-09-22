@@ -29,7 +29,11 @@ module.exports = {
     // 'guides/known-issues' is included in both "Getting Started" and "Guides", because it fits into both categories
     Guides: [
       {
-        'Integration Examples': ['guides/advanced/using-with-class-transformer', 'guides/advanced/common-plugins'],
+        'Integration Examples': [
+          'guides/integration-examples/using-with-class-transformer',
+          'guides/integration-examples/using-with-deepkit-type',
+          'guides/integration-examples/common-plugins',
+        ],
         Miscellaneous: [
           'guides/advanced/logger',
           'guides/mongoose-compatibility',
@@ -50,6 +54,6 @@ module.exports = {
       'guides/advanced/using-objectid-type',
       'guides/advanced/non-nested-discriminators',
     ],
-    Migration: ['guides/migrate-8', 'guides/migrate-7', 'guides/migrate-6'],
+    Migration: ['guides/migration/migrate-9', 'guides/migration/migrate-8', 'guides/migration/migrate-7', 'guides/migration/migrate-6'],
   },
 };

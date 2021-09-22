@@ -1,6 +1,6 @@
 ---
 id: document-type
-title: 'Document Type'
+title: 'DocumentType<T>'
 ---
 
 *previously known as `InstanceType<T>`*

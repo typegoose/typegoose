@@ -8,8 +8,8 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '5.13.8')) {
-    throw new Error(`Please use mongoose 5.13.8 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '6.0.7')) {
+    throw new Error(`Please use mongoose 6.0.7 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
@@ -25,6 +25,7 @@ import { _buildSchema } from './internal/schema';
 import { logger } from './logSettings';
 import { isModel } from './typeguards';
 import type { AnyParamConstructor, BeAnObject, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
+import { FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
 /* exports */
 // export the internally used "mongoose", to not need to always import it
@@ -129,13 +130,24 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   let sch: mongoose.Schema<DocumentType<InstanceType<U>>> | undefined = undefined;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
+  /* This array is to execute from lowest class to highest (when extending) */
+  const parentClasses: AnyParamConstructor<any>[] = [];
+
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
-    // extend schema
-    sch = _buildSchema(parentCtor, sch, mergedOptions, false, overwriteOptions);
+    // add lower classes (when extending) to the front of the arrray to be processed first
+    parentClasses.unshift(parentCtor);
+
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
+
+  // iterate and build class schemas from lowest to highest (when extending classes, the lower class will get build first) see https://github.com/typegoose/typegoose/pull/243
+  for (const parentClass of parentClasses) {
+    // extend schema
+    sch = _buildSchema(parentClass, sch!, mergedOptions, false);
+  }
+
   // get schema of current model
   sch = _buildSchema(cl, sch, mergedOptions, true, overwriteOptions);
 
@@ -164,17 +176,17 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 ) {
   const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
 
-  assertion(model.prototype instanceof mongooseModel, new TypeError(`"${model}" is not a valid Model!`));
+  assertion(model.prototype instanceof mongooseModel, new NotValidModelError(model, 'addModelToTypegoose.model'));
   assertionIsClass(cl);
 
   const name = model.modelName;
 
   assertion(
     !models.has(name),
-    new Error(
-      'It seems like "addModelToTypegoose" got called twice\n' +
-        'Or multiple classes with the same name are used, which is not supported!' +
-        `(Model Name: "${name}") [E003]`
+    new FunctionCalledMoreThanSupportedError(
+      'addModelToTypegoose',
+      1,
+      `This was caused because the model name "${name}" already exists in the typegoose-internal "models" cache`
     )
   );
 
@@ -232,6 +244,7 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
     logger.debug(`Class "${name}" is not in "models", trying to find in "constructors"`);
     let found = false;
 
+    // type "Map" does not have a "find" function, and using "get" would maybe result in the incorrect values
     for (const [cname, constructor] of constructors) {
       if (constructor === cl) {
         logger.debug(`Found Class in "constructors" with class name "${name}" and entered name "${cname}""`);
@@ -269,7 +282,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   cl: U,
   value?: string
 ) {
-  assertion(isModel(from), new TypeError(`"${from}" is not a valid Model!`));
+  assertion(isModel(from), new NotValidModelError(from, 'getDiscriminatorModelForClass.from'));
   assertionIsClass(cl);
 
   const name = getName(cl);
@@ -293,12 +306,17 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 
 /**
  * Use this class if raw mongoose for this path is wanted
- * It is still recommended to use the typegoose classes directly for full type and validation support
- * @see Using `Passthrough`, the paths created will result in `Mixed`, see {@link https://github.com/Automattic/mongoose/issues/7181 Mongoose#7181}
+ * It is still recommended to use the typegoose classes directly
+ * @see Using `Passthrough`, the paths created will also result as an `Schema` (since mongoose 6.0), see {@link https://github.com/Automattic/mongoose/issues/7181 Mongoose#7181}
  * @example
  * ```ts
  * class Dummy {
  *   @prop({ type: () => new Passthrough({ somePath: String }) })
+ *   public somepath: { somePath: string };
+ * }
+ *
+ * class Dummy {
+ *   @prop({ type: () => new Passthrough({ somePath: String }, true) })
  *   public somepath: { somePath: string };
  * }
  * ```
@@ -306,12 +324,15 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 // Note: for "SchemaDefinitionType", i have no clue what it does, but it is also defined on "mongoose.Schema" and kinda required for "mongoose.DocumentDefinition"
 export class Passthrough<SchemaDefinitionType = undefined> {
   public raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>;
+  public direct: boolean;
 
   /**
    * Use this like `new mongoose.Schema()`
-   * @param raw the Schema definition
+   * @param raw The Schema definition
+   * @param direct Directly insert "raw", instead of using "type" (this will not apply any other inner options)
    */
-  constructor(raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>) {
+  constructor(raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>, direct?: boolean) {
     this.raw = raw;
+    this.direct = direct ?? false;
   }
 }

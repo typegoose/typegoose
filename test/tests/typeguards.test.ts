@@ -1,7 +1,6 @@
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose';
 import {
-  IsRefType,
   IsRefTypeArrayModel,
   IsRefTypeModel,
   IsRefTypeNestedObjectIdModel,
@@ -24,7 +23,7 @@ describe('isDocument / isDocumentArray', () => {
 
     UserMaster.subAccounts.push(UserSub._id);
 
-    await UserMaster.populate('subAccounts').execPopulate();
+    await UserMaster.populate('subAccounts');
 
     if (isDocumentArray(UserMaster.subAccounts)) {
       expect(UserMaster.subAccounts).toHaveLength(1);
@@ -47,7 +46,7 @@ describe('isDocument / isDocumentArray', () => {
 
     UserSub.master = UserMaster._id;
 
-    await UserSub.populate('master').execPopulate();
+    await UserSub.populate('master');
 
     if (isDocument(UserSub.master)) {
       expect(UserSub.master.name).toEqual('master');
@@ -109,11 +108,11 @@ describe('isDocument / isDocumentArray', () => {
       master: User2._id,
     });
 
-    await User3.populate('master').execPopulate();
+    await User3.populate('master');
 
     if (isDocument(User3.master)) {
       // User3.master === User2
-      await User3.master.populate('master').execPopulate();
+      await User3.master.populate('master');
 
       if (isDocument(User3.master.master)) {
         // User3.master.master === User1
@@ -130,7 +129,7 @@ describe('isDocument / isDocumentArray', () => {
       populate: {
         path: 'master',
       },
-    }).execPopulate();
+    });
   });
 
   it('should handle recursive populations - single populate', async () => {
@@ -151,7 +150,7 @@ describe('isDocument / isDocumentArray', () => {
       populate: {
         path: 'master',
       },
-    }).execPopulate();
+    });
 
     if (isDocument(User3.master) && isDocument(User3.master.master)) {
       // User3.master === User2 && User3.master.master === User1
@@ -168,7 +167,9 @@ describe('isRefType / isRefTypeArray', () => {
     it('should guarantee the RefType - String', async () => {
       const doc = await IsRefTypeModel.create({
         nestedString: await IsRefTypeNestedStringModel.create({ _id: 'should guarantee the RefType' }),
-      } as IsRefType);
+      });
+
+      expect(isRefType(doc.nestedString, String)).toStrictEqual(false);
       doc.depopulate('nestedString');
 
       expect(doc.nestedString).not.toBeUndefined();
@@ -183,7 +184,9 @@ describe('isRefType / isRefTypeArray', () => {
     it('should guarantee the RefType - ObjectId', async () => {
       const doc = await IsRefTypeModel.create({
         nestedObjectId: await IsRefTypeNestedObjectIdModel.create({ _id: new mongoose.Types.ObjectId() }),
-      } as IsRefType);
+      });
+
+      expect(isRefType(doc.nestedObjectId, mongoose.Types.ObjectId)).toStrictEqual(false);
       doc.depopulate('nestedObjectId');
 
       expect(doc.nestedObjectId).not.toBeUndefined();
@@ -193,6 +196,15 @@ describe('isRefType / isRefTypeArray', () => {
       } else {
         fail('Expected isRefType to be returning true');
       }
+    });
+
+    it('should return "false" if all other fail', async () => {
+      const obj = { hello: String };
+      expect(isDocument(obj)).toStrictEqual(false);
+      expect(
+        // @ts-expect-error "Array" is not a supported type for param2, but is used to test the fallback-case
+        isRefType(obj, Array)
+      ).toStrictEqual(false);
     });
   });
 
