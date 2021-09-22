@@ -16,4 +16,8 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
+  "files.associations": {
+    "*.ts.snap": "javascript",
+    "*.mdx": "markdown"
+  }
 }
