@@ -1,3 +1,10 @@
+### [9.0.1](https://github.com/typegoose/typegoose/compare/v9.0.0...v9.0.1) (2021-09-23)
+
+
+### Fixes
+
+* **package.json:** fix "peerDependencies" mongoose version ([1f0b8de](https://github.com/typegoose/typegoose/commit/1f0b8de38d95b96a764c674064bc1bf2073d993b))
+
 ## [9.0.0](https://github.com/typegoose/typegoose/compare/v8.3.0...v9.0.0) (2021-09-22)
 
 
