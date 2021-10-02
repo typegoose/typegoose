@@ -644,7 +644,8 @@ describe('test the Passthrough class (non "direct")', () => {
   });
 
   // currently does not work, see https://github.com/Automattic/mongoose/issues/10750
-  it.skip('should make use of the "Passthrough" class (WhatIsIt.ARRAY)', () => {
+  it('should make use of the "Passthrough" class (WhatIsIt.ARRAY)', () => {
+    const spyWarn = jest.spyOn(logger, 'warn').mockImplementation(() => void 0);
     const mongooseSchema = new mongoose.Schema({
       something: [{ type: { somePath: String } }],
     });
@@ -658,13 +659,17 @@ describe('test the Passthrough class (non "direct")', () => {
     const typegooseSomethingPath = typegooseSchema.path('something');
     const mongooseSomethingPath = mongooseSchema.path('something');
 
-    console.log(
-      'test1',
-      typegooseSomethingPath instanceof mongoose.Schema.Types.Array,
-      typegooseSomethingPath instanceof mongoose.Schema.Types.DocumentArray
-    );
-    expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Array);
-    expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+    expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+
+    expect((typegooseSomethingPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
+    expect((mongooseSomethingPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
+
+    expect((typegooseSomethingPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect((mongooseSomethingPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+
+    expect(spyWarn).toHaveBeenCalledTimes(1);
+    expect(spyWarn.mock.calls).toMatchSnapshot();
   });
 
   it('should make use of the "Passthrough" class (WhatIsIt.MAP)', () => {

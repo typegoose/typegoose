@@ -889,7 +889,29 @@ new mongoose.Schema({
 
 Example for `WhatIsIt.ARRAY`:
 
-*This currently does not work, see [this issue](https://github.com/Automattic/mongoose/issues/10750)*
+:::note
+This was not working before mongoose 6.0.9, see [issue #10750](https://github.com/Automattic/mongoose/issues/10750).
+:::
+
+:::note
+Using this way will throw a "Mixed" warning for property `child`, because at the time where typegoose checks types is way before it being a proper Type.
+:::
+
+```ts
+class PassthroughNoDirect {
+  @prop({ type: () => new Passthrough({ somePath: String }) })
+  public child?: [{ somePath: string }]
+}
+
+// would be equal to
+new mongoose.Schema({
+  child: {
+    type: [{
+      somePath: String
+    }]
+  }
+})
+```
 
 Example for `WhatIsIt.MAP`:
 

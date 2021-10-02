@@ -177,12 +177,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        // TODO: somehow this does not work, see https://github.com/Automattic/mongoose/issues/10750
-        logger.warn(
-          'Passthrough was used for "%s.%s", with WhatIsIt.ARRAY, which currently does not work, see https://github.com/Automattic/mongoose/issues/10750',
-          name,
-          key
-        );
         schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, target, key);
 
         return;
