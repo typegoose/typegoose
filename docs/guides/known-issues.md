@@ -37,6 +37,8 @@ class SomeClass {
 
 ### Babel
 
+<span class="badge badge--warning">This Section may be outdated</span>
+
 Using babel as a TypeScript compiler is known to cause problems (like incorrect types), we recommened you use `tsc` directly, or `ts-node` or `ts-jest` for jest-testing.
 
 If Babel is still needed, then read [Babel TypeScript preset](https://babeljs.io/docs/en/babel-preset-typescript) and install the following plugins:  
