@@ -1,3 +1,10 @@
+### [9.0.2](https://github.com/typegoose/typegoose/compare/v9.0.1...v9.0.2) (2021-10-02)
+
+
+### Style
+
+* **utils::mapOptions:** add some comments ([c8c74bd](https://github.com/typegoose/typegoose/commit/c8c74bda1b9176c22eb80d52a8befb83fc698d12))
+
 ### [9.0.1](https://github.com/typegoose/typegoose/compare/v9.0.0...v9.0.1) (2021-09-23)
 
 
