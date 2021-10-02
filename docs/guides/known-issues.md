@@ -45,6 +45,7 @@ If Babel is still needed, then read [Babel TypeScript preset](https://babeljs.io
 
 - To reproduce the typescript decorators (`experimentalDecorators`), use [`@babel/plugin-proposal-decorators`](https://babeljs.io/docs/en/babel-plugin-proposal-decorators)
 - To reproduce the decorator metadata output (`emitDecoratorMetadata`), use [`babel-plugin-transform-typescript-metadata`](https://github.com/leonardfactory/babel-plugin-transform-typescript-metadata)
+- Plugin [`@babel/plugin-proposal-class-properties`](https://babeljs.io/docs/en/babel-plugin-proposal-class-properties) is required to solve the error `Syntax error, Definitely assigned fields cannot be initialized here, but only in the constructor` which would come with using decorators (legacy / stage 1) nowdays
 
 :::info
 `emitDecoratorMetadata` is not strictly needed, see [Use Without `emitDecoratorMetadata`](./use-without-emitDecoratorMetadata.md)
@@ -55,6 +56,7 @@ module.exports = {
   plugins: [
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     'babel-plugin-transform-typescript-metadata',
+    ['@babel/plugin-proposal-class-properties', { loose: true }],
   ]
 }
 ```
