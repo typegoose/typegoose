@@ -435,7 +435,9 @@ export function mapOptions(
     outer: {} as KeyStringAny,
   };
 
+  // if Type is not a Schema, try to convert js type to mongoose type (Object => Mixed)
   if (!(Type instanceof mongoose.Schema)) {
+    // set the loggerType to the js type
     loggerType = Type;
     const loggerTypeName = getName(loggerType);
 
