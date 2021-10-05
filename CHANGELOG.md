@@ -1,3 +1,22 @@
+## [9.1.0](https://github.com/typegoose/typegoose/compare/v9.0.2...v9.1.0) (2021-10-05)
+
+
+### Fixes
+
+* **processProp:** remove warning for Passthrough being a array while being non-direct ([23c9cb0](https://github.com/typegoose/typegoose/commit/23c9cb0835cea0216a085194d10d1a429566f5d2))
+
+
+### Dependencies
+
+* **@deepkit/*:** upgrade to 1.0.1-alpha.58 ([4117a6b](https://github.com/typegoose/typegoose/commit/4117a6be1b3fc9400981c6da44e16f4f277ce09e))
+* **@types/lodash:** upgrade to 4.14.175 ([30d17d5](https://github.com/typegoose/typegoose/commit/30d17d529d4e5e19a362f416e1e657992f57b15b))
+* **@typescript-eslint/*:** upgrade to 4.33.0 ([dcaaa9e](https://github.com/typegoose/typegoose/commit/dcaaa9e8eba8bc4abea8d0948327e8d9f09733e5))
+* **commitlint:** upgrade to 13.2.0 ([edd3229](https://github.com/typegoose/typegoose/commit/edd3229d29a8d079175ff2150fba6e0892b9bc9f))
+* **jest:** upgrade to 27.2.4 ([17ba696](https://github.com/typegoose/typegoose/commit/17ba69621ebcf7491fad5db4ad1edd287bd07eb6))
+* **lint-staged:** upgrade to 11.2.0 ([d196f2a](https://github.com/typegoose/typegoose/commit/d196f2a07d0b577489f0a41887da39494b937a66))
+* **mongodb-memory-server:** upgrade to 7.4.3 ([2cfcbff](https://github.com/typegoose/typegoose/commit/2cfcbff78fbbbd153e7d63ada029d674177ad2ef))
+* **mongoose:** upgrade to 6.0.9 ([6a6a825](https://github.com/typegoose/typegoose/commit/6a6a8258de26ac754dc1aae65b22a2ea24da1752))
+
 ### [9.0.2](https://github.com/typegoose/typegoose/compare/v9.0.1...v9.0.2) (2021-10-02)
 
 
