@@ -127,8 +127,10 @@ Example:
 
 ```ts
 import { t, jsonSerializer } from '@deepkit/type';
-import { ObjectId } from 'bson'; // or from mongodb or mongoose
+import * as mongoose from 'mongoose';
 
+// Shorten type
+const ObjectId = mongoose.Types.ObjectId;
 // Create a Custom Serializer to add custom transfrom functions to types
 const mySerializer = new (class CustomSerializer extends jsonSerializer.fork('mySerializer') {})();
 
