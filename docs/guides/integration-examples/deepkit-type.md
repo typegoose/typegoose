@@ -7,8 +7,8 @@ Last updated for:
 
 ```txt
 @typegoose/typegoose@9.0.0
-@deepkit/core@1.0.1-alpha.52
-@deepkit/type@1.0.1-alpha.56
+@deepkit/core@1.0.1-alpha.58
+@deepkit/type@1.0.1-alpha.58
 ```
 
 ---
