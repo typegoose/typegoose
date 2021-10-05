@@ -448,7 +448,7 @@
   dependencies:
     chalk "^4.0.0"
 
-"@deepkit/core@^1.0.1-alpha.58":
+"@deepkit/core@1.0.1-alpha.58":
   version "1.0.1-alpha.58"
   resolved "https://registry.yarnpkg.com/@deepkit/core/-/core-1.0.1-alpha.58.tgz#a12f94966d158762ed3c768edbf01eb92d42c8c8"
   integrity sha512-K938hwAqtzdJp5uIJBmquL5L2IxLw4SP8RDGFhVwLCrsoOecqTaqfhfDBqXACTwgWAXnWCY2vNdvWwNFcVtFHA==
@@ -456,7 +456,7 @@
     dot-prop "^5.1.1"
     to-fast-properties "^3.0.1"
 
-"@deepkit/type@^1.0.1-alpha.58":
+"@deepkit/type@1.0.1-alpha.58":
   version "1.0.1-alpha.58"
   resolved "https://registry.yarnpkg.com/@deepkit/type/-/type-1.0.1-alpha.58.tgz#8a3710756b233c5b1067f1d88c9e6713f06bcfc8"
   integrity sha512-arbmwt+bbJv4+tRklyCugjp42rHIoaLjex4N3tQ03xHIn+hYh1c64wLFxt+GwuLv6u1w3WOpXCoYcHovkZnFbQ==
@@ -1904,7 +1904,7 @@ cjs-module-lexer@^1.0.0:
   resolved "https://registry.yarnpkg.com/cjs-module-lexer/-/cjs-module-lexer-1.2.2.tgz#9f84ba3244a512f3a54e5277e8eef4c489864e40"
   integrity sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==
 
-class-transformer@^0.4.0:
+class-transformer@0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.4.0.tgz#b52144117b423c516afb44cc1c76dbad31c2165b"
   integrity sha512-ETWD/H2TbWbKEi7m9N4Km5+cw1hNcqJSxlSYhsLsNjQzWWiZIYA1zafxpK9PwVfaZ6AqR5rrjPVUBGESm5tQUA==
@@ -4717,7 +4717,7 @@ mongodb@^3.6.9:
   optionalDependencies:
     saslprep "^1.0.0"
 
-mongoose-findorcreate@^3.0.0:
+mongoose-findorcreate@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/mongoose-findorcreate/-/mongoose-findorcreate-3.0.0.tgz#490acf67c16061de74f7d1b92906538a62554a6d"
   integrity sha512-kQhDe5XDj6tMv8kq1wjK+hITGIGUl60rj8oGLupF9poNsqIDkAJBXudZKcCdSyBZ7p6DLK2+0jSBthrb26tSYQ==
