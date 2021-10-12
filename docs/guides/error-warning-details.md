@@ -106,12 +106,17 @@ The `Type` in its final state (after checking `rawOptions.type` and executing th
 Example of when this gets triggered:
 
 ```ts
+enum TestEnum {}
+
 class ErrorClass {
-  @prop({ type: () => undefined }) // <- error here
+  @prop({ type: () => undefined }) // <- error here, correct type: "String"
   public someProp?: string;
 
-  @prop({ type: 'Hello' }) // <- error here
+  @prop({ type: 'Hello' }) // <- error here, correct type: "String"
   public someProp?: string;
+
+  @prop({ type: TestEnum }) // <- error here, correct type: "String"
+  public someProp?: TestEnum
 }
 ```
 
