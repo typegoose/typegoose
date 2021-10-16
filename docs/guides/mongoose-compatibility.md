@@ -7,7 +7,7 @@ title: 'Mongoose Compatibility'
 
 | Typegoose Version | Mongoose Version |
 | ----------------- | ---------------- |
-| 9.1.x             | ~6.0.9           |
+| 9.1.x             | 6.0.9 - 6.0.10   |
 | 9.0.x             | ~6.0.7           |
 | 8.2.x             | ~5.13.8          |
 | 8.1.x             | ~5.13.3          |
