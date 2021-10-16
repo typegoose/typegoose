@@ -1,3 +1,10 @@
+### [9.1.1](https://github.com/typegoose/typegoose/compare/v9.1.0...v9.1.1) (2021-10-16)
+
+
+### Fixes
+
+* lock mongoose to "6.0.9 - 6.0.10" for typegoose 6.1.x ([f45d9d4](https://github.com/typegoose/typegoose/commit/f45d9d43f351541d287fc0971ffb2493c41492b1)), closes [typegoose/typegoose#623](https://github.com/typegoose/typegoose/issues/623)
+
 ## [9.1.0](https://github.com/typegoose/typegoose/compare/v9.0.2...v9.1.0) (2021-10-05)
 
 
