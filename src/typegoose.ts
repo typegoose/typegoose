@@ -8,8 +8,8 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '6.0.9')) {
-    throw new Error(`Please use mongoose 6.0.9 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '6.0.11')) {
+    throw new Error(`Please use mongoose 6.0.11 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
@@ -321,9 +321,9 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
  * }
  * ```
  */
-// Note: for "SchemaDefinitionType", i have no clue what it does, but it is also defined on "mongoose.Schema" and kinda required for "mongoose.DocumentDefinition"
-export class Passthrough<SchemaDefinitionType = undefined> {
-  public raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>;
+export class Passthrough {
+  // this property has no types, because it can slightly differentiate than a normal mongoose schema (like being a direct array)
+  public raw: any;
   public direct: boolean;
 
   /**
@@ -331,7 +331,7 @@ export class Passthrough<SchemaDefinitionType = undefined> {
    * @param raw The Schema definition
    * @param direct Directly insert "raw", instead of using "type" (this will not apply any other inner options)
    */
-  constructor(raw: mongoose.SchemaDefinition<mongoose.DocumentDefinition<SchemaDefinitionType>>, direct?: boolean) {
+  constructor(raw: any, direct?: boolean) {
     this.raw = raw;
     this.direct = direct ?? false;
   }
