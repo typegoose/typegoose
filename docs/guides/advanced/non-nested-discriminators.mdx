@@ -402,3 +402,21 @@ const ParrotModel = getDiscriminatorModelForClass(AnimalModel, Parrot, Names.PAR
 </Tabs>
 
 And so instead of the model name (example: `Cat`), it will be stored as `customCat` inside property `customKey`.
+
+## Extra Notes
+
+### `strictQuery`
+
+In mongoose 6.x, the option `strictQuery` is `true` by default, basically meaning that it will strip all properties from a query that are not on the schema the query is executed on.
+
+See [mongoose 6.0 Migration guide](https://mongoosejs.com/docs/migrating_to_6.html#strictquery-is-removed-and-replaced-by-strict).
+
+Example:
+
+```ts
+// The following will result in a empty array
+await AnimalModel.find({ cageNumber: 10 });
+
+// use the following if it is required to be used this way
+await AnimalModel.find({ cageNumber: 10 }, null, { strictQuery: false })
+```
