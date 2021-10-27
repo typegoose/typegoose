@@ -64,3 +64,21 @@ module.exports = {
 ### prop on get & set
 
 `@prop` cannot be applied to `get` & `set` (ES6), because virtuals do not accept options & [`schema.loadClass`](https://mongoosejs.com/docs/advanced_schemas.html#creating-from-es6-classes-using-loadclass) wouldn't load these.
+
+### Webpack
+
+Webpack's `minimize` cannot be used with typegoose, because typegoose relies heavily on reflection and property names.
+
+In webpack, it can be disabled when adding the following to the webpack config:
+
+```js
+module.exports = {
+  optimization: {
+    minimize: false
+  }
+}
+```
+
+:::note
+There are some workarounds for some minification problems, like the class name (which would be the model name) can be changed with [`customName`](../api/decorators/model-options#customname).
+:::
