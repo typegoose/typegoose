@@ -34,6 +34,8 @@ Typegoose's custom options
 
 `customName` can be used to set custom model names.
 
+See also [Typegoose's Name Generation](../../guides/advanced/name-generation.md)
+
 Example:
 
 ```ts
@@ -83,6 +85,9 @@ expect(model.modelName).to.be.equal('MultiModel_Something');
 `automaticName` can be used to automatically generate custom model names based on `{ schemaOptions: { collection } }` or `{ options: { customName } }`  
 -> `customName` will be prioritzed over `collection`  
 -> if `automaticName` is true, `customName` will be a *suffix* of the base class name
+-> if `automaticName` is false, it will behave as if unset
+
+See also [Typegoose's Name Generation](../../guides/advanced/name-generation.md)
 
 Example:
 
