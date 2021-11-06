@@ -54,6 +54,7 @@ module.exports = {
       'guides/advanced/using-objectid-type',
       'guides/advanced/non-nested-discriminators',
       'guides/advanced/nested-discriminators',
+      'guides/advanced/name-generation',
     ],
     Migration: ['guides/migration/migrate-9', 'guides/migration/migrate-8', 'guides/migration/migrate-7', 'guides/migration/migrate-6'],
   },
