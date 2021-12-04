@@ -22,7 +22,7 @@ Typegoose has the prop option `autopopulate` implemented, but it only has an eff
 
 ```ts
 import * as mongoose from 'mongoose';
-import * as autopopulate from 'mongoose-autopopulate';
+import autopopulate from 'mongoose-autopopulate';
 import { plugin, prop, Ref, getModelForClass } from '@typegoose/typegoose';
 
 @plugin(autopopulate as any) // this is a dirty fix, because the types of this plugin dont work
