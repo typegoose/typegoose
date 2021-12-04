@@ -25,7 +25,7 @@ import * as mongoose from 'mongoose';
 import autopopulate from 'mongoose-autopopulate';
 import { plugin, prop, Ref, getModelForClass } from '@typegoose/typegoose';
 
-@plugin(autopopulate as any) // this is a dirty fix, because the types of this plugin dont work
+@plugin(autopopulate)
 class SomeClass {
   @prop({ autopopulate: true, ref: 'SomeReferencedClass' })
   public populateField: Ref<SomeReferencedClass>;
