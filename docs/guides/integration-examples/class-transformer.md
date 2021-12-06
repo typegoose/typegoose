@@ -6,8 +6,8 @@ title: 'Using with class-transformer'
 Last updated for:
 
 ```txt
-@typegoose/typegoose@9.0.0
-class-transformer@0.4.0
+@typegoose/typegoose@9.3.0
+class-transformer@0.5.1
 ```
 
 ---
@@ -15,7 +15,7 @@ class-transformer@0.4.0
 This guide shows how to use `typegoose` with `class-transformer`.
 
 ```bash npm2yarn
-npm install --save class-transformer@~0.4.0
+npm install --save class-transformer@~0.5.1
 ```
 
 ## Implementation
@@ -72,7 +72,7 @@ You can then use, for example:
   // deserialize Plain Old Javascript Object into an instance of the Account class
   const deserialized = plainToClass(Account, pojo);
   // serialize Account instance back to a Plain Old Javascript Object, applying class-transformer's magic
-  const serialized = classToPlain(deserialized);
+  const serialized = instanceToPlain(deserialized);
   ```
 
 * or a normal document:
@@ -83,13 +83,13 @@ You can then use, for example:
   // deserialize Mongoose Object into an instance of the Account class
   const deserialized = plainToClass(Account, mo);
   // serialize Account instance back to a Plain Old Javascript Object, applying class-transformer's magic
-  const serialized = classToPlain(deserialized);
+  const serialized = instanceToPlain(deserialized);
   ```
 
 As you can see from these examples, there is:
 
 * a redundant step to first turn the output of the query into a full instance of `Account` : `plainToClass(..., ...)`
-* before being able to benefit from its features for serialization: `classToPlain(...)`
+* before being able to benefit from its features for serialization: `instanceToPlain(...)`
 
 The reason for doing this is so queries will output `DocumentType<Account>` (Mongoose Document) instead of required `Account` (Plain Object / instance of the Class) in this example.
 

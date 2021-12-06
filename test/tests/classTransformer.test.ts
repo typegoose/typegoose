@@ -1,4 +1,4 @@
-import { classToPlain, Exclude, Expose, plainToClass, Transform } from 'class-transformer';
+import { Exclude, Expose, instanceToPlain, plainToClass, Transform } from 'class-transformer';
 import { getModelForClass, prop } from '../../src/typegoose';
 
 // re-implement base Document to allow class-transformer to serialize/deserialize its properties
@@ -52,7 +52,7 @@ describe('class-transformer', () => {
       const pojo = await AccountModel.findById(id).orFail().lean().exec();
       // deserialize Plain Old Javascript Object into an instance of the Account class
       // serialize Account instance back to a Plain Old Javascript Object, applying class-transformer's magic
-      const serialized = classToPlain(plainToClass(Account, pojo));
+      const serialized = instanceToPlain(plainToClass(Account, pojo));
       // the reason for doing a transformation round-trip here
       // is that class-transformer can only works it magic on an instance of a class with its annotation
       expect(serialized).toStrictEqual({
@@ -68,7 +68,7 @@ describe('class-transformer', () => {
       const options = { groups: ['admin'] };
       // deserialize Plain Old Javascript Object into an instance of the Account class
       // serialize Account instance back to a Plain Old Javascript Object, applying class-transformer's magic
-      const serialized = classToPlain(plainToClass(Account, pojo, options), options);
+      const serialized = instanceToPlain(plainToClass(Account, pojo, options), options);
       // the reason for doing a transformation round-trip here
       // is that class-transformer can only works it magic on an instance of a class with its annotation
       expect(serialized).toStrictEqual({
@@ -86,7 +86,7 @@ describe('class-transformer', () => {
       const doc = await AccountModel.findById(id).orFail().exec();
       // deserialize Mongoose Object into an instance of the Account class
       // serialize Account instance back to a Plain Old Javascript Object, applying class-transformer's magic
-      const serialized = classToPlain(plainToClass(Account, doc));
+      const serialized = instanceToPlain(plainToClass(Account, doc));
       // the reason for doing a transformation round-trip here
       // is that class-transformer can only works it magic on an instance of a class with its annotation
       expect(serialized).toStrictEqual({
@@ -102,7 +102,7 @@ describe('class-transformer', () => {
       const options = { groups: ['admin'] };
       // deserialize Mongoose Object into an instance of the Account class
       // serialize Account instance back to a Plain Old Javascript Object, applying class-transformer's magic
-      const serialized = classToPlain(plainToClass(Account, doc, options), options);
+      const serialized = instanceToPlain(plainToClass(Account, doc, options), options);
       // the reason for doing a transformation round-trip here
       // is that class-transformer can only works it magic on an instance of a class with its annotation
       expect(serialized).toStrictEqual({
