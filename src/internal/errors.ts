@@ -67,12 +67,6 @@ export class SelfContainingClassError extends TypeError {
   }
 }
 
-export class OptionRefDoesNotSupportArraysError extends TypeError {
-  constructor(dim: number, name: string, key: string) {
-    super(`Prop-Option "ref" does not support Arrays! (got "${dim}" dimensions, for property "${name}.${key}") [E021]`);
-  }
-}
-
 export class RefOptionIsUndefinedError extends Error {
   constructor(name: string, key: string) {
     super(`Prop-Option "ref"'s value is "null" or "undefined" for "${name}.${key}" [E005]`);
@@ -98,5 +92,13 @@ export class StringLengthExpectedError extends TypeError {
     const gotMessage = typeof got === 'string' ? `(String: "${got.length}")` : `(not-String: "${toStringNoFail(got)}")`;
 
     super(`Expected "${valueName}" to have at least length of "${length}" (got: ${gotMessage}, where: "${where}") [E026]`);
+  }
+}
+
+export class OptionDoesNotSupportOptionError extends TypeError {
+  constructor(currentOption: string, problemOption: string, expected: string, provided: string) {
+    super(
+      `The Option "${currentOption}" does not support Option "${problemOption}" other than "${expected}" (provided was: "${provided}") [E027]`
+    );
   }
 }

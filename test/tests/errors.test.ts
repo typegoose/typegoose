@@ -600,24 +600,46 @@ it('should throw a Error when the property is a Symbol [CannotBeSymbolError]', a
   }
 });
 
-it('should throw a Error when "ref" is a array [OptionRefDoesNotSupportArraysError]', async () => {
+it('should throw a Error when "ref" is a array [OptionDoesNotSupportOption]', async () => {
   class Sub {
     @prop()
     public dummy?: string;
   }
 
-  class TestOptionRefDoesNotSupportArraysError {
+  class TestOptionDoesNotSupportOptionRef {
     // @ts-expect-error option "ref" does not accept a array
     @prop({ ref: () => [Sub] })
     public nested?: any;
   }
 
   try {
-    buildSchema(TestOptionRefDoesNotSupportArraysError);
+    buildSchema(TestOptionDoesNotSupportOptionRef);
 
-    fail('Expected to throw "OptionRefDoesNotSupportArraysError"');
+    fail('Expected to throw "OptionDoesNotSupportOption"');
   } catch (err) {
-    expect(err).toBeInstanceOf(errors.OptionRefDoesNotSupportArraysError);
+    expect(err).toBeInstanceOf(errors.OptionDoesNotSupportOptionError);
+    expect(err.message).toMatchSnapshot();
+  }
+});
+
+it('should throw a Error when "discriminators" is with "dim" other than "1" [OptionDoesNotSupportOption]', async () => {
+  class Sub {
+    @prop()
+    public dummy?: string;
+  }
+
+  class TestOptionDoesNotSupportOptionDiscriminators {
+    // @ts-expect-error option "discriminators" does not accept more than 1 array layer
+    @prop({ discriminators: () => [[Sub]] })
+    public nested?: any;
+  }
+
+  try {
+    buildSchema(TestOptionDoesNotSupportOptionDiscriminators);
+
+    fail('Expected to throw "OptionDoesNotSupportOption"');
+  } catch (err) {
+    expect(err).toBeInstanceOf(errors.OptionDoesNotSupportOptionError);
     expect(err.message).toMatchSnapshot();
   }
 });

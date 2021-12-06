@@ -260,6 +260,12 @@ This Error should never show up, if it does report it
 
 ### PropOptions.discriminators dosnt support Arrays with more or less than 1 dimension [E020]
 
+<span class="badge badge--warning">This Error got removed in 0.0.0</span>
+
+:::info
+This Error got merged with [`E027`](#the-option-does-not-support-a-option-value-e027) in 0.0.0
+:::
+
 Error: `"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`
 
 Error Class: `Error`
@@ -280,6 +286,12 @@ class ErrorClass {
 ```
 
 ### PropOptions.ref dosnt support Arrays [E021]
+
+<span class="badge badge--warning">This Error got removed in 0.0.0</span>
+
+:::info
+This Error got merged with [`E027`](#the-option-does-not-support-a-option-value-e027) in 0.0.0
+:::
 
 Error: `Prop-Option "ref" does not support Arrays! (got "${dim}" dimensions, for property "${name}.${key}") [E021]`
 
@@ -361,6 +373,36 @@ This Error gets most commonly thrown when:
 - [`customName`](../api/decorators/modelOptions.md#customname) is a Function, but the function does not return a String or the returned String does not have the required length.
 - [`customName`](../api/decorators/modelOptions.md#customname) is defined, but is not a String or the defined String does not have the required length.
 - [`refPath`](../api/decorators/prop.md#refpath) is defined, but is not a String or the defined String does not have the required length.
+
+### The Option does not support a Option Value [E027]
+
+Error: `The Option "${currentOption}" does not support Option "${problemOption}" other than "${expected}" (provided was: "${provided}") [E027]`
+
+Error Class: `OptionDoesNotSupportOption`
+
+Details:  
+The Option `currentOption` does not support the value `provided` that was set for `problemOption`, expected value was `expected`.
+
+This Error gets most commonly thrown when:
+
+- Option `discriminators`'s function return value is not a array.
+- Option `discriminators`' function return value is a multi-layer array.
+- Option `ref`'s value or function return value is a array.
+
+Example of when this gets triggered:
+
+```ts
+class ErrorClassDiscriminators {
+  @prop({ discriminators: () => [[ErrorClass]] }) // <- error here
+  public someProp?: ErrorClass; // (this is just an example)
+
+  @prop({ discriminators: () => ErrorClass }) // <- error here
+  public someProp?: ErrorClass; // (this is just an example)
+
+  @prop({ ref: () => [ErrorClass] }) // <- error here
+  public someProp?: Ref<ErrorClass>;
+}
+```
 
 ## Warnings
 
