@@ -1,8 +1,10 @@
-import { allVirtualoptions } from './utils';
+import { allVirtualoptions, toStringNoFail } from './utils';
+
+// Note: dont forget to use "toStringNoFail" on values that are "unknown" or "any"
 
 export class InvalidTypeError extends Error {
   constructor(targetName: string, key: string, Type: unknown) {
-    super(`"${targetName}.${key}"'s Type is invalid! Type is: "${Type}" [E009]`);
+    super(`"${targetName}.${key}"'s Type is invalid! Type is: "${toStringNoFail(Type)}" [E009]`);
   }
 }
 
@@ -33,7 +35,7 @@ export class NotAllVPOPElementsError extends Error {
 
 export class NoValidClassError extends TypeError {
   constructor(cl: unknown) {
-    super(`"${cl}" is not a function(/constructor)!`);
+    super(`"${toStringNoFail(cl)}" is not a function(/constructor)!`);
   }
 }
 
@@ -46,13 +48,13 @@ export class AssertionFallbackError extends Error {
 /** Error for when an unknown WhatIsIt is passed to an switch, gets thrown in the default case */
 export class InvalidWhatIsItError extends Error {
   constructor(whatisit: unknown, name: string, key: string, where: string) {
-    super(`"${whatisit}"(${where}) is invalid for "${name}.${key}" [E013]`);
+    super(`"${toStringNoFail(whatisit)}"(${where}) is invalid for "${name}.${key}" [E013]`);
   }
 }
 
 export class CannotBeSymbolError extends Error {
   constructor(name: string, key: string | symbol) {
-    super(`A property key in Typegoose cannot be an symbol! ("${name}.${String(key)}") [E024]`);
+    super(`A property key in Typegoose cannot be an symbol! ("${name}.${toStringNoFail(key)}") [E024]`);
   }
 }
 
@@ -79,7 +81,7 @@ export class RefOptionIsUndefinedError extends Error {
 
 export class NotValidModelError extends TypeError {
   constructor(model: unknown, where: string) {
-    super(`Expected "${where}" to be a valid mongoose.Model! (got: "${model}") [E025]`);
+    super(`Expected "${where}" to be a valid mongoose.Model! (got: "${toStringNoFail(model)}") [E025]`);
   }
 }
 
@@ -93,7 +95,7 @@ export class StringLengthExpectedError extends TypeError {
   constructor(length: number, got: any, where: string, valueName: string) {
     // create the "got:" message, when string say it was a string, but not the length
     // if not string, then say it is not a string plus the value
-    const gotMessage = typeof got === 'string' ? `(String: "${got.length}")` : `(not-String: "${got}")`;
+    const gotMessage = typeof got === 'string' ? `(String: "${got.length}")` : `(not-String: "${toStringNoFail(got)}")`;
 
     super(`Expected "${valueName}" to have at least length of "${length}" (got: ${gotMessage}, where: "${where}") [E026]`);
   }
