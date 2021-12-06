@@ -41,6 +41,7 @@ export * from './typeguards';
 export * as defaultClasses from './defaultClasses';
 export * as errors from './internal/errors';
 export * as types from './types';
+// the following types are re-exported (instead of just in "types") because they are often used types
 export { DocumentType, Ref, ReturnModelType };
 export { getClassForDocument, getClass, getName } from './internal/utils';
 export { Severity } from './internal/constants';
