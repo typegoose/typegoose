@@ -7,10 +7,10 @@ title: 'Error & Warning Details'
 
 ### Mongoose Version [E001]
 
-Error: `Please use mongoose 6.0.11 or higher (Current mongoose: x.x.x) [E001]`
+Error: `Please use mongoose 6.0.14 or higher (Current mongoose: x.x.x) [E001]`
 
 Details:  
-Typegoose requires at least mongoose version `6.0.11`, because that version changed something that affected typegoose internals
+Typegoose requires at least mongoose version `6.0.14`, because that version changed something that affected typegoose internals
 
 ### NodeJS Version [E002]
 

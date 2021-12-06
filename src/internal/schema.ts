@@ -21,7 +21,7 @@ import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullO
  * Private schema builder out of class props
  * -> If you discover this, don't use this function, use Typegoose.buildSchema!
  * @param cl The not initialized Class
- * @param sch Already Existing Schema?
+ * @param sch Use a Already existing Schema as a base?
  * @param opt Options to override
  * @param isFinalSchema If it's the final schema to be built (defaults to `true`).
  * @returns Returns the Build Schema
@@ -29,7 +29,7 @@ import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullO
  */
 export function _buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
-  sch?: mongoose.Schema<any>,
+  origSch?: mongoose.Schema<any>,
   opt?: mongoose.SchemaOptions,
   isFinalSchema: boolean = true,
   overwriteOptions?: IModelOptions
@@ -64,10 +64,12 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     schemas.set(className, {});
   }
 
-  if (!(sch instanceof Schema)) {
+  let sch: mongoose.Schema;
+
+  if (!(origSch instanceof Schema)) {
     sch = new Schema(schemas.get(className), schemaOptions);
   } else {
-    sch = sch.clone();
+    sch = origSch.clone();
     sch.add(schemas.get(className)!);
   }
 
