@@ -1,3 +1,11 @@
+### [9.3.1](https://github.com/typegoose/typegoose/compare/v9.3.0...v9.3.1) (2021-12-06)
+
+
+### Fixes
+
+* change many assertions to use deferred functions for errors ([b7f00af](https://github.com/typegoose/typegoose/commit/b7f00afb31e6669108e69fb03bf73d72627a1fe4)), closes [typegoose/typegoose#641](https://github.com/typegoose/typegoose/issues/641)
+* **utils::assertion:** allow arg2 (error) to be a function ([6151087](https://github.com/typegoose/typegoose/commit/61510872702cbb9f5e9ef175a52306c8cbbf76f1)), closes [typegoose/typegoose#641](https://github.com/typegoose/typegoose/issues/641)
+
 ## [9.3.0](https://github.com/typegoose/typegoose/compare/v9.2.0...v9.3.0) (2021-12-06)
 
 
