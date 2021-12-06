@@ -1,3 +1,40 @@
+## [9.3.0](https://github.com/typegoose/typegoose/compare/v9.2.0...v9.3.0) (2021-12-06)
+
+
+### Features
+
+* **utils:** add function "toStringNoFail" ([cf94c30](https://github.com/typegoose/typegoose/commit/cf94c302d3c283fdab09d216167c6cb31da9c708)), closes [typegoose/typegoose#642](https://github.com/typegoose/typegoose/issues/642)
+
+
+### Fixes
+
+* **errors:** change to use "utils.toStringNoFail" on "unknown" and "any" variables ([593ef93](https://github.com/typegoose/typegoose/commit/593ef93bdf1f6323fa7d47978241590c397c70da)), closes [typegoose/typegoose#642](https://github.com/typegoose/typegoose/issues/642) [typegoose/typegoose#638](https://github.com/typegoose/typegoose/issues/638)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 27.0.3 ([3d7f4d9](https://github.com/typegoose/typegoose/commit/3d7f4d9d1060387e571ffa3ad2006960b6a01a0b))
+* **@types/lodash:** upgrade to 4.14.177 ([96b883f](https://github.com/typegoose/typegoose/commit/96b883f222d016a33487b123c81930bcfcada473))
+* **@types/node:** upgrade to 12.20.37 ([95a840f](https://github.com/typegoose/typegoose/commit/95a840f68f91c153994a3659100a2a311e026a96))
+* **@types/semver:** upgrade to 7.3.9 ([7218046](https://github.com/typegoose/typegoose/commit/7218046667f2879a027d5f523fe954dfe213f100))
+* **@typescript-eslint/*:** upgrade to 5.5.0 ([650d281](https://github.com/typegoose/typegoose/commit/650d2819bb1c2d8e7f1cbbe13b1f7d116f60979c))
+* **class-transformer:** upgrade to 0.5.1 ([fc54396](https://github.com/typegoose/typegoose/commit/fc5439664ea097f7a299c9677900e26c3c0dc17e))
+* **commitlint:** upgrade to 15.0.0 ([89f01bb](https://github.com/typegoose/typegoose/commit/89f01bb89ae6bd76bd17d84341669faf70ce3f22))
+* **eslint:** upgrade to 8.4.0 ([d8a7827](https://github.com/typegoose/typegoose/commit/d8a7827630c0030e822f945d0a37ad07acb3d405))
+* **husky:** upgrade to 7.0.4 ([f1f3827](https://github.com/typegoose/typegoose/commit/f1f382712b04997f503979492aec917ecff1a912))
+* **jest:** upgrade to 27.4.3 ([3f55c10](https://github.com/typegoose/typegoose/commit/3f55c103085f4d9cc95a2f86b539af5c0d0c9c18))
+* **lint-staged:** upgrade to 11.2.6 ([059325b](https://github.com/typegoose/typegoose/commit/059325b50960346a7545af059f7f2458ae73bf50))
+* **loglevel:** upgrade to 1.8.0 ([aa7bffd](https://github.com/typegoose/typegoose/commit/aa7bffd3bdf23409c16a129f5a25b066339712b0))
+* **mongodb-memory-server:** upgrade to 8.0.4 ([cbbfa26](https://github.com/typegoose/typegoose/commit/cbbfa265f615e1ebb6d83ed5aaa316f3030558f2))
+* **mongoose:** upgrade to 6.0.14 ([737f2dd](https://github.com/typegoose/typegoose/commit/737f2dd9c001b100ace620b19ad3829f2ff3af8d))
+* **prettier:** upgrade to 2.5.1 ([dfdadf7](https://github.com/typegoose/typegoose/commit/dfdadf7c34b3a1ae2365bb81219f1596908773f3))
+* **ts-jest:** upgrade to 27.1.0 ([d5651bd](https://github.com/typegoose/typegoose/commit/d5651bde26514b61e24aa4f4af296f80fcbf41b5))
+
+
+### Style
+
+* **typegoose:** add note about some top-level types ([8ade62d](https://github.com/typegoose/typegoose/commit/8ade62dbfc18ddbc595f717dab6bdb11aa3d1b77)), closes [typegoose/typegoose#639](https://github.com/typegoose/typegoose/issues/639)
+
 ## [9.2.0](https://github.com/typegoose/typegoose/compare/v9.1.1...v9.2.0) (2021-10-16)
 
 
