@@ -1,7 +1,15 @@
 import * as mongoose from 'mongoose';
 import { mapValueToSeverity } from '../../src/globalOptions';
 import { DecoratorKeys, Severity } from '../../src/internal/constants';
-import { assertion, assignMetadata, createArrayFromDimensions, getName, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
+import {
+  assertion,
+  assignMetadata,
+  createArrayFromDimensions,
+  getName,
+  mergeMetadata,
+  mergeSchemaOptions,
+  toStringNoFail,
+} from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 import {
   addModelToTypegoose,
@@ -868,4 +876,21 @@ describe('tests for "mapValueToSeverity"', () => {
     expect(mapValueToSeverity('WARN')).toStrictEqual(Severity.WARN);
     expect(mapValueToSeverity('ERROR')).toStrictEqual(Severity.ERROR);
   });
+});
+
+it('utils.toStringNoFail should work correctly', () => {
+  expect(toStringNoFail(undefined)).toStrictEqual('undefined');
+  expect(toStringNoFail(null)).toStrictEqual('null');
+  expect(toStringNoFail(0)).toStrictEqual('0');
+  expect(toStringNoFail({})).toStrictEqual('[object Object]');
+  expect(toStringNoFail(function t() {})).toStrictEqual('function t() { }');
+
+  class TestToStringRedefine {
+    public value: { inner: string };
+    toString() {
+      return this.value.inner; // ERROR: "value" is undefined and so cannot access "inner"
+    }
+  }
+
+  expect(toStringNoFail(new TestToStringRedefine())).toStrictEqual('(Error: Converting value to String failed)');
 });
