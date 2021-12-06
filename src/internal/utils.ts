@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose';
 import { logger } from '../logSettings';
 import type {
   AnyParamConstructor,
+  DeferredFunc,
   Func,
   GetTypeReturn,
   IModelOptions,
@@ -584,12 +585,14 @@ export function createArrayFromDimensions(rawOptions: any, extra: any, name: str
 /**
  * Assert an condition, if "false" throw error
  * Note: it is not named "assert" to differentiate between node and jest types
+ *
+ * Note: "error" can be a function to not execute the constructor when not needed
  * @param cond The Condition to throw
- * @param error An Custom Error to throw
+ * @param error An Custom Error to throw or a function that returns a Error
  */
-export function assertion(cond: any, error?: Error): asserts cond {
+export function assertion(cond: any, error?: Error | DeferredFunc<Error>): asserts cond {
   if (!cond) {
-    throw error ?? new AssertionFallbackError();
+    throw typeof error === 'function' ? error() : error ?? new AssertionFallbackError();
   }
 }
 

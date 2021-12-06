@@ -894,3 +894,13 @@ it('utils.toStringNoFail should work correctly', () => {
 
   expect(toStringNoFail(new TestToStringRedefine())).toStrictEqual('(Error: Converting value to String failed)');
 });
+
+it('utils.assertion should make use of arg1 being a function', () => {
+  class CustomError extends Error {
+    constructor() {
+      super('CustomError');
+    }
+  }
+
+  expect(assertion.bind(undefined, false, () => new CustomError())).toThrowError(CustomError);
+});
