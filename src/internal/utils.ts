@@ -262,7 +262,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamC
  * @internal
  */
 export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): T {
-  assertion(typeof key === 'string' && key.length > 0, new StringLengthExpectedError(1, key, getName(cl), 'key'));
+  assertion(typeof key === 'string' && key.length > 0, () => new StringLengthExpectedError(1, key, getName(cl), 'key'));
   assertionIsClass(cl);
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
@@ -311,7 +311,7 @@ export function getRightTarget(target: any): any {
  */
 export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions?: IModelOptions) {
   // this case can happen when type casting (or type being "any") happened and wanting to throw a Error (and there using "getName" to help)
-  assertion(!isNullOrUndefined(cl), new NoValidClassError(cl));
+  assertion(!isNullOrUndefined(cl), () => new NoValidClassError(cl));
 
   const ctor: any = getRightTarget(cl);
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
@@ -323,7 +323,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions
 
     assertion(
       typeof name === 'string' && name.length > 0,
-      new StringLengthExpectedError(1, name, baseName, 'options.customName(function)')
+      () => new StringLengthExpectedError(1, name, baseName, 'options.customName(function)')
     );
 
     return name;
@@ -343,7 +343,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions
 
   assertion(
     typeof customName === 'string' && customName.length > 0,
-    new StringLengthExpectedError(1, customName, baseName, 'options.customName')
+    () => new StringLengthExpectedError(1, customName, baseName, 'options.customName')
   );
 
   return customName;
@@ -601,7 +601,7 @@ export function assertion(cond: any, error?: Error | DeferredFunc<Error>): asser
  * @param val Value to test
  */
 export function assertionIsClass(val: any): asserts val is Func {
-  assertion(isConstructor(val), new NoValidClassError(val));
+  assertion(isConstructor(val), () => new NoValidClassError(val));
 }
 
 /**

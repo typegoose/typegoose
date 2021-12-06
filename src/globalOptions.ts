@@ -8,7 +8,7 @@ import type { IGlobalOptions } from './types';
  * Set Typegoose's global Options
  */
 export function setGlobalOptions(options: IGlobalOptions) {
-  assertion(typeof options === 'object', new TypeError('"options" argument needs to be an object!'));
+  assertion(typeof options === 'object', () => new TypeError('"options" argument needs to be an object!'));
 
   logger.info('"setGlobalOptions" got called with', options);
 
@@ -53,7 +53,7 @@ export function parseENV(): void {
  * @internal
  */
 export function mapValueToSeverity(value: string | number): Severity {
-  assertion(value in Severity, new Error(`"value" is not in range of "Severity"! (got: ${value})`));
+  assertion(value in Severity, () => new Error(`"value" is not in range of "Severity"! (got: ${value})`));
 
   if (typeof value === 'number') {
     return value;

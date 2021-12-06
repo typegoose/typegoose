@@ -84,10 +84,12 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
         logger.debug('Applying Nested Discriminators for:', key, discriminators);
 
         const path = sch.path(key) as mongoose.Schema.Types.DocumentArray;
-        assertion(!isNullOrUndefined(path), new Error(`Path "${key}" does not exist on Schema of "${finalName}"`));
+        // REFACTOR: re-write this to be a Error inside errors.ts
+        assertion(!isNullOrUndefined(path), () => new Error(`Path "${key}" does not exist on Schema of "${finalName}"`));
+        // REFACTOR: re-write this to be a Error inside errors.ts
         assertion(
           typeof path.discriminator === 'function',
-          new Error(`There is no function called "discriminator" on schema-path "${key}" on Schema of "${finalName}"`)
+          () => new Error(`There is no function called "discriminator" on schema-path "${key}" on Schema of "${finalName}"`)
         );
 
         for (const { type: child, value: childName } of discriminators) {
