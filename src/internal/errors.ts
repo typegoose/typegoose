@@ -102,3 +102,12 @@ export class OptionDoesNotSupportOptionError extends TypeError {
     );
   }
 }
+
+export class ResolveTypegooseNameError extends ReferenceError {
+  constructor(input: unknown) {
+    super(
+      'Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]\n' +
+        `Value: "${toStringNoFail(input)}"`
+    );
+  }
+}

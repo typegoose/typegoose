@@ -20,6 +20,7 @@ import { _buildSchema } from '../../src/internal/schema';
 import * as utils from '../../src/internal/utils';
 import { mapValueToSeverity } from '../../src/globalOptions';
 import { BasePropOptions } from '../../src/types';
+import { ResolveTypegooseNameError } from '../../src/internal/errors';
 
 beforeEach(() => {
   jest.restoreAllMocks();
@@ -501,13 +502,13 @@ it('should error if no valid key is supplied to "getModelWithString" [TypeError]
   }
 });
 
-it('should error if a non-valid object is passed to "getClass" [ReferenceError] [E014]', () => {
+it('should error if a non-valid object is passed to "getClass" [ResolveTypegooseNameError] [E014]', () => {
   try {
     getClass(undefined);
 
-    fail('Expected to throw "ReferenceError"');
+    fail('Expected to throw "ResolveTypegooseNameError"');
   } catch (err) {
-    expect(err).toBeInstanceOf(ReferenceError);
+    expect(err).toBeInstanceOf(ResolveTypegooseNameError);
     expect(err.message).toMatchSnapshot();
   }
 });

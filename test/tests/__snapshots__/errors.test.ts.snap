@@ -4,7 +4,10 @@ exports[`should error if 0 or less dimensions are given (createArrayFromDimensio
 
 exports[`should error if 0 or less dimensions are given (createArrayFromDimensions) [RangeError] [E018] 2`] = `"\\"dim\\" needs to be higher than 0 (.) [E018]"`;
 
-exports[`should error if a non-valid object is passed to "getClass" [ReferenceError] [E014] 1`] = `"Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]"`;
+exports[`should error if a non-valid object is passed to "getClass" [ResolveTypegooseNameError] [E014] 1`] = `
+"Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]
+Value: \\"undefined\\""
+`;
 
 exports[`should error if no function for hooks is defined [TypeError] 1`] = `"\\"TestNoFunctionHook.pre.\\"'s function is not a function!"`;
 

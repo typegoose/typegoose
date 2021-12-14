@@ -190,12 +190,17 @@ The Value `${whatisit}` is not supported in `${where}` or does not exist in the 
 
 ### Input was not string or have .typegooseName function/string [E014]
 
-Error: `Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]`
+Error:
 
-Error Class: `ReferenceError`
+```txt
+Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]
+Value: "${toStringNoFail(input)}"
+```
+
+Error Class: `ResolveTypegooseNameError`
 
 Details:  
-The Provided Input wasnt a string and didnt have a `.typegooseName` function / string to be searched by
+The Provided Input `input` was not a string and didnt have a `.typegooseName` function / string to be searched by.
 
 ### customName must be string and at least one character [E015]
 

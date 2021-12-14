@@ -17,7 +17,13 @@ import type {
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
-import { AssertionFallbackError, InvalidWhatIsItError, NoValidClassError, StringLengthExpectedError } from './errors';
+import {
+  AssertionFallbackError,
+  InvalidWhatIsItError,
+  NoValidClassError,
+  ResolveTypegooseNameError,
+  StringLengthExpectedError,
+} from './errors';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -177,8 +183,7 @@ export function getClass(
     return constructors.get(input.typegooseName());
   }
 
-  // REFACTOR: re-write this to be a Error inside errors.ts
-  throw new ReferenceError('Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]');
+  throw new ResolveTypegooseNameError(input);
 }
 
 /**
