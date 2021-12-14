@@ -133,3 +133,9 @@ export class InvalidOptionsConstructorError extends TypeError {
     super(`Type has a invalid "OptionsConstructor" on "${name}.${key}"! [E016]\n` + `Type: "${toStringNoFail(type)}"`);
   }
 }
+
+export class PathNotInSchemaError extends Error {
+  constructor(name: string, key: string) {
+    super(`Path "${key}" on "${name}" does not exist in the Schema! [E030]`);
+  }
+}

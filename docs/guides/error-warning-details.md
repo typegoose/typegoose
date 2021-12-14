@@ -477,6 +477,19 @@ class SomeClass {}
 class SomeClass {}
 ```
 
+### Path does not exist on Schema [E030]
+
+Error: `Path "${key}" on "${name}" does not exist in the Schema! [E030]`
+
+Error Class: `PathNotInSchemaError`
+
+Details:  
+This gets thrown when the path `key` does not exist and a nested discriminator is tried to be applied.
+
+:::note
+If this Error is encountered, please open a [new Issue in Github](https://github.com/typegoose/typegoose/issues/new/choose).
+:::
+
 ## Warnings
 
 ### Type is not ${type}, but includes the following ${extra} options [W001]
