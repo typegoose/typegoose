@@ -172,12 +172,25 @@ This Error should never be thrown if Typescript is used, it throws if the `Type`
 
 ### Invalid Type for Enum [E012]
 
-Error: `Invalid type used for enums!, got: "${Type}" (${name}.${key}) [E012]`
+Error:
 
-Error Class: `Error`
+```txt
+Invalid Type used for options "enum" at "${name}.${key}"! [E012]
+Type: "${toStringNoFail(value)}"
+https://typegoose.github.io/typegoose/docs/guides/error-warning-details#invalid-type-for-enum-e012
+```
+
+Error Class: `InvalidEnumTypeError`
 
 Details:  
-This Error should never be thrown if Typescript is used, it throws if the `Type` is not `String` or `Number`
+This Error may get thrown when a invalid Type is used with the option [`enum`](../api/decorators/prop.md#enum).
+Currently Valid Types for enum are `String` or `Number`.
+
+This may be thrown when using typescript option `transpileOnly` (see [Known Issues: transpile-only](,/../known-issues.md#transpile-only)) or using Babel without proper configuration (see [Known Issues: Babel](./known-issues.md#babel)).
+
+:::tip
+This Error has a workaround, see [Use Without "emitDecoratorMetadata"](./use-without-emitDecoratorMetadata.md).
+:::
 
 ### Invalid WhatIsIt used [E013]
 

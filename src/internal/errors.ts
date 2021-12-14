@@ -117,3 +117,13 @@ export class ExpectedTypeError extends TypeError {
     super(`Expected Argument "${optionName}" to have type "${expected}", got: "${toStringNoFail(got)}" [E029]`);
   }
 }
+
+export class InvalidEnumTypeError extends TypeError {
+  constructor(name: string, key: string, value: unknown) {
+    super(
+      `Invalid Type used for options "enum" at "${name}.${key}"! [E012]\n` +
+        `Type: "${toStringNoFail(value)}"\n` +
+        'https://typegoose.github.io/typegoose/docs/guides/error-warning-details#invalid-type-for-enum-e012'
+    );
+  }
+}

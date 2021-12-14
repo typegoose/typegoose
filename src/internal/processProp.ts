@@ -12,6 +12,7 @@ import { DecoratorKeys, WhatIsIt } from './constants';
 import { schemas } from './data';
 import {
   CannotBeSymbolError,
+  InvalidEnumTypeError,
   InvalidTypeError,
   InvalidWhatIsItError,
   NotAllVPOPElementsError,
@@ -309,12 +310,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       } else {
         // this will happen if the enum type is not "String" or "Number"
         // most likely this error happened because the code got transpiled with babel or "tsc --transpile-only"
-        // REFACTOR: re-write this to be a Error inside errors.ts
-        throw new Error(
-          `Invalid type used for enums!, got: "${Type}" (${name}.${key}) [E012]` +
-            "Is the code transpiled with Babel or 'tsc --transpile-only' or 'ts-node --transpile-only'?\n" +
-            'See https://typegoose.github.io/typegoose/docs/api/decorators/prop/#enum'
-        );
+        throw new InvalidEnumTypeError(name, key, Type);
       }
     }
   }
