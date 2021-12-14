@@ -139,3 +139,9 @@ export class PathNotInSchemaError extends Error {
     super(`Path "${key}" on "${name}" does not exist in the Schema! [E030]`);
   }
 }
+
+export class NoDiscriminatorFunctionError extends Error {
+  constructor(name: string, key: string) {
+    super(`Path "${name}.${key}" does not have a function called "discriminator"! (Nested Discriminator cannot be applied) [E031]`);
+  }
+}

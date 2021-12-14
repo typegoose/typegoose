@@ -490,6 +490,19 @@ This gets thrown when the path `key` does not exist and a nested discriminator i
 If this Error is encountered, please open a [new Issue in Github](https://github.com/typegoose/typegoose/issues/new/choose).
 :::
 
+### Path does not have function "discriminator" [E031]
+
+Error: `Path "${name}.${key}" does not have a function called "discriminator"! (Nested Discriminator cannot be applied) [E031]`
+
+Error Class: `NoDiscriminatorFunctionError`
+
+Details:  
+The Path `key` of Schema `name` does not have a function called `discriminator`, which id needed to apply a nested discriminator.
+
+:::note
+If this Error is encountered, please open a [new Issue in Github](https://github.com/typegoose/typegoose/issues/new/choose).
+:::
+
 ## Warnings
 
 ### Type is not ${type}, but includes the following ${extra} options [W001]

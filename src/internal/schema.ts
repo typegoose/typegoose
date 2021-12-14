@@ -14,7 +14,7 @@ import type {
 } from '../types';
 import { DecoratorKeys } from './constants';
 import { constructors, schemas } from './data';
-import { PathNotInSchemaError } from './errors';
+import { NoDiscriminatorFunctionError, PathNotInSchemaError } from './errors';
 import { processProp } from './processProp';
 import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
@@ -87,11 +87,8 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
         const path = sch.path(key) as mongoose.Schema.Types.DocumentArray | undefined;
         // TODO: add test for this error
         assertion(!isNullOrUndefined(path), () => new PathNotInSchemaError(finalName, key));
-        // REFACTOR: re-write this to be a Error inside errors.ts
-        assertion(
-          typeof path.discriminator === 'function',
-          () => new Error(`There is no function called "discriminator" on schema-path "${key}" on Schema of "${finalName}"`)
-        );
+        // TODO: add test for this error
+        assertion(typeof path.discriminator === 'function', () => new NoDiscriminatorFunctionError(finalName, key));
 
         for (const { type: child, value: childName } of discriminators) {
           const childSch = getName(child) === finalName ? sch : buildSchema(child);
