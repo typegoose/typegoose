@@ -20,7 +20,7 @@ import { _buildSchema } from '../../src/internal/schema';
 import * as utils from '../../src/internal/utils';
 import { mapValueToSeverity } from '../../src/globalOptions';
 import { BasePropOptions } from '../../src/types';
-import { ResolveTypegooseNameError } from '../../src/internal/errors';
+import { ExpectedTypeError, ResolveTypegooseNameError } from '../../src/internal/errors';
 
 beforeEach(() => {
   jest.restoreAllMocks();
@@ -436,18 +436,6 @@ describe('tests for "InvalidWhatIsItError" [E013]', () => {
   });
 });
 
-it('should error if the options provide to "setGlobalOptions" are not an object [TypeError]', () => {
-  try {
-    // @ts-expect-error "undefined" does not match the restriction "IGlobalOptions"
-    setGlobalOptions(undefined);
-
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
-});
-
 it('should fail when using Number-Enum on an String Type [NotStringTypeError] [E010]', () => {
   try {
     enum NumberEnum {
@@ -786,6 +774,20 @@ describe('tests for "StringLengthExpectedError" [E026]', () => {
       fail('Expected to throw "StringLengthExpectedError"');
     } catch (err) {
       expect(err).toBeInstanceOf(errors.StringLengthExpectedError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+});
+
+describe('tests for "ExpectedTypeError" [E029]', () => {
+  it('should error if the options provided to "setGlobalOptions" are not an object [ExpectedTypeError] [E029]', () => {
+    try {
+      // @ts-expect-error "undefined" does not match the restriction "IGlobalOptions"
+      setGlobalOptions(undefined);
+
+      fail('Expected to throw "ExpectedTypeError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(ExpectedTypeError);
       expect(err.message).toMatchSnapshot();
     }
   });

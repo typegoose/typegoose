@@ -446,6 +446,7 @@ The Argument `optionName` is expected to be of type `expected`, but type was `go
 Example of when this gets triggered:
 
 ```ts
+setGlobalOptions(undefined); // Expected input to be a defined object
 ```
 
 ## Warnings
