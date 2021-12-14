@@ -10,6 +10,7 @@ import {
   getModelForClass,
   getModelWithString,
   getName,
+  mongoose,
   Passthrough,
   pre,
   prop,
@@ -20,7 +21,7 @@ import { _buildSchema } from '../../src/internal/schema';
 import * as utils from '../../src/internal/utils';
 import { mapValueToSeverity } from '../../src/globalOptions';
 import { BasePropOptions } from '../../src/types';
-import { ExpectedTypeError, ResolveTypegooseNameError } from '../../src/internal/errors';
+import { ExpectedTypeError, InvalidEnumTypeError, ResolveTypegooseNameError } from '../../src/internal/errors';
 
 beforeEach(() => {
   jest.restoreAllMocks();
@@ -791,4 +792,25 @@ describe('tests for "ExpectedTypeError" [E029]', () => {
       expect(err.message).toMatchSnapshot();
     }
   });
+});
+
+it('should throw a Error in "processProp" when using a invalid type for enums [InvalidEnumTypeError] [E012]', () => {
+  enum TestEnum {
+    v1 = 'v1',
+    v2 = 'v2',
+  }
+
+  class TestInvalidEnumType {
+    @prop({ type: mongoose.Schema.Types.Boolean, enum: TestEnum })
+    public testVal: boolean;
+  }
+
+  try {
+    _buildSchema(TestInvalidEnumType);
+
+    fail('Expected "InvalidEnumTypeError" to be thrown');
+  } catch (err) {
+    expect(err).toBeInstanceOf(InvalidEnumTypeError);
+    expect(err.message).toMatchSnapshot();
+  }
 });
