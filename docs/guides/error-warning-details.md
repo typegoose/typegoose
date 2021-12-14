@@ -283,10 +283,10 @@ This Error should never show up, if it does report it
 
 ### PropOptions.discriminators dosnt support Arrays with more or less than 1 dimension [E020]
 
-<span class="badge badge--warning">This Error got removed in 0.0.0</span>
+<span class="badge badge--warning">This Error got removed in 9.4.0</span>
 
 :::info
-This Error got merged with [`E027`](#the-option-does-not-support-a-option-value-e027) in 0.0.0
+This Error got merged with [`E027`](#the-option-does-not-support-a-option-value-e027) in 9.4.0
 :::
 
 Error: `"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`
@@ -310,10 +310,10 @@ class ErrorClass {
 
 ### PropOptions.ref dosnt support Arrays [E021]
 
-<span class="badge badge--warning">This Error got removed in 0.0.0</span>
+<span class="badge badge--warning">This Error got removed in 9.4.0</span>
 
 :::info
-This Error got merged with [`E027`](#the-option-does-not-support-a-option-value-e027) in 0.0.0
+This Error got merged with [`E027`](#the-option-does-not-support-a-option-value-e027) in 9.4.0
 :::
 
 Error: `Prop-Option "ref" does not support Arrays! (got "${dim}" dimensions, for property "${name}.${key}") [E021]`
