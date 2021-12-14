@@ -127,3 +127,9 @@ export class InvalidEnumTypeError extends TypeError {
     );
   }
 }
+
+export class InvalidOptionsConstructorError extends TypeError {
+  constructor(name: string, key: string, type: unknown) {
+    super(`Type has a invalid "OptionsConstructor" on "${name}.${key}"! [E016]\n` + `Type: "${toStringNoFail(type)}"`);
+  }
+}

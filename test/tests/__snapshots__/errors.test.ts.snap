@@ -13,7 +13,12 @@ exports[`should error if no function for hooks is defined [TypeError] 1`] = `"\\
 
 exports[`should error if not all needed parameters for virtual-populate are given [NotAllVPOPElementsError] [E006] 1`] = `"\\"TestNAEEVirtualPopulate.test\\" has not all needed Virtual Populate Options! Needed are: localField, foreignField, ref [E006]"`;
 
-exports[`should error if the Type does not have a valid "OptionsConstructor" [TypeError] [E016] 1`] = `"Type does not have a valid \\"OptionsConstructor\\"! (\\"Error\\" on \\"Error.undefined-pkey\\") [E016]"`;
+exports[`should error if the Type does not have a valid "OptionsConstructor" [InvalidOptionsConstructorError] [E016] 1`] = `
+"Type has a invalid \\"OptionsConstructor\\" on \\"Error.undefined-pkey\\"! [E016]
+Type: \\"class CustomType {
+        constructor() { }
+    }\\""
+`;
 
 exports[`should fail when using Number-Enum on an String Type [NotStringTypeError] [E010] 1`] = `
 "Typeof \\"NumberEnumOnStringType.someEnum\\" is \\"String\\", used enum is not only Strings! [E010]

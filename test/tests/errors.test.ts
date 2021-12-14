@@ -21,7 +21,12 @@ import { _buildSchema } from '../../src/internal/schema';
 import * as utils from '../../src/internal/utils';
 import { mapValueToSeverity } from '../../src/globalOptions';
 import { BasePropOptions } from '../../src/types';
-import { ExpectedTypeError, InvalidEnumTypeError, ResolveTypegooseNameError } from '../../src/internal/errors';
+import {
+  ExpectedTypeError,
+  InvalidEnumTypeError,
+  InvalidOptionsConstructorError,
+  ResolveTypegooseNameError,
+} from '../../src/internal/errors';
 
 beforeEach(() => {
   jest.restoreAllMocks();
@@ -279,13 +284,17 @@ describe('tests for "FunctionCalledMoreThanSupportedError" [E003]', () => {
   });
 });
 
-it('should error if the Type does not have a valid "OptionsConstructor" [TypeError] [E016]', () => {
-  try {
-    utils.mapOptions({}, Error, Error, 'undefined-pkey');
+it('should error if the Type does not have a valid "OptionsConstructor" [InvalidOptionsConstructorError] [E016]', () => {
+  class CustomType {
+    constructor() {}
+  }
 
-    fail('Expected to throw "TypeError"');
+  try {
+    utils.mapOptions({}, CustomType, Error, 'undefined-pkey');
+
+    fail('Expected to throw "InvalidOptionsConstructor"');
   } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
+    expect(err).toBeInstanceOf(InvalidOptionsConstructorError);
     expect(err.message).toMatchSnapshot();
   }
 });

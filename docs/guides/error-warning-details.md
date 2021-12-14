@@ -232,14 +232,19 @@ The `customName` option must be a String AND at least *one* character long
 
 ### Type dosnt have "OptionsConstructor" [E016]
 
-Error: `Type does not have a valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`
+Error:
 
-Error Class: `TypeError`
+```txt
+Type has a invalid "OptionsConstructor" on "${name}.${key}"! [E016]
+Type: "${toStringNoFail(type)}"
+```
+
+Error Class: `InvalidOptionsConstructor`
 
 Details:  
-The `Type` provided does not have a property `OptionsConstructor` (`undefined / null`), this is required to map options of an array & map
+The Type provided `type` does not have a `OptionsConstructor` property, this property is required to map options correctly.
 
-Typegoose uses the property [`OptionsConstructor`](https://github.com/Automattic/mongoose/tree/master/lib/options) on types (ex `mongoose.Schema.Types.ObjectId.OptionsConstructor`) to correctly map the options (from `@prop(options)`) to the appropiate place
+Typegoose uses the property [`OptionsConstructor`](https://github.com/Automattic/mongoose/tree/master/lib/options) on types (like `mongoose.Schema.Types.ObjectId.OptionsConstructor`) to correctly map the options (from `@prop(options)`) to the appropiate place.
 
 If custom types are used and they dont have `OptionsConstructor`, and an easy way to workaround this error is the following:
 

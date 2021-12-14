@@ -19,6 +19,7 @@ import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
 import {
   AssertionFallbackError,
+  InvalidOptionsConstructorError,
   InvalidWhatIsItError,
   NoValidClassError,
   ResolveTypegooseNameError,
@@ -470,11 +471,7 @@ export function mapOptions(
     OptionsCTOR = mongoose.Schema.Types.Subdocument.prototype.OptionsConstructor;
   }
 
-  // REFACTOR: re-write this to be a Error inside errors.ts
-  assertion(
-    !isNullOrUndefined(OptionsCTOR),
-    new TypeError(`Type does not have a valid "OptionsConstructor"! ("${getName(loggerType)}" on "${getName(target)}.${pkey}") [E016]`)
-  );
+  assertion(!isNullOrUndefined(OptionsCTOR), () => new InvalidOptionsConstructorError(getName(target), pkey, loggerType));
 
   const options = Object.assign({}, rawOptions); // for sanity
 
