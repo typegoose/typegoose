@@ -466,18 +466,6 @@ it('should fail when using String-Enum on an Number Type [NotNumberTypeError] [E
   }
 });
 
-it('should error if no valid key is supplied to "getModelWithString" [TypeError]', () => {
-  try {
-    // @ts-expect-error expect the first argument to be an "string"
-    getModelWithString(true);
-
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
-});
-
 it('should error if a non-valid object is passed to "getClass" [ResolveTypegooseNameError] [E014]', () => {
   try {
     getClass(undefined);
@@ -784,6 +772,18 @@ describe('tests for "ExpectedTypeError" [E029]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       deleteModel(true);
+
+      fail('Expected to throw "ExpectedTypeError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(ExpectedTypeError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should error if no valid key is supplied to "getModelWithString" [ExpectedTypeError] [E029]', () => {
+    try {
+      // @ts-expect-error expect the first argument to be an "string"
+      getModelWithString(true);
 
       fail('Expected to throw "ExpectedTypeError"');
     } catch (err) {

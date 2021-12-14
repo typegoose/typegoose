@@ -448,6 +448,7 @@ Example of when this gets triggered:
 ```ts
 setGlobalOptions(undefined); // Expected input(name of first argument) to be a defined object
 deleteModel(undefined); // Expected name(name of first argument) to be a string
+getModelWithString(undefined); // Expected key(name of first argument) to be a string
 ```
 
 ## Warnings

@@ -11,8 +11,6 @@ Value: \\"undefined\\""
 
 exports[`should error if no function for hooks is defined [TypeError] 1`] = `"\\"TestNoFunctionHook.pre.\\"'s function is not a function!"`;
 
-exports[`should error if no valid key is supplied to "getModelWithString" [TypeError] 1`] = `"Expected \\"key\\" to be a string, got \\"true\\""`;
-
 exports[`should error if not all needed parameters for virtual-populate are given [NotAllVPOPElementsError] [E006] 1`] = `"\\"TestNAEEVirtualPopulate.test\\" has not all needed Virtual Populate Options! Needed are: localField, foreignField, ref [E006]"`;
 
 exports[`should error if the Type does not have a valid "OptionsConstructor" [TypeError] [E016] 1`] = `"Type does not have a valid \\"OptionsConstructor\\"! (\\"Error\\" on \\"Error.undefined-pkey\\") [E016]"`;
@@ -41,6 +39,8 @@ Please look at https://github.com/typegoose/typegoose/issues/42 for more informa
 `;
 
 exports[`should throw default error if no error is specified (assertion) [AssertionFallbackError] [E019] 1`] = `"Assert failed - no custom error [E019]"`;
+
+exports[`tests for "ExpectedTypeError" [E029] should error if no valid key is supplied to "getModelWithString" [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"key\\" to have type \\"string\\", got: \\"true\\" [E029]"`;
 
 exports[`tests for "ExpectedTypeError" [E029] should error if the options provided to "setGlobalOptions" are not an object [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"options\\" to have type \\"object\\", got: \\"undefined\\" [E029]"`;
 

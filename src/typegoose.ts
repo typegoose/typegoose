@@ -101,8 +101,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
  * ```
  */
 export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
-  // REFACTOR: re-write this to be a Error inside errors.ts
-  assertion(typeof key === 'string', TypeError(`Expected "key" to be a string, got "${key}"`));
+  assertion(typeof key === 'string', () => new ExpectedTypeError('key', 'string', key));
 
   return models.get(key) as any;
 }
