@@ -310,10 +310,12 @@ export function getRightTarget(target: any): any {
  * @param customOptions Extra Options that can be added in "buildSchema"
  */
 export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions?: IModelOptions) {
-  // this case can happen when type casting (or type being "any") happened and wanting to throw a Error (and there using "getName" to help)
+  // this case (cl being undefined / null) can happen when type casting (or type being "any") happened and wanting to throw a Error (and there using "getName" to help)
+  // check if input variable is undefined, if it is throw a error (cannot be combined with the error below because of "getRightTarget")
   assertion(!isNullOrUndefined(cl), () => new NoValidClassError(cl));
-
   const ctor: any = getRightTarget(cl);
+  assertion(isConstructor(ctor), () => new NoValidClassError(ctor));
+
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
   const baseName: string = ctor.name;
   const customName = customOptions?.options?.customName ?? options.options?.customName;

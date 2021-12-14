@@ -426,7 +426,7 @@ getDiscriminatorModelForClass(ParentModel, undefined); // second argument is the
 addModelToTypegoose("ModelName", ModelSchema, undefined); // third argument is the class
 buildSchema(undefined); // first argument is the class
 deleteModelWithClass(undefined); // first argument is the class
-getName(undefined); // first argument is the class (this function is currently more lenient)
+getName(undefined); // first argument is the class
 ```
 
 ## Warnings
