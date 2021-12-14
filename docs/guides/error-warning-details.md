@@ -471,6 +471,10 @@ getModelWithString(undefined); // Expected key(name of first argument) to be a s
 @pre('', undefined) // Expected fn(name of second argument) to be a function
 @post('', undefined) // Expected fn(name of second argument) to be a function
 class SomeClass {}
+
+@pre('', () => {}, '')) // Expected options(name of third argument) to be a object or undefined
+@post('', () => {}, '') // Expected options(name of third argument) to be a object or undefined
+class SomeClass {}
 ```
 
 ## Warnings

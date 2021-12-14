@@ -150,20 +150,3 @@ it('should allow usage of hook-options [typegoose/typegoose#605]', async () => {
     })
   );
 });
-
-it('should throw a Error when a hooks options argument is not a object', async () => {
-  try {
-    const customPre = jest.fn(() => fail('Expected this function to not be executed'));
-    // @ts-expect-error The second argument should be a function (test a warning)
-    @pre<TestHookFunctionNotFunction>('save', customPre, 'SomethingElse')
-    class TestHookFunctionNotFunction {
-      @prop()
-      public dummy?: string;
-    }
-
-    fail('Expected this to fail');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
-});

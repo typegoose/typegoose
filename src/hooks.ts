@@ -105,10 +105,9 @@ function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
   const hookOptions: HookOptionsEither = args[2] ?? {};
 
   assertion(typeof func === 'function', () => new ExpectedTypeError('fn', 'function', func));
-  // REFACTOR: re-write this to be a Error inside errors.ts
   assertion(
     typeof hookOptions === 'object' && !isNullOrUndefined(hookOptions),
-    () => new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s hookOptions is not a normal object!`)
+    () => new ExpectedTypeError('options', 'object / undefined', hookOptions)
   );
 
   if (args.length > 3) {
