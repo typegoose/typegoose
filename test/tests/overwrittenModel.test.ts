@@ -41,11 +41,8 @@ it('should be possible to overwrite an existing model', () => {
   deleteModel('User');
 });
 
-it('should not be possible to delete a non-existing model', () => {
-  const notExistingModelName = 'NotExistingModel';
-  expect(() => {
-    deleteModel(notExistingModelName);
-  }).toThrow(`Model "${notExistingModelName}" could not be found`);
+it('should not error if model did not exist in "models" map', () => {
+  deleteModel('DefinetlyNotExistingModel');
 });
 
 it('should make use of "deleteModelWithClass"', () => {

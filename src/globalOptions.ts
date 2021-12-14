@@ -1,6 +1,7 @@
 import { Severity } from './internal/constants';
 import { globalOptions } from './internal/data';
-import { assertion } from './internal/utils';
+import { ExpectedTypeError } from './internal/errors';
+import { assertion, isNullOrUndefined } from './internal/utils';
 import { logger } from './logSettings';
 import type { IGlobalOptions } from './types';
 
@@ -8,7 +9,7 @@ import type { IGlobalOptions } from './types';
  * Set Typegoose's global Options
  */
 export function setGlobalOptions(options: IGlobalOptions) {
-  assertion(typeof options === 'object', () => new TypeError('"options" argument needs to be an object!'));
+  assertion(!isNullOrUndefined(options) && typeof options === 'object', () => new ExpectedTypeError('options', 'object', options));
 
   logger.info('"setGlobalOptions" got called with', options);
 

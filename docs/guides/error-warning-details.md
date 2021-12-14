@@ -172,12 +172,25 @@ This Error should never be thrown if Typescript is used, it throws if the `Type`
 
 ### Invalid Type for Enum [E012]
 
-Error: `Invalid type used for enums!, got: "${Type}" (${name}.${key}) [E012]`
+Error:
 
-Error Class: `Error`
+```txt
+Invalid Type used for options "enum" at "${name}.${key}"! [E012]
+Type: "${toStringNoFail(value)}"
+https://typegoose.github.io/typegoose/docs/guides/error-warning-details#invalid-type-for-enum-e012
+```
+
+Error Class: `InvalidEnumTypeError`
 
 Details:  
-This Error should never be thrown if Typescript is used, it throws if the `Type` is not `String` or `Number`
+This Error may get thrown when a invalid Type is used with the option [`enum`](../api/decorators/prop.md#enum).
+Currently Valid Types for enum are `String` or `Number`.
+
+This may be thrown when using typescript option `transpileOnly` (see [Known Issues: transpile-only](,/../known-issues.md#transpile-only)) or using Babel without proper configuration (see [Known Issues: Babel](./known-issues.md#babel)).
+
+:::tip
+This Error has a workaround, see [Use Without "emitDecoratorMetadata"](./use-without-emitDecoratorMetadata.md).
+:::
 
 ### Invalid WhatIsIt used [E013]
 
@@ -190,12 +203,17 @@ The Value `${whatisit}` is not supported in `${where}` or does not exist in the 
 
 ### Input was not string or have .typegooseName function/string [E014]
 
-Error: `Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]`
+Error:
 
-Error Class: `ReferenceError`
+```txt
+Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]
+Value: "${toStringNoFail(input)}"
+```
+
+Error Class: `ResolveTypegooseNameError`
 
 Details:  
-The Provided Input wasnt a string and didnt have a `.typegooseName` function / string to be searched by
+The Provided Input `input` was not a string and didnt have a `.typegooseName` function / string to be searched by.
 
 ### customName must be string and at least one character [E015]
 
@@ -214,14 +232,19 @@ The `customName` option must be a String AND at least *one* character long
 
 ### Type dosnt have "OptionsConstructor" [E016]
 
-Error: `Type does not have a valid "OptionsConstructor"! (${getName(loggerType)} on ${getName(target)}.${pkey}) [E016]`
+Error:
 
-Error Class: `TypeError`
+```txt
+Type has a invalid "OptionsConstructor" on "${name}.${key}"! [E016]
+Type: "${toStringNoFail(type)}"
+```
+
+Error Class: `InvalidOptionsConstructor`
 
 Details:  
-The `Type` provided does not have a property `OptionsConstructor` (`undefined / null`), this is required to map options of an array & map
+The Type provided `type` does not have a `OptionsConstructor` property, this property is required to map options correctly.
 
-Typegoose uses the property [`OptionsConstructor`](https://github.com/Automattic/mongoose/tree/master/lib/options) on types (ex `mongoose.Schema.Types.ObjectId.OptionsConstructor`) to correctly map the options (from `@prop(options)`) to the appropiate place
+Typegoose uses the property [`OptionsConstructor`](https://github.com/Automattic/mongoose/tree/master/lib/options) on types (like `mongoose.Schema.Types.ObjectId.OptionsConstructor`) to correctly map the options (from `@prop(options)`) to the appropiate place.
 
 If custom types are used and they dont have `OptionsConstructor`, and an easy way to workaround this error is the following:
 
@@ -260,6 +283,12 @@ This Error should never show up, if it does report it
 
 ### PropOptions.discriminators dosnt support Arrays with more or less than 1 dimension [E020]
 
+<span class="badge badge--warning">This Error got removed in 0.0.0</span>
+
+:::info
+This Error got merged with [`E027`](#the-option-does-not-support-a-option-value-e027) in 0.0.0
+:::
+
 Error: `"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`
 
 Error Class: `Error`
@@ -280,6 +309,12 @@ class ErrorClass {
 ```
 
 ### PropOptions.ref dosnt support Arrays [E021]
+
+<span class="badge badge--warning">This Error got removed in 0.0.0</span>
+
+:::info
+This Error got merged with [`E027`](#the-option-does-not-support-a-option-value-e027) in 0.0.0
+:::
 
 Error: `Prop-Option "ref" does not support Arrays! (got "${dim}" dimensions, for property "${name}.${key}") [E021]`
 
@@ -361,6 +396,112 @@ This Error gets most commonly thrown when:
 - [`customName`](../api/decorators/modelOptions.md#customname) is a Function, but the function does not return a String or the returned String does not have the required length.
 - [`customName`](../api/decorators/modelOptions.md#customname) is defined, but is not a String or the defined String does not have the required length.
 - [`refPath`](../api/decorators/prop.md#refpath) is defined, but is not a String or the defined String does not have the required length.
+
+### The Option does not support a Option Value [E027]
+
+Error: `The Option "${currentOption}" does not support Option "${problemOption}" other than "${expected}" (provided was: "${provided}") [E027]`
+
+Error Class: `OptionDoesNotSupportOption`
+
+Details:  
+The Option `currentOption` does not support the value `provided` that was set for `problemOption`, expected value was `expected`.
+
+This Error gets most commonly thrown when:
+
+- Option `discriminators`'s function return value is not a array.
+- Option `discriminators`' function return value is a multi-layer array.
+- Option `ref`'s value or function return value is a array.
+
+Example of when this gets triggered:
+
+```ts
+class ErrorClassDiscriminators {
+  @prop({ discriminators: () => [[ErrorClass]] }) // <- error here
+  public someProp?: ErrorClass; // (this is just an example)
+
+  @prop({ discriminators: () => ErrorClass }) // <- error here
+  public someProp?: ErrorClass; // (this is just an example)
+
+  @prop({ ref: () => [ErrorClass] }) // <- error here
+  public someProp?: Ref<ErrorClass>;
+}
+```
+
+### Value is not a function or does not have a constructor [E028]
+
+Error:
+
+```txt
+Value is not a function or does not have a constructor! [E028]
+Value: "${toStringNoFail(value)}"
+```
+
+Error Class: `NoValidClassError`
+
+Details:  
+The Input variable (stringified) `value` is not a function or/and does not have a constructor (`value.prototype.constructor.name`)
+
+Example of when this gets triggered:
+
+```ts
+getModelForClass(undefined); // first argument is the class
+getDiscriminatorModelForClass(ParentModel, undefined); // second argument is the class
+addModelToTypegoose("ModelName", ModelSchema, undefined); // third argument is the class
+buildSchema(undefined); // first argument is the class
+deleteModelWithClass(undefined); // first argument is the class
+getName(undefined); // first argument is the class
+```
+
+### Expected Argument to have type [E029]
+
+Error: `Expected Argument "${optionName}" to have type "${expected}", got: "${toStringNoFail(got)}" [E029]`
+
+Error Class: `ExpectedTypeError`
+
+Details:  
+The Argument `optionName` is expected to be of type `expected`, but type was `got`.
+
+Example of when this gets triggered:
+
+```ts
+setGlobalOptions(undefined); // Expected input(name of first argument) to be a defined object
+deleteModel(undefined); // Expected name(name of first argument) to be a string
+getModelWithString(undefined); // Expected key(name of first argument) to be a string
+
+@pre('', undefined) // Expected fn(name of second argument) to be a function
+@post('', undefined) // Expected fn(name of second argument) to be a function
+class SomeClass {}
+
+@pre('', () => {}, '')) // Expected options(name of third argument) to be a object or undefined
+@post('', () => {}, '') // Expected options(name of third argument) to be a object or undefined
+class SomeClass {}
+```
+
+### Path does not exist on Schema [E030]
+
+Error: `Path "${key}" on "${name}" does not exist in the Schema! [E030]`
+
+Error Class: `PathNotInSchemaError`
+
+Details:  
+This gets thrown when the path `key` does not exist and a nested discriminator is tried to be applied.
+
+:::note
+If this Error is encountered, please open a [new Issue in Github](https://github.com/typegoose/typegoose/issues/new/choose).
+:::
+
+### Path does not have function "discriminator" [E031]
+
+Error: `Path "${name}.${key}" does not have a function called "discriminator"! (Nested Discriminator cannot be applied) [E031]`
+
+Error Class: `NoDiscriminatorFunctionError`
+
+Details:  
+The Path `key` of Schema `name` does not have a function called `discriminator`, which id needed to apply a nested discriminator.
+
+:::note
+If this Error is encountered, please open a [new Issue in Github](https://github.com/typegoose/typegoose/issues/new/choose).
+:::
 
 ## Warnings
 
