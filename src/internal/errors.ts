@@ -111,3 +111,9 @@ export class ResolveTypegooseNameError extends ReferenceError {
     );
   }
 }
+
+export class ExpectedTypeError extends TypeError {
+  constructor(optionName: string, expected: string, got: unknown) {
+    super(`Expected Argument "${optionName}" to have type "${expected}", got: "${toStringNoFail(got)}" [E029]`);
+  }
+}

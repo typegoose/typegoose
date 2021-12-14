@@ -434,6 +434,20 @@ deleteModelWithClass(undefined); // first argument is the class
 getName(undefined); // first argument is the class
 ```
 
+### Expected Argument to have type [E029]
+
+Error: `Expected Argument "${optionName}" to have type "${expected}", got: "${toStringNoFail(got)}" [E029]`
+
+Error Class: `ExpectedTypeError`
+
+Details:  
+The Argument `optionName` is expected to be of type `expected`, but type was `got`.
+
+Example of when this gets triggered:
+
+```ts
+```
+
 ## Warnings
 
 ### Type is not ${type}, but includes the following ${extra} options [W001]
