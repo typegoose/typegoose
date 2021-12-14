@@ -25,7 +25,7 @@ import { _buildSchema } from './internal/schema';
 import { logger } from './logSettings';
 import { isModel } from './typeguards';
 import type { AnyParamConstructor, BeAnObject, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
-import { FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
+import { ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
 /* exports */
 // export the internally used "mongoose", to not need to always import it
@@ -214,8 +214,7 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
  * ```
  */
 export function deleteModel(name: string) {
-  // REFACTOR: re-write this to be a Error inside errors.ts
-  assertion(typeof name === 'string', new TypeError('name is not an string! (deleteModel)'));
+  assertion(typeof name === 'string', () => new ExpectedTypeError('name', 'string', name));
   const model = models.get(name);
   // REFACTOR: re-write this to be a Error inside errors.ts
   assertion(model, new Error(`Model "${name}" could not be found`));

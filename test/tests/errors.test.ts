@@ -258,18 +258,6 @@ it('should throw an error if a self-contained class is used [typegoose#42] [Self
   }
 });
 
-it('should throw when "deleteModel" is called with no string [TypeError]', () => {
-  try {
-    // @ts-expect-error expect that the first argument should be an class
-    deleteModel(true);
-
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
-});
-
 describe('tests for "FunctionCalledMoreThanSupportedError" [E003]', () => {
   it('should throw a Error when "addModelToTypegoose" got called more than once with the same model name [FunctionCalledMoreThanSupportedError] [E003]', () => {
     class TestMoreThanOnce {
@@ -784,6 +772,18 @@ describe('tests for "ExpectedTypeError" [E029]', () => {
     try {
       // @ts-expect-error "undefined" does not match the restriction "IGlobalOptions"
       setGlobalOptions(undefined);
+
+      fail('Expected to throw "ExpectedTypeError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(ExpectedTypeError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw when "deleteModel" is called with no string [ExpectedTypeError] [E029]', () => {
+    try {
+      // @ts-expect-error expect that the first argument should be an class
+      deleteModel(true);
 
       fail('Expected to throw "ExpectedTypeError"');
     } catch (err) {

@@ -42,9 +42,9 @@ Please look at https://github.com/typegoose/typegoose/issues/42 for more informa
 
 exports[`should throw default error if no error is specified (assertion) [AssertionFallbackError] [E019] 1`] = `"Assert failed - no custom error [E019]"`;
 
-exports[`should throw when "deleteModel" is called with no string [TypeError] 1`] = `"name is not an string! (deleteModel)"`;
-
 exports[`tests for "ExpectedTypeError" [E029] should error if the options provided to "setGlobalOptions" are not an object [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"options\\" to have type \\"object\\", got: \\"undefined\\" [E029]"`;
+
+exports[`tests for "ExpectedTypeError" [E029] should throw when "deleteModel" is called with no string [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"name\\" to have type \\"string\\", got: \\"true\\" [E029]"`;
 
 exports[`tests for "FunctionCalledMoreThanSupportedError" [E003] should throw a Error when "addModelToTypegoose" got called more than once with the same model name [FunctionCalledMoreThanSupportedError] [E003] 1`] = `
 "Function \\"addModelToTypegoose\\" only supports to be called \\"1\\" times with the same parameters [E003]
