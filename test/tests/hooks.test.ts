@@ -2,11 +2,11 @@ import { DecoratorKeys } from '../../src/internal/constants';
 import { logger } from '../../src/logSettings';
 import { buildSchema, post, pre, prop } from '../../src/typegoose';
 import { HookOptionsEither, IHooksArray } from '../../src/types';
-import { ExtendedHookModel, Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
+import { ExtendedHookModel, HookArray, HookArrayModel, HookModel } from '../models/hook1';
 import { Hook2Model } from '../models/hook2';
 
 it('RegEXP tests', async () => {
-  const doc = new HookModel({ material: 'iron' } as Hook);
+  const doc = new HookModel({ material: 'iron' });
   await doc.save();
   await doc.updateOne(doc).exec(); // to run the update hook with regexp, find doesn't work (it doesn't get applied)
 
