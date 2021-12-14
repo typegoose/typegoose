@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose';
 import { logger } from '../logSettings';
 import type {
   AnyParamConstructor,
+  DeferredFunc,
   Func,
   GetTypeReturn,
   IModelOptions,
@@ -261,7 +262,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamC
  * @internal
  */
 export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): T {
-  assertion(typeof key === 'string' && key.length > 0, new StringLengthExpectedError(1, key, getName(cl), 'key'));
+  assertion(typeof key === 'string' && key.length > 0, () => new StringLengthExpectedError(1, key, getName(cl), 'key'));
   assertionIsClass(cl);
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
@@ -310,7 +311,7 @@ export function getRightTarget(target: any): any {
  */
 export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions?: IModelOptions) {
   // this case can happen when type casting (or type being "any") happened and wanting to throw a Error (and there using "getName" to help)
-  assertion(!isNullOrUndefined(cl), new NoValidClassError(cl));
+  assertion(!isNullOrUndefined(cl), () => new NoValidClassError(cl));
 
   const ctor: any = getRightTarget(cl);
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
@@ -322,7 +323,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions
 
     assertion(
       typeof name === 'string' && name.length > 0,
-      new StringLengthExpectedError(1, name, baseName, 'options.customName(function)')
+      () => new StringLengthExpectedError(1, name, baseName, 'options.customName(function)')
     );
 
     return name;
@@ -342,7 +343,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions
 
   assertion(
     typeof customName === 'string' && customName.length > 0,
-    new StringLengthExpectedError(1, customName, baseName, 'options.customName')
+    () => new StringLengthExpectedError(1, customName, baseName, 'options.customName')
   );
 
   return customName;
@@ -435,7 +436,9 @@ export function mapOptions(
     outer: {} as KeyStringAny,
   };
 
+  // if Type is not a Schema, try to convert js type to mongoose type (Object => Mixed)
   if (!(Type instanceof mongoose.Schema)) {
+    // set the loggerType to the js type
     loggerType = Type;
     const loggerTypeName = getName(loggerType);
 
@@ -582,12 +585,14 @@ export function createArrayFromDimensions(rawOptions: any, extra: any, name: str
 /**
  * Assert an condition, if "false" throw error
  * Note: it is not named "assert" to differentiate between node and jest types
+ *
+ * Note: "error" can be a function to not execute the constructor when not needed
  * @param cond The Condition to throw
- * @param error An Custom Error to throw
+ * @param error An Custom Error to throw or a function that returns a Error
  */
-export function assertion(cond: any, error?: Error): asserts cond {
+export function assertion(cond: any, error?: Error | DeferredFunc<Error>): asserts cond {
   if (!cond) {
-    throw error ?? new AssertionFallbackError();
+    throw typeof error === 'function' ? error() : error ?? new AssertionFallbackError();
   }
 }
 
@@ -596,7 +601,7 @@ export function assertion(cond: any, error?: Error): asserts cond {
  * @param val Value to test
  */
 export function assertionIsClass(val: any): asserts val is Func {
-  assertion(isConstructor(val), new NoValidClassError(val));
+  assertion(isConstructor(val), () => new NoValidClassError(val));
 }
 
 /**
@@ -676,5 +681,18 @@ export function warnNotCorrectTypeOptions(name: string, key: string, type: strin
     logger.warn(
       `Type of "${name}.${key}" is not ${type}, but includes the following ${extra} options [W001]:\n` + `  [${included.join(', ')}]`
     );
+  }
+}
+
+/**
+ * Try to convert input "value" to a String, without it failing
+ * @param value The Value to convert to String
+ * @returns A String, either "value.toString" or a placeholder
+ */
+export function toStringNoFail(value: unknown): string {
+  try {
+    return String(value);
+  } catch (_) {
+    return '(Error: Converting value to String failed)';
   }
 }

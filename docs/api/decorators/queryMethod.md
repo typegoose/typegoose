@@ -18,11 +18,13 @@ It is recommended to not define the functions inside the decorator, like in the 
 Example:
 
 ```ts
+import { types } from "@typegoose/typegoose";
+
 // an interface is needed to add query-function types to the class
 interface QueryHelpers {
   // use the actual function types dynamically
-  findByName: AsQueryMethod<typeof findByName>;
-  findByLastname: AsQueryMethod<typeof findByLastname>;
+  findByName: types.AsQueryMethod<typeof findByName>;
+  findByLastname: types.AsQueryMethod<typeof findByLastname>;
 }
 
 function findByName(this: ReturnModelType<typeof Person, QueryHelpers>, name: string) {

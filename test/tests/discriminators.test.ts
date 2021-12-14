@@ -35,7 +35,7 @@ it('"getDiscriminatorModelForClass" should return the same model if already defi
 
   const model = getModelForClass(TestSameModelDiscriminator);
 
-  const dummymodel = mongoose.model('DummyModel', new mongoose.Schema());
+  const dummymodel = mongoose.model('DummyModel', new mongoose.Schema<any>());
 
   const newmodel = getDiscriminatorModelForClass(dummymodel, TestSameModelDiscriminator);
 

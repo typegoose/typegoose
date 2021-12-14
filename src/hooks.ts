@@ -106,12 +106,12 @@ function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
   // REFACTOR: re-write this to be a Error inside errors.ts
   assertion(
     typeof func === 'function',
-    new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s function is not a function!`)
+    () => new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s function is not a function!`)
   );
   // REFACTOR: re-write this to be a Error inside errors.ts
   assertion(
     typeof hookOptions === 'object' && !isNullOrUndefined(hookOptions),
-    new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s hookOptions is not a normal object!`)
+    () => new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s hookOptions is not a normal object!`)
   );
 
   if (args.length > 3) {

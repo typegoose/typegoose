@@ -66,6 +66,8 @@ const model = getModelForClass(CustomNameOption);
 expect(model.modelName).to.be.equal('CustomNameOption_CustomName');
 ```
 
----
+## Notes
 
 For more details on the usage of these naming features, please look into [the tests that are written for them.](https://github.com/typegoose/typegoose/blob/r6/master/test/tests/customName.test.ts)
+
+See also [Typegoose's Name Generation](./name-generation.md) for a complete (and hopefully simple) way to understand name generation.

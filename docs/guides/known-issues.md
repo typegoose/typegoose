@@ -37,12 +37,15 @@ class SomeClass {
 
 ### Babel
 
+<span class="badge badge--warning">This Section may be outdated</span>
+
 Using babel as a TypeScript compiler is known to cause problems (like incorrect types), we recommened you use `tsc` directly, or `ts-node` or `ts-jest` for jest-testing.
 
 If Babel is still needed, then read [Babel TypeScript preset](https://babeljs.io/docs/en/babel-preset-typescript) and install the following plugins:  
 
 - To reproduce the typescript decorators (`experimentalDecorators`), use [`@babel/plugin-proposal-decorators`](https://babeljs.io/docs/en/babel-plugin-proposal-decorators)
 - To reproduce the decorator metadata output (`emitDecoratorMetadata`), use [`babel-plugin-transform-typescript-metadata`](https://github.com/leonardfactory/babel-plugin-transform-typescript-metadata)
+- Plugin [`@babel/plugin-proposal-class-properties`](https://babeljs.io/docs/en/babel-plugin-proposal-class-properties) is required to solve the error `Syntax error, Definitely assigned fields cannot be initialized here, but only in the constructor` which would come with using decorators (legacy / stage 1) nowdays
 
 :::info
 `emitDecoratorMetadata` is not strictly needed, see [Use Without `emitDecoratorMetadata`](./use-without-emitDecoratorMetadata.md)
@@ -53,6 +56,7 @@ module.exports = {
   plugins: [
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     'babel-plugin-transform-typescript-metadata',
+    ['@babel/plugin-proposal-class-properties', { loose: true }],
   ]
 }
 ```
@@ -60,3 +64,21 @@ module.exports = {
 ### prop on get & set
 
 `@prop` cannot be applied to `get` & `set` (ES6), because virtuals do not accept options & [`schema.loadClass`](https://mongoosejs.com/docs/advanced_schemas.html#creating-from-es6-classes-using-loadclass) wouldn't load these.
+
+### Webpack
+
+Webpack's `minimize` cannot be used with typegoose, because typegoose relies heavily on reflection and property names.
+
+In webpack, it can be disabled when adding the following to the webpack config:
+
+```js
+module.exports = {
+  optimization: {
+    minimize: false
+  }
+}
+```
+
+:::note
+There are some workarounds for some minification problems, like the class name (which would be the model name) can be changed with [`customName`](../api/decorators/model-options#customname).
+:::

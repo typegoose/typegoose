@@ -1,7 +1,15 @@
 import * as mongoose from 'mongoose';
 import { mapValueToSeverity } from '../../src/globalOptions';
 import { DecoratorKeys, Severity } from '../../src/internal/constants';
-import { assertion, assignMetadata, createArrayFromDimensions, getName, mergeMetadata, mergeSchemaOptions } from '../../src/internal/utils';
+import {
+  assertion,
+  assignMetadata,
+  createArrayFromDimensions,
+  getName,
+  mergeMetadata,
+  mergeSchemaOptions,
+  toStringNoFail,
+} from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 import {
   addModelToTypegoose,
@@ -644,7 +652,8 @@ describe('test the Passthrough class (non "direct")', () => {
   });
 
   // currently does not work, see https://github.com/Automattic/mongoose/issues/10750
-  it.skip('should make use of the "Passthrough" class (WhatIsIt.ARRAY)', () => {
+  it('should make use of the "Passthrough" class (WhatIsIt.ARRAY)', () => {
+    const spyWarn = jest.spyOn(logger, 'warn').mockImplementation(() => void 0);
     const mongooseSchema = new mongoose.Schema({
       something: [{ type: { somePath: String } }],
     });
@@ -658,13 +667,17 @@ describe('test the Passthrough class (non "direct")', () => {
     const typegooseSomethingPath = typegooseSchema.path('something');
     const mongooseSomethingPath = mongooseSchema.path('something');
 
-    console.log(
-      'test1',
-      typegooseSomethingPath instanceof mongoose.Schema.Types.Array,
-      typegooseSomethingPath instanceof mongoose.Schema.Types.DocumentArray
-    );
-    expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Array);
-    expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+    expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+
+    expect((typegooseSomethingPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
+    expect((mongooseSomethingPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
+
+    expect((typegooseSomethingPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect((mongooseSomethingPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+
+    expect(spyWarn).toHaveBeenCalledTimes(1);
+    expect(spyWarn.mock.calls).toMatchSnapshot();
   });
 
   it('should make use of the "Passthrough" class (WhatIsIt.MAP)', () => {
@@ -863,4 +876,31 @@ describe('tests for "mapValueToSeverity"', () => {
     expect(mapValueToSeverity('WARN')).toStrictEqual(Severity.WARN);
     expect(mapValueToSeverity('ERROR')).toStrictEqual(Severity.ERROR);
   });
+});
+
+it('utils.toStringNoFail should work correctly', () => {
+  expect(toStringNoFail(undefined)).toStrictEqual('undefined');
+  expect(toStringNoFail(null)).toStrictEqual('null');
+  expect(toStringNoFail(0)).toStrictEqual('0');
+  expect(toStringNoFail({})).toStrictEqual('[object Object]');
+  expect(toStringNoFail(function t() {})).toStrictEqual('function t() { }');
+
+  class TestToStringRedefine {
+    public value: { inner: string };
+    toString() {
+      return this.value.inner; // ERROR: "value" is undefined and so cannot access "inner"
+    }
+  }
+
+  expect(toStringNoFail(new TestToStringRedefine())).toStrictEqual('(Error: Converting value to String failed)');
+});
+
+it('utils.assertion should make use of arg1 being a function', () => {
+  class CustomError extends Error {
+    constructor() {
+      super('CustomError');
+    }
+  }
+
+  expect(assertion.bind(undefined, false, () => new CustomError())).toThrowError(CustomError);
 });

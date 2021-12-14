@@ -36,7 +36,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const propKind = input.whatis ?? detectWhatIsIt(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);
-  utils.assertion(typeof key === 'string', new CannotBeSymbolError(name, key));
+  utils.assertion(typeof key === 'string', () => new CannotBeSymbolError(name, key));
 
   // optionDeprecation(rawOptions);
 
@@ -101,9 +101,10 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     // REFACTOR: re-write this to be a Error inside errors.ts
     utils.assertion(
       gotType.dim === 1,
-      new Error(
-        `"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`
-      )
+      () =>
+        new Error(
+          `"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`
+        )
     );
     const discriminators: DiscriminatorObject[] = (gotType.type as (AnyParamConstructor<any> | DiscriminatorObject)[]).map((val, index) => {
       if (utils.isConstructor(val)) {
@@ -130,9 +131,9 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   // allow setting the type asynchronously
   if ('ref' in rawOptions) {
     const gotType = utils.getType(rawOptions.ref);
-    utils.assertion(gotType.dim === 0, new OptionRefDoesNotSupportArraysError(gotType.dim, name, key));
+    utils.assertion(gotType.dim === 0, () => new OptionRefDoesNotSupportArraysError(gotType.dim, name, key));
     rawOptions.ref = gotType.type;
-    utils.assertion(!utils.isNullOrUndefined(rawOptions.ref), new RefOptionIsUndefinedError(name, key));
+    utils.assertion(!utils.isNullOrUndefined(rawOptions.ref), () => new RefOptionIsUndefinedError(name, key));
 
     rawOptions.ref =
       typeof rawOptions.ref === 'string'
@@ -177,12 +178,6 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     switch (propKind) {
       case WhatIsIt.ARRAY:
-        // TODO: somehow this does not work, see https://github.com/Automattic/mongoose/issues/10750
-        logger.warn(
-          'Passthrough was used for "%s.%s", with WhatIsIt.ARRAY, which currently does not work, see https://github.com/Automattic/mongoose/issues/10750',
-          name,
-          key
-        );
         schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, target, key);
 
         return;
@@ -252,7 +247,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
     utils.assertion(
       typeof refPath === 'string' && refPath.length > 0,
-      new StringLengthExpectedError(1, refPath, `${name}.${key}`, 'refPath')
+      () => new StringLengthExpectedError(1, refPath, `${name}.${key}`, 'refPath')
     );
 
     switch (propKind) {

@@ -25,7 +25,14 @@ module.exports = {
     Types: ['api/types/document-type', 'api/types/return-model-type', 'api/types/ref-type', 'api/types/additional-types'],
   },
   guides: {
-    'Getting Started': ['guides/quick-start-guide', 'guides/faq', 'guides/known-issues'],
+    'Getting Started': [
+      'guides/quick-start-guide',
+      'guides/faq',
+      'guides/known-issues',
+      'guides/mongoose-compatibility',
+      'guides/deprecation-codes',
+      'guides/error-warning-details',
+    ],
     // 'guides/known-issues' is included in both "Getting Started" and "Guides", because it fits into both categories
     Guides: [
       {
@@ -34,16 +41,7 @@ module.exports = {
           'guides/integration-examples/using-with-deepkit-type',
           'guides/integration-examples/common-plugins',
         ],
-        Miscellaneous: [
-          'guides/advanced/logger',
-          'guides/mongoose-compatibility',
-          'guides/all-decorators',
-          'guides/deprecation-codes',
-          'guides/error-warning-details',
-          'guides/known-issues',
-          'guides/use-without-emitDecoratorMetadata',
-          'guides/motivation',
-        ],
+        Miscellaneous: ['guides/advanced/logger', 'guides/all-decorators', 'guides/use-without-emitDecoratorMetadata', 'guides/motivation'],
       },
       'guides/default-classes',
       'guides/advanced/custom-types',
@@ -53,6 +51,8 @@ module.exports = {
       'guides/advanced/change-id-type',
       'guides/advanced/using-objectid-type',
       'guides/advanced/non-nested-discriminators',
+      'guides/advanced/nested-discriminators',
+      'guides/advanced/name-generation',
     ],
     Migration: ['guides/migration/migrate-9', 'guides/migration/migrate-8', 'guides/migration/migrate-7', 'guides/migration/migrate-6'],
   },

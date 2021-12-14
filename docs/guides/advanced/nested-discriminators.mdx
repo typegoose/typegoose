@@ -1,0 +1,285 @@
+---
+id: nested-discriminators
+title: 'Nested Discriminators'
+---
+
+<!--MDX Import section-->
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<!--END MDX Import section-->
+
+## Use-Case
+
+If you dont know an use case for this, consider the following:  
+A Veterinarian that wants to store medication information about the current patients in their care, how would it be done in mongoose / typegoose?
+
+:::note
+This Guide will use similar examples and guide style to that from [Non-Nested-Discriminators](./non-nested-discriminators.mdx).
+:::
+
+:::note
+Nested Discriminators may also be called "Embedded Discriminators".
+:::
+
+:::info
+This Guide will use the [`assertion`](../../api/functions/assertions.md) function that typegoose provides.  
+TL;DR: This function is basically like NodeJS's [`assert`](https://nodejs.org/api/assert.html#assertvalue-message), just more typescript friendly.
+:::
+
+## First thought
+
+At first you might think to do a basic array, that is of type `Mixed`:
+
+```ts
+interface MedicationA {
+  name: string;
+  amount: number;
+}
+
+interface MedicationB {
+  name: string;
+  length: number;
+}
+
+class Animal {
+  @prop({ required: true, unique: true })
+  public patientNumber!: number;
+
+  // Even when not setting the type explicitly, the resulting type would be "Mixed" with the typescript type below
+  @prop({ type: mongoose.Schema.Types.Mixed })
+  public medications?: (MedicationA | MedicationB)[];
+}
+
+const AnimalModel = getModelForClass(Animal);
+```
+
+And then in some code accessing the properties:
+
+```ts
+const doc = await AnimalModel.create({
+  patientNumber: 0,
+  medications: [
+    {
+      name: 'med1',
+      amount: 10,
+    } as MedicationA,
+    {
+      name: 'med2',
+      length: 5,
+    } as MedicationB,
+    {
+      unknownType: 1,
+    },
+  ],
+});
+
+assertion(doc.medications[0].name === 'med1');
+assertion(doc.medications[1].name === 'med2');
+assertion(doc.medications[2].unknownType === 1);
+assertion(doc.medications.length === 3);
+```
+
+Which is obviously problematic:
+
+- No Runtime validation and no Middleware applied to elements of the array (because of type `Mixed`)
+- Because of no validation, unknown properties like `unknownType` will persist
+
+## Fixing it with Nested Discriminators
+
+The code from [First though](#first-thought) is not that far off of what nested discriminators will need to work:
+
+<Tabs groupId="diff-full">
+  <TabItem value="diff" label="Difference">
+
+```diff
++ @modelOptions({
++   schemaOptions: {
++     // Set the property key which is used to discriminate between the different types
++     discriminatorKey: 'name',
++     // Disable automatic "_id" property
++     _id: false,
++   },
++ })
++ class MedicationBase {
++   @prop({ required: true })
++   public name!: string;
++ }
+
++ enum MedicationTypes {
++   MedicationA = 'MedicationA',
++   MedicationB = 'MedicationB',
++ }
+
+- interface MedicationA {
+-   name: string;
+-   amount: number;
++ class MedicationA extends MedicationBase {
++   @prop({ required: true })
++   public amount!: number;
+}
+
+- interface MedicationB {
+-   name: string;
+-   length: number;
++ class MedicationB extends MedicationBase {
++   @prop({ required: true })
++   public length!: number;
+}
+
+class Animal {
+  @prop({ required: true, unique: true })
+  public patientNumber!: number;
+
+-   // Even when not setting the type explicitly, the resulting type would be "Mixed" with the typescript type below
+-   @prop({ type: mongoose.Schema.Types.Mixed })
+-   public medications?: (MedicationA | MedicationB)[];
++   @prop({
++     required: true,
++     // Set the Base class, which all types need to extend from
++     type: MedicationBase,
++     // Set the nested discriminators that are used for this property
++     discriminators: () => [
++       // The "advanced" way of defining types is used here, to make it easier to understand
++       { type: MedicationA, value: MedicationTypes.MedicationA },
++       { type: MedicationB, value: MedicationTypes.MedicationB },
++     ],
++   })
++   public medications!: MedicationBase[];
+}
+
+const AnimalModel = getModelForClass(Animal);
+```
+
+  </TabItem>
+  <TabItem value="fullcode" label="Full Code" default>
+
+```ts
+@modelOptions({
+  schemaOptions: {
+    // Set the property key which is used to discriminate between the different types
+    discriminatorKey: 'name',
+    // Disable automatic "_id" property
+    _id: false,
+  },
+})
+class MedicationBase {
+  @prop({ required: true })
+  public name!: string;
+}
+
+// A Enum is used to easily keep track of different types, instead of hardcoding it in many places
+enum MedicationTypes {
+  MedicationA = 'MedicationA',
+  MedicationB = 'MedicationB',
+}
+
+class MedicationA extends MedicationBase {
+  @prop({ required: true })
+  public amount!: number;
+}
+
+class MedicationB extends MedicationBase {
+  @prop({ required: true })
+  public length!: number;
+}
+
+class Animal {
+  @prop({ required: true, unique: true })
+  public patientNumber!: number;
+
+  @prop({
+    required: true,
+    // Set the Base class, which all types need to extend from
+    type: MedicationBase,
+    // Set the nested discriminators that are used for this property
+    discriminators: () => [
+      // The "advanced" way of defining types is used here, to make it easier to understand, see section #Extras
+      { type: MedicationA, value: MedicationTypes.MedicationA },
+      { type: MedicationB, value: MedicationTypes.MedicationB },
+    ],
+  })
+  public medications!: MedicationBase[];
+}
+
+const AnimalModel = getModelForClass(Animal);
+```
+
+  </TabItem>
+</Tabs>
+
+And then in some code accessing the properties again:
+
+```ts
+const doc = await AnimalModel.create({
+  patientNumber: 1,
+  medications: [
+    {
+      name: MedicationTypes.MedicationA,
+      amount: 10,
+    } as MedicationA,
+    {
+      name: MedicationTypes.MedicationB,
+      length: 5,
+    } as MedicationB,
+  ],
+});
+
+try {
+  await AnimalModel.create({
+    patientNumber: 2,
+    medications: [
+      {
+        unknownType: 1,
+      },
+    ],
+  });
+
+  throw new Error('Expected create to fail');
+} catch (err) {
+  assertion(err instanceof mongoose.Error.ValidationError);
+}
+
+assertion(doc.medications[0].name === MedicationTypes.MedicationA);
+assertion(doc.medications[1].name === MedicationTypes.MedicationB);
+assertion(doc.medications.length === 2);
+```
+
+This Time, it will correctly validate and apply middleware to all elements of the array, meaning it will correctly strip all unknown elements and error if elements are missing (as can be seen in the `try-catch`).
+
+## Extras
+
+### Multiple ways to define nested discriminators
+
+There are currently multiple ways to define nested discriminators, which are:
+
+- Directly and only the `Class`
+- A `DiscriminatorObject` (which is used in the examples)
+
+```ts
+class Animal {
+  @prop({
+    type: MedicationBase,
+    // Define nested discriminators with a "DiscriminatorObject"
+    // Explicitly set the discriminator value
+    discriminators: () => [
+      { type: MedicationA, value: MedicationTypes.MedicationA },
+      { type: MedicationB, value: MedicationTypes.MedicationB },
+    ],
+    // Define nested discriminators with the "Class" directly
+    // Implicitly converts the generated model name to the discriminator value
+    discriminators: () => [
+      MedicationA,
+      MedicationB,
+    ],
+  })
+  public medications!: MedicationBase[];
+}
+```
+
+See `@prop` option [`discriminators`](../../api/decorators/prop.md#discriminators).
+
+## See Also
+
+- Also see the blog post from `thecodebarbarian` (or also known as `vkarpov15` on github) about [Embedded Discriminators](https://thecodebarbarian.com/mongoose-4.12-single-embedded-discriminators.html).
