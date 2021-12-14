@@ -9,5 +9,3 @@ Array [
 `;
 
 exports[`should throw a Error when a hooks options argument is not a object 1`] = `"\\"TestHookFunctionNotFunction.pre.save\\"'s hookOptions is not a normal object!"`;
-
-exports[`should throw a Error when a hooks second parameter is not a function 1`] = `"\\"TestHookFunctionNotFunction.pre.save\\"'s function is not a function!"`;

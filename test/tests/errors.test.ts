@@ -32,22 +32,6 @@ beforeEach(() => {
   jest.restoreAllMocks();
 });
 
-it('should error if no function for hooks is defined [TypeError]', () => {
-  try {
-    // @ts-expect-error expect that the first argument needs to be an function
-    @pre<Test>('')
-    class TestNoFunctionHook {
-      @prop()
-      public test: string;
-    }
-    buildSchema(TestNoFunctionHook);
-    fail('Expected to throw "TypeError"');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
-});
-
 it('should error if not all needed parameters for virtual-populate are given [NotAllVPOPElementsError] [E006]', () => {
   try {
     class TestNAEEVirtualPopulate {
@@ -794,6 +778,38 @@ describe('tests for "ExpectedTypeError" [E029]', () => {
     try {
       // @ts-expect-error expect the first argument to be an "string"
       getModelWithString(true);
+
+      fail('Expected to throw "ExpectedTypeError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(ExpectedTypeError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should error if no function for hooks is defined [ExpectedTypeError] [E029]', () => {
+    try {
+      // @ts-expect-error the second argument should be a function
+      @pre<TestNoFunctionHook>('')
+      class TestNoFunctionHook {
+        @prop()
+        public test: string;
+      }
+
+      fail('Expected to throw "ExpectedTypeError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(ExpectedTypeError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error when a hooks second parameter is not a function [ExpectedTypeError] [E029]', () => {
+    try {
+      // @ts-expect-error the second argument should be a function
+      @pre<TestHookFunctionNotFunction>('save', 'string')
+      class TestHookFunctionNotFunction {
+        @prop()
+        public dummy?: string;
+      }
 
       fail('Expected to throw "ExpectedTypeError"');
     } catch (err) {

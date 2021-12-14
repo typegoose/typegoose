@@ -83,22 +83,6 @@ it('should execute post hooks only twice in case inheritance is being used [type
   expect(docFromDb.hooksMessages.length).toEqual(4);
 });
 
-it('should throw a Error when a hooks second parameter is not a function', async () => {
-  try {
-    // @ts-expect-error The second argument should be a function (test a warning)
-    @pre<TestHookFunctionNotFunction>('save', 'string')
-    class TestHookFunctionNotFunction {
-      @prop()
-      public dummy?: string;
-    }
-
-    fail('Expected this to fail');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
-});
-
 it('should log a warning if "addToHooks" parameter "args" is longer than 3', async () => {
   const loggerSpy = jest.spyOn(logger, 'warn').mockImplementationOnce(() => void 0);
 

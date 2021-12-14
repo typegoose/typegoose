@@ -467,6 +467,10 @@ Example of when this gets triggered:
 setGlobalOptions(undefined); // Expected input(name of first argument) to be a defined object
 deleteModel(undefined); // Expected name(name of first argument) to be a string
 getModelWithString(undefined); // Expected key(name of first argument) to be a string
+
+@pre('', undefined) // Expected fn(name of second argument) to be a function
+@post('', undefined) // Expected fn(name of second argument) to be a function
+class SomeClass {}
 ```
 
 ## Warnings
