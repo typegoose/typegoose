@@ -8,6 +8,7 @@ import type { IGlobalOptions } from './types';
  * Set Typegoose's global Options
  */
 export function setGlobalOptions(options: IGlobalOptions) {
+  // REFACTOR: re-write this to be a Error inside errors.ts
   assertion(typeof options === 'object', () => new TypeError('"options" argument needs to be an object!'));
 
   logger.info('"setGlobalOptions" got called with', options);
