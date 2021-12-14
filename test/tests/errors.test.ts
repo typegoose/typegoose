@@ -82,8 +82,8 @@ describe('tests for "NotValidModelError" [E025]', () => {
   });
 });
 
-describe('tests for "NoValidClassError"', () => {
-  it('should error if no valid class is supplied to "addModelToTypegoose" [NoValidClassError]', () => {
+describe('tests for "NoValidClassError" [E028]', () => {
+  it('should error if no valid class is supplied to "addModelToTypegoose" [NoValidClassError] [E028]', () => {
     try {
       // @ts-expect-error expect that the second argument should be an "class"
       addModelToTypegoose(model('hello', new Schema()), 'not class');
@@ -95,7 +95,7 @@ describe('tests for "NoValidClassError"', () => {
     }
   });
 
-  it('should error if no valid class is supplied to "buildSchema" [NoValidClassError]', () => {
+  it('should error if no valid class is supplied to "buildSchema" [NoValidClassError] [E028]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       buildSchema('hello');
@@ -107,7 +107,7 @@ describe('tests for "NoValidClassError"', () => {
     }
   });
 
-  it('should error if no valid class is supplied to "_buildSchema" [NoValidClassError]', () => {
+  it('should error if no valid class is supplied to "_buildSchema" [NoValidClassError] [E028]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       _buildSchema('hello');
@@ -119,7 +119,7 @@ describe('tests for "NoValidClassError"', () => {
     }
   });
 
-  it('should error if no valid class is supplied to "getModelForClass" [NoValidClassError]', () => {
+  it('should error if no valid class is supplied to "getModelForClass" [NoValidClassError] [E028]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       getModelForClass('hello');
@@ -131,7 +131,7 @@ describe('tests for "NoValidClassError"', () => {
     }
   });
 
-  it('should error if no valid class is supplied to "deleteModelWithClass" [NoValidClassError]', () => {
+  it('should error if no valid class is supplied to "deleteModelWithClass" [NoValidClassError] [E028]', () => {
     try {
       // @ts-expect-error expect that the first argument should be an class
       deleteModelWithClass(true);
@@ -143,7 +143,7 @@ describe('tests for "NoValidClassError"', () => {
     }
   });
 
-  it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClassError]', () => {
+  it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClassError] [E028]', () => {
     try {
       // @ts-expect-error expect that the second argument should be an class
       utils.mergeSchemaOptions({}, true);
@@ -155,7 +155,7 @@ describe('tests for "NoValidClassError"', () => {
     }
   });
 
-  it('should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClassError]', () => {
+  it('should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClassError] [E028]', () => {
     try {
       // @ts-expect-error expect that the second argument should be an class
       getDiscriminatorModelForClass(model('NoValidClassgetDiscriminatorModelForClass', {}), true);
@@ -167,7 +167,7 @@ describe('tests for "NoValidClassError"', () => {
     }
   });
 
-  it('should throw a Error when "cl" in "getName" is null or undefined [NoValidClassError]', () => {
+  it('should throw a Error when "cl" in "getName" is null or undefined [NoValidClassError] [E028]', () => {
     try {
       // @ts-expect-error "getName" only accepts classes (and types that are not null / undefined)
       getName(undefined);
@@ -179,7 +179,7 @@ describe('tests for "NoValidClassError"', () => {
     }
   });
 
-  it('should error if no valid class is supplied to "assignMetadata" (and "mergeMetadata") [NoValidClassError]', () => {
+  it('should error if no valid class is supplied to "assignMetadata" (and "mergeMetadata") [NoValidClassError] [E028]', () => {
     try {
       // @ts-expect-error expect that the third argument is an class
       utils.assignMetadata(DecoratorKeys.Index, {}, true);

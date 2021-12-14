@@ -404,6 +404,31 @@ class ErrorClassDiscriminators {
 }
 ```
 
+### Value is not a function or does not have a constructor [E028]
+
+Error:
+
+```txt
+Value is not a function or does not have a constructor! [E028]
+Value: "${toStringNoFail(value)}"
+```
+
+Error Class: `NoValidClassError`
+
+Details:  
+The Input variable (stringified) `value` is not a function or/and does not have a constructor (`value.prototype.constructor.name`)
+
+Example of when this gets triggered:
+
+```ts
+getModelForClass(undefined); // first argument is the class
+getDiscriminatorModelForClass(ParentModel, undefined); // second argument is the class
+addModelToTypegoose("ModelName", ModelSchema, undefined); // third argument is the class
+buildSchema(undefined); // first argument is the class
+deleteModelWithClass(undefined); // first argument is the class
+getName(undefined); // first argument is the class (this function is currently more lenient)
+```
+
 ## Warnings
 
 ### Type is not ${type}, but includes the following ${extra} options [W001]

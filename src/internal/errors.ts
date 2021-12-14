@@ -34,9 +34,8 @@ export class NotAllVPOPElementsError extends Error {
 }
 
 export class NoValidClassError extends TypeError {
-  constructor(cl: unknown) {
-    // TODO: give a Error code to this error
-    super(`"${toStringNoFail(cl)}" is not a function(/constructor)!`);
+  constructor(value: unknown) {
+    super('Value is not a function or does not have a constructor! [E028]\n' + `Value: "${toStringNoFail(value)}"`);
   }
 }
 
