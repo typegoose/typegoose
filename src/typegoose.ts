@@ -204,7 +204,7 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 /**
  * Deletes an existing model so that it can be overwritten with another model
  * (deletes from mongoose.connection & typegoose models cache & typegoose constructors cache)
- * @param key
+ * @param name The Model's name
  * @example
  * ```ts
  * class ClassName {}
@@ -214,13 +214,14 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
  */
 export function deleteModel(name: string) {
   assertion(typeof name === 'string', () => new ExpectedTypeError('name', 'string', name));
-  const model = models.get(name);
-  // REFACTOR: re-write this to be a Error inside errors.ts
-  assertion(model, new Error(`Model "${name}" could not be found`));
 
   logger.debug('Deleting Model "%s"', name);
 
-  model.db.deleteModel(name);
+  const model = models.get(name);
+
+  if (!isNullOrUndefined(model)) {
+    model.db.deleteModel(name);
+  }
 
   models.delete(name);
   constructors.delete(name);
