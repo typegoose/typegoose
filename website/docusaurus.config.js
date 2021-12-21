@@ -8,7 +8,7 @@ module.exports = {
   projectName: 'typegoose',
   themeConfig: {
     algolia: {
-      apiKey: '2c49a41064ba9b534e8417089c6cde93',
+      apiKey: '1d89e6f0db971f0e3a61b8bc3aff949f',
       indexName: 'typegoose',
     },
     navbar: {
