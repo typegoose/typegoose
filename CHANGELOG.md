@@ -1,3 +1,11 @@
+## [9.4.0-beta.3](https://github.com/typegoose/typegoose/compare/v9.4.0-beta.2...v9.4.0-beta.3) (2021-12-22)
+
+
+### Dependencies
+
+* **mongodb-memory-server:** upgrade to 8.1.0 ([24aac3d](https://github.com/typegoose/typegoose/commit/24aac3d04283014c6aac5cb67e9c7450d7cf5441))
+* **typescript:** lock to minor version (use "~" instead of "^") ([e4e1565](https://github.com/typegoose/typegoose/commit/e4e156525c8b8c10384cbf6b27cef501924347c3))
+
 ## [9.4.0-beta.2](https://github.com/typegoose/typegoose/compare/v9.4.0-beta.1...v9.4.0-beta.2) (2021-12-22)
 
 
