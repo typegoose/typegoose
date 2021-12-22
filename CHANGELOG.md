@@ -1,3 +1,14 @@
+## [9.4.0-beta.2](https://github.com/typegoose/typegoose/compare/v9.4.0-beta.1...v9.4.0-beta.2) (2021-12-22)
+
+
+### Dependencies
+
+* **@types/node:** upgrade to 12.20.38 ([35d9822](https://github.com/typegoose/typegoose/commit/35d9822a6eb8de897c3fa73dbbb1b7f84bbb3192))
+* **@typescript-eslint/*:** upgrade to 5.8.0 ([d7fcad1](https://github.com/typegoose/typegoose/commit/d7fcad1040de81caf535492982f10aa2e0bd0485))
+* **eslint:** upgrade to 8.5.0 ([93a8c07](https://github.com/typegoose/typegoose/commit/93a8c07541d7370d9bb6f9776009002d3bcf8629))
+* **mongoose:** upgrade to 6.1.3 ([46076cd](https://github.com/typegoose/typegoose/commit/46076cd8d04795559987bbd296f1d4f085e2272f)), closes [typegoose/typegoose#647](https://github.com/typegoose/typegoose/issues/647)
+* **ts-jest:** upgrade to 27.1.2 ([fc486a6](https://github.com/typegoose/typegoose/commit/fc486a6a2263ba05d01d17175f551e82e0f6eac0))
+
 ## [9.4.0-beta.1](https://github.com/typegoose/typegoose/compare/v9.3.1...v9.4.0-beta.1) (2021-12-14)
 
 
