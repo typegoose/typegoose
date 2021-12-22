@@ -8,8 +8,8 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '6.0.14')) {
-    throw new Error(`Please use mongoose 6.0.14 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '6.1.3')) {
+    throw new Error(`Please use mongoose 6.1.3 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
@@ -25,7 +25,7 @@ import { _buildSchema } from './internal/schema';
 import { logger } from './logSettings';
 import { isModel } from './typeguards';
 import type { AnyParamConstructor, BeAnObject, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
-import { FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
+import { ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
 /* exports */
 // export the internally used "mongoose", to not need to always import it
@@ -101,7 +101,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
  * ```
  */
 export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
-  assertion(typeof key === 'string', TypeError(`Expected "key" to be a string, got "${key}"`));
+  assertion(typeof key === 'string', () => new ExpectedTypeError('key', 'string', key));
 
   return models.get(key) as any;
 }
@@ -204,7 +204,7 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 /**
  * Deletes an existing model so that it can be overwritten with another model
  * (deletes from mongoose.connection & typegoose models cache & typegoose constructors cache)
- * @param key
+ * @param name The Model's name
  * @example
  * ```ts
  * class ClassName {}
@@ -213,13 +213,15 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
  * ```
  */
 export function deleteModel(name: string) {
-  assertion(typeof name === 'string', new TypeError('name is not an string! (deleteModel)'));
-  const model = models.get(name);
-  assertion(model, new Error(`Model "${name}" could not be found`));
+  assertion(typeof name === 'string', () => new ExpectedTypeError('name', 'string', name));
 
   logger.debug('Deleting Model "%s"', name);
 
-  model.db.deleteModel(name);
+  const model = models.get(name);
+
+  if (!isNullOrUndefined(model)) {
+    model.db.deleteModel(name);
+  }
 
   models.delete(name);
   constructors.delete(name);

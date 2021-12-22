@@ -17,7 +17,14 @@ import type {
 } from '../types';
 import { DecoratorKeys, Severity, WhatIsIt } from './constants';
 import { constructors, globalOptions, schemas } from './data';
-import { AssertionFallbackError, InvalidWhatIsItError, NoValidClassError, StringLengthExpectedError } from './errors';
+import {
+  AssertionFallbackError,
+  InvalidOptionsConstructorError,
+  InvalidWhatIsItError,
+  NoValidClassError,
+  ResolveTypegooseNameError,
+  StringLengthExpectedError,
+} from './errors';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -177,8 +184,7 @@ export function getClass(
     return constructors.get(input.typegooseName());
   }
 
-  // REFACTOR: re-write this to be a Error inside errors.ts
-  throw new ReferenceError('Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]');
+  throw new ResolveTypegooseNameError(input);
 }
 
 /**
@@ -310,10 +316,12 @@ export function getRightTarget(target: any): any {
  * @param customOptions Extra Options that can be added in "buildSchema"
  */
 export function getName<U extends AnyParamConstructor<any>>(cl: U, customOptions?: IModelOptions) {
-  // this case can happen when type casting (or type being "any") happened and wanting to throw a Error (and there using "getName" to help)
+  // this case (cl being undefined / null) can happen when type casting (or type being "any") happened and wanting to throw a Error (and there using "getName" to help)
+  // check if input variable is undefined, if it is throw a error (cannot be combined with the error below because of "getRightTarget")
   assertion(!isNullOrUndefined(cl), () => new NoValidClassError(cl));
-
   const ctor: any = getRightTarget(cl);
+  assertion(isConstructor(ctor), () => new NoValidClassError(ctor));
+
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
   const baseName: string = ctor.name;
   const customName = customOptions?.options?.customName ?? options.options?.customName;
@@ -463,11 +471,7 @@ export function mapOptions(
     OptionsCTOR = mongoose.Schema.Types.Subdocument.prototype.OptionsConstructor;
   }
 
-  // REFACTOR: re-write this to be a Error inside errors.ts
-  assertion(
-    !isNullOrUndefined(OptionsCTOR),
-    new TypeError(`Type does not have a valid "OptionsConstructor"! ("${getName(loggerType)}" on "${getName(target)}.${pkey}") [E016]`)
-  );
+  assertion(!isNullOrUndefined(OptionsCTOR), () => new InvalidOptionsConstructorError(getName(target), pkey, loggerType));
 
   const options = Object.assign({}, rawOptions); // for sanity
 

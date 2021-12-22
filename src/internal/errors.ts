@@ -34,8 +34,8 @@ export class NotAllVPOPElementsError extends Error {
 }
 
 export class NoValidClassError extends TypeError {
-  constructor(cl: unknown) {
-    super(`"${toStringNoFail(cl)}" is not a function(/constructor)!`);
+  constructor(value: unknown) {
+    super('Value is not a function or does not have a constructor! [E028]\n' + `Value: "${toStringNoFail(value)}"`);
   }
 }
 
@@ -67,12 +67,6 @@ export class SelfContainingClassError extends TypeError {
   }
 }
 
-export class OptionRefDoesNotSupportArraysError extends TypeError {
-  constructor(dim: number, name: string, key: string) {
-    super(`Prop-Option "ref" does not support Arrays! (got "${dim}" dimensions, for property "${name}.${key}") [E021]`);
-  }
-}
-
 export class RefOptionIsUndefinedError extends Error {
   constructor(name: string, key: string) {
     super(`Prop-Option "ref"'s value is "null" or "undefined" for "${name}.${key}" [E005]`);
@@ -98,5 +92,56 @@ export class StringLengthExpectedError extends TypeError {
     const gotMessage = typeof got === 'string' ? `(String: "${got.length}")` : `(not-String: "${toStringNoFail(got)}")`;
 
     super(`Expected "${valueName}" to have at least length of "${length}" (got: ${gotMessage}, where: "${where}") [E026]`);
+  }
+}
+
+export class OptionDoesNotSupportOptionError extends TypeError {
+  constructor(currentOption: string, problemOption: string, expected: string, provided: string) {
+    super(
+      `The Option "${currentOption}" does not support Option "${problemOption}" other than "${expected}" (provided was: "${provided}") [E027]`
+    );
+  }
+}
+
+export class ResolveTypegooseNameError extends ReferenceError {
+  constructor(input: unknown) {
+    super(
+      'Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]\n' +
+        `Value: "${toStringNoFail(input)}"`
+    );
+  }
+}
+
+export class ExpectedTypeError extends TypeError {
+  constructor(optionName: string, expected: string, got: unknown) {
+    super(`Expected Argument "${optionName}" to have type "${expected}", got: "${toStringNoFail(got)}" [E029]`);
+  }
+}
+
+export class InvalidEnumTypeError extends TypeError {
+  constructor(name: string, key: string, value: unknown) {
+    super(
+      `Invalid Type used for options "enum" at "${name}.${key}"! [E012]\n` +
+        `Type: "${toStringNoFail(value)}"\n` +
+        'https://typegoose.github.io/typegoose/docs/guides/error-warning-details#invalid-type-for-enum-e012'
+    );
+  }
+}
+
+export class InvalidOptionsConstructorError extends TypeError {
+  constructor(name: string, key: string, type: unknown) {
+    super(`Type has a invalid "OptionsConstructor" on "${name}.${key}"! [E016]\n` + `Type: "${toStringNoFail(type)}"`);
+  }
+}
+
+export class PathNotInSchemaError extends Error {
+  constructor(name: string, key: string) {
+    super(`Path "${key}" on "${name}" does not exist in the Schema! [E030]`);
+  }
+}
+
+export class NoDiscriminatorFunctionError extends Error {
+  constructor(name: string, key: string) {
+    super(`Path "${name}.${key}" does not have a function called "discriminator"! (Nested Discriminator cannot be applied) [E031]`);
   }
 }

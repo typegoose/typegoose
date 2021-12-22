@@ -12,12 +12,13 @@ import { DecoratorKeys, WhatIsIt } from './constants';
 import { schemas } from './data';
 import {
   CannotBeSymbolError,
+  InvalidEnumTypeError,
   InvalidTypeError,
   InvalidWhatIsItError,
   NotAllVPOPElementsError,
   NotNumberTypeError,
   NotStringTypeError,
-  OptionRefDoesNotSupportArraysError,
+  OptionDoesNotSupportOptionError,
   RefOptionIsUndefinedError,
   SelfContainingClassError,
   StringLengthExpectedError,
@@ -98,14 +99,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   if ('discriminators' in rawOptions) {
     logger.debug('Found option "discriminators" in "%s.%s"', name, key);
     const gotType = utils.getType(rawOptions.discriminators, true);
-    // REFACTOR: re-write this to be a Error inside errors.ts
-    utils.assertion(
-      gotType.dim === 1,
-      () =>
-        new Error(
-          `"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`
-        )
-    );
+    utils.assertion(gotType.dim === 1, () => new OptionDoesNotSupportOptionError('discriminators', 'dim', '1', `dim: ${gotType.dim}`));
     const discriminators: DiscriminatorObject[] = (gotType.type as (AnyParamConstructor<any> | DiscriminatorObject)[]).map((val, index) => {
       if (utils.isConstructor(val)) {
         return { type: val };
@@ -131,7 +125,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   // allow setting the type asynchronously
   if ('ref' in rawOptions) {
     const gotType = utils.getType(rawOptions.ref);
-    utils.assertion(gotType.dim === 0, () => new OptionRefDoesNotSupportArraysError(gotType.dim, name, key));
+    utils.assertion(gotType.dim === 0, () => new OptionDoesNotSupportOptionError('ref', 'dim', '0', `dim: ${gotType.dim}`));
     rawOptions.ref = gotType.type;
     utils.assertion(!utils.isNullOrUndefined(rawOptions.ref), () => new RefOptionIsUndefinedError(name, key));
 
@@ -316,12 +310,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       } else {
         // this will happen if the enum type is not "String" or "Number"
         // most likely this error happened because the code got transpiled with babel or "tsc --transpile-only"
-        // REFACTOR: re-write this to be a Error inside errors.ts
-        throw new Error(
-          `Invalid type used for enums!, got: "${Type}" (${name}.${key}) [E012]` +
-            "Is the code transpiled with Babel or 'tsc --transpile-only' or 'ts-node --transpile-only'?\n" +
-            'See https://typegoose.github.io/typegoose/docs/api/decorators/prop/#enum'
-        );
+        throw new InvalidEnumTypeError(name, key, Type);
       }
     }
   }

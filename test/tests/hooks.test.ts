@@ -2,11 +2,11 @@ import { DecoratorKeys } from '../../src/internal/constants';
 import { logger } from '../../src/logSettings';
 import { buildSchema, post, pre, prop } from '../../src/typegoose';
 import { HookOptionsEither, IHooksArray } from '../../src/types';
-import { ExtendedHookModel, Hook, HookArray, HookArrayModel, HookModel } from '../models/hook1';
+import { ExtendedHookModel, HookArray, HookArrayModel, HookModel } from '../models/hook1';
 import { Hook2Model } from '../models/hook2';
 
 it('RegEXP tests', async () => {
-  const doc = new HookModel({ material: 'iron' } as Hook);
+  const doc = new HookModel({ material: 'iron' });
   await doc.save();
   await doc.updateOne(doc).exec(); // to run the update hook with regexp, find doesn't work (it doesn't get applied)
 
@@ -83,22 +83,6 @@ it('should execute post hooks only twice in case inheritance is being used [type
   expect(docFromDb.hooksMessages.length).toEqual(4);
 });
 
-it('should throw a Error when a hooks second parameter is not a function', async () => {
-  try {
-    // @ts-expect-error The second argument should be a function (test a warning)
-    @pre<TestHookFunctionNotFunction>('save', 'string')
-    class TestHookFunctionNotFunction {
-      @prop()
-      public dummy?: string;
-    }
-
-    fail('Expected this to fail');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
-});
-
 it('should log a warning if "addToHooks" parameter "args" is longer than 3', async () => {
   const loggerSpy = jest.spyOn(logger, 'warn').mockImplementationOnce(() => void 0);
 
@@ -165,21 +149,4 @@ it('should allow usage of hook-options [typegoose/typegoose#605]', async () => {
       fn: customPost,
     })
   );
-});
-
-it('should throw a Error when a hooks options argument is not a object', async () => {
-  try {
-    const customPre = jest.fn(() => fail('Expected this function to not be executed'));
-    // @ts-expect-error The second argument should be a function (test a warning)
-    @pre<TestHookFunctionNotFunction>('save', customPre, 'SomethingElse')
-    class TestHookFunctionNotFunction {
-      @prop()
-      public dummy?: string;
-    }
-
-    fail('Expected this to fail');
-  } catch (err) {
-    expect(err).toBeInstanceOf(TypeError);
-    expect(err.message).toMatchSnapshot();
-  }
 });

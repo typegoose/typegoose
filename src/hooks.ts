@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Aggregate, Query } from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
+import { ExpectedTypeError } from './internal/errors';
 import { assertion, getName, isNullOrUndefined } from './internal/utils';
 import { logger } from './logSettings';
 import { mongoose } from './typegoose';
@@ -103,15 +104,10 @@ function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
   const func: EmptyVoidFn = args[1];
   const hookOptions: HookOptionsEither = args[2] ?? {};
 
-  // REFACTOR: re-write this to be a Error inside errors.ts
-  assertion(
-    typeof func === 'function',
-    () => new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s function is not a function!`)
-  );
-  // REFACTOR: re-write this to be a Error inside errors.ts
+  assertion(typeof func === 'function', () => new ExpectedTypeError('fn', 'function', func));
   assertion(
     typeof hookOptions === 'object' && !isNullOrUndefined(hookOptions),
-    () => new TypeError(`"${getName(target)}.${hookType}.${methods.join(' ')}"'s hookOptions is not a normal object!`)
+    () => new ExpectedTypeError('options', 'object / undefined', hookOptions)
   );
 
   if (args.length > 3) {
