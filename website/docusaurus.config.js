@@ -9,6 +9,7 @@ module.exports = {
   themeConfig: {
     algolia: {
       apiKey: '1d89e6f0db971f0e3a61b8bc3aff949f',
+      appId: 'E5557YWQXF',
       indexName: 'typegoose',
     },
     navbar: {
