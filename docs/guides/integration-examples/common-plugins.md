@@ -147,8 +147,8 @@ For more details, see [this issue](https://github.com/ramiel/mongoose-sequence/i
 Last updated for:
 
 ```txt
-@typegoose/typegoose@8.3.0
-@typegoose/auto-increment@0.9.0
+@typegoose/typegoose@9.4.0
+@typegoose/auto-increment@1.1.0
 ```
 
 ```bash npm2yarn
