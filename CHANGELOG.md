@@ -1,3 +1,26 @@
+## [9.5.0](https://github.com/typegoose/typegoose/compare/v9.4.0...v9.5.0) (2022-01-14)
+
+
+### Refactor
+
+* rename enum "WhatIsIt" to "PropType" (with backwards-compat) ([6cfa6ca](https://github.com/typegoose/typegoose/commit/6cfa6ca98ad89f80de61ace4b41679767d857b9b)), closes [typegoose/typegoose#653](https://github.com/typegoose/typegoose/issues/653)
+
+
+### Fixes
+
+* **typegoose:** re-export "PropType" from main entry-point ([123d586](https://github.com/typegoose/typegoose/commit/123d586e9d2adf89b31b9916002fdb0588bdfb04)), closes [typegoose/typegoose#653](https://github.com/typegoose/typegoose/issues/653)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 27.4.0 ([94516e9](https://github.com/typegoose/typegoose/commit/94516e9f50134788a9567dbb9d0eed051fd80361))
+* **@types/node:** upgrade to 12.20.39 and lock version ([1175d35](https://github.com/typegoose/typegoose/commit/1175d35c2d540365d64d13ba80e68e1340db433e))
+* **@typescript-eslint/*:** upgrade to 5.9.1 ([5c8cd82](https://github.com/typegoose/typegoose/commit/5c8cd82e4b1ce956112fabffbd571037b72d6dbf))
+* **commitlint:** upgrade to 16.0.2 ([6060fc6](https://github.com/typegoose/typegoose/commit/6060fc6c64b105aeaa8ebe6bb8bca47bb41f18c8))
+* **eslint:** upgrade to 8.6.0 ([92c7aa2](https://github.com/typegoose/typegoose/commit/92c7aa2b28b782cb234076eb539b5502ffdee37b))
+* **jest:** upgrade to 27.4.7 ([3a74b2a](https://github.com/typegoose/typegoose/commit/3a74b2a4c2334556049712024dab0644d8c39fe3))
+* **mongoose:** upgrade to 6.1.6 ([8a0404e](https://github.com/typegoose/typegoose/commit/8a0404e3840f73bb55d6629d9139ae6765f34159))
+
 ## [9.4.0](https://github.com/typegoose/typegoose/compare/v9.3.1...v9.4.0) (2021-12-22)
 
 
