@@ -15,8 +15,9 @@ import {
   pre,
   prop,
   setGlobalOptions,
+  PropType,
 } from '../../src/typegoose'; // import order is important with jest
-import { DecoratorKeys, PropType } from '../../src/internal/constants';
+import { DecoratorKeys } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import * as utils from '../../src/internal/utils';
 import { mapValueToSeverity } from '../../src/globalOptions';

@@ -1,5 +1,4 @@
-import { PropType } from '../../src/internal/constants';
-import { getModelForClass, mongoose, prop, Ref } from '../../src/typegoose';
+import { getModelForClass, mongoose, prop, Ref, PropType } from '../../src/typegoose';
 
 export class IsRefTypeNestedString {
   @prop()

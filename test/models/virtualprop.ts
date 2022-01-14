@@ -1,5 +1,4 @@
-import { PropType } from '../../src/internal/constants';
-import { getModelForClass, prop, Ref } from '../../src/typegoose';
+import { getModelForClass, prop, Ref, PropType } from '../../src/typegoose';
 
 export class Virtual {
   @prop({ required: true })
