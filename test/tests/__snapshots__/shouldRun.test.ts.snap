@@ -31,23 +31,23 @@ Look here for how to disable this message: https://typegoose.github.io/typegoose
 ]
 `;
 
-exports[`test the Passthrough class (non "direct") should make use of the "Passthrough" class (WhatIsIt.ARRAY) 1`] = `
+exports[`test the Passthrough class (non "direct") should make use of the "Passthrough" class (PropType.ARRAY) 1`] = `
 Array [
   Array [
     "Setting \\"Mixed\\" for property \\"%s.%s\\"
 Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
-    "PassthroughWhatIsItARRAY",
+    "PassthroughPropTypeARRAY",
     "something",
   ],
 ]
 `;
 
-exports[`test the Passthrough class (non "direct") should make use of the "Passthrough" class (WhatIsIt.MAP) 1`] = `
+exports[`test the Passthrough class (non "direct") should make use of the "Passthrough" class (PropType.MAP) 1`] = `
 Array [
   Array [
     "Setting \\"Mixed\\" for property \\"%s.%s\\"
 Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
-    "PassthroughWhatIsItMAP",
+    "PassthroughPropTypeMAP",
     "something",
   ],
 ]

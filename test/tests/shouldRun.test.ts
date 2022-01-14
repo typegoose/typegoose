@@ -515,7 +515,7 @@ it('should output correct defaults with multiple inheritance [typegoose/typegoos
 });
 
 describe('get/set options', () => {
-  it('should map WhatIsIt (none/array/map) correctly when using get/set options [typegoose#422]', async () => {
+  it('should map PropType (none/array/map) correctly when using get/set options [typegoose#422]', async () => {
     class TestGetSetOptions {
       @prop({ get: () => 0, set: () => 1 })
       public normal?: number;
@@ -599,13 +599,13 @@ describe('get/set options', () => {
 });
 
 describe('test the Passthrough class (non "direct")', () => {
-  it('should make use of the "Passthrough" class (WhatIsIt.NONE)', async () => {
+  it('should make use of the "Passthrough" class (PropType.NONE)', async () => {
     const mongooseSchema = new mongoose.Schema({
       something: { type: { somePath: String } },
       somethingExtra: { type: { someExtraPath: [String] } },
     });
 
-    class PassthroughWhatIsItNONE {
+    class PassthroughPropTypeNONE {
       @prop({ type: () => new Passthrough({ somePath: String }) })
       public something?: { somePath: string };
 
@@ -613,7 +613,7 @@ describe('test the Passthrough class (non "direct")', () => {
       public somethingExtra?: { someExtraPath: string[] };
     }
 
-    const typegooseSchema = buildSchema(PassthroughWhatIsItNONE);
+    const typegooseSchema = buildSchema(PassthroughPropTypeNONE);
     const typegooseSomethingPath = typegooseSchema.path('something');
     const typegooseSomethingExtraPath = typegooseSchema.path('somethingExtra');
     const mongooseSomethingPath = mongooseSchema.path('something');
@@ -652,18 +652,18 @@ describe('test the Passthrough class (non "direct")', () => {
   });
 
   // currently does not work, see https://github.com/Automattic/mongoose/issues/10750
-  it('should make use of the "Passthrough" class (WhatIsIt.ARRAY)', () => {
+  it('should make use of the "Passthrough" class (PropType.ARRAY)', () => {
     const spyWarn = jest.spyOn(logger, 'warn').mockImplementation(() => void 0);
     const mongooseSchema = new mongoose.Schema({
       something: [{ type: { somePath: String } }],
     });
 
-    class PassthroughWhatIsItARRAY {
+    class PassthroughPropTypeARRAY {
       @prop({ type: () => new Passthrough({ somePath: String }) })
       public something?: [{ somePath: string }];
     }
 
-    const typegooseSchema = buildSchema(PassthroughWhatIsItARRAY);
+    const typegooseSchema = buildSchema(PassthroughPropTypeARRAY);
     const typegooseSomethingPath = typegooseSchema.path('something');
     const mongooseSomethingPath = mongooseSchema.path('something');
 
@@ -680,7 +680,7 @@ describe('test the Passthrough class (non "direct")', () => {
     expect(spyWarn.mock.calls).toMatchSnapshot();
   });
 
-  it('should make use of the "Passthrough" class (WhatIsIt.MAP)', () => {
+  it('should make use of the "Passthrough" class (PropType.MAP)', () => {
     const spyWarn = jest.spyOn(logger, 'warn').mockImplementation(() => void 0);
     const mongooseSchema = new mongoose.Schema({
       something: {
@@ -689,12 +689,12 @@ describe('test the Passthrough class (non "direct")', () => {
       },
     });
 
-    class PassthroughWhatIsItMAP {
+    class PassthroughPropTypeMAP {
       @prop({ type: () => new Passthrough({ somePath: String }) })
       public something?: Map<string, { somePath: string }>;
     }
 
-    const typegooseSchema = buildSchema(PassthroughWhatIsItMAP);
+    const typegooseSchema = buildSchema(PassthroughPropTypeMAP);
     const typegooseSomethingPath = typegooseSchema.path('something');
     const mongooseSomethingPath = mongooseSchema.path('something');
 
@@ -706,17 +706,17 @@ describe('test the Passthrough class (non "direct")', () => {
 });
 
 describe('test the Passthrough class with "direct"', () => {
-  it('should make use of the "Passthrough" class with "direct" (WhatIsIt.NONE)', () => {
+  it('should make use of the "Passthrough" class with "direct" (PropType.NONE)', () => {
     const mongooseSchema = new mongoose.Schema({
       child: { somePath: String },
     });
 
-    class TestPassthroughWhatIsItNONEDirect {
+    class TestPassthroughPropTypeNONEDirect {
       @prop({ type: () => new Passthrough({ somePath: String }, true) })
       public child?: { somePath: string };
     }
 
-    const typegooseSchema = buildSchema(TestPassthroughWhatIsItNONEDirect);
+    const typegooseSchema = buildSchema(TestPassthroughPropTypeNONEDirect);
 
     expect(mongooseSchema.path('child')).toBeUndefined();
     expect(typegooseSchema.path('child')).toBeUndefined();
@@ -725,17 +725,17 @@ describe('test the Passthrough class with "direct"', () => {
     expect(typegooseSchema.path('child.somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
   });
 
-  it('should make use of the "Passthrough" class with "direct" (WhatIsIt.ARRAY)', () => {
+  it('should make use of the "Passthrough" class with "direct" (PropType.ARRAY)', () => {
     const mongooseSchema = new mongoose.Schema({
       child: [{ somePath: String }],
     });
 
-    class TestPassthroughWhatIsItARRAYDirect {
+    class TestPassthroughPropTypeARRAYDirect {
       @prop({ type: () => new Passthrough([{ somePath: String }], true) })
       public child?: [{ somePath: string }];
     }
 
-    const typegooseSchema = buildSchema(TestPassthroughWhatIsItARRAYDirect);
+    const typegooseSchema = buildSchema(TestPassthroughPropTypeARRAYDirect);
 
     const mongooseChildPath = mongooseSchema.path('child');
     const typegooeChildPath = typegooseSchema.path('child');
@@ -750,7 +750,7 @@ describe('test the Passthrough class with "direct"', () => {
     expect((typegooeChildPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
   });
 
-  it('should make use of the "Passthrough" class with "direct" (WhatIsIt.MAP)', () => {
+  it('should make use of the "Passthrough" class with "direct" (PropType.MAP)', () => {
     const mongooseSchema = new mongoose.Schema({
       child: {
         type: Map,
@@ -758,12 +758,12 @@ describe('test the Passthrough class with "direct"', () => {
       },
     });
 
-    class TestPassthroughWhatIsItMAPDirect {
+    class TestPassthroughPropTypeMAPDirect {
       @prop({ type: () => new Passthrough({ type: Map, of: { somePath: String } }, true) })
       public child?: Map<string, { somePath: string }>;
     }
 
-    const typegooseSchema = buildSchema(TestPassthroughWhatIsItMAPDirect);
+    const typegooseSchema = buildSchema(TestPassthroughPropTypeMAPDirect);
 
     const mongooseChildPath = mongooseSchema.path('child');
     const typegooeChildPath = typegooseSchema.path('child');

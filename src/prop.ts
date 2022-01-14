@@ -1,4 +1,4 @@
-import { DecoratorKeys, WhatIsIt } from './internal/constants';
+import { DecoratorKeys, PropType } from './internal/constants';
 import * as utils from './internal/utils';
 import { logger } from './logSettings';
 import type {
@@ -32,7 +32,7 @@ import type {
  */
 function prop(
   options?: BasePropOptions | ArrayPropOptions | MapPropOptions | PropOptionsForNumber | PropOptionsForString | VirtualOptions,
-  kind?: WhatIsIt
+  kind?: PropType
 ): PropertyDecorator {
   return (target: any, key: string | symbol) => {
     options = options ?? {};

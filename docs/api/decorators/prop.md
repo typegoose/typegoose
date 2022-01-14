@@ -3,9 +3,9 @@ id: prop
 title: '@prop'
 ---
 
-`@prop(options: object, kind: WhatIsIt)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
+`@prop(options: object, kind: PropType)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
 - `options` is to set [all options](#single-options)
-- `kind` is to overwrite what kind of prop this is (should be auto-inferred), [read more here](#whatisit)
+- `kind` is to overwrite what kind of prop this is (should be auto-inferred), [read more here](#PropType)
 
 ## Single Options
 
@@ -23,7 +23,7 @@ class Cat2 {
 }
 
 class Cat3 {
-  @prop({ type: () => String }, WhatIsIt) // explicitly define the "WhatIsIt"
+  @prop({ type: () => String }, PropType) // explicitly define the "PropType"
   public name?: string;
 }
 ```
@@ -273,7 +273,7 @@ Both `get` & `set` must be defined all the time, even when just wanting to use o
 :::
 
 :::note
-If the [WhatIsIt](#whatisit) (Primitive / Array / Map) is different from what is got from the reflection, it requires **explicit** setting that it is different
+If the [PropType](#PropType) (Primitive / Array / Map) is different from what is got from the reflection, it requires **explicit** setting that it is different
 :::
 
 Pre-process string to string:
@@ -290,7 +290,7 @@ Store string, runtime have string array (string array to string):
 ```ts
 class Dummy {
   // this value is a "string-array" during runtime and is stored in the database as a "primite-string"
-  @prop({ set: (val: string[]) => val.join(' '), get: (val: string) => val.split(' '), type: String }, WhatIsIt.NONE) // requires explicit setting of "WhatIsIt"
+  @prop({ set: (val: string[]) => val.join(' '), get: (val: string) => val.split(' '), type: String }, PropType.NONE) // requires explicit setting of "PropType"
   public fullName?: string[];
 }
 ```
@@ -522,7 +522,7 @@ await area.save();
 Use this only when absolutely necessary and please open a new issue about it
 :::
 :::note
-This option can be used everywhere `mapOptions` function is called (currently being `WhatIsIt.ARRAY` and `WhatIsIt.MAP`)
+This option can be used everywhere `mapOptions` function is called (currently being `PropType.ARRAY` and `PropType.MAP`)
 :::
 
 Example:
@@ -559,7 +559,7 @@ class Something {
 Use this only when absolutely necessary and please open a new issue about it
 :::
 :::note
-This option can be used everywhere `mapOptions` function is called (currently being `WhatIsIt.ARRAY` and `WhatIsIt.MAP`)
+This option can be used everywhere `mapOptions` function is called (currently being `PropType.ARRAY` and `PropType.MAP`)
 :::
 
 Example:
@@ -610,7 +610,7 @@ class Cat {
 }
 
 class Cat2 {
-  @prop({ type: () => [Kitten] }, WhatIsIt.ARRAY) // explicitly define the "WhatIsIt"
+  @prop({ type: () => [Kitten] }, PropType.ARRAY) // explicitly define the "PropType"
   public kitten?: Kitten[];
 }
 ```
@@ -661,7 +661,7 @@ class SomeMapClass1 {
 }
 
 class SomeMapClass2 {
-  @prop({ type: () => String }, WhatIsIt.MAP) // explicitly define the "WhatIsIt"
+  @prop({ type: () => String }, PropType.MAP) // explicitly define the "PropType"
   public lookup?: Map<string, string>;
 }
 
@@ -823,14 +823,17 @@ class Mined {
 }
 ```
 
-## WhatIsIt
+<!--The Following "a" is a backwards-comaptability anchor-->
+<a name="whatisit"></a>
+
+## PropType
 
 This is an Enum to represent what the prop should be, this is in most cases automatically set. It can be overridden in the second parameter of `@prop`
 
 Full Enum:
 
 ```ts
-enum WhatIsIt {
+enum PropType {
   ARRAY,
   MAP,
   NONE // default for properties if no Map / Array is detected
@@ -862,7 +865,7 @@ It should be noted that using this method no typegoose transformations or warnin
 
 There is also a option to set the `Passthrough` class to `direct` mode (with the second parameter), this will mean that absolutlely no typegoose process is applied (everything has to be done manually), see [Passthrough-Class#Direct](#passthrough-direct).
 
-Example for `WhatIsIt.NONE`:
+Example for `PropType.NONE`:
 
 ```ts
 class PassthroughNoDirect {
@@ -887,7 +890,7 @@ new mongoose.Schema({
 })
 ```
 
-Example for `WhatIsIt.ARRAY`:
+Example for `PropType.ARRAY`:
 
 :::note
 This was not working before mongoose 6.0.9, see [issue #10750](https://github.com/Automattic/mongoose/issues/10750).
@@ -913,7 +916,7 @@ new mongoose.Schema({
 })
 ```
 
-Example for `WhatIsIt.MAP`:
+Example for `PropType.MAP`:
 
 ```ts
 class PassthroughNoDirect {
@@ -944,7 +947,7 @@ With the option `direct` set to `true`, no other option will be applied (even wh
 The most obvious one being that no `type:` will be in-front of what `Passthrough` holds.
 :::
 
-Example for `WhatIsIt.NONE`:
+Example for `PropType.NONE`:
 
 ```ts
 class PassthroughWithDirect {
@@ -961,7 +964,7 @@ new mongoose.Schema({
 })
 ```
 
-Example for `WhatIsIt.ARRAY`:
+Example for `PropType.ARRAY`:
 
 ```ts
 class PassthroughWithDirect {
@@ -976,7 +979,7 @@ new mongoose.Schema({
 })
 ```
 
-Example for `WhatIsIt.MAP`:
+Example for `PropType.MAP`:
 
 ```ts
 class PassthroughWithDirect {

@@ -1,5 +1,5 @@
 import type * as mongoose from 'mongoose';
-import type { Severity, WhatIsIt } from './internal/constants';
+import type { Severity, PropType } from './internal/constants';
 
 /**
  * Get the Type of an instance of a Document with Class properties
@@ -195,7 +195,7 @@ export interface BasePropOptions {
   /**
    * Use option {@link BasePropOptions.type}
    * @see https://typegoose.github.io/typegoose/docs/api/decorators/prop#map-options
-   * @see https://typegoose.github.io/typegoose/docs/api/decorators/prop#whatisit
+   * @see https://typegoose.github.io/typegoose/docs/api/decorators/prop#proptype
    */
   of?: never;
   /**
@@ -424,7 +424,8 @@ export interface DecoratedPropertyMetadata {
   /** Property name */
   key: string | symbol;
   /** What is it for a prop type? */
-  whatis?: WhatIsIt;
+  // TODO: for the next major version (10), change this name to "proptype" or "type"
+  whatis?: PropType;
 }
 export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropertyMetadata>;
 

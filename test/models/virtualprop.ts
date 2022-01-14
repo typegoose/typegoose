@@ -1,4 +1,4 @@
-import { WhatIsIt } from '../../src/internal/constants';
+import { PropType } from '../../src/internal/constants';
 import { getModelForClass, prop, Ref } from '../../src/typegoose';
 
 export class Virtual {
@@ -23,7 +23,7 @@ export class NonVirtual {
 }
 
 export class NonVirtualGS {
-  @prop({ set: (val: string[]) => val.join(' '), get: (val: string) => val.split(' '), type: String }, WhatIsIt.NONE)
+  @prop({ set: (val: string[]) => val.join(' '), get: (val: string) => val.split(' '), type: String }, PropType.NONE)
   public non?: string[];
 }
 

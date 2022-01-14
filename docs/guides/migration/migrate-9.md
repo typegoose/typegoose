@@ -32,7 +32,7 @@ The Error [`E007`](../error-warning-details.md#get--set-options-e007) got remove
 
 ## Error "E023" got merged into "E013"
 
-The Error [`E023`](../error-warning-details.md#ref-is-not-supported-for-propkind-name-key-e023) got merged into [`E013`](../error-warning-details.md#invalid-whatisit-used-e013).
+The Error [`E023`](../error-warning-details.md#ref-is-not-supported-for-propkind-name-key-e023) got merged into [`E013`](../error-warning-details.md#invalid-proptype-used-e013).
 
 ## Errors "E008" & "E015" & "E022" got merged into "E026"
 

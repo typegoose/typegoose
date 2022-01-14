@@ -1,4 +1,4 @@
-import { WhatIsIt } from '../../src/internal/constants';
+import { PropType } from '../../src/internal/constants';
 import { getModelForClass, mongoose, prop, Ref } from '../../src/typegoose';
 
 export class IsRefTypeNestedString {
@@ -39,7 +39,7 @@ export class Sub {
 }
 
 export class MTypesArrayRef {
-  @prop({ required: true, ref: () => Sub }, WhatIsIt.ARRAY)
+  @prop({ required: true, ref: () => Sub }, PropType.ARRAY)
   public subs!: mongoose.Types.Array<Ref<Sub>>;
 }
 

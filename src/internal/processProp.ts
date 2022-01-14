@@ -8,13 +8,13 @@ import type {
   NestedDiscriminatorsMap,
   VirtualPopulateMap,
 } from '../types';
-import { DecoratorKeys, WhatIsIt } from './constants';
+import { DecoratorKeys, PropType } from './constants';
 import { schemas } from './data';
 import {
   CannotBeSymbolError,
   InvalidEnumTypeError,
   InvalidTypeError,
-  InvalidWhatIsItError,
+  InvalidPropTypeError,
   NotAllVPOPElementsError,
   NotNumberTypeError,
   NotStringTypeError,
@@ -34,7 +34,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const name = utils.getName(target);
   const rawOptions: KeyStringAny = Object.assign({}, input.options);
   let Type: any | undefined = Reflect.getMetadata(DecoratorKeys.Type, target, key);
-  const propKind = input.whatis ?? detectWhatIsIt(Type);
+  const propKind = input.whatis ?? detectPropType(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);
   utils.assertion(typeof key === 'string', () => new CannotBeSymbolError(name, key));
@@ -44,10 +44,10 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   {
     // soft errors & "type"-alias mapping
     switch (propKind) {
-      case WhatIsIt.NONE:
+      case PropType.NONE:
         break;
-      case WhatIsIt.MAP:
-      case WhatIsIt.ARRAY:
+      case PropType.MAP:
+      case PropType.ARRAY:
         // set the "Type" to undefined if "ref" or "refPath" are defined, as an fallback in case "type" is also not defined
         if (('ref' in rawOptions || 'refPath' in rawOptions) && !('type' in rawOptions)) {
           Type = undefined;
@@ -79,15 +79,15 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     Type = mongoose.Schema.Types.Buffer;
   }
 
-  // confirm that "WhatIsIt" is an ARRAY and if that the Type is still an *ARRAY, set them to Mixed
+  // confirm that "PropType" is an ARRAY and if that the Type is still an *ARRAY, set them to Mixed
   // for issues like https://github.com/typegoose/typegoose/issues/300
-  if (propKind === WhatIsIt.ARRAY && detectWhatIsIt(Type) === WhatIsIt.ARRAY) {
+  if (propKind === PropType.ARRAY && detectPropType(Type) === PropType.ARRAY) {
     logger.debug('Type is still *ARRAY, defaulting to Mixed');
     Type = mongoose.Schema.Types.Mixed;
   }
 
-  // confirm that "WhatIsIt" is an MAP and if that the Type is still an *MAP, set them to Mixed
-  if (propKind === WhatIsIt.MAP && detectWhatIsIt(Type) === WhatIsIt.MAP) {
+  // confirm that "PropType" is an MAP and if that the Type is still an *MAP, set them to Mixed
+  if (propKind === PropType.MAP && detectPropType(Type) === PropType.MAP) {
     logger.debug('Type is still *Map, defaulting to Mixed');
     Type = mongoose.Schema.Types.Mixed;
   }
@@ -171,11 +171,11 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     }
 
     switch (propKind) {
-      case WhatIsIt.ARRAY:
+      case PropType.ARRAY:
         schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, target, key);
 
         return;
-      case WhatIsIt.MAP:
+      case PropType.MAP:
         const mapped = utils.mapOptions(rawOptions, newType, target, key);
 
         schemaProp[key] = {
@@ -185,7 +185,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
 
         return;
-      case WhatIsIt.NONE:
+      case PropType.NONE:
         schemaProp[key] = {
           ...rawOptions,
           type: newType,
@@ -193,7 +193,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
         return;
       default:
-        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(Passthrough)');
+        throw new InvalidPropTypeError(propKind, name, key, 'PropType(Passthrough)');
     }
   }
 
@@ -205,17 +205,17 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     delete rawOptions.ref;
 
     switch (propKind) {
-      case WhatIsIt.ARRAY:
+      case PropType.ARRAY:
         schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { ref });
         break;
-      case WhatIsIt.NONE:
+      case PropType.NONE:
         schemaProp[key] = {
           type: refType,
           ref,
           ...rawOptions,
         };
         break;
-      case WhatIsIt.MAP:
+      case PropType.MAP:
         const mapped = utils.mapOptions(rawOptions, refType, target, key);
 
         schemaProp[key] = {
@@ -229,7 +229,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
         break;
       default:
-        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(ref)');
+        throw new InvalidPropTypeError(propKind, name, key, 'PropType(ref)');
     }
 
     return;
@@ -245,10 +245,10 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     );
 
     switch (propKind) {
-      case WhatIsIt.ARRAY:
+      case PropType.ARRAY:
         schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { refPath });
         break;
-      case WhatIsIt.NONE:
+      case PropType.NONE:
         schemaProp[key] = {
           type: refType,
           refPath,
@@ -256,7 +256,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
         break;
       default:
-        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(refPath)');
+        throw new InvalidPropTypeError(propKind, name, key, 'PropType(refPath)');
     }
 
     return;
@@ -360,11 +360,11 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     }
 
     switch (propKind) {
-      case WhatIsIt.ARRAY:
+      case PropType.ARRAY:
         schemaProp[key] = utils.mapArrayOptions(rawOptions, Type, target, key);
 
         return;
-      case WhatIsIt.MAP:
+      case PropType.MAP:
         const mapped = utils.mapOptions(rawOptions, Type, target, key);
 
         schemaProp[key] = {
@@ -374,7 +374,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
         };
 
         return;
-      case WhatIsIt.NONE:
+      case PropType.NONE:
         schemaProp[key] = {
           ...rawOptions,
           type: Type,
@@ -382,7 +382,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
         return;
       default:
-        throw new InvalidWhatIsItError(propKind, name, key, 'whatis(primitive)');
+        throw new InvalidPropTypeError(propKind, name, key, 'PropType(primitive)');
     }
   }
 
@@ -403,11 +403,11 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   const virtualSchema = buildSchema(Type);
   switch (propKind) {
-    case WhatIsIt.ARRAY:
+    case PropType.ARRAY:
       schemaProp[key] = utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type);
 
       return;
-    case WhatIsIt.MAP:
+    case PropType.MAP:
       // special handling if the lower type should be an array
       if ('dim' in rawOptions) {
         logger.debug('Map SubDocument Array for "%s.%s"', name, key);
@@ -432,7 +432,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
       };
 
       return;
-    case WhatIsIt.NONE:
+    case PropType.NONE:
       schemaProp[key] = {
         ...rawOptions,
         type: virtualSchema,
@@ -440,7 +440,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
       return;
     default:
-      throw new InvalidWhatIsItError(propKind, name, key, 'whatis(subSchema)');
+      throw new InvalidPropTypeError(propKind, name, key, 'PropType(subSchema)');
   }
 }
 
@@ -452,11 +452,11 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 // function optionDeprecation(options: any) {}
 
 /**
- * Detect "WhatIsIt" based on "Type"
+ * Detect "PropType" based on "Type"
  * @param Type The Type used for detection
  */
-function detectWhatIsIt(Type: any): WhatIsIt {
-  logger.debug('Detecting WhatIsIt');
+function detectPropType(Type: any): PropType {
+  logger.debug('Detecting PropType');
 
   if (
     Type === Array ||
@@ -465,11 +465,11 @@ function detectWhatIsIt(Type: any): WhatIsIt {
     Type === mongoose.Types.DocumentArray ||
     Type === mongoose.Schema.Types.DocumentArray
   ) {
-    return WhatIsIt.ARRAY;
+    return PropType.ARRAY;
   }
   if (Type === Map || Type === mongoose.Types.Map || Type === mongoose.Schema.Types.Map) {
-    return WhatIsIt.MAP;
+    return PropType.MAP;
   }
 
-  return WhatIsIt.NONE;
+  return PropType.NONE;
 }

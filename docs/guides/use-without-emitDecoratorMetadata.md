@@ -33,15 +33,15 @@ class Kitten {
   @prop({ type: () => String, required: true }) // Needs to be explicitly defined, because "emitDecoratorMetadata" is not enabled
   public name!: string;
 
-  @prop({ type: () => [String], required: true }, WhatIsIt.ARRAY)
+  @prop({ type: () => [String], required: true }, PropType.ARRAY)
   public friendNames!: string[];
 
-  @prop({ type: () => Number, required: true }, WhatIsIt.MAP)
+  @prop({ type: () => Number, required: true }, PropType.MAP)
   public favoritePlacePriority!: Map<string, number>;
 }
 ```
 
-[Look here for what `WhatIsIt` is](../api/decorators/prop.md#whatisit)
+[Look here for what `PropType` is](../api/decorators/prop.md#proptype)
 
 ## References
 

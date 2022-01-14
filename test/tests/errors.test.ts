@@ -16,7 +16,7 @@ import {
   prop,
   setGlobalOptions,
 } from '../../src/typegoose'; // import order is important with jest
-import { DecoratorKeys, WhatIsIt } from '../../src/internal/constants';
+import { DecoratorKeys, PropType } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import * as utils from '../../src/internal/utils';
 import { mapValueToSeverity } from '../../src/globalOptions';
@@ -184,7 +184,7 @@ describe('tests for "NoValidClassError" [E028]', () => {
 });
 
 describe('tests for "InvalidTypeError" [E009]', () => {
-  it('should error if no valid type is supplied to WhatIsIt.NONE [InvalidTypeError] [E009]', () => {
+  it('should error if no valid type is supplied to PropType.NONE [InvalidTypeError] [E009]', () => {
     try {
       class TestNME {
         @prop({ type: undefined })
@@ -199,10 +199,10 @@ describe('tests for "InvalidTypeError" [E009]', () => {
     }
   });
 
-  it('should error if no valid type is supplied to WhatIsIt.ARRAY [InvalidTypeError] [E009]', () => {
+  it('should error if no valid type is supplied to PropType.ARRAY [InvalidTypeError] [E009]', () => {
     try {
       class TestNoMetadataErrorAP {
-        @prop({ type: undefined }, WhatIsIt.ARRAY)
+        @prop({ type: undefined }, PropType.ARRAY)
         public something: undefined;
       }
 
@@ -215,10 +215,10 @@ describe('tests for "InvalidTypeError" [E009]', () => {
     }
   });
 
-  it('should error if no valid type is supplied to WhatIsIt.MAP [InvalidTypeError] [E009]', () => {
+  it('should error if no valid type is supplied to PropType.MAP [InvalidTypeError] [E009]', () => {
     try {
       class TestNoMetadataErrorMP {
-        @prop({ type: undefined }, WhatIsIt.MAP)
+        @prop({ type: undefined }, PropType.MAP)
         public something: undefined;
       }
 
@@ -283,66 +283,66 @@ it('should error if the Type does not have a valid "OptionsConstructor" [Invalid
   }
 });
 
-describe('tests for "InvalidWhatIsItError" [E013]', () => {
-  it('should throw a Error when a unknown WhatIsIt is used for "utils#initProperty" [InvalidWhatIsItError] [E013]', () => {
+describe('tests for "InvalidPropTypeError" [E013]', () => {
+  it('should throw a Error when a unknown PropType is used for "utils#initProperty" [InvalidPropTypeError] [E013]', () => {
     try {
       utils.initProperty('a1', 'a2', -1);
 
-      fail('Expected to throw "InvalidWhatIsItError"');
+      fail('Expected to throw "InvalidPropTypeError"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+      expect(err).toBeInstanceOf(errors.InvalidPropTypeError);
       expect(err.message).toMatchSnapshot();
     }
   });
 
-  describe('WhatIsIt unknown (processProp)', () => {
+  describe('PropType unknown (processProp)', () => {
     beforeEach(() => {
-      // Mock implementation of "utils.initProperty", otherwise "InvalidWhatIsItError.whatisit(initProperty)" always gets thrown
+      // Mock implementation of "utils.initProperty", otherwise "InvalidPropTypeError.PropType(initProperty)" always gets thrown
       const origInitProperty = utils.initProperty;
       jest.spyOn(utils, 'initProperty').mockImplementation((...args) => {
         return origInitProperty(
           args[0],
           args[1],
-          // @ts-expect-error "-1" does not exist in WhatIsIt
-          args[2] === -1 ? WhatIsIt.NONE : args[2] // map "-1" to "NONE" just to have "utils.initProperty" not throw a Error, but still use it
+          // @ts-expect-error "-1" does not exist in PropType
+          args[2] === -1 ? PropType.NONE : args[2] // map "-1" to "NONE" just to have "utils.initProperty" not throw a Error, but still use it
         );
       });
     });
 
-    it('should throw a Error when a unknown WhatIsIt is used for "processProp#Passthrough" [InvalidWhatIsItError] [E013]', () => {
-      class ProcessPropPassthroughWhatIsIt {
+    it('should throw a Error when a unknown PropType is used for "processProp#Passthrough" [InvalidPropTypeError] [E013]', () => {
+      class ProcessPropPassthroughPropType {
         @prop({ type: () => new Passthrough({}) }, -1)
         public test?: any;
       }
 
       try {
-        buildSchema(ProcessPropPassthroughWhatIsIt);
+        buildSchema(ProcessPropPassthroughPropType);
 
-        fail('Expected to throw "InvalidWhatIsItError"');
+        fail('Expected to throw "InvalidPropTypeError"');
       } catch (err) {
-        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err).toBeInstanceOf(errors.InvalidPropTypeError);
         expect(err.message).toMatchSnapshot();
       }
     });
 
-    it('should throw a Error when a unknown WhatIsIt is used for "processProp#ref" [InvalidWhatIsItError] [E013]', () => {
-      class ProcessPropRefWhatIsIt {
+    it('should throw a Error when a unknown PropType is used for "processProp#ref" [InvalidPropTypeError] [E013]', () => {
+      class ProcessPropRefPropType {
         @prop({ ref: 'hi' }, -1)
         public test?: any;
       }
 
       try {
-        buildSchema(ProcessPropRefWhatIsIt);
+        buildSchema(ProcessPropRefPropType);
 
-        fail('Expected to throw "InvalidWhatIsItError"');
+        fail('Expected to throw "InvalidPropTypeError"');
       } catch (err) {
-        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err).toBeInstanceOf(errors.InvalidPropTypeError);
         expect(err.message).toMatchSnapshot();
       }
     });
 
-    it('should throw a Error when a unknown WhatIsIt is used for "processProp#refPath" [InvalidWhatIsItError] [E013]', () => {
-      class ProcessPropRefWhatIsIt {
+    it('should throw a Error when a unknown PropType is used for "processProp#refPath" [InvalidPropTypeError] [E013]', () => {
+      class ProcessPropRefPropType {
         @prop()
         public hi?: string;
 
@@ -351,68 +351,68 @@ describe('tests for "InvalidWhatIsItError" [E013]', () => {
       }
 
       try {
-        buildSchema(ProcessPropRefWhatIsIt);
+        buildSchema(ProcessPropRefPropType);
 
-        fail('Expected to throw "InvalidWhatIsItError"');
+        fail('Expected to throw "InvalidPropTypeError"');
       } catch (err) {
-        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err).toBeInstanceOf(errors.InvalidPropTypeError);
         expect(err.message).toMatchSnapshot();
       }
     });
 
-    it('should throw a Error when a unknown WhatIsIt is used for "processProp#primitive" [InvalidWhatIsItError] [E013]', () => {
-      class ProcessPropRefWhatIsIt {
+    it('should throw a Error when a unknown PropType is used for "processProp#primitive" [InvalidPropTypeError] [E013]', () => {
+      class ProcessPropRefPropType {
         @prop({ type: () => String }, -1)
         public test?: string;
       }
 
       try {
-        buildSchema(ProcessPropRefWhatIsIt);
+        buildSchema(ProcessPropRefPropType);
 
-        fail('Expected to throw "InvalidWhatIsItError"');
+        fail('Expected to throw "InvalidPropTypeError"');
       } catch (err) {
-        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err).toBeInstanceOf(errors.InvalidPropTypeError);
         expect(err.message).toMatchSnapshot();
       }
     });
 
-    it('should throw a Error when a unknown WhatIsIt is used for "processProp#subSchema" [InvalidWhatIsItError] [E013]', () => {
+    it('should throw a Error when a unknown PropType is used for "processProp#subSchema" [InvalidPropTypeError] [E013]', () => {
       class Sub {
         @prop()
         public dummy?: string;
       }
 
-      class ProcessPropRefWhatIsIt {
+      class ProcessPropRefPropType {
         @prop({ type: () => Sub }, -1)
         public test?: Sub;
       }
 
       try {
-        buildSchema(ProcessPropRefWhatIsIt);
+        buildSchema(ProcessPropRefPropType);
 
-        fail('Expected to throw "InvalidWhatIsItError"');
+        fail('Expected to throw "InvalidPropTypeError"');
       } catch (err) {
-        expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+        expect(err).toBeInstanceOf(errors.InvalidPropTypeError);
         expect(err.message).toMatchSnapshot();
       }
     });
   });
 
-  it('should throw a Error when "WhatIsIt.MAP" is used for "processProp#refPath" [InvalidWhatIsItError] [E013]', () => {
-    class ProcessPropRefWhatIsIt {
+  it('should throw a Error when "PropType.MAP" is used for "processProp#refPath" [InvalidPropTypeError] [E013]', () => {
+    class ProcessPropRefPropType {
       @prop()
       public hi?: string;
 
-      @prop({ refPath: 'hi' }, WhatIsIt.MAP)
+      @prop({ refPath: 'hi' }, PropType.MAP)
       public test?: any;
     }
 
     try {
-      buildSchema(ProcessPropRefWhatIsIt);
+      buildSchema(ProcessPropRefPropType);
 
-      fail('Expected to throw "InvalidWhatIsItError"');
+      fail('Expected to throw "InvalidPropTypeError"');
     } catch (err) {
-      expect(err).toBeInstanceOf(errors.InvalidWhatIsItError);
+      expect(err).toBeInstanceOf(errors.InvalidPropTypeError);
       expect(err.message).toMatchSnapshot();
     }
   });

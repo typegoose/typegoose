@@ -15,12 +15,12 @@ import type {
   PropOptionsForString,
   VirtualOptions,
 } from '../types';
-import { DecoratorKeys, Severity, WhatIsIt } from './constants';
+import { DecoratorKeys, Severity, PropType } from './constants';
 import { constructors, globalOptions, schemas } from './data';
 import {
   AssertionFallbackError,
   InvalidOptionsConstructorError,
-  InvalidWhatIsItError,
+  InvalidPropTypeError,
   NoValidClassError,
   ResolveTypegooseNameError,
   StringLengthExpectedError,
@@ -131,21 +131,21 @@ export function isString(Type: any): Type is string {
  * Initialize the property in the schemas Map
  * @param name Name of the current Model/Class
  * @param key Key of the property
- * @param whatis What should it be for a type?
+ * @param proptype What should it be for a type?
  */
-export function initProperty(name: string, key: string, whatis: WhatIsIt) {
+export function initProperty(name: string, key: string, proptype: PropType) {
   const schemaProp = !schemas.has(name) ? schemas.set(name, {}).get(name)! : schemas.get(name)!;
 
-  switch (whatis) {
-    case WhatIsIt.ARRAY:
+  switch (proptype) {
+    case PropType.ARRAY:
       schemaProp[key] = [{}];
       break;
-    case WhatIsIt.MAP:
-    case WhatIsIt.NONE:
+    case PropType.MAP:
+    case PropType.NONE:
       schemaProp[key] = {};
       break;
     default:
-      throw new InvalidWhatIsItError(whatis, name, key, 'whatis(initProperty)');
+      throw new InvalidPropTypeError(proptype, name, key, 'PropType(initProperty)');
   }
 
   return schemaProp;

@@ -33,7 +33,7 @@ The following decorator functions got removed, and replaced with an second param
 - `arrayProp`
 
 :::info
-`@prop` can since 7.x be forced into an specific mode with an second parameter: `@prop({}, WhatIsIt.ARRAY)` [Look here for an example for `WhatIsIt`](../../api/decorators/prop.md#whatisit)
+`@prop` can since 7.x be forced into an specific mode with an second parameter: `@prop({}, PropType.ARRAY)` [Look here for an example for `PropType`](../../api/decorators/prop.md#proptype)
 :::
 
 ## Mongoose Version above 5.13 is now supported

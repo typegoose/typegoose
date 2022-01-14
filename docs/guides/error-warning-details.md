@@ -192,14 +192,17 @@ This may be thrown when using typescript option `transpileOnly` (see [Known Issu
 This Error has a workaround, see [Use Without "emitDecoratorMetadata"](./use-without-emitDecoratorMetadata.md).
 :::
 
-### Invalid WhatIsIt used [E013]
+<!--The Following "a" is a backwards-comaptability anchor-->
+<a name="invalid-whatisit-used-e013"></a>
 
-Error: `"${whatisit}"(${where}) is invalid for "${name}.${key}" [E013]`
+### Invalid PropType used [E013]
 
-Error Class: `InvalidWhatIsItError`
+Error: `"${proptype}"(${where}) is invalid for "${name}.${key}" [E013]`
+
+Error Class: `InvalidPropTypeError`
 
 Details:  
-The Value `${whatisit}` is not supported in `${where}` or does not exist in the [`WhatIsIt`](../api/decorators/prop.md#whatisit) enum.
+The Value `${proptype}` is not supported in `${where}` or does not exist in the [`PropType`](../api/decorators/prop.md#proptype) enum.
 
 ### Input was not string or have .typegooseName function/string [E014]
 
@@ -352,7 +355,7 @@ The function used to create a custom model name (via the `modelOptions` "option"
 <span class="badge badge--warning">This Error got removed in 9.0.0</span>
 
 :::info
-This Error got merged with [`E013`](#invalid-whatisit-used-e013) in 9.0.0
+This Error got merged with [`E013`](#invalid-proptype-used-e013) in 9.0.0
 :::
 
 Error:  

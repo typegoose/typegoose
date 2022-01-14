@@ -52,11 +52,14 @@ export enum DecoratorKeys {
 }
 
 /** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
-export enum WhatIsIt {
+export enum PropType {
   ARRAY,
   MAP,
   NONE,
 }
+
+// For Backwards-compatability
+export const WhatIsIt = PropType;
 
 /** Severity levels for soft-warnings */
 export enum Severity {
