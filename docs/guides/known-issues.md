@@ -82,3 +82,10 @@ module.exports = {
 :::note
 There are some workarounds for some minification problems, like the class name (which would be the model name) can be changed with [`customName`](../api/decorators/model-options#customname).
 :::
+
+### `@types/node` breaking change
+
+Recently (early January 2022), there was a update in `@types/node`, which was actually a breaking change which causes typescript compile errors to show up (like for `GridFSBucketWriteStream` from mongodb).
+
+The current only workaround is to pin the versions of `@types/node` used to ones before the update, which in the case of typegoose is `@types/node@12.20.39`.  
+Currently (as of 15.01.2022 d/m/y), mongodb has released a version that has updated types, but mongoose does not have a version yet.
