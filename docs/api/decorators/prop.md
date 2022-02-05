@@ -823,6 +823,56 @@ class Mined {
 }
 ```
 
+## Virtual Populate Options
+
+Options for [Virtual Populate](../virtuals.md#virtual-populate)
+
+### ref {#virtual-populate-ref}
+
+Required: yes, if using virtual populate
+
+See normal [`ref`](#ref)
+
+### foreignField
+
+Accepts Type: `string | DynamicStringFunc<any>`  
+Required: yes, if using virtual populate
+
+Set the field to look at in the remote document and be compared with the field set by [`localField`](#localfield).
+
+### localField
+
+Accepts Type: `string | DynamicStringFunc<any>`  
+Required: yes, if using virtual populate
+
+Set the field to look at in the local document and be compared with the field set by [`foreignField`](#foreignfield).
+
+### justOne
+
+Accepts Type: `boolean`  
+Conflicts with: [`count`](#count)
+
+Set wheter the query should only return one document instead of a array of documents.
+
+### count
+
+Accepts Type: `boolean`  
+Conflicts with: [`justOne`](#justone)
+
+Set wheter the query should return a count of found documents instead of the documents themself.
+
+### options {#virtual-populate-options-option}
+
+Accepts Type: `mongoose.QueryOptions`
+
+Set custom options to be used in the query for virtual populate.
+
+### match {#virtual-populate-match}
+
+Accepts Type: `object | (doc) => object`
+
+Set a custom matcher for virtual populate.
+
 <!--The Following "a" is a backwards-comaptability anchor-->
 <a name="whatisit"></a>
 
