@@ -1,3 +1,28 @@
+## [9.6.0](https://github.com/typegoose/typegoose/compare/v9.5.0...v9.6.0) (2022-02-05)
+
+
+### Features
+
+* update queryMethod to use more correct type for "this" ([d121528](https://github.com/typegoose/typegoose/commit/d1215282eb761aabcfcfcb4f1d66808f1ab04cee)), closes [typegoose/typegoose#665](https://github.com/typegoose/typegoose/issues/665)
+
+
+### Fixes
+
+* **types:** change type of "foreignField" from "DeferredFunc" to "DynamicStringFunc" ([541aaf7](https://github.com/typegoose/typegoose/commit/541aaf76f16dddf177172b82eb29f0c9ee571ca2))
+* **utils::warnMixed:** add debug log to show model-options on WARN ([31942cd](https://github.com/typegoose/typegoose/commit/31942cd7e66537148b53033415ca6e7e091414db))
+
+
+### Dependencies
+
+* **@types/node:** upgrade to 12.20.43 ([842072c](https://github.com/typegoose/typegoose/commit/842072c2a349bf27015d6bb73cd7de6ad04d1e6c)), closes [typegoose/typegoose#656](https://github.com/typegoose/typegoose/issues/656)
+* **@typescript-eslint/*:** upgrade to 5.10.2 ([ceac979](https://github.com/typegoose/typegoose/commit/ceac9793f0499febe3e1fbe0c2438fe2226427a9))
+* **commitlint:** upgrade to 16.1.0 ([d3382f9](https://github.com/typegoose/typegoose/commit/d3382f9241bc285e09fe649d7e978e4d5e05e0b2))
+* **eslint:** upgrade to 8.8.0 ([4016c33](https://github.com/typegoose/typegoose/commit/4016c338eed6aa2493f97e4af4dc7477b6ffe82f))
+* **jest:** upgrade to 27.5.0 ([3d3defa](https://github.com/typegoose/typegoose/commit/3d3defa8d126fbcd1f12ac94ccb7302b08b18696))
+* **mongodb-memory-server:** upgrade to 8.3.0 ([47a283c](https://github.com/typegoose/typegoose/commit/47a283c4a8b1e099d9eeac4594df14f34142efa0))
+* **mongoose:** upgrade to 6.2.0 ([b4e8ec8](https://github.com/typegoose/typegoose/commit/b4e8ec8f5cc788881c05f765e8a1695a157002d5))
+* **ts-jest:** upgrade to 27.1.3 ([d6ec965](https://github.com/typegoose/typegoose/commit/d6ec965969d22f923e7badb81f188206d56119c9))
+
 ## [9.5.0](https://github.com/typegoose/typegoose/compare/v9.4.0...v9.5.0) (2022-01-14)
 
 
