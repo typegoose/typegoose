@@ -23,7 +23,7 @@ import {
   prop,
   queryMethod,
 } from '../../src/typegoose';
-import type { AsQueryMethod, Func, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
+import type { AsQueryMethod, Func, QueryHelperThis, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -383,11 +383,11 @@ it('should add query Methods', async () => {
     findByLastname: AsQueryMethod<typeof findByLastname>;
   }
 
-  function findByName(this: ReturnModelType<typeof QueryMethodsClass, FindHelpers>, name: string) {
+  function findByName(this: QueryHelperThis<typeof QueryMethodsClass, FindHelpers>, name: string) {
     return this.find({ name });
   }
 
-  function findByLastname(this: ReturnModelType<typeof QueryMethodsClass, FindHelpers>, lastname: string) {
+  function findByLastname(this: QueryHelperThis<typeof QueryMethodsClass, FindHelpers>, lastname: string) {
     return this.find({ lastname });
   }
 

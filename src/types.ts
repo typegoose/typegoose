@@ -495,6 +495,20 @@ export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
 export type AsQueryMethod<T extends (...args: any) => any> = (...args: Parameters<T>) => ReturnType<T>;
 
 /**
+ * Helper type to easily set the `this` type in a QueryHelper function
+ *
+ * @example
+ * function findById(this: QueryHelperThis<YourClass, YourClassQueryHelpers>, id: string) {
+ *   return this.findOne({ _id: id });
+ * }
+ */
+export type QueryHelperThis<T extends AnyParamConstructor<any>, QueryHelpers, S = DocumentType<T>> = mongoose.QueryWithHelpers<
+  S | null,
+  S,
+  QueryHelpers
+>;
+
+/**
  * Used for the Reflection of Query Methods
  * @example
  * ```ts

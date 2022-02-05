@@ -3,7 +3,7 @@ id: query-method
 title: '@queryMethod'
 ---
 
-`@queryMethod(func: (this: ReturnModelType<U, QueryHelpers>, ...args: any[]) => mongoose.DocumentQuery)` is a decorator to add [custom query methods](https://thecodebarbarian.com/mongoose-custom-query-methods)
+`@queryMethod(func: (this: QueryHelperThis<U, QueryHelpers>, ...args: any[]) => mongoose.DocumentQuery)` is a decorator to add [custom query methods](https://thecodebarbarian.com/mongoose-custom-query-methods)
 - `this` needs to be defined to have the correct types inside the class (and to make it compatible with `@queryMethod`)
 - `func` is the function that should be added
 - the return type of the function needs to be `mongoose.DocumentQuery`
@@ -27,8 +27,8 @@ interface QueryHelpers {
   findByLastname: types.AsQueryMethod<typeof findByLastname>;
 }
 
-function findByName(this: ReturnModelType<typeof Person, QueryHelpers>, name: string) {
-  return this.find({ name }); // important to not do an "await" and ".exec"
+function findByName(this: types.QueryHelperThis<typeof Person, QueryHelpers>, name: string) {
+  return this.find({ name }); // it is important to not do a "await" and ".exec"
 }
 @queryMethod(findByName)
 class Person {
@@ -38,7 +38,7 @@ class Person {
 const PersonModel = getModelForClass<typeof Person, QueryHelpers>(Person);
 
 // thanks to "QueryHelpers" the function "findByName" should exist here and return the correct type
-const docs: DocumentType<Person>[] = await PersonModel.find()
+const docs: types.DocumentType<Person>[] = await PersonModel.find()
   .findByName('hello')
   .orFail()
   .exec();
