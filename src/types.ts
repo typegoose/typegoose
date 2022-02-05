@@ -307,7 +307,7 @@ export interface VirtualOptions {
   /** Which property(on the current-Class) to match `foreignField` against */
   localField: string | DynamicStringFunc<any>;
   /** Which property(on the ref-Class) to match `localField` against */
-  foreignField: string | DeferredFunc<string>;
+  foreignField: string | DynamicStringFunc<any>;
   /** Return as One Document(true) or as Array(false) */
   justOne?: mongoose.VirtualTypeOptions['justOne'];
   /** Return the number of Documents found instead of the actual Documents */
