@@ -64,7 +64,7 @@
     "jest": "^27.5.0",
     "lint-staged": "^11.2.6",
     "mongodb-memory-server": "^8.3.0",
-    "mongoose": "~6.1.6",
+    "mongoose": "~6.2.0",
     "mongoose-findorcreate": "3.0.0",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",

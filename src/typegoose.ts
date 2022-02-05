@@ -8,8 +8,8 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '6.1.6')) {
-    throw new Error(`Please use mongoose 6.1.6 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '6.2.0')) {
+    throw new Error(`Please use mongoose 6.2.0 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
