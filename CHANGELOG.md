@@ -1,3 +1,10 @@
+### [9.6.2](https://github.com/typegoose/typegoose/compare/v9.6.1...v9.6.2) (2022-02-07)
+
+
+### Fixes
+
+* **dependencies:** fix mongoose peer-dependency requirement ([#669](https://github.com/typegoose/typegoose/issues/669)) ([80eefcd](https://github.com/typegoose/typegoose/commit/80eefcd9e74b4cf65070b6a890572c99a4303998))
+
 ### [9.6.1](https://github.com/typegoose/typegoose/compare/v9.6.0...v9.6.1) (2022-02-07)
 
 
