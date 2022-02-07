@@ -36,7 +36,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "~6.1.6"
+    "mongoose": "~6.2.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
