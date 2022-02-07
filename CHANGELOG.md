@@ -1,3 +1,10 @@
+### [9.6.1](https://github.com/typegoose/typegoose/compare/v9.6.0...v9.6.1) (2022-02-07)
+
+
+### Fixes
+
+* **typegoose::getDiscriminatorModelForClass:** try to fix webstorm inspection loop ([5d3e88e](https://github.com/typegoose/typegoose/commit/5d3e88eed2394f6dfb31bfc178cef42fe9980ded)), closes [typegoose/typegoose#664](https://github.com/typegoose/typegoose/issues/664)
+
 ## [9.6.0](https://github.com/typegoose/typegoose/compare/v9.5.0...v9.6.0) (2022-02-05)
 
 
