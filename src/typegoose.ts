@@ -281,7 +281,7 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
  * ```
  */
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
-  from: mongoose.Model<any>,
+  from: mongoose.Model<any, any>,
   cl: U,
   value?: string
 ) {
