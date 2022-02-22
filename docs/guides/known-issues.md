@@ -89,3 +89,10 @@ Recently (early January 2022), there was a update in `@types/node`, which was ac
 
 ~~The current only workaround is to pin the versions of `@types/node` used to ones before the update, which in the case of typegoose is `@types/node@12.20.39`.~~  
 As of 02-02-2022 (d/m/y), mongoose has release `6.2.0` which upgraded `mongodb` to a version that has updated types, and typegoose `9.6.0` uses this mongoose version.
+
+### NodeJS 17.5 Breaking Change
+
+Recently NodeJS 17.5 was released, which included a breaking change for mongoose, which resulted in a error (/crash of the application).
+
+Mongoose has released version `6.2.2` on 16.2.22 (d/m/y) which fixes the issue on mongoose's side.  
+NodeJS has a fix merged, but as of now has not released the new version yet.
