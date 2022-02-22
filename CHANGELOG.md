@@ -1,3 +1,21 @@
+## [9.7.0](https://github.com/typegoose/typegoose/compare/v9.6.2...v9.7.0) (2022-02-22)
+
+
+### Fixes
+
+* **types::QueryHelperThis:** fix missing QueryHelpers in DocumentType ([03a39de](https://github.com/typegoose/typegoose/commit/03a39de4754637b1f1fec4a9840b8c4c30901226))
+
+
+### Dependencies
+
+* **@typescript-eslint/*:** upgrade to 5.12.1 ([a59ed73](https://github.com/typegoose/typegoose/commit/a59ed73e719466cc1e347a9bc2b30493ad02917e))
+* **commitlint:** upgrade to 16.2.1 ([c3005bf](https://github.com/typegoose/typegoose/commit/c3005bf9baf5f95fc52e112fef370816aa27c1b9))
+* **eslint:** upgrade to 8.9.0 ([2cf59f0](https://github.com/typegoose/typegoose/commit/2cf59f074ebd062f0eeb04674e14ba483edadef0))
+* **eslint-config-prettier:** upgrade to 8.4.0 ([9344989](https://github.com/typegoose/typegoose/commit/9344989d65ebcebc3bbd5a717782efef1c9ee7b7))
+* **jest:** upgrade to 27.5.1 ([02670ca](https://github.com/typegoose/typegoose/commit/02670caf704c17bbbd54147c71159ef7911fd4ab))
+* **mongodb-memory-server:** upgrade to 8.4.0 ([ccea634](https://github.com/typegoose/typegoose/commit/ccea634e966856eab795af84203ef42cb21c5e0d))
+* **mongoose:** upgrade to 6.2.3 ([6044db0](https://github.com/typegoose/typegoose/commit/6044db07af45bea25b0489d6b54299b5918bc1eb))
+
 ### [9.6.2](https://github.com/typegoose/typegoose/compare/v9.6.1...v9.6.2) (2022-02-07)
 
 
