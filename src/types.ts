@@ -502,11 +502,11 @@ export type AsQueryMethod<T extends (...args: any) => any> = (...args: Parameter
  *   return this.findOne({ _id: id });
  * }
  */
-export type QueryHelperThis<T extends AnyParamConstructor<any>, QueryHelpers, S = DocumentType<T>> = mongoose.QueryWithHelpers<
-  S | null,
-  S,
-  QueryHelpers
->;
+export type QueryHelperThis<
+  T extends AnyParamConstructor<any>,
+  QueryHelpers,
+  S = DocumentType<T, QueryHelpers>
+> = mongoose.QueryWithHelpers<S | null, S, QueryHelpers>;
 
 /**
  * Used for the Reflection of Query Methods
