@@ -513,6 +513,15 @@ export function mapOptions(
 }
 
 /**
+ * Check if the current Type is meant to be a Array
+ * @param rawOptions The raw options
+ */
+export function isTypeMeantToBeArray(rawOptions: any): boolean {
+  // check if the "dim" option exists, if yes the type is meant to be a array in the end
+  return !isNullOrUndefined(rawOptions) && !isNullOrUndefined(rawOptions.dim) && typeof rawOptions.dim === 'number' && rawOptions.dim > 0;
+}
+
+/**
  * Warn, Error or Allow if an mixed type is set
  * -> this function exists for de-duplication
  * @param target Target Class

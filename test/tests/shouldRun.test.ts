@@ -1,11 +1,13 @@
 import * as mongoose from 'mongoose';
 import { mapValueToSeverity } from '../../src/globalOptions';
-import { DecoratorKeys, Severity } from '../../src/internal/constants';
+import { DecoratorKeys, PropType, Severity } from '../../src/internal/constants';
 import {
   assertion,
   assignMetadata,
   createArrayFromDimensions,
   getName,
+  isNullOrUndefined,
+  isTypeMeantToBeArray,
   mergeMetadata,
   mergeSchemaOptions,
   toStringNoFail,
@@ -903,4 +905,29 @@ it('utils.assertion should make use of arg1 being a function', () => {
   }
 
   expect(assertion.bind(undefined, false, () => new CustomError())).toThrowError(CustomError);
+});
+
+it('should correctly map a Map<string, string[]> [typegoose/typegoose#682]', () => {
+  class MapStringArray {
+    @prop({ required: true, type: () => [String] }, PropType.MAP)
+    public mapArr!: Map<string, string[]>;
+  }
+
+  const schema = buildSchema(MapStringArray);
+
+  const path = schema.path('mapArr');
+
+  assertion(!isNullOrUndefined(path), new Error('"path" should not be undefined/null!'));
+
+  expect(path).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(path['$__schemaType']).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(path['$__schemaType'].caster).toBeInstanceOf(mongoose.Schema.Types.String);
+});
+
+it('should properly get if the type is meant to be a array', () => {
+  expect(isTypeMeantToBeArray(undefined)).toBeFalsy();
+  expect(isTypeMeantToBeArray({})).toBeFalsy();
+  expect(isTypeMeantToBeArray({ dim: undefined })).toBeFalsy();
+  expect(isTypeMeantToBeArray({ dim: 0 })).toBeFalsy();
+  expect(isTypeMeantToBeArray({ dim: 1 })).toBeTruthy();
 });

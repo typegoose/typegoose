@@ -5,6 +5,7 @@ import type {
   DecoratedPropertyMetadata,
   DiscriminatorObject,
   KeyStringAny,
+  MappedInnerOuterOptions,
   NestedDiscriminatorsMap,
   VirtualPopulateMap,
 } from '../types';
@@ -365,12 +366,23 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
         return;
       case PropType.MAP:
-        const mapped = utils.mapOptions(rawOptions, Type, target, key);
+        let mapped: MappedInnerOuterOptions;
+        let finalType: mongoose.SchemaTypeOptions<any>;
+
+        // Map the correct options for the end type
+        if (utils.isTypeMeantToBeArray(rawOptions)) {
+          mapped = utils.mapOptions(rawOptions, mongoose.Schema.Types.Array, target, key);
+          // "rawOptions" is not used here, because that would duplicate some options to where the should not be
+          finalType = utils.mapArrayOptions({ ...mapped.inner, dim: rawOptions.dim }, Type, target, key);
+        } else {
+          mapped = utils.mapOptions(rawOptions, Type, target, key);
+          finalType = { ...mapped.inner, type: Type };
+        }
 
         schemaProp[key] = {
           ...mapped.outer,
           type: Map,
-          of: { type: Type, ...mapped.inner },
+          of: { ...finalType },
         };
 
         return;
