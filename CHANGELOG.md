@@ -1,3 +1,15 @@
+### [9.7.1](https://github.com/typegoose/typegoose/compare/v9.7.0...v9.7.1) (2022-03-23)
+
+
+### Style
+
+* **utils::mapOptions:** add proper interface for return type ([3deb4ec](https://github.com/typegoose/typegoose/commit/3deb4ecc283145badb251b01974531f9f2896e87))
+
+
+### Fixes
+
+* **processProp:** fix handling map-array values ([36deb80](https://github.com/typegoose/typegoose/commit/36deb80cd9a63542eb16c0a0fcb5db84ce5db81e)), closes [typegoose/typegoose#682](https://github.com/typegoose/typegoose/issues/682)
+
 ## [9.7.0](https://github.com/typegoose/typegoose/compare/v9.6.2...v9.7.0) (2022-02-22)
 
 
