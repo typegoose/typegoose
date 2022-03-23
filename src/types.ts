@@ -245,6 +245,21 @@ export interface InnerOuterOptions {
   outerOptions?: KeyStringAny;
 }
 
+/**
+ * Internal type for `utils.mapOptions`
+ * @internal
+ */
+export interface MappedInnerOuterOptions {
+  /**
+   * Mapped options for the inner of the Type
+   */
+  inner: NonNullable<KeyStringAny>;
+  /**
+   * Mapped options for the outer of the type
+   */
+  outer: NonNullable<KeyStringAny>;
+}
+
 export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
   /**
    * How many dimensions this Array should have

@@ -11,6 +11,7 @@ import type {
   IObjectWithTypegooseName,
   IPrototype,
   KeyStringAny,
+  MappedInnerOuterOptions,
   PropOptionsForNumber,
   PropOptionsForString,
   VirtualOptions,
@@ -434,14 +435,14 @@ export function mapOptions(
   target: any,
   pkey: string,
   loggerType?: AnyParamConstructor<any>
-) {
+): MappedInnerOuterOptions {
   logger.debug('mapOptions called');
   loggerType = loggerType ?? (Type as AnyParamConstructor<any>);
 
   /** The Object that gets returned */
-  const ret = {
-    inner: {} as KeyStringAny,
-    outer: {} as KeyStringAny,
+  const ret: MappedInnerOuterOptions = {
+    inner: {},
+    outer: {},
   };
 
   // if Type is not a Schema, try to convert js type to mongoose type (Object => Mixed)
