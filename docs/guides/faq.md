@@ -26,7 +26,7 @@ A: Because I (hasezoey) don't have permissions over the old `typegoose` reposito
 
 ### Why does `new Model({})` not have types?
 
-A: Because Typegoose doesn't modify any Mongoose code, it is still the same as Mongoose's original `new Model()`, you would have to do `new Model({} as Class)` (or sometimes `new Model({} as Partial<Class>)`, because of functions.)
+A: Since around mongoose 6.0.0, `new Model()` and `Model.create()` have types, but they are not enforced (as in they will be suggested, but will not error if not present / other unknown properties are present).
 
 ### Do all Classes get compiled to their own `mongoose.Schema`?
 
