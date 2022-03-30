@@ -62,7 +62,7 @@ There is also a option to not use sub-classes, called [the `Passthrough` class](
 
 ### I want to the return document with property `id` instead of `_id`
 
-Mongoose automatically adds a virtual named `id`, use the following for type definitions:
+Mongoose automatically adds a virtual named `id`, use the following for type definitions if it does not already exist:
 
 ```ts
 class Cat {
