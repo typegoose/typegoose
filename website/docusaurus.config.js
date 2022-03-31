@@ -1,6 +1,5 @@
 module.exports = {
   title: 'typegoose',
-  description: 'Define Mongoose models using TypeScript classes',
   tagline: 'Define Mongoose models using TypeScript classes',
   url: 'https://typegoose.github.io',
   baseUrl: '/typegoose/',
