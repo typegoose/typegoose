@@ -1,3 +1,25 @@
+## [9.8.0](https://github.com/typegoose/typegoose/compare/v9.7.1...v9.8.0) (2022-04-16)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 27.4.1 ([f1f1f7c](https://github.com/typegoose/typegoose/commit/f1f1f7cca9ba856847dcd5d48333769a049efc5f))
+* **@types/lodash:** upgrade to 4.14.181 ([02b1aee](https://github.com/typegoose/typegoose/commit/02b1aee313c8464b729aec57219d1a12fb22c3fc))
+* **@typescript-eslint/*:** upgrade to 5.19.0 ([c86c5c8](https://github.com/typegoose/typegoose/commit/c86c5c8b50b4078a8b0e542da06a223bb86f4cfd))
+* **commitlint:** upgrade to 16.2.3 ([c486229](https://github.com/typegoose/typegoose/commit/c4862290629334e54af4e6b62f7e7884d981fa2d))
+* **eslint:** upgrade to 8.13.0 ([c6b8038](https://github.com/typegoose/typegoose/commit/c6b80383432b5e78e6f3a47b07cec08210d55a03))
+* **eslint-config-prettier:** upgrade to 8.5.0 ([0f62917](https://github.com/typegoose/typegoose/commit/0f629172b78f8dccf7d041794de9866428ab3885))
+* **mongodb-memory-server:** upgrade to 8.5.0 ([7392b77](https://github.com/typegoose/typegoose/commit/7392b7747edd058660d6b257e0d99a491b44500d))
+* **mongoose:** upgrade to 6.3.0 ([2419824](https://github.com/typegoose/typegoose/commit/2419824219e7907dd8f8788125594ff6809a41c6))
+* **prettier:** upgrade to 2.6.2 ([f2adbc6](https://github.com/typegoose/typegoose/commit/f2adbc6d86ddea8db461d930c1970d5615213151))
+* **semver:** upgrade to 7.3.7 ([367d797](https://github.com/typegoose/typegoose/commit/367d79793c303fe122e1e4059869e06d3b46ae54))
+* **ts-jest:** upgrade to 27.1.4 ([4358ecc](https://github.com/typegoose/typegoose/commit/4358ecc1571d91aee443802506368d646c8bb031))
+
+
+### Fixes
+
+* **types::VirtualOptions:** fix "localField" and "foreignField" typings ([eb6521b](https://github.com/typegoose/typegoose/commit/eb6521be5086f919287ece15807116d5a9506ce3)), closes [typegoose/typegoose#674](https://github.com/typegoose/typegoose/issues/674)
+
 ### [9.7.1](https://github.com/typegoose/typegoose/compare/v9.7.0...v9.7.1) (2022-03-23)
 
 
