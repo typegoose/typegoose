@@ -316,13 +316,18 @@ export interface TransformStringOptions {
   trim?: mongoose.SchemaTypeOptions<any>['trim'];
 }
 
+/**
+ * Type for VirtualOptions.localField and VirtualOptions.foreignField
+ */
+export type VirtualOptionsDynamicFunction<T extends AnyParamConstructor<any>> = (this: DocumentType<T>, doc: DocumentType<T>) => string;
+
 export interface VirtualOptions {
   /** Reference another Document (Ref<T> should be used as property type) */
   ref: NonNullable<BasePropOptions['ref']>;
   /** Which property(on the current-Class) to match `foreignField` against */
-  localField: string | DynamicStringFunc<any>;
+  localField: string | VirtualOptionsDynamicFunction<any>;
   /** Which property(on the ref-Class) to match `localField` against */
-  foreignField: string | DynamicStringFunc<any>;
+  foreignField: string | VirtualOptionsDynamicFunction<any>;
   /** Return as One Document(true) or as Array(false) */
   justOne?: mongoose.VirtualTypeOptions['justOne'];
   /** Return the number of Documents found instead of the actual Documents */
