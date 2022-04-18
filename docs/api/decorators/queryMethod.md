@@ -24,6 +24,7 @@ import { types } from "@typegoose/typegoose";
 interface QueryHelpers {
   // use the actual function types dynamically
   findByName: types.AsQueryMethod<typeof findByName>;
+  // the same can be done with other functions (not listed in this example)
   findByLastname: types.AsQueryMethod<typeof findByLastname>;
 }
 
