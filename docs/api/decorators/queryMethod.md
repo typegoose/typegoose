@@ -11,8 +11,8 @@ title: '@queryMethod'
 :::note
 The function needs to have a name and can't be an array-function (it needs to handle and use `this`)
 :::
-:::note
-It is recommended to not define the functions inside the decorator, like in the example below
+:::warning
+Using arrow-functions (`() => {}`) is dicouraged, because the `this` value would otherwise be not what would be expected.
 :::
 
 Example:
