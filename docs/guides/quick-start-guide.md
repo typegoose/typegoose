@@ -171,7 +171,7 @@ let document = await KittenModel.create({ name: 'Kitty' });
 
 ### Static Methods
 
-Sometimes extra functions for model creation or pre-written querys are needed, they can be done as follows:
+Sometimes extra functions for model creation or pre-written queries are needed, they can be done as follows:
 
 ```ts
 class KittenClass {
