@@ -115,7 +115,7 @@ Like `public: string[]` is in reflection only `Array`.
 - tsconfig option `target` being `es6` (or higher)
 
 :::info
-tsconfig option `emitDecoratorMetadata` is not strictly requierd, look [here](./use-without-emitDecoratorMetadata.md) for more
+tsconfig option `emitDecoratorMetadata` is not strictly required, look [here](./use-without-emitDecoratorMetadata.md) for more
 :::
 
 ### Install
