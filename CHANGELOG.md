@@ -1,3 +1,10 @@
+### [9.8.1](https://github.com/typegoose/typegoose/compare/v9.8.0...v9.8.1) (2022-04-21)
+
+
+### Fixes
+
+* **hooks:** add "this" typing for post-query hooks ([44ff1c1](https://github.com/typegoose/typegoose/commit/44ff1c120dccf2aaab78df0500484547244404f5)), closes [typegoose/typegoose#694](https://github.com/typegoose/typegoose/issues/694)
+
 ## [9.8.0](https://github.com/typegoose/typegoose/compare/v9.7.1...v9.8.0) (2022-04-16)
 
 
