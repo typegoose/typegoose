@@ -16,5 +16,4 @@ class Kitten {
 }
 
 const kittenSchema = buildSchema(Kitten);
-
 ```
