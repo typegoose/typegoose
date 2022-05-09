@@ -1,5 +1,6 @@
 ### [9.8.1](https://github.com/typegoose/typegoose/compare/v9.8.0...v9.8.1) (2022-04-21)
 
+The Type change in this release may break some array post hooks and need to be seperated
 
 ### Fixes
 
