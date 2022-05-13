@@ -75,6 +75,10 @@ const AnimalSchema = new mongoose.Schema({
 });
 ```
 
+:::note
+Typegoose does not support native "nested paths" (unless using [`Passthrough`](#using-the-passthrough-class)), each class in typegoose will be a nested schema (each class is its own `Schema` instance), so it is not a 1:1 translation of the initial mongoose example to typegoose, but similar enough to initially think that way.
+:::
+
 ### Using the Passthrough Class
 
 :::warning
