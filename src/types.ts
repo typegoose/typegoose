@@ -16,6 +16,14 @@ export type DocumentType<T, QueryHelpers = BeAnObject> = (T extends { _id: unkno
   : mongoose.Document<any, QueryHelpers> & T) &
   IObjectWithTypegooseFunction;
 /**
+ * Get the Type of an instance of a SubDocument with Class properties
+ */
+export type SubDocumentType<T, QueryHelpers = BeAnObject> = DocumentType<T, QueryHelpers> & mongoose.Types.Subdocument;
+/**
+ * Get the Type of an instance of a SubDocument that exists within an array, with Class properties
+ */
+export type ArraySubDocumentType<T, QueryHelpers = BeAnObject> = DocumentType<T, QueryHelpers> & mongoose.Types.ArraySubdocument;
+/**
  * Used Internally for ModelTypes
  */
 export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T, QueryHelpers>, QueryHelpers>;
