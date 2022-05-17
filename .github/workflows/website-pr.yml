@@ -3,8 +3,13 @@ name: Deploy Github Pages
 on:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   website:
+    permissions:
+      contents: read # for actions/checkout to fetch code
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:

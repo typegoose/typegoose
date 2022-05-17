@@ -8,8 +8,13 @@ on:
       - 'docs/**'
       - 'website/**'
 
+permissions:
+  contents: read
+
 jobs:
   website:
+    permissions:
+      contents: write  # for JamesIves/github-pages-deploy-action to push changes in repo
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
