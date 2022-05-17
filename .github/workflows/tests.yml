@@ -10,8 +10,13 @@ on:
 #       - 'test/**'
 #       - '*.json' # run if an ".json" file in the *root* of the repository is changed
 
+permissions:
+  contents: read
+
 jobs:
   tests:
+    permissions:
+      contents: read  # for actions/checkout to fetch code
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -39,6 +44,10 @@ jobs:
         if: matrix.node-version == '14.x'
         uses: codecov/codecov-action@v2
   publish:
+    permissions:
+      contents: write  # for actions/checkout to fetch code and for semantic-release to push commits, release releases and tags
+      issues: write # for semantic-release to comment on and close issues
+      pull-requests: write # for semantic-release to comment on and close pull requests
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta' || startsWith(github.ref, 'refs/heads/old')
     needs: [tests]
     runs-on: ubuntu-latest
