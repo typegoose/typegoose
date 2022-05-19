@@ -5,7 +5,7 @@ title: '@prop'
 
 `@prop(options: object, kind: PropType)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
 - `options` is to set [all options](#single-options)
-- `kind` is to overwrite what kind of prop this is (should be auto-inferred), [read more here](#PropType)
+- `kind` is to overwrite what kind of prop this is (should be auto-inferred), [read more here](#proptype)
 
 ## Single Options
 
