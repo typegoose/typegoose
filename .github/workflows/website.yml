@@ -26,9 +26,9 @@ jobs:
       - name: Install & Build
         run: bash ./ghPagesPre.sh
       - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.5
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           branch: gh-pages
           folder: . # the root, because the provided script already moves files
           git-config-name: github-pages-deploy # Set a Different name for the commit in "gh-pages" branch than the commiter itself
-          git-config-email: ''
+          git-config-email: <>
