@@ -259,3 +259,59 @@ it('should work with references [typegoose#385]', () => {
   assertion(isDocument(nick.vehicle), new Error('Expect "nick.vehicle" to be an document'));
   expect(nick.vehicle.name).toEqual('Eleanor');
 });
+
+it('should allow passing ModelOptions through getDiscriminatorModelForClass [typegoose#713]', () => {
+  class Main {
+    @prop({ required: true })
+    public name!: string;
+
+    @prop({ required: true, ref: () => Base })
+    public dis!: Ref<Base>[];
+  }
+
+  class Base {
+    @prop()
+    public name?: string;
+  }
+
+  class ExtendedAsValue extends Base {
+    @prop()
+    public model1?: string;
+  }
+
+  class ExtendedWithoutOptions extends Base {
+    @prop()
+    public model2?: string;
+  }
+
+  class ExtendedValueAndOptions extends Base {
+    @prop()
+    public model3?: string;
+  }
+
+  const MainModel = getModelForClass(Main);
+  const BaseModel = getModelForClass(Base);
+  const ExtendedWithoutOptionsModel = getDiscriminatorModelForClass(BaseModel, ExtendedWithoutOptions);
+  const ExtendedAsValueModel = getDiscriminatorModelForClass(BaseModel, ExtendedAsValue, { schemaOptions: { toJSON: { virtuals: true } } });
+  const ExtendedValueAndOptionsModel = getDiscriminatorModelForClass(BaseModel, ExtendedValueAndOptions, 'SomeCustomValue', {
+    schemaOptions: { toJSON: { virtuals: true } },
+  });
+
+  const extendedWithoutOptionsDoc = new ExtendedWithoutOptionsModel({ model2: 'model2' });
+  const extendedAsValueDoc = new ExtendedAsValueModel({ model1: 'model1' });
+  const extendedValueAndOptionsDoc = new ExtendedValueAndOptionsModel({ model3: 'model3' });
+
+  const mainDoc = new MainModel({ name: 'main', dis: [extendedWithoutOptionsDoc, extendedAsValueDoc, extendedValueAndOptionsDoc] });
+
+  expect(mainDoc.dis.length).toEqual(3);
+
+  // test that the schemaoptions are properly translated
+  expect(ExtendedAsValueModel.schema.get('toJSON')).toHaveProperty('virtuals', true);
+  expect(ExtendedValueAndOptionsModel.schema.get('toJSON')).toHaveProperty('virtuals', true);
+  expect(ExtendedWithoutOptionsModel.schema.get('toJSON')).toBeUndefined();
+
+  // test that the value is properly translated
+  expect(ExtendedValueAndOptionsModel.schema['discriminatorMapping']).toHaveProperty('value', 'SomeCustomValue');
+  expect(ExtendedAsValueModel.schema['discriminatorMapping']).toHaveProperty('value', 'ExtendedAsValue');
+  expect(ExtendedWithoutOptionsModel.schema['discriminatorMapping']).toHaveProperty('value', 'ExtendedWithoutOptions');
+});

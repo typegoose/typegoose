@@ -267,34 +267,128 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
 }
 
 /**
- * Build a Model from a given class and return the model
- * @param from The Model to build From
- * @param cl The Class to make a model out
+ * Build a Model from the given Class and add it as a discriminator on "from"
+ * @param from The Model to add the new discriminator model to
+ * @param cl The Class to make a discriminator model from
+ * @param options Overwrite ModelOptions (Merged with ModelOptions from class)
+ * @example
+ * ```ts
+ * class Main {
+ *   @prop({ ref: () => BaseDiscriminator })
+ *   public discriminators?: Ref<BaseDiscriminator>;
+ * }
+ *
+ * class BaseDiscriminator {
+ *   @prop()
+ *   public propertyOnAllDiscriminators?: string;
+ * }
+ *
+ * class AnotherDiscriminator {
+ *   @prop()
+ *   public someValue?: string;
+ * }
+ *
+ * const MainModel = getModelForClass(Main);
+ *
+ * const BaseDiscriminatorModel = getModelFroClass(BaseDiscriminator);
+ * const AnotherDiscriminatorModel = getDiscriminatorModelForClass(BaseDiscriminatorModel, AnotherDiscriminator);
+ * // add other discriminator models the same way as "AnotherDiscriminatorModel"
+ * ```
+ */
+export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
+  from: mongoose.Model<any, any>,
+  cl: U,
+  options?: IModelOptions
+): ReturnModelType<U, QueryHelpers>;
+/**
+ * Build a Model from the given Class and add it as a discriminator on "from"
+ * @param from The Model to add the new discriminator model to
+ * @param cl The Class to make a discriminator model from
  * @param value The Identifier to use to differentiate documents (default: cl.name)
  * @example
  * ```ts
- * class Class1 {}
- * class Class2 extends Class1 {}
+ * class Main {
+ *   @prop({ ref: () => BaseDiscriminator })
+ *   public discriminators?: Ref<BaseDiscriminator>;
+ * }
  *
- * const Class1Model = getModelForClass(Class1);
- * const Class2Model = getDiscriminatorModelForClass(Class1Model, Class1);
+ * class BaseDiscriminator {
+ *   @prop()
+ *   public propertyOnAllDiscriminators?: string;
+ * }
+ *
+ * class AnotherDiscriminator {
+ *   @prop()
+ *   public someValue?: string;
+ * }
+ *
+ * const MainModel = getModelForClass(Main);
+ *
+ * const BaseDiscriminatorModel = getModelFroClass(BaseDiscriminator);
+ * const AnotherDiscriminatorModel = getDiscriminatorModelForClass(BaseDiscriminatorModel, AnotherDiscriminator);
+ * // add other discriminator models the same way as "AnotherDiscriminatorModel"
  * ```
  */
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
   from: mongoose.Model<any, any>,
   cl: U,
   value?: string
+): ReturnModelType<U, QueryHelpers>;
+/**
+ * Build a Model from the given Class and add it as a discriminator on "from"
+ * @param from The Model to add the new discriminator model to
+ * @param cl The Class to make a discriminator model from
+ * @param value The Identifier to use to differentiate documents (default: cl.name)
+ * @param options Overwrite ModelOptions (Merged with ModelOptions from class)
+ * @example
+ * ```ts
+ * class Main {
+ *   @prop({ ref: () => BaseDiscriminator })
+ *   public discriminators?: Ref<BaseDiscriminator>;
+ * }
+ *
+ * class BaseDiscriminator {
+ *   @prop()
+ *   public propertyOnAllDiscriminators?: string;
+ * }
+ *
+ * class AnotherDiscriminator {
+ *   @prop()
+ *   public someValue?: string;
+ * }
+ *
+ * const MainModel = getModelForClass(Main);
+ *
+ * const BaseDiscriminatorModel = getModelFroClass(BaseDiscriminator);
+ * const AnotherDiscriminatorModel = getDiscriminatorModelForClass(BaseDiscriminatorModel, AnotherDiscriminator);
+ * // add other discriminator models the same way as "AnotherDiscriminatorModel"
+ * ```
+ */
+export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
+  from: mongoose.Model<any, any>,
+  cl: U,
+  value?: string,
+  options?: IModelOptions
+): ReturnModelType<U, QueryHelpers>;
+export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
+  from: mongoose.Model<any, any>,
+  cl: U,
+  value_or_options?: string | IModelOptions,
+  options?: IModelOptions
 ) {
   assertion(isModel(from), new NotValidModelError(from, 'getDiscriminatorModelForClass.from'));
   assertionIsClass(cl);
 
-  const name = getName(cl);
+  const value = typeof value_or_options === 'string' ? value_or_options : undefined;
+  const rawOptions = typeof value_or_options !== 'string' ? value_or_options : typeof options === 'object' ? options : {};
+  const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
+  const name = getName(cl, rawOptions);
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const sch: mongoose.Schema<any> = buildSchema(cl);
+  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions.schemaOptions, rawOptions);
 
   const discriminatorKey = sch.get('discriminatorKey');
 
