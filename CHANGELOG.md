@@ -1,3 +1,39 @@
+## [9.9.0-beta.1](https://github.com/typegoose/typegoose/compare/v9.8.1...v9.9.0-beta.1) (2022-05-28)
+
+
+### Features
+
+* **typegoose::getDiscriminatorModelForClass:** add option to overwrite ModelOptions ([1c7460e](https://github.com/typegoose/typegoose/commit/1c7460e9c20821cb007a709ab25320904dac72d6)), closes [typegoose/typegoose#713](https://github.com/typegoose/typegoose/issues/713)
+
+
+### Style
+
+* **schema::_buildSchema:** update tsdoc to current implementation ([082de9f](https://github.com/typegoose/typegoose/commit/082de9f3033abcf4e8fdc2be53e3db635cf60440))
+* **typegoose:** add best-guess comment explaining why "rawOption" is used for "getName" ([89c4b1b](https://github.com/typegoose/typegoose/commit/89c4b1bfead50401ab71ad6987ab79522250c8ec))
+* **typegoose:** fix missing and incorrect tsdoc ([1cb946f](https://github.com/typegoose/typegoose/commit/1cb946f04a76b5948a994d27458a1990f397db69))
+* **utils::getName:** change tsdoc to be more descriptive ([f10eb35](https://github.com/typegoose/typegoose/commit/f10eb35961ea0668ac2e5b4da267db82c340aac9))
+* **utils::mergeMetadata:** add "returns" tsdoc ([109fb7d](https://github.com/typegoose/typegoose/commit/109fb7d5440acc86dc495caf58d2ffe9cbc7b496))
+
+
+### Refactor
+
+* **typegoose::getModelForClass:** assign options to new value instead of re-assigning ([2e2f304](https://github.com/typegoose/typegoose/commit/2e2f3044223854bed02556788e775bf31e0a0ba2))
+* **typegoose::getModelForClass:** rename value to be more intuitive ([b504314](https://github.com/typegoose/typegoose/commit/b504314c0288e203bcf9564678973a0a6a05e657))
+* **utils::getName:** rename a parameter to be more intuitive ([cbdf759](https://github.com/typegoose/typegoose/commit/cbdf75904439753def36d5a756c19178a1b122c1))
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 27.5.1 ([ef199ce](https://github.com/typegoose/typegoose/commit/ef199cee202ad3c833c7fbde91d8608a9a7b30cf))
+* **@types/lodash:** upgrade to 4.14.182 ([b1f5cb1](https://github.com/typegoose/typegoose/commit/b1f5cb1d245b6710415ff8e1c73ceb28db0f6350))
+* **@types/node:** upgrade to 12.20.52 ([72cb216](https://github.com/typegoose/typegoose/commit/72cb2161653f6dc84123108caedc88690aae7122))
+* **@typescript-eslint/*:** upgrade to 5.26.0 ([5b25b23](https://github.com/typegoose/typegoose/commit/5b25b23bb7915d3b587ca71f027d62164a071f07))
+* **commitlint:** upgrade to 16.3.0 ([dd7301e](https://github.com/typegoose/typegoose/commit/dd7301e9edfa389dc9a1e7a8ef328da5158a6bf5))
+* **eslint:** upgrade to 8.16.0 ([2be72ac](https://github.com/typegoose/typegoose/commit/2be72ac054a2886b7e48aafd29b62019927a7036))
+* **jest:** upgrade to 28.1.0 ([661b10b](https://github.com/typegoose/typegoose/commit/661b10b7c15a6faff0baf4a195090da4843005b3))
+* **mongodb-memory-server:** upgrade to 8.6.0 ([47bfcc4](https://github.com/typegoose/typegoose/commit/47bfcc4325a6a08ae6921e69c5a85249a42cd253))
+* **tslib:** upgrade to 2.4.0 ([8417ba1](https://github.com/typegoose/typegoose/commit/8417ba17f5183d3e25e07d9160033e6ea7e67d65))
+
 ### [9.8.1](https://github.com/typegoose/typegoose/compare/v9.8.0...v9.8.1) (2022-04-21)
 
 The Type change in this release may break some array post hooks and need to be seperated
