@@ -266,6 +266,7 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamC
  * @param key Metadata key
  * @param value Raw value
  * @param cl The constructor
+ * @returns Returns the Merged output where the raw `value` has higher priority
  * @internal
  */
 export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): T {
