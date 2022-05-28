@@ -66,7 +66,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   const rawOptions = typeof options === 'object' ? options : {};
 
   const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  const name = getName(cl, rawOptions);
+  const name = getName(cl, rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
@@ -385,7 +385,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   const value = typeof value_or_options === 'string' ? value_or_options : undefined;
   const rawOptions = typeof value_or_options !== 'string' ? value_or_options : typeof options === 'object' ? options : {};
   const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  const name = getName(cl, rawOptions);
+  const name = getName(cl, rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
