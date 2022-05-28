@@ -8,8 +8,10 @@ module.exports = {
   projectName: 'typegoose',
   themeConfig: {
     algolia: {
-      apiKey: '2c49a41064ba9b534e8417089c6cde93',
+      apiKey: '27478265b7cee23844ccb8cf79943e2c',
+      appId: 'E5557YWQXF',
       indexName: 'typegoose',
+      contextualSearch: false, // since docusaurus v2.beta-15, it is defaulted to "true", but somehow breaks current search
     },
     navbar: {
       title: 'typegoose',

@@ -8,22 +8,27 @@ on:
       - 'docs/**'
       - 'website/**'
 
+permissions:
+  contents: read
+
 jobs:
   website:
+    permissions:
+      contents: write  # for JamesIves/github-pages-deploy-action to push changes in repo
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js 14
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 14.x
       - name: Install & Build
         run: bash ./ghPagesPre.sh
       - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.5
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
           branch: gh-pages
           folder: . # the root, because the provided script already moves files
           git-config-name: github-pages-deploy # Set a Different name for the commit in "gh-pages" branch than the commiter itself
-          git-config-email: ''
+          git-config-email: <>

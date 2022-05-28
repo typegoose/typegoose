@@ -1,5 +1,5 @@
 import type * as mongoose from 'mongoose';
-import type { Severity, WhatIsIt } from './internal/constants';
+import type { Severity, PropType } from './internal/constants';
 
 /**
  * Get the Type of an instance of a Document with Class properties
@@ -195,7 +195,7 @@ export interface BasePropOptions {
   /**
    * Use option {@link BasePropOptions.type}
    * @see https://typegoose.github.io/typegoose/docs/api/decorators/prop#map-options
-   * @see https://typegoose.github.io/typegoose/docs/api/decorators/prop#whatisit
+   * @see https://typegoose.github.io/typegoose/docs/api/decorators/prop#proptype
    */
   of?: never;
   /**
@@ -243,6 +243,21 @@ export interface InnerOuterOptions {
    * Please open a new issue if some option is mismatched or not existing / mapped
    */
   outerOptions?: KeyStringAny;
+}
+
+/**
+ * Internal type for `utils.mapOptions`
+ * @internal
+ */
+export interface MappedInnerOuterOptions {
+  /**
+   * Mapped options for the inner of the Type
+   */
+  inner: NonNullable<KeyStringAny>;
+  /**
+   * Mapped options for the outer of the type
+   */
+  outer: NonNullable<KeyStringAny>;
 }
 
 export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
@@ -301,13 +316,18 @@ export interface TransformStringOptions {
   trim?: mongoose.SchemaTypeOptions<any>['trim'];
 }
 
+/**
+ * Type for VirtualOptions.localField and VirtualOptions.foreignField
+ */
+export type VirtualOptionsDynamicFunction<T extends AnyParamConstructor<any>> = (this: DocumentType<T>, doc: DocumentType<T>) => string;
+
 export interface VirtualOptions {
   /** Reference another Document (Ref<T> should be used as property type) */
   ref: NonNullable<BasePropOptions['ref']>;
   /** Which property(on the current-Class) to match `foreignField` against */
-  localField: string | DynamicStringFunc<any>;
+  localField: string | VirtualOptionsDynamicFunction<any>;
   /** Which property(on the ref-Class) to match `localField` against */
-  foreignField: string | DeferredFunc<string>;
+  foreignField: string | VirtualOptionsDynamicFunction<any>;
   /** Return as One Document(true) or as Array(false) */
   justOne?: mongoose.VirtualTypeOptions['justOne'];
   /** Return the number of Documents found instead of the actual Documents */
@@ -424,7 +444,8 @@ export interface DecoratedPropertyMetadata {
   /** Property name */
   key: string | symbol;
   /** What is it for a prop type? */
-  whatis?: WhatIsIt;
+  // TODO: for the next major version (10), change this name to "proptype" or "type"
+  whatis?: PropType;
 }
 export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropertyMetadata>;
 
@@ -492,6 +513,20 @@ export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
  * ```
  */
 export type AsQueryMethod<T extends (...args: any) => any> = (...args: Parameters<T>) => ReturnType<T>;
+
+/**
+ * Helper type to easily set the `this` type in a QueryHelper function
+ *
+ * @example
+ * function findById(this: QueryHelperThis<YourClass, YourClassQueryHelpers>, id: string) {
+ *   return this.findOne({ _id: id });
+ * }
+ */
+export type QueryHelperThis<
+  T extends AnyParamConstructor<any>,
+  QueryHelpers,
+  S = DocumentType<T, QueryHelpers>
+> = mongoose.QueryWithHelpers<S | null, S, QueryHelpers>;
 
 /**
  * Used for the Reflection of Query Methods

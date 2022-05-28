@@ -3,7 +3,16 @@ id: common-plugins
 title: 'Common Plugins'
 ---
 
-Typegoose supports mongoose plugins. Here's how to use some common plugins:
+<!--MDX Import section-->
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<!--END MDX Import section-->
+
+Typegoose supports mongoose plugins and this Guide will showcase how to use some plugins, more plugins or updating their versions can be done with a PR to [typegoose's repository](https://github.com/typegoose/typegoose).
+
+If the Example does not have tabs for `esModuleInterop`, then assume it is only written and tested for `esModuleInterop: false`.
 
 ## mongoose-autopopulate
 
@@ -20,12 +29,15 @@ npm install --save mongoose-autopopulate
 
 Typegoose has the prop option `autopopulate` implemented, but it only has an effect, if [`mongoose-autopopulate`](https://github.com/mongodb-js/mongoose-autopopulate) is installed and used too.
 
+<Tabs groupId="esModuleInterop">
+  <TabItem value="esModuleInterop-false" label="esModuleInterop: false" default>
+
 ```ts
 import * as mongoose from 'mongoose';
 import * as autopopulate from 'mongoose-autopopulate';
 import { plugin, prop, Ref, getModelForClass } from '@typegoose/typegoose';
 
-@plugin(autopopulate as any) // this is a dirty fix, because the types of this plugin dont work
+@plugin(autopopulate as any) // this is a dirty fix, because the types of this plugin dont work with "esModuleInterop: false"
 class SomeClass {
   @prop({ autopopulate: true, ref: 'SomeReferencedClass' })
   public populateField: Ref<SomeReferencedClass>;
@@ -51,6 +63,44 @@ const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
   await mongoose.disconnect();
 })();
 ```
+
+  </TabItem>
+  <TabItem value="esModuleInterop-true" label="esModuleInterop: true">
+
+```ts
+import * as mongoose from 'mongoose';
+import autopopulate from 'mongoose-autopopulate';
+import { plugin, prop, Ref, getModelForClass } from '@typegoose/typegoose';
+
+@plugin(autopopulate)
+class SomeClass {
+  @prop({ autopopulate: true, ref: 'SomeReferencedClass' })
+  public populateField: Ref<SomeReferencedClass>;
+}
+
+class SomeReferencedClass {
+  // a dummy property is required, otherwise the class will equal to others
+  @prop()
+  public dummy?: string;
+}
+
+const SomeClassModel = getModelForClass(SomeClass);
+const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
+
+(async () => {
+  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: 'guides', useUnifiedTopology: true });
+
+  const reference = await SomeReferencedClassModel.create({ dummy: 'hello' });
+  const { _id: id } = await SomeClassModel.create({ populateField: reference } as SomeClass);
+
+  console.log(await SomeClassModel.findById(id).exec()); // output will be populated
+
+  await mongoose.disconnect();
+})();
+```
+
+  </TabItem>
+</Tabs>
 
 :::caution
 If you have a `ref` which refers back to its own class/model, like having a User class with a `createdBy` field referring back to User, then you'll need to set the `maxDepth` prop of `autocomplete` to 1. If you don't do this, Mongoose will do recursive calls to
@@ -147,8 +197,8 @@ For more details, see [this issue](https://github.com/ramiel/mongoose-sequence/i
 Last updated for:
 
 ```txt
-@typegoose/typegoose@8.3.0
-@typegoose/auto-increment@0.9.0
+@typegoose/typegoose@9.7.0
+@typegoose/auto-increment@1.2.0
 ```
 
 ```bash npm2yarn

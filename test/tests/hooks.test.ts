@@ -1,4 +1,5 @@
 import { DecoratorKeys } from '../../src/internal/constants';
+import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
 import { buildSchema, post, pre, prop } from '../../src/typegoose';
 import { HookOptionsEither, IHooksArray } from '../../src/types';
@@ -149,4 +150,38 @@ it('should allow usage of hook-options [typegoose/typegoose#605]', async () => {
       fn: customPost,
     })
   );
+});
+
+it('should work with QueryMethod post "this" [typegoose/typegoose#694]', () => {
+  @post('findOneAndUpdate', function noerror(result, ...args) {
+    // this function should not be triggered by this test, but still includes it for property (types) testing
+    assertion(!isNullOrUndefined(this));
+    assertion(!isNullOrUndefined(result));
+    // @ts-expect-error The following will error in typescript, because it *should* always contain only one argument, but may not actually be there
+    assertion(args.length === 0);
+  })
+  // the following call should trigger the "this, error, result" overload, but does not, i dont know why
+  // @post('findOneAndUpdate', function error(error, result, ...args) {
+  //   // this function should not be triggered by this test, but still includes it for property (types) testing
+  //   assertion(!isNullOrUndefined(this));
+  //   assertion(!isNullOrUndefined(error));
+  //   assertion(!isNullOrUndefined(result));
+  //   // @ts-expect-error The following will error in typescript, because it *should* always contain only one argument, but may not actually be there
+  //   assertion(args.length === 0);
+  // })
+  class TestQueryPostHooks {
+    @prop()
+    public dummy?: string;
+  }
+
+  const reflectHooksPost: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, TestQueryPostHooks);
+
+  expect(reflectHooksPost).toHaveLength(1);
+  expect(reflectHooksPost[0]).toHaveProperty('method', 'findOneAndUpdate');
+
+  const schema = buildSchema(TestQueryPostHooks);
+  // @ts-expect-error "s" is not in the types, but is used for something like "hooks"
+  const schemaHooks: { _pres: Map<string, any>; _posts: Map<string, any> } = schema.s.hooks;
+
+  expect(schemaHooks._posts.size).toStrictEqual(1);
 });

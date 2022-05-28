@@ -1,3 +1,167 @@
+### [9.8.1](https://github.com/typegoose/typegoose/compare/v9.8.0...v9.8.1) (2022-04-21)
+
+The Type change in this release may break some array post hooks and need to be seperated
+
+### Fixes
+
+* **hooks:** add "this" typing for post-query hooks ([44ff1c1](https://github.com/typegoose/typegoose/commit/44ff1c120dccf2aaab78df0500484547244404f5)), closes [typegoose/typegoose#694](https://github.com/typegoose/typegoose/issues/694)
+
+## [9.8.0](https://github.com/typegoose/typegoose/compare/v9.7.1...v9.8.0) (2022-04-16)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 27.4.1 ([f1f1f7c](https://github.com/typegoose/typegoose/commit/f1f1f7cca9ba856847dcd5d48333769a049efc5f))
+* **@types/lodash:** upgrade to 4.14.181 ([02b1aee](https://github.com/typegoose/typegoose/commit/02b1aee313c8464b729aec57219d1a12fb22c3fc))
+* **@typescript-eslint/*:** upgrade to 5.19.0 ([c86c5c8](https://github.com/typegoose/typegoose/commit/c86c5c8b50b4078a8b0e542da06a223bb86f4cfd))
+* **commitlint:** upgrade to 16.2.3 ([c486229](https://github.com/typegoose/typegoose/commit/c4862290629334e54af4e6b62f7e7884d981fa2d))
+* **eslint:** upgrade to 8.13.0 ([c6b8038](https://github.com/typegoose/typegoose/commit/c6b80383432b5e78e6f3a47b07cec08210d55a03))
+* **eslint-config-prettier:** upgrade to 8.5.0 ([0f62917](https://github.com/typegoose/typegoose/commit/0f629172b78f8dccf7d041794de9866428ab3885))
+* **mongodb-memory-server:** upgrade to 8.5.0 ([7392b77](https://github.com/typegoose/typegoose/commit/7392b7747edd058660d6b257e0d99a491b44500d))
+* **mongoose:** upgrade to 6.3.0 ([2419824](https://github.com/typegoose/typegoose/commit/2419824219e7907dd8f8788125594ff6809a41c6))
+* **prettier:** upgrade to 2.6.2 ([f2adbc6](https://github.com/typegoose/typegoose/commit/f2adbc6d86ddea8db461d930c1970d5615213151))
+* **semver:** upgrade to 7.3.7 ([367d797](https://github.com/typegoose/typegoose/commit/367d79793c303fe122e1e4059869e06d3b46ae54))
+* **ts-jest:** upgrade to 27.1.4 ([4358ecc](https://github.com/typegoose/typegoose/commit/4358ecc1571d91aee443802506368d646c8bb031))
+
+
+### Fixes
+
+* **types::VirtualOptions:** fix "localField" and "foreignField" typings ([eb6521b](https://github.com/typegoose/typegoose/commit/eb6521be5086f919287ece15807116d5a9506ce3)), closes [typegoose/typegoose#674](https://github.com/typegoose/typegoose/issues/674)
+
+### [9.7.1](https://github.com/typegoose/typegoose/compare/v9.7.0...v9.7.1) (2022-03-23)
+
+
+### Style
+
+* **utils::mapOptions:** add proper interface for return type ([3deb4ec](https://github.com/typegoose/typegoose/commit/3deb4ecc283145badb251b01974531f9f2896e87))
+
+
+### Fixes
+
+* **processProp:** fix handling map-array values ([36deb80](https://github.com/typegoose/typegoose/commit/36deb80cd9a63542eb16c0a0fcb5db84ce5db81e)), closes [typegoose/typegoose#682](https://github.com/typegoose/typegoose/issues/682)
+
+## [9.7.0](https://github.com/typegoose/typegoose/compare/v9.6.2...v9.7.0) (2022-02-22)
+
+
+### Fixes
+
+* **types::QueryHelperThis:** fix missing QueryHelpers in DocumentType ([03a39de](https://github.com/typegoose/typegoose/commit/03a39de4754637b1f1fec4a9840b8c4c30901226))
+
+
+### Dependencies
+
+* **@typescript-eslint/*:** upgrade to 5.12.1 ([a59ed73](https://github.com/typegoose/typegoose/commit/a59ed73e719466cc1e347a9bc2b30493ad02917e))
+* **commitlint:** upgrade to 16.2.1 ([c3005bf](https://github.com/typegoose/typegoose/commit/c3005bf9baf5f95fc52e112fef370816aa27c1b9))
+* **eslint:** upgrade to 8.9.0 ([2cf59f0](https://github.com/typegoose/typegoose/commit/2cf59f074ebd062f0eeb04674e14ba483edadef0))
+* **eslint-config-prettier:** upgrade to 8.4.0 ([9344989](https://github.com/typegoose/typegoose/commit/9344989d65ebcebc3bbd5a717782efef1c9ee7b7))
+* **jest:** upgrade to 27.5.1 ([02670ca](https://github.com/typegoose/typegoose/commit/02670caf704c17bbbd54147c71159ef7911fd4ab))
+* **mongodb-memory-server:** upgrade to 8.4.0 ([ccea634](https://github.com/typegoose/typegoose/commit/ccea634e966856eab795af84203ef42cb21c5e0d))
+* **mongoose:** upgrade to 6.2.3 ([6044db0](https://github.com/typegoose/typegoose/commit/6044db07af45bea25b0489d6b54299b5918bc1eb))
+
+### [9.6.2](https://github.com/typegoose/typegoose/compare/v9.6.1...v9.6.2) (2022-02-07)
+
+
+### Fixes
+
+* **dependencies:** fix mongoose peer-dependency requirement ([#669](https://github.com/typegoose/typegoose/issues/669)) ([80eefcd](https://github.com/typegoose/typegoose/commit/80eefcd9e74b4cf65070b6a890572c99a4303998))
+
+### [9.6.1](https://github.com/typegoose/typegoose/compare/v9.6.0...v9.6.1) (2022-02-07)
+
+
+### Fixes
+
+* **typegoose::getDiscriminatorModelForClass:** try to fix webstorm inspection loop ([5d3e88e](https://github.com/typegoose/typegoose/commit/5d3e88eed2394f6dfb31bfc178cef42fe9980ded)), closes [typegoose/typegoose#664](https://github.com/typegoose/typegoose/issues/664)
+
+## [9.6.0](https://github.com/typegoose/typegoose/compare/v9.5.0...v9.6.0) (2022-02-05)
+
+
+### Features
+
+* update queryMethod to use more correct type for "this" ([d121528](https://github.com/typegoose/typegoose/commit/d1215282eb761aabcfcfcb4f1d66808f1ab04cee)), closes [typegoose/typegoose#665](https://github.com/typegoose/typegoose/issues/665)
+
+
+### Fixes
+
+* **types:** change type of "foreignField" from "DeferredFunc" to "DynamicStringFunc" ([541aaf7](https://github.com/typegoose/typegoose/commit/541aaf76f16dddf177172b82eb29f0c9ee571ca2))
+* **utils::warnMixed:** add debug log to show model-options on WARN ([31942cd](https://github.com/typegoose/typegoose/commit/31942cd7e66537148b53033415ca6e7e091414db))
+
+
+### Dependencies
+
+* **@types/node:** upgrade to 12.20.43 ([842072c](https://github.com/typegoose/typegoose/commit/842072c2a349bf27015d6bb73cd7de6ad04d1e6c)), closes [typegoose/typegoose#656](https://github.com/typegoose/typegoose/issues/656)
+* **@typescript-eslint/*:** upgrade to 5.10.2 ([ceac979](https://github.com/typegoose/typegoose/commit/ceac9793f0499febe3e1fbe0c2438fe2226427a9))
+* **commitlint:** upgrade to 16.1.0 ([d3382f9](https://github.com/typegoose/typegoose/commit/d3382f9241bc285e09fe649d7e978e4d5e05e0b2))
+* **eslint:** upgrade to 8.8.0 ([4016c33](https://github.com/typegoose/typegoose/commit/4016c338eed6aa2493f97e4af4dc7477b6ffe82f))
+* **jest:** upgrade to 27.5.0 ([3d3defa](https://github.com/typegoose/typegoose/commit/3d3defa8d126fbcd1f12ac94ccb7302b08b18696))
+* **mongodb-memory-server:** upgrade to 8.3.0 ([47a283c](https://github.com/typegoose/typegoose/commit/47a283c4a8b1e099d9eeac4594df14f34142efa0))
+* **mongoose:** upgrade to 6.2.0 ([b4e8ec8](https://github.com/typegoose/typegoose/commit/b4e8ec8f5cc788881c05f765e8a1695a157002d5))
+* **ts-jest:** upgrade to 27.1.3 ([d6ec965](https://github.com/typegoose/typegoose/commit/d6ec965969d22f923e7badb81f188206d56119c9))
+
+## [9.5.0](https://github.com/typegoose/typegoose/compare/v9.4.0...v9.5.0) (2022-01-14)
+
+
+### Refactor
+
+* rename enum "WhatIsIt" to "PropType" (with backwards-compat) ([6cfa6ca](https://github.com/typegoose/typegoose/commit/6cfa6ca98ad89f80de61ace4b41679767d857b9b)), closes [typegoose/typegoose#653](https://github.com/typegoose/typegoose/issues/653)
+
+
+### Fixes
+
+* **typegoose:** re-export "PropType" from main entry-point ([123d586](https://github.com/typegoose/typegoose/commit/123d586e9d2adf89b31b9916002fdb0588bdfb04)), closes [typegoose/typegoose#653](https://github.com/typegoose/typegoose/issues/653)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 27.4.0 ([94516e9](https://github.com/typegoose/typegoose/commit/94516e9f50134788a9567dbb9d0eed051fd80361))
+* **@types/node:** upgrade to 12.20.39 and lock version ([1175d35](https://github.com/typegoose/typegoose/commit/1175d35c2d540365d64d13ba80e68e1340db433e))
+* **@typescript-eslint/*:** upgrade to 5.9.1 ([5c8cd82](https://github.com/typegoose/typegoose/commit/5c8cd82e4b1ce956112fabffbd571037b72d6dbf))
+* **commitlint:** upgrade to 16.0.2 ([6060fc6](https://github.com/typegoose/typegoose/commit/6060fc6c64b105aeaa8ebe6bb8bca47bb41f18c8))
+* **eslint:** upgrade to 8.6.0 ([92c7aa2](https://github.com/typegoose/typegoose/commit/92c7aa2b28b782cb234076eb539b5502ffdee37b))
+* **jest:** upgrade to 27.4.7 ([3a74b2a](https://github.com/typegoose/typegoose/commit/3a74b2a4c2334556049712024dab0644d8c39fe3))
+* **mongoose:** upgrade to 6.1.6 ([8a0404e](https://github.com/typegoose/typegoose/commit/8a0404e3840f73bb55d6629d9139ae6765f34159))
+
+## [9.4.0](https://github.com/typegoose/typegoose/compare/v9.3.1...v9.4.0) (2021-12-22)
+
+
+### Features
+
+* **errors:** add custom Error "ExpectedTypeError" ([506d145](https://github.com/typegoose/typegoose/commit/506d1459de2aab9da16fe35cb8fb58b0c66268b0))
+* **errors:** add Error "OptionDoesNotSupportOptionError", merge E020 and E021 into E027 ([04491ad](https://github.com/typegoose/typegoose/commit/04491adc69fe9668e4e9663cefeea76eaa22788e))
+* **errors:** move Error E014 into custom Error "ResolveTypegooseNameError" ([3ca1a67](https://github.com/typegoose/typegoose/commit/3ca1a6731d09ec9e81c382eb401d5b09dbf00d9c))
+* **errors::NoValidClassError:** add Error Code to Error and change message ([32db334](https://github.com/typegoose/typegoose/commit/32db334d45c61cad977b19d554e84db74b2eec2c))
+* **globalOptions:** change to use custom Error "ExpectedTypeError" ([c6540a5](https://github.com/typegoose/typegoose/commit/c6540a5913c73d3cc8adeb69deef2fb849fd3b34))
+* **hooks::addToHooks:** change to use "ExpectedTypeError" 1 ([b8d630f](https://github.com/typegoose/typegoose/commit/b8d630f464fb0b63297a3d01c3408b03479fb8fd))
+* **hooks::addToHooks:** change to use "ExpectedTypeError" 2 ([4769658](https://github.com/typegoose/typegoose/commit/4769658ea6cfa0933cd5b0e2b1044ba56efeb22b))
+* **processProp:** use custom Error "InvalidEnumTypeError" ([83f131b](https://github.com/typegoose/typegoose/commit/83f131bd6f087ce240ec9de6f91e04001fc58c0f))
+* **schema:** use custom Error "NoDiscriminatorFunctionError" ([00de1cf](https://github.com/typegoose/typegoose/commit/00de1cfdc02fbb4b306d4e729adacd59120533fa))
+* **schema:** use custom Error "PathNotInSchemaError" ([a897e0c](https://github.com/typegoose/typegoose/commit/a897e0caa3083dac8a12cb903daceaccaff0d8d2))
+* **typegoose::deleteModel:** change to use custom Error "ExpectedTypeError" ([90268b9](https://github.com/typegoose/typegoose/commit/90268b9edd18cbaa9d4467e57d6d8cb086aef477))
+* **typegoose::getModelWithString:** change to use custom Error "ExpectedTypeError" ([ebcab71](https://github.com/typegoose/typegoose/commit/ebcab71b56425e28753dd9f5fc06b41a48537a47))
+* **typegoose:deleteModel:** change to not error when not existing ([fc30052](https://github.com/typegoose/typegoose/commit/fc300521ce4b96fc1372e45859664713351a6819))
+* **utils::getName:** throw Error when "cl" cannot be resolved to a constructor ([7800289](https://github.com/typegoose/typegoose/commit/7800289899ddb04cebc629239aef000b72cd0e40))
+* **utils::mapOptions:** use custom Error "InvalidOptionsConstructor" ([8199f2f](https://github.com/typegoose/typegoose/commit/8199f2f18c8ee24f38ee1a2f62882af78f32c1c1))
+
+
+### Style
+
+* add more Error REFACTOR and TODO comments ([108301e](https://github.com/typegoose/typegoose/commit/108301e4a13c3b6f32a987353a23c6eeb37e14d1))
+
+
+### Dependencies
+
+* **@types/lodsash:** upgrade to 4.14.178 ([ea8ff31](https://github.com/typegoose/typegoose/commit/ea8ff310469e90140349466f36751ae405b8adc4))
+* **@types/node:** upgrade to 12.20.38 ([35d9822](https://github.com/typegoose/typegoose/commit/35d9822a6eb8de897c3fa73dbbb1b7f84bbb3192))
+* **@typescript-eslint/*:** upgrade to 5.7.0 ([0197ffe](https://github.com/typegoose/typegoose/commit/0197ffe86dd252ae568c8721c9b6dc613ceb0059))
+* **@typescript-eslint/*:** upgrade to 5.8.0 ([d7fcad1](https://github.com/typegoose/typegoose/commit/d7fcad1040de81caf535492982f10aa2e0bd0485))
+* **eslint:** upgrade to 8.4.1 ([aff4c54](https://github.com/typegoose/typegoose/commit/aff4c546c01098e47d8f599bcd3d6cc911bf19f9))
+* **eslint:** upgrade to 8.5.0 ([93a8c07](https://github.com/typegoose/typegoose/commit/93a8c07541d7370d9bb6f9776009002d3bcf8629))
+* **jest:** upgrade to 27.4.5 ([980f89c](https://github.com/typegoose/typegoose/commit/980f89c4b3356691ab9a6e3c0445a6fd5eb41e6d))
+* **mongodb-memory-server:** upgrade to 8.1.0 ([24aac3d](https://github.com/typegoose/typegoose/commit/24aac3d04283014c6aac5cb67e9c7450d7cf5441))
+* **mongoose:** upgrade to 6.1.3 ([46076cd](https://github.com/typegoose/typegoose/commit/46076cd8d04795559987bbd296f1d4f085e2272f)), closes [typegoose/typegoose#647](https://github.com/typegoose/typegoose/issues/647)
+* **ts-jest:** upgrade to 27.1.1 ([6f537b5](https://github.com/typegoose/typegoose/commit/6f537b5f3192476b4a80e9c6f43176a94a9dd39d))
+* **ts-jest:** upgrade to 27.1.2 ([fc486a6](https://github.com/typegoose/typegoose/commit/fc486a6a2263ba05d01d17175f551e82e0f6eac0))
+* **typescript:** lock to minor version (use "~" instead of "^") ([e4e1565](https://github.com/typegoose/typegoose/commit/e4e156525c8b8c10384cbf6b27cef501924347c3))
+
 ## [9.4.0-beta.3](https://github.com/typegoose/typegoose/compare/v9.4.0-beta.2...v9.4.0-beta.3) (2021-12-22)
 
 

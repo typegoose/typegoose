@@ -11,16 +11,17 @@ import type {
   IObjectWithTypegooseName,
   IPrototype,
   KeyStringAny,
+  MappedInnerOuterOptions,
   PropOptionsForNumber,
   PropOptionsForString,
   VirtualOptions,
 } from '../types';
-import { DecoratorKeys, Severity, WhatIsIt } from './constants';
+import { DecoratorKeys, Severity, PropType } from './constants';
 import { constructors, globalOptions, schemas } from './data';
 import {
   AssertionFallbackError,
   InvalidOptionsConstructorError,
-  InvalidWhatIsItError,
+  InvalidPropTypeError,
   NoValidClassError,
   ResolveTypegooseNameError,
   StringLengthExpectedError,
@@ -131,21 +132,21 @@ export function isString(Type: any): Type is string {
  * Initialize the property in the schemas Map
  * @param name Name of the current Model/Class
  * @param key Key of the property
- * @param whatis What should it be for a type?
+ * @param proptype What should it be for a type?
  */
-export function initProperty(name: string, key: string, whatis: WhatIsIt) {
+export function initProperty(name: string, key: string, proptype: PropType) {
   const schemaProp = !schemas.has(name) ? schemas.set(name, {}).get(name)! : schemas.get(name)!;
 
-  switch (whatis) {
-    case WhatIsIt.ARRAY:
+  switch (proptype) {
+    case PropType.ARRAY:
       schemaProp[key] = [{}];
       break;
-    case WhatIsIt.MAP:
-    case WhatIsIt.NONE:
+    case PropType.MAP:
+    case PropType.NONE:
       schemaProp[key] = {};
       break;
     default:
-      throw new InvalidWhatIsItError(whatis, name, key, 'whatis(initProperty)');
+      throw new InvalidPropTypeError(proptype, name, key, 'PropType(initProperty)');
   }
 
   return schemaProp;
@@ -434,14 +435,14 @@ export function mapOptions(
   target: any,
   pkey: string,
   loggerType?: AnyParamConstructor<any>
-) {
+): MappedInnerOuterOptions {
   logger.debug('mapOptions called');
   loggerType = loggerType ?? (Type as AnyParamConstructor<any>);
 
   /** The Object that gets returned */
-  const ret = {
-    inner: {} as KeyStringAny,
-    outer: {} as KeyStringAny,
+  const ret: MappedInnerOuterOptions = {
+    inner: {},
+    outer: {},
   };
 
   // if Type is not a Schema, try to convert js type to mongoose type (Object => Mixed)
@@ -512,6 +513,15 @@ export function mapOptions(
 }
 
 /**
+ * Check if the current Type is meant to be a Array
+ * @param rawOptions The raw options
+ */
+export function isTypeMeantToBeArray(rawOptions: any): boolean {
+  // check if the "dim" option exists, if yes the type is meant to be a array in the end
+  return !isNullOrUndefined(rawOptions) && !isNullOrUndefined(rawOptions.dim) && typeof rawOptions.dim === 'number' && rawOptions.dim > 0;
+}
+
+/**
  * Warn, Error or Allow if an mixed type is set
  * -> this function exists for de-duplication
  * @param target Target Class
@@ -524,6 +534,8 @@ export function warnMixed(target: any, key: string): void | never {
   switch (modelOptions.options?.allowMixed) {
     default:
     case Severity.WARN:
+      logger.debug('warnMixed: modelOptions:', modelOptions);
+
       logger.warn(
         'Setting "Mixed" for property "%s.%s"\nLook here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed',
         name,

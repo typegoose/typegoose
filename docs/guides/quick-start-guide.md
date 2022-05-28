@@ -99,8 +99,8 @@ class User {
 Like `public: string[]` is in reflection only `Array`.  
 :::
 
-[Look here for what `!` means on an property](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html#non-null-assertion-operator)  
-[Look here for what `?` means on an property](https://www.typescriptlang.org/docs/handbook/functions.html#optional-and-default-parameters)  
+[Look here for what `!` means on a property](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html#non-null-assertion-operator)  
+[Look here for what `?` means on a property](https://www.typescriptlang.org/docs/handbook/functions.html#optional-and-default-parameters)  
 
 ## How to Start using typegoose
 
@@ -108,14 +108,14 @@ Like `public: string[]` is in reflection only `Array`.
 
 - TypeScript version `^4.4` (since 9.0) is recommended, though older ones may also work
 - NodeJS `^12.22.0`
-- Mongoose `~6.1.3`
+- Mongoose `~6.3.0`
 - A IDE that supports TypeScript linting is recommended to be used (VSCode is recommended)
 - This Guide expects you to know how Mongoose (or at least its models) works
 - `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
 - tsconfig option `target` being `es6` (or higher)
 
 :::info
-tsconfig option `emitDecoratorMetadata` is not strictly requierd, look [here](./use-without-emitDecoratorMetadata.md) for more
+tsconfig option `emitDecoratorMetadata` is not strictly required, look [here](./use-without-emitDecoratorMetadata.md) for more
 :::
 
 ### Install
@@ -171,7 +171,7 @@ let document = await KittenModel.create({ name: 'Kitty' });
 
 ### Static Methods
 
-Sometimes extra functions for model creation or pre-written querys are needed, they can be done as follows:
+Sometimes extra functions for model creation or pre-written queries are needed, they can be done as follows:
 
 ```ts
 class KittenClass {

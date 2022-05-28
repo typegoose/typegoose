@@ -37,13 +37,13 @@ class Something extends Base<mongoose.Schema.Type.String> {} // _id is now of ty
 
 ### FindOrCreate
 
-This class provides all the types supplied by the plugin [`mongoose-findorcreate`](./integration-examples/common-plugins.md#mongoose-findorcreate).
+This class provides all the types supplied by the plugin [`mongoose-findorcreate`](./integration-examples/common-plugins.mdx#mongoose-findorcreate).
 
 :::note
 This class should only be used, if the plugin is used too
 :::
 
-[An Example can be seen in common-plugins](./integration-examples/common-plugins.md#mongoose-findorcreate)
+[An Example can be seen in common-plugins](./integration-examples/common-plugins.mdx#mongoose-findorcreate)
 
 ## Extra information
 

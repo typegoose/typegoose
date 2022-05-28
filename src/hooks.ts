@@ -26,12 +26,23 @@ type PostSingleResponse<T> = (result: DocumentType<T>, next: EmptyVoidFn) => Ret
 type PostMultipleResponse<T> = (result: DocumentType<T>[], next: EmptyVoidFn) => ReturnVoid;
 type PostRegExpResponse<T> = (result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
 type PostArrayResponse<T> = (result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
+type PostQueryArrayResponse<T> = (
+  this: Query<any, DocumentType<T>>,
+  result: NumberOrDocumentOrDocumentArray<T>,
+  next: EmptyVoidFn
+) => ReturnVoid;
 
 type PostNumberWithError<T> = (error: Error, result: number, next: HookNextErrorFn) => ReturnVoid;
 type PostSingleWithError<T> = (error: Error, result: DocumentType<T>, next: HookNextErrorFn) => ReturnVoid;
 type PostMultipleWithError<T> = (error: Error, result: DocumentType<T>[], next: HookNextErrorFn) => ReturnVoid;
 type PostRegExpWithError<T> = (error: Error, result: NumberOrDocumentOrDocumentArray<T>, next: HookNextErrorFn) => ReturnVoid;
 type PostArrayWithError<T> = (error: Error, result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
+type PostQueryArrayWithError<T> = (
+  this: Query<any, DocumentType<T>>,
+  error: Error,
+  result: NumberOrDocumentOrDocumentArray<T>,
+  next: EmptyVoidFn
+) => ReturnVoid;
 
 type AggregateMethod = 'aggregate';
 type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
@@ -78,8 +89,11 @@ interface Hooks {
 
   post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
 
-  post<T>(method: QDM | QDM[], fn: PostArrayResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-  post<T>(method: QDM | QDM[], fn: PostArrayWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
+  post<T>(method: DocumentMethod | DocumentMethod[], fn: PostArrayResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
+  post<T>(method: DocumentMethod | DocumentMethod[], fn: PostArrayWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
+
+  post<T>(method: QMR | QMR[], fn: PostQueryArrayResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
+  post<T>(method: QMR | QMR[], fn: PostQueryArrayWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
 }
 
 // TSDoc for the hooks can't be added without adding it to *every* overload

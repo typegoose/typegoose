@@ -44,6 +44,7 @@ module.exports = {
         Miscellaneous: ['guides/advanced/logger', 'guides/all-decorators', 'guides/use-without-emitDecoratorMetadata', 'guides/motivation'],
       },
       'guides/default-classes',
+      'guides/nesting-classes',
       'guides/advanced/custom-types',
       'guides/advanced/array-types',
       'guides/advanced/models-with-same-name',

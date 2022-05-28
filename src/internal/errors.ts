@@ -45,12 +45,15 @@ export class AssertionFallbackError extends Error {
   }
 }
 
-/** Error for when an unknown WhatIsIt is passed to an switch, gets thrown in the default case */
-export class InvalidWhatIsItError extends Error {
-  constructor(whatisit: unknown, name: string, key: string, where: string) {
-    super(`"${toStringNoFail(whatisit)}"(${where}) is invalid for "${name}.${key}" [E013]`);
+/** Error for when an unknown PropType is passed to an switch, gets thrown in the default case */
+export class InvalidPropTypeError extends Error {
+  constructor(proptype: unknown, name: string, key: string, where: string) {
+    super(`"${toStringNoFail(proptype)}"(${where}) is invalid for "${name}.${key}" [E013]`);
   }
 }
+
+// For Backwards-compatability
+export const InvalidWhatIsItError = InvalidPropTypeError;
 
 export class CannotBeSymbolError extends Error {
   constructor(name: string, key: string | symbol) {

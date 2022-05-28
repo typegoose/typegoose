@@ -8,8 +8,8 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '6.1.3')) {
-    throw new Error(`Please use mongoose 6.1.3 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '6.3.0')) {
+    throw new Error(`Please use mongoose 6.3.0 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
@@ -44,7 +44,7 @@ export * as types from './types';
 // the following types are re-exported (instead of just in "types") because they are often used types
 export { DocumentType, Ref, ReturnModelType };
 export { getClassForDocument, getClass, getName } from './internal/utils';
-export { Severity } from './internal/constants';
+export { Severity, PropType } from './internal/constants';
 
 parseENV(); // call this before anything to ensure they are applied
 
@@ -281,7 +281,7 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
  * ```
  */
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
-  from: mongoose.Model<any>,
+  from: mongoose.Model<any, any>,
   cl: U,
   value?: string
 ) {

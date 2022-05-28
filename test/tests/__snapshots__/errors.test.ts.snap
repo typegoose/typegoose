@@ -68,25 +68,25 @@ exports[`tests for "FunctionCalledMoreThanSupportedError" [E003] should throw a 
 This was caused because the model name \\"TestMoreThanOnce\\" already exists in the typegoose-internal \\"models\\" cache"
 `;
 
-exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to WhatIsIt.ARRAY [InvalidTypeError] [E009] 1`] = `"\\"TestNoMetadataErrorAP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
+exports[`tests for "InvalidPropTypeError" [E013] PropType unknown (processProp) should throw a Error when a unknown PropType is used for "processProp#Passthrough" [InvalidPropTypeError] [E013] 1`] = `"\\"-1\\"(PropType(Passthrough)) is invalid for \\"ProcessPropPassthroughPropType.test\\" [E013]"`;
 
-exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to WhatIsIt.MAP [InvalidTypeError] [E009] 1`] = `"\\"TestNoMetadataErrorMP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
+exports[`tests for "InvalidPropTypeError" [E013] PropType unknown (processProp) should throw a Error when a unknown PropType is used for "processProp#primitive" [InvalidPropTypeError] [E013] 1`] = `"\\"-1\\"(PropType(primitive)) is invalid for \\"ProcessPropRefPropType.test\\" [E013]"`;
 
-exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to WhatIsIt.NONE [InvalidTypeError] [E009] 1`] = `"\\"TestNME.test\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
+exports[`tests for "InvalidPropTypeError" [E013] PropType unknown (processProp) should throw a Error when a unknown PropType is used for "processProp#ref" [InvalidPropTypeError] [E013] 1`] = `"\\"-1\\"(PropType(ref)) is invalid for \\"ProcessPropRefPropType.test\\" [E013]"`;
 
-exports[`tests for "InvalidWhatIsItError" [E013] WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#Passthrough" [InvalidWhatIsItError] [E013] 1`] = `"\\"-1\\"(whatis(Passthrough)) is invalid for \\"ProcessPropPassthroughWhatIsIt.test\\" [E013]"`;
+exports[`tests for "InvalidPropTypeError" [E013] PropType unknown (processProp) should throw a Error when a unknown PropType is used for "processProp#refPath" [InvalidPropTypeError] [E013] 1`] = `"\\"-1\\"(PropType(refPath)) is invalid for \\"ProcessPropRefPropType.test\\" [E013]"`;
 
-exports[`tests for "InvalidWhatIsItError" [E013] WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#primitive" [InvalidWhatIsItError] [E013] 1`] = `"\\"-1\\"(whatis(primitive)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+exports[`tests for "InvalidPropTypeError" [E013] PropType unknown (processProp) should throw a Error when a unknown PropType is used for "processProp#subSchema" [InvalidPropTypeError] [E013] 1`] = `"\\"-1\\"(PropType(subSchema)) is invalid for \\"ProcessPropRefPropType.test\\" [E013]"`;
 
-exports[`tests for "InvalidWhatIsItError" [E013] WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#ref" [InvalidWhatIsItError] [E013] 1`] = `"\\"-1\\"(whatis(ref)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+exports[`tests for "InvalidPropTypeError" [E013] should throw a Error when "PropType.MAP" is used for "processProp#refPath" [InvalidPropTypeError] [E013] 1`] = `"\\"1\\"(PropType(refPath)) is invalid for \\"ProcessPropRefPropType.test\\" [E013]"`;
 
-exports[`tests for "InvalidWhatIsItError" [E013] WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#refPath" [InvalidWhatIsItError] [E013] 1`] = `"\\"-1\\"(whatis(refPath)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+exports[`tests for "InvalidPropTypeError" [E013] should throw a Error when a unknown PropType is used for "utils#initProperty" [InvalidPropTypeError] [E013] 1`] = `"\\"-1\\"(PropType(initProperty)) is invalid for \\"a1.a2\\" [E013]"`;
 
-exports[`tests for "InvalidWhatIsItError" [E013] WhatIsIt unknown (processProp) should throw a Error when a unknown WhatIsIt is used for "processProp#subSchema" [InvalidWhatIsItError] [E013] 1`] = `"\\"-1\\"(whatis(subSchema)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to PropType.ARRAY [InvalidTypeError] [E009] 1`] = `"\\"TestNoMetadataErrorAP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
 
-exports[`tests for "InvalidWhatIsItError" [E013] should throw a Error when "WhatIsIt.MAP" is used for "processProp#refPath" [InvalidWhatIsItError] [E013] 1`] = `"\\"1\\"(whatis(refPath)) is invalid for \\"ProcessPropRefWhatIsIt.test\\" [E013]"`;
+exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to PropType.MAP [InvalidTypeError] [E009] 1`] = `"\\"TestNoMetadataErrorMP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
 
-exports[`tests for "InvalidWhatIsItError" [E013] should throw a Error when a unknown WhatIsIt is used for "utils#initProperty" [InvalidWhatIsItError] [E013] 1`] = `"\\"-1\\"(whatis(initProperty)) is invalid for \\"a1.a2\\" [E013]"`;
+exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to PropType.NONE [InvalidTypeError] [E009] 1`] = `"\\"TestNME.test\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
 
 exports[`tests for "NoValidClassError" [E028] should error if no valid class is supplied to "_buildSchema" [NoValidClassError] [E028] 1`] = `
 "Value is not a function or does not have a constructor! [E028]

@@ -138,7 +138,7 @@ await SubModel.create({ parentId: parent._id });
 
 ### Why is my virtual not included in the output?
 
-By default Mongoose doesn't output virtuals. To achive this, you need to add `toObject` and(/or) `toObject` to `schemaOptions` in `@modelOptions`.
+By default Mongoose doesn't output virtuals. To achieve this, you need to add `toObject` and(/or) `toJSON` to `schemaOptions` in `@modelOptions`.
 
 Note: it can be set in `@modelOptions`, but it can be set in `getModelForClass` too (and in the `doc.toJSON()`/`doc.toObject()` functions).
 
