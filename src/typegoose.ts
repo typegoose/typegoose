@@ -63,10 +63,10 @@ parseENV(); // call this before anything to ensure they are applied
  */
 export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(cl: U, options?: IModelOptions) {
   assertionIsClass(cl);
-  options = typeof options === 'object' ? options : {};
+  const rawOptions = typeof options === 'object' ? options : {};
 
-  const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
-  const name = getName(cl, options);
+  const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
+  const name = getName(cl, rawOptions);
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
@@ -77,7 +77,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
     mergedOptions?.existingMongoose?.model.bind(mergedOptions.existingMongoose) ??
     mongoose.model.bind(mongoose);
 
-  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, mergedOptions.schemaOptions, options));
+  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, mergedOptions.schemaOptions, rawOptions));
   const refetchedOptions = (Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions) ?? {};
 
   if (refetchedOptions?.options?.runSyncIndexes) {
