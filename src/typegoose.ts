@@ -49,8 +49,9 @@ export { Severity, PropType } from './internal/constants';
 parseENV(); // call this before anything to ensure they are applied
 
 /**
- * Get a Model for a Class
- * @param cl The uninitialized Class
+ * Build a Model From a Class
+ * @param cl The Class to build a Model from
+ * @param options Overwrite SchemaOptions (Merged with Decorator)
  * @returns The Model
  * @public
  * @example
@@ -92,7 +93,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
 
 /**
  * Get Model from internal cache
- * @param key ModelName key
+ * @param key Model's name key
  * @example
  * ```ts
  * class ClassName {}
@@ -108,7 +109,9 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
 
 /**
  * Generates a Mongoose schema out of class props, iterating through all parents
- * @param cl The not initialized Class
+ * @param cl The Class to build a Schema from
+ * @param options Overwrite SchemaOptions (Merged with Decorator)
+ * @param overwriteOptions Overwrite ModelOptions (aside from schemaOptions) (Not Merged with Decorator)
  * @returns Returns the Build Schema
  * @example
  * ```ts
@@ -160,7 +163,7 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
  * Note: no gurantee that the type information is fully correct
  * @param model The model to store
  * @param cl The Class to store
- * @param options? Optional param for existingMongoose or existingConnection
+ * @param options Optional param for existingMongoose or existingConnection
  * @example
  * ```ts
  * class ClassName {}
@@ -204,7 +207,7 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 /**
  * Deletes an existing model so that it can be overwritten with another model
  * (deletes from mongoose.connection & typegoose models cache & typegoose constructors cache)
- * @param name The Model's name
+ * @param name The Model's mongoose name
  * @example
  * ```ts
  * class ClassName {}
@@ -230,7 +233,7 @@ export function deleteModel(name: string) {
 /**
  * Delete a model, with the given class
  * Same as "deleteModel", only that it can be done with the class instead of the name
- * @param cl The Class
+ * @param cl The Class to delete the model from
  * @example
  * ```ts
  * class ClassName {}
