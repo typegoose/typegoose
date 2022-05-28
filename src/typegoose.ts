@@ -65,7 +65,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   assertionIsClass(cl);
   options = typeof options === 'object' ? options : {};
 
-  const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
+  const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
   const name = getName(cl, options);
 
   if (models.has(name)) {
@@ -73,11 +73,11 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   }
 
   const model =
-    roptions?.existingConnection?.model.bind(roptions.existingConnection) ??
-    roptions?.existingMongoose?.model.bind(roptions.existingMongoose) ??
+    mergedOptions?.existingConnection?.model.bind(mergedOptions.existingConnection) ??
+    mergedOptions?.existingMongoose?.model.bind(mergedOptions.existingMongoose) ??
     mongoose.model.bind(mongoose);
 
-  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions, options));
+  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, mergedOptions.schemaOptions, options));
   const refetchedOptions = (Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions) ?? {};
 
   if (refetchedOptions?.options?.runSyncIndexes) {
@@ -86,8 +86,8 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   }
 
   return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
-    existingMongoose: roptions?.existingMongoose,
-    existingConnection: roptions?.existingConnection,
+    existingMongoose: mergedOptions?.existingMongoose,
+    existingConnection: mergedOptions?.existingConnection,
   });
 }
 
