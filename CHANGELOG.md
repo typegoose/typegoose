@@ -1,3 +1,10 @@
+## [9.9.0-beta.2](https://github.com/typegoose/typegoose/compare/v9.9.0-beta.1...v9.9.0-beta.2) (2022-05-30)
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 6.3.5 ([7f70529](https://github.com/typegoose/typegoose/commit/7f70529fa5bbcad3d767fdd1cf6bc40481c497f7))
+
 ## [9.9.0-beta.1](https://github.com/typegoose/typegoose/compare/v9.8.1...v9.9.0-beta.1) (2022-05-28)
 
 
