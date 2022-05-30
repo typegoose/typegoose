@@ -11,12 +11,12 @@ Only Removed Error will have a link to their code, because there is currently no
 
 ### Mongoose Version [E001]
 
-Error: `Please use mongoose 6.3.0 or higher (Current mongoose: x.x.x) [E001]`
+Error: `Please use mongoose 6.3.5 or higher (Current mongoose: x.x.x) [E001]`
 
 Error Class: `Error`
 
 Details:  
-Typegoose requires at least mongoose version `6.3.0`, because that version changed something that affected typegoose internals
+Typegoose requires at least mongoose version `6.3.5`, because that version changed something that affected typegoose internals
 
 ### NodeJS Version [E002]
 

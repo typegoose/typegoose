@@ -467,7 +467,7 @@ export function mapOptions(
   }
 
   /** The OptionsConstructor to use */
-  let OptionsCTOR: undefined | AnyParamConstructor<any> = Type?.prototype?.OptionsConstructor;
+  let OptionsCTOR: undefined | mongoose.SchemaTypeOptions<any> = Type?.prototype?.OptionsConstructor;
 
   if (Type instanceof mongoose.Schema) {
     OptionsCTOR = mongoose.Schema.Types.Subdocument.prototype.OptionsConstructor;
