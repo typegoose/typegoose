@@ -299,7 +299,7 @@ export interface ValidateNumberOptions {
 
 export interface ValidateStringOptions {
   /** Only allow values that match this RegExp */
-  match?: RegExp | [RegExp, string];
+  match?: mongoose.SchemaTypeOptions<any>['match'];
   /** Only allow Values from the enum */
   enum?: string[];
   /** Only allow values that have at least this length */
