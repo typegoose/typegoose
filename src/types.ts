@@ -122,7 +122,7 @@ export interface BasePropOptions {
    * }
    * ```
    */
-  set?(val: any): any;
+  set?: mongoose.SchemaTypeOptions<any>['set'];
   /**
    * Set a Getter (Non-Virtual) to Post-process your value
    * (when using get/set both are required)
@@ -143,7 +143,7 @@ export interface BasePropOptions {
    * }
    * ```
    */
-  get?(val: any): any;
+  get?: mongoose.SchemaTypeOptions<any>['get'];
   /**
    * This may be needed if get/set is used
    * (this sets the type how it is saved to the DB)
