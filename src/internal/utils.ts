@@ -29,7 +29,7 @@ import {
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
- * @param Type The Type
+ * @param Type The Type to test
  * @returns true, if it includes it
  */
 export function isPrimitive(Type: any): boolean {
@@ -49,7 +49,7 @@ export function isPrimitive(Type: any): boolean {
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types except the aliases
- * @param Type The Type
+ * @param Type The Type to test
  * @returns true, if it includes it
  */
 export function isAnRefType(Type: any): boolean {
@@ -82,8 +82,9 @@ export function isAnRefType(Type: any): boolean {
 
 /**
  * Returns true, if it is an Object
- * @param Type The Type
- * @param once Just run it once?
+ * Looks down the prototype chain, unless "once" is set to "true"
+ * @param Type The Type to test
+ * @param once Set to not loop down the prototype chain, default "false"
  * @returns true, if it is an Object
  */
 export function isObject(Type: any, once: boolean = false): boolean {
@@ -108,7 +109,7 @@ export function isObject(Type: any, once: boolean = false): boolean {
 
 /**
  * Returns true, if it is an Number
- * @param Type The Type
+ * @param Type The Type to test
  * @returns true, if it is an Number
  */
 export function isNumber(Type: any): Type is number {
@@ -119,7 +120,7 @@ export function isNumber(Type: any): Type is number {
 
 /**
  * Returns true, if it is an String
- * @param Type The Type
+ * @param Type The Type to test
  * @returns true, if it is an String
  */
 export function isString(Type: any): Type is string {
@@ -129,10 +130,10 @@ export function isString(Type: any): Type is string {
 }
 
 /**
- * Initialize the property in the schemas Map
+ * Generate the inital values for the property to be extended upon
  * @param name Name of the current Model/Class
  * @param key Key of the property
- * @param proptype What should it be for a type?
+ * @param proptype Type of the Property
  */
 export function initProperty(name: string, key: string, proptype: PropType) {
   const schemaProp = !schemas.has(name) ? schemas.set(name, {}).get(name)! : schemas.get(name)!;
@@ -154,7 +155,7 @@ export function initProperty(name: string, key: string, proptype: PropType) {
 
 /**
  * Get the Class for a given Document
- * @param document The Document
+ * @param document The Document to fetch the class from
  */
 export function getClassForDocument(document: mongoose.Document): NewableFunction | undefined {
   const modelName = (document.constructor as mongoose.Model<typeof document>).modelName;
@@ -164,7 +165,7 @@ export function getClassForDocument(document: mongoose.Document): NewableFunctio
 
 /**
  * Get the Class for a given Schema
- * @param input
+ * @param input The Input to fetch the class from
  */
 export function getClass(
   input:
@@ -189,15 +190,15 @@ export function getClass(
 }
 
 /**
- * Return an array of options that are included
- * @param options The raw Options
+ * Returns all options found in "options" that are String-validate related
+ * @param options The raw Options that may contain the wanted options
  */
 export function isWithStringValidate(options: PropOptionsForString): string[] {
   return intersection(Object.keys(options), ['match', 'minlength', 'maxlength']);
 }
 
 /**
- * Return an array of options that are included
+ * Returns all options found in "options" that are String-transform related
  * @param options The raw Options
  */
 export function isWithStringTransform(options: PropOptionsForString): string[] {
@@ -205,7 +206,7 @@ export function isWithStringTransform(options: PropOptionsForString): string[] {
 }
 
 /**
- * Return an array of options that are included
+ * Returns all options found in "options" that are Number-Validate related
  * @param options The raw Options
  */
 export function isWithNumberValidate(options: PropOptionsForNumber): string[] {
@@ -213,7 +214,7 @@ export function isWithNumberValidate(options: PropOptionsForNumber): string[] {
 }
 
 /**
- * Return an array of options that are included
+ * Returns all options found in "options" that are Enum Related
  * @param options The raw Options
  */
 export function isWithEnumValidate(options: PropOptionsForNumber | PropOptionsForString): string[] {
@@ -223,10 +224,10 @@ export function isWithEnumValidate(options: PropOptionsForNumber | PropOptionsFo
 const virtualOptions = ['localField', 'foreignField'];
 
 /**
- * Check if Options include Virtual Populate Options
- * @param options RawOptions of the Prop
+ * Check if the "options" contain any Virtual-Populate related options (excluding "ref" by it self)
+ * @param options The raw Options
  */
-export function isWithVirtualPOP(options: any): options is VirtualOptions {
+export function isWithVirtualPOP(options: Partial<VirtualOptions>): boolean {
   return Object.keys(options).some((v) => virtualOptions.includes(v));
 }
 
@@ -234,19 +235,20 @@ export const allVirtualoptions = virtualOptions.slice(0); // copy "virtualOption
 allVirtualoptions.push('ref');
 
 /**
- * Check if all the required Options are present
- * @param options RawOptions of the Prop
+ * Check if all Required options for Virtual-Populate are included in "options"
+ * @param options The raw Options
  */
-export function includesAllVirtualPOP(options: VirtualOptions): options is VirtualOptions {
+export function includesAllVirtualPOP(options: Partial<VirtualOptions>): options is VirtualOptions {
   return allVirtualoptions.every((v) => Object.keys(options).includes(v));
 }
 
 /**
- * Merge value & existing Metadata & Save it to the class
+ * Merge "value" with existing Metadata and save it to the class
  * Difference with "mergeMetadata" is that this one DOES save it to the class
- * @param key Metadata key
- * @param value Raw value
- * @param cl The constructor
+ * Overwrites any existing Metadata that is new in "value"
+ * @param key Metadata key to read from and assign the new value to
+ * @param value Options to merge with
+ * @param cl The Class to read and assign the new metadata to
  * @internal
  */
 export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): any {
@@ -261,12 +263,13 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamC
 }
 
 /**
- * Merge value & existing Metadata
+ * Merge "value" with existing Metadata
  * Difference with "assignMetadata" is that this one DOES NOT save it to the class
- * @param key Metadata key
- * @param value Raw value
- * @param cl The constructor
- * @returns Returns the Merged output where the raw `value` has higher priority
+ * Overwrites any existing Metadata that is new in "value"
+ * @param key Metadata key to read existing metadata from
+ * @param value Option to merge with
+ * @param cl The Class to read the metadata from
+ * @returns Returns the merged output, where "value" overwrites existing Metadata values
  * @internal
  */
 export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): T {
@@ -304,7 +307,7 @@ export function mergeSchemaOptions<U extends AnyParamConstructor<any>>(value: mo
 
 /**
  * Tries to return the right target
- * if target.constructor.name is "Function", return target, otherwise target.constructor
+ * if target.constructor.name is "Function", return "target", otherwise "target.constructor"
  * @param target The target to determine
  */
 export function getRightTarget(target: any): any {
@@ -360,11 +363,11 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteOpti
 }
 
 /**
- * Returns if it is not defined in "schemas"
- * @param cl The Type
+ * Check if "Type" is a class and if it is already in "schemas"
+ * @param Type The Type to check
  */
-export function isNotDefined(cl: any) {
-  return typeof cl === 'function' && !isPrimitive(cl) && cl !== Object && !schemas.has(getName(cl));
+export function isNotDefined(Type: any) {
+  return typeof Type === 'function' && !isPrimitive(Type) && Type !== Object && !schemas.has(getName(Type));
 }
 
 /**
@@ -378,6 +381,7 @@ export function isNotDefined(cl: any) {
  * @param target The Target class
  * @param pkey Key of the Property
  * @param loggerType Type to use for logging
+ * @param extraInner Extra Options to Mad explicitly to "inner"
  */
 export function mapArrayOptions(
   rawOptions: any,
@@ -385,7 +389,7 @@ export function mapArrayOptions(
   target: any,
   pkey: string,
   loggerType?: AnyParamConstructor<any>,
-  extra?: KeyStringAny
+  extraInner?: KeyStringAny
 ): mongoose.SchemaTypeOptions<any> {
   logger.debug('mapArrayOptions called');
   loggerType = loggerType ?? (Type as AnyParamConstructor<any>);
@@ -406,7 +410,7 @@ export function mapArrayOptions(
       {
         type: Type,
         ...mapped.inner,
-        ...extra,
+        ...extraInner,
       },
     ],
   };
@@ -554,7 +558,8 @@ export function warnMixed(target: any, key: string): void | never {
 }
 
 /**
- * Because since node 4.0.0 the internal util.is* functions got deprecated
+ * Check if "val" is "null" to "undefined"
+ * This Function exists because since node 4.0.0 the internal util.is* functions got deprecated
  * @param val Any value to test if null or undefined
  */
 export function isNullOrUndefined(val: unknown): val is null | undefined {
@@ -600,12 +605,12 @@ export function createArrayFromDimensions(rawOptions: any, extra: any, name: str
 }
 
 /**
- * Assert an condition, if "false" throw error
+ * Assert a condition, if "false" throw error
  * Note: it is not named "assert" to differentiate between node and jest types
  *
  * Note: "error" can be a function to not execute the constructor when not needed
- * @param cond The Condition to throw
- * @param error An Custom Error to throw or a function that returns a Error
+ * @param cond The Condition to check
+ * @param error A Custom Error to throw or a function that returns a Error
  */
 export function assertion(cond: any, error?: Error | DeferredFunc<Error>): asserts cond {
   if (!cond) {
@@ -614,7 +619,7 @@ export function assertion(cond: any, error?: Error | DeferredFunc<Error>): asser
 }
 
 /**
- * Assert if val is an function (constructor for classes)
+ * Assert if "val" is an function (constructor for classes)
  * @param val Value to test
  */
 export function assertionIsClass(val: any): asserts val is Func {
@@ -662,6 +667,7 @@ export function getType(typeOrFunc: Func | any, returnLastFoundArray: boolean = 
 
 /**
  * Is the provided input an class with an constructor?
+ * @param obj The Value to test
  */
 export function isConstructor(obj: any): obj is AnyParamConstructor<any> {
   return typeof obj === 'function' && !isNullOrUndefined(obj.prototype?.constructor?.name);
