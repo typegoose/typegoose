@@ -1,3 +1,29 @@
+## [9.9.0-beta.3](https://github.com/typegoose/typegoose/compare/v9.9.0-beta.2...v9.9.0-beta.3) (2022-06-01)
+
+
+### Style
+
+* **constants:** add tsdoc deprecate to backwards-compat Value ([0791807](https://github.com/typegoose/typegoose/commit/079180711d6dc829d7b70b8404446228c542c304))
+* **errors::InvalidWhatIsItError:** add tsdoc deprecate to backwards-compat error ([eec2843](https://github.com/typegoose/typegoose/commit/eec2843a20348ffd73bc36787d43594273d697ef))
+* **globalOptions:** update tsdoc ([c10271b](https://github.com/typegoose/typegoose/commit/c10271b0e40a2d50af7bdee5f9bbe0ac3142bc2f))
+* **index:** update tsdoc ([3f3723a](https://github.com/typegoose/typegoose/commit/3f3723aab1bc476c9782dae573f0cf33b5fffd97))
+* **modelOptions:** update tsdoc ([a95d0aa](https://github.com/typegoose/typegoose/commit/a95d0aa0b1c007900cc69b220f91723abeb1cf30))
+* **plugin:** update tsdoc ([1753514](https://github.com/typegoose/typegoose/commit/175351457e961d72f9d60756442cbad69784bfb0))
+* **prop:** update tsdoc ([619c7d7](https://github.com/typegoose/typegoose/commit/619c7d7f2acd6fb9842a43cb634a439ca6795dd2))
+* **queryMethod:** update tsdoc ([c4e2632](https://github.com/typegoose/typegoose/commit/c4e26320af73d03e6900948ebbd5b4066b59c3f7))
+* **typegoose:** update tsdoc ([07acb61](https://github.com/typegoose/typegoose/commit/07acb6166457e374a93d07fa146ddbb617a6cff5))
+* **typeguards:** update tsdoc ([1c05684](https://github.com/typegoose/typegoose/commit/1c056843c50a854f1f787f2b089dc278d27c5070))
+* **types:** update tsdoc ([15488e6](https://github.com/typegoose/typegoose/commit/15488e6dcc6e6143776a1c7c18cf369d839b2ca6))
+* **utils:** update tsdoc to match current implementations ([f2a10d0](https://github.com/typegoose/typegoose/commit/f2a10d022e8142f6046ce7572fc7f4012dd1a360))
+
+
+### Fixes
+
+* **types::BasePropOptions:** replace "set" & "get" with upstream types ([51296f4](https://github.com/typegoose/typegoose/commit/51296f4b62cf9fec9bd55c02f61d1a338ac91983))
+* **types::IndexOptions:** remove options that has been fixed upstream ([98c1918](https://github.com/typegoose/typegoose/commit/98c19183caade70d00f908d29c466abb09779c5f))
+* **types::ValidateStringOptions:** replace "match" with upstream types ([f290fad](https://github.com/typegoose/typegoose/commit/f290fad470ce4bacd0b87fe3b04119a589f35cec))
+* **types::VirtualOptions:** replace options with upstream types ([e2c721a](https://github.com/typegoose/typegoose/commit/e2c721a736ee07a4c3444d35ffc7e3c37ed6c6ab))
+
 ## [9.9.0-beta.2](https://github.com/typegoose/typegoose/compare/v9.9.0-beta.1...v9.9.0-beta.2) (2022-05-30)
 
 
