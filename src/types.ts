@@ -28,13 +28,12 @@ export type AnyParamConstructor<T> = new (...args: any) => T;
  */
 export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject> = ModelType<InstanceType<U>, QueryHelpers> & U;
 
+/** Generic "Function" type, because typescript does not like using "Function" directly in strict mode */
 export type Func = (...args: any[]) => any;
-
 /**
  * The Type of a function to generate a custom model name.
  */
 export type CustomNameFunction = (options: IModelOptions) => string;
-
 /**
  * Defer an reference with an function (or as other projects call it "Forward declaration")
  * @param type This is just to comply with the common pattern of `type => ActualType`
@@ -260,6 +259,7 @@ export interface MappedInnerOuterOptions {
   outer: NonNullable<KeyStringAny>;
 }
 
+/** Options for Array's */
 export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
   /**
    * How many dimensions this Array should have
@@ -285,6 +285,7 @@ export interface ArrayPropOptions extends BasePropOptions, InnerOuterOptions {
   castNonArrays?: boolean;
 }
 
+/** Options For Map's */
 export interface MapPropOptions extends BasePropOptions, InnerOuterOptions {}
 
 export interface ValidateNumberOptions {
@@ -411,6 +412,7 @@ export interface IModelOptions {
   options?: ICustomOptions;
 }
 
+/** Typegoose options, mostly for "modelOptions({ options: ICustomOptions })" */
 export interface ICustomOptions {
   /**
    * Set the modelName of the class.
@@ -436,6 +438,7 @@ export interface ICustomOptions {
   runSyncIndexes?: boolean;
 }
 
+/** Type for the Values stored in the Reflection for Properties */
 export interface DecoratedPropertyMetadata {
   /** Prop Options */
   options: any;
@@ -463,7 +466,7 @@ export interface IndexOptions<T> extends mongoose.IndexOptions {
 }
 
 /**
- * Used for the Reflection of Indexes
+ * Type for the Values stored in the Reflection for Indexes
  * @example
  * ```ts
  * const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, target) || []);
@@ -475,7 +478,7 @@ export interface IIndexArray<T> {
 }
 
 /**
- * Used for the Reflection of Plugins
+ * Type for the Values stored in the Reflection for Plugins
  * @example
  * ```ts
  * const plugins: IPluginsArray<any>[] = Array.from(Reflect.getMetadata(DecoratorKeys.Plugins, target) ?? []);
@@ -487,7 +490,7 @@ export interface IPluginsArray<T> {
 }
 
 /**
- * Used for the Reflection of Virtual Populates
+ * Type for the Values stored in the Reflection for Virtual Populates
  * @example
  * ```ts
  * const virtuals: VirtualPopulateMap = new Map(Reflect.getMetadata(DecoratorKeys.VirtualPopulate, target.constructor) ?? []);
@@ -529,7 +532,7 @@ export type QueryHelperThis<
 > = mongoose.QueryWithHelpers<S | null, S, QueryHelpers>;
 
 /**
- * Used for the Reflection of Query Methods
+ * Type for the Values stored in the Reflection for Query Methods
  * @example
  * ```ts
  * const queryMethods: QueryMethodMap = new Map(Reflect.getMetadata(DecoratorKeys.QueryMethod, target) ?? []);
@@ -538,7 +541,7 @@ export type QueryHelperThis<
 export type QueryMethodMap = Map<string, Func>;
 
 /**
- * Used for the Reflection of Nested Discriminators
+ * Type for the Values stored in the Reflection for Nested Discriminators
  * @example
  * ```ts
  * const disMap: NestedDiscriminatorsMap = new Map(Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, target) ?? []);
@@ -550,7 +553,7 @@ export type NestedDiscriminatorsMap = Map<string, DiscriminatorObject[]>;
 export type HookOptionsEither = mongoose.SchemaPreOptions | mongoose.SchemaPostOptions;
 
 /**
- * Used for the Reflection of Hooks
+ * Type for the Values stored in the Reflection for Hooks
  * @example
  * ```ts
  * const postHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPost, target) ?? []);
@@ -580,10 +583,12 @@ export interface IGlobalOptions {
   globalOptions?: BeAnObject;
 }
 
+/** Interface describing a Object that has a "typegooseName" Function */
 export interface IObjectWithTypegooseFunction {
   typegooseName(): string;
 }
 
+/** Interface describing a Object that has a "typegooseName" Value */
 export interface IObjectWithTypegooseName {
   typegooseName: string;
 }
