@@ -4,12 +4,12 @@ import { logger } from './logSettings';
 import type { Func, IPluginsArray } from './types';
 
 /**
- * Add a Middleware-Plugin
+ * Add a mongoose Middleware-Plugin
  * @param mongoosePlugin The Plugin to plug-in
  * @param options Options for the Plugin, if any
  * @example Example:
  * ```ts
- * @plugin(findOrCreate)
+ * @plugin(findOrCreate, { optionsHere: true })
  * class ClassName {}
  * ```
  */
