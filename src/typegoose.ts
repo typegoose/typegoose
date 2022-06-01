@@ -52,7 +52,7 @@ parseENV(); // call this before anything to ensure they are applied
  * Build a Model From a Class
  * @param cl The Class to build a Model from
  * @param options Overwrite SchemaOptions (Merged with Decorator)
- * @returns The Model
+ * @returns The finished Model
  * @public
  * @example
  * ```ts
@@ -159,11 +159,12 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
 }
 
 /**
- * This can be used to add custom Models to Typegoose, with the type information of cl
- * Note: no gurantee that the type information is fully correct
- * @param model The model to store
+ * Add a Class-Model Pair to the Typegoose Cache
+ * This can be used to add custom Models to Typegoose, with the type information of "cl"
+ * Note: no gurantee that the type information is fully correct when used manually
+ * @param model The Model to store
  * @param cl The Class to store
- * @param options Optional param for existingMongoose or existingConnection
+ * @param options Overwrite existingMongoose or existingConnection
  * @example
  * ```ts
  * class ClassName {}
@@ -205,8 +206,8 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 }
 
 /**
- * Deletes an existing model so that it can be overwritten with another model
- * (deletes from mongoose.connection & typegoose models cache & typegoose constructors cache)
+ * Deletes a existing model so that it can be overwritten with another model
+ * (deletes from mongoose.connection and typegoose models cache and typegoose constructors cache)
  * @param name The Model's mongoose name
  * @example
  * ```ts
@@ -270,7 +271,7 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
 }
 
 /**
- * Build a Model from the given Class and add it as a discriminator on "from"
+ * Build a Model from the given Class and add it as a discriminator onto "from"
  * @param from The Model to add the new discriminator model to
  * @param cl The Class to make a discriminator model from
  * @param options Overwrite ModelOptions (Merged with ModelOptions from class)
@@ -304,7 +305,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   options?: IModelOptions
 ): ReturnModelType<U, QueryHelpers>;
 /**
- * Build a Model from the given Class and add it as a discriminator on "from"
+ * Build a Model from the given Class and add it as a discriminator onto "from"
  * @param from The Model to add the new discriminator model to
  * @param cl The Class to make a discriminator model from
  * @param value The Identifier to use to differentiate documents (default: cl.name)
@@ -338,7 +339,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   value?: string
 ): ReturnModelType<U, QueryHelpers>;
 /**
- * Build a Model from the given Class and add it as a discriminator on "from"
+ * Build a Model from the given Class and add it as a discriminator onto "from"
  * @param from The Model to add the new discriminator model to
  * @param cl The Class to make a discriminator model from
  * @param value The Identifier to use to differentiate documents (default: cl.name)
@@ -405,7 +406,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 }
 
 /**
- * Use this class if raw mongoose for this path is wanted
+ * Use this class if raw mongoose for a path is wanted
  * It is still recommended to use the typegoose classes directly
  * @see Using `Passthrough`, the paths created will also result as an `Schema` (since mongoose 6.0), see {@link https://github.com/Automattic/mongoose/issues/7181 Mongoose#7181}
  * @example
