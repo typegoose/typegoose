@@ -456,12 +456,6 @@ export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropert
  * copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
  */
 export interface IndexOptions<T> extends mongoose.IndexOptions {
-  /**
-   * Mongoose-specific syntactic sugar, uses ms to convert
-   * expires option into seconds for the expireAfterSeconds in the above link.
-   */
-  expires?: string;
-
   weights?: Partial<Record<keyof T, number>>;
 }
 
