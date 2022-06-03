@@ -40,7 +40,7 @@ export function parseENV(): void {
 }
 
 /**
- * Maps strings to the number
+ * Maps strings to the number of "Severity"
  * -> This function is specifically build for "Severity"-Enum
  * @throws {Error} if not in range of the "Severity"-Enum
  * @example
@@ -50,7 +50,7 @@ export function parseENV(): void {
  * // now internal use
  * mapValueToSeverity(1) === 1
  * ```
- * @param value The value to check for
+ * @param value The Value to translate
  * @internal
  */
 export function mapValueToSeverity(value: string | number): Severity {

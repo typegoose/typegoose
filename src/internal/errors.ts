@@ -53,6 +53,7 @@ export class InvalidPropTypeError extends Error {
 }
 
 // For Backwards-compatability
+/** @deprecated This was renamed to "InvalidPropTypeError" and will be removed in 10.0 */
 export const InvalidWhatIsItError = InvalidPropTypeError;
 
 export class CannotBeSymbolError extends Error {

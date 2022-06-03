@@ -4,7 +4,7 @@ import type { IModelOptions } from './types';
 
 /**
  * Define Options for the Class
- * @param options Options
+ * @param options The Options to set
  * @example Example:
  * ```ts
  * @modelOptions({ schemaOptions: { timestamps: true } })

@@ -19,12 +19,13 @@ import { processProp } from './processProp';
 import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
 
 /**
- * Private schema builder out of class props
- * -> If you discover this, don't use this function, use Typegoose.buildSchema!
- * @param cl The not initialized Class
- * @param sch Use a Already existing Schema as a base?
- * @param opt Options to override
- * @param isFinalSchema If it's the final schema to be built (defaults to `true`).
+ * Internal Schema Builder for Classes
+ * This Function should not be used directly outside of typegoose internals, use "buildSchema" from typegoose.ts directly
+ * @param cl The Class to build a Model from
+ * @param origSch A Schema to clone and extend onto
+ * @param opt Overwrite SchemaOptions (Merged with Decorator Options)
+ * @param isFinalSchema Set if this Schema is the final (top-level) to build, only when "true" are discriminators, hooks, virtuals, etc applied
+ * @param overwriteOptions Overwrite ModelOptions for Name Generation (Not Merged with Decorator)
  * @returns Returns the Build Schema
  * @private
  */

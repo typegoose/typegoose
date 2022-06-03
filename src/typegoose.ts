@@ -8,8 +8,8 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '6.3.0')) {
-    throw new Error(`Please use mongoose 6.3.0 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '6.3.5')) {
+    throw new Error(`Please use mongoose 6.3.5 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
@@ -49,9 +49,10 @@ export { Severity, PropType } from './internal/constants';
 parseENV(); // call this before anything to ensure they are applied
 
 /**
- * Get a Model for a Class
- * @param cl The uninitialized Class
- * @returns The Model
+ * Build a Model From a Class
+ * @param cl The Class to build a Model from
+ * @param options Overwrite SchemaOptions (Merged with Decorator)
+ * @returns The finished Model
  * @public
  * @example
  * ```ts
@@ -62,21 +63,21 @@ parseENV(); // call this before anything to ensure they are applied
  */
 export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(cl: U, options?: IModelOptions) {
   assertionIsClass(cl);
-  options = typeof options === 'object' ? options : {};
+  const rawOptions = typeof options === 'object' ? options : {};
 
-  const roptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, options, cl);
-  const name = getName(cl, options);
+  const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
+  const name = getName(cl, rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
   const model =
-    roptions?.existingConnection?.model.bind(roptions.existingConnection) ??
-    roptions?.existingMongoose?.model.bind(roptions.existingMongoose) ??
+    mergedOptions?.existingConnection?.model.bind(mergedOptions.existingConnection) ??
+    mergedOptions?.existingMongoose?.model.bind(mergedOptions.existingMongoose) ??
     mongoose.model.bind(mongoose);
 
-  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, roptions.schemaOptions, options));
+  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, mergedOptions.schemaOptions, rawOptions));
   const refetchedOptions = (Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions) ?? {};
 
   if (refetchedOptions?.options?.runSyncIndexes) {
@@ -85,14 +86,14 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   }
 
   return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
-    existingMongoose: roptions?.existingMongoose,
-    existingConnection: roptions?.existingConnection,
+    existingMongoose: mergedOptions?.existingMongoose,
+    existingConnection: mergedOptions?.existingConnection,
   });
 }
 
 /**
  * Get Model from internal cache
- * @param key ModelName key
+ * @param key Model's name key
  * @example
  * ```ts
  * class ClassName {}
@@ -108,7 +109,9 @@ export function getModelWithString<U extends AnyParamConstructor<any>>(key: stri
 
 /**
  * Generates a Mongoose schema out of class props, iterating through all parents
- * @param cl The not initialized Class
+ * @param cl The Class to build a Schema from
+ * @param options Overwrite SchemaOptions (Merged with Decorator)
+ * @param overwriteOptions Overwrite ModelOptions (aside from schemaOptions) (Not Merged with Decorator)
  * @returns Returns the Build Schema
  * @example
  * ```ts
@@ -156,11 +159,12 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
 }
 
 /**
- * This can be used to add custom Models to Typegoose, with the type information of cl
- * Note: no gurantee that the type information is fully correct
- * @param model The model to store
+ * Add a Class-Model Pair to the Typegoose Cache
+ * This can be used to add custom Models to Typegoose, with the type information of "cl"
+ * Note: no gurantee that the type information is fully correct when used manually
+ * @param model The Model to store
  * @param cl The Class to store
- * @param options? Optional param for existingMongoose or existingConnection
+ * @param options Overwrite existingMongoose or existingConnection
  * @example
  * ```ts
  * class ClassName {}
@@ -202,9 +206,9 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
 }
 
 /**
- * Deletes an existing model so that it can be overwritten with another model
- * (deletes from mongoose.connection & typegoose models cache & typegoose constructors cache)
- * @param name The Model's name
+ * Deletes a existing model so that it can be overwritten with another model
+ * (deletes from mongoose.connection and typegoose models cache and typegoose constructors cache)
+ * @param name The Model's mongoose name
  * @example
  * ```ts
  * class ClassName {}
@@ -230,7 +234,7 @@ export function deleteModel(name: string) {
 /**
  * Delete a model, with the given class
  * Same as "deleteModel", only that it can be done with the class instead of the name
- * @param cl The Class
+ * @param cl The Class to delete the model from
  * @example
  * ```ts
  * class ClassName {}
@@ -267,34 +271,128 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
 }
 
 /**
- * Build a Model from a given class and return the model
- * @param from The Model to build From
- * @param cl The Class to make a model out
+ * Build a Model from the given Class and add it as a discriminator onto "from"
+ * @param from The Model to add the new discriminator model to
+ * @param cl The Class to make a discriminator model from
+ * @param options Overwrite ModelOptions (Merged with ModelOptions from class)
+ * @example
+ * ```ts
+ * class Main {
+ *   @prop({ ref: () => BaseDiscriminator })
+ *   public discriminators?: Ref<BaseDiscriminator>;
+ * }
+ *
+ * class BaseDiscriminator {
+ *   @prop()
+ *   public propertyOnAllDiscriminators?: string;
+ * }
+ *
+ * class AnotherDiscriminator {
+ *   @prop()
+ *   public someValue?: string;
+ * }
+ *
+ * const MainModel = getModelForClass(Main);
+ *
+ * const BaseDiscriminatorModel = getModelFroClass(BaseDiscriminator);
+ * const AnotherDiscriminatorModel = getDiscriminatorModelForClass(BaseDiscriminatorModel, AnotherDiscriminator);
+ * // add other discriminator models the same way as "AnotherDiscriminatorModel"
+ * ```
+ */
+export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
+  from: mongoose.Model<any, any>,
+  cl: U,
+  options?: IModelOptions
+): ReturnModelType<U, QueryHelpers>;
+/**
+ * Build a Model from the given Class and add it as a discriminator onto "from"
+ * @param from The Model to add the new discriminator model to
+ * @param cl The Class to make a discriminator model from
  * @param value The Identifier to use to differentiate documents (default: cl.name)
  * @example
  * ```ts
- * class Class1 {}
- * class Class2 extends Class1 {}
+ * class Main {
+ *   @prop({ ref: () => BaseDiscriminator })
+ *   public discriminators?: Ref<BaseDiscriminator>;
+ * }
  *
- * const Class1Model = getModelForClass(Class1);
- * const Class2Model = getDiscriminatorModelForClass(Class1Model, Class1);
+ * class BaseDiscriminator {
+ *   @prop()
+ *   public propertyOnAllDiscriminators?: string;
+ * }
+ *
+ * class AnotherDiscriminator {
+ *   @prop()
+ *   public someValue?: string;
+ * }
+ *
+ * const MainModel = getModelForClass(Main);
+ *
+ * const BaseDiscriminatorModel = getModelFroClass(BaseDiscriminator);
+ * const AnotherDiscriminatorModel = getDiscriminatorModelForClass(BaseDiscriminatorModel, AnotherDiscriminator);
+ * // add other discriminator models the same way as "AnotherDiscriminatorModel"
  * ```
  */
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
   from: mongoose.Model<any, any>,
   cl: U,
   value?: string
+): ReturnModelType<U, QueryHelpers>;
+/**
+ * Build a Model from the given Class and add it as a discriminator onto "from"
+ * @param from The Model to add the new discriminator model to
+ * @param cl The Class to make a discriminator model from
+ * @param value The Identifier to use to differentiate documents (default: cl.name)
+ * @param options Overwrite ModelOptions (Merged with ModelOptions from class)
+ * @example
+ * ```ts
+ * class Main {
+ *   @prop({ ref: () => BaseDiscriminator })
+ *   public discriminators?: Ref<BaseDiscriminator>;
+ * }
+ *
+ * class BaseDiscriminator {
+ *   @prop()
+ *   public propertyOnAllDiscriminators?: string;
+ * }
+ *
+ * class AnotherDiscriminator {
+ *   @prop()
+ *   public someValue?: string;
+ * }
+ *
+ * const MainModel = getModelForClass(Main);
+ *
+ * const BaseDiscriminatorModel = getModelFroClass(BaseDiscriminator);
+ * const AnotherDiscriminatorModel = getDiscriminatorModelForClass(BaseDiscriminatorModel, AnotherDiscriminator);
+ * // add other discriminator models the same way as "AnotherDiscriminatorModel"
+ * ```
+ */
+export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
+  from: mongoose.Model<any, any>,
+  cl: U,
+  value?: string,
+  options?: IModelOptions
+): ReturnModelType<U, QueryHelpers>;
+export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
+  from: mongoose.Model<any, any>,
+  cl: U,
+  value_or_options?: string | IModelOptions,
+  options?: IModelOptions
 ) {
   assertion(isModel(from), new NotValidModelError(from, 'getDiscriminatorModelForClass.from'));
   assertionIsClass(cl);
 
-  const name = getName(cl);
+  const value = typeof value_or_options === 'string' ? value_or_options : undefined;
+  const rawOptions = typeof value_or_options !== 'string' ? value_or_options : typeof options === 'object' ? options : {};
+  const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
+  const name = getName(cl, rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const sch: mongoose.Schema<any> = buildSchema(cl);
+  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions.schemaOptions, rawOptions);
 
   const discriminatorKey = sch.get('discriminatorKey');
 
@@ -308,7 +406,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 }
 
 /**
- * Use this class if raw mongoose for this path is wanted
+ * Use this class if raw mongoose for a path is wanted
  * It is still recommended to use the typegoose classes directly
  * @see Using `Passthrough`, the paths created will also result as an `Schema` (since mongoose 6.0), see {@link https://github.com/Automattic/mongoose/issues/7181 Mongoose#7181}
  * @example

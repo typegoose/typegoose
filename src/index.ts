@@ -4,8 +4,8 @@ import { logger } from './logSettings';
 import type { BeAnObject, IIndexArray, IndexOptions } from './types';
 
 /**
- * Defines an index (most likely compound) for this schema.
- * @param fields Which fields to give the Options
+ * Defines a index for this Class which will then be added to the Schema.
+ * @param fields Which fields to index (if multiple fields are set, it will be a compound index)
  * @param options Options to pass to MongoDB driver's createIndex() function
  * @example Example:
  * ```ts

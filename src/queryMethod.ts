@@ -5,9 +5,8 @@ import { logger } from './logSettings';
 import type { AnyParamConstructor, QueryHelperThis, QueryMethodMap } from './types';
 
 /**
- * Adds a query method to schema.
- *
- * @param func Query function
+ * Adds a query method to the Class which will then be added to the Schema.
+ * @param func The Query Method to add
  * @example
  * ```ts
  * interface FindHelpers {

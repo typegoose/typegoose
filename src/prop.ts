@@ -14,8 +14,8 @@ import type {
 
 /**
  * Set Property Options for the property below
- * @param options Options
- * @param kind Overwrite auto-inferred kind
+ * @param options The Options to Set
+ * @param kind Overwrite auto-inferred PropType
  * @example
  * ```ts
  * class ClassName {
