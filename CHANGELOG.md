@@ -1,3 +1,60 @@
+## [9.9.0](https://github.com/typegoose/typegoose/compare/v9.8.1...v9.9.0) (2022-06-03)
+
+
+### Features
+
+* **typegoose::getDiscriminatorModelForClass:** add option to overwrite ModelOptions ([1c7460e](https://github.com/typegoose/typegoose/commit/1c7460e9c20821cb007a709ab25320904dac72d6)), closes [typegoose/typegoose#713](https://github.com/typegoose/typegoose/issues/713)
+
+
+### Refactor
+
+* **typegoose::getModelForClass:** assign options to new value instead of re-assigning ([2e2f304](https://github.com/typegoose/typegoose/commit/2e2f3044223854bed02556788e775bf31e0a0ba2))
+* **typegoose::getModelForClass:** rename value to be more intuitive ([b504314](https://github.com/typegoose/typegoose/commit/b504314c0288e203bcf9564678973a0a6a05e657))
+* **utils::getName:** rename a parameter to be more intuitive ([cbdf759](https://github.com/typegoose/typegoose/commit/cbdf75904439753def36d5a756c19178a1b122c1))
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 27.5.1 ([ef199ce](https://github.com/typegoose/typegoose/commit/ef199cee202ad3c833c7fbde91d8608a9a7b30cf))
+* **@types/lodash:** upgrade to 4.14.182 ([b1f5cb1](https://github.com/typegoose/typegoose/commit/b1f5cb1d245b6710415ff8e1c73ceb28db0f6350))
+* **@types/node:** upgrade to 12.20.52 ([72cb216](https://github.com/typegoose/typegoose/commit/72cb2161653f6dc84123108caedc88690aae7122))
+* **@typescript-eslint/*:** upgrade to 5.26.0 ([5b25b23](https://github.com/typegoose/typegoose/commit/5b25b23bb7915d3b587ca71f027d62164a071f07))
+* **commitlint:** upgrade to 16.3.0 ([dd7301e](https://github.com/typegoose/typegoose/commit/dd7301e9edfa389dc9a1e7a8ef328da5158a6bf5))
+* **eslint:** upgrade to 8.16.0 ([2be72ac](https://github.com/typegoose/typegoose/commit/2be72ac054a2886b7e48aafd29b62019927a7036))
+* **jest:** upgrade to 28.1.0 ([661b10b](https://github.com/typegoose/typegoose/commit/661b10b7c15a6faff0baf4a195090da4843005b3))
+* **mongodb-memory-server:** upgrade to 8.6.0 ([47bfcc4](https://github.com/typegoose/typegoose/commit/47bfcc4325a6a08ae6921e69c5a85249a42cd253))
+* **mongoose:** upgrade to 6.3.5 ([7f70529](https://github.com/typegoose/typegoose/commit/7f70529fa5bbcad3d767fdd1cf6bc40481c497f7))
+* **tslib:** upgrade to 2.4.0 ([8417ba1](https://github.com/typegoose/typegoose/commit/8417ba17f5183d3e25e07d9160033e6ea7e67d65))
+
+
+### Style
+
+* **constants:** add tsdoc deprecate to backwards-compat Value ([0791807](https://github.com/typegoose/typegoose/commit/079180711d6dc829d7b70b8404446228c542c304))
+* **errors::InvalidWhatIsItError:** add tsdoc deprecate to backwards-compat error ([eec2843](https://github.com/typegoose/typegoose/commit/eec2843a20348ffd73bc36787d43594273d697ef))
+* **globalOptions:** update tsdoc ([c10271b](https://github.com/typegoose/typegoose/commit/c10271b0e40a2d50af7bdee5f9bbe0ac3142bc2f))
+* **index:** update tsdoc ([3f3723a](https://github.com/typegoose/typegoose/commit/3f3723aab1bc476c9782dae573f0cf33b5fffd97))
+* **modelOptions:** update tsdoc ([a95d0aa](https://github.com/typegoose/typegoose/commit/a95d0aa0b1c007900cc69b220f91723abeb1cf30))
+* **plugin:** update tsdoc ([1753514](https://github.com/typegoose/typegoose/commit/175351457e961d72f9d60756442cbad69784bfb0))
+* **prop:** update tsdoc ([619c7d7](https://github.com/typegoose/typegoose/commit/619c7d7f2acd6fb9842a43cb634a439ca6795dd2))
+* **queryMethod:** update tsdoc ([c4e2632](https://github.com/typegoose/typegoose/commit/c4e26320af73d03e6900948ebbd5b4066b59c3f7))
+* **schema::_buildSchema:** update tsdoc to current implementation ([082de9f](https://github.com/typegoose/typegoose/commit/082de9f3033abcf4e8fdc2be53e3db635cf60440))
+* **typegoose:** add best-guess comment explaining why "rawOption" is used for "getName" ([89c4b1b](https://github.com/typegoose/typegoose/commit/89c4b1bfead50401ab71ad6987ab79522250c8ec))
+* **typegoose:** fix missing and incorrect tsdoc ([1cb946f](https://github.com/typegoose/typegoose/commit/1cb946f04a76b5948a994d27458a1990f397db69))
+* **typegoose:** update tsdoc ([07acb61](https://github.com/typegoose/typegoose/commit/07acb6166457e374a93d07fa146ddbb617a6cff5))
+* **typeguards:** update tsdoc ([1c05684](https://github.com/typegoose/typegoose/commit/1c056843c50a854f1f787f2b089dc278d27c5070))
+* **types:** update tsdoc ([15488e6](https://github.com/typegoose/typegoose/commit/15488e6dcc6e6143776a1c7c18cf369d839b2ca6))
+* **utils:** update tsdoc to match current implementations ([f2a10d0](https://github.com/typegoose/typegoose/commit/f2a10d022e8142f6046ce7572fc7f4012dd1a360))
+* **utils::getName:** change tsdoc to be more descriptive ([f10eb35](https://github.com/typegoose/typegoose/commit/f10eb35961ea0668ac2e5b4da267db82c340aac9))
+* **utils::mergeMetadata:** add "returns" tsdoc ([109fb7d](https://github.com/typegoose/typegoose/commit/109fb7d5440acc86dc495caf58d2ffe9cbc7b496))
+
+
+### Fixes
+
+* **types::BasePropOptions:** replace "set" & "get" with upstream types ([51296f4](https://github.com/typegoose/typegoose/commit/51296f4b62cf9fec9bd55c02f61d1a338ac91983))
+* **types::IndexOptions:** remove options that has been fixed upstream ([98c1918](https://github.com/typegoose/typegoose/commit/98c19183caade70d00f908d29c466abb09779c5f))
+* **types::ValidateStringOptions:** replace "match" with upstream types ([f290fad](https://github.com/typegoose/typegoose/commit/f290fad470ce4bacd0b87fe3b04119a589f35cec))
+* **types::VirtualOptions:** replace options with upstream types ([e2c721a](https://github.com/typegoose/typegoose/commit/e2c721a736ee07a4c3444d35ffc7e3c37ed6c6ab))
+
 ## [9.9.0-beta.3](https://github.com/typegoose/typegoose/compare/v9.9.0-beta.2...v9.9.0-beta.3) (2022-06-01)
 
 
