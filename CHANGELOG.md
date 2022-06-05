@@ -1,3 +1,18 @@
+## [9.10.0-beta.1](https://github.com/typegoose/typegoose/compare/v9.9.0...v9.10.0-beta.1) (2022-06-05)
+
+
+### Features
+
+* **utils:** allow setting warnMixed Severity as property option ([ff793d1](https://github.com/typegoose/typegoose/commit/ff793d1201682e54b19927a525cfcec1c11fc2ec)), closes [typegoose/typegoose#620](https://github.com/typegoose/typegoose/issues/620)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 28.1.1 ([9521a04](https://github.com/typegoose/typegoose/commit/9521a04d5f500acb145eb7bca0f6a0fef87babe8))
+* **@types/node:** upgrade to 12.20.54 ([2bf4bdd](https://github.com/typegoose/typegoose/commit/2bf4bdd4eabfaaaf2a2c2d726b4c3a8c857eb8b4))
+* **eslint:** upgrade to 8.17.0 ([5dec6cc](https://github.com/typegoose/typegoose/commit/5dec6cc58105ed7fd868a8a433945d4ed35ea60c))
+* **ts-jest:** upgrade to 28.0.4 ([aaf494b](https://github.com/typegoose/typegoose/commit/aaf494bc39abec1220e2aca41070265c758845bb))
+
 ## [9.9.0](https://github.com/typegoose/typegoose/compare/v9.8.1...v9.9.0) (2022-06-03)
 
 
