@@ -264,7 +264,11 @@ Error Class: `TypeError`
 
 Details:  
 The option to change Severity is set to `Severity.ERROR`  
-[read here on how to change this](api/decorators/modelOptions.md#allowmixed)
+
+The Severity can be set:
+- Globally with [`setGlobalOptions`](../api/functions/setGlobalOptions.md).
+- Class-wide with [`modelOptions`](../api/decorators/modelOptions.md#allowmixed).
+- Property-Specific with [`allowMixed`](../api/decorators/prop.md#allowmixed).
 
 ### dim needs to be 1 or higher [E018]
 

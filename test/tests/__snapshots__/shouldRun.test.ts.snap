@@ -52,3 +52,5 @@ Look here for how to disable this message: https://typegoose.github.io/typegoose
   ],
 ]
 `;
+
+exports[`warnMixed as property option should allow setting "allowMixed" as property option [typegoose/typegoose#620] 1`] = `"Setting \\"Mixed\\" is not allowed! (TestPropertyAllowMixed, someMixed) [E017]"`;

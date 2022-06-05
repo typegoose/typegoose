@@ -588,6 +588,24 @@ class Something {
 }
 ```
 
+### allowMixed
+
+`allowMixed` is used to set a custom `warnMixed` Severity for a specific Property.  
+Takes priority over class-wide `allowMixed`.
+
+See [`modelOptions#allowMixed`](./modelOptions.md#allowmixed) for all possible variants for the enum.
+
+Example:
+
+```ts
+class Something {
+  @prop({ allowMixed: Severity.ERROR, type: () => mongoose.Schema.Type.Mixed })
+  public propy?: any;
+}
+
+buildSchema(Something); // would throw a "warnMixed" error
+```
+
 <!--Below are just the Specific Options-->
 
 ## Array Options

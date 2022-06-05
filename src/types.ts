@@ -68,6 +68,12 @@ export interface BasePropOptions {
    * Note: Custom Typegoose Option
    */
   addNullToEnum?: boolean;
+  /**
+   * Set Custom "warnMixed" Severity for a specific property
+   * Overwrites Severity set in "modelOptions" for a specific property
+   * Note: Custom Typegoose Option
+   */
+  allowMixed?: Severity;
   /** Give the Property a default Value */
   default?: mongoose.SchemaTypeOptions<any>['default']; // i know this one does not have much of an effect, because of "any"
   /** Give an Validator RegExp or Function */

@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { mapValueToSeverity } from '../../src/globalOptions';
 import { DecoratorKeys, PropType, Severity } from '../../src/internal/constants';
+import { globalOptions } from '../../src/internal/data';
 import {
   assertion,
   assignMetadata,
@@ -930,4 +931,28 @@ it('should properly get if the type is meant to be a array', () => {
   expect(isTypeMeantToBeArray({ dim: undefined })).toBeFalsy();
   expect(isTypeMeantToBeArray({ dim: 0 })).toBeFalsy();
   expect(isTypeMeantToBeArray({ dim: 1 })).toBeTruthy();
+});
+
+describe('warnMixed as property option', () => {
+  beforeEach(() => {
+    // set options so that they dont interfere with the tests
+    globalOptions['options'] = globalOptions['options'] ?? {};
+    globalOptions['options']['allowMixed'] = Severity.WARN;
+  });
+
+  it('should allow setting "allowMixed" as property option [typegoose/typegoose#620]', () => {
+    class TestPropertyAllowMixed {
+      @prop({ type: () => mongoose.Schema.Types.Mixed, allowMixed: Severity.ERROR })
+      public someMixed?: any;
+    }
+
+    try {
+      getModelForClass(TestPropertyAllowMixed);
+      fail('Expected getModelForClass to fail');
+    } catch (err) {
+      expect(err).toBeInstanceOf(TypeError);
+      assertion(err instanceof TypeError); // typescript check
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });
