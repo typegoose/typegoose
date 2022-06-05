@@ -65,7 +65,7 @@ Error Class: `RefOptionIsUndefinedError`
 Details:  
 Either:
 - The Option `ref` was defined with a function, but that function returned `undefined / null`
-- The Option `ref` was defined with `undefined / null` (`{ ref: undefined }`) ([Can Be Solved with this guide](guides/../advanced/reference-other-classes.md#common-problems))
+- The Option `ref` was defined with `undefined / null` (`{ ref: undefined }`) ([Can Be Solved with this guide](./advanced/reference-other-classes.md#common-problems))
 
 Example of when this gets triggerd:
 
@@ -186,7 +186,7 @@ Details:
 This Error may get thrown when a invalid Type is used with the option [`enum`](../api/decorators/prop.md#enum).
 Currently Valid Types for enum are `String` or `Number`.
 
-This may be thrown when using typescript option `transpileOnly` (see [Known Issues: transpile-only](,/../known-issues.md#transpile-only)) or using Babel without proper configuration (see [Known Issues: Babel](./known-issues.md#babel)).
+This may be thrown when using typescript option `transpileOnly` (see [Known Issues: transpile-only](./known-issues.md#transpile-only)) or using Babel without proper configuration (see [Known Issues: Babel](./known-issues.md#babel)).
 
 :::tip
 This Error has a workaround, see [Use Without "emitDecoratorMetadata"](./use-without-emitDecoratorMetadata.md).
