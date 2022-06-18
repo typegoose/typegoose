@@ -1,6 +1,6 @@
 {
   "name": "@typegoose/typegoose",
-  "version": "9.10.0-beta.2",
+  "version": "9.10.0-beta.3",
   "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
   "types": "lib/typegoose.d.ts",

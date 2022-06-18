@@ -1,3 +1,15 @@
+## [9.10.0-beta.3](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.2...v9.10.0-beta.3) (2022-06-18)
+
+
+### Style
+
+* **types:** add "SubDocumentType" and "ArraySubDocumentType" to supplement DocumentType ([72d49c1](https://github.com/typegoose/typegoose/commit/72d49c1a6e16440abb0050f1594280d54ccfd63c))
+
+
+### Fixes
+
+* **typegoose:** re-export type "SubDocumentType" and "ArraySubDocumentType" ([16dadd5](https://github.com/typegoose/typegoose/commit/16dadd530b2255fe1e5519d339ff05ffa50d7732))
+
 ## [9.10.0-beta.2](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.1...v9.10.0-beta.2) (2022-06-17)
 
 
