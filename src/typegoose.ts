@@ -24,7 +24,16 @@ import { constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
 import { logger } from './logSettings';
 import { isModel } from './typeguards';
-import type { AnyParamConstructor, BeAnObject, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
+import type {
+  AnyParamConstructor,
+  BeAnObject,
+  DocumentType,
+  IModelOptions,
+  Ref,
+  ReturnModelType,
+  SubDocumentType,
+  ArraySubDocumentType,
+} from './types';
 import { ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
 /* exports */
@@ -42,7 +51,7 @@ export * as defaultClasses from './defaultClasses';
 export * as errors from './internal/errors';
 export * as types from './types';
 // the following types are re-exported (instead of just in "types") because they are often used types
-export { DocumentType, Ref, ReturnModelType };
+export { DocumentType, Ref, ReturnModelType, SubDocumentType, ArraySubDocumentType };
 export { getClassForDocument, getClass, getName } from './internal/utils';
 export { Severity, PropType } from './internal/constants';
 
