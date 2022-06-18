@@ -26,7 +26,16 @@ import {
   prop,
   queryMethod,
 } from '../../src/typegoose';
-import type { AsQueryMethod, Func, QueryHelperThis, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
+import type {
+  ArraySubDocumentType,
+  AsQueryMethod,
+  Func,
+  QueryHelperThis,
+  QueryMethodMap,
+  Ref,
+  ReturnModelType,
+  SubDocumentType,
+} from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -955,4 +964,43 @@ describe('warnMixed as property option', () => {
       expect(err.message).toMatchSnapshot();
     }
   });
+});
+
+it('type "SubDocumentType" should work', () => {
+  class SubDocumentTypeNest {
+    @prop()
+    public someprop?: string;
+  }
+
+  class SubDocumentTypeParent {
+    @prop({ required: true, type: () => SubDocumentTypeNest })
+    public sub!: SubDocumentType<SubDocumentTypeNest>;
+  }
+
+  const SubDocumentTypeParentModel = getModelForClass(SubDocumentTypeParent);
+
+  const origDoc = new SubDocumentTypeParentModel({ sub: { someprop: 'hello' } });
+
+  expect(origDoc.sub).not.toBeUndefined();
+  expect(origDoc).toStrictEqual(origDoc.sub.parent());
+  expect(origDoc.sub.$isSingleNested).toEqual(true);
+});
+
+it('type "ArraySubDocumentType" should work', () => {
+  class ArraySubDocumentTypeNest {
+    @prop()
+    public someprop?: string;
+  }
+
+  class ArraySubDocumentTypeParent {
+    @prop({ required: true, type: () => ArraySubDocumentTypeNest })
+    public sub!: ArraySubDocumentType<ArraySubDocumentTypeNest>[];
+  }
+
+  const ArraySubDocumentTypeParentModel = getModelForClass(ArraySubDocumentTypeParent);
+
+  const origDoc = new ArraySubDocumentTypeParentModel({ sub: [{ someprop: 'hello' }] });
+
+  expect(origDoc.sub[0]).not.toBeUndefined();
+  expect(origDoc.sub).toStrictEqual(origDoc.sub[0].parentArray());
 });
