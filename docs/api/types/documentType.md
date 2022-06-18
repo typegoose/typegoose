@@ -1,18 +1,20 @@
 ---
 id: document-type
-title: 'DocumentType<T>'
+title: 'DocumentType<T, QueryHelpers>'
 ---
 
 ## Type `DocumentType`
 
-*previously known as `InstanceType<T>`*
+Typings: `DocumentType<T, QueryHelpers = BeAnObject>`
 
-The Type `DocumentType<T>` is the type used for Documents.
+- `T` is the Class
+- `QueryHelpers` is for [QueryHelpers](../decorators/queryMethod.md)
 
--> It is the logical 'AND' of the `mongoose.Document` and `T`
+The Type `DocumentType<T>` is the type used for Documents.  
+This type is the logical AND of `mongoose.Document` and `T`.
 
 :::note
-When `typeof Class` is used, it might not work.
+With this type, `typeof Class` cannot be used.
 :::
 
 :::caution
