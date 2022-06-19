@@ -7,6 +7,10 @@ title: 'buildSchema'
 
 A compiled model can be re-added with [`addModelToTypegoose`](./addModelToTypegoose.md).
 
+:::tip
+For a full example with `buildSchema` and `addModelToTypegoose` see [Manual Schema Modification](../../guides/advanced/manual-schema-modification.md).
+:::
+
 ## Example
 
 ```ts
