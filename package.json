@@ -63,7 +63,7 @@
     "husky": "^7.0.4",
     "jest": "^28.1.1",
     "lint-staged": "^11.2.6",
-    "mongodb-memory-server": "^8.6.1",
+    "mongodb-memory-server": "^8.7.0",
     "mongoose": "~6.3.5",
     "mongoose-findorcreate": "3.0.0",
     "prettier": "^2.7.1",
