@@ -1,3 +1,12 @@
+## [9.10.0-beta.4](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.3...v9.10.0-beta.4) (2022-06-20)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 28.1.2 ([8fda636](https://github.com/typegoose/typegoose/commit/8fda636d1048c4d04c5224d3cc8f381789193ba2))
+* **eslint:** upgrade to 8.18.0 ([4eb6b5a](https://github.com/typegoose/typegoose/commit/4eb6b5aecf1c484436e6e758351419aeb21b3150))
+* **mongodb-memory-server:** upgrade to 8.7.0 ([7427db7](https://github.com/typegoose/typegoose/commit/7427db78e9c47f68e677e0d758bc92bb293ab3b2))
+
 ## [9.10.0-beta.3](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.2...v9.10.0-beta.3) (2022-06-18)
 
 
