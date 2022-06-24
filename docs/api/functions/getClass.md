@@ -24,7 +24,7 @@ function getClass(
 
 `getClass` is used to get a Class from a variety of inputs, which include:
 
-- `mongoose.Document & IObjectWithTypegooseFunction`: get a Class from a document which has a `.typegooseName` function
+- `mongoose.Document & IObjectWithTypegooseFunction`: get a Class from a document which has a `.typegooseName` function, basically the same as [`getClassForDocument`](./getClassForDocument.md)
 - `mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction`: get a Class from a subdocument which has a `.typegooseName` function
 - `string`: get a Class from a name directly (directly passed to [`getName`](./getName.md))
 - `IObjectWithTypegooseName`: get a Class from any object that has a `.typegooseName` property

@@ -165,7 +165,7 @@ export function getClassForDocument(document: mongoose.Document): NewableFunctio
 }
 
 /**
- * Get the Class for a given Schema
+ * Get the Class for a number of inputs
  * @param input The Input to fetch the class from
  */
 export function getClass(
