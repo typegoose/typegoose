@@ -111,12 +111,12 @@ This is a simple matrix to show what interacts with what, or also called a Truth
 
 <sub>`x` means it is unset</sub>
 
-| Class name | customName    | automaticName | collection       | Result                 |
-|------------|---------------|---------------|------------------|------------------------|
-| “Hello”    | x             | x             | x                | “Hello”                |
-| “Hello”    | x             | x             | “SomeCollection” | “Hello”                |
-| “Hello”    | “AcustomName” | x             | x                | “AcustomName”          |
-| “Hello”    | x             | TRUE          | x                | “Hello”                |
-| “Hello”    | x             | TRUE          | “SomeCollection” | “Hello_SomeCollection” |
-| “Hello”    | “AcustomName” | TRUE          | x                | “Hello_AcustomName”    |
-| “Hello”    | “AcustomName” | TRUE          | “SomeCollection” | “Hello_AcustomName”    |
+| Class name | customName      | automaticName | collection         | Result                   |
+| ---------- | --------------- | ------------- | ------------------ | ------------------------ |
+| `"Hello"`  | x               | x             | x                  | `"Hello"`                |
+| `"Hello"`  | x               | x             | `"SomeCollection"` | `"Hello"`                |
+| `"Hello"`  | `"AcustomName"` | x             | x                  | ``"AcustomName"``        |
+| `"Hello"`  | x               | `true`        | x                  | `"Hello"`                |
+| `"Hello"`  | x               | `true`        | `"SomeCollection"` | `"Hello_SomeCollection"` |
+| `"Hello"`  | `"AcustomName"` | `true`        | x                  | `"Hello_AcustomName"`    |
+| `"Hello"`  | `"AcustomName"` | `true`        | `"SomeCollection"` | `"Hello_AcustomName"`    |
