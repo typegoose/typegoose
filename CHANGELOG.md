@@ -1,3 +1,16 @@
+## [9.10.0-beta.5](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.4...v9.10.0-beta.5) (2022-06-24)
+
+
+### Fixes
+
+* **typegoose::getModelWithString:** allow specifying QueryHelpers for return model ([441113b](https://github.com/typegoose/typegoose/commit/441113b7037a816d41686fa1a4bd9ddbbddb34fe))
+
+
+### Style
+
+* **typeguards:isRefType*:** add tsdoc for "refType" parameter ([c704bb6](https://github.com/typegoose/typegoose/commit/c704bb6c5e7ca399e04fecb4afd7a5fb63626846))
+* **utils::getClass:** update tsdoc to reflect current implementation ([51d2eba](https://github.com/typegoose/typegoose/commit/51d2eba4961b846f3938f281886380291be6e992))
+
 ## [9.10.0-beta.4](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.3...v9.10.0-beta.4) (2022-06-20)
 
 
