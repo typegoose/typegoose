@@ -5,18 +5,30 @@ title: 'isRefType & isRefTypeArray'
 
 ## isRefType
 
-`isRefType<T, S extends RefType>(doc: Ref<T, S> | undefined, reftype: AllowedRefTypes)`: Checks if the supplied value is not a document and is not undefined/null (mainly for `Ref<T>` fields).
+**Typings:**
 
-- `doc`: the document / value to test
-- `reftype`: the expected reference type, [AllowedRefTypes](#allowedreftypes)
+```ts
+function isRefType<T, S extends RefType>(doc: Ref<T, S> | undefined, refType: AllowedRefTypes): doc is NonNullable<S>
+```
 
-Example:
+**Parameters:**
+
+| Name                                                           |                 Type                  | Description                             |
+| :------------------------------------------------------------- | :-----------------------------------: | :-------------------------------------- |
+| `doc` <span class="badge badge--secondary">Required</span>     |              `Ref<T, S>`              | The Document to check                   |
+| `refType` <span class="badge badge--secondary">Required</span> | [`AllowedRefTypes`](#allowedreftypes) | The Expected Reference Type to test for |
+
+`isRefType` checks if the given Input (`doc`) is of the given Type (`refType`).  
+Option `refType` is required because the known Reference Type only exists at compile time, not at runtime so it needs to be explicitly defined (to have accurate checks).
+
+## Example {#isreftype-example}
 
 ```ts
 class Cat {
   @prop({ ref: 'Cat' })
   public partner: Ref<Cat>;
 
+  // this example could be smaller, but for demonstation purposes this is a longer version
   public hasPartner(): boolean {
     if (isRefType(this.partner, mongoose.Types.ObjectId)) {
       // "this.partner" now has the type of "Cat._id"'s RefType (This case ObjectId)
@@ -32,18 +44,53 @@ class Cat {
 
 ## isRefTypeArray
 
-`isRefTypeArray(docs: Ref<any, any>[] | undefined, reftype: AllowedRefTypes)` is the same as `isRefType`, only that it checks if it is an array **AND** all of the items are not `undefined`/`null` and not a document.
+### Overload 1 {#isreftypearray-overload1}
 
-- `doc`: the document / value to test
-- `reftype`: the expected reference type, [AllowedRefTypes](#allowedreftypes)
+**Typings:**
 
-Example:
+```ts
+function isRefTypeArray<T, S extends RefType>(
+  docs: mongoose.Types.Array<Ref<T, S>> | undefined,
+  refType: AllowedRefTypes
+): docs is mongoose.Types.Array<NonNullable<S>>;
+```
+
+**Parameters:**
+
+| Name                                                           |                 Type                  | Description                             |
+| :------------------------------------------------------------- | :-----------------------------------: | :-------------------------------------- |
+| `docs` <span class="badge badge--secondary">Required</span>    |   `mongoose.Types.Array<Ref<T, S>>`   | The Array of Documents to check         |
+| `refType` <span class="badge badge--secondary">Required</span> | [`AllowedRefTypes`](#allowedreftypes) | The Expected Reference Type to test for |
+
+### Overload 2 {#isreftypearray-overload2}
+
+**Typings:**
+
+```ts
+function isRefTypeArray<T, S extends RefType>(docs: Ref<T, S>[] | undefined, refType: AllowedRefTypes): docs is NonNullable<S>[];
+```
+
+**Parameters:**
+
+| Name                                                           |                 Type                  | Description                             |
+| :------------------------------------------------------------- | :-----------------------------------: | :-------------------------------------- |
+| `docs` <span class="badge badge--secondary">Required</span>    |             `Ref<T, S>[]`             | The Array of Documents to check         |
+| `refType` <span class="badge badge--secondary">Required</span> | [`AllowedRefTypes`](#allowedreftypes) | The Expected Reference Type to test for |
+
+### Description {#isreftypearray-description}
+
+`isRefTypeArray` checks if **all** the items in the given Array (`docs`) are matching the given Reference type (`refType`).  
+This function calls [`isRefType`](#isreftype) for each item in the array.  
+Only returns `true` if **all** items in the array return `true`.
+
+### Example {#isreftypearray-example}
 
 ```ts
 class Cat {
   @prop({ ref: 'Cat' })
   public kittens: Ref<Cat>;
 
+  // this example could be smaller, but for demonstation purposes this is a longer version
   public areAllKittensExisting(): boolean {
     if (isRefTypeArray(this.kittens, mongoose.Types.ObjectId)) {
       // "this.kittens" now has the type of "Cat._id"'s RefType (This case ObjectId)
@@ -55,9 +102,7 @@ class Cat {
 }
 ```
 
--> this could be minified, but for demonstration purposes this will stay the long version
-
-## AllowedRefTypes
+## `AllowedRefTypes`
 
 The Allowed Reference Types for `isRefType` and `isRefTypeArray` are:
 
