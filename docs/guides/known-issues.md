@@ -96,3 +96,8 @@ Recently NodeJS 17.5 was released, which included a breaking change for mongoose
 
 Mongoose has released version `6.2.2` on 16.2.22 (d/m/y) which fixes the issue on mongoose's side.  
 NodeJS has a fix merged, but as of now has not released the new version yet.
+
+### `DocumentType` is not generic
+
+Typescript has its own `DocumentType` when having `DOM` enabled in `tsconfig` option `lib`, in any case the correct `DocumentType` has to be imported directly from typegoose.  
+It is also recommended to remove the option `DOM` from the `tsconfig` option `lib` when possible.
