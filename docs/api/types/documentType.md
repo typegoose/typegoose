@@ -5,10 +5,18 @@ title: 'DocumentType<T, QueryHelpers>'
 
 ## Type `DocumentType`
 
-Typings: `DocumentType<T, QueryHelpers = BeAnObject>`
+**Typings:**
 
-- `T` is the Class
-- `QueryHelpers` is for [QueryHelpers](../decorators/queryMethod.md)
+```ts
+type DocumentType<T, QueryHelpers = BeAnObject>
+```
+
+**Parameters:**
+
+| Name                                                     |                      Type                      | Description                    |
+| :------------------------------------------------------- | :--------------------------------------------: | :----------------------------- |
+| `T` <span class="badge badge--secondary">Required</span> |                    `object`                    | The Class to get a document of |
+| `QueryHelpers`                                           | [`QueryHelpers`](../decorators/queryMethod.md) | Add Query Helpers to the type  |
 
 The Type `DocumentType<T>` is the type used for Documents.  
 This type is the logical AND of `mongoose.Document` and `T`.
@@ -38,10 +46,18 @@ class Kitten {
 
 ## Helper Type `SubDocumentType`
 
-Typings: `SubDocumentType<T, QueryHelpers = BeAnObject>`
+**Typings:**
 
-- `T` is the Class
-- `QueryHelpers` is for [QueryHelpers](../decorators/queryMethod.md)
+```ts
+type SubDocumentType<T, QueryHelpers = BeAnObject>
+```
+
+**Parameters:**
+
+| Name                                                     |                      Type                      | Description                    |
+| :------------------------------------------------------- | :--------------------------------------------: | :----------------------------- |
+| `T` <span class="badge badge--secondary">Required</span> |                    `object`                    | The Class to get a document of |
+| `QueryHelpers`                                           | [`QueryHelpers`](../decorators/queryMethod.md) | Add Query Helpers to the type  |
 
 The Type to use for subdocuments, when extra functions like `.parent` or document functions are necessary.  
 This type is a logical AND of `DocumentType` and `mongoose.Types.SubDocument`
@@ -68,10 +84,18 @@ catdoc.favoritePlace.parent() === catdoc;
 
 ## Helper Type `ArraySubDocumentType`
 
-Typings: `ArraySubDocumentType<T, QueryHelpers = BeAnObject>`
+**Typings:**
 
-- `T` is the Class
-- `QueryHelpers` is for [QueryHelpers](../decorators/queryMethod.md)
+```ts
+type ArraySubDocumentType<T, QueryHelpers = BeAnObject>
+```
+
+**Parameters:**
+
+| Name                                                     |                      Type                      | Description                    |
+| :------------------------------------------------------- | :--------------------------------------------: | :----------------------------- |
+| `T` <span class="badge badge--secondary">Required</span> |                    `object`                    | The Class to get a document of |
+| `QueryHelpers`                                           | [`QueryHelpers`](../decorators/queryMethod.md) | Add Query Helpers to the type  |
 
 The Type to use for subdocuments in arrays, when extra functions like `.parent` / `.parentArray` or document functions are necessary.  
 This type is a logical AND of `DocumentType` and `mongoose.Types.ArraySubdocument`
