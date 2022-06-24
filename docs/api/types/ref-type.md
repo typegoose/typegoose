@@ -3,12 +3,27 @@ id: ref-type
 title: 'Ref<PopulatedType, RawId>'
 ---
 
+**Typings:**
+
+```ts
+type Ref<
+  PopulatedType,
+  RawId extends mongoose.RefType>
+```
+
+**Parameters:**
+
+| Name                                                     |                      Type                      | Description                                |
+| :------------------------------------------------------- | :--------------------------------------------: | :----------------------------------------- |
+| `PopulatedType` <span class="badge badge--secondary">Required</span> |           `object`           | The Type of the what is expected when it is populated |
+| `RawId`                                           | `mongoose.RefType` | Overwrite the Reference type (the type of `_id` of `PopulatedType`)              |
+
 The Type `Ref<PopulatedType, RawId>` is the type used for [References](https://mongoosejs.com/docs/populate.html).
 
 - `PopulatedType`: This is the Class being referenced.
 - `RawId`: This should be the `_id` Type of the referenced Class, by default its `mongoose.Types.ObjectId`
 
-There are typeguards to check if a reference if populated or an reference type:
+There are typeguards to check if a reference is populated or of the reference type:
 
 - [`isDocument`](../functions/typeguards/isDocument.md)
 - [`isRefType`](../functions/typeguards/isRefType.md)
