@@ -182,7 +182,6 @@ class SomeClass extends defaultClasses.Base<number> {
 }
 
 // The Plugin options can be applied too
-
 @plugin<mongoose.SequenceOptions>(AutoIncrement, { inc_field: '_id' }) // Note: "start_seq" is not in the "SequenceOptions" type
 class SomeClass extends defaultClasses.Base<number> {
   @prop()
