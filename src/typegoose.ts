@@ -110,7 +110,9 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
  * const NameModel = getModelWithString<typeof ClassName>("ClassName");
  * ```
  */
-export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
+export function getModelWithString<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
+  key: string
+): undefined | ReturnModelType<U, QueryHelpers> {
   assertion(typeof key === 'string', () => new ExpectedTypeError('key', 'string', key));
 
   return models.get(key) as any;
