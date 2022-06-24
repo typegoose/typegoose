@@ -3,28 +3,30 @@ id: set-global-options
 title: 'setGlobalOptions'
 ---
 
-`setGlobalOptions(options)` is used to set the global Options.
-
-Example:
+**Typings:**
 
 ```ts
-setGlobalOptions({ options: { allowMixed: Severity.ALLOW } });
+function setGlobalOptions(options: IGlobalOptions)
 ```
 
-## Options
+**Parameters:**
 
-### schemaOptions
+| Name      |       Type       | Description                   |
+| :-------- | :--------------: | :---------------------------- |
+| `options` | `IGlobalOptions` | The Options to apply globally |
 
-Will be merged with every class's `modelOptions`'s `schemaOptions`.
+`setGlobalOptions` is used to set [`schemaOptions`](../decorators/modelOptions.md#schemaoptions) and [`options`](../decorators/modelOptions.md#options-1) of [`IModelOptions`](../decorators/modelOptions.md#options) globally (applied to all schemas created by [`buildSchema`](./buildSchema.md)) and also set some global operation options for typegoose with [`globalOptions`](#options) property.
 
-[See the Mongoose docs](https://mongoosejs.com/docs/guide.html#options).
+:::caution
+Each call to `setGlobalOptions` overwrites previous calls.
+:::
 
-### options
+## Example
 
-Will be merged with every class's `modelOptions`'s `options`.
+```ts
+setGlobalOptions({ options: { allowMixed: Severity.ERROR } });
+```
 
-[Please look here for more info](../decorators/modelOptions.md#options-1)
+## Global Typegoose Options {#options}
 
-### globalOptions
-
-Global Options that will be applied no where else other than globally.
+There are currently no global Typegoose specific options
