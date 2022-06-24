@@ -3,16 +3,35 @@ id: get-class
 title: 'getClass'
 ---
 
-`getClass(input: any)` gets the class in a variety of ways.  
-Overloads:
+**Typings:**
 
-- `getClass(input: mongoose.Document)`: get the class like in [`getClassForDocument`](api/functions/getClassForDocument.md)
-- `getClass(input: mongoose.Schema.Types.Embedded`: get the class for a nested document
-- `getClass(input: string)`: get the class by the name directly
-- `getClass(input: { typegooseName: string })`: get the class by using some object with the key `typegooseName` of type `string`
+```ts
+function getClass(
+  input:
+    | (mongoose.Document & IObjectWithTypegooseFunction)
+    | (mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction)
+    | string
+    | IObjectWithTypegooseName
+    | any
+): NewableFunction | undefined
+```
+
+**Parameters:**
+
+| Name                                                         | Type  | Description                |
+| :----------------------------------------------------------- | :---: | :------------------------- |
+| `input` <span class="badge badge--secondary">Required</span> | `any` | A Input to get a name from |
+
+`getClass` is used to get a Class from a variety of inputs, which include:
+
+- `mongoose.Document & IObjectWithTypegooseFunction`: get a Class from a document which has a `.typegooseName` function
+- `mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction`: get a Class from a subdocument which has a `.typegooseName` function
+- `string`: get a Class from a name directly (directly passed to [`getName`](./getName.md))
+- `IObjectWithTypegooseName`: get a Class from any object that has a `.typegooseName` property
+- `any`: try to get a Class from any of the above, without having proper types
 
 :::note
-`Embedded` & `Document` only work if the class / schema / model was created with Typegoose
+`Embedded` & `Document` only work if the class / schema / model was created with Typegoose (through [`buildSchema`](./buildSchema.md)).
 :::
 
 ## Example
@@ -37,16 +56,6 @@ const input = new KittenModel();
 getClass(input.currentFood) === Food; // should be "true"
 // Document
 getClass(input) === Kitten; // should be "true"
-```
-
-```ts
-// String-GetClass
-class Kitten {
-  @prop()
-  public name: string;
-}
-
-buildSchema(Kitten);
-
-getClass('Kitten') === Kitten; // should be "true"
+// by string
+getClass('Kitten') == Kitten; // should be "true"
 ```
