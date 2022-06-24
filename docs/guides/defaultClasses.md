@@ -18,6 +18,12 @@ The `TimeStamps` class provides the following fields:
 | `createdAt` | `Date` |
 | `updatedAt` | `Date` |
 
+And also applies the following `schemaOptions`:
+
+|  Field Name  | Value  |
+| :----------: | :----: |
+| `timestamps` | `true` |
+
 ### Base
 
 The Base Class provides the following fields:
