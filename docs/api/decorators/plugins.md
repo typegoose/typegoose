@@ -1,6 +1,6 @@
 ---
-id: plugins
-title: '@plugins'
+id: plugin
+title: '@plugin'
 ---
 
 **Typings:**
