@@ -3,19 +3,35 @@ id: query-method
 title: '@queryMethod'
 ---
 
-`@queryMethod(func: (this: QueryHelperThis<U, QueryHelpers>, ...args: any[]) => mongoose.DocumentQuery)` is a decorator to add [custom query methods](https://thecodebarbarian.com/mongoose-custom-query-methods)
-- `this` needs to be defined to have the correct types inside the class (and to make it compatible with `@queryMethod`)
-- `func` is the function that should be added
-- the return type of the function needs to be `mongoose.DocumentQuery`
+**Typings:**
 
-:::note
-The function needs to have a name and can't be an array-function (it needs to handle and use `this`)
-:::
+```ts
+function queryMethod<QueryHelpers, U extends AnyParamConstructor<any>>(
+  func: (this: QueryHelperThis<U, QueryHelpers>, ...params: any[]) => Query<any, any>
+): ClassDecorator
+```
+
+**Parameters:**
+
+| Name                                                        |                                      Type                                       | Description                           |
+| :---------------------------------------------------------- | :-----------------------------------------------------------------------------: | :------------------------------------ |
+| `func` <span class="badge badge--secondary">Required</span> | `(this: QueryHelperThis<U, QueryHelpers>, ...params: any[]) => Query<any, any>` | The Function to add as a Query Method |
+
+`@queryMethod` is used to add [Custom Query Methods](https://thecodebarbarian.com/mongoose-custom-query-methods).
+
+**`func` Parameters:**
+
+| Name               |                Type                | Description                                               |
+| :----------------- | :--------------------------------: | :-------------------------------------------------------- |
+| `this`             | `QueryHelperThis<U, QueryHelpers>` | The Current Query, with Query Helpers available           |
+| `...params`        |              `any[]`               | Extra Parameters defined by the Query Helper to be added  |
+| `=>` (Return Type) |          `mongoose.Query`          | A Mongoose Query has to be returned from the Query Helper |
+
 :::warning
-Using arrow-functions (`() => {}`) is dicouraged, because the `this` value would otherwise be not what would be expected.
+A Named function has do be used, it also cannot be a Arrow-Function (`() => any`), because the Query can only be accessed with `this` and a name has to be supplied to be callable later on. (see Example below)
 :::
 
-Example:
+## Example
 
 ```ts
 import { types } from "@typegoose/typegoose";
