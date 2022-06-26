@@ -1,3 +1,10 @@
+## [9.10.0-beta.6](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.5...v9.10.0-beta.6) (2022-06-26)
+
+
+### Fixes
+
+* **index:** change "fields" to use mongoose's "IndexDefinition" type ([38862e0](https://github.com/typegoose/typegoose/commit/38862e0463991df73a9d9532cf59c6b0cd981b3b))
+
 ## [9.10.0-beta.5](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.4...v9.10.0-beta.5) (2022-06-24)
 
 
