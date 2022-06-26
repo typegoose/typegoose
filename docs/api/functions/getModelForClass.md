@@ -18,7 +18,7 @@ function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeA
 
 `getModelForClass` compiled a given Class (`cl`) into a `mongoose.Model`, this function will return the existing model if a model of the same name has already been created and cached with [`addModelToTypegoose`](./addModelToTypegoose.md).
 
-[All options for `options`,](../decorators/modelOptions.md#imodeloptions)
+[All options for `options`.](../decorators/modelOptions.md#imodeloptions)
 
 ## Example
 
