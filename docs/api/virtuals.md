@@ -100,13 +100,13 @@ class Parent {
     ref: () => Sub,
     foreignField: 'parent',
     localField: '_id',
-    justOne: true // know that when this is not included, Mongoose will return an array
+    justOne: true // when this is not set to "true", mongoose will always return a Array
   })
   public one: Ref<Sub>;
 }
 ```
 
-Example (since typegoose 7.4 (and mongoose 4.13)): dynamic `ref` & `localField` & `foreignField`
+Example (since typegoose 7.4): dynamic `ref`, `localField` and `foreignField`
 
 ```ts
 class Sub {
