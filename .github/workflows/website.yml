@@ -26,7 +26,7 @@ jobs:
       - name: Install & Build
         run: bash ./ghPagesPre.sh
       - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        uses: JamesIves/github-pages-deploy-action@v4.3.4
         with:
           branch: gh-pages
           folder: . # the root, because the provided script already moves files
