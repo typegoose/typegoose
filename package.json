@@ -59,7 +59,7 @@
     "commitlint": "^16.3.0",
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-prettier": "^4.1.0",
     "husky": "^7.0.4",
     "jest": "^28.1.1",
     "lint-staged": "^11.2.6",
