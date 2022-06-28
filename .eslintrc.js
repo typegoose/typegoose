@@ -88,6 +88,7 @@ module.exports = {
         next: 'import', // dont allow blank line between imports
       },
     ],
+    'eol-last': 'warn',
   },
   env: {
     node: true,
