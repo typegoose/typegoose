@@ -1,0 +1,10 @@
+{
+  "displayName": {
+    "color": "blue",
+    "name": "types"
+  },
+  "runner": "jest-runner-tsd",
+  "testMatch": [
+    "**/test/tests/types/*.test-d.ts"
+  ]
+}

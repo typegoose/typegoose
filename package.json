@@ -19,6 +19,7 @@
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
     "test:watchCoverage": "jest --collectCoverage --watchAll",
+    "test:types": "jest -c jest.config.tsd.json",
     "watch": "tsc -w -p tsconfig.json",
     "clean": "rimraf lib .tsbuildinfo coverage doc build",
     "version:patch": "yarn version patch -m 'release: %s'",
@@ -49,6 +50,7 @@
     "@semantic-release/github": "^7.2.3",
     "@semantic-release/npm": "^7.1.3",
     "@semantic-release/release-notes-generator": "^9.0.3",
+    "@tsd/typescript": "~4.4.4",
     "@types/jest": "^27.5.1",
     "@types/lodash": "^4.14.182",
     "@types/node": "~12.20.52",
@@ -62,6 +64,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^7.0.4",
     "jest": "^28.1.0",
+    "jest-runner-tsd": "^3.1.0",
     "lint-staged": "^11.2.6",
     "mongodb-memory-server": "^8.6.0",
     "mongoose": "~6.3.5",
@@ -70,6 +73,7 @@
     "rimraf": "^3.0.2",
     "semantic-release": "^17.4.7",
     "ts-jest": "^28.0.3",
+    "tsd-lite": "^0.5.4",
     "typescript": "~4.4.4"
   },
   "dependencies": {
