@@ -46,10 +46,10 @@ export class RefTest {
 
   // ref string
   @prop({ ref: RefTestString, type: mongoose.Schema.Types.String })
-  public refFieldString?: Ref<RefTestString /* , string */>; // RefType not set, to know if automatic Ref is brocken
+  public refFieldString?: Ref<RefTestString /* , string */>; // RefType not set, to know if automatic Ref is broken
 
   @prop({ ref: getName(RefTestString), type: mongoose.Schema.Types.String })
-  public refFieldString2?: Ref<RefTestString /* , string */>; // RefType not set, to know if automatic Ref is brocken
+  public refFieldString2?: Ref<RefTestString /* , string */>; // RefType not set, to know if automatic Ref is broken
 
   // ref string array
   @prop({ ref: RefTestString, type: mongoose.Schema.Types.String })
@@ -60,10 +60,10 @@ export class RefTest {
 
   // ref string optional or undefined
   @prop({ ref: RefTestString, type: mongoose.Schema.Types.String })
-  public refFieldStringOptional?: Ref<RefTestStringOptional /* , string */>; // RefType not set, to know if automatic Ref is brocken
+  public refFieldStringOptional?: Ref<RefTestStringOptional /* , string */>; // RefType not set, to know if automatic Ref is broken
 
   @prop({ ref: getName(RefTestString), type: mongoose.Schema.Types.String })
-  public refFieldStringOrUndefined?: Ref<RefTestStringOrUndefined /* , string */>; // RefType not set, to know if automatic Ref is brocken
+  public refFieldStringOrUndefined?: Ref<RefTestStringOrUndefined /* , string */>; // RefType not set, to know if automatic Ref is broken
 
   // ref string array
   @prop({ ref: RefTestString, type: mongoose.Schema.Types.String })
