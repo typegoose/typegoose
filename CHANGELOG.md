@@ -1,3 +1,10 @@
+## [9.10.0-beta.8](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.7...v9.10.0-beta.8) (2022-06-30)
+
+
+### Fixes
+
+* **types::DocumentType:** simplify conditional ([be59b7a](https://github.com/typegoose/typegoose/commit/be59b7ac195143887b927c113d9ee8f369cef778))
+
 ## [9.10.0-beta.7](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.6...v9.10.0-beta.7) (2022-06-28)
 
 
