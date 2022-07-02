@@ -33,7 +33,9 @@ export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<DocumentTyp
  */
 export type AnyParamConstructor<T> = new (...args: any) => T;
 /**
- * The Type of a Model that gets returned by "getModelForClass" and "setModelForClass"
+ * The Type for Models used in typegoose, mostly returned by "getModelForClass" and "addModelToTypegoose"
+ * @example
+ * const Model: ReturnModelType<typeof YourClass, YourClassQueryHelper> = mongoose.model("YourClass", YourClassSchema);
  */
 export type ReturnModelType<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject> = ModelType<InstanceType<U>, QueryHelpers> & U;
 
