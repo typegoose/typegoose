@@ -474,9 +474,9 @@ export type IndexOptions<_T> = mongoose.IndexOptions;
  * const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, target) || []);
  * ```
  */
-export interface IIndexArray<T> {
+export interface IIndexArray {
   fields: KeyStringAny;
-  options?: IndexOptions<T>;
+  options?: IndexOptions<unknown>;
 }
 
 /**
