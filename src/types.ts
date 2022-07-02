@@ -346,7 +346,7 @@ export interface VirtualOptions {
   /** Extra Query Options */
   options?: mongoose.VirtualTypeOptions['options'];
   /** Match Options */
-  match?: KeyStringAny | ((doc) => KeyStringAny);
+  match?: mongoose.VirtualTypeOptions['match'];
   /**
    * If you set this to `true`, Mongoose will call any custom getters you defined on this virtual.
    *
