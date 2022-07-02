@@ -1,3 +1,35 @@
+## [9.10.0-beta.9](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.8...v9.10.0-beta.9) (2022-07-02)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 28.1.4 ([feb2ece](https://github.com/typegoose/typegoose/commit/feb2ece6d190ab28d9c918f16c3a29f6fea3b49b))
+* **@typescript-eslint/*:** upgrade to 5.30.3 ([7a722e1](https://github.com/typegoose/typegoose/commit/7a722e13be77d15c1b2d8a93f1c347ec8952a74e))
+* **eslint:** upgrade to 8.19.0 ([f5940b4](https://github.com/typegoose/typegoose/commit/f5940b45b7675f89738d1c0081f45570f7dfc4e5))
+* **eslint-plugin-prettier:** upgrade to 4.2.1 ([b1acd20](https://github.com/typegoose/typegoose/commit/b1acd20eacfdbb75faaebb6a88c5e9c191268e19))
+* **jest:** upgrade to 28.1.2 ([e8139e2](https://github.com/typegoose/typegoose/commit/e8139e2f3d3b6364031b7f7f9f31026e14236513))
+* **mongodb-memory-server:** upgrade to 8.7.2 ([c81fb51](https://github.com/typegoose/typegoose/commit/c81fb5165fc4bebe26ae372d542c736ffdca9106))
+* **mongoose:** upgrade to 6.4.2 ([1558851](https://github.com/typegoose/typegoose/commit/15588515b22cc8fd1733931f0ef624319063502e))
+
+
+### Fixes
+
+* **types::BasePropOptions:** update "enum" to use mongoose's types ([8c8a6e2](https://github.com/typegoose/typegoose/commit/8c8a6e27a5d4ed7e724c43908b1846be26d777e3))
+* **types::DocumentType:** add correct generic for "toJSON" and "toObject" types ([026482d](https://github.com/typegoose/typegoose/commit/026482df5fd43775b6073ceb55e2bd0bffb0dbc5)), closes [typegoose/typegoose#732](https://github.com/typegoose/typegoose/issues/732)
+* **types::IIndexArray:** remove generic ([9983ce9](https://github.com/typegoose/typegoose/commit/9983ce9f81ceca9097aa6d4295a5f117c5687bc8))
+* **types::IPluginsArray:** remove generic ([abff87e](https://github.com/typegoose/typegoose/commit/abff87e81134f2e4b60bd3187716b32dda61f4a9))
+* **types::VirtualOptions:** update "match" to use mongoose's types ([dc6680f](https://github.com/typegoose/typegoose/commit/dc6680f207a82a7e8f2035925c40262523510feb))
+
+
+### Style
+
+* **types::BeAnObject:** update tsdoc to explain difference with "KeyStringAny" ([3448fde](https://github.com/typegoose/typegoose/commit/3448fde733aee2d51558897e082894170b08b27c))
+* **types::EmptyVoidFn:** fix typo in tsdoc ([93aab06](https://github.com/typegoose/typegoose/commit/93aab0660f4bed680fc91360378cd8e9013531dc))
+* **types::IObjectWithTypegooseName:** deprecate interface and value ([89810b8](https://github.com/typegoose/typegoose/commit/89810b8e53c35a9cde407b1077487a16c945abe6))
+* **types::KeyStringAny:** simplify type by using "Record" ([77c9502](https://github.com/typegoose/typegoose/commit/77c95022209c7bf3626af267b8fc8ccb2f1a45a4))
+* **types::ReturnModelType:** update tsdoc ([bb66145](https://github.com/typegoose/typegoose/commit/bb661456c5d8fa5e9c0fc3bf022620d07d7c8b62))
+* **types::VirtualPopulateMap:** change map type to not be coerced to "any" ([b3c43ac](https://github.com/typegoose/typegoose/commit/b3c43acbf5ad742068d2bf58570a6733474a3d3c))
+
 ## [9.10.0-beta.8](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.7...v9.10.0-beta.8) (2022-06-30)
 
 
