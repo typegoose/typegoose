@@ -603,10 +603,8 @@ export interface IPrototype {
   prototype?: any;
 }
 
-/** An Helper Interface for key: any: string */
-export interface KeyStringAny {
-  [key: string]: any;
-}
+/** An Helper Interface for defining a "key" index of "string" and "value" of "any" */
+export type KeyStringAny = Record<string, any>;
 
 /**
  * The Return Type of "utils.getType"
