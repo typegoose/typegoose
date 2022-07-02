@@ -154,7 +154,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     }
 
     /** Get Metadata for indices */
-    const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
+    const plugins: IPluginsArray[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
 
     if (Array.isArray(plugins)) {
       for (const plugin of plugins) {

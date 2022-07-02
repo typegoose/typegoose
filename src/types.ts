@@ -483,12 +483,12 @@ export interface IIndexArray {
  * Type for the Values stored in the Reflection for Plugins
  * @example
  * ```ts
- * const plugins: IPluginsArray<any>[] = Array.from(Reflect.getMetadata(DecoratorKeys.Plugins, target) ?? []);
+ * const plugins: IPluginsArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.Plugins, target) ?? []);
  * ```
  */
-export interface IPluginsArray<T> {
+export interface IPluginsArray {
   mongoosePlugin: Func;
-  options: T;
+  options: BeAnObject | undefined;
 }
 
 /**
