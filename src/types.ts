@@ -498,7 +498,7 @@ export interface IPluginsArray {
  * const virtuals: VirtualPopulateMap = new Map(Reflect.getMetadata(DecoratorKeys.VirtualPopulate, target.constructor) ?? []);
  * ```
  */
-export type VirtualPopulateMap = Map<string, any & VirtualOptions>;
+export type VirtualPopulateMap = Map<string, VirtualOptions & Record<string, unknown>>;
 
 /**
  * Gets the signature (parameters with their types, and the return type) of a function type.
