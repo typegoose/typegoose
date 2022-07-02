@@ -155,19 +155,43 @@ typeguards();
 async function testDocumentType() {
   const someNewDoc = new TestClassModel();
 
-  expectType<typegoose.mongoose.Document<any, BeAnObject, any> & TestClass & IObjectWithTypegooseFunction & { _id: any }>(someNewDoc);
+  expectType<typegoose.mongoose.Document<any, BeAnObject, TestClass> & TestClass & IObjectWithTypegooseFunction & { _id: any }>(someNewDoc);
 
   const someCreatedDoc = await TestClassModel.create();
 
-  expectType<(typegoose.mongoose.Document<any, BeAnObject, any> & TestClass & IObjectWithTypegooseFunction & { _id: any })[]>(
+  expectType<(typegoose.mongoose.Document<any, BeAnObject, TestClass> & TestClass & IObjectWithTypegooseFunction & { _id: any })[]>(
     someCreatedDoc
   );
 
   const someFoundDoc = await TestClassModel.findOne();
 
-  expectType<(typegoose.mongoose.Document<any, BeAnObject, any> & TestClass & IObjectWithTypegooseFunction & { _id: any }) | null>(
+  expectType<(typegoose.mongoose.Document<any, BeAnObject, TestClass> & TestClass & IObjectWithTypegooseFunction & { _id: any }) | null>(
     someFoundDoc
   );
 }
 
 testDocumentType();
+
+async function gh732() {
+  class SomeClass {
+    @typegoose.prop()
+    public someoptionalProp?: string;
+
+    @typegoose.prop({ required: true })
+    public somerequiredProp!: string;
+  }
+
+  const SomeClassModel = typegoose.getModelForClass(SomeClass);
+
+  const doc = await SomeClassModel.create({ someoptionalProp: 'helloopt', somerequiredProp: 'helloreq' });
+
+  expectType<typegoose.mongoose.Document<any, BeAnObject, SomeClass> & SomeClass & IObjectWithTypegooseFunction & { _id: any }>(doc);
+
+  const toobj = doc.toObject();
+  const tojson = doc.toJSON();
+
+  expectType<typegoose.mongoose.Require_id<typegoose.mongoose.LeanDocument<SomeClass>>>(toobj);
+  expectType<typegoose.mongoose.FlattenMaps<typegoose.mongoose.LeanDocument<SomeClass>>>(tojson);
+}
+
+gh732();

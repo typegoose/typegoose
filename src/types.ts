@@ -12,8 +12,8 @@ import type { Severity, PropType } from './internal/constants';
  * ```
  */
 export type DocumentType<T, QueryHelpers = BeAnObject> = (T extends { _id: unknown }
-  ? mongoose.Document<T['_id'], QueryHelpers>
-  : mongoose.Document<any, QueryHelpers>) &
+  ? mongoose.Document<T['_id'], QueryHelpers, T>
+  : mongoose.Document<any, QueryHelpers, T>) &
   T &
   IObjectWithTypegooseFunction;
 /**
