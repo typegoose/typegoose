@@ -590,7 +590,10 @@ export interface IObjectWithTypegooseFunction {
   typegooseName(): string;
 }
 
-/** Interface describing a Object that has a "typegooseName" Value */
+/**
+ * Interface describing a Object that has a "typegooseName" Value
+ * @deprecated This interface and value will be removed in typegoose 10, use {@link IObjectWithTypegooseFunction} instead
+ */
 export interface IObjectWithTypegooseName {
   typegooseName: string;
 }
