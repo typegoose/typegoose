@@ -1,3 +1,10 @@
+## [9.10.0-beta.10](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.9...v9.10.0-beta.10) (2022-07-02)
+
+
+### Style
+
+* **types::IndexOptions:** add TODO for typegoose 10 ([edcd0c4](https://github.com/typegoose/typegoose/commit/edcd0c4af536d1787dd4fae4d7d9786c6e431e87))
+
 ## [9.10.0-beta.9](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.8...v9.10.0-beta.9) (2022-07-02)
 
 
