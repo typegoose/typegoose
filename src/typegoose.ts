@@ -8,8 +8,8 @@ import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata,
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '6.3.5')) {
-    throw new Error(`Please use mongoose 6.3.5 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '6.4.2')) {
+    throw new Error(`Please use mongoose 6.4.2 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
@@ -24,7 +24,16 @@ import { constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
 import { logger } from './logSettings';
 import { isModel } from './typeguards';
-import type { AnyParamConstructor, BeAnObject, DocumentType, IModelOptions, Ref, ReturnModelType } from './types';
+import type {
+  AnyParamConstructor,
+  BeAnObject,
+  DocumentType,
+  IModelOptions,
+  Ref,
+  ReturnModelType,
+  SubDocumentType,
+  ArraySubDocumentType,
+} from './types';
 import { ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
 /* exports */
@@ -42,7 +51,7 @@ export * as defaultClasses from './defaultClasses';
 export * as errors from './internal/errors';
 export * as types from './types';
 // the following types are re-exported (instead of just in "types") because they are often used types
-export { DocumentType, Ref, ReturnModelType };
+export { DocumentType, Ref, ReturnModelType, SubDocumentType, ArraySubDocumentType };
 export { getClassForDocument, getClass, getName } from './internal/utils';
 export { Severity, PropType } from './internal/constants';
 
@@ -101,7 +110,9 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
  * const NameModel = getModelWithString<typeof ClassName>("ClassName");
  * ```
  */
-export function getModelWithString<U extends AnyParamConstructor<any>>(key: string): undefined | ReturnModelType<U> {
+export function getModelWithString<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
+  key: string
+): undefined | ReturnModelType<U, QueryHelpers> {
   assertion(typeof key === 'string', () => new ExpectedTypeError('key', 'string', key));
 
   return models.get(key) as any;

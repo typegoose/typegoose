@@ -35,6 +35,7 @@ type AllowedRefTypes = typeof String | typeof Number | typeof Buffer | typeof mo
 /**
  * Check if the document is of type "refType"
  * @param doc The Ref with uncretain type
+ * @param refType The Expected Reference Type (this is required because this type is only known at compile time, not at runtime)
  */
 export function isRefType<T, S extends RefType>(doc: Ref<T, S> | undefined, refType: AllowedRefTypes): doc is NonNullable<S> {
   logger.info('isRefType:', refType);
@@ -64,6 +65,7 @@ export function isRefType<T, S extends RefType>(doc: Ref<T, S> | undefined, refT
  * Check if the array is fully of type "refType"
  * Only returns "true" if all members in the array are of type "refType"
  * @param docs The Ref with uncretain type
+ * @param refType The Expected Reference Type (this is required because this type is only known at compile time, not at runtime)
  */
 export function isRefTypeArray<T, S extends RefType>(
   docs: mongoose.Types.Array<Ref<T, S>> | undefined,
@@ -73,6 +75,7 @@ export function isRefTypeArray<T, S extends RefType>(
  * Check if the array is fully of type "refType"
  * Only returns "true" if all members in the array are of type "refType"
  * @param docs The Ref with uncretain type
+ * @param refType The Expected Reference Type (this is required because this type is only known at compile time, not at runtime)
  */
 export function isRefTypeArray<T, S extends RefType>(docs: Ref<T, S>[] | undefined, refType: AllowedRefTypes): docs is NonNullable<S>[];
 export function isRefTypeArray(docs: Ref<any, any>[] | undefined, refType: AllowedRefTypes): unknown {

@@ -134,7 +134,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     }
 
     /** Get Metadata for indices */
-    const indices: IIndexArray<any>[] = Reflect.getMetadata(DecoratorKeys.Index, cl);
+    const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, cl);
 
     if (Array.isArray(indices)) {
       for (const index of indices) {
@@ -154,7 +154,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     }
 
     /** Get Metadata for indices */
-    const plugins: IPluginsArray<any>[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
+    const plugins: IPluginsArray[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
 
     if (Array.isArray(plugins)) {
       for (const plugin of plugins) {

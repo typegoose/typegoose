@@ -42,13 +42,29 @@ jobs:
       - name: Send codecov.io stats
         if: matrix.node-version == '14.x'
         uses: codecov/codecov-action@v3
+  test-types:
+    permissions:
+      contents: read  # for actions/checkout to fetch code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 12
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12.x
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+      - name: Test Types
+        run: yarn run test:types --colors
+        env:
+          CI: true
   publish:
     permissions:
       contents: write  # for actions/checkout to fetch code and for semantic-release to push commits, release releases and tags
       issues: write # for semantic-release to comment on and close issues
       pull-requests: write # for semantic-release to comment on and close pull requests
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta' || startsWith(github.ref, 'refs/heads/old')
-    needs: [tests]
+    needs: [tests, test-types]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

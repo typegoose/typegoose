@@ -1,19 +1,28 @@
 ---
-id: plugins
-title: '@plugins'
+id: plugin
+title: '@plugin'
 ---
 
-`@plugin<PluginOptions>(mongoosePlugin: (...args: any) => any, options: object)` is used to add plugins to a class
-- `mongoosePlugin`: the plugin itself; some plugins might have to be called first
-- `options`: the options for the plugin
+**Typings:**
 
--> Typegoose has a [default-class for `findOrCreate`](../../guides/defaultClasses.md#findorcreate) with all the types supplied by the plugin
+```ts
+function plugin<TFunc extends Func, TParams = Parameters<TFunc>[1]>(mongoosePlugin: TFunc, options?: TParams): ClassDecorator
+```
 
-:::note
-Plugin-functions that have types and options defined, are automatically inferred, and can be manually overwritten with generic `PluginOptions`.
+**Parameters:**
+
+| Name                                                                  |   Type    | Description                                                                                       |
+| :-------------------------------------------------------------------- | :-------: | :------------------------------------------------------------------------------------------------ |
+| `mongoosePlugin` <span class="badge badge--secondary">Required</span> |  `TFunc`  | The Plugin to add, works like a normal `schema.plugin(plugin)` call                               |
+| `options`                                                             | `TParams` | Options to add to the plugin, works like the second parameter to `schema.plugin(plugin, options)` |
+
+Also see [Common Plugins](../../guides/integration-examples/common-plugins.mdx).
+
+:::tip
+If the Plugin to be added has options defined, it can be automatically inferred and set as the type for `options`, it can also be manually overwritten with the second generic.
 :::
 
-Example:
+## Example
 
 ```ts
 import { plugin, getModelForClass, defaultClasses } from '@typegoose/typegoose';
@@ -25,7 +34,3 @@ class User extends FindOrCreate {}
 const UserModel = getModelForClass(User);
 const result = await UserModel.findOrCreate({ ... });
 ```
-
-## Typegoose plugins
-
-- [Auto-Increment](https://github.com/typegoose/auto-increment/)

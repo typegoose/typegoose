@@ -3,9 +3,27 @@ id: prop
 title: '@prop'
 ---
 
-`@prop(options: object, kind: PropType)` is used for setting properties in a Class (without this set, it is just a type and will **NOT** be in the final model/document)
-- `options` is to set [all options](#single-options)
-- `kind` is to overwrite what kind of prop this is (should be auto-inferred), [read more here](#proptype)
+**Typings:**
+
+```ts
+function prop(
+  options?: BasePropOptions | ArrayPropOptions | MapPropOptions | PropOptionsForNumber | PropOptionsForString | VirtualOptions,
+  kind?: PropType
+): PropertyDecorator
+```
+
+**Parameters:**
+
+| Name                                                           |          Type           | Description                                  |
+| :------------------------------------------------------------- | :---------------------: | :------------------------------------------- |
+| `options` <span class="badge badge--secondary">Required</span> |    `BasePropOptions`    | The Option to set for the following property |
+| `kind`                                                         | [`PropType`](#proptype) | Overwrite what Kind is used                  |
+
+`@prop` is used to mark properties to be in the Schema and also set Options of that property.
+
+:::note
+Any Property that does not have `@prop` on it, will not be in the Schema, because it cannot be seen at runtime.
+:::
 
 ## Single Options
 
@@ -386,7 +404,7 @@ class Enumed {
 
 Known-Issues:
 - Babel doesn't set the type for enums correctly. They need to be set manually with [the `type` option](#type)
-- If transpiling your code with `tsc --transpile-only` or `ts-node -- transpile-only`, then the `--transpile-only` needs to be removed or the type needs to be set manually with [the `type` option](#type)
+- If transpiling your code with `tsc --transpile-only` or `ts-node -- transpile-only`, then the `--transpile-only` needs to be removed or the type needs to be set manually with [the `type` option](#type) (see [Known-Issues: Babel](../../guides/known-issues.md#babel))
 
 ### addNullToEnum
 
@@ -588,6 +606,24 @@ class Something {
 }
 ```
 
+### allowMixed
+
+`allowMixed` is used to set a custom `warnMixed` Severity for a specific Property.  
+Takes priority over class-wide `allowMixed`.
+
+See [`modelOptions#allowMixed`](./modelOptions.md#allowmixed) for all possible variants for the enum.
+
+Example:
+
+```ts
+class Something {
+  @prop({ allowMixed: Severity.ERROR, type: () => mongoose.Schema.Type.Mixed })
+  public propy?: any;
+}
+
+buildSchema(Something); // would throw a "warnMixed" error
+```
+
 <!--Below are just the Specific Options-->
 
 ## Array Options
@@ -703,7 +739,7 @@ class SomeMapClass3 {
 
 Accepts Type: `boolean`
 
-Set this to `true`, if the value should always be lowercased.
+Set this to `true`, if the value should always be transformed to be lowercased.
 
 Example:
 
@@ -718,7 +754,7 @@ class LowerCased {
 
 Accepts Type: `boolean`
 
-Set this to `true`, if the value should always be UPPERCASED. <!--please dont change this to lowercased-->
+Set this to `true`, if the value should always be transformed to be UPPERCASE. <!--please dont change this to lowercase-->
 
 Example:
 
@@ -831,7 +867,7 @@ Options for [Virtual Populate](../virtuals.md#virtual-populate)
 
 Required: yes, if using virtual populate
 
-See normal [`ref`](#ref)
+For Options and Typings, see normal [`ref`](#ref).
 
 ### foreignField
 
@@ -873,7 +909,7 @@ Accepts Type: `object | (doc) => object`
 
 Set a custom matcher for virtual populate.
 
-<!--The Following "a" is a backwards-comaptability anchor-->
+<!--The Following "a" is a backwards-compatibility anchor-->
 <a name="whatisit"></a>
 
 ## PropType

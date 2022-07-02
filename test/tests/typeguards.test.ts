@@ -48,6 +48,10 @@ describe('isDocument / isDocumentArray', () => {
 
     await UserSub.populate('master');
 
+    if (!isDocument(UserSub)) {
+      fail('"UserSub" is not a Document!');
+    }
+
     if (isDocument(UserSub.master)) {
       expect(UserSub.master.name).toEqual('master');
       expect(UserSub.master.name).not.toEqual('other');

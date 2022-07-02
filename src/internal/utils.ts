@@ -3,6 +3,7 @@ import * as mongoose from 'mongoose';
 import { logger } from '../logSettings';
 import type {
   AnyParamConstructor,
+  DecoratedPropertyMetadataMap,
   DeferredFunc,
   Func,
   GetTypeReturn,
@@ -164,7 +165,7 @@ export function getClassForDocument(document: mongoose.Document): NewableFunctio
 }
 
 /**
- * Get the Class for a given Schema
+ * Get the Class for a number of inputs
  * @param input The Input to fetch the class from
  */
 export function getClass(
@@ -534,13 +535,16 @@ export function isTypeMeantToBeArray(rawOptions: any): boolean {
  */
 export function warnMixed(target: any, key: string): void | never {
   const name = getName(target);
-  const modelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, getRightTarget(target)) ?? {};
+  const modelOptions: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, getRightTarget(target)) ?? {};
+  const rawOptions = Reflect.getMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap | undefined;
 
-  switch (modelOptions.options?.allowMixed) {
+  const setSeverity: Severity = rawOptions?.get(key)?.options?.allowMixed ?? modelOptions.options?.allowMixed ?? Severity.WARN;
+
+  logger.debug(`setSeverity for "${name}.${key}" is "${setSeverity}"`);
+
+  switch (setSeverity) {
     default:
     case Severity.WARN:
-      logger.debug('warnMixed: modelOptions:', modelOptions);
-
       logger.warn(
         'Setting "Mixed" for property "%s.%s"\nLook here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed',
         name,

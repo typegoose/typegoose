@@ -60,9 +60,9 @@ Virtual-Populate is also supported by Typegoose
 
 Options ([look here for more details](https://mongoosejs.com/docs/api/schema.html#schema_Schema-virtual)):
 
-- `ref`: This is like a normal [ref](https://typegoose.github.io/typegoose/docs/api/decorators/prop/#ref), use `'ClassName'` when the classes are in different files **[Required]**
-- `foreignField`: Which property(on the ref-Class) to match `localField` against **[Required]**
-- `localField`: Which property(on the current-Class) to match `foreignField` against **[Required]**
+- `ref`: This is like a normal [ref](https://typegoose.github.io/typegoose/docs/api/decorators/prop/#ref), use `'ClassName'` when the classes are in different files <span class="badge badge--secondary">Required</span>
+- `foreignField`: Which property(on the ref-Class) to match `localField` against <span class="badge badge--secondary">Required</span>
+- `localField`: Which property(on the current-Class) to match `foreignField` against <span class="badge badge--secondary">Required</span>
 - `justOne`: Return as One Document(true) or as Array(false) ***[Optional]***
 - `count`: Return the number of Documents found instead of the actual Documents ***[Optional]***
 - `options`: Extra Query Options ***[Optional]***
@@ -100,13 +100,13 @@ class Parent {
     ref: () => Sub,
     foreignField: 'parent',
     localField: '_id',
-    justOne: true // know that when this is not included, Mongoose will return an array
+    justOne: true // when this is not set to "true", mongoose will always return a Array
   })
   public one: Ref<Sub>;
 }
 ```
 
-Example (since typegoose 7.4 (and mongoose 4.13)): dynamic `ref` & `localField` & `foreignField`
+Example (since typegoose 7.4): dynamic `ref`, `localField` and `foreignField`
 
 ```ts
 class Sub {

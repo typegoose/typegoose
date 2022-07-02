@@ -1,0 +1,13 @@
+{
+  "displayName": {
+    "color": "blue",
+    "name": "types"
+  },
+  "runner": "jest-runner-tsd",
+  "testRegex": ".test-d.ts$",
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/lib/"
+  ],
+  "testTimeout": 10000
+}

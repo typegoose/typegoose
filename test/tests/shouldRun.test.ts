@@ -1,6 +1,7 @@
 import * as mongoose from 'mongoose';
 import { mapValueToSeverity } from '../../src/globalOptions';
 import { DecoratorKeys, PropType, Severity } from '../../src/internal/constants';
+import { globalOptions } from '../../src/internal/data';
 import {
   assertion,
   assignMetadata,
@@ -25,7 +26,16 @@ import {
   prop,
   queryMethod,
 } from '../../src/typegoose';
-import type { AsQueryMethod, Func, QueryHelperThis, QueryMethodMap, Ref, ReturnModelType } from '../../src/types';
+import type {
+  ArraySubDocumentType,
+  AsQueryMethod,
+  Func,
+  QueryHelperThis,
+  QueryMethodMap,
+  Ref,
+  ReturnModelType,
+  SubDocumentType,
+} from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -930,4 +940,67 @@ it('should properly get if the type is meant to be a array', () => {
   expect(isTypeMeantToBeArray({ dim: undefined })).toBeFalsy();
   expect(isTypeMeantToBeArray({ dim: 0 })).toBeFalsy();
   expect(isTypeMeantToBeArray({ dim: 1 })).toBeTruthy();
+});
+
+describe('warnMixed as property option', () => {
+  beforeEach(() => {
+    // set options so that they dont interfere with the tests
+    globalOptions['options'] = globalOptions['options'] ?? {};
+    globalOptions['options']['allowMixed'] = Severity.WARN;
+  });
+
+  it('should allow setting "allowMixed" as property option [typegoose/typegoose#620]', () => {
+    class TestPropertyAllowMixed {
+      @prop({ type: () => mongoose.Schema.Types.Mixed, allowMixed: Severity.ERROR })
+      public someMixed?: any;
+    }
+
+    try {
+      getModelForClass(TestPropertyAllowMixed);
+      fail('Expected getModelForClass to fail');
+    } catch (err) {
+      expect(err).toBeInstanceOf(TypeError);
+      assertion(err instanceof TypeError); // typescript check
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+});
+
+it('type "SubDocumentType" should work', () => {
+  class SubDocumentTypeNest {
+    @prop()
+    public someprop?: string;
+  }
+
+  class SubDocumentTypeParent {
+    @prop({ required: true, type: () => SubDocumentTypeNest })
+    public sub!: SubDocumentType<SubDocumentTypeNest>;
+  }
+
+  const SubDocumentTypeParentModel = getModelForClass(SubDocumentTypeParent);
+
+  const origDoc = new SubDocumentTypeParentModel({ sub: { someprop: 'hello' } });
+
+  expect(origDoc.sub).not.toBeUndefined();
+  expect(origDoc).toStrictEqual(origDoc.sub.parent());
+  expect(origDoc.sub.$isSingleNested).toEqual(true);
+});
+
+it('type "ArraySubDocumentType" should work', () => {
+  class ArraySubDocumentTypeNest {
+    @prop()
+    public someprop?: string;
+  }
+
+  class ArraySubDocumentTypeParent {
+    @prop({ required: true, type: () => ArraySubDocumentTypeNest })
+    public sub!: ArraySubDocumentType<ArraySubDocumentTypeNest>[];
+  }
+
+  const ArraySubDocumentTypeParentModel = getModelForClass(ArraySubDocumentTypeParent);
+
+  const origDoc = new ArraySubDocumentTypeParentModel({ sub: [{ someprop: 'hello' }] });
+
+  expect(origDoc.sub[0]).not.toBeUndefined();
+  expect(origDoc.sub).toStrictEqual(origDoc.sub[0].parentArray());
 });

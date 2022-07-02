@@ -3,11 +3,28 @@ id: indexes
 title: '@index'
 ---
 
-`@index(fields: object, options: object)` is used to set indexes
-  - `fields`: set of key-number pairs like `{ field1: 1 }` (`1` for ascending and `-1` for descending), or for text indexes, `{ field1: 'text' }`.
-  - `options`: [please see the MongoDB driver docs](https://mongodb.github.io/node-mongodb-native/3.6/api/Db.html#createIndex). Note that if you want to add `weights` to the `options` (for [full-text search](https://docs.mongodb.com/manual/tutorial/control-results-of-text-search/)), you must define the same set of fields in `fields` as in the `weights`.
+**Typings:**
 
-Example:
+```ts
+function index<T extends BeAnObject = BeAnObject>(fields: mongoose.IndexDefinition, options?: IndexOptions<T>): ClassDecorator
+```
+
+**Parameters:**
+
+| Name                                                          |                                                    Type                                                     | Description                                                   |
+| :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------ |
+| `fields` <span class="badge badge--secondary">Required</span> |                                         `mongoose.IndexDefinition`                                          | All Fields for this single index                              |
+| `options`                                                     | [`IndexOptions<T>`](https://mongodb.github.io/node-mongodb-native/4.7/interfaces/CreateIndexesOptions.html) | Overwrite Schema Options, merged with original schema options |
+
+<!--TODO: update "options" type field link with latest mongodb version-->
+
+`@index` is used to set indices on the schema, this decorator acts like `schema.index()`.
+
+:::note
+For [Full-Text Search](https://docs.mongodb.com/manual/tutorial/control-results-of-text-search/) option `weights` all fields (from `fields`) have to also be defined in `weigths`.
+:::
+
+## Example
 
 ```ts
 @index({ article: 1, user: 1 }, { unique: true }) // compound index

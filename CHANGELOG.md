@@ -1,3 +1,128 @@
+## [9.10.0-beta.10](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.9...v9.10.0-beta.10) (2022-07-02)
+
+
+### Style
+
+* **types::IndexOptions:** add TODO for typegoose 10 ([edcd0c4](https://github.com/typegoose/typegoose/commit/edcd0c4af536d1787dd4fae4d7d9786c6e431e87))
+
+## [9.10.0-beta.9](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.8...v9.10.0-beta.9) (2022-07-02)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 28.1.4 ([feb2ece](https://github.com/typegoose/typegoose/commit/feb2ece6d190ab28d9c918f16c3a29f6fea3b49b))
+* **@typescript-eslint/*:** upgrade to 5.30.3 ([7a722e1](https://github.com/typegoose/typegoose/commit/7a722e13be77d15c1b2d8a93f1c347ec8952a74e))
+* **eslint:** upgrade to 8.19.0 ([f5940b4](https://github.com/typegoose/typegoose/commit/f5940b45b7675f89738d1c0081f45570f7dfc4e5))
+* **eslint-plugin-prettier:** upgrade to 4.2.1 ([b1acd20](https://github.com/typegoose/typegoose/commit/b1acd20eacfdbb75faaebb6a88c5e9c191268e19))
+* **jest:** upgrade to 28.1.2 ([e8139e2](https://github.com/typegoose/typegoose/commit/e8139e2f3d3b6364031b7f7f9f31026e14236513))
+* **mongodb-memory-server:** upgrade to 8.7.2 ([c81fb51](https://github.com/typegoose/typegoose/commit/c81fb5165fc4bebe26ae372d542c736ffdca9106))
+* **mongoose:** upgrade to 6.4.2 ([1558851](https://github.com/typegoose/typegoose/commit/15588515b22cc8fd1733931f0ef624319063502e))
+
+
+### Fixes
+
+* **types::BasePropOptions:** update "enum" to use mongoose's types ([8c8a6e2](https://github.com/typegoose/typegoose/commit/8c8a6e27a5d4ed7e724c43908b1846be26d777e3))
+* **types::DocumentType:** add correct generic for "toJSON" and "toObject" types ([026482d](https://github.com/typegoose/typegoose/commit/026482df5fd43775b6073ceb55e2bd0bffb0dbc5)), closes [typegoose/typegoose#732](https://github.com/typegoose/typegoose/issues/732)
+* **types::IIndexArray:** remove generic ([9983ce9](https://github.com/typegoose/typegoose/commit/9983ce9f81ceca9097aa6d4295a5f117c5687bc8))
+* **types::IPluginsArray:** remove generic ([abff87e](https://github.com/typegoose/typegoose/commit/abff87e81134f2e4b60bd3187716b32dda61f4a9))
+* **types::VirtualOptions:** update "match" to use mongoose's types ([dc6680f](https://github.com/typegoose/typegoose/commit/dc6680f207a82a7e8f2035925c40262523510feb))
+
+
+### Style
+
+* **types::BeAnObject:** update tsdoc to explain difference with "KeyStringAny" ([3448fde](https://github.com/typegoose/typegoose/commit/3448fde733aee2d51558897e082894170b08b27c))
+* **types::EmptyVoidFn:** fix typo in tsdoc ([93aab06](https://github.com/typegoose/typegoose/commit/93aab0660f4bed680fc91360378cd8e9013531dc))
+* **types::IObjectWithTypegooseName:** deprecate interface and value ([89810b8](https://github.com/typegoose/typegoose/commit/89810b8e53c35a9cde407b1077487a16c945abe6))
+* **types::KeyStringAny:** simplify type by using "Record" ([77c9502](https://github.com/typegoose/typegoose/commit/77c95022209c7bf3626af267b8fc8ccb2f1a45a4))
+* **types::ReturnModelType:** update tsdoc ([bb66145](https://github.com/typegoose/typegoose/commit/bb661456c5d8fa5e9c0fc3bf022620d07d7c8b62))
+* **types::VirtualPopulateMap:** change map type to not be coerced to "any" ([b3c43ac](https://github.com/typegoose/typegoose/commit/b3c43acbf5ad742068d2bf58570a6733474a3d3c))
+
+## [9.10.0-beta.8](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.7...v9.10.0-beta.8) (2022-06-30)
+
+
+### Fixes
+
+* **types::DocumentType:** simplify conditional ([be59b7a](https://github.com/typegoose/typegoose/commit/be59b7ac195143887b927c113d9ee8f369cef778))
+
+## [9.10.0-beta.7](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.6...v9.10.0-beta.7) (2022-06-28)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 28.1.3 ([86c9b8e](https://github.com/typegoose/typegoose/commit/86c9b8e444696dbd6a836c55c76d2340240bcb88))
+* **@typescript-eslint/*:** upgrade to 5.30.0 ([e87dffd](https://github.com/typegoose/typegoose/commit/e87dffd81ea1b1734ba56f9e64c6cdd65af658fa))
+* **eslint-plugin-prettier:** upgrade to 4.1.0 ([bde224a](https://github.com/typegoose/typegoose/commit/bde224ad9d238326a5c7219c41f6972c20c81216))
+* **mongodb-memory-server:** upgrade to 8.7.1 ([2f382b6](https://github.com/typegoose/typegoose/commit/2f382b6d255880b3ee4f31bdf958cd5a943811f1))
+
+## [9.10.0-beta.6](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.5...v9.10.0-beta.6) (2022-06-26)
+
+
+### Fixes
+
+* **index:** change "fields" to use mongoose's "IndexDefinition" type ([38862e0](https://github.com/typegoose/typegoose/commit/38862e0463991df73a9d9532cf59c6b0cd981b3b))
+
+## [9.10.0-beta.5](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.4...v9.10.0-beta.5) (2022-06-24)
+
+
+### Fixes
+
+* **typegoose::getModelWithString:** allow specifying QueryHelpers for return model ([441113b](https://github.com/typegoose/typegoose/commit/441113b7037a816d41686fa1a4bd9ddbbddb34fe))
+
+
+### Style
+
+* **typeguards:isRefType*:** add tsdoc for "refType" parameter ([c704bb6](https://github.com/typegoose/typegoose/commit/c704bb6c5e7ca399e04fecb4afd7a5fb63626846))
+* **utils::getClass:** update tsdoc to reflect current implementation ([51d2eba](https://github.com/typegoose/typegoose/commit/51d2eba4961b846f3938f281886380291be6e992))
+
+## [9.10.0-beta.4](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.3...v9.10.0-beta.4) (2022-06-20)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 28.1.2 ([8fda636](https://github.com/typegoose/typegoose/commit/8fda636d1048c4d04c5224d3cc8f381789193ba2))
+* **eslint:** upgrade to 8.18.0 ([4eb6b5a](https://github.com/typegoose/typegoose/commit/4eb6b5aecf1c484436e6e758351419aeb21b3150))
+* **mongodb-memory-server:** upgrade to 8.7.0 ([7427db7](https://github.com/typegoose/typegoose/commit/7427db78e9c47f68e677e0d758bc92bb293ab3b2))
+
+## [9.10.0-beta.3](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.2...v9.10.0-beta.3) (2022-06-18)
+
+
+### Style
+
+* **types:** add "SubDocumentType" and "ArraySubDocumentType" to supplement DocumentType ([72d49c1](https://github.com/typegoose/typegoose/commit/72d49c1a6e16440abb0050f1594280d54ccfd63c))
+
+
+### Fixes
+
+* **typegoose:** re-export type "SubDocumentType" and "ArraySubDocumentType" ([16dadd5](https://github.com/typegoose/typegoose/commit/16dadd530b2255fe1e5519d339ff05ffa50d7732))
+
+## [9.10.0-beta.2](https://github.com/typegoose/typegoose/compare/v9.10.0-beta.1...v9.10.0-beta.2) (2022-06-17)
+
+
+### Dependencies
+
+* **@types/node:** upgrade to 12.20.55 ([3e09201](https://github.com/typegoose/typegoose/commit/3e09201cfe18cab63c569c6aca1d66eea170e108))
+* **@types/semver:** upgrade to 7.3.10 ([92288de](https://github.com/typegoose/typegoose/commit/92288de5a45cbab0c541b84caf86c4db2cadaf8e))
+* **@typescript-eslint/*:** upgrade to 5.28.0 ([44f1388](https://github.com/typegoose/typegoose/commit/44f13882146aaea29ca2eabc0f0af92f98a8900e))
+* **jest:** upgrade to 28.1.1 ([980ea20](https://github.com/typegoose/typegoose/commit/980ea20146eb395dbbacb04f55e97e252b6e18df))
+* **mongodb-memory-server:** upgrade to 8.6.1 ([a5335f0](https://github.com/typegoose/typegoose/commit/a5335f0fe04f97105e322d8de9ba72b9e0ea1fbf))
+* **prettier:** upgrade to 2.7.1 ([8a47e33](https://github.com/typegoose/typegoose/commit/8a47e33016999dd88731473db53148ac3cdb5300))
+* **ts-jest:** upgrade to 28.0.5 ([d663713](https://github.com/typegoose/typegoose/commit/d6637131ba124bc42fa59d82d7d9c997a620733c))
+
+## [9.10.0-beta.1](https://github.com/typegoose/typegoose/compare/v9.9.0...v9.10.0-beta.1) (2022-06-05)
+
+
+### Features
+
+* **utils:** allow setting warnMixed Severity as property option ([ff793d1](https://github.com/typegoose/typegoose/commit/ff793d1201682e54b19927a525cfcec1c11fc2ec)), closes [typegoose/typegoose#620](https://github.com/typegoose/typegoose/issues/620)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 28.1.1 ([9521a04](https://github.com/typegoose/typegoose/commit/9521a04d5f500acb145eb7bca0f6a0fef87babe8))
+* **@types/node:** upgrade to 12.20.54 ([2bf4bdd](https://github.com/typegoose/typegoose/commit/2bf4bdd4eabfaaaf2a2c2d726b4c3a8c857eb8b4))
+* **eslint:** upgrade to 8.17.0 ([5dec6cc](https://github.com/typegoose/typegoose/commit/5dec6cc58105ed7fd868a8a433945d4ed35ea60c))
+* **ts-jest:** upgrade to 28.0.4 ([aaf494b](https://github.com/typegoose/typegoose/commit/aaf494bc39abec1220e2aca41070265c758845bb))
+
 ## [9.9.0](https://github.com/typegoose/typegoose/compare/v9.8.1...v9.9.0) (2022-06-03)
 
 

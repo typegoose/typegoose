@@ -59,6 +59,7 @@ it(
       assertion(!isNullOrUndefined(foundUser.previousJobs), new Error('Expected "previousJobs" to not be undefined/null'));
       assertion(!isNullOrUndefined(foundUser.previousCars), new Error('Expected "previousCars" to not be undefined/null'));
 
+      // @ts-expect-error "id" does not exist in the type by default and mongoose has no handling currently to add virtuals / getters
       expect(foundUser.toObject({ virtuals: true, getters: true })).toMatchSnapshot({
         _id: expect.any(mongoose.Types.ObjectId),
         id: expect.any(String),

@@ -3,9 +3,21 @@ id: model-options
 title: '@modelOptions'
 ---
 
-`@modelOptions(options: object)` is used for setting options like schema options, an existing connect and/or an existing Mongoose.
+**Typings:**
 
-## Options
+```ts
+function modelOptions(options: IModelOptions): ClassDecorator
+```
+
+**Parameters:**
+
+| Name                                                      |           Type           | Description                                                   |
+| :-------------------------------------------------------- | :----------------------: | :------------------------------------------------------------ |
+| `options` <span class="badge badge--secondary">Required</span> |           [`IModelOptions`](#imodeloptions)            | The Options to add to the Class                              |
+
+`@modelOptions` is used to set options on a Class.
+
+## IModelOptions
 
 ### schemaOptions
 

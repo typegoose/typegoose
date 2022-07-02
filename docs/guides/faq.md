@@ -18,7 +18,7 @@ A: Yes it is, but not on the main repository anymore because of [What happened t
 (context: from `typegoose` to `@typegoose/typegoose`)  
 A: Because of a Repository Switch ([reasons](#is-this-project-still-active)) and because a name cannot be used by multiple packages, except if it is scoped.
 
-### Why @typegoose/typegoose
+### Why `@typegoose/typegoose`
 
 A: Because I (hasezoey) don't have permissions over the old `typegoose` repository and I dont want to touch the old npm package. It is a typical forking and continuation of an OSS project.
 

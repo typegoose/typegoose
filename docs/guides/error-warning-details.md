@@ -11,12 +11,12 @@ Only Removed Error will have a link to their code, because there is currently no
 
 ### Mongoose Version [E001]
 
-Error: `Please use mongoose 6.3.5 or higher (Current mongoose: x.x.x) [E001]`
+Error: `Please use mongoose 6.4.2 or higher (Current mongoose: x.x.x) [E001]`
 
 Error Class: `Error`
 
 Details:  
-Typegoose requires at least mongoose version `6.3.5`, because that version changed something that affected typegoose internals
+Typegoose requires at least mongoose version `6.4.2`, because that version changed something that affected typegoose internals
 
 ### NodeJS Version [E002]
 
@@ -65,7 +65,7 @@ Error Class: `RefOptionIsUndefinedError`
 Details:  
 Either:
 - The Option `ref` was defined with a function, but that function returned `undefined / null`
-- The Option `ref` was defined with `undefined / null` (`{ ref: undefined }`) ([Can Be Solved with this guide](guides/../advanced/reference-other-classes.md#common-problems))
+- The Option `ref` was defined with `undefined / null` (`{ ref: undefined }`) ([Can Be Solved with this guide](./advanced/reference-other-classes.md#common-problems))
 
 Example of when this gets triggerd:
 
@@ -186,7 +186,7 @@ Details:
 This Error may get thrown when a invalid Type is used with the option [`enum`](../api/decorators/prop.md#enum).
 Currently Valid Types for enum are `String` or `Number`.
 
-This may be thrown when using typescript option `transpileOnly` (see [Known Issues: transpile-only](,/../known-issues.md#transpile-only)) or using Babel without proper configuration (see [Known Issues: Babel](./known-issues.md#babel)).
+This may be thrown when using typescript option `transpileOnly` (see [Known Issues: transpile-only](./known-issues.md#transpile-only)) or using Babel without proper configuration (see [Known Issues: Babel](./known-issues.md#babel)).
 
 :::tip
 This Error has a workaround, see [Use Without "emitDecoratorMetadata"](./use-without-emitDecoratorMetadata.md).
@@ -264,7 +264,11 @@ Error Class: `TypeError`
 
 Details:  
 The option to change Severity is set to `Severity.ERROR`  
-[read here on how to change this](api/decorators/modelOptions.md#allowmixed)
+
+The Severity can be set:
+- Globally with [`setGlobalOptions`](../api/functions/setGlobalOptions.md).
+- Class-wide with [`modelOptions`](../api/decorators/modelOptions.md#allowmixed).
+- Property-Specific with [`allowMixed`](../api/decorators/prop.md#allowmixed).
 
 ### dim needs to be 1 or higher [E018]
 
