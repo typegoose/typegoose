@@ -467,7 +467,7 @@ export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropert
 /**
  * copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
  */
-export type IndexOptions<_T> = mongoose.IndexOptions;
+export type IndexOptions<_T> = mongoose.IndexOptions; // TODO: remove unused generic in typegoose 10
 
 /**
  * Type for the Values stored in the Reflection for Indexes
