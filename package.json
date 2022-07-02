@@ -67,7 +67,7 @@
     "jest-runner-tsd": "^3.1.0",
     "lint-staged": "^11.2.6",
     "mongodb-memory-server": "^8.7.2",
-    "mongoose": "~6.3.5",
+    "mongoose": "~6.4.2",
     "mongoose-findorcreate": "3.0.0",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",

@@ -465,9 +465,7 @@ export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropert
 /**
  * copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
  */
-export interface IndexOptions<T> extends mongoose.IndexOptions {
-  weights?: Partial<Record<keyof T, number>>;
-}
+export type IndexOptions<_T> = mongoose.IndexOptions;
 
 /**
  * Type for the Values stored in the Reflection for Indexes
