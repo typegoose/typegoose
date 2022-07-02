@@ -615,6 +615,7 @@ export interface GetTypeReturn {
 }
 
 /**
- * This type is for lint error "ban-types"
+ * This type is for lint error "ban-types" where "{}" would be used
+ * This type is seperate from "{@link KeyStringAny}" because it has a different meaning
  */
 export type BeAnObject = Record<string, any>;
