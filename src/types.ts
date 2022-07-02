@@ -396,7 +396,7 @@ export type Ref<
 > = mongoose.PopulatedDoc<PopulatedType, RawId>;
 
 /**
- * An Function type for a function that doesn't have any arguments and doesn't return anything
+ * A Function type for a function that doesn't have any arguments and doesn't return anything
  */
 export type EmptyVoidFn = () => void;
 
