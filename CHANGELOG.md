@@ -1,3 +1,10 @@
+### [9.10.1](https://github.com/typegoose/typegoose/compare/v9.10.0...v9.10.1) (2022-07-03)
+
+
+### Fixes
+
+* update mongoose peer dependency ([ed9dd62](https://github.com/typegoose/typegoose/commit/ed9dd62dbda3398c1045070c93a873012453980b)), closes [typegoose/typegoose#733](https://github.com/typegoose/typegoose/issues/733)
+
 ## [9.10.0](https://github.com/typegoose/typegoose/compare/v9.9.0...v9.10.0) (2022-07-02)
 
 
