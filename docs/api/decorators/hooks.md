@@ -122,7 +122,7 @@ post<T>(method: QMR | QMR[], fn: PostQueryArrayWithError<T>, options?: mongoose.
 | `fn` <span class="badge badge--secondary">Required</span>     |                                         `Func`                                         | The Function to run for the Method(s) set in `method` |
 | `options`                                                     | [`mongoose.SchemaPreOptions`](https://mongoosejs.com/docs/api.html#schema_Schema-post) | Options to set when to run the hook                   |
 
-`@post` is used to set Pre-Hooks for many function, works like `schema.post` calls.  
+`@post` is used to set Post-Hooks for many function, works like `schema.post` calls.  
 `@post` currently supports `method` arrays that mongoose does not natively supports, may change in the future.
 
 For parameter `options`, look at the [mongoose for `schema.post`](https://mongoosejs.com/docs/api/schema.html#schema_Schema-post) or [mongoose Middleware section Naming Conflicts](https://mongoosejs.com/docs/middleware.html#naming).
