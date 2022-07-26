@@ -127,6 +127,10 @@ post<T>(method: QMR | QMR[], fn: PostQueryArrayWithError<T>, options?: mongoose.
 
 For parameter `options`, look at the [mongoose for `schema.post`](https://mongoosejs.com/docs/api/schema.html#schema_Schema-post) or [mongoose Middleware section Naming Conflicts](https://mongoosejs.com/docs/middleware.html#naming).
 
+:::note
+Arrow Functions cannot be used here, because the binding of `this` is required to get & modify the Document / Query / Aggregate.
+:::
+
 ## Example {#post-example}
 
 ```ts
