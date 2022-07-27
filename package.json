@@ -1,6 +1,6 @@
 {
   "name": "@typegoose/typegoose",
-  "version": "9.10.0-beta.10",
+  "version": "9.10.1",
   "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
   "types": "lib/typegoose.d.ts",
@@ -37,7 +37,7 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "~6.3.5"
+    "mongoose": "~6.4.2"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.3.0",

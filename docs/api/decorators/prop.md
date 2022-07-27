@@ -445,6 +445,9 @@ Use this function for embedded discriminators.
 :::note
 The `discriminatorKey` (like in the example property `type`) needs to be always set in a newly created document (via `.create({ type: 'yourKey' })`, or `.save()`)
 :::
+:::note
+There currently is no typegoose built-in way to get the models the `path.discriminator` call would return, see [typegoose/typegoose#744](https://github.com/typegoose/typegoose/issues/744).
+:::
 
 Example for `[Class]`:
 
