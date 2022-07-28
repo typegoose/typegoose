@@ -1,5 +1,5 @@
-import { DocumentType, prop, Ref } from '../../src/typegoose.js';
-import { Car } from './car.js';
+import { DocumentType, prop, Ref } from '../../src/typegoose';
+import { Car } from './car';
 
 export abstract class PersistentModel {
   @prop()

@@ -1,4 +1,4 @@
-import { connect, disconnect } from './utils/connect.js';
+import { connect, disconnect } from './utils/connect';
 
 beforeAll(async () => {
   await connect();

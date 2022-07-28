@@ -1,4 +1,4 @@
-import { getModelForClass, prop, Ref, PropType } from '../../src/typegoose.js';
+import { getModelForClass, prop, Ref, PropType } from '../../src/typegoose';
 
 export class Virtual {
   @prop({ required: true })

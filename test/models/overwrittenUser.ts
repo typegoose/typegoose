@@ -1,4 +1,4 @@
-import { modelOptions, prop, types } from '../../src/typegoose.js';
+import { modelOptions, prop, types } from '../../src/typegoose';
 
 const options = {
   schemaOptions: {

@@ -1,4 +1,4 @@
-import { modelOptions, prop } from '../../src/typegoose.js';
+import { modelOptions, prop } from '../../src/typegoose';
 
 @modelOptions({ schemaOptions: { _id: false } })
 export class JobType {

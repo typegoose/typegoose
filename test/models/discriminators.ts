@@ -1,4 +1,4 @@
-import { getDiscriminatorModelForClass, getModelForClass, prop } from '../../src/typegoose.js';
+import { getDiscriminatorModelForClass, getModelForClass, prop } from '../../src/typegoose';
 
 export class DisMain {
   @prop({ required: true, default: 'hello main1' })

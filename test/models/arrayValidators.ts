@@ -1,4 +1,4 @@
-import { getModelForClass, prop } from '../../src/typegoose.js';
+import { getModelForClass, prop } from '../../src/typegoose';
 
 // Please try to keep this file in sync with ./stringValidators.ts
 

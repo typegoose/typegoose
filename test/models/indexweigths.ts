@@ -1,4 +1,4 @@
-import { getModelForClass, index, prop } from '../../src/typegoose.js';
+import { getModelForClass, index, prop } from '../../src/typegoose';
 
 // using examples from https://docs.mongodb.com/manual/tutorial/control-results-of-text-search/
 @index<IndexWeights>(

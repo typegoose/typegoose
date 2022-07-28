@@ -1,5 +1,5 @@
 import { t, jsonSerializer } from '@deepkit/type';
-import { DocumentType, getModelForClass, prop, mongoose } from '../../src/typegoose.js';
+import { DocumentType, getModelForClass, prop, mongoose } from '../../src/typegoose';
 
 const ObjectId = mongoose.Types.ObjectId;
 // Create a Custom Serializer to add custom transfrom functions to types

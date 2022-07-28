@@ -1,4 +1,4 @@
-import { getModelForClass, prop } from '../../src/typegoose.js';
+import { getModelForClass, prop } from '../../src/typegoose';
 
 export class GetClassTestSub {
   @prop()

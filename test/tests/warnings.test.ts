@@ -1,5 +1,5 @@
-import { logger } from '../../src/logSettings.js';
-import { buildSchema, mongoose, prop } from '../../src/typegoose.js';
+import { logger } from '../../src/logSettings';
+import { buildSchema, mongoose, prop } from '../../src/typegoose';
 
 let spyWarn: jest.SpyInstance;
 // "deprecate" is commented out, because there is currently nothing to test for deprecation

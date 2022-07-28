@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { config } from './config.js';
+import { config } from './config';
 
 interface ExtraConnectionConfig {
   dbName?: string;

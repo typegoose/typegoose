@@ -1,6 +1,6 @@
-import { DecoratorKeys, PropType } from './internal/constants.js';
-import * as utils from './internal/utils.js';
-import { logger } from './logSettings.js';
+import { DecoratorKeys, PropType } from './internal/constants';
+import * as utils from './internal/utils';
+import { logger } from './logSettings';
 import type {
   ArrayPropOptions,
   BasePropOptions,
@@ -10,7 +10,7 @@ import type {
   PropOptionsForNumber,
   PropOptionsForString,
   VirtualOptions,
-} from './types.js';
+} from './types';
 
 /**
  * Set Property Options for the property below

@@ -1,5 +1,5 @@
 import type * as mongoose from 'mongoose';
-import type { Severity, PropType } from './internal/constants.js';
+import type { Severity, PropType } from './internal/constants';
 
 /**
  * Get the Type of an instance of a Document with Class properties

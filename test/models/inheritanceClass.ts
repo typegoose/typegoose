@@ -1,4 +1,4 @@
-import { getModelForClass, modelOptions, prop } from '../../src/typegoose.js';
+import { getModelForClass, modelOptions, prop } from '../../src/typegoose';
 
 @modelOptions({
   schemaOptions: {

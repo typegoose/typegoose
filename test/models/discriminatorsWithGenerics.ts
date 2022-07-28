@@ -1,4 +1,4 @@
-import { getDiscriminatorModelForClass, getModelForClass, modelOptions, prop } from '../../src/typegoose.js';
+import { getDiscriminatorModelForClass, getModelForClass, modelOptions, prop } from '../../src/typegoose';
 
 export enum ROLE {
   VISITOR = 'VISITOR',

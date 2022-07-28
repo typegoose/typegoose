@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
-import { mapValueToSeverity } from '../../src/globalOptions.js';
-import { DecoratorKeys, PropType, Severity } from '../../src/internal/constants.js';
-import { globalOptions } from '../../src/internal/data.js';
+import { mapValueToSeverity } from '../../src/globalOptions';
+import { DecoratorKeys, PropType, Severity } from '../../src/internal/constants';
+import { globalOptions } from '../../src/internal/data';
 import {
   assertion,
   assignMetadata,
@@ -12,8 +12,8 @@ import {
   mergeMetadata,
   mergeSchemaOptions,
   toStringNoFail,
-} from '../../src/internal/utils.js';
-import { logger } from '../../src/logSettings.js';
+} from '../../src/internal/utils';
+import { logger } from '../../src/logSettings';
 import {
   addModelToTypegoose,
   buildSchema,
@@ -25,7 +25,7 @@ import {
   Passthrough,
   prop,
   queryMethod,
-} from '../../src/typegoose.js';
+} from '../../src/typegoose';
 import type {
   ArraySubDocumentType,
   AsQueryMethod,
@@ -35,7 +35,7 @@ import type {
   Ref,
   ReturnModelType,
   SubDocumentType,
-} from '../../src/types.js';
+} from '../../src/types';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
