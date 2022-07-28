@@ -1,3 +1,10 @@
+## [9.11.0-beta.2](https://github.com/typegoose/typegoose/compare/v9.11.0-beta.1...v9.11.0-beta.2) (2022-07-28)
+
+
+### Dependencies
+
+* **lint-staged:** upgrade to 12.5.0 ([f447011](https://github.com/typegoose/typegoose/commit/f4470115cf24a5c99bfb549f9675d0e4143f1f6f))
+
 ## [9.11.0-beta.1](https://github.com/typegoose/typegoose/compare/v9.10.1...v9.11.0-beta.1) (2022-07-27)
 
 
