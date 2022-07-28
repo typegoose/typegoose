@@ -55,6 +55,10 @@ module.exports = {
               href: 'https://stackoverflow.com/questions/tagged/typegoose',
             },
             {
+              label: 'Github Discussions',
+              href: 'https://github.com/typegoose/typegoose/discussions',
+            },
+            {
               label: 'Discord',
               href: 'https://discord.gg/BpGjTTD',
             },
