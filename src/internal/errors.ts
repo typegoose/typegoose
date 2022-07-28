@@ -1,4 +1,4 @@
-import { allVirtualoptions, toStringNoFail } from './utils';
+import { allVirtualoptions, toStringNoFail } from './utils.js';
 
 // Note: dont forget to use "toStringNoFail" on values that are "unknown" or "any"
 

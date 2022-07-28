@@ -1,8 +1,8 @@
 import * as findOrCreate from 'mongoose-findorcreate';
-import { isNullOrUndefined } from '../../src/internal/utils';
-import { defaultClasses, DocumentType, getModelForClass, plugin, prop, Ref, ReturnModelType } from '../../src/typegoose';
-import { Car } from './car';
-import { Job } from './job';
+import { isNullOrUndefined } from '../../src/internal/utils.js';
+import { defaultClasses, DocumentType, getModelForClass, plugin, prop, Ref, ReturnModelType } from '../../src/typegoose.js';
+import { Car } from './car.js';
+import { Job } from './job.js';
 
 export enum Genders {
   MALE = 'male',

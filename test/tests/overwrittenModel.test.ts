@@ -1,8 +1,8 @@
-import { constructors, models } from '../../src/internal/data';
-import { deleteModel, deleteModelWithClass, getModelForClass, modelOptions, prop, types } from '../../src/typegoose';
-import { config } from '../utils/config';
-import { connect } from '../utils/connect';
-import { NormalUser, OverwrittenUser } from './../models/overwrittenUser';
+import { constructors, models } from '../../src/internal/data.js';
+import { deleteModel, deleteModelWithClass, getModelForClass, modelOptions, prop, types } from '../../src/typegoose.js';
+import { config } from '../utils/config.js';
+import { connect } from '../utils/connect.js';
+import { NormalUser, OverwrittenUser } from './../models/overwrittenUser.js';
 
 it('should be possible to overwrite an existing model', () => {
   const options = {

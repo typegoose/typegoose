@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
-import { schemas } from '../../src/internal/data';
-import { assertion, isNullOrUndefined } from '../../src/internal/utils';
+import { schemas } from '../../src/internal/data.js';
+import { assertion, isNullOrUndefined } from '../../src/internal/utils.js';
 import {
   buildSchema,
   DocumentType,
@@ -11,16 +11,16 @@ import {
   isDocumentArray,
   prop,
   Ref,
-} from '../../src/typegoose';
-import { Alias, AliasModel } from '../models/alias';
-import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';
-import { GetSet, GetSetModel } from '../models/getSet';
-import { InternetUserModel } from '../models/internetUser';
-import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models/inventory';
-import { Job } from '../models/job';
-import { OptionsClass, OptionsModel } from '../models/options';
-import { Genders, UserModel } from '../models/user';
-import { NonVirtual, NonVirtualGS, NonVirtualGSModel, NonVirtualModel, VirtualModel, VirtualSubModel } from '../models/virtualprop';
+} from '../../src/typegoose.js';
+import { Alias, AliasModel } from '../models/alias.js';
+import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass.js';
+import { GetSet, GetSetModel } from '../models/getSet.js';
+import { InternetUserModel } from '../models/internetUser.js';
+import { Beverage, BeverageModel, InventoryModel, ScooterModel } from '../models/inventory.js';
+import { Job } from '../models/job.js';
+import { OptionsClass, OptionsModel } from '../models/options.js';
+import { Genders, UserModel } from '../models/user.js';
+import { NonVirtual, NonVirtualGS, NonVirtualGSModel, NonVirtualModel, VirtualModel, VirtualSubModel } from '../models/virtualprop.js';
 
 it('should add a language and job using instance methods', async () => {
   const user = await UserModel.create({

@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
-import { isNullOrUndefined } from './internal/utils';
-import { logger } from './logSettings';
-import type { DocumentType, Ref, RefType } from './types';
+import { isNullOrUndefined } from './internal/utils.js';
+import { logger } from './logSettings.js';
+import type { DocumentType, Ref, RefType } from './types.js';
 
 /**
  * Check if the given document is populated

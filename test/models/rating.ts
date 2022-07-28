@@ -1,4 +1,4 @@
-import { getModelForClass, index, prop, Ref } from '../../src/typegoose';
+import { getModelForClass, index, prop, Ref } from '../../src/typegoose.js';
 
 export class RatingCar {
   @prop({ required: true })

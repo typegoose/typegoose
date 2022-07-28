@@ -1,5 +1,5 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { config } from './utils/config';
+import { config } from './utils/config.js';
 
 export = async function globalTeardown() {
   if (config.Memory) {

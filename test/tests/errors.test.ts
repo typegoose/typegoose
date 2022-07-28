@@ -16,18 +16,18 @@ import {
   prop,
   setGlobalOptions,
   PropType,
-} from '../../src/typegoose'; // import order is important with jest
-import { DecoratorKeys } from '../../src/internal/constants';
-import { _buildSchema } from '../../src/internal/schema';
-import * as utils from '../../src/internal/utils';
-import { mapValueToSeverity } from '../../src/globalOptions';
-import { BasePropOptions } from '../../src/types';
+} from '../../src/typegoose.js'; // import order is important with jest
+import { DecoratorKeys } from '../../src/internal/constants.js';
+import { _buildSchema } from '../../src/internal/schema.js';
+import * as utils from '../../src/internal/utils.js';
+import { mapValueToSeverity } from '../../src/globalOptions.js';
+import { BasePropOptions } from '../../src/types.js';
 import {
   ExpectedTypeError,
   InvalidEnumTypeError,
   InvalidOptionsConstructorError,
   ResolveTypegooseNameError,
-} from '../../src/internal/errors';
+} from '../../src/internal/errors.js';
 
 beforeEach(() => {
   jest.restoreAllMocks();

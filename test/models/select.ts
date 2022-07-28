@@ -1,4 +1,4 @@
-import { getModelForClass, prop } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose.js';
 
 export enum SelectStrings {
   test1 = 'testing 1 should not default include',

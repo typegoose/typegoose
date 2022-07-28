@@ -1,4 +1,4 @@
-import { getModelForClass, prop } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose.js';
 
 /** Enum how it *could* be */
 export enum NumberValidatorEnum {

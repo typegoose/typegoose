@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { NumberValidatorEnum, NumberValidatorsModel } from '../models/numberValidators';
+import { NumberValidatorEnum, NumberValidatorsModel } from '../models/numberValidators.js';
 
 // Please try to keep this file in sync with ./arrayValidator.test.ts
 

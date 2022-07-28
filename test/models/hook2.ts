@@ -1,4 +1,4 @@
-import { getModelForClass, post, pre, prop } from '../../src/typegoose';
+import { getModelForClass, post, pre, prop } from '../../src/typegoose.js';
 
 @pre<Hook2>('save', function (next) {
   this.text = 'saved';

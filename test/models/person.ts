@@ -1,5 +1,5 @@
-import { getModelForClass, pre, prop } from '../../src/typegoose';
-import { PersistentModel } from './persistentModel';
+import { getModelForClass, pre, prop } from '../../src/typegoose.js';
+import { PersistentModel } from './persistentModel.js';
 
 // add a pre-save hook to PersistentModel
 @pre<PersistentModel>('save', function (next) {

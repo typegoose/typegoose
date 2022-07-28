@@ -1,4 +1,4 @@
-import { TestTimeStampsModel } from '../models/dClasses';
+import { TestTimeStampsModel } from '../models/dClasses.js';
 
 it('TimeStamp Model', async () => {
   const doc = await TestTimeStampsModel.create({ someValue: 'hello' });

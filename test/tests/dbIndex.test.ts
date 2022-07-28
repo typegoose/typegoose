@@ -1,6 +1,6 @@
-import { IndexWeights, IndexWeightsModel } from '../models/indexweigths';
-import { RatingCar, RatingCarModel, RatingModel, RatingUser, RatingUserModel } from '../models/rating';
-import { SelectModel, SelectStrings } from '../models/select';
+import { IndexWeights, IndexWeightsModel } from '../models/indexweigths.js';
+import { RatingCar, RatingCarModel, RatingModel, RatingUser, RatingUserModel } from '../models/rating.js';
+import { SelectModel, SelectStrings } from '../models/select.js';
 
 describe('Property Option {select}', () => {
   beforeEach(async () => {

@@ -1,5 +1,5 @@
 import { Exclude, Expose, instanceToPlain, plainToClass, Transform } from 'class-transformer';
-import { getModelForClass, prop } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose.js';
 
 // re-implement base Document to allow class-transformer to serialize/deserialize its properties
 // This class is needed, otherwise "_id" and "__v" would be excluded from the output

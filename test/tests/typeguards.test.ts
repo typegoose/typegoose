@@ -1,5 +1,5 @@
-import { assertion, isNullOrUndefined } from '../../src/internal/utils';
-import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose';
+import { assertion, isNullOrUndefined } from '../../src/internal/utils.js';
+import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose.js';
 import {
   IsRefTypeArrayModel,
   IsRefTypeModel,
@@ -8,7 +8,7 @@ import {
   MTypesArrayRefModel,
   SubModel,
   UserRefModel,
-} from '../models/typeguards';
+} from '../models/typeguards.js';
 
 describe('isDocument / isDocumentArray', () => {
   it('should guarantee array of document types', async () => {

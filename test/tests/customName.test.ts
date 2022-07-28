@@ -1,5 +1,5 @@
-import { constructors, models, schemas } from '../../src/internal/data';
-import { getClass, getClassForDocument, getModelForClass, modelOptions, prop } from '../../src/typegoose';
+import { constructors, models, schemas } from '../../src/internal/data.js';
+import { getClass, getClassForDocument, getModelForClass, modelOptions, prop } from '../../src/typegoose.js';
 
 it('expect no changes to model Name when not using customOptions or collection', () => {
   class NormalOptions {}

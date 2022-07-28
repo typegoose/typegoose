@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
-import { assertion, isNullOrUndefined } from '../../src/internal/utils';
-import { ArrayValidatorEnumNumber, ArrayValidatorEnumString, ArrayValidatorsModel } from '../models/arrayValidators';
+import { assertion, isNullOrUndefined } from '../../src/internal/utils.js';
+import { ArrayValidatorEnumNumber, ArrayValidatorEnumString, ArrayValidatorsModel } from '../models/arrayValidators.js';
 
 // Please try to keep this file in sync with ./stringValidator.test.ts
 

@@ -1,4 +1,4 @@
-import { getModelForClass, getName, modelOptions, mongoose, prop } from '../../src/typegoose';
+import { getModelForClass, getName, modelOptions, mongoose, prop } from '../../src/typegoose.js';
 
 it('should make use of nested-discriminators [typegoose/typegoose#25]', async () => {
   enum BuildingTypes {

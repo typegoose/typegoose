@@ -1,4 +1,4 @@
-import { defaultClasses, getModelForClass, prop } from '../../src/typegoose';
+import { defaultClasses, getModelForClass, prop } from '../../src/typegoose.js';
 
 export class TestTimeStamps extends defaultClasses.TimeStamps {
   @prop({ required: true })

@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
-import { assertion, isNullOrUndefined } from '../../src/internal/utils';
-import { CarModel } from '../models/car';
-import { Genders, Role, UserModel } from '../models/user';
+import { assertion, isNullOrUndefined } from '../../src/internal/utils.js';
+import { CarModel } from '../models/car.js';
+import { Genders, Role, UserModel } from '../models/user.js';
 
 it(
   'should create a User with connections',

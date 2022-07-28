@@ -1,4 +1,4 @@
-import { getModelForClass, prop } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose.js';
 
 // Please try to keep this file in sync with ./arrayValidators.ts
 

@@ -1,7 +1,7 @@
-import { DecoratorKeys } from '../../src/internal/constants';
-import { globalOptions } from '../../src/internal/data';
-import { buildSchema, prop, setGlobalOptions, Severity } from '../../src/typegoose';
-import type { IModelOptions } from '../../src/types';
+import { DecoratorKeys } from '../../src/internal/constants.js';
+import { globalOptions } from '../../src/internal/data.js';
+import { buildSchema, prop, setGlobalOptions, Severity } from '../../src/typegoose.js';
+import type { IModelOptions } from '../../src/types.js';
 
 it('should set the global Options right', () => {
   setGlobalOptions({ options: { allowMixed: Severity.WARN } });

@@ -1,5 +1,5 @@
 import { LeanDocument } from 'mongoose';
-import { assertion } from '../../src/internal/utils';
+import { assertion } from '../../src/internal/utils.js';
 import {
   DocumentType,
   getClass,
@@ -12,9 +12,9 @@ import {
   prop,
   Prop,
   Ref,
-} from '../../src/typegoose';
-import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
-import { Default, DefaultModel, DisciminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminatorsWithGenerics';
+} from '../../src/typegoose.js';
+import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators.js';
+import { Default, DefaultModel, DisciminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminatorsWithGenerics.js';
 
 it('should make use of discriminators', async () => {
   const disMainDoc = await DisMainModel.create({ main1: 'hello DMM' } as DisMain);

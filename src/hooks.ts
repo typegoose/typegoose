@@ -1,12 +1,12 @@
 // disable "no-unused" for this file, to keep hooks consistent (it has to be an inline-comment, because of an problem with eslint)
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { Aggregate, Query } from 'mongoose';
-import { DecoratorKeys } from './internal/constants';
-import { ExpectedTypeError } from './internal/errors';
-import { assertion, getName, isNullOrUndefined } from './internal/utils';
-import { logger } from './logSettings';
-import { mongoose } from './typegoose';
-import type { DocumentType, EmptyVoidFn, HookOptionsEither, IHooksArray } from './types';
+import { DecoratorKeys } from './internal/constants.js';
+import { ExpectedTypeError } from './internal/errors.js';
+import { assertion, getName, isNullOrUndefined } from './internal/utils.js';
+import { logger } from './logSettings.js';
+import { mongoose } from './typegoose.js';
+import type { DocumentType, EmptyVoidFn, HookOptionsEither, IHooksArray } from './types.js';
 
 type NumberOrDocumentOrDocumentArray<T> = number | DocumentType<T> | DocumentType<T>[];
 

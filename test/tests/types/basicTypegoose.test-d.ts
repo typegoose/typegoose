@@ -1,6 +1,6 @@
 import { expectType, expectAssignable } from 'tsd-lite';
-import * as typegoose from '../../../src/typegoose';
-import { BeAnObject, IObjectWithTypegooseFunction } from '../../../src/types';
+import * as typegoose from '../../../src/typegoose.js';
+import { BeAnObject, IObjectWithTypegooseFunction } from '../../../src/types.js';
 
 // decorators return type
 expectType<PropertyDecorator>(typegoose.prop());

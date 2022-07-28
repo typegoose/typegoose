@@ -1,4 +1,4 @@
-import { getModelForClass, mongoose, pre, prop } from '../../src/typegoose';
+import { getModelForClass, mongoose, pre, prop } from '../../src/typegoose.js';
 
 @pre<Car>('save', function (next) {
   if (this.carModel === 'Trabant') {

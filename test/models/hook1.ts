@@ -1,4 +1,4 @@
-import { getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose';
+import { getModelForClass, isDocument, post, pre, prop } from '../../src/typegoose.js';
 
 @pre<Hook>('save', function () {
   if (this.isModified('shape')) {

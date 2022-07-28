@@ -1,10 +1,10 @@
 import { omit } from 'lodash';
-import { DecoratorKeys, Severity } from '../../src/internal/constants';
-import { globalOptions } from '../../src/internal/data';
-import { getName, mergeMetadata } from '../../src/internal/utils';
-import { addModelToTypegoose, buildSchema, getModelForClass, modelOptions, mongoose, prop } from '../../src/typegoose';
-import { IModelOptions } from '../../src/types';
-import { connect } from '../utils/connect';
+import { DecoratorKeys, Severity } from '../../src/internal/constants.js';
+import { globalOptions } from '../../src/internal/data.js';
+import { getName, mergeMetadata } from '../../src/internal/utils.js';
+import { addModelToTypegoose, buildSchema, getModelForClass, modelOptions, mongoose, prop } from '../../src/typegoose.js';
+import { IModelOptions } from '../../src/types.js';
+import { connect } from '../utils/connect.js';
 
 describe('typegoose-specific-options', () => {
   it('should set Severity right', () => {

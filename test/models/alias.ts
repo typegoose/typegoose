@@ -1,4 +1,4 @@
-import { getModelForClass, prop } from '../../src/typegoose';
+import { getModelForClass, prop } from '../../src/typegoose.js';
 
 export class Alias {
   @prop({ required: true })

@@ -1,7 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { logger } from '../src/logSettings';
-import { config } from './utils/config';
-import { connect } from './utils/connect';
+import { logger } from '../src/logSettings.js';
+import { config } from './utils/config.js';
+import { connect } from './utils/connect.js';
 
 export = async function globalSetup() {
   logger.setLevel('DEBUG');

@@ -2,7 +2,7 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
-import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata, mergeSchemaOptions } from './internal/utils.js';
 
 /* istanbul ignore next */
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
@@ -18,12 +18,12 @@ if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version
   }
 }
 
-import { parseENV, setGlobalOptions } from './globalOptions';
-import { DecoratorKeys } from './internal/constants';
-import { constructors, models } from './internal/data';
-import { _buildSchema } from './internal/schema';
-import { logger } from './logSettings';
-import { isModel } from './typeguards';
+import { parseENV, setGlobalOptions } from './globalOptions.js';
+import { DecoratorKeys } from './internal/constants.js';
+import { constructors, models } from './internal/data.js';
+import { _buildSchema } from './internal/schema.js';
+import { logger } from './logSettings.js';
+import { isModel } from './typeguards.js';
 import type {
   AnyParamConstructor,
   BeAnObject,
@@ -33,27 +33,27 @@ import type {
   ReturnModelType,
   SubDocumentType,
   ArraySubDocumentType,
-} from './types';
-import { ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
+} from './types.js';
+import { ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors.js';
 
 /* exports */
 // export the internally used "mongoose", to not need to always import it
 export { mongoose, setGlobalOptions };
-export { setLogLevel, LogLevels } from './logSettings';
-export * from './prop';
-export * from './hooks';
-export * from './plugin';
-export * from './index';
-export * from './modelOptions';
-export * from './queryMethod';
-export * from './typeguards';
-export * as defaultClasses from './defaultClasses';
-export * as errors from './internal/errors';
-export * as types from './types';
+export { setLogLevel, LogLevels } from './logSettings.js';
+export * from './prop.js';
+export * from './hooks.js';
+export * from './plugin.js';
+export * from './index.js';
+export * from './modelOptions.js';
+export * from './queryMethod.js';
+export * from './typeguards.js';
+export * as defaultClasses from './defaultClasses.js';
+export * as errors from './internal/errors.js';
+export * as types from './types.js';
 // the following types are re-exported (instead of just in "types") because they are often used types
 export { DocumentType, Ref, ReturnModelType, SubDocumentType, ArraySubDocumentType };
-export { getClassForDocument, getClass, getName } from './internal/utils';
-export { Severity, PropType } from './internal/constants';
+export { getClassForDocument, getClass, getName } from './internal/utils.js';
+export { Severity, PropType } from './internal/constants.js';
 
 parseENV(); // call this before anything to ensure they are applied
 
