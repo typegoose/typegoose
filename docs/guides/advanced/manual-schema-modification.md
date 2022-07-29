@@ -25,7 +25,7 @@ const CatSchema = buildSchema(Cat);
 CatSchema.virtual("getName").get(function() { return this.name });
 
 // The Schema will have to be manually made into a model
-const CatModelRaw = mongoose.model(getName(Cat), Cat);
+const CatModelRaw = mongoose.model(getName(Cat), CatSchema);
 
 // And finally the model will get added to the typegoose cache with the class and also have proper types
 // essentially "addModelToTypegoose" re-exports the input model, but cast as the correct typegoose type
