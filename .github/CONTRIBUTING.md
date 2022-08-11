@@ -1,5 +1,9 @@
 # How to Contribue
 
+## Language
+
+In this Project & Repository, keep all issues, Pull Requests, and everything else in English.
+
 ## Before making a Pull Request
 
 - Make sure all tests pass locally (`npm run test`)
