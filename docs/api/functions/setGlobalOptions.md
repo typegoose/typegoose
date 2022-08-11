@@ -20,6 +20,9 @@ function setGlobalOptions(options: IGlobalOptions)
 :::caution
 Each call to `setGlobalOptions` overwrites previous calls.
 :::
+:::caution
+The `setGlobalOptions` call has to be before any `buildSchema` (by extension also `getModelForClass`) calls, which means when doing `export const Model = buildSchema(class)`, the `setGlobalOptions` call has to be before any of the imports that export schemas / models.
+:::
 
 ## Example
 
