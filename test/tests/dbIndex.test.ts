@@ -1,4 +1,4 @@
-import { IndexWeights, IndexWeightsModel } from '../models/indexweigths';
+import { IndexWeights, IndexWeightsModel } from '../models/indexweights';
 import { RatingCar, RatingCarModel, RatingModel, RatingUser, RatingUserModel } from '../models/rating';
 import { SelectModel, SelectStrings } from '../models/select';
 

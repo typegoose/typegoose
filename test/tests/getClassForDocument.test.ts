@@ -83,7 +83,7 @@ it('should properly set Decimal128, ObjectID types to field', () => {
   expect((CarModel.schema as any).paths.someId.instance).toEqual('ObjectID');
 });
 
-// faild validation will need to be checked
+// failed validation will need to be checked
 it('should validate Decimal128', async () => {
   expect.assertions(3);
   try {

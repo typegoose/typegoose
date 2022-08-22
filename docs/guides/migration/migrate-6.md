@@ -44,7 +44,7 @@ Otherwise, the functions still override the settings made in `modelOptions`
 
 ## Hooks
 
-Hooks recieved a change (in 6.0.0-13) for the types to comply with the latest mongoose (5.6.8)  
+Hooks received a change (in 6.0.0-13) for the types to comply with the latest mongoose (5.6.8)  
 -> no workarounds or typedefs required anymore.
 
 ## Methods (staticMethod, instanceMethod, virtuals)

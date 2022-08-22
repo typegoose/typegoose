@@ -12,7 +12,7 @@ import TabItem from '@theme/TabItem';
 
 ## Use-Case
 
-If you dont know an use case for this, consider the following:  
+If you don't know an use case for this, consider the following:  
 A Veterinarian that wants to store information about the current patients in their care, how would it be done in mongoose / typegoose?
 
 ## First thought
@@ -371,7 +371,7 @@ class Animal {
   @prop({ required: true, unique: true })
   public patientNumber!: number;
 
-  // options "enum" & "default" can also be specified, but dont have much effect
+  // options "enum" & "default" can also be specified, but don't have much effect
   // the property set in "discriminatorKey" does not actually need to be defined, but its for types like usage in an typeguard
   @prop({ required: true })
   public customKey!: string; // its recommended to only use "string" or "number"

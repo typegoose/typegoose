@@ -11,7 +11,7 @@ A: The original author szokodiakos (github name) [has abandoned the project](htt
 
 ### Is this Project still active?
 
-A: Yes it is, but not on the main repository anymore because of [What happened to the original author?](#what-happened-to-the-original-author) and [Github Permissions](https://help.github.com/en/articles/permission-levels-for-a-user-account-repository) (TL;DR: a collaborator cannot add another collaborater, only the owner can)
+A: Yes it is, but not on the main repository anymore because of [What happened to the original author?](#what-happened-to-the-original-author) and [Github Permissions](https://help.github.com/en/articles/permission-levels-for-a-user-account-repository) (TL;DR: a collaborator cannot add another collaborator, only the owner can)
 
 ### Why is the package now released in another package?
 
@@ -20,7 +20,7 @@ A: Because of a Repository Switch ([reasons](#is-this-project-still-active)) and
 
 ### Why `@typegoose/typegoose`
 
-A: Because I (hasezoey) don't have permissions over the old `typegoose` repository and I dont want to touch the old npm package. It is a typical forking and continuation of an OSS project.
+A: Because I (hasezoey) don't have permissions over the old `typegoose` repository and I don't want to touch the old npm package. It is a typical forking and continuation of an OSS project.
 
 ## Functional
 

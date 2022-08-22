@@ -11,7 +11,7 @@ assignees: ''
 <!--
 - Only include the verions & packages that were used in the environment where typegoose ran
 - in "Code Example" add as many code blocks as needed, but when possible try to use an repo / gist
-- in "Do you know *why* it happenes replace the "*no*" if you know why
+- in "Do you know *why* it happens replace the "*no*" if you know why
 - Make sure you read [Mastering-Markdown](https://guides.github.com/features/mastering-markdown/)
 -->
 
@@ -53,4 +53,4 @@ code here
 
 ---
 
-<!--Write extra below here that dosnt fit in any header-->
+<!--Write extra below here that doesn't fit in any header-->

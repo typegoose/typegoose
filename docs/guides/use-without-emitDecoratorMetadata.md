@@ -3,11 +3,11 @@ id: use-without-emitDecoratorMetadata
 title: 'Use Without "emitDecoratorMetadata"'
 ---
 
-Typegoose can be used without the option [`emitDecoratorMetadata`](https://www.typescriptlang.org/tsconfig#emitDecoratorMetadata), but it is generally recommeneded to enable it for auto-inferring from the typescript type.
+Typegoose can be used without the option [`emitDecoratorMetadata`](https://www.typescriptlang.org/tsconfig#emitDecoratorMetadata), but it is generally recommended to enable it for auto-inferring from the typescript type.
 
 ## Advantages to "emitDecoratorMetadata"
 
-When using `emitDecoratorMetadata`, it is not needed to be explicit about *everything*, like the following example would simply "compile" into the appropiate types.
+When using `emitDecoratorMetadata`, it is not needed to be explicit about *everything*, like the following example would simply "compile" into the appropriate types.
 
 :::info
 Some Properties (like Arrays & Maps) need to be always explicit, see [`@prop` Array Options](../api/decorators/prop.md#array-options).

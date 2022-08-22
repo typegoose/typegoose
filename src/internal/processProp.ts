@@ -271,7 +271,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   const enumOption = rawOptions.enum;
 
   if (!utils.isNullOrUndefined(enumOption)) {
-    // check if the supplied value is already "mongoose-consumeable"
+    // check if the supplied value is already "mongoose-consumable"
     if (!Array.isArray(enumOption)) {
       if (Type === String || Type === mongoose.Schema.Types.String) {
         rawOptions.enum = Object.entries<string>(enumOption) // get all key-value pairs of the enum

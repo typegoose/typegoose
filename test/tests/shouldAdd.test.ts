@@ -30,7 +30,7 @@ it('should add a language and job using instance methods', async () => {
     languages: ['english'],
     uniqueId: 'unique-id',
   });
-  await user.addJob(new Job({ position: 'Dark Wizzard', title: 'Archmage' }));
+  await user.addJob(new Job({ position: 'Dark Wizard', title: 'Archmage' }));
   await user.addJob();
   const savedUser = await user.addLanguage();
 

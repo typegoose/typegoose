@@ -37,7 +37,7 @@ import * as mongoose from 'mongoose';
 import * as autopopulate from 'mongoose-autopopulate';
 import { plugin, prop, Ref, getModelForClass } from '@typegoose/typegoose';
 
-@plugin(autopopulate as any) // this is a dirty fix, because the types of this plugin dont work with "esModuleInterop: false"
+@plugin(autopopulate as any) // this is a dirty fix, because the types of this plugin don't work with "esModuleInterop: false"
 class SomeClass {
   @prop({ autopopulate: true, ref: 'SomeReferencedClass' })
   public populateField: Ref<SomeReferencedClass>;
@@ -109,7 +109,7 @@ the user collection 10 times, extremely delaying the output of the query. Below 
 
 ```ts
 // the types of "autopopulate" may change depending on the tsconfig option "esModuleInterop"
-@plugin(autopopulate as any) // this is a dirty fix, because the types of this plugin dont work
+@plugin(autopopulate as any) // this is a dirty fix, because the types of this plugin don't work
 class SomeClass {
   @prop({ autopopulate: { maxDepth: 1 }, ref: 'SomeReferencedClass' })
   public populateField: Ref<SomeReferencedClass>;

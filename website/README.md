@@ -1,6 +1,6 @@
 This website is built using [Docusaurus 2](https://v2.docusaurus.io/), a modern static website generator.
 
-Note: `yarn` is required, otherwise some plugins dont work
+Note: `yarn` is required, otherwise some plugins don't work
 
 ## Installation
 

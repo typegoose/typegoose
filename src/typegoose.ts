@@ -150,7 +150,7 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
 
   // iterate trough all parents
   while (parentCtor?.name !== 'Object') {
-    // add lower classes (when extending) to the front of the arrray to be processed first
+    // add lower classes (when extending) to the front of the array to be processed first
     parentClasses.unshift(parentCtor);
 
     // set next parent
@@ -172,7 +172,7 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
 /**
  * Add a Class-Model Pair to the Typegoose Cache
  * This can be used to add custom Models to Typegoose, with the type information of "cl"
- * Note: no gurantee that the type information is fully correct when used manually
+ * Note: no guarrantee that the type information is fully correct when used manually
  * @param model The Model to store
  * @param cl The Class to store
  * @param options Overwrite existingMongoose or existingConnection
@@ -181,7 +181,7 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
  * class ClassName {}
  *
  * const schema = buildSchema(ClassName);
- * // modifications to the schame can be done
+ * // modifications to the schema can be done
  * const model = addModelToTypegoose(mongoose.model("Name", schema), ClassName);
  * ```
  */

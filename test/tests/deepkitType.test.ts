@@ -2,7 +2,7 @@ import { t, jsonSerializer } from '@deepkit/type';
 import { DocumentType, getModelForClass, prop, mongoose } from '../../src/typegoose';
 
 const ObjectId = mongoose.Types.ObjectId;
-// Create a Custom Serializer to add custom transfrom functions to types
+// Create a Custom Serializer to add custom transform functions to types
 const mySerializer = new (class CustomSerializer extends jsonSerializer.fork('mySerializer') {})();
 
 // Note: A custom Serializer has to be used, because the included "mongoId" "decorator" only works with "@deepkit/orm"
@@ -147,7 +147,7 @@ describe('@deepkit/type transforms', () => {
     const access = { groups: [Group.confidential, Group.public] };
     // transform our "fake" incoming DTO to a Class instance
     const incomingDataTransformedToClass = plainToClass(Account, origData, access);
-    // Strre the class object
+    // Store the class object
     const createdDoc = await AccountModel.create(incomingDataTransformedToClass);
     // retrieve the document
     const docFound = await AccountModel.findById(createdDoc._id).orFail().exec();

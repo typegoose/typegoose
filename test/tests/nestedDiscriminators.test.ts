@@ -9,7 +9,7 @@ it('should make use of nested-discriminators [typegoose/typegoose#25]', async ()
   @modelOptions({
     schemaOptions: {
       discriminatorKey: 'type',
-      // set to "throw" that if the discriminators dont get applied it fails instead of silently discarding non-existent values
+      // set to "throw" that if the discriminators don't get applied it fails instead of silently discarding non-existent values
       strict: 'throw',
       _id: false,
     },
@@ -77,7 +77,7 @@ it('should make use of nested-discriminators (options as object) [typegoose/type
   @modelOptions({
     schemaOptions: {
       discriminatorKey: 'type',
-      // set to "throw" that if the discriminators dont get applied it fails instead of silently discarding non-existent values
+      // set to "throw" that if the discriminators don't get applied it fails instead of silently discarding non-existent values
       // strict: 'throw',
       _id: false,
     },

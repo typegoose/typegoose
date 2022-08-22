@@ -1,6 +1,6 @@
 import { allVirtualoptions, toStringNoFail } from './utils';
 
-// Note: dont forget to use "toStringNoFail" on values that are "unknown" or "any"
+// Note: don't forget to use "toStringNoFail" on values that are "unknown" or "any"
 
 export class InvalidTypeError extends Error {
   constructor(targetName: string, key: string, Type: unknown) {
@@ -110,7 +110,7 @@ export class OptionDoesNotSupportOptionError extends TypeError {
 export class ResolveTypegooseNameError extends ReferenceError {
   constructor(input: unknown) {
     super(
-      'Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]\n' +
+      'Input was not a string AND didn't have a .typegooseName function AND didn't have a .typegooseName string [E014]\n' +
         `Value: "${toStringNoFail(input)}"`
     );
   }

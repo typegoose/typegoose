@@ -131,7 +131,7 @@ export function isString(Type: any): Type is string {
 }
 
 /**
- * Generate the inital values for the property to be extended upon
+ * Generate the initial values for the property to be extended upon
  * @param name Name of the current Model/Class
  * @param key Key of the property
  * @param proptype Type of the Property
@@ -282,7 +282,7 @@ export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: A
 }
 
 /**
- * Used for lodash customizer's (cloneWith, cloneDeepWith, mergeWith)
+ * Used for lodash customizers (cloneWith, cloneDeepWith, mergeWith)
  * @param key the key of the current object
  * @param val the value of the object that should get returned for "existingMongoose" & "existingConnection"
  */

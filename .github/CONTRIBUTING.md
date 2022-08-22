@@ -106,4 +106,4 @@ When doing code examples in the documentation:
 
 When generally writing (outside of code examples):
 - use inline-code-blocks for versions, code, variable names, etc (like: `this is an inline-code-block`)
-- use double-quotes for things that dont need inline-code-blocks
+- use double-quotes for things that don't need inline-code-blocks

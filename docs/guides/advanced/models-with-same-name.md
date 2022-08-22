@@ -6,7 +6,7 @@ title: 'Models with same name'
 This Guide shows all the possibilities for a model to use different names.
 
 :::note
-If Classes with the same name are wanted, these methods need to be used so that Typegooes can differentiate between them
+If Classes with the same name are wanted, these methods need to be used so that Typegoose can differentiate between them
 :::
 
 :::info

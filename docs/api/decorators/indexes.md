@@ -21,7 +21,7 @@ function index<T extends BeAnObject = BeAnObject>(fields: mongoose.IndexDefiniti
 `@index` is used to set indices on the schema, this decorator acts like `schema.index()`.
 
 :::note
-For [Full-Text Search](https://docs.mongodb.com/manual/tutorial/control-results-of-text-search/) option `weights` all fields (from `fields`) have to also be defined in `weigths`.
+For [Full-Text Search](https://docs.mongodb.com/manual/tutorial/control-results-of-text-search/) option `weights` all fields (from `fields`) have to also be defined in `weights`.
 :::
 
 ## Example

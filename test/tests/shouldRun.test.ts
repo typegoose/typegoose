@@ -750,16 +750,16 @@ describe('test the Passthrough class with "direct"', () => {
     const typegooseSchema = buildSchema(TestPassthroughPropTypeARRAYDirect);
 
     const mongooseChildPath = mongooseSchema.path('child');
-    const typegooeChildPath = typegooseSchema.path('child');
+    const typegooseChildPath = typegooseSchema.path('child');
 
     expect(mongooseChildPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
-    expect(typegooeChildPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+    expect(typegooseChildPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
 
     expect((mongooseChildPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
-    expect((typegooeChildPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
+    expect((typegooseChildPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
 
     expect((mongooseChildPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
-    expect((typegooeChildPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect((typegooseChildPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
   });
 
   it('should make use of the "Passthrough" class with "direct" (PropType.MAP)', () => {
@@ -778,13 +778,13 @@ describe('test the Passthrough class with "direct"', () => {
     const typegooseSchema = buildSchema(TestPassthroughPropTypeMAPDirect);
 
     const mongooseChildPath = mongooseSchema.path('child');
-    const typegooeChildPath = typegooseSchema.path('child');
+    const typegooseChildPath = typegooseSchema.path('child');
 
     expect(mongooseChildPath).toBeInstanceOf(mongoose.Schema.Types.Map);
-    expect(typegooeChildPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+    expect(typegooseChildPath).toBeInstanceOf(mongoose.Schema.Types.Map);
 
     const mongooseChildMapType = mongooseChildPath['$__schemaType'];
-    const typegooseChildMapType = typegooeChildPath['$__schemaType'];
+    const typegooseChildMapType = typegooseChildPath['$__schemaType'];
 
     expect(mongooseChildMapType).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
     expect(typegooseChildMapType).toBeInstanceOf(mongoose.Schema.Types.Subdocument);
@@ -944,7 +944,7 @@ it('should properly get if the type is meant to be a array', () => {
 
 describe('warnMixed as property option', () => {
   beforeEach(() => {
-    // set options so that they dont interfere with the tests
+    // set options so that they don't interferee with the tests
     globalOptions['options'] = globalOptions['options'] ?? {};
     globalOptions['options']['allowMixed'] = Severity.WARN;
   });

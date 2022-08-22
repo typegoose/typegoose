@@ -51,7 +51,7 @@ export enum DecoratorKeys {
   NestedDiscriminators = 'typegoose:nestedDiscriminators',
 }
 
-/** This Enum is meant for baseProp to decide for diffrent props (like if it is an arrayProp or prop or mapProp) */
+/** This Enum is meant for baseProp to decide for different props (like if it is an arrayProp or prop or mapProp) */
 export enum PropType {
   ARRAY,
   MAP,

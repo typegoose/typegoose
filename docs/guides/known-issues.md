@@ -39,7 +39,7 @@ class SomeClass {
 
 <span class="badge badge--warning">This Section may be outdated</span>
 
-Using babel as a TypeScript compiler is known to cause problems (like incorrect types) (see [`transpile-only`](#transpile-only)), it is recommened you use `tsc`, `ts-node` or `ts-jest` directly.
+Using babel as a TypeScript compiler is known to cause problems (like incorrect types) (see [`transpile-only`](#transpile-only)), it is recommended you use `tsc`, `ts-node` or `ts-jest` directly.
 
 If Babel is still needed, then read [Babel TypeScript preset](https://babeljs.io/docs/en/babel-preset-typescript) and install the following plugins:  
 

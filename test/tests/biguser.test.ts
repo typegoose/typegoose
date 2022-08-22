@@ -35,7 +35,7 @@ it(
         title: 'Developer',
         position: 'Lead',
         jobType: {
-          salery: 5000,
+          salary: 5000,
           field: 'IT',
         },
       },
