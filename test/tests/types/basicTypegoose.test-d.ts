@@ -15,7 +15,7 @@ expectType<ClassDecorator>(
   })
 );
 
-// non mongosoe related function return types
+// non mongoose related function return types
 expectType<void>(typegoose.setGlobalOptions({}));
 expectType<void>(typegoose.setLogLevel('DEBUG'));
 
@@ -58,7 +58,7 @@ async function typeguards() {
     }
 
     if (typegoose.isRefType(someNewDoc, typegoose.mongoose.Types.ObjectId)) {
-      // this should never happen at runtime, but i dont know the proper types to set for "isRefType", and so invalid types are here
+      // this should never happen at runtime, but I don't know the proper types to set for "isRefType", and so invalid types are here
     } else {
       // same here
     }
@@ -145,7 +145,7 @@ async function typeguards() {
     }
 
     if (typegoose.isRefType(someFoundDoc, typegoose.mongoose.Types.ObjectId)) {
-      // this should never happen at runtime, but i dont know the proper types to set for "isRefType", and so invalid types are here
+      // this should never happen at runtime, but I don't know the proper types to set for "isRefType", and so invalid types are here
     } else {
       // same here
     }

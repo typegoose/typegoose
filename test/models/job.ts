@@ -6,7 +6,7 @@ export class JobType {
   public field!: string;
 
   @prop({ required: true })
-  public salery!: number;
+  public salary!: number;
 }
 
 @modelOptions({ schemaOptions: { _id: false } })

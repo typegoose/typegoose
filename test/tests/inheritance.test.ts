@@ -23,7 +23,7 @@ it('should set all parent props for nested schemas', async () => {
 
   expect(instance.mainGarage!.slotsForCars).toEqual(3);
   expect(instance.mainGarage!.width).toEqual(100);
-  // this has an any type assertion, because it shouldnt exists on this type, what is tested here
+  // this has an any type assertion, because it shouldn't exists on this type, what is tested here
   expect((instance.mainGarage as any).doors).toBeUndefined();
 
   // sanity check
@@ -44,7 +44,7 @@ it('should set all parent props for nested array items', async () => {
   const firstGarage = instance.garagesInArea!.pop();
   expect(firstGarage!.slotsForCars).toEqual(2);
   expect(firstGarage!.width).toEqual(100);
-  // this has an any type assertion, because it shouldnt exists on this type, what is tested here
+  // this has an any type assertion, because it shouldn't exists on this type, what is tested here
   expect((firstGarage as any).doors).toBeUndefined();
 
   // sanity check

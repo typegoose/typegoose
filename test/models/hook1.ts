@@ -9,7 +9,7 @@ import { getModelForClass, isDocument, post, pre, prop } from '../../src/typegoo
 })
 @pre<Hook>(/^update/, function () {
   if (Array.isArray(this)) {
-    this.forEach(async (v) => await v.update({ shape: 'REGEXP_PRE' })); // i know this is inefficient
+    this.forEach(async (v) => await v.update({ shape: 'REGEXP_PRE' })); // I know this is inefficient
   } else {
     this.update({ shape: 'REGEXP_PRE' });
   }

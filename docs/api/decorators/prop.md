@@ -257,7 +257,7 @@ class Dummy {
 Accepts Type: `boolean`
 
 Set it to `false`, if you want to retrieve data without this property by default  
--> [Read more in Mongoose's offical documentation](https://mongoosejs.com/docs/api.html#schematype_SchemaType-select)
+-> [Read more in Mongoose's official documentation](https://mongoosejs.com/docs/api.html#schematype_SchemaType-select)
 
 ```ts
 class Dummy {
@@ -677,7 +677,7 @@ class Something {
 }
 ```
 
-This option `dim` can be ommitted, when used with the `() => [Type]` syntax (since `7.4.0`):
+This option `dim` can be omitted, when used with the `() => [Type]` syntax (since `7.4.0`):
 
 ```ts
 class ArrayInType {
@@ -757,7 +757,7 @@ class LowerCased {
 
 Accepts Type: `boolean`
 
-Set this to `true`, if the value should always be transformed to be UPPERCASE. <!--please dont change this to lowercase-->
+Set this to `true`, if the value should always be transformed to be UPPERCASE. <!--please don't change this to lowercase-->
 
 Example:
 
@@ -891,14 +891,14 @@ Set the field to look at in the local document and be compared with the field se
 Accepts Type: `boolean`  
 Conflicts with: [`count`](#count)
 
-Set wheter the query should only return one document instead of a array of documents.
+Set whether the query should only return one document instead of a array of documents.
 
 ### count
 
 Accepts Type: `boolean`  
 Conflicts with: [`justOne`](#justone)
 
-Set wheter the query should return a count of found documents instead of the documents themself.
+Set whether the query should return a count of found documents instead of the documents themself.
 
 ### options {#virtual-populate-options-option}
 
@@ -952,7 +952,7 @@ Also see the [FAQ `Do all Classes get compiled to their own "mongoose.Schema"?`]
 It should be noted that using this method no typegoose transformations or warnings will be applied to what is inside `Passthrough.raw` (like `type: () => Class` will not be translated, it will stay as-is).
 :::
 
-There is also a option to set the `Passthrough` class to `direct` mode (with the second parameter), this will mean that absolutlely no typegoose process is applied (everything has to be done manually), see [Passthrough-Class#Direct](#passthrough-direct).
+There is also a option to set the `Passthrough` class to `direct` mode (with the second parameter), this will mean that absolutely no typegoose process is applied (everything has to be done manually), see [Passthrough-Class#Direct](#passthrough-direct).
 
 Example for `PropType.NONE`:
 

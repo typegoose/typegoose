@@ -22,7 +22,7 @@ npm install --save @deepkit/core@~1.0.1-alpha.52 @deepkit/type@~1.0.1-alpha.56
 ## Implementation
 
 :::note
-It is better to have [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object) to separate your API logic (decorated with @deepkit/type decorators) from your Entities (decorated with Typgoose decorators). This may seem like extra code, verbosity and work, but it is smart, because it will allow you to change your API and Entities separate from each other.
+It is better to have [DTOs](https://en.wikipedia.org/wiki/Data_transfer_object) to separate your API logic (decorated with @deepkit/type decorators) from your Entities (decorated with Typegoose decorators). This may seem like extra code, verbosity and work, but it is smart, because it will allow you to change your API and Entities separate from each other.
 :::
 
 Suppose you have this `Account` class decorated with `@deepkit/type`:
@@ -91,7 +91,7 @@ You can then do, for example:
 
 As you can see from these code examples, there is:
 
-* an `access` or `grouping` (`@t.group(group)`) definition needed to ouput the required properties for any serializing or deserializing. The `@deepkit/type` author suggests not using groupings at all, as they cause `@deepkit/type`'s performance to deteriorate. [See Offical Documentation for Reference](https://deepkit.io/documentation/type/serialization#groups), official quote:
+* an `access` or `grouping` (`@t.group(group)`) definition needed to output the required properties for any serializing or deserializing. The `@deepkit/type` author suggests not using groupings at all, as they cause `@deepkit/type`'s performance to deteriorate. [See Official Documentation for Reference](https://deepkit.io/documentation/type/serialization#groups), official quote:
   >  Note: Using grouped serialization is much slower than regular serialization. If performance is important, consider rearranging your data into multiple classes instead.
 * a `Mongodb.ObjectId` decorator (`@t.mongoId`) is built into `@deepkit/type`'s decorators to handle the type conversion to string and back to a MongoId.
 
@@ -131,7 +131,7 @@ import * as mongoose from 'mongoose';
 
 // Shorten type
 const ObjectId = mongoose.Types.ObjectId;
-// Create a Custom Serializer to add custom transfrom functions to types
+// Create a Custom Serializer to add custom transform functions to types
 const mySerializer = new (class CustomSerializer extends jsonSerializer.fork('mySerializer') {})();
 
 // Note: A custom Serializer has to be used, because the included "mongoId" "decorator" only works with "@deepkit/orm"

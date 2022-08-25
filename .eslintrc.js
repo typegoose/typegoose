@@ -85,7 +85,7 @@ module.exports = {
       {
         blankLine: 'never',
         prev: 'import',
-        next: 'import', // dont allow blank line between imports
+        next: 'import', // don't allow blank line between imports
       },
     ],
     'eol-last': 'warn',

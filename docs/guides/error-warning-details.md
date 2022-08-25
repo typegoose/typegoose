@@ -25,7 +25,7 @@ Error: `You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]`
 Error Class: `Error`
 
 Details:  
-Typegoose requires at least NodeJS Version 12.22, because NodeJS 12 is the lowest activly maintained version AND is the lowest that supports all functions needed by typegoose (without having to add polyfills)
+Typegoose requires at least NodeJS Version 12.22, because NodeJS 12 is the lowest actively maintained version AND is the lowest that supports all functions needed by typegoose (without having to add polyfills)
 
 ### Function only supports to be called "${supported}" times [E003]
 
@@ -41,7 +41,7 @@ Error Class: `FunctionCalledMoreThanSupportedError`
 Details:  
 For example [`addModelToTypegoose`](../api/functions/addModelToTypegoose.md) only supports to be called once (1) with the same model name, [this problem has a specific Guide](./advanced/models-with-same-name.md).
 
-### Self Containg Class [E004]
+### Self Containing Class [E004]
 
 Error:
 
@@ -67,7 +67,7 @@ Either:
 - The Option `ref` was defined with a function, but that function returned `undefined / null`
 - The Option `ref` was defined with `undefined / null` (`{ ref: undefined }`) ([Can Be Solved with this guide](./advanced/reference-other-classes.md#common-problems))
 
-Example of when this gets triggerd:
+Example of when this gets triggered:
 
 ```ts
 class ErrorClass {
@@ -192,7 +192,7 @@ This may be thrown when using typescript option `transpileOnly` (see [Known Issu
 This Error has a workaround, see [Use Without "emitDecoratorMetadata"](./use-without-emitDecoratorMetadata.md).
 :::
 
-<!--The Following "a" is a backwards-comaptability anchor-->
+<!--The Following "a" is a backwards-compatability anchor-->
 <a name="invalid-whatisit-used-e013"></a>
 
 ### Invalid PropType used [E013]
@@ -209,14 +209,14 @@ The Value `${proptype}` is not supported in `${where}` or does not exist in the 
 Error:
 
 ```txt
-Input was not a string AND didnt have a .typegooseName function AND didnt have a .typegooseName string [E014]
+Input was not a string AND didn't have a .typegooseName function AND didn't have a .typegooseName string [E014]
 Value: "${toStringNoFail(input)}"
 ```
 
 Error Class: `ResolveTypegooseNameError`
 
 Details:  
-The Provided Input `input` was not a string and didnt have a `.typegooseName` function / string to be searched by.
+The Provided Input `input` was not a string and didn't have a `.typegooseName` function / string to be searched by.
 
 ### customName must be string and at least one character [E015]
 
@@ -233,7 +233,7 @@ Error Class: [`TypeError`](https://github.com/typegoose/typegoose/blob/8fad2ac21
 Details:  
 The `customName` option must be a String AND at least *one* character long
 
-### Type dosnt have "OptionsConstructor" [E016]
+### Type doesn't have "OptionsConstructor" [E016]
 
 Error:
 
@@ -247,9 +247,9 @@ Error Class: `InvalidOptionsConstructor`
 Details:  
 The Type provided `type` does not have a `OptionsConstructor` property, this property is required to map options correctly.
 
-Typegoose uses the property [`OptionsConstructor`](https://github.com/Automattic/mongoose/tree/master/lib/options) on types (like `mongoose.Schema.Types.ObjectId.OptionsConstructor`) to correctly map the options (from `@prop(options)`) to the appropiate place.
+Typegoose uses the property [`OptionsConstructor`](https://github.com/Automattic/mongoose/tree/master/lib/options) on types (like `mongoose.Schema.Types.ObjectId.OptionsConstructor`) to correctly map the options (from `@prop(options)`) to the appropriate place.
 
-If custom types are used and they dont have `OptionsConstructor`, and an easy way to workaround this error is the following:
+If custom types are used and they don't have `OptionsConstructor`, and an easy way to workaround this error is the following:
 
 ```ts
 mongoose.Schema.Types.Custom.OptionsConstructor = {}; // only do this if really necessary
@@ -288,7 +288,7 @@ Error Class: `AssertionFallbackError`
 Details:  
 This Error should never show up, if it does report it
 
-### PropOptions.discriminators dosnt support Arrays with more or less than 1 dimension [E020]
+### PropOptions.discriminators doesn't support Arrays with more or less than 1 dimension [E020]
 
 <span class="badge badge--warning">This Error got removed in 9.4.0</span>
 
@@ -296,7 +296,7 @@ This Error should never show up, if it does report it
 This Error got merged with [`E027`](#the-option-does-not-support-a-option-value-e027) in 9.4.0
 :::
 
-Error: `"PropOptions.discriminators" dosnt support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`
+Error: `"PropOptions.discriminators" doesn't support Arrays higher and lower than 1 (got "${gotType.dim}" dimensions at "${name}.${key}") [E020]`
 
 Error Class: `Error`
 
@@ -315,7 +315,7 @@ class ErrorClass {
 }
 ```
 
-### PropOptions.ref dosnt support Arrays [E021]
+### PropOptions.ref doesn't support Arrays [E021]
 
 <span class="badge badge--warning">This Error got removed in 9.4.0</span>
 

@@ -46,7 +46,7 @@ describe('existingMongoose & existingConnection', () => {
   });
 
   it('should merge existingConnection correctly (overwrite)', () => {
-    // @ts-expect-error because "hello" dosnt exist in "existingConnection"
+    // @ts-expect-error because "hello" doesn't exist in "existingConnection"
     @modelOptions({ existingConnection: { hello: 1 } })
     class Dummy {}
 

@@ -42,7 +42,7 @@ it('should be possible to overwrite an existing model', () => {
 });
 
 it('should not error if model did not exist in "models" map', () => {
-  deleteModel('DefinetlyNotExistingModel');
+  deleteModel('DefinitelyNotExistingModel');
 });
 
 it('should make use of "deleteModelWithClass"', () => {

@@ -17,7 +17,7 @@ export abstract class TimeStamps {
 export interface Base<IDType extends RefType = Types.ObjectId> {
   _id: IDType;
   /**
-   * This getter/setter dosnt exist if "schemaOptions.id" being set to "false"
+   * This getter/setter doesn't exist if "schemaOptions.id" being set to "false"
    */
   id: string;
 }

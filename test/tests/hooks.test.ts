@@ -160,7 +160,7 @@ it('should work with QueryMethod post "this" [typegoose/typegoose#694]', () => {
     // @ts-expect-error The following will error in typescript, because it *should* always contain only one argument, but may not actually be there
     assertion(args.length === 0);
   })
-  // the following call should trigger the "this, error, result" overload, but does not, i dont know why
+  // the following call should trigger the "this, error, result" overload, but does not, I don't know why
   // @post('findOneAndUpdate', function error(error, result, ...args) {
   //   // this function should not be triggered by this test, but still includes it for property (types) testing
   //   assertion(!isNullOrUndefined(this));

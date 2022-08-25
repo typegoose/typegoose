@@ -14,7 +14,7 @@ import {
   Ref,
 } from '../../src/typegoose';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
-import { Default, DefaultModel, DisciminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminatorsWithGenerics';
+import { Default, DefaultModel, DiscriminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminatorsWithGenerics';
 
 it('should make use of discriminators', async () => {
   const disMainDoc = await DisMainModel.create({ main1: 'hello DMM' } as DisMain);
@@ -44,7 +44,7 @@ it('"getDiscriminatorModelForClass" should return the same model if already defi
 
 describe('Generic Discriminators', () => {
   it('should use DefaultModel when setting role to "ROLE.DEFAULT"', async () => {
-    const instance: DocumentType<Default> = await DisciminatedUserModel.create({
+    const instance: DocumentType<Default> = await DiscriminatedUserModel.create({
       role: ROLE.DEFAULT,
       visitor: 'sth',
       default: 'sth',
@@ -74,7 +74,7 @@ describe('Generic Discriminators', () => {
   });
 
   it('should use VisitorModel when setting role to "ROLE.VISITOR"', async () => {
-    const instance: DocumentType<Visitor> = await DisciminatedUserModel.create({
+    const instance: DocumentType<Visitor> = await DiscriminatedUserModel.create({
       role: ROLE.VISITOR,
       visitor: 'sth',
       default: 'sth',

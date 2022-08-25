@@ -26,7 +26,7 @@ export function isDocumentArray<T, S extends RefType>(
  */
 export function isDocumentArray<T, S extends RefType>(docs: Ref<T, S>[] | undefined): docs is DocumentType<NonNullable<T>>[];
 export function isDocumentArray(docs: Ref<any, any>[] | undefined): unknown {
-  // its "any" & "unkown" because this is not listed as an overload
+  // its "any" & "unknown" because this is not listed as an overload
   return Array.isArray(docs) && docs.every((v) => isDocument(v));
 }
 
@@ -79,7 +79,7 @@ export function isRefTypeArray<T, S extends RefType>(
  */
 export function isRefTypeArray<T, S extends RefType>(docs: Ref<T, S>[] | undefined, refType: AllowedRefTypes): docs is NonNullable<S>[];
 export function isRefTypeArray(docs: Ref<any, any>[] | undefined, refType: AllowedRefTypes): unknown {
-  // its "any" & "unkown" because this is not listed as an overload
+  // its "any" & "unknown" because this is not listed as an overload
   return Array.isArray(docs) && docs.every((v) => isRefType(v, refType));
 }
 

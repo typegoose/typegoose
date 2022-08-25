@@ -10,7 +10,7 @@ import type { DocumentType, EmptyVoidFn, HookOptionsEither, IHooksArray } from '
 
 type NumberOrDocumentOrDocumentArray<T> = number | DocumentType<T> | DocumentType<T>[];
 
-// i know that some events cannot be async (like "init"), but because they are unified into bigger types, i cannot change it
+// I know that some events cannot be async (like "init"), but because they are unified into bigger types, I cannot change it
 type ReturnVoid = void | Promise<void>;
 
 type HookNextErrorFn = (err?: Error) => ReturnVoid;
@@ -110,7 +110,7 @@ const hooks: Hooks = {
  * Add a hook to the hooks Array
  * @param target Target Class
  * @param hookType What type is it
- * @param args All Arguments, that should be passed-throught
+ * @param args All Arguments, that should be passed-through
  */
 function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
   // Convert Method to array if only a string is provided

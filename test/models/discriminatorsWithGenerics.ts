@@ -16,7 +16,7 @@ export class Profile {
     discriminatorKey: 'role',
   },
 })
-export class DisciminatedUser<T extends Profile = Profile> {
+export class DiscriminatedUser<T extends Profile = Profile> {
   @prop({ required: true, enum: ROLE })
   public role?: ROLE; // optional because it will be automatically added
 
@@ -24,7 +24,7 @@ export class DisciminatedUser<T extends Profile = Profile> {
   public profile?: T;
 }
 
-export class Visitor extends DisciminatedUser {
+export class Visitor extends DiscriminatedUser {
   @prop()
   public visitor?: string;
 }
@@ -34,7 +34,7 @@ export class DefaultProfile extends Profile {
   public lastName?: string;
 }
 
-export class Default extends DisciminatedUser<DefaultProfile> {
+export class Default extends DiscriminatedUser<DefaultProfile> {
   @prop()
   public default?: string;
 
@@ -42,6 +42,6 @@ export class Default extends DisciminatedUser<DefaultProfile> {
   public profile?: DefaultProfile;
 }
 
-export const DisciminatedUserModel = getModelForClass(DisciminatedUser);
-export const VisitorModel = getDiscriminatorModelForClass(DisciminatedUserModel, Visitor, ROLE.VISITOR);
-export const DefaultModel = getDiscriminatorModelForClass(DisciminatedUserModel, Default, ROLE.DEFAULT);
+export const DiscriminatedUserModel = getModelForClass(DiscriminatedUser);
+export const VisitorModel = getDiscriminatorModelForClass(DiscriminatedUserModel, Visitor, ROLE.VISITOR);
+export const DefaultModel = getDiscriminatorModelForClass(DiscriminatedUserModel, Default, ROLE.DEFAULT);

@@ -61,14 +61,14 @@ When using the option [`customName`](../../api/decorators/modelOptions.md#custom
 Example:
 
 ```ts
-// Example having "customName" staticly set
+// Example having "customName" statically set
 @modelOptions({ options: { customName: "Hello" } })
 class SomeClassWithCustomName {
   @prop()
   public someProp: string;
 }
 
-// The resulting name will be the staticly defined "customName"
+// The resulting name will be the statically defined "customName"
 assertion(getName(SomeClassWithCustomName) === 'Hello');
 
 // Example having "customName" be a function
@@ -94,7 +94,7 @@ When using option [`automaticName`](../../api/decorators/modelOptions.md#automat
 Example:
 
 ```ts
-// Example having "customName" staticly set and having "automaticName"
+// Example having "customName" statically set and having "automaticName"
 @modelOptions({ options: { customName: "Hello", automaticName: true } })
 class SomeClassWithCustomNameAndAutomaticName {
   @prop()

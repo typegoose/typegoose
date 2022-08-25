@@ -385,7 +385,7 @@ it('should map options correctly on an ref-array', async () => {
   expect(reference3).toBeDefined();
   await RefArrayOptionsMappingModel.create({ explicitDoubleRefArray: [reference3, reference3] });
   expect(validateInner).toBeCalledWith(reference3._id);
-  // the order is different, because defaults get created *after* normal values, and so validatorss of those defaults are also called later
+  // the order is different, because defaults get created *after* normal values, and so validators of those defaults are also called later
   expect(validateOuter).toHaveBeenNthCalledWith(1, expect.arrayContaining([reference3._id, reference3._id]));
   expect(validateOuter).toHaveBeenNthCalledWith(2, expect.any(Array));
 });

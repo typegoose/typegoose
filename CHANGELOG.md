@@ -348,7 +348,7 @@
 
 ### [9.8.1](https://github.com/typegoose/typegoose/compare/v9.8.0...v9.8.1) (2022-04-21)
 
-The Type change in this release may break some array post hooks and need to be seperated
+The Type change in this release may break some array post hooks and need to be separated
 
 ### Fixes
 
@@ -497,7 +497,7 @@ The Type change in this release may break some array post hooks and need to be s
 
 ### Dependencies
 
-* **@types/lodsash:** upgrade to 4.14.178 ([ea8ff31](https://github.com/typegoose/typegoose/commit/ea8ff310469e90140349466f36751ae405b8adc4))
+* **@types/lodash:** upgrade to 4.14.178 ([ea8ff31](https://github.com/typegoose/typegoose/commit/ea8ff310469e90140349466f36751ae405b8adc4))
 * **@types/node:** upgrade to 12.20.38 ([35d9822](https://github.com/typegoose/typegoose/commit/35d9822a6eb8de897c3fa73dbbb1b7f84bbb3192))
 * **@typescript-eslint/*:** upgrade to 5.7.0 ([0197ffe](https://github.com/typegoose/typegoose/commit/0197ffe86dd252ae568c8721c9b6dc613ceb0059))
 * **@typescript-eslint/*:** upgrade to 5.8.0 ([d7fcad1](https://github.com/typegoose/typegoose/commit/d7fcad1040de81caf535492982f10aa2e0bd0485))
@@ -558,7 +558,7 @@ The Type change in this release may break some array post hooks and need to be s
 
 ### Dependencies
 
-* **@types/lodsash:** upgrade to 4.14.178 ([ea8ff31](https://github.com/typegoose/typegoose/commit/ea8ff310469e90140349466f36751ae405b8adc4))
+* **@types/lodash:** upgrade to 4.14.178 ([ea8ff31](https://github.com/typegoose/typegoose/commit/ea8ff310469e90140349466f36751ae405b8adc4))
 * **@typescript-eslint/*:** upgrade to 5.7.0 ([0197ffe](https://github.com/typegoose/typegoose/commit/0197ffe86dd252ae568c8721c9b6dc613ceb0059))
 * **eslint:** upgrade to 8.4.1 ([aff4c54](https://github.com/typegoose/typegoose/commit/aff4c546c01098e47d8f599bcd3d6cc911bf19f9))
 * **jest:** upgrade to 27.4.5 ([980f89c](https://github.com/typegoose/typegoose/commit/980f89c4b3356691ab9a6e3c0445a6fd5eb41e6d))
@@ -685,7 +685,7 @@ Co-authored-by: hasezoey <hasezoey@gmail.com>
 * **errors:** rename "CannotBeSymbol" to "CannotBeSymbolError" to match style ([454c23b](https://github.com/typegoose/typegoose/commit/454c23b0d4de4dc95dea48316339c33697ca0c5b))
 * **processProp:** merge Error "E008" into "E026" ([3469a22](https://github.com/typegoose/typegoose/commit/3469a22e847d1ad4833b8bf263c759018e9a1224))
 * **processProp:** remove Error E007 ([928f51d](https://github.com/typegoose/typegoose/commit/928f51df82d8ccc845ecb5bf0c67c66fa61347e7)), closes [typegoose/typegoose#599](https://github.com/typegoose/typegoose/issues/599)
-* **typegoose:** add option to use "Passthrough" directly (no "type" property inbetween) ([7379810](https://github.com/typegoose/typegoose/commit/73798104c8865e80ababba1663946fda6fefdb11))
+* **typegoose:** add option to use "Passthrough" directly (no "type" property in between) ([7379810](https://github.com/typegoose/typegoose/commit/73798104c8865e80ababba1663946fda6fefdb11))
 * **utils::mergeMetadata:** change custom error to use "StringLengthExpectedError" ([9ad3013](https://github.com/typegoose/typegoose/commit/9ad30133a5967fe2b889c00ad1e97314a03f6401))
 * change build order to bottom-up (when extending classes) ([#243](https://github.com/typegoose/typegoose/issues/243)) ([79977ee](https://github.com/typegoose/typegoose/commit/79977ee675a48fda280be5a10bc9b962721cd5dc))
 * merge errors "E023" into "E013" ([c8ce9b8](https://github.com/typegoose/typegoose/commit/c8ce9b8c36d82f9d23e66d4cdda86cb86567b4fa))
@@ -781,7 +781,7 @@ Co-authored-by: hasezoey <hasezoey@gmail.com>
 
 ### Features
 
-* **typegoose:** add option to use "Passthrough" directly (no "type" property inbetween) ([7379810](https://github.com/typegoose/typegoose/commit/73798104c8865e80ababba1663946fda6fefdb11))
+* **typegoose:** add option to use "Passthrough" directly (no "type" property in between) ([7379810](https://github.com/typegoose/typegoose/commit/73798104c8865e80ababba1663946fda6fefdb11))
 
 
 ### Dependencies
@@ -1052,8 +1052,8 @@ Co-authored-by: hasezoey <hasezoey@gmail.com>
 * **processProp:** "ref" and "refPath" now use "mapArrayOptions" that means that some options might be mapped differently
 * Changing types from unofficial to official is an breaking change
 * **prop:** Removing deprecated options "items", "of", "refType"
-* **prop:** Removeing deprecated function "mapProp"
-* **prop:** Removeing deprecated function "arrayProp"
+* **prop:** Removing deprecated function "mapProp"
+* **prop:** Removing deprecated function "arrayProp"
 
 ### Features
 
@@ -1140,7 +1140,7 @@ Co-authored-by: hasezoey <hasezoey@gmail.com>
 * **semantic-release:** upgrade to version "17.4.2" ([283afb1](https://github.com/typegoose/typegoose/commit/283afb15427650941236dce9583b4315152a6e36))
 * **semantic-release:** upgrade to version "17.4.3" ([ed4cbfc](https://github.com/typegoose/typegoose/commit/ed4cbfce8a67e18692d2de1436ecaac72bbae773))
 * **semantic-release:** upgrade to version "17.4.4" ([090d05f](https://github.com/typegoose/typegoose/commit/090d05f964f680767fc8321a1525e6fdf2a60078))
-* **ts-jest:** upgrad eto version 27.0.4 ([e20fd0c](https://github.com/typegoose/typegoose/commit/e20fd0c7f0f01442591b8f604c8fab5a8be7fc43))
+* **ts-jest:** upgrade eto version 27.0.4 ([e20fd0c](https://github.com/typegoose/typegoose/commit/e20fd0c7f0f01442591b8f604c8fab5a8be7fc43))
 * **ts-jest:** upgrade to version "26.5.4" ([047051b](https://github.com/typegoose/typegoose/commit/047051bc0bb6c280c82914ae4a13e7e733faa02d))
 * **ts-jest:** upgrade to version "27.0.3" ([dc0452f](https://github.com/typegoose/typegoose/commit/dc0452ffa5f5a58de24e4bd154119571d9d7fb96))
 * **tslib:** upgrade to version "2.2.0" ([edd2581](https://github.com/typegoose/typegoose/commit/edd2581db6e572bbd7286a307ed3fcf7761ca140))
@@ -1197,7 +1197,7 @@ Co-authored-by: hasezoey <hasezoey@gmail.com>
 * **lint-staged:** upgrade to version 11.1.1 ([5f370ad](https://github.com/typegoose/typegoose/commit/5f370ad81faff038c1dad5997d018def79fc880c))
 * **mongodb-memory-server:** upgrade to version 7.3.4 ([460bdcb](https://github.com/typegoose/typegoose/commit/460bdcbc0a050c678c5eac42d8333558d07c72f5))
 * **mongoose:** upgrade to version 5.13.3 ([c7414e6](https://github.com/typegoose/typegoose/commit/c7414e649369c0198b80fffc5004d6c014600cde))
-* **ts-jest:** upgrad eto version 27.0.4 ([e20fd0c](https://github.com/typegoose/typegoose/commit/e20fd0c7f0f01442591b8f604c8fab5a8be7fc43))
+* **ts-jest:** upgrade eto version 27.0.4 ([e20fd0c](https://github.com/typegoose/typegoose/commit/e20fd0c7f0f01442591b8f604c8fab5a8be7fc43))
 
 
 ### Style
@@ -1645,7 +1645,7 @@ Everything Below here is manually made:
 - Add Error Codes [Errors & Warnings Details](guides/error-warnings-details.md)
 - Remove never triggered Error `InvalidPropError`
 - Change "Options-not-for-current-type" Errors into warnings (with actual information on what options are included) [[typegoose#363](https://github.com/typegoose/typegoose/issues/363)]
-- [IC] Assing `schemaOptions` in `src/internal/schema.ts` to an black object [[typegoose#357](https://github.com/typegoose/typegoose/issues/357)]
+- [IC] Assigning `schemaOptions` in `src/internal/schema.ts` to an black object [[typegoose#357](https://github.com/typegoose/typegoose/issues/357)]
 
 ## 7.3.4
 
@@ -1653,7 +1653,7 @@ Everything Below here is manually made:
 
 ## 7.3.3
 
-- Dont assume that the plugin function has an name [[typegoose#353](https://github.com/typegoose/typegoose/issues/353)]
+- Don't assume that the plugin function has an name [[typegoose#353](https://github.com/typegoose/typegoose/issues/353)]
 - Only check mongoose & nodejs version if `process` is defined
 - [IC] replace all `util.format` with template strings [[typegoose#348](https://github.com/typegoose/typegoose/issues/348)]
 - [IC] add wrapper & polyfill for `util.deprecate`[[typegoose#344](https://github.com/typegoose/typegoose/issues/344)]
@@ -1684,12 +1684,12 @@ Everything Below here is manually made:
 - Add option `discriminators` for embedded Discriminators [[typegoose#248](https://github.com/typegoose/typegoose/issues/248)]
 - Set correct Decorator Return type (`ClassDecorator` & `PropertyDecorator`)
 - Change warning message for `warnMixed`
-- If an SchemaType dosnt extend `SchemaTypeOptions`, the options are now defaulted to the outer-layer
+- If an SchemaType doesn't extend `SchemaTypeOptions`, the options are now defaulted to the outer-layer
 - `innerOptions` and `outerOptions` can now be used for Maps too
 - Custom Validators now support `message` being an function
 - Automatically convert `mongoose.Types.Buffer` to `mongoose.Schema.Types.Buffer`
 - Fix Types when extending default class `Base` with other than `ObjectId` [[typegoose#316](https://github.com/typegoose/typegoose/issues/316)]
-- [IC] `mapOptions` now always errors if the given type dosnt extend `mongoose.SchemaTypeOptions`
+- [IC] `mapOptions` now always errors if the given type doesn't extend `mongoose.SchemaTypeOptions`
 - [IC] Moved function `_buildPropMetadata` to its own file (`processProp`) and renamed it to `processProp` [[typegoose#286](https://github.com/typegoose/typegoose/issues/286)]
 - [IC] Moved pre-processing in function `prop` into `processProp` [[typegoose#286](https://github.com/typegoose/typegoose/issues/286)]
 - [IC] Removed error `NoMetadataError`
@@ -1716,9 +1716,9 @@ Everything Below here is manually made:
 ## 7.1.2
 
 - `@prop` options types now work again
-- `BasePropOptions.type` is now `unkown` instead of `any`
+- `BasePropOptions.type` is now `unknown` instead of `any`
 - All aliases of `BasePropOptions.type` now inherit the types from there
-- Fix bug where autopopulate (or any other plugin) wouldnt pick up on virtuals [[typegoose#274](https://github.com/typegoose/typegoose/issues/274)]
+- Fix bug where autopopulate (or any other plugin) wouldn't pick up on virtuals [[typegoose#274](https://github.com/typegoose/typegoose/issues/274)]
 - [IC] `refType` is now moved to `prop`
 
 ## 7.1.1
@@ -1759,7 +1759,7 @@ Everything Below here is manually made:
 - The functions `addModelToTypegoose`, `getModelForClass`, `getDiscriminatorModelForClass` now have an new optional generic `QueryHelpers`
 - The Type `ReturnModelType` now has the `T` generic removed (it was unnecessary)
 - The Type `ReturnModelType` now has an second optional generic `QueryHelpers`
-- Fix bug where `ref: Class` didnt execute `getName` when Virtual-Populate was used
+- Fix bug where `ref: Class` didn't execute `getName` when Virtual-Populate was used
 - Allow use of `@prop` for arrays & maps (In preparation for 8.0), it is now auto-detected based on `design:type`
 - The Decorator `@plugin` now automatically infers the options if the plugin & function have typings and use options
 - [IC] add some tslint rules & apply them
@@ -1774,7 +1774,7 @@ Everything Below here is manually made:
   - `@types/mongoose` to 5.7.12
 - Minimal NodeJS version is now 10.15
 - Minimal Typescript version is now 3.8.3
-- Typegoose class got completly removed
+- Typegoose class got completely removed
 - All Deprecated `arrayProp` options got remove
   - `itemsRef` replaced with plain `ref`
   - `itemsRefPath` replaced with plain `refPath`
@@ -1782,7 +1782,7 @@ Everything Below here is manually made:
 - All enums got moved from `src/types` to `src/internal/constants`
 - All things from `src/types` now get exported as `type`
 - All Errors now get exported as `errors`
-- All non-essentail types get exported as `types`
+- All non-essential types get exported as `types`
 - `utils`'s `getName` function now gets exported
 - Add PropOption `addNullToEnum`
 - Remove Deprecated value `overwrite` for `VirtualOptions`
@@ -1790,7 +1790,7 @@ Everything Below here is manually made:
 - Add class decorator `queryMethod`
 - [IC] rename file `optionsProp` to `modelOptions`
 - [IC] Replace mocha & chai with jest
-- [IC] Completly remove `TG_USE_NEW_ENUM` from documentation & code
+- [IC] Completely remove `TG_USE_NEW_ENUM` from documentation & code
 - [IC] Replace almost all if-throw with the internal `assertion` function
 - [IC] Move VirtualPopulate cache to Reflection
 - [IC] Move Plugins cache to Reflection
@@ -1817,7 +1817,7 @@ Everything Below here is manually made:
   - `semver` to 7.1.3
   - `loglevel` to 1.6.7
   - `tslib` to 1.11.0
-- Completly remove `__uniqueID`, because it was not used internally anymore
+- Completely remove `__uniqueID`, because it was not used internally anymore
 
 ## 6.3.2
 
@@ -1835,7 +1835,7 @@ Everything Below here is manually made:
   - `semver` to 7.1.2
 - Add `@types/mongoose` to `peerDependencies`
 - Add generic type to `@plugin` to set the type for the options
-- Use a modified `Ref`-Type to automatically get the type (if the Ref'd type has `string` as `_id`, it automaticly sets the `RefType` to `string`)
+- Use a modified `Ref`-Type to automatically get the type (if the Ref'd type has `string` as `_id`, it automatically sets the `RefType` to `string`)
 
 ## 6.2.2
 
@@ -1854,7 +1854,7 @@ This Update may break some code (mongoose upgrade, inline `_id` change, `enum` c
   - Upgrade @types/mongoose from 5.5.30 to 5.5.35
   - [IC] Upgrade Typescript from 3.7.2 to 3.7.4
   - [IC] Upgrade NYC from 14.1.1 to 15.0.0
-- The option `useNewEnum` (and `TG_USE_NEW_ENUM`) got removed, because it would interfer with the number-enums
+- The option `useNewEnum` (and `TG_USE_NEW_ENUM`) got removed, because it would interfere with the number-enums
 - Added the ability to use number-enums on number-type props
 - Changed behaviour of string-enums to only work on string-type props
 - Fix `PropOptions` type for `autopopulate`
@@ -1894,7 +1894,7 @@ This Update may break some code (mongoose upgrade, inline `_id` change, `enum` c
 
 ## 6.1.3
 
-- fix bug when "buildSchema" didnt get called when overwriting the type in `@prop`
+- fix bug when "buildSchema" didn't get called when overwriting the type in `@prop`
 - [IC] add tests for Generic Discriminators
 
 ## 6.1.2
@@ -1912,7 +1912,7 @@ This Update may break some code (mongoose upgrade, inline `_id` change, `enum` c
 - Update Dependencies
   - Upgrade mongoose from 5.7.1 to 5.7.7
   - [IC] Upgrade Typescript from 3.6.x to 3.7.2
-- Completly remove `@staticMethod` & `@instanceMethod`, because they were completly obsolete
+- Completely remove `@staticMethod` & `@instanceMethod`, because they were completely obsolete
 - README now has no documentation anymore
 - `@prop({ validate })` now accepts `{ validator, message }` as an array
 - Add function `deleteModel` & `deleteModelWithClass`
@@ -1942,12 +1942,12 @@ This Update may break some code (mongoose upgrade, inline `_id` change, `enum` c
 - [IC] Refactor how "isPrimitive" works, some types like `Buffer` & `Decimal` now work
 - [IC] Added more debug logs to `prop.ts`
 - [IC] Move Decorator Cache to the class itself
-- [IC] "baseProp" now uses one single arguments, whith all the options
+- [IC] "baseProp" now uses one single arguments, with all the options
 - [IC] "createUniqueID" now returns a boolean instead of the "initname"
 
 ## 6.0.4
 
-This Release didnt change anything on the code, it was mostly tests & github-page
+This Release didn't change anything on the code, it was mostly tests & github-page
 - Update Dependencies
   - Upgrade mongoose from 5.7.1 to 5.7.4
 - Added soft warning when using "ref" in an "arrayProp"
@@ -2006,7 +2006,7 @@ This Release didnt change anything on the code, it was mostly tests & github-pag
 - adding Types to Ref (to allow not just ObjectID) [[szokodiakos#369](https://github.com/szokodiakos/typegoose/issues/369)]
 - szokodiakos#54 seems to work now in 6.0.0 (added test in 6.0.0-21)
 - because of the changes in 6.0.0 #235 got fixed
-- Adding "InvalidTypeError" for the case that "undefined" or "null" is used as a type (or something other happenes)
+- Adding "InvalidTypeError" for the case that "undefined" or "null" is used as a type (or something other happens)
 - Change Error text of "InvalidPropError"
 - adding some "soft-errors" and traces with "loglevel"
 - exposing settings for "loglevel"
@@ -2046,7 +2046,7 @@ This Release did not change anything in the code, it is just there to update the
 
 - This should not be a breaking release
 - Hooks now support Regular Expression for names, like mongoose
-- Tests are splitted into their own files
+- Tests are split into their own files
 - Fixing `itemsRefPath` & adding tests
 - `itemsRef` now supports to be used with a string as model
 - `@prop({ alias })` is now supported

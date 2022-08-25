@@ -86,7 +86,7 @@ export interface BasePropOptions {
    */
   allowMixed?: Severity;
   /** Give the Property a default Value */
-  default?: mongoose.SchemaTypeOptions<any>['default']; // i know this one does not have much of an effect, because of "any"
+  default?: mongoose.SchemaTypeOptions<any>['default']; // I know this one does not have much of an effect, because of "any"
   /** Give an Validator RegExp or Function */
   validate?: mongoose.SchemaTypeOptions<any>['validate'];
   /**
@@ -96,7 +96,7 @@ export interface BasePropOptions {
   unique?: mongoose.SchemaTypeOptions<any>['unique'];
   /**
    * Should this property have an index?
-   * Note: dont use this if you want to do an compound index
+   * Note: don't use this if you want to do an compound index
    * @link https://docs.mongodb.com/manual/indexes
    */
   index?: mongoose.SchemaTypeOptions<any>['index'];
@@ -203,7 +203,7 @@ export interface BasePropOptions {
   /**
    * Set the Nested Discriminators
    *
-   * Note: "_id: false" as an prop option dosnt work here
+   * Note: "_id: false" as an prop option doesn't work here
    *
    * Note: Custom Typegoose Option
    */
@@ -600,7 +600,7 @@ export interface IObjectWithTypegooseName {
   typegooseName: string;
 }
 
-/** For the types that error that seemingly dont have a prototype */
+/** For the types that error that seemingly don't have a prototype */
 export interface IPrototype {
   prototype?: any;
 }
@@ -618,6 +618,6 @@ export interface GetTypeReturn {
 
 /**
  * This type is for lint error "ban-types" where "{}" would be used
- * This type is seperate from "{@link KeyStringAny}" because it has a different meaning
+ * This type is separate from "{@link KeyStringAny}" because it has a different meaning
  */
 export type BeAnObject = Record<string, any>;

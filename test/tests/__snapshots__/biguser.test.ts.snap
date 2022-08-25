@@ -22,7 +22,7 @@ Object {
   "job": Object {
     "jobType": Object {
       "field": "IT",
-      "salery": 5000,
+      "salary": 5000,
     },
     "position": "Lead",
     "startedAt": Any<Date>,

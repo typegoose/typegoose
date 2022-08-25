@@ -16,7 +16,7 @@ const features = [
     description: <>Typegoose lets you focus on your data, and typegoose will create the correct mappings to schema's and model's</>,
   },
   {
-    // didnt know what to write here
+    // didn't know what to write here
     title: <>Works</>,
     description: <>Typegoose is compatible with almost every mongoose option</>,
   },

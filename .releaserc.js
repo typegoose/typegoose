@@ -16,7 +16,7 @@ module.exports = {
           {type: 'chore', release: false},
           {type: 'dependencies', release: 'minor'},
           {type: 'revert', release: 'patch'},
-          // dont trigger another release on release commit
+          // don't trigger another release on release commit
           {type: 'release', release: false}
         ],
         parserOpts: {
@@ -62,7 +62,7 @@ module.exports = {
     '@semantic-release/github'
   ],
   branches: [
-    // from what i read in the semantic-release configuration and in some issues, the order has to be like this:
+    // from what I read in the semantic-release configuration and in some issues, the order has to be like this:
     // other branches
     // main / upstream branch
     // prerelease branches
