@@ -1652,7 +1652,7 @@ Everything Below here is manually made:
 - Add Error Codes [Errors & Warnings Details](guides/error-warnings-details.md)
 - Remove never triggered Error `InvalidPropError`
 - Change "Options-not-for-current-type" Errors into warnings (with actual information on what options are included) [[typegoose#363](https://github.com/typegoose/typegoose/issues/363)]
-- [IC] Assigning `schemaOptions` in `src/internal/schema.ts` to an black object [[typegoose#357](https://github.com/typegoose/typegoose/issues/357)]
+- [IC] Assigning `schemaOptions` in `src/internal/schema.ts` to a blank object [[typegoose#357](https://github.com/typegoose/typegoose/issues/357)]
 
 ## 7.3.4
 
