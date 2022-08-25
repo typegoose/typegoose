@@ -1,3 +1,10 @@
+### [9.11.2](https://github.com/typegoose/typegoose/compare/v9.11.1...v9.11.2) (2022-08-25)
+
+
+### Style
+
+* fix some typos ([#754](https://github.com/typegoose/typegoose/issues/754)) ([12b7007](https://github.com/typegoose/typegoose/commit/12b7007b7b2ce0ff50314be5cafac839756696f9))
+
 ### [9.11.1](https://github.com/typegoose/typegoose/compare/v9.11.0...v9.11.1) (2022-08-25)
 
 
