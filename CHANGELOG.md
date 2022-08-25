@@ -1,3 +1,10 @@
+### [9.11.1](https://github.com/typegoose/typegoose/compare/v9.11.0...v9.11.1) (2022-08-25)
+
+
+### Fixes
+
+* **scripts:** use double quotes in lint file glob ([#755](https://github.com/typegoose/typegoose/issues/755)) ([e383d32](https://github.com/typegoose/typegoose/commit/e383d3260f0b445ff133de56466794937a84c545))
+
 ## [9.11.0](https://github.com/typegoose/typegoose/compare/v9.10.1...v9.11.0) (2022-07-28)
 
 
