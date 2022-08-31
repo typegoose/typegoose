@@ -22,7 +22,7 @@ function prop(
 `@prop` is used to mark properties to be in the Schema and also set Options of that property.
 
 :::note
-Any Property that does not have `@prop` on it, will not be in the Schema, because it cannot be seen at runtime.
+Any Property that does not have `@prop` on it will not be in the Schema, because typegoose's current approach is that the keys for the schema get defined in `@prop`, unlike `class-transformer`'s global-`@Expose` and `@Exclude`.
 :::
 
 ## Single Options
