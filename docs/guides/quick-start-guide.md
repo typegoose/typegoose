@@ -83,7 +83,7 @@ class User {
   @prop()
   public mainJob?: Job; // This is a single SubDocument
 
-  @prop({ type: () => Job })
+  @prop({ type: () => [Job] })
   public jobs?: Job[]; // This is a SubDocument Array
 
   @prop({ ref: () => Car })
