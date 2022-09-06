@@ -30,7 +30,7 @@ This section has some typescript notes that are subtle and can cause confusion.
 ### Difference between value and type
 
 The Type `Kitten` is not, infact, the class `Kitten` but the *instance* of `Kitten`, to actually get the static you would need to do `typeof Kitten`.
-If you would ever need to get the *instance*(`Kitten`) type of a class while you only have the input of a *static*(`typeof Kitten`), there is a Typescript Utility Type called [`InstanceType`](https://www.typescriptlang.org/docs/handbook/utility-types.html#instancetypetype). (Which was also the reason why typegoose had to rename its [`InstanceType` to `DocumentType`](./migration/migrate-6#instancetype-changed))
+If you would ever need to get the *instance*(`Kitten`) type of a class while you only have the input of a *static*(`typeof Kitten`), there is a Typescript Utility Type called [`InstanceType`](https://www.typescriptlang.org/docs/handbook/utility-types.html#instancetypetype). (Which was also the reason why typegoose had to rename its [`InstanceType` to `DocumentType`](../migration/migrate-6#instancetype-changed))
 
 Example:
 
