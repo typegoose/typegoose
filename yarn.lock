@@ -1318,7 +1318,12 @@
   resolved "https://registry.yarnpkg.com/@types/minimist/-/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
-"@types/node@*", "@types/node@>=12":
+"@types/node@*":
+  version "18.7.17"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.7.17.tgz#52438111ea98f77475470fc62d79b9eb96bb2c92"
+  integrity sha512-0UyfUnt02zIuqp7yC8RYtDkp/vo8bFaQ13KkSEvUAohPOAlnVNbj5Fi3fgPSuwzakS+EvvnnZ4x9y7i6ASaSPQ==
+
+"@types/node@>=12":
   version "17.0.36"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.36.tgz#c0d5f2fe76b47b63e0e0efc3d2049a9970d68794"
   integrity sha512-V3orv+ggDsWVHP99K3JlwtH20R7J4IhI1Kksgc+64q5VxgfRkQG8Ws3MFm/FZOKDYGy9feGFlZ70/HpCNe9QaA==
@@ -2297,10 +2302,10 @@ cosmiconfig@^7, cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
-create-jest-runner@^0.11.1:
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/create-jest-runner/-/create-jest-runner-0.11.1.tgz#ffaf2fccc60b08b762233637a4c4838bdc8eaf17"
-  integrity sha512-fmR1TpRhKIjmU1iXGRbpT2FXZkSlv58n+Cl2FvK5EIhy9kgM/bf/S7w1Nr3hg/jpHLaC0XLklmbZgt67iIV59A==
+create-jest-runner@^0.11.2:
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/create-jest-runner/-/create-jest-runner-0.11.2.tgz#4b4f62ccef1e4de12e80f81c2cf8211fa392a962"
+  integrity sha512-6lwspphs4M1PLKV9baBNxHQtWVBPZuDU8kAP4MyrVWa6aEpEcpi2HZeeA6WncwaqgsGNXpP0N2STS7XNM/nHKQ==
   dependencies:
     chalk "^4.1.0"
     jest-worker "^28.0.2"
@@ -3770,14 +3775,14 @@ jest-resolve@^28.1.3:
     resolve.exports "^1.1.0"
     slash "^3.0.0"
 
-jest-runner-tsd@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/jest-runner-tsd/-/jest-runner-tsd-3.1.0.tgz#77789b323aa695c5aaf65303258e3c39ed5c35fa"
-  integrity sha512-cu8QRX6cUYKnrIFTOOfm5tixPwPwSyaMSXv3rpJzzWoa6eS3e9aFFtnY/lnSZZH9yROGrtl9B6+1snrLrrtKOw==
+jest-runner-tsd@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/jest-runner-tsd/-/jest-runner-tsd-3.1.1.tgz#377f4fbda4151a3b7bbfc559246be61fac407e72"
+  integrity sha512-F+9vo++yT2/ND5hzARuFY2ZglQfRQihOQAOgtSe+1xW5cA6hHwYA7NUkAJcTNuqOXdkdCZkNaOZUcQ9+5ZcwDA==
   dependencies:
     "@babel/code-frame" "^7.15.8"
     chalk "^4.1.2"
-    create-jest-runner "^0.11.1"
+    create-jest-runner "^0.11.2"
     tsd-lite "^0.5.4"
 
 jest-runner@^28.1.3:
@@ -3914,16 +3919,7 @@ jest-watcher@^28.1.3:
     jest-util "^28.1.3"
     string-length "^4.0.1"
 
-jest-worker@^28.0.2:
-  version "28.1.1"
-  resolved "https://registry.yarnpkg.com/jest-worker/-/jest-worker-28.1.1.tgz#3480c73247171dfd01eda77200f0063ab6a3bf28"
-  integrity sha512-Au7slXB08C6h+xbJPp7VIb6U0XX5Kc9uel/WFc6/rcTzGiaVCBRngBExSYuXSLFPULPSYU3cJ3ybS988lNFQhQ==
-  dependencies:
-    "@types/node" "*"
-    merge-stream "^2.0.0"
-    supports-color "^8.0.0"
-
-jest-worker@^28.1.3:
+jest-worker@^28.0.2, jest-worker@^28.1.3:
   version "28.1.3"
   resolved "https://registry.yarnpkg.com/jest-worker/-/jest-worker-28.1.3.tgz#7e3c4ce3fa23d1bb6accb169e7f396f98ed4bb98"
   integrity sha512-CqRA220YV/6jCo8VWvAt1KKx6eek1VIHMPeLEbpcfSfkEeWyBNppynM/o6q+Wmw+sOhos2ml34wZbSX3G13//g==
@@ -6256,9 +6252,9 @@ ts-node@^10.8.0:
     yn "3.1.1"
 
 tsd-lite@^0.5.4:
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/tsd-lite/-/tsd-lite-0.5.4.tgz#ba139a7d398bd23ed728125365311e98b76d55e5"
-  integrity sha512-65GRufKZqu5/jJEzFj3K8TmX5sLrtM6FP5156ORZX1yfAXzucEtL4+hVQxvG8aqkhIu8O3Q/X53/8WNuiJPlkA==
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/tsd-lite/-/tsd-lite-0.5.6.tgz#82750ea5f231c1ec4f5d893f27e56dcb862e348d"
+  integrity sha512-njyGiT8s6F19TIr4Fwlau3IX6fVNgmSgmM0j5u97+csQAp5BMtzMHNsPABBC8bp6m+XQ0itKfym6HvfCmzEIpA==
 
 tslib@^1.8.1:
   version "1.14.1"
