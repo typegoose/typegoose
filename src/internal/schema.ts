@@ -112,14 +112,16 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
 
       if (Array.isArray(preHooks)) {
-        preHooks.forEach((obj) => sch!.pre(obj.method, obj.options, obj.func));
+        // "as any" is used here because mongoose now has static typings for method names, but the intermediate "IHooksArray" has "string"
+        preHooks.forEach((obj) => sch!.pre(obj.method as any, obj.options, obj.func));
       }
 
       /** Get Metadata for PreHooks */
       const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
 
       if (Array.isArray(postHooks)) {
-        postHooks.forEach((obj) => sch!.post(obj.method, obj.options, obj.func));
+        // "as any" is used here because mongoose now has static typings for method names, but the intermediate "IHooksArray" has "string"
+        postHooks.forEach((obj) => sch!.post(obj.method as any, obj.options, obj.func));
       }
     }
 
