@@ -109,7 +109,7 @@ assertion(getName(SomeClassWithCustomNameAndAutomaticName) === 'SomeClassWithCus
 
 This is a simple matrix to show what interacts with what, or also called a Truth Table.
 
-<sub>`x` means it is unset</sub>
+<sub><code>x</code> means it is unset</sub>
 
 | Class name | customName      | automaticName | collection         | Result                   |
 | ---------- | --------------- | ------------- | ------------------ | ------------------------ |
