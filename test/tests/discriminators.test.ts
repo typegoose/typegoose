@@ -12,6 +12,8 @@ import {
   prop,
   Prop,
   Ref,
+  plugin,
+  modelOptions,
 } from '../../src/typegoose';
 import { DisAbove, DisAboveModel, DisMain, DisMainModel } from '../models/discriminators';
 import { Default, DefaultModel, DiscriminatedUserModel, ROLE, Visitor, VisitorModel } from '../models/discriminatorsWithGenerics';
@@ -314,4 +316,85 @@ it('should allow passing ModelOptions through getDiscriminatorModelForClass [typ
   expect(ExtendedValueAndOptionsModel.schema['discriminatorMapping']).toHaveProperty('value', 'SomeCustomValue');
   expect(ExtendedAsValueModel.schema['discriminatorMapping']).toHaveProperty('value', 'ExtendedAsValue');
   expect(ExtendedWithoutOptionsModel.schema['discriminatorMapping']).toHaveProperty('value', 'ExtendedWithoutOptions');
+});
+
+it('should only apply plugins once', () => {
+  let pluginCount = 0;
+
+  function hookTestTimesGlobal() {}
+
+  function pluginTestTimes(schema) {
+    pluginCount += 1;
+    schema.pre('save', function hookTestTimesNonGlobal() {});
+    schema.pre('save', hookTestTimesGlobal);
+  }
+
+  @plugin(pluginTestTimes)
+  @modelOptions({ options: { disablePluginsOnDiscriminator: true } })
+  class DisBase {
+    @prop()
+    public dummy?: string;
+  }
+
+  const DisBaseModel = getModelForClass(DisBase);
+
+  class Dis1 extends DisBase {
+    @prop()
+    public dummy2?: string;
+  }
+
+  const Dis1Model = getDiscriminatorModelForClass(DisBaseModel, Dis1);
+
+  // common filter function
+  const pluginFunctionsFilter = (v) => {
+    return v.fn.name === pluginTestTimes.name;
+  };
+
+  expect(pluginCount).toStrictEqual(1);
+  // test that the plugin only gets applied once in the base model
+  {
+    const pluginFunctions = (DisBaseModel.schema as any).plugins.filter(pluginFunctionsFilter);
+
+    expect(pluginFunctions.length).toStrictEqual(1);
+  }
+  // test that the plugin only gets applied once in the discriminated model
+  {
+    const pluginFunctions = (Dis1Model.schema as any).plugins.filter(pluginFunctionsFilter);
+
+    expect(pluginFunctions.length).toStrictEqual(1);
+  }
+
+  const hooksFunctionsFilter1 = (v) => {
+    return v.fn.name === 'hookTestTimesNonGlobal';
+  };
+  // test that the plugin's hook(non-global) only gets applied once in the base model
+  {
+    const hookFunctions = (DisBaseModel.schema as any).s.hooks._pres.get('save').filter(hooksFunctionsFilter1);
+
+    expect(hookFunctions.length).toStrictEqual(1);
+  }
+
+  // test that the plugin's hook(non-global) only gets applied once in the discriminated model
+  {
+    const hookFunctions = (Dis1Model.schema as any).s.hooks._pres.get('save').filter(hooksFunctionsFilter1);
+
+    expect(hookFunctions.length).toStrictEqual(1);
+  }
+
+  const hooksFunctionsFilter2 = (v) => {
+    return v.fn.name === hookTestTimesGlobal.name;
+  };
+  // test that the plugin's hook(non-global) only gets applied once in the base model
+  {
+    const hookFunctions = (DisBaseModel.schema as any).s.hooks._pres.get('save').filter(hooksFunctionsFilter2);
+
+    expect(hookFunctions.length).toStrictEqual(1);
+  }
+
+  // test that the plugin's hook(non-global) only gets applied once in the discriminated model
+  {
+    const hookFunctions = (Dis1Model.schema as any).s.hooks._pres.get('save').filter(hooksFunctionsFilter2);
+
+    expect(hookFunctions.length).toStrictEqual(1);
+  }
 });

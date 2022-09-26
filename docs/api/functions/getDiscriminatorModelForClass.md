@@ -89,3 +89,35 @@ class ClickEvent extends Event {
 const EventModel = getModelForClass(Event);
 const ClickEventModel = getDiscriminatorModelForClass(EventModel, ClickEvent);
 ```
+
+## Notes
+
+ModelOption [`disablePluginsOnDiscriminator`](../decorators/modelOptions.md#disablepluginsondiscriminator) many need to be set to not get duplicate plugins / plugin hooks.
+
+Example:
+
+```ts
+function pluginFn(schema) {
+  schema.pre('save', function hookTestTimesNonGlobal() {});
+}
+
+@plugin(pluginFn)
+@modelOptions({ options: { disablePluginsOnDiscriminator: true } })
+class DisBase {
+  @prop()
+  public dummy?: string;
+}
+
+const DisBaseModel = getModelForClass(DisBase);
+
+class Dis1 extends DisBase {
+  @prop()
+  public dummy2?: string;
+}
+
+const Dis1Model = getDiscriminatorModelForClass(DisBaseModel, Dis1);
+
+// should only contain "hookTestTimesNonGlobal" once
+// if "disablePluginsOnDiscriminator" is falsy, this will otherwise result in duplicates
+console.log('Dis1Model save hooks', (Dis1Model.schema as any).s.hooks._pres.get('save'));
+```

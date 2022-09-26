@@ -448,6 +448,21 @@ export interface ICustomOptions {
   allowMixed?: Severity;
   /** Run "model.syncIndexes" when model is finished compiling? */
   runSyncIndexes?: boolean;
+  /**
+   * Disable applying plugins when the class is a discriminator.
+   * This can be set to "true" when encountering that plugins or plugin-hooks are duplicated in a discriminator
+   * This is necessary because currently mongoose merges the base schema for a discriminator into the discriminator schema
+   * which will result in the plugins being overwritten and hooks may be duplicated.
+   * Only applies to discriminator schemas, not the base for the discriminators themself
+   * @see {@link https://github.com/Automattic/mongoose/issues/12472}
+   * @default false
+   */
+  disablePluginsOnDiscriminator?: boolean;
+  /**
+   * Option if the current class is meant to be a discriminator
+   * @internal
+   */
+  $isDiscriminator?: boolean;
 }
 
 /** Type for the Values stored in the Reflection for Properties */

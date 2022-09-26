@@ -403,7 +403,10 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions.schemaOptions, rawOptions);
+  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions.schemaOptions, {
+    ...rawOptions,
+    options: { ...rawOptions?.options, $isDiscriminator: true },
+  });
 
   const discriminatorKey = sch.get('discriminatorKey');
 

@@ -159,9 +159,15 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     const plugins: IPluginsArray[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
 
     if (Array.isArray(plugins)) {
-      for (const plugin of plugins) {
-        logger.debug('Applying Plugin:', plugin);
-        sch.plugin(plugin.mongoosePlugin, plugin.options);
+      const mergedOptions = { ...ropt.options, ...overwriteOptions?.options };
+
+      if (!(mergedOptions.$isDiscriminator && mergedOptions.disablePluginsOnDiscriminator)) {
+        for (const plugin of plugins) {
+          logger.debug('Applying Plugin:', plugin);
+          sch.plugin(plugin.mongoosePlugin, plugin.options);
+        }
+      } else {
+        logger.info('Ignoring plugins because it is a discriminator and "disablePluginsOnDiscriminator" is set');
       }
     }
 
