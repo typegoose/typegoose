@@ -1,3 +1,10 @@
+### [9.12.1](https://github.com/typegoose/typegoose/compare/v9.12.0...v9.12.1) (2022-09-26)
+
+
+### Fixes
+
+* add option to skip applying plugins on discriminators ([f9cbc90](https://github.com/typegoose/typegoose/commit/f9cbc90044b715cf1f2d1b535daca754b5de8bf3))
+
 ## [9.12.0](https://github.com/typegoose/typegoose/compare/v9.11.2...v9.12.0) (2022-09-13)
 
 
