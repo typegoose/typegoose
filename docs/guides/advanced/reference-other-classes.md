@@ -7,7 +7,7 @@ title: 'Reference other Classes'
 
 ## Referencing other Classes
 
-Referencing other Classes can be as easy as shown in the following example:
+Referencing other classes may be needed to create relationships, this can be done with the following:
 
 ```ts
 class Nested {
@@ -37,6 +37,9 @@ Sometimes the `_id` type needs to be changed (to something like `String` / `Numb
 class Cat {
   @prop()
   public _id: string;
+
+  @prop()
+  public year: number;
 }
 
 class Person {
@@ -48,6 +51,8 @@ class Person {
 }
 ```
 
+Also see [Change _id Type](./changeIDType.md).
+
 :::info
 By default typegoose sets the default for the option `type` (if not defined) to `mongoose.Schema.Types.ObjectId`
 :::
@@ -56,6 +61,39 @@ By default typegoose sets the default for the option `type` (if not defined) to 
 The generic-parameter `IDType` from `Ref` is not automatically inferred from the generic-parameter `Class` yet (may be in the future)  
 The option `type` is not automatically inferred at runtime, because this could cause more "Circular Dependency" issues.  
 See [Common Problems](#common-problems) for more.
+:::
+
+## Population
+
+One of the main reasons why references may want to be used over plain types, is population, which can be done with:
+
+```ts
+// this example continues to use the classes defined previously
+
+const cat = await CatModel.create({ year: 2015 });
+
+await PersonModel.create({ name: "Jonny", pet: cat });
+
+const person1 = await PersonModel.findOne({ name: "Jonny" });
+// with this path "pet" is still unpopulated
+await person1.populate("pet"); // will try to populate path "pet"
+
+console.log(person1.pet); // will list the populated data
+// but for actual use in the code it will need to be checked that it is actually populated, because ".populate" may also fail
+person1.pet.year; // Type Error: "pet" may not have property "year"
+// for this the typeguard "isDocument" is used that typegoose provides
+if (isDocument(person1.pet)) {
+  person1.pet.year; // Works without typescript complaining
+} else {
+  // in this case the path is definitely NOT a document
+}
+```
+
+Function [`isDocument`](../../api/functions/typeguards/isDocument.md#isdocument) (or for arrays [`isDocumentArray`](../../api/functions/typeguards/isDocument.md#isdocumentarray)) will need to be used to narrow the type after population, because `.populate` may fail.
+
+:::tip
+Populated paths are **not** subdocuments, they are their own top-level documents and modifications to them need to be saved separately.  
+See [Subdocuments](https://mongoosejs.com/docs/subdocs.html) in mongoose's documentation.
 :::
 
 ## Common Problems
