@@ -504,8 +504,10 @@ export interface IIndexArray {
  * ```
  */
 export interface IPluginsArray {
+  /** The Plugin Function to add */
   mongoosePlugin: Func;
-  options: BeAnObject | undefined;
+  /** The Plugin's options, which could be anything because mongoose does not enforce it to be a object */
+  options: any | undefined;
 }
 
 /**
