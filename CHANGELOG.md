@@ -1,3 +1,17 @@
+## [9.13.0-beta.1](https://github.com/typegoose/typegoose/compare/v9.12.1...v9.13.0-beta.1) (2022-10-27)
+
+
+### Dependencies
+
+* **@types/lodash:** upgrade to 4.14.186 ([8367452](https://github.com/typegoose/typegoose/commit/836745224e5a167ab8a5cb6701fbe3335bc7b651))
+* **@types/semver:** upgrade to 7.3.13 ([9c7a151](https://github.com/typegoose/typegoose/commit/9c7a15182cafc3a59ff213b3e76a05b488b84ac2))
+* **@typescript-eslint/*:** upgrade to 5.41.0 ([e10e53a](https://github.com/typegoose/typegoose/commit/e10e53aac461a0bb40890c15449db6ee29a6ff90))
+* **eslint:** upgrade to 8.26.0 ([187c843](https://github.com/typegoose/typegoose/commit/187c84337b1836b0243b17550b579307877f3667))
+* **mongodb-memory-server:** upgrade to 8.9.3 ([1725f65](https://github.com/typegoose/typegoose/commit/1725f65af25c86fb89f3f1cbd5cb4795ce9e0edf))
+* **mongoose:** upgrade to 6.7.0 ([d5fa0e0](https://github.com/typegoose/typegoose/commit/d5fa0e09d933e6132241c5d2c2159882dc6d8b91))
+* **semver:** upgrade to 7.3.8 ([7dc8138](https://github.com/typegoose/typegoose/commit/7dc813880df15ad9fc7fd4861661f8fb3d767a0d))
+* **typescript:** upgrade to 4.8.4 ([6590961](https://github.com/typegoose/typegoose/commit/6590961e8736804fe17a1d0f9f82e19c1b0f09ff)), closes [#644](https://github.com/typegoose/typegoose/issues/644)
+
 ### [9.12.1](https://github.com/typegoose/typegoose/compare/v9.12.0...v9.12.1) (2022-09-26)
 
 
