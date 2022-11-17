@@ -1,5 +1,5 @@
-import { IndexWeights, IndexWeightsModel } from '../models/indexweights';
-import { RatingCar, RatingCarModel, RatingModel, RatingUser, RatingUserModel } from '../models/rating';
+import { IndexWeightsModel } from '../models/indexweights';
+import { RatingCarModel, RatingModel, RatingUserModel } from '../models/rating';
 import { SelectModel, SelectStrings } from '../models/select';
 
 describe('Property Option {select}', () => {
