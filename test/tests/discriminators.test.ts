@@ -1,4 +1,3 @@
-import { LeanDocument } from 'mongoose';
 import { assertion } from '../../src/internal/utils';
 import {
   DocumentType,
@@ -104,7 +103,7 @@ it('should pass all mongoose discriminator tests', async () => {
       discriminatorKey: 'kind',
     },
   })
-  @Pre('validate', (next) => {
+  @Pre('validate', function (next) {
     ++eventValidationCalls;
     next();
   })
@@ -115,7 +114,7 @@ it('should pass all mongoose discriminator tests', async () => {
     public time?: Date;
   }
 
-  @Pre('validate', (next) => {
+  @Pre('validate', function (next) {
     ++clickedLinkEventValidationCalls;
     next();
   })
@@ -172,7 +171,7 @@ it('should pass all mongoose discriminator tests', async () => {
 
   // https://mongoosejs.com/docs/discriminators.html#using-discriminators-with-model-create
   const events = await Promise.all([
-    EventModel.create<LeanDocument<ClickedLinkEvent>>({ time: new Date(Date.now()), url: 'google.com' }),
+    EventModel.create<mongoose.LeanDocument<ClickedLinkEvent>>({ time: new Date(Date.now()), url: 'google.com' }),
     ClickedLinkEventModel.create({ time: Date.now(), url: 'google.com' }),
     SignedUpEventModel.create({ time: Date.now(), user: 'testuser' }),
   ]);
@@ -202,7 +201,7 @@ it('should pass all mongoose discriminator tests', async () => {
   expect(clickedEvents[0].url).toEqual('google.com');
 
   // https://mongoosejs.com/docs/discriminators.html#discriminators-copy-pre-and-post-hooks
-  expect(eventValidationCalls).toEqual(3);
+  expect(eventValidationCalls).toEqual(3); // hooks should be triggered for each of the 3 "create" calls of the 3 models above
   expect(clickedLinkEventValidationCalls).toEqual(1);
 
   // https://mongoosejs.com/docs/discriminators.html#embedded-discriminators-in-arrays
