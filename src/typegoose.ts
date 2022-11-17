@@ -403,10 +403,17 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions.schemaOptions, {
-    ...rawOptions,
-    options: { ...rawOptions?.options, $isDiscriminator: true },
-  });
+  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions.schemaOptions, rawOptions);
+
+  const mergeHooks = mergedOptions.options?.enableMergeHooks ?? false;
+  // Note: this option is not actually for "merging plugins", but if "true" it will *overwrite* all plugins with the base-schema's
+  const mergePlugins = mergedOptions.options?.enableMergePlugins ?? false;
+
+  if (!mergeHooks && !mergePlugins) {
+    logger.debug('Manually applying global plugins');
+    // apply global plugins to the schema, see https://github.com/Automattic/mongoose/issues/12696
+    ((mergedOptions.existingMongoose ?? mongoose) as any)._applyPlugins(sch);
+  }
 
   const discriminatorKey = sch.get('discriminatorKey');
 
@@ -414,7 +421,11 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
     (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
   }
 
-  const model = from.discriminator(name, sch, value ? value : name);
+  const model = from.discriminator(name, sch, {
+    value: value ? value : name,
+    mergeHooks,
+    mergePlugins,
+  });
 
   return addModelToTypegoose<U, QueryHelpers>(model, cl);
 }
