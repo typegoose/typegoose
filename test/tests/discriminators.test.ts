@@ -1,4 +1,3 @@
-import { LeanDocument } from 'mongoose';
 import { assertion } from '../../src/internal/utils';
 import {
   DocumentType,
@@ -104,7 +103,7 @@ it('should pass all mongoose discriminator tests', async () => {
       discriminatorKey: 'kind',
     },
   })
-  @Pre('validate', (next) => {
+  @Pre('validate', function (next) {
     ++eventValidationCalls;
     next();
   })
@@ -115,7 +114,7 @@ it('should pass all mongoose discriminator tests', async () => {
     public time?: Date;
   }
 
-  @Pre('validate', (next) => {
+  @Pre('validate', function (next) {
     ++clickedLinkEventValidationCalls;
     next();
   })
@@ -172,7 +171,7 @@ it('should pass all mongoose discriminator tests', async () => {
 
   // https://mongoosejs.com/docs/discriminators.html#using-discriminators-with-model-create
   const events = await Promise.all([
-    EventModel.create<LeanDocument<ClickedLinkEvent>>({ time: new Date(Date.now()), url: 'google.com' }),
+    EventModel.create<mongoose.LeanDocument<ClickedLinkEvent>>({ time: new Date(Date.now()), url: 'google.com' }),
     ClickedLinkEventModel.create({ time: Date.now(), url: 'google.com' }),
     SignedUpEventModel.create({ time: Date.now(), user: 'testuser' }),
   ]);
@@ -202,7 +201,7 @@ it('should pass all mongoose discriminator tests', async () => {
   expect(clickedEvents[0].url).toEqual('google.com');
 
   // https://mongoosejs.com/docs/discriminators.html#discriminators-copy-pre-and-post-hooks
-  expect(eventValidationCalls).toEqual(3);
+  expect(eventValidationCalls).toEqual(3); // hooks should be triggered for each of the 3 "create" calls of the 3 models above
   expect(clickedLinkEventValidationCalls).toEqual(1);
 
   // https://mongoosejs.com/docs/discriminators.html#embedded-discriminators-in-arrays
@@ -318,7 +317,7 @@ it('should allow passing ModelOptions through getDiscriminatorModelForClass [typ
   expect(ExtendedWithoutOptionsModel.schema['discriminatorMapping']).toHaveProperty('value', 'ExtendedWithoutOptions');
 });
 
-it('should only apply plugins once', () => {
+it('should only apply plugins and hooks once and still have global plugins', () => {
   let pluginCount = 0;
 
   function hookTestTimesGlobal() {}
@@ -330,7 +329,6 @@ it('should only apply plugins once', () => {
   }
 
   @plugin(pluginTestTimes)
-  @modelOptions({ options: { disablePluginsOnDiscriminator: true } })
   class DisBase {
     @prop()
     public dummy?: string;
@@ -350,7 +348,8 @@ it('should only apply plugins once', () => {
     return v.fn.name === pluginTestTimes.name;
   };
 
-  expect(pluginCount).toStrictEqual(1);
+  // a plugin gets from the ground-up re-applied to each class
+  expect(pluginCount).toStrictEqual(2);
   // test that the plugin only gets applied once in the base model
   {
     const pluginFunctions = (DisBaseModel.schema as any).plugins.filter(pluginFunctionsFilter);
@@ -384,16 +383,171 @@ it('should only apply plugins once', () => {
   const hooksFunctionsFilter2 = (v) => {
     return v.fn.name === hookTestTimesGlobal.name;
   };
-  // test that the plugin's hook(non-global) only gets applied once in the base model
+  // test that the plugin's hook(global) only gets applied once in the base model
   {
     const hookFunctions = (DisBaseModel.schema as any).s.hooks._pres.get('save').filter(hooksFunctionsFilter2);
 
     expect(hookFunctions.length).toStrictEqual(1);
   }
 
-  // test that the plugin's hook(non-global) only gets applied once in the discriminated model
+  // test that the plugin's hook(global) only gets applied once in the discriminated model
   {
     const hookFunctions = (Dis1Model.schema as any).s.hooks._pres.get('save').filter(hooksFunctionsFilter2);
+
+    expect(hookFunctions.length).toStrictEqual(1);
+  }
+});
+
+it('if "mergePlugins" is "true", it should not contain any new plugins', () => {
+  let pluginCount = 0;
+  let newPluginCount = 0;
+
+  function pluginTestTimes(/* schema */) {
+    pluginCount += 1;
+  }
+
+  @plugin(pluginTestTimes)
+  @modelOptions({
+    options: {
+      enableMergePlugins: true,
+    },
+  })
+  class MergePluginsTrueBase {
+    @prop()
+    public dummy?: string;
+  }
+
+  const MergePluginsTrueBaseModel = getModelForClass(MergePluginsTrueBase);
+
+  function newPlugin() {
+    newPluginCount += 1;
+  }
+
+  @plugin(newPlugin)
+  class MergePluginsTrue1 extends MergePluginsTrueBase {
+    @prop()
+    public dummy2?: string;
+  }
+
+  const MergePluginsTrue1Model = getDiscriminatorModelForClass(MergePluginsTrueBaseModel, MergePluginsTrue1);
+
+  // common filter function
+  const pluginFunctionsFilterTestTimes = (v) => {
+    return v.fn.name === pluginTestTimes.name;
+  };
+  const pluginFunctionsFilterNewPlugin = (v) => {
+    return v.fn.name === newPlugin.name;
+  };
+
+  // a plugin gets from the ground-up re-applied to each class
+  expect(pluginCount).toStrictEqual(2);
+  // test that the plugin only gets applied once in the base model
+  {
+    const pluginFunctions = (MergePluginsTrueBaseModel.schema as any).plugins.filter(pluginFunctionsFilterTestTimes);
+
+    expect(pluginFunctions.length).toStrictEqual(1);
+
+    // "newPlugin" should not be on the base
+    const pluginFunctionsNewPlugin = (MergePluginsTrueBaseModel.schema as any).plugins.filter(pluginFunctionsFilterNewPlugin);
+
+    expect(pluginFunctionsNewPlugin.length).toStrictEqual(0);
+  }
+  // test that the plugin only gets applied once in the discriminated model
+  {
+    const pluginFunctions = (MergePluginsTrue1Model.schema as any).plugins.filter(pluginFunctionsFilterTestTimes);
+
+    expect(pluginFunctions.length).toStrictEqual(1);
+
+    // "newPlugin" should not be on the discriminated schema, because of "mergePlugins"
+    const pluginFunctionsNewPlugin = (MergePluginsTrueBaseModel.schema as any).plugins.filter(pluginFunctionsFilterNewPlugin);
+
+    expect(pluginFunctionsNewPlugin.length).toStrictEqual(0);
+    // but the plugin still gets executed, but is not listed as a plugin anymore
+    expect(newPluginCount).toStrictEqual(1);
+  }
+});
+
+it('should duplicate non-global hooks if "mergeHooks" is "true"', () => {
+  let pluginCount = 0;
+
+  function hookTestTimesGlobal() {}
+
+  function pluginTestTimes(schema) {
+    pluginCount += 1;
+    schema.pre('save', function hookTestTimesNonGlobal() {});
+    schema.pre('save', hookTestTimesGlobal);
+  }
+
+  @plugin(pluginTestTimes)
+  @modelOptions({
+    options: {
+      enableMergeHooks: true,
+    },
+  })
+  class MergeHooksTrueBase {
+    @prop()
+    public dummy?: string;
+  }
+
+  const MergeHooksTrueBaseModel = getModelForClass(MergeHooksTrueBase);
+
+  class MergeHooksTrue1 extends MergeHooksTrueBase {
+    @prop()
+    public dummy2?: string;
+  }
+
+  const MergeHooksTrue1Model = getDiscriminatorModelForClass(MergeHooksTrueBaseModel, MergeHooksTrue1);
+
+  // common filter function
+  const pluginFunctionsFilter = (v) => {
+    return v.fn.name === pluginTestTimes.name;
+  };
+
+  // a plugin gets from the ground-up re-applied to each class
+  expect(pluginCount).toStrictEqual(2);
+  // test that the plugin only gets applied once in the base model (because "mergePlugins" is "false")
+  {
+    const pluginFunctions = (MergeHooksTrueBaseModel.schema as any).plugins.filter(pluginFunctionsFilter);
+
+    expect(pluginFunctions.length).toStrictEqual(1);
+  }
+  // test that the plugin only gets applied once in the discriminated model (because "mergePlugins" is "false")
+  {
+    const pluginFunctions = (MergeHooksTrue1Model.schema as any).plugins.filter(pluginFunctionsFilter);
+
+    expect(pluginFunctions.length).toStrictEqual(1);
+  }
+
+  const hooksFunctionsFilter1 = (v) => {
+    return v.fn.name === 'hookTestTimesNonGlobal';
+  };
+  // test that the plugin's hook(non-global) only gets applied once in the base model (because for the "Base" it only gets applied once)
+  {
+    const hookFunctions = (MergeHooksTrueBaseModel.schema as any).s.hooks._pres.get('save').filter(hooksFunctionsFilter1);
+
+    expect(hookFunctions.length).toStrictEqual(1);
+  }
+
+  // test that the plugin's hook(non-global) gets applied multiple times in the discriminated model because non-global hooks cannot be de-duplicated
+  {
+    const hookFunctions = (MergeHooksTrue1Model.schema as any).s.hooks._pres.get('save').filter(hooksFunctionsFilter1);
+
+    expect(hookFunctions.length).toStrictEqual(2);
+  }
+
+  const hooksFunctionsFilter2 = (v) => {
+    return v.fn.name === hookTestTimesGlobal.name;
+  };
+  // test that the plugin's hook(global) only gets applied once in the base model (because for the "Base" it only gets applied once)
+  {
+    const hookFunctions = (MergeHooksTrueBaseModel.schema as any).s.hooks._pres.get('save').filter(hooksFunctionsFilter2);
+
+    expect(hookFunctions.length).toStrictEqual(1);
+  }
+
+  // test that the plugin's hook(global) only gets applied once in the discriminated model (because global hooks can be de-duplicated)
+  {
+    const hookFunctions = (MergeHooksTrue1Model.schema as any).s.hooks._pres.get('save').filter(hooksFunctionsFilter2);
 
     expect(hookFunctions.length).toStrictEqual(1);
   }

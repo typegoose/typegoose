@@ -1,3 +1,35 @@
+## [9.13.0-beta.2](https://github.com/typegoose/typegoose/compare/v9.13.0-beta.1...v9.13.0-beta.2) (2022-11-17)
+
+
+### Features
+
+* fix non-nested discriminator hooks & plugins ([8cc7301](https://github.com/typegoose/typegoose/commit/8cc73018aaf538a698ac390bb3bb0d46628cabcc)), closes [#12472](https://github.com/typegoose/typegoose/issues/12472) [#12604](https://github.com/typegoose/typegoose/issues/12604) [#12613](https://github.com/typegoose/typegoose/issues/12613) [#12696](https://github.com/typegoose/typegoose/issues/12696) [typegoose/typegoose#768](https://github.com/typegoose/typegoose/issues/768)
+
+
+### Dependencies
+
+* **@types/lodash:** upgrade to 4.14.189 ([6257223](https://github.com/typegoose/typegoose/commit/62572238e3cdbe2d7ce944da395f5f2ff7637593))
+* **@typescript-eslint/*:** upgrade to 5.43.0 ([851163f](https://github.com/typegoose/typegoose/commit/851163f33d75c0ec707ccc3e843a7cd222f1960b))
+* **eslint:** upgrade to 8.27.0 ([436036a](https://github.com/typegoose/typegoose/commit/436036ab21352ef625007d2a46b9d677f4e99f90))
+* **loglevel:** upgrade to 1.8.1 ([b017f76](https://github.com/typegoose/typegoose/commit/b017f76cdb55cbe257fbf02cad5e699d93102a77))
+* **mongodb-memory-server:** upgrade to 8.10.0 ([79242e6](https://github.com/typegoose/typegoose/commit/79242e64588887e63a78b3866f600508e38af18d))
+* **mongoose:** upgrade to 6.7.2 ([d1e83f7](https://github.com/typegoose/typegoose/commit/d1e83f7aa140a4c5fce605e80340d617a4fe5fe2))
+* **tslib:** upgrade to 2.4.1 ([9da2600](https://github.com/typegoose/typegoose/commit/9da260029f06bf5d34a789e09bd4c86a2f301273))
+
+## [9.13.0-beta.1](https://github.com/typegoose/typegoose/compare/v9.12.1...v9.13.0-beta.1) (2022-10-27)
+
+
+### Dependencies
+
+* **@types/lodash:** upgrade to 4.14.186 ([8367452](https://github.com/typegoose/typegoose/commit/836745224e5a167ab8a5cb6701fbe3335bc7b651))
+* **@types/semver:** upgrade to 7.3.13 ([9c7a151](https://github.com/typegoose/typegoose/commit/9c7a15182cafc3a59ff213b3e76a05b488b84ac2))
+* **@typescript-eslint/*:** upgrade to 5.41.0 ([e10e53a](https://github.com/typegoose/typegoose/commit/e10e53aac461a0bb40890c15449db6ee29a6ff90))
+* **eslint:** upgrade to 8.26.0 ([187c843](https://github.com/typegoose/typegoose/commit/187c84337b1836b0243b17550b579307877f3667))
+* **mongodb-memory-server:** upgrade to 8.9.3 ([1725f65](https://github.com/typegoose/typegoose/commit/1725f65af25c86fb89f3f1cbd5cb4795ce9e0edf))
+* **mongoose:** upgrade to 6.7.0 ([d5fa0e0](https://github.com/typegoose/typegoose/commit/d5fa0e09d933e6132241c5d2c2159882dc6d8b91))
+* **semver:** upgrade to 7.3.8 ([7dc8138](https://github.com/typegoose/typegoose/commit/7dc813880df15ad9fc7fd4861661f8fb3d767a0d))
+* **typescript:** upgrade to 4.8.4 ([6590961](https://github.com/typegoose/typegoose/commit/6590961e8736804fe17a1d0f9f82e19c1b0f09ff)), closes [#644](https://github.com/typegoose/typegoose/issues/644)
+
 ### [9.12.1](https://github.com/typegoose/typegoose/compare/v9.12.0...v9.12.1) (2022-09-26)
 
 

@@ -455,14 +455,30 @@ export interface ICustomOptions {
    * which will result in the plugins being overwritten and hooks may be duplicated.
    * Only applies to discriminator schemas, not the base for the discriminators themself
    * @see {@link https://github.com/Automattic/mongoose/issues/12472}
+   * @deprecated Not used anymore since version 9.13.0
    * @default false
    */
-  disablePluginsOnDiscriminator?: boolean;
+  disablePluginsOnDiscriminator?: never;
   /**
    * Option if the current class is meant to be a discriminator
+   * @deprecated Not used anymore since version 9.13.0
    * @internal
    */
-  $isDiscriminator?: boolean;
+  $isDiscriminator?: never;
+  /**
+   * Enable Overwriting of the plugins on the "to-be" discriminator schema with the base schema's
+   * Note: this does not actually "merge plugins", it will overwrite the "to-be" discriminator's plugins with the base schema's
+   * If {@link ICustomOptions.enableMergePlugins} and {@link ICustomOptions.enableMergeHooks} are both "false", then the global plugins will be automatically applied by typegoose, see https://github.com/Automattic/mongoose/issues/12696
+   * @default false
+   */
+  enableMergePlugins?: boolean;
+  /**
+   * Enable Merging of Hooks
+   * Note: only hooks that can be matched against each-other can be de-duplicated
+   * If {@link ICustomOptions.enableMergePlugins} and {@link ICustomOptions.enableMergeHooks} are both "false", then the global plugins will be automatically applied by typegoose, see https://github.com/Automattic/mongoose/issues/12696
+   * @default false
+   */
+  enableMergeHooks?: boolean;
 }
 
 /** Type for the Values stored in the Reflection for Properties */
@@ -504,8 +520,10 @@ export interface IIndexArray {
  * ```
  */
 export interface IPluginsArray {
+  /** The Plugin Function to add */
   mongoosePlugin: Func;
-  options: BeAnObject | undefined;
+  /** The Plugin's options, which could be anything because mongoose does not enforce it to be a object */
+  options: any | undefined;
 }
 
 /**

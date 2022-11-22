@@ -1,5 +1,5 @@
-import { IndexWeights, IndexWeightsModel } from '../models/indexweights';
-import { RatingCar, RatingCarModel, RatingModel, RatingUser, RatingUserModel } from '../models/rating';
+import { IndexWeightsModel } from '../models/indexweights';
+import { RatingCarModel, RatingModel, RatingUserModel } from '../models/rating';
 import { SelectModel, SelectStrings } from '../models/select';
 
 describe('Property Option {select}', () => {
@@ -32,17 +32,17 @@ it('should create and find indexes with weights', async () => {
     about: 'NodeJS module for MongoDB',
     content: 'MongoDB-native is the default driver for MongoDB in NodeJS',
     keywords: ['mongodb', 'js', 'nodejs'],
-  } as IndexWeights);
+  });
   const docMongoose = await IndexWeightsModel.create({
     about: 'NodeJS module for MongoDB',
     content: 'Mongoose is a Module for NodeJS that interfaces with MongoDB',
     keywords: ['mongoose', 'js', 'nodejs'],
-  } as IndexWeights);
+  });
   const docTypegoose = await IndexWeightsModel.create({
     about: 'TypeScript Module for Mongoose',
     content: 'Typegoose is a Module for NodeJS that makes Mongoose more compatible with Typescript',
     keywords: ['typegoose', 'ts', 'nodejs', 'mongoose'],
-  } as IndexWeights);
+  });
 
   {
     const found = await IndexWeightsModel.find({ $text: { $search: 'mongodb' } }).exec();
@@ -60,8 +60,8 @@ it('should create and find indexes with weights', async () => {
 
 it('should add compound index', async () => {
   expect.assertions(1);
-  const user = await RatingUserModel.create({ name: 'hi' } as RatingUser);
-  const car = await RatingCarModel.create({ carModel: 'some' } as RatingCar);
+  const user = await RatingUserModel.create({ name: 'hi' });
+  const car = await RatingCarModel.create({ carModel: 'some' });
 
   await RatingModel.create({ user, car, stars: 4 });
 

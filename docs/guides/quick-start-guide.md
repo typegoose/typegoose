@@ -106,9 +106,9 @@ Like `public: string[]` is in reflection only `Array`.
 
 ### Requirements
 
-- TypeScript version `^4.4` (since 9.0) is recommended, though older ones may also work
+- TypeScript version `^4.8` (since 9.13) is recommended, though older ones may also work
 - NodeJS `^12.22.0`
-- Mongoose `~6.6.0`
+- Mongoose `~6.7.2`
 - A IDE that supports TypeScript linting is recommended to be used (VSCode is recommended)
 - This Guide expects you to know how Mongoose (or at least its models) works
 - `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`

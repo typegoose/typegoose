@@ -94,6 +94,8 @@ const ClickEventModel = getDiscriminatorModelForClass(EventModel, ClickEvent);
 
 ModelOption [`disablePluginsOnDiscriminator`](../decorators/modelOptions.md#disablepluginsondiscriminator) many need to be set to not get duplicate plugins / plugin hooks.
 
+This will not be neccessary for typegoose 9.13.0 and higher.
+
 Example:
 
 ```ts

@@ -133,7 +133,11 @@ Only run this while in development. It could cause race-conditions because `getM
 
 #### disablePluginsOnDiscriminator
 
+<span class="badge badge--warning">Deprecated</span><span class="badge badge--warning">No Effect</span>
+
 Default: `false`
+
+This Option has been deprecated (and has no use) since typegoose 9.13.0
 
 Disables adding plugins to a discriminator model.  
 This may be necessary to be set to `true` to not have duplicate plugins or plugin hooks, see [Mongoose#12472](https://github.com/Automattic/mongoose/issues/12472).  
@@ -141,8 +145,63 @@ Only has a effect when [`$isDiscriminator`](#isdiscriminator) is `true`.
 
 #### $isDiscriminator
 
-<span class="badge badge--warning">Internal</span>
+<span class="badge badge--warning">Deprecated</span><span class="badge badge--warning">No Effect</span><span class="badge badge--warning">Internal</span>
+
+This Option has been deprecated (and has no use) since typegoose 9.13.0
 
 Internal function, is only set to `true` for [`buildSchema`](../functions/buildSchema.md) calls through [`getDiscriminatorModelForClass`](../functions/getDiscriminatorModelForClass.md).  
 
 This should not be set manually
+
+#### enableMergePlugins
+
+Default: `false`
+
+Enable Overwriting of the plugins on the "to-be" discriminator schema with the base schema's.
+
+:::caution
+This does not actually "merge plugins", it will overwrite the "to-be" discriminator's plugins with the base schema's!
+:::
+
+:::note
+If [`enableMergePlugins`](#enablemergeplugins) and [`enableMergeHooks`](#enablemergehooks) are both `false`, then the global plugins will be automatically applied by typegoose, see [Mongoose Issue #12696](https://github.com/Automattic/mongoose/issues/12696).
+:::
+
+#### enableMergeHooks
+
+Default: `false`
+
+Enable Merging of Hooks.
+
+Example of what can be deduplicated:
+
+```ts
+// this is a global function and can be de-duplicated, because they are the same reference
+function hookTestTimesGlobal() {}
+
+function pluginTestTimes(schema) {
+  pluginCount += 1;
+  // the following function cannot be de-duplicated, because they are a new reference each time the plugin gets called
+  schema.pre('save', function hookTestTimesNonGlobal() {});
+  schema.pre('save', hookTestTimesGlobal);
+}
+
+@plugin(pluginTestTimes)
+@modelOptions({
+  options: {
+    enableMergeHooks: true, // needs to be set, because by default typegoose does not need de-duplication
+  },
+})
+class MergeHooks {
+  @prop()
+  public dummy?: string;
+}
+```
+
+:::caution
+Only hooks that can be matched against each-other can be de-duplicated.
+:::
+
+:::note
+If [`enableMergePlugins`](#enablemergeplugins) and [`enableMergeHooks`](#enablemergehooks) are both `false`, then the global plugins will be automatically applied by typegoose, see [Mongoose Issue #12696](https://github.com/Automattic/mongoose/issues/12696).
+:::
