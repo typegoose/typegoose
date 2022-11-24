@@ -26,13 +26,12 @@ And also applies the following `schemaOptions`:
 
 ### Base
 
-The Base Class provides the following fields:
+The Base *Interface* provides the following fields:
 
-| Field Name |             Type              |
-| :--------: | :---------------------------: |
-|   `_id`    |   `mongoose.Types.ObjectId`   |
-|   `__v`    |           `number`            |
-|   `__t`    | undefined \| string \| number | <!--This has to not be a inline-block, because docusaurus does not like " | "--> |
+| Field Name |           Type            |
+| :--------: | :-----------------------: |
+|   `_id`    | `mongoose.Types.ObjectId` |
+|    `id`    |         `string`          |
 
 How to override `_id` type:  
 <sub>This only works with typegoose 6.0.2+</sub>
