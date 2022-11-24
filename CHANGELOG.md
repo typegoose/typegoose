@@ -1,3 +1,10 @@
+### [9.13.1](https://github.com/typegoose/typegoose/compare/v9.13.0...v9.13.1) (2022-11-24)
+
+
+### Fixes
+
+* **typeguards:** quick fix for typescript 4.9 ([df36c34](https://github.com/typegoose/typegoose/commit/df36c346006cb89e4d89c8d152c63b3b222bcfd5)), closes [#772](https://github.com/typegoose/typegoose/issues/772)
+
 ## [9.13.0](https://github.com/typegoose/typegoose/compare/v9.12.1...v9.13.0) (2022-11-22)
 
 
