@@ -56,7 +56,7 @@ class Main {
 }
 ```
 
-There is also a option to not use sub-classes, called [the `Passthrough` class](../api/decorators/prop.md#passthrough-class)
+There is also a option to not use sub-classes, called [the `Passthrough` class](../api/decorators/prop.md#passthrough-class), but it is not recommended to be used.
 
 ## Edge Cases
 
