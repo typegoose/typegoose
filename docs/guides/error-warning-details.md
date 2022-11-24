@@ -5,10 +5,6 @@ title: 'Error & Warning Details'
 
 ## Errors
 
-:::note
-Only Removed Error will have a link to their code, because there is currently no good way to keep the links up-to-date when the file changes
-:::
-
 ### Mongoose Version [E001]
 
 Error: `Please use mongoose 6.7.2 or higher (Current mongoose: x.x.x) [E001]`
