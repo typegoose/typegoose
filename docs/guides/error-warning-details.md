@@ -12,7 +12,9 @@ Error: `Please use mongoose 6.7.2 or higher (Current mongoose: x.x.x) [E001]`
 Error Class: `Error`
 
 Details:  
-Typegoose requires at least mongoose version `6.7.2`, because that version changed something that affected typegoose internals
+Typegoose requires at least the mentioned mongoose version because that version was validated for that version of typegoose, previous / newer mongoose versions may have functional or type changes which are incompatible with the currently installed typegoose version.
+
+[Mongoose Compatability](../guides/mongoose-compatibility.md)
 
 ### NodeJS Version [E002]
 
@@ -21,7 +23,9 @@ Error: `You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]`
 Error Class: `Error`
 
 Details:  
-Typegoose requires at least NodeJS Version 12.22, because NodeJS 12 is the lowest actively maintained version AND is the lowest that supports all functions needed by typegoose (without having to add polyfills)
+Typegoose requires at least NodeJS Version 12.22, because:
+
+- it is the lowest version also supported by mongoose
 
 ### Function only supports to be called "${supported}" times [E003]
 
@@ -49,7 +53,7 @@ Please look at https://github.com/typegoose/typegoose/issues/42 for more informa
 Error Class: `SelfContainingClassError`
 
 Details:  
-Because of limitations of JS, it is not possible to use a self-containing-class  
+Because of limitations in JavaScript, it is not possible to use a self-containing-class  
 -> But Self-Referencing still works
 
 ### ref is undefined [E005]
