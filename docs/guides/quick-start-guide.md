@@ -138,7 +138,7 @@ const kittenSchema = new mongoose.Schema({
 const KittenModel = mongoose.model('Kitten', kittenSchema);
 
 let document = await KittenModel.create({ name: 'Kitty' });
-// "document" has no types
+// "document" has basic mongoose inferred types
 ```
 
 With Typegoose, it can be converted to something like:
@@ -152,11 +152,15 @@ class KittenClass {
 const KittenModel = getModelForClass(KittenClass);
 
 let document = await KittenModel.create({ name: 'Kitty' });
-// "document" has proper types of KittenClass
+// "document" has proper (manual) typescript types of KittenClass
 ```
 
 :::note
-`new KittenModel({})` has no types of KittenClass, because Typegoose doesn't modify functions of Mongoose, [read more here](./faq.md#why-does-new-model-not-have-types)
+`new KittenModel({} /*<-- this here*/)` will have type suggestions, but they are *not enforced*, [read more here](./faq.md#why-does-new-model-not-have-types).
+:::
+:::note
+Since around mongoose 6.0, mongoose can infer types mostly from the schema definition, but it is still not perfect and arguably less overview-able than typegoose's style of classes.  
+Also tsdoc comments are not transferred when using mongoose's inferred types.
 :::
 
 ## Do's and Don'ts of Typegoose
