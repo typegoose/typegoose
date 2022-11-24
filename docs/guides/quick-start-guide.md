@@ -165,7 +165,7 @@ Also tsdoc comments are not transferred when using mongoose's inferred types.
 
 ## Do's and Don'ts of Typegoose
 
-- Typegoose is a wrapper for Mongoose's models
+- Typegoose is a wrapper for Mongoose's models & schemas
 - Typegoose does not modify any functions of Mongoose
 - Typegoose aims to get Mongoose's models to be stable through type-information from classes (without defining extra interfaces)
 - Typegoose aims to make Mongoose more usable by making the models more type-rich with TypeScript
@@ -201,7 +201,7 @@ pre-6.0 static functions needed `@staticMethod`, but this is not needed anymore.
 
 ### Instance Methods
 
-Sometimes extra functions for manipulating data on an instance is needed, they can be done as follows:
+Sometimes extra functions for manipulating data on an instance are needed, they can be done as follows:
 
 ```ts
 class KittenClass {
