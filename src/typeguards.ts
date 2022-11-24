@@ -11,6 +11,8 @@ export function isDocument<T, S extends RefType>(
   doc: Ref<T, S>
   // handle type case of T being "DocumentType" already and being a OR of other types (like for count hooks)
   // i am not a typescript wizard, so i dont know how to handle this better, this will need to be updated for #730 and #587
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore somehow the following errors in typescript 4.9, but can be disabled with a directive
 ): doc is T extends DocumentType<infer T1, infer T2> ? DocumentType<T1, T2> : T extends object ? DocumentType<T> : never {
   return doc instanceof mongoose.Model;
 }
