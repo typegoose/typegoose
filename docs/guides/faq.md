@@ -20,7 +20,7 @@ A: Because of a Repository Switch ([reasons](#is-this-project-still-active)) and
 
 ### Why `@typegoose/typegoose`
 
-A: Because I (hasezoey) don't have permissions over the old `typegoose` repository and I don't want to touch the old npm package. It is a typical forking and continuation of an OSS project.
+A: Because I (hasezoey) don't have permissions over the old `typegoose` repository and I don't want to touch the old npm package. It is a typical forking and continuation of an [OSS](https://en.wikipedia.org/wiki/Open-source_software) project.
 
 ## Functional
 
