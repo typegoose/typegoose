@@ -88,9 +88,7 @@ async function typeguards() {
         expectAssignable<typegoose.DocumentType<TypeguardsClass>[]>(someNewDoc.refObjectIdArray);
       } else {
         // currently has to be multiple "| undefined" because of https://github.com/typegoose/typegoose/issues/730
-        expectType<(typegoose.Ref<TypeguardsClass, typegoose.mongoose.Types.ObjectId> | undefined)[] | undefined>(
-          someNewDoc.refObjectIdArray
-        );
+        expectType<typegoose.Ref<TypeguardsClass, typegoose.mongoose.Types.ObjectId>[] | undefined>(someNewDoc.refObjectIdArray);
       }
 
       if (typegoose.isDocumentArray(someNewDoc.refStringArray)) {
@@ -121,9 +119,7 @@ async function typeguards() {
         expectType<typegoose.mongoose.Types.ObjectId[]>(someNewDoc.refObjectIdArray);
       } else {
         // currently has to be multiple "| undefined" because of https://github.com/typegoose/typegoose/issues/730
-        expectType<typegoose.Ref<TypeguardsClass, typegoose.mongoose.Types.ObjectId | undefined>[] | undefined>(
-          someNewDoc.refObjectIdArray
-        );
+        expectType<typegoose.Ref<TypeguardsClass, typegoose.mongoose.Types.ObjectId>[] | undefined>(someNewDoc.refObjectIdArray);
       }
 
       if (typegoose.isRefTypeArray(someNewDoc.refStringArray, String)) {
