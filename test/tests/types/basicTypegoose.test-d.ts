@@ -1,5 +1,6 @@
-import { expectType, expectAssignable } from 'tsd-lite';
+import { expectType, expectAssignable, expectError } from 'tsd-lite';
 import * as typegoose from '../../../src/typegoose';
+import { isDocument, isRefType } from '../../../src/typegoose';
 import { BeAnObject, IObjectWithTypegooseFunction } from '../../../src/types';
 
 // decorators return type
@@ -71,13 +72,13 @@ async function typeguards() {
       if (typegoose.isDocument(someNewDoc.refObjectId)) {
         expectAssignable<typegoose.DocumentType<TypeguardsClass>>(someNewDoc.refObjectId);
       } else {
-        expectType<typegoose.Ref<TypeguardsClass, typegoose.mongoose.Types.ObjectId> | undefined>(someNewDoc.refObjectId);
+        expectType<typegoose.mongoose.Types.ObjectId | undefined>(someNewDoc.refObjectId);
       }
 
       if (typegoose.isDocument(someNewDoc.refString)) {
         expectAssignable<typegoose.DocumentType<TypeguardsClass>>(someNewDoc.refString);
       } else {
-        expectType<typegoose.Ref<TypeguardsClass, string> | undefined>(someNewDoc.refString);
+        expectType<string | undefined>(someNewDoc.refString);
       }
     }
 
@@ -104,13 +105,13 @@ async function typeguards() {
       if (typegoose.isRefType(someNewDoc.refObjectId, typegoose.mongoose.Types.ObjectId)) {
         expectType<typegoose.mongoose.Types.ObjectId>(someNewDoc.refObjectId);
       } else {
-        expectType<TypeguardsClass | undefined>(someNewDoc.refObjectId);
+        expectType<typegoose.DocumentType<TypeguardsClass> | undefined>(someNewDoc.refObjectId);
       }
 
       if (typegoose.isRefType(someNewDoc.refString, String)) {
         expectType<string>(someNewDoc.refString);
       } else {
-        expectType<TypeguardsClass | undefined>(someNewDoc.refString);
+        expectType<typegoose.DocumentType<TypeguardsClass> | undefined>(someNewDoc.refString);
       }
     }
 
@@ -150,6 +151,17 @@ async function typeguards() {
       // same here
     }
   }
+
+  // test primitives
+  isDocument(null);
+  isDocument(undefined);
+  isDocument('string');
+  isRefType(null, String);
+  isRefType(undefined, String);
+  isRefType('string', String);
+
+  // test errors
+  expectError<Parameters<typeof isDocument>[0]>({});
 }
 
 typeguards();

@@ -392,10 +392,10 @@ export type RefType = mongoose.RefType;
  */
 export type Ref<
   PopulatedType,
-  RawId extends mongoose.RefType =
-    | (PopulatedType extends { _id?: mongoose.RefType } ? NonNullable<PopulatedType['_id']> : mongoose.Types.ObjectId)
-    | undefined
-> = mongoose.PopulatedDoc<PopulatedType, RawId>;
+  RawId extends mongoose.RefType = PopulatedType extends { _id?: mongoose.RefType }
+    ? NonNullable<PopulatedType['_id']>
+    : mongoose.Types.ObjectId
+> = mongoose.PopulatedDoc<DocumentType<PopulatedType>, RawId>;
 
 /**
  * A Function type for a function that doesn't have any arguments and doesn't return anything
