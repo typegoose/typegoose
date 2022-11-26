@@ -62,7 +62,7 @@
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "husky": "^7.0.4",
+    "husky": "^8.0.2",
     "jest": "^28.1.3",
     "jest-runner-tsd": "^3.1.1",
     "lint-staged": "^12.5.0",
