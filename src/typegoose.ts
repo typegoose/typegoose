@@ -13,8 +13,8 @@ if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version
   }
 
   /* istanbul ignore next */
-  if (semver.lt(process.version.slice(1), '12.22.0')) {
-    throw new Error('You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]');
+  if (semver.lt(process.version.slice(1), '14.17.0')) {
+    throw new Error('You are using a NodeJS Version below 14.17.0, Please Upgrade! [E002]');
   }
 }
 
