@@ -119,7 +119,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
       if (Array.isArray(preHooks)) {
         // "as any" is used here because mongoose now has static typings for method names, but the intermediate "IHooksArray" has "string"
-        preHooks.forEach((obj) => sch!.pre(obj.method as any, obj.options, obj.func));
+        preHooks.forEach((obj) => sch!.pre(obj.methods as any, obj.options, obj.func));
       }
 
       /** Get Metadata for PreHooks */
@@ -127,7 +127,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
       if (Array.isArray(postHooks)) {
         // "as any" is used here because mongoose now has static typings for method names, but the intermediate "IHooksArray" has "string"
-        postHooks.forEach((obj) => sch!.post(obj.method as any, obj.options, obj.func));
+        postHooks.forEach((obj) => sch!.post(obj.methods as any, obj.options, obj.func));
       }
     }
 

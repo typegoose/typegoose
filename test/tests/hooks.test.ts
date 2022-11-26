@@ -118,14 +118,14 @@ it('should allow usage of hook-options [typegoose/typegoose#605]', async () => {
 
   expect(reflectHooksPre).toHaveLength(1);
   expect(reflectHooksPre[0]).toStrictEqual<IHooksArray>({
-    method: 'save',
+    methods: ['save'],
     func: customPre,
     options: fullHookOptions,
   });
 
   expect(reflectHooksPost).toHaveLength(1);
   expect(reflectHooksPost[0]).toStrictEqual<IHooksArray>({
-    method: 'save',
+    methods: ['save'],
     func: customPost,
     options: fullHookOptions,
   });
@@ -177,7 +177,7 @@ it('should work with QueryMethod post "this" [typegoose/typegoose#694]', () => {
   const reflectHooksPost: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, TestQueryPostHooks);
 
   expect(reflectHooksPost).toHaveLength(1);
-  expect(reflectHooksPost[0]).toHaveProperty('method', 'findOneAndUpdate');
+  expect(reflectHooksPost[0]).toHaveProperty('methods', ['findOneAndUpdate']);
 
   const schema = buildSchema(TestQueryPostHooks);
   // @ts-expect-error "s" is not in the types, but is used for something like "hooks"

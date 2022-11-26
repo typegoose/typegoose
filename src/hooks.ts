@@ -130,19 +130,17 @@ function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
 
   logger.info('Adding hooks for "[%s]" to "%s" as type "%s"', methods.join(','), getName(target), hookType);
 
-  for (const method of methods) {
-    switch (hookType) {
-      case 'post':
-        const postHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPost, target) ?? []);
-        postHooks.push({ func, method, options: hookOptions });
-        Reflect.defineMetadata(DecoratorKeys.HooksPost, postHooks, target);
-        break;
-      case 'pre':
-        const preHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPre, target) ?? []);
-        preHooks.push({ func, method, options: hookOptions });
-        Reflect.defineMetadata(DecoratorKeys.HooksPre, preHooks, target);
-        break;
-    }
+  switch (hookType) {
+    case 'post':
+      const postHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPost, target) ?? []);
+      postHooks.push({ func, methods, options: hookOptions });
+      Reflect.defineMetadata(DecoratorKeys.HooksPost, postHooks, target);
+      break;
+    case 'pre':
+      const preHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPre, target) ?? []);
+      preHooks.push({ func, methods, options: hookOptions });
+      Reflect.defineMetadata(DecoratorKeys.HooksPre, preHooks, target);
+      break;
   }
 }
 

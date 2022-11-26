@@ -600,7 +600,7 @@ export interface IHooksArray {
   /** The Function to add as a hooks */
   func: Func;
   /** The Method to where this hook gets triggered */
-  method: string | RegExp;
+  methods: (string | RegExp)[];
   /**
    * Options for Hooks
    * @see https://mongoosejs.com/docs/middleware.html#naming
