@@ -1,99 +1,110 @@
-// disable "no-unused" for this file, to keep hooks consistent (it has to be an inline-comment, because of an problem with eslint)
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type { Aggregate, Query } from 'mongoose';
+import type {
+  Aggregate,
+  AggregateExtract,
+  CallbackError,
+  Document,
+  ErrorHandlingMiddlewareFunction,
+  HydratedDocument,
+  Model,
+  MongooseDocumentMiddleware,
+  MongooseQueryMiddleware,
+  PostMiddlewareFunction,
+  PreMiddlewareFunction,
+  PreSaveMiddlewareFunction,
+  Query,
+  SchemaPostOptions,
+  SchemaPreOptions,
+} from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
 import { ExpectedTypeError } from './internal/errors';
 import { assertion, getName, isNullOrUndefined } from './internal/utils';
 import { logger } from './logSettings';
-import { mongoose } from './typegoose';
-import type { DocumentType, EmptyVoidFn, HookOptionsEither, IHooksArray } from './types';
+import type { AnyParamConstructor, DocumentType, EmptyVoidFn, HookOptionsEither, IHooksArray, ReturnModelType } from './types';
 
-type NumberOrDocumentOrDocumentArray<T> = number | DocumentType<T> | DocumentType<T>[];
+/** Type copied from mongoose, because it is not exported but used in hooks */
+type QueryResultType<T> = T extends Query<infer ResultType, any> ? ResultType : never;
 
-// I know that some events cannot be async (like "init"), but because they are unified into bigger types, I cannot change it
-type ReturnVoid = void | Promise<void>;
+// Type below is to replace a "@post<typeof Class>" to just be "@post<Class>" regardless of what is used
+// see https://github.com/microsoft/TypeScript/issues/51647
+// current workaround is to use "extends object" instead of something like "AnyParamConstructor" to just allow classes
+// type TypeofClass<T extends { prototype: AnyParamConstructor<any> }> = T extends { prototype: infer S } ? S : never;
 
-type HookNextErrorFn = (err?: Error) => ReturnVoid;
-
-type PreFnWithAggregate<T> = (this: Aggregate<T>, next: (error?: Error) => ReturnVoid) => ReturnVoid;
-type PreFnWithDocumentType<T> = (this: DocumentType<T>, next: HookNextErrorFn) => ReturnVoid;
-type PreFnWithQuery<T> = (this: Query<any, DocumentType<T>>, next: (error?: Error) => ReturnVoid) => ReturnVoid;
-
-type ModelPostFn<T> = (result: any, next: EmptyVoidFn) => ReturnVoid;
-
-type PostNumberResponse<T> = (result: number, next: EmptyVoidFn) => ReturnVoid;
-type PostSingleResponse<T> = (result: DocumentType<T>, next: EmptyVoidFn) => ReturnVoid;
-type PostMultipleResponse<T> = (result: DocumentType<T>[], next: EmptyVoidFn) => ReturnVoid;
-type PostRegExpResponse<T> = (result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
-type PostArrayResponse<T> = (result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
-type PostQueryArrayResponse<T> = (
-  this: Query<any, DocumentType<T>>,
-  result: NumberOrDocumentOrDocumentArray<T>,
-  next: EmptyVoidFn
-) => ReturnVoid;
-
-type PostNumberWithError<T> = (error: Error, result: number, next: HookNextErrorFn) => ReturnVoid;
-type PostSingleWithError<T> = (error: Error, result: DocumentType<T>, next: HookNextErrorFn) => ReturnVoid;
-type PostMultipleWithError<T> = (error: Error, result: DocumentType<T>[], next: HookNextErrorFn) => ReturnVoid;
-type PostRegExpWithError<T> = (error: Error, result: NumberOrDocumentOrDocumentArray<T>, next: HookNextErrorFn) => ReturnVoid;
-type PostArrayWithError<T> = (error: Error, result: NumberOrDocumentOrDocumentArray<T>, next: EmptyVoidFn) => ReturnVoid;
-type PostQueryArrayWithError<T> = (
-  this: Query<any, DocumentType<T>>,
-  error: Error,
-  result: NumberOrDocumentOrDocumentArray<T>,
-  next: EmptyVoidFn
-) => ReturnVoid;
-
-type AggregateMethod = 'aggregate';
-type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
-type NumberMethod = 'count';
-type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'findOneAndDelete' | 'deleteOne' | DocumentMethod;
-type MultipleMethod = 'find' | 'update' | 'deleteMany' | 'aggregate';
-type QueryMethod =
-  | 'count'
-  | 'countDocuments'
-  | 'estimatedDocumentCount'
-  | 'find'
-  | 'findOne'
-  | 'findOneAndRemove'
-  | 'findOneAndUpdate'
-  | 'update'
-  | 'updateOne'
-  | 'updateMany'
-  | 'findOneAndDelete'
-  | 'deleteOne'
-  | 'deleteMany';
-type ModelMethod = 'insertMany';
-type QMR = QueryMethod | ModelMethod | RegExp;
-type QDM = QMR | DocumentMethod;
-type DR = DocumentMethod | RegExp;
-
+/**
+ * Definitions for "pre" and "post" function overloads
+ * basically a copy of https://github.com/Automattic/mongoose/blob/a9cfd65e87a6107aff47fb6811406bd970b517e2/types/index.d.ts#L276-L305
+ * only modifications done are:
+ * - moved options from second argument to be the last argument
+ * - de-duplicate function that were duplicated because of options being the second argument
+ * - changing the generics in use to support the classes or overwriting whatever is used
+ * VERSION COPY OF 6.7.3
+ */
 interface Hooks {
-  pre<T>(method: AggregateMethod, fn: PreFnWithAggregate<T>, options?: mongoose.SchemaPreOptions): ClassDecorator;
+  // normal post hooks
+  post<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
+    method: MongooseQueryMiddleware | MongooseQueryMiddleware[] | RegExp,
+    fn: PostMiddlewareFunction<T, QueryResultType<T>>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+    method: MongooseDocumentMiddleware | MongooseDocumentMiddleware[] | RegExp,
+    fn: PostMiddlewareFunction<T, T>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<T extends Aggregate<any>>(
+    method: 'aggregate' | RegExp,
+    fn: PostMiddlewareFunction<T, Array<AggregateExtract<T>>>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<S extends AnyParamConstructor<any> | Model<any>, T = S extends Model<any> ? S : ReturnModelType<S>>(
+    method: 'insertMany' | RegExp,
+    fn: PostMiddlewareFunction<T, T>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
 
-  pre<T>(method: DR | DR[], fn: PreFnWithDocumentType<T>, options?: mongoose.SchemaPreOptions): ClassDecorator;
+  // error handling post hooks
+  post<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
+    method: MongooseQueryMiddleware | MongooseQueryMiddleware[] | RegExp,
+    fn: ErrorHandlingMiddlewareFunction<T>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+    method: MongooseDocumentMiddleware | MongooseDocumentMiddleware[] | RegExp,
+    fn: ErrorHandlingMiddlewareFunction<T>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<T extends Aggregate<any>>(
+    method: 'aggregate' | RegExp,
+    fn: ErrorHandlingMiddlewareFunction<T, Array<any>>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<S extends AnyParamConstructor<any> | Model<any>, T = S extends Model<any> ? S : ReturnModelType<S>>(
+    method: 'insertMany' | RegExp,
+    fn: ErrorHandlingMiddlewareFunction<T>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
 
-  pre<T>(method: QMR | QMR[], fn: PreFnWithQuery<T>, options?: mongoose.SchemaPreOptions): ClassDecorator;
-
-  post<T>(method: RegExp, fn: PostRegExpResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-  post<T>(method: RegExp, fn: PostRegExpWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-  post<T>(method: NumberMethod, fn: PostNumberResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-  post<T>(method: NumberMethod, fn: PostNumberWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-  post<T>(method: SingleMethod, fn: PostSingleResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-  post<T>(method: SingleMethod, fn: PostSingleWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-  post<T>(method: MultipleMethod, fn: PostMultipleResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-  post<T>(method: MultipleMethod, fn: PostMultipleWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-  post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-  post<T>(method: DocumentMethod | DocumentMethod[], fn: PostArrayResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-  post<T>(method: DocumentMethod | DocumentMethod[], fn: PostArrayWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-  post<T>(method: QMR | QMR[], fn: PostQueryArrayResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-  post<T>(method: QMR | QMR[], fn: PostQueryArrayWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
+  // normal pre hooks
+  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+    method: 'save',
+    fn: PreSaveMiddlewareFunction<T>,
+    options?: SchemaPreOptions
+  ): ClassDecorator;
+  pre<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
+    method: MongooseQueryMiddleware | MongooseQueryMiddleware[] | RegExp,
+    fn: PreMiddlewareFunction<T>,
+    options?: SchemaPreOptions
+  ): ClassDecorator;
+  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+    method: MongooseDocumentMiddleware | MongooseDocumentMiddleware[] | RegExp,
+    fn: PreMiddlewareFunction<T>,
+    options?: SchemaPreOptions
+  ): ClassDecorator;
+  pre<T extends Aggregate<any>>(method: 'aggregate' | RegExp, fn: PreMiddlewareFunction<T>, options?: SchemaPreOptions): ClassDecorator;
+  pre<S extends AnyParamConstructor<any> | Model<any>, T = S extends Model<any> ? S : ReturnModelType<S>>(
+    method: 'insertMany' | RegExp,
+    fn: (this: T, next: (err?: CallbackError) => void, docs: any | Array<any>) => void | Promise<void>,
+    options?: SchemaPreOptions
+  ): ClassDecorator;
 }
 
 // TSDoc for the hooks can't be added without adding it to *every* overload
@@ -114,7 +125,7 @@ const hooks: Hooks = {
  */
 function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
   // Convert Method to array if only a string is provided
-  const methods: QDM[] = Array.isArray(args[0]) ? args[0] : [args[0]];
+  const methods: IHooksArray['methods'] = Array.isArray(args[0]) ? args[0] : [args[0]];
   const func: EmptyVoidFn = args[1];
   const hookOptions: HookOptionsEither = args[2] ?? {};
 
