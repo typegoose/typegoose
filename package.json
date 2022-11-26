@@ -65,7 +65,7 @@
     "husky": "^8.0.2",
     "jest": "^29.3.1",
     "jest-runner-tsd": "^4.0.0",
-    "lint-staged": "^12.5.0",
+    "lint-staged": "^13.0.4",
     "mongodb-memory-server": "^8.10.0",
     "mongoose": "~6.7.2",
     "mongoose-findorcreate": "3.0.0",
