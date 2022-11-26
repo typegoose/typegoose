@@ -286,19 +286,6 @@ it('should error if the Type does not have a valid "OptionsConstructor" [Invalid
 
 describe('tests for "InvalidPropTypeError" [E013]', () => {
   describe('PropType unknown (processProp)', () => {
-    beforeEach(() => {
-      // Mock implementation of "utils.initProperty", otherwise "InvalidPropTypeError.PropType(initProperty)" always gets thrown
-      const origInitProperty = utils.initProperty;
-      jest.spyOn(utils, 'initProperty').mockImplementation((...args) => {
-        return origInitProperty(
-          args[0],
-          args[1],
-          // @ts-expect-error "-1" does not exist in PropType
-          args[2] === -1 ? PropType.NONE : args[2] // map "-1" to "NONE" just to have "utils.initProperty" not throw a Error, but still use it
-        );
-      });
-    });
-
     it('should throw a Error when a unknown PropType is used for "processProp#Passthrough" [InvalidPropTypeError] [E013]', () => {
       class ProcessPropPassthroughPropType {
         @prop({ type: () => new Passthrough({}) }, -1)

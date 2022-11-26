@@ -151,21 +151,6 @@ export function getCachedSchema(target: AnyParamConstructor<any>): Record<string
 }
 
 /**
- * Generate the initial values for the property to be extended upon
- * @param target The Class to work on for the schema
- * @param key Key of the property
- * @param proptype Type of the Property
- */
-export function initProperty(target: AnyParamConstructor<any>, key: string, proptype: PropType) {
-  const schemaProp = getCachedSchema(target);
-
-  // setting this so later when using the "key" is not undefined when trying to set options like "type"
-  schemaProp[key] = {};
-
-  return schemaProp;
-}
-
-/**
  * Get the Class for a given Document
  * @param document The Document to fetch the class from
  */

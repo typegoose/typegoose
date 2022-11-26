@@ -156,7 +156,7 @@ export function processProp(input: ProcessPropOptions): void {
     );
   }
 
-  const schemaProp = utils.initProperty(input.cl, key, propKind);
+  const schemaProp = utils.getCachedSchema(input.cl);
 
   // do this early, because the other options (enum, ref, refPath, discriminators) should not matter for this one
   if (Type instanceof Passthrough) {
