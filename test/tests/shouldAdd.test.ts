@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { schemas } from '../../src/internal/data';
+import { DecoratorKeys } from '../../src/internal/constants';
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import {
   buildSchema,
@@ -411,7 +411,7 @@ it('should use "dim" correctly', () => {
   }
 
   const schema = buildSchema(DimArrayClass);
-  const fromSchemas = schemas.get(getName(DimArrayClass));
+  const fromSchemas = Reflect.getMetadata(DecoratorKeys.CachedSchema, DimArrayClass);
 
   assertion(!isNullOrUndefined(fromSchemas), new Error('"fromSchemas" should not be undefined/null!'));
 
@@ -477,7 +477,7 @@ it('should allow dynamic use of "ref" (since mongoose 4.13)', async () => {
   const NestedRefModel = getModelForClass(NestedRef);
   const ParentRefModel = getModelForClass(ParentRef);
 
-  expect((schemas.get(getName(ParentRef)) as any).nested.ref).toBeInstanceOf(Function);
+  expect(Reflect.getMetadata(DecoratorKeys.CachedSchema, ParentRef).nested.ref).toBeInstanceOf(Function);
 
   const nested = await NestedRefModel.create({ someProp: 'Hello' });
   const parent = await ParentRefModel.create({ from: getName(NestedRef), nested: nested._id });

@@ -287,7 +287,7 @@ it('should error if the Type does not have a valid "OptionsConstructor" [Invalid
 describe('tests for "InvalidPropTypeError" [E013]', () => {
   it('should throw a Error when a unknown PropType is used for "utils#initProperty" [InvalidPropTypeError] [E013]', () => {
     try {
-      utils.initProperty('a1', 'a2', -1);
+      utils.initProperty(class a1 {}, 'a2', -1);
 
       fail('Expected to throw "InvalidPropTypeError"');
     } catch (err) {

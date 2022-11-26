@@ -485,7 +485,7 @@ export interface ICustomOptions {
 export interface DecoratedPropertyMetadata {
   /** Prop Options */
   options: any;
-  /** Target Class */
+  /** The Target Reflection target for getting metadata from keys */
   target: AnyParamConstructor<any>;
   /** Property name */
   key: string | symbol;
@@ -654,3 +654,9 @@ export interface GetTypeReturn {
  * This type is separate from "{@link KeyStringAny}" because it has a different meaning
  */
 export type BeAnObject = Record<string, any>;
+
+/** Options used for "processProp" */
+export interface ProcessPropOptions extends DecoratedPropertyMetadata {
+  /** The target Class's static version */
+  cl: AnyParamConstructor<any>;
+}

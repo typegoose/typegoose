@@ -2,15 +2,14 @@ import { logger } from '../logSettings';
 import { buildSchema, mongoose, Passthrough } from '../typegoose';
 import type {
   AnyParamConstructor,
-  DecoratedPropertyMetadata,
   DiscriminatorObject,
   KeyStringAny,
   MappedInnerOuterOptions,
   NestedDiscriminatorsMap,
+  ProcessPropOptions,
   VirtualPopulateMap,
 } from '../types';
 import { DecoratorKeys, PropType } from './constants';
-import { schemas } from './data';
 import {
   CannotBeSymbolError,
   InvalidEnumTypeError,
@@ -30,7 +29,7 @@ import * as utils from './utils';
  * Function that is the actual processing of the prop's (used for caching)
  * @param input All the options needed for prop's
  */
-export function processProp(input: DecoratedPropertyMetadata): void {
+export function processProp(input: ProcessPropOptions): void {
   const { key, target } = input;
   const name = utils.getName(target);
   const rawOptions: KeyStringAny = Object.assign({}, input.options);
@@ -157,7 +156,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     );
   }
 
-  const schemaProp = utils.initProperty(name, key, propKind);
+  const schemaProp = utils.initProperty(input.cl, key, propKind);
 
   // do this early, because the other options (enum, ref, refPath, discriminators) should not matter for this one
   if (Type instanceof Passthrough) {
@@ -353,7 +352,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   }
 
   /** Is this Type (/Class) in the schemas Map? */
-  const isInSchemas = schemas.has(utils.getName(Type));
+  const hasCachedSchema = !utils.isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.CachedSchema, Type));
 
   if (utils.isPrimitive(Type)) {
     if (utils.isObject(Type, true)) {
@@ -400,7 +399,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
-  if (utils.isObject(Type) && !isInSchemas) {
+  if (utils.isObject(Type) && !hasCachedSchema) {
     utils.warnMixed(target, key);
     logger.warn(
       'if someone can see this message, please open an new issue at https://github.com/typegoose/typegoose/issues with reproduction code for tests'

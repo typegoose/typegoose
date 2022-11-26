@@ -13,10 +13,18 @@ import type {
   VirtualPopulateMap,
 } from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, schemas } from './data';
+import { constructors } from './data';
 import { NoDiscriminatorFunctionError, PathNotInSchemaError } from './errors';
 import { processProp } from './processProp';
-import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
+import {
+  assertion,
+  assertionIsClass,
+  assignGlobalModelOptions,
+  getCachedSchema,
+  getName,
+  isNullOrUndefined,
+  mergeSchemaOptions,
+} from './utils';
 
 /**
  * Internal Schema Builder for Classes
@@ -43,8 +51,6 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   // Options sanity check
   opt = mergeSchemaOptions(isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt, cl);
 
-  /** used, because when trying to resolve an child, the overwriteOptions for that child are not available */
-  const className = getName(cl);
   const finalName = getName(cl, overwriteOptions);
 
   logger.debug('_buildSchema Called for %s with options:', finalName, opt);
@@ -58,21 +64,21 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
   if (!isNullOrUndefined(decorators)) {
     for (const decorator of decorators.values()) {
-      processProp(decorator);
+      processProp({ ...decorator, cl: cl });
     }
-  }
-
-  if (!schemas.has(className)) {
-    schemas.set(className, {});
   }
 
   let sch: mongoose.Schema;
 
-  if (!(origSch instanceof Schema)) {
-    sch = new Schema(schemas.get(className), schemaOptions);
-  } else {
-    sch = origSch.clone();
-    sch.add(schemas.get(className)!);
+  {
+    const schemaReflectTarget = getCachedSchema(cl);
+
+    if (!(origSch instanceof Schema)) {
+      sch = new Schema(schemaReflectTarget, schemaOptions);
+    } else {
+      sch = origSch.clone();
+      sch.add(schemaReflectTarget);
+    }
   }
 
   sch.loadClass(cl);

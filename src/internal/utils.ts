@@ -18,7 +18,7 @@ import type {
   VirtualOptions,
 } from '../types';
 import { DecoratorKeys, Severity, PropType } from './constants';
-import { constructors, globalOptions, schemas } from './data';
+import { constructors, globalOptions } from './data';
 import {
   AssertionFallbackError,
   InvalidOptionsConstructorError,
@@ -131,13 +131,33 @@ export function isString(Type: any): Type is string {
 }
 
 /**
+ * Get or init the Cached Schema
+ * @param target The Target to get / init the cached schema
+ * @returns The Schema to use
+ */
+export function getCachedSchema(target: AnyParamConstructor<any>): Record<string, mongoose.SchemaDefinition<unknown>> {
+  let schemaReflectTarget = Reflect.getMetadata(DecoratorKeys.CachedSchema, target);
+
+  if (isNullOrUndefined(schemaReflectTarget)) {
+    Reflect.defineMetadata(DecoratorKeys.CachedSchema, {}, target);
+    schemaReflectTarget = Reflect.getMetadata(DecoratorKeys.CachedSchema, target);
+  } else if (isNullOrUndefined(Reflect.getOwnMetadata(DecoratorKeys.CachedSchema, target))) {
+    // set own metadata and clone object, because otherwise on inheritance it would just modify the base class's object, not its own object
+    schemaReflectTarget = { ...schemaReflectTarget };
+    Reflect.defineMetadata(DecoratorKeys.CachedSchema, schemaReflectTarget, target);
+  }
+
+  return schemaReflectTarget;
+}
+
+/**
  * Generate the initial values for the property to be extended upon
- * @param name Name of the current Model/Class
+ * @param target The Class to work on for the schema
  * @param key Key of the property
  * @param proptype Type of the Property
  */
-export function initProperty(name: string, key: string, proptype: PropType) {
-  const schemaProp = !schemas.has(name) ? schemas.set(name, {}).get(name)! : schemas.get(name)!;
+export function initProperty(target: AnyParamConstructor<any>, key: string, proptype: PropType) {
+  const schemaProp = getCachedSchema(target);
 
   switch (proptype) {
     case PropType.ARRAY:
@@ -148,7 +168,7 @@ export function initProperty(name: string, key: string, proptype: PropType) {
       schemaProp[key] = {};
       break;
     default:
-      throw new InvalidPropTypeError(proptype, name, key, 'PropType(initProperty)');
+      throw new InvalidPropTypeError(proptype, getName(target), key, 'PropType(initProperty)');
   }
 
   return schemaProp;
@@ -368,7 +388,12 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteOpti
  * @param Type The Type to check
  */
 export function isNotDefined(Type: any) {
-  return typeof Type === 'function' && !isPrimitive(Type) && Type !== Object && !schemas.has(getName(Type));
+  return (
+    typeof Type === 'function' &&
+    !isPrimitive(Type) &&
+    Type !== Object &&
+    isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.CachedSchema, Type))
+  );
 }
 
 /**
