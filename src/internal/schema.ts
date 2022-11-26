@@ -119,7 +119,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
       if (Array.isArray(preHooks)) {
         // "as any" is used here because mongoose explicitly types out many methods, but the input type (from IHooksArray) is a combination of multiple types
-        preHooks.forEach((obj) => sch!.pre(obj.methods as any, obj.options, obj.func));
+        preHooks.forEach((obj) => callCorrectSignature(sch, 'pre', obj));
       }
 
       /** Get Metadata for PreHooks */
@@ -127,7 +127,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
       if (Array.isArray(postHooks)) {
         // "as any" is used here because mongoose explicitly types out many methods, but the input type (from IHooksArray) is a combination of multiple types
-        postHooks.forEach((obj) => sch!.post(obj.methods as any, obj.options, obj.func));
+        postHooks.forEach((obj) => callCorrectSignature(sch, 'post', obj));
       }
     }
 
@@ -181,4 +181,23 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   constructors.set(finalName, cl);
 
   return sch;
+}
+
+/** Simple helper type for "fnToCall" in {@link callCorrectSignature} */
+type GenericPrePostFn = (p1: any, p2: any, p3?: any) => any;
+
+/**
+ * Helper function to call the correct signature for a given "fnToCall" (pre / post hooks)
+ * @param fnToCall The function to call (sch.pre / sch.post)
+ * @param obj The object to call as arguments with
+ */
+function callCorrectSignature(sch: mongoose.Schema, fn: 'pre' | 'post', obj: IHooksArray): void {
+  // we have to bind "sch", otherwise "this" will not be defined in the "pre / post" functions
+  const fnToCall: GenericPrePostFn = (fn === 'pre' ? sch.pre : sch.post).bind(sch);
+
+  if (!isNullOrUndefined(obj.options)) {
+    return fnToCall(obj.methods, obj.options, obj.func);
+  }
+
+  return fnToCall(obj.methods, obj.func);
 }

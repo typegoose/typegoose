@@ -605,7 +605,7 @@ export interface IHooksArray {
    * Options for Hooks
    * @see https://mongoosejs.com/docs/middleware.html#naming
    */
-  options: HookOptionsEither;
+  options?: HookOptionsEither;
 }
 
 export interface IGlobalOptions {

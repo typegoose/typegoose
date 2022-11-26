@@ -57,8 +57,6 @@ exports[`tests for "ExpectedTypeError" [E029] should error if no valid key is su
 
 exports[`tests for "ExpectedTypeError" [E029] should error if the options provided to "setGlobalOptions" are not an object [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"options\\" to have type \\"object\\", got: \\"undefined\\" [E029]"`;
 
-exports[`tests for "ExpectedTypeError" [E029] should throw a Error when a hooks options argument is not a object [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"options\\" to have type \\"object / undefined\\", got: \\"SomethingElse\\" [E029]"`;
-
 exports[`tests for "ExpectedTypeError" [E029] should throw a Error when a hooks second parameter is not a function [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"fn\\" to have type \\"function\\", got: \\"string\\" [E029]"`;
 
 exports[`tests for "ExpectedTypeError" [E029] should throw when "deleteModel" is called with no string [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"name\\" to have type \\"string\\", got: \\"true\\" [E029]"`;

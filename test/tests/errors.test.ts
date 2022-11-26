@@ -794,23 +794,6 @@ describe('tests for "ExpectedTypeError" [E029]', () => {
       expect(err.message).toMatchSnapshot();
     }
   });
-
-  it('should throw a Error when a hooks options argument is not a object [ExpectedTypeError] [E029]', async () => {
-    const customPre = jest.fn(() => fail('Expected this function to not be executed'));
-    try {
-      // @ts-expect-error the third argument should be undefined or a object
-      @pre<TestHookOptionsNotObject>('save', customPre, 'SomethingElse')
-      class TestHookOptionsNotObject {
-        @prop()
-        public dummy?: string;
-      }
-
-      fail('Expected to throw "ExpectedTypeError"');
-    } catch (err) {
-      expect(err).toBeInstanceOf(ExpectedTypeError);
-      expect(err.message).toMatchSnapshot();
-    }
-  });
 });
 
 it('should throw a Error in "processProp" when using a invalid type for enums [InvalidEnumTypeError] [E012]', () => {

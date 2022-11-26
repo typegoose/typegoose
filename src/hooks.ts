@@ -17,7 +17,7 @@ import type {
 } from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
 import { ExpectedTypeError } from './internal/errors';
-import { assertion, getName, isNullOrUndefined } from './internal/utils';
+import { assertion, getName } from './internal/utils';
 import { logger } from './logSettings';
 import type { AnyParamConstructor, DocumentType, EmptyVoidFn, HookOptionsEither, IHooksArray, ReturnModelType } from './types';
 
@@ -127,13 +127,9 @@ function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
   // Convert Method to array if only a string is provided
   const methods: IHooksArray['methods'] = Array.isArray(args[0]) ? args[0] : [args[0]];
   const func: EmptyVoidFn = args[1];
-  const hookOptions: HookOptionsEither = args[2] ?? {};
+  const hookOptions: HookOptionsEither | undefined = args[2];
 
   assertion(typeof func === 'function', () => new ExpectedTypeError('fn', 'function', func));
-  assertion(
-    typeof hookOptions === 'object' && !isNullOrUndefined(hookOptions),
-    () => new ExpectedTypeError('options', 'object / undefined', hookOptions)
-  );
 
   if (args.length > 3) {
     logger.warn(`"addToHooks" parameter "args" has a length of over 3 (length: ${args.length})`);

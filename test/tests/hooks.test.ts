@@ -185,3 +185,25 @@ it('should work with QueryMethod post "this" [typegoose/typegoose#694]', () => {
 
   expect(schemaHooks._posts.size).toStrictEqual(1);
 });
+
+it('should not define options when none are provided', () => {
+  @pre('save', function test() {})
+  class Test {}
+
+  buildSchema(Test);
+
+  const hooksPre: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, Test);
+  expect(hooksPre.length).toStrictEqual(1);
+  expect(hooksPre[0]).toHaveProperty('options', undefined);
+});
+
+it('should define options when they are provided', () => {
+  @pre('save', function test() {}, { test: 1 } as any)
+  class Test {}
+
+  buildSchema(Test);
+
+  const hooksPre: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, Test);
+  expect(hooksPre.length).toStrictEqual(1);
+  expect(hooksPre[0]).toHaveProperty('options', { test: 1 });
+});
