@@ -80,8 +80,6 @@ exports[`tests for "InvalidPropTypeError" [E013] PropType unknown (processProp) 
 
 exports[`tests for "InvalidPropTypeError" [E013] should throw a Error when "PropType.MAP" is used for "processProp#refPath" [InvalidPropTypeError] [E013] 1`] = `"\\"1\\"(PropType(refPath)) is invalid for \\"ProcessPropRefPropType.test\\" [E013]"`;
 
-exports[`tests for "InvalidPropTypeError" [E013] should throw a Error when a unknown PropType is used for "utils#initProperty" [InvalidPropTypeError] [E013] 1`] = `"\\"-1\\"(PropType(initProperty)) is invalid for \\"a1.a2\\" [E013]"`;
-
 exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to PropType.ARRAY [InvalidTypeError] [E009] 1`] = `"\\"TestNoMetadataErrorAP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
 
 exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to PropType.MAP [InvalidTypeError] [E009] 1`] = `"\\"TestNoMetadataErrorMP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;

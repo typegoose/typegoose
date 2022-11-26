@@ -159,17 +159,8 @@ export function getCachedSchema(target: AnyParamConstructor<any>): Record<string
 export function initProperty(target: AnyParamConstructor<any>, key: string, proptype: PropType) {
   const schemaProp = getCachedSchema(target);
 
-  switch (proptype) {
-    case PropType.ARRAY:
-      schemaProp[key] = [{}];
-      break;
-    case PropType.MAP:
-    case PropType.NONE:
-      schemaProp[key] = {};
-      break;
-    default:
-      throw new InvalidPropTypeError(proptype, getName(target), key, 'PropType(initProperty)');
-  }
+  // setting this so later when using the "key" is not undefined when trying to set options like "type"
+  schemaProp[key] = {};
 
   return schemaProp;
 }
