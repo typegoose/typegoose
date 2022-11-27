@@ -9,7 +9,6 @@ import type {
   GetTypeReturn,
   IModelOptions,
   IObjectWithTypegooseFunction,
-  IObjectWithTypegooseName,
   IPrototype,
   KeyStringAny,
   MappedInnerOuterOptions,
@@ -168,7 +167,6 @@ export function getClass(
     | (mongoose.Document & IObjectWithTypegooseFunction)
     | (mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction)
     | string
-    | IObjectWithTypegooseName
     | any
 ): NewableFunction | undefined {
   if (typeof input === 'string') {

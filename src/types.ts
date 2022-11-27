@@ -607,14 +607,6 @@ export interface IObjectWithTypegooseFunction {
   typegooseName(): string;
 }
 
-/**
- * Interface describing a Object that has a "typegooseName" Value
- * @deprecated This interface and value will be removed in typegoose 10, use {@link IObjectWithTypegooseFunction} instead
- */
-export interface IObjectWithTypegooseName {
-  typegooseName: string;
-}
-
 /** For the types that error that seemingly don't have a prototype */
 export interface IPrototype {
   prototype?: any;
