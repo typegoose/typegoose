@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { getClassForDocument, isDocument } from '../../src/typegoose';
+import { getClass, isDocument } from '../../src/typegoose';
 import { Car, CarModel } from '../models/car';
 import { InternetUserModel } from '../models/internetUser';
 import { AddressNested, AddressNestedModel, PersonNested, PersonNestedModel } from '../models/nestedObject';
@@ -11,7 +11,7 @@ it('should return correct class type for document', async () => {
     carModel: 'Tesla',
     price: mongoose.Types.Decimal128.fromString('50123.25'),
   });
-  const carReflectedType = getClassForDocument(car);
+  const carReflectedType = getClass(car);
   expect(carReflectedType).toEqual(Car);
 
   const user = await UserModel.create({
@@ -21,7 +21,7 @@ it('should return correct class type for document', async () => {
     languages: ['english2', 'typescript2'],
     uniqueId: 'not-needed',
   });
-  const userReflectedType = getClassForDocument(user);
+  const userReflectedType = getClass(user);
   expect(userReflectedType).toEqual(User);
 
   // assert negative to be sure (false positive)

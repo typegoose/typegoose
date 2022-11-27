@@ -52,7 +52,7 @@ export * as errors from './internal/errors';
 export * as types from './types';
 // the following types are re-exported (instead of just in "types") because they are often used types
 export { DocumentType, Ref, ReturnModelType, SubDocumentType, ArraySubDocumentType };
-export { getClassForDocument, getClass, getName } from './internal/utils';
+export { getClass, getName } from './internal/utils';
 export { Severity, PropType } from './internal/constants';
 
 parseENV(); // call this before anything to ensure they are applied

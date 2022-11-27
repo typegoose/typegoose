@@ -149,16 +149,6 @@ export function getCachedSchema(target: AnyParamConstructor<any>): Record<string
 }
 
 /**
- * Get the Class for a given Document
- * @param document The Document to fetch the class from
- */
-export function getClassForDocument(document: mongoose.Document): NewableFunction | undefined {
-  const modelName = (document.constructor as mongoose.Model<typeof document>).modelName;
-
-  return constructors.get(modelName);
-}
-
-/**
  * Get the Class for a number of inputs
  * @param input The Input to fetch the class from
  */

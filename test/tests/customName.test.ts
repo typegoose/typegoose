@@ -1,5 +1,5 @@
 import { constructors, models } from '../../src/internal/data';
-import { getClass, getClassForDocument, getModelForClass, modelOptions, prop } from '../../src/typegoose';
+import { getClass, getModelForClass, modelOptions, prop } from '../../src/typegoose';
 
 it('expect no changes to model Name when not using customOptions or collection', () => {
   class NormalOptions {}
@@ -8,7 +8,7 @@ it('expect no changes to model Name when not using customOptions or collection',
   expect(model.modelName).toEqual('NormalOptions');
 
   const doc = new model();
-  const gotClass = getClassForDocument(doc);
+  const gotClass = getClass(doc);
   expect(gotClass).toEqual(NormalOptions);
 });
 
@@ -20,7 +20,7 @@ it('if collection is defined to be automatically used with automaticName', () =>
   expect(model.modelName).toEqual('CollectionOption_Something');
 
   const doc = new model();
-  const gotClass = getClassForDocument(doc);
+  const gotClass = getClass(doc);
   expect(gotClass).toEqual(CollectionOption);
 });
 
@@ -32,7 +32,7 @@ it('if options.customName is defined to be used with automaticName', () => {
   expect(model.modelName).toEqual('CustomNameOption_CustomName');
 
   const doc = new model();
-  const gotClass = getClassForDocument(doc);
+  const gotClass = getClass(doc);
   expect(gotClass).toEqual(CustomNameOption);
 });
 
@@ -44,7 +44,7 @@ it('expect to use options.customName if both are defined with automaticName', ()
   expect(model.modelName).toEqual('BothOptions_CustomName2');
 
   const doc = new model();
-  const gotClass = getClassForDocument(doc);
+  const gotClass = getClass(doc);
   expect(gotClass).toEqual(BothOptions);
 });
 
@@ -59,7 +59,7 @@ it('create multiple models depending on options with base class (extends) with a
     expect(model.modelName).toEqual('MultiModel_Something');
 
     const doc = new model();
-    const gotClass = getClassForDocument(doc);
+    const gotClass = getClass(doc);
     expect(gotClass).toEqual(MultiModel);
   }
   {
@@ -70,7 +70,7 @@ it('create multiple models depending on options with base class (extends) with a
     expect(model.modelName).toEqual('MultiModel_SomethingDifferent');
 
     const doc = new model();
-    const gotClass = getClassForDocument(doc);
+    const gotClass = getClass(doc);
     expect(gotClass).toEqual(MultiModel);
   }
 });
@@ -97,7 +97,7 @@ it('create multiple models depending on options without base model with automati
     expect(doc).not.toHaveProperty('t3');
     expect(doc).not.toHaveProperty('t4');
 
-    const gotClass = getClassForDocument(doc);
+    const gotClass = getClass(doc);
     expect(gotClass).toEqual(MultiModel);
   }
   {
@@ -121,7 +121,7 @@ it('create multiple models depending on options without base model with automati
     expect(doc.t3).toEqual('3');
     expect(doc.t4).toEqual('4');
 
-    const gotClass = getClassForDocument(doc);
+    const gotClass = getClass(doc);
     expect(gotClass).toEqual(MultiModel);
   }
 });
