@@ -166,7 +166,8 @@ export function getClass(
   input:
     | (mongoose.Document & IObjectWithTypegooseFunction)
     | mongoose.Document
-    | (mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction)
+    | IObjectWithTypegooseFunction
+    | { typegooseName: string }
     | string
     | any
 ): NewableFunction | undefined {
