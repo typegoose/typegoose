@@ -165,6 +165,7 @@ export function getClassForDocument(document: mongoose.Document): NewableFunctio
 export function getClass(
   input:
     | (mongoose.Document & IObjectWithTypegooseFunction)
+    | mongoose.Document
     | (mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction)
     | string
     | any
@@ -178,6 +179,10 @@ export function getClass(
 
   if (typeof input?.typegooseName === 'function') {
     return constructors.get(input.typegooseName());
+  }
+
+  if (typeof input?.constructor?.modelName === 'string') {
+    return constructors.get(input.constructor.modelName);
   }
 
   throw new ResolveTypegooseNameError(input);

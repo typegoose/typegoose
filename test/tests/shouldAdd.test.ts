@@ -2,6 +2,7 @@ import * as mongoose from 'mongoose';
 import { DecoratorKeys } from '../../src/internal/constants';
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import {
+  addModelToTypegoose,
   buildSchema,
   DocumentType,
   getClass,
@@ -325,10 +326,8 @@ it('should add schema paths when there is a virtual called `name`', () => {
 
 describe('utils.getClass', () => {
   it('should get class by string', () => {
-    const doc = new GetClassTestParentModel({ nested: { subprop: 'hi' } });
-
-    expect(getClass(doc.typegooseName())).toEqual(GetClassTestParent);
-    expect(getClass((doc.nested as any).typegooseName())).toEqual(GetClassTestSub);
+    expect(getClass(getName(GetClassTestParent))).toEqual(GetClassTestParent);
+    expect(getClass(getName(GetClassTestSub))).toEqual(GetClassTestSub);
   });
 
   it('should get class by Document / Embedded', () => {
@@ -343,6 +342,19 @@ describe('utils.getClass', () => {
 
     expect(getClass(doc)).toEqual(GetClassTestParent);
     expect(getClass(doc.testy)).toEqual(GetClassTestSub);
+  });
+
+  it('should get class via modelName', () => {
+    const name = 'TestModelName';
+
+    class TestModelName {}
+
+    const m = mongoose.model(name, new mongoose.Schema({}));
+    addModelToTypegoose(m, TestModelName);
+
+    const doc = new m();
+
+    expect(getClass(doc)).toEqual(TestModelName);
   });
 });
 
