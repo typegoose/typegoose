@@ -467,7 +467,7 @@ export interface ICustomOptions {
 /** Type for the Values stored in the Reflection for Properties */
 export interface DecoratedPropertyMetadata {
   /** Prop Options */
-  options: any;
+  options: KeyStringAny;
   /** The Target Reflection target for getting metadata from keys */
   target: AnyParamConstructor<any>;
   /** Property name */
