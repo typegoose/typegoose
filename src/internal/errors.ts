@@ -52,10 +52,6 @@ export class InvalidPropTypeError extends Error {
   }
 }
 
-// For Backwards-compatability
-/** @deprecated This was renamed to "InvalidPropTypeError" and will be removed in 10.0 */
-export const InvalidWhatIsItError = InvalidPropTypeError;
-
 export class CannotBeSymbolError extends Error {
   constructor(name: string, key: string | symbol) {
     super(`A property key in Typegoose cannot be an symbol! ("${name}.${toStringNoFail(key)}") [E024]`);

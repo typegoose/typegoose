@@ -63,10 +63,6 @@ export enum PropType {
   NONE,
 }
 
-// For Backwards-compatability
-/** @deprecated This was renamed to "PropType" and will be removed in 10.0 */
-export const WhatIsIt = PropType;
-
 /** Severity levels for soft-warnings */
 export enum Severity {
   ALLOW,

@@ -34,7 +34,7 @@ export function processProp(input: ProcessPropOptions): void {
   const name = utils.getName(target);
   const rawOptions: KeyStringAny = Object.assign({}, input.options);
   let Type: any | undefined = Reflect.getMetadata(DecoratorKeys.Type, target, key);
-  const propKind = input.whatis ?? detectPropType(Type);
+  const propKind = input.propType ?? detectPropType(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);
   utils.assertion(typeof key === 'string', () => new CannotBeSymbolError(name, key));

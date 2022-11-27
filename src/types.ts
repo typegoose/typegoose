@@ -473,8 +473,7 @@ export interface DecoratedPropertyMetadata {
   /** Property name */
   key: string | symbol;
   /** What is it for a prop type? */
-  // TODO: for the next major version (10), change this name to "proptype" or "type"
-  whatis?: PropType;
+  propType?: PropType;
 }
 export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropertyMetadata>;
 
