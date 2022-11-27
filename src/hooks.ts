@@ -19,7 +19,7 @@ import { DecoratorKeys } from './internal/constants';
 import { ExpectedTypeError } from './internal/errors';
 import { assertion, getName } from './internal/utils';
 import { logger } from './logSettings';
-import type { AnyParamConstructor, DocumentType, EmptyVoidFn, HookOptionsEither, IHooksArray, ReturnModelType } from './types';
+import type { AnyParamConstructor, DocumentType, HookOptionsEither, IHooksArray, ReturnModelType } from './types';
 
 /** Type copied from mongoose, because it is not exported but used in hooks */
 type QueryResultType<T> = T extends Query<infer ResultType, any> ? ResultType : never;
@@ -126,7 +126,7 @@ const hooks: Hooks = {
 function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
   // Convert Method to array if only a string is provided
   const methods: IHooksArray['methods'] = Array.isArray(args[0]) ? args[0] : [args[0]];
-  const func: EmptyVoidFn = args[1];
+  const func: (...args: any[]) => void = args[1];
   const hookOptions: HookOptionsEither | undefined = args[2];
 
   assertion(typeof func === 'function', () => new ExpectedTypeError('fn', 'function', func));

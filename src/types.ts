@@ -397,11 +397,6 @@ export type Ref<
     : mongoose.Types.ObjectId
 > = mongoose.PopulatedDoc<DocumentType<PopulatedType>, RawId>;
 
-/**
- * A Function type for a function that doesn't have any arguments and doesn't return anything
- */
-export type EmptyVoidFn = () => void;
-
 export interface DiscriminatorObject {
   /** The Class to use */
   type: AnyParamConstructor<any>;
