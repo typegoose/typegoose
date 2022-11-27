@@ -478,9 +478,9 @@ export interface DecoratedPropertyMetadata {
 export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropertyMetadata>;
 
 /**
- * copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
+ * Alias of "mongoose.IndexOptions" for convenience
  */
-export type IndexOptions<_T> = mongoose.IndexOptions; // TODO: remove unused generic in typegoose 10
+export type IndexOptions = mongoose.IndexOptions;
 
 /**
  * Type for the Values stored in the Reflection for Indexes
@@ -491,7 +491,7 @@ export type IndexOptions<_T> = mongoose.IndexOptions; // TODO: remove unused gen
  */
 export interface IIndexArray {
   fields: KeyStringAny;
-  options?: IndexOptions<unknown>;
+  options?: IndexOptions;
 }
 
 /**
