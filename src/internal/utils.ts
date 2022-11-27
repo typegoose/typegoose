@@ -17,12 +17,11 @@ import type {
   PropOptionsForString,
   VirtualOptions,
 } from '../types';
-import { DecoratorKeys, Severity, PropType } from './constants';
+import { DecoratorKeys, Severity } from './constants';
 import { constructors, globalOptions } from './data';
 import {
   AssertionFallbackError,
   InvalidOptionsConstructorError,
-  InvalidPropTypeError,
   NoValidClassError,
   ResolveTypegooseNameError,
   StringLengthExpectedError,
