@@ -3,6 +3,8 @@ id: get-class-for-document
 title: 'getClassForDocument'
 ---
 
+<span class="badge badge--danger">Removed in 10.0</span>
+
 **Typings:**
 
 ```ts
@@ -19,6 +21,9 @@ function getClassForDocument(document: mongoose.Document): NewableFunction | und
 
 :::note
 This function only works if the schema has been created with [`buildSchema`](./buildSchema.md) or a property / function has been manually added.
+:::
+:::caution
+This Function has been removed in typegoose 10.0, use [`getClass`](./getClass.md) instead.
 :::
 
 ## Example
