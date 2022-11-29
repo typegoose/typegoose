@@ -70,7 +70,7 @@ async function typeguards() {
     // isDocument
     {
       if (typegoose.isDocument(someNewDoc.refObjectId)) {
-        expectAssignable<typegoose.DocumentType<TypeguardsClass>>(someNewDoc.refObjectId);
+        expectType<typegoose.DocumentType<TypeguardsClass>>(someNewDoc.refObjectId);
       } else {
         expectType<typegoose.mongoose.Types.ObjectId | undefined>(someNewDoc.refObjectId);
       }
@@ -85,14 +85,14 @@ async function typeguards() {
     // isDocumentArray
     {
       if (typegoose.isDocumentArray(someNewDoc.refObjectIdArray)) {
-        expectAssignable<typegoose.DocumentType<TypeguardsClass>[]>(someNewDoc.refObjectIdArray);
+        expectType<typegoose.DocumentType<TypeguardsClass>[]>(someNewDoc.refObjectIdArray);
       } else {
         // currently has to be multiple "| undefined" because of https://github.com/typegoose/typegoose/issues/730
         expectType<typegoose.Ref<TypeguardsClass, typegoose.mongoose.Types.ObjectId>[] | undefined>(someNewDoc.refObjectIdArray);
       }
 
       if (typegoose.isDocumentArray(someNewDoc.refStringArray)) {
-        expectAssignable<typegoose.DocumentType<TypeguardsClass>[]>(someNewDoc.refStringArray);
+        expectType<typegoose.DocumentType<TypeguardsClass>[]>(someNewDoc.refStringArray);
       } else {
         expectType<typegoose.Ref<TypeguardsClass, string>[] | undefined>(someNewDoc.refStringArray);
       }
