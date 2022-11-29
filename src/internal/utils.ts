@@ -153,13 +153,7 @@ export function getCachedSchema(target: AnyParamConstructor<any>): Record<string
  * @param input The Input to fetch the class from
  */
 export function getClass(
-  input:
-    | (mongoose.Document & IObjectWithTypegooseFunction)
-    | mongoose.Document
-    | IObjectWithTypegooseFunction
-    | { typegooseName: string }
-    | string
-    | any
+  input: mongoose.Document | IObjectWithTypegooseFunction | { typegooseName: string } | string | any
 ): NewableFunction | undefined {
   if (typeof input === 'string') {
     return constructors.get(input);
