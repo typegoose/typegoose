@@ -8,41 +8,40 @@ title: '@pre & @post'
 **Typings:**
 
 ```ts
-type AggregateMethod = 'aggregate';
-type QueryMethod =
-  | 'count'
-  | 'countDocuments'
-  | 'estimatedDocumentCount'
-  | 'find'
-  | 'findOne'
-  | 'findOneAndRemove'
-  | 'findOneAndUpdate'
-  | 'update'
-  | 'updateOne'
-  | 'updateMany'
-  | 'findOneAndDelete'
-  | 'deleteOne'
-  | 'deleteMany';
-type ModelMethod = 'insertMany';
-type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
-type QMR = QueryMethod | ModelMethod | RegExp;
-type DR = DocumentMethod | RegExp;
-
-pre<T>(method: AggregateMethod, fn: PreFnWithAggregate<T>, options?: mongoose.SchemaPreOptions): ClassDecorator;
-pre<T>(method: DR | DR[], fn: PreFnWithDocumentType<T>, options?: mongoose.SchemaPreOptions): ClassDecorator;
-pre<T>(method: QMR | QMR[], fn: PreFnWithQuery<T>, options?: mongoose.SchemaPreOptions): ClassDecorator;
+interface PreHooks {
+  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+    method: 'save',
+    fn: PreSaveMiddlewareFunction<T>,
+    options?: SchemaPreOptions
+  ): ClassDecorator;
+  pre<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
+    method: MongooseQueryMiddleware | MongooseQueryMiddleware[] | RegExp,
+    fn: PreMiddlewareFunction<T>,
+    options?: SchemaPreOptions
+  ): ClassDecorator;
+  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+    method: MongooseDocumentMiddleware | MongooseDocumentMiddleware[] | RegExp,
+    fn: PreMiddlewareFunction<T>,
+    options?: SchemaPreOptions
+  ): ClassDecorator;
+  pre<T extends Aggregate<any>>(method: 'aggregate' | RegExp, fn: PreMiddlewareFunction<T>, options?: SchemaPreOptions): ClassDecorator;
+  pre<S extends AnyParamConstructor<any> | Model<any>, T = S extends Model<any> ? S : ReturnModelType<S>>(
+    method: 'insertMany' | RegExp,
+    fn: (this: T, next: (err?: CallbackError) => void, docs: any | Array<any>) => void | Promise<void>,
+    options?: SchemaPreOptions
+  ): ClassDecorator;
+}
 ```
 
 **Parameters:**
 
 | Name                                                          |                                         Type                                          | Description                                           |
 | :------------------------------------------------------------ | :-----------------------------------------------------------------------------------: | :---------------------------------------------------- |
-| `method` <span class="badge badge--secondary">Required</span> |                      `string \| RegExp \| (string \| RegExp)[]`                       | The Method(s) to add the `fn` to                      |
+| `method` <span class="badge badge--secondary">Required</span> |                            `string \| RegExp \| string[]`                             | The Method(s) to add the `fn` to                      |
 | `fn` <span class="badge badge--secondary">Required</span>     |                                        `Func`                                         | The Function to run for the Method(s) set in `method` |
 | `options`                                                     | [`mongoose.SchemaPreOptions`](https://mongoosejs.com/docs/api.html#schema_Schema-pre) | Options to set when to run the hook                   |
 
-`@pre` is used to set Pre-Hooks for many function, works like `schema.pre` calls.  
-`@pre` currently supports `method` arrays that mongoose does not natively supports, may change in the future.
+`@pre` is used to set Document & Query pre hooks, works like `schema.pre` only difference is the switched `options` and `method`(`fn`) parameter positions.
 
 For parameter `options`, look at the [mongoose for `schema.pre`](https://mongoosejs.com/docs/api/schema.html#schema_Schema-pre) or [mongoose Middleware section Naming Conflicts](https://mongoosejs.com/docs/middleware.html#naming).
 
@@ -72,58 +71,61 @@ class Car {
 **Typings:**
 
 ```ts
-type NumberMethod = 'count';
-type SingleMethod = 'findOne' | 'findOneAndRemove' | 'findOneAndUpdate' | 'findOneAndDelete' | 'deleteOne' | DocumentMethod;
-type MultipleMethod = 'find' | 'update' | 'deleteMany' | 'aggregate';
-type ModelMethod = 'insertMany';
-type DocumentMethod = 'init' | 'validate' | 'save' | 'remove';
-type QueryMethod =
-  | 'count'
-  | 'countDocuments'
-  | 'estimatedDocumentCount'
-  | 'find'
-  | 'findOne'
-  | 'findOneAndRemove'
-  | 'findOneAndUpdate'
-  | 'update'
-  | 'updateOne'
-  | 'updateMany'
-  | 'findOneAndDelete'
-  | 'deleteOne'
-  | 'deleteMany';
-type QMR = QueryMethod | ModelMethod | RegExp;
+interface PostHooks {
+  post<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
+    method: MongooseQueryMiddleware | MongooseQueryMiddleware[] | RegExp,
+    fn: PostMiddlewareFunction<T, QueryResultType<T>>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+    method: MongooseDocumentMiddleware | MongooseDocumentMiddleware[] | RegExp,
+    fn: PostMiddlewareFunction<T, T>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<T extends Aggregate<any>>(
+    method: 'aggregate' | RegExp,
+    fn: PostMiddlewareFunction<T, Array<AggregateExtract<T>>>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<S extends AnyParamConstructor<any> | Model<any>, T = S extends Model<any> ? S : ReturnModelType<S>>(
+    method: 'insertMany' | RegExp,
+    fn: PostMiddlewareFunction<T, T>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
 
-post<T>(method: RegExp, fn: PostRegExpResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-post<T>(method: RegExp, fn: PostRegExpWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-post<T>(method: NumberMethod, fn: PostNumberResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-post<T>(method: NumberMethod, fn: PostNumberWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-post<T>(method: SingleMethod, fn: PostSingleResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-post<T>(method: SingleMethod, fn: PostSingleWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-post<T>(method: MultipleMethod, fn: PostMultipleResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-post<T>(method: MultipleMethod, fn: PostMultipleWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-post<T>(method: ModelMethod, fn: ModelPostFn<T> | PostMultipleResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-post<T>(method: DocumentMethod | DocumentMethod[], fn: PostArrayResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-post<T>(method: DocumentMethod | DocumentMethod[], fn: PostArrayWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-
-post<T>(method: QMR | QMR[], fn: PostQueryArrayResponse<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
-post<T>(method: QMR | QMR[], fn: PostQueryArrayWithError<T>, options?: mongoose.SchemaPostOptions): ClassDecorator;
+  // error handling post hooks
+  post<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
+    method: MongooseQueryMiddleware | MongooseQueryMiddleware[] | RegExp,
+    fn: ErrorHandlingMiddlewareFunction<T>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+    method: MongooseDocumentMiddleware | MongooseDocumentMiddleware[] | RegExp,
+    fn: ErrorHandlingMiddlewareFunction<T>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<T extends Aggregate<any>>(
+    method: 'aggregate' | RegExp,
+    fn: ErrorHandlingMiddlewareFunction<T, Array<any>>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+  post<S extends AnyParamConstructor<any> | Model<any>, T = S extends Model<any> ? S : ReturnModelType<S>>(
+    method: 'insertMany' | RegExp,
+    fn: ErrorHandlingMiddlewareFunction<T>,
+    options?: SchemaPostOptions
+  ): ClassDecorator;
+}
 ```
 
 **Parameters:**
 
 | Name                                                          |                                          Type                                          | Description                                           |
 | :------------------------------------------------------------ | :------------------------------------------------------------------------------------: | :---------------------------------------------------- |
-| `method` <span class="badge badge--secondary">Required</span> |                       `string \| RegExp \| (string \| RegExp)[]`                       | The Method(s) to add the `fn` to                      |
+| `method` <span class="badge badge--secondary">Required</span> |                             `string \| RegExp \| string[]`                             | The Method(s) to add the `fn` to                      |
 | `fn` <span class="badge badge--secondary">Required</span>     |                                         `Func`                                         | The Function to run for the Method(s) set in `method` |
 | `options`                                                     | [`mongoose.SchemaPreOptions`](https://mongoosejs.com/docs/api.html#schema_Schema-post) | Options to set when to run the hook                   |
 
-`@post` is used to set Post-Hooks for many function, works like `schema.post` calls.  
-`@post` currently supports `method` arrays that mongoose does not natively supports, may change in the future.
+`@post` is used to set Document & Query pre hooks, works like `schema.post` only difference is the switched `options` and `method`(`fn`) parameter positions.
 
 For parameter `options`, look at the [mongoose for `schema.post`](https://mongoosejs.com/docs/api/schema.html#schema_Schema-post) or [mongoose Middleware section Naming Conflicts](https://mongoosejs.com/docs/middleware.html#naming).
 
