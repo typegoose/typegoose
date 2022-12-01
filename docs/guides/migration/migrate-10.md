@@ -57,6 +57,10 @@ A Error is thrown when both this option and the prop-option [`discriminators`](.
 See [Duplicate Option Definition [E032]](../error-warning-details.md#duplicate-option-definition-e032).
 :::
 
+## `buildSchema` now only accepts 2 arguments instead of 3
+
+With Typegoose 10.0 `buildSchema` now only accepts 2 arguments instead of 3, where the last 2 (previously named `options` and `overwriteOptions`) have been merged into just `options`.
+
 ## Option `runSyncIndexes` has been removed
 
 The Model Option `runSyncIndexes` has been removed. If wanting to continue to use it, manually call `model.syncIndexes()`.
