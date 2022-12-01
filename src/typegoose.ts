@@ -2,7 +2,15 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
-import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import {
+  assertion,
+  assertionIsClass,
+  getName,
+  isNullOrUndefined,
+  mapModelOptionsToNaming,
+  mergeMetadata,
+  mergeSchemaOptions,
+} from './internal/utils';
 
 /* istanbul ignore next */
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
@@ -34,6 +42,7 @@ import type {
   SubDocumentType,
   ArraySubDocumentType,
   IBuildSchemaOptions,
+  INamingOptions,
 } from './types';
 import { ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
@@ -74,9 +83,10 @@ parseENV(); // call this before anything to ensure they are applied
 export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(cl: U, options?: IModelOptions) {
   assertionIsClass(cl);
   const rawOptions = typeof options === 'object' ? options : {};
+  const overwriteNaming = mapModelOptionsToNaming(rawOptions);
 
   const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  const name = getName(cl, rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
+  const name = getName(cl, overwriteNaming); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
@@ -87,7 +97,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
     mergedOptions?.existingMongoose?.model.bind(mergedOptions.existingMongoose) ??
     mongoose.model.bind(mongoose);
 
-  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, mergedOptions.schemaOptions, rawOptions));
+  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, mergedOptions.schemaOptions, overwriteNaming));
 
   return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
     existingMongoose: mergedOptions?.existingMongoose,
@@ -117,7 +127,7 @@ export function getModelWithString<U extends AnyParamConstructor<any>, QueryHelp
  * Generates a Mongoose schema out of class props, iterating through all parents
  * @param cl The Class to build a Schema from
  * @param options Overwrite SchemaOptions (Merged with Decorator)
- * @param overwriteOptions Overwrite ModelOptions (aside from schemaOptions) (Not Merged with Decorator)
+ * @param overwriteNaming Overwrite Options used for name generation
  * @returns Returns the Build Schema
  * @example
  * ```ts
@@ -129,11 +139,11 @@ export function getModelWithString<U extends AnyParamConstructor<any>, QueryHelp
 export function buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
   options?: mongoose.SchemaOptions,
-  overwriteOptions?: IModelOptions
+  overwriteNaming?: INamingOptions
 ): mongoose.Schema<DocumentType<InstanceType<U>>> {
   assertionIsClass(cl);
 
-  logger.debug('buildSchema called for "%s"', getName(cl, overwriteOptions));
+  logger.debug('buildSchema called for "%s"', getName(cl, overwriteNaming));
 
   const mergedOptions = mergeSchemaOptions(options, cl);
 
@@ -170,7 +180,7 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   }
 
   // get schema of current model
-  sch = _buildSchema(cl, sch, mergedOptions, true, overwriteOptions);
+  sch = _buildSchema(cl, sch, mergedOptions, true, overwriteNaming);
 
   return sch;
 }
@@ -402,14 +412,15 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 
   const value = typeof value_or_options === 'string' ? value_or_options : undefined;
   const rawOptions = typeof value_or_options !== 'string' ? value_or_options : typeof options === 'object' ? options : {};
+  const overwriteNaming = mapModelOptionsToNaming(rawOptions);
   const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  const name = getName(cl, rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
+  const name = getName(cl, overwriteNaming); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions.schemaOptions, rawOptions);
+  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions.schemaOptions, overwriteNaming);
 
   const mergeHooks = mergedOptions.options?.enableMergeHooks ?? false;
   // Note: this option is not actually for "merging plugins", but if "true" it will *overwrite* all plugins with the base-schema's

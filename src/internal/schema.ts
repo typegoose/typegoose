@@ -8,6 +8,7 @@ import type {
   IHooksArray,
   IIndexArray,
   IModelOptions,
+  INamingOptions,
   IPluginsArray,
   NestedDiscriminatorsMap,
   QueryMethodMap,
@@ -34,7 +35,7 @@ import {
  * @param origSch A Schema to clone and extend onto
  * @param opt Overwrite SchemaOptions (Merged with Decorator Options)
  * @param isFinalSchema Set if this Schema is the final (top-level) to build, only when "true" are discriminators, hooks, virtuals, etc applied
- * @param overwriteOptions Overwrite ModelOptions for Name Generation (Not Merged with Decorator)
+ * @param overwriteNaming Overwrite options for name generation
  * @param extraOptions Extra options to affect what needs to be done
  * @returns Returns the Build Schema
  * @private
@@ -44,7 +45,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   origSch?: mongoose.Schema<any>,
   opt?: mongoose.SchemaOptions,
   isFinalSchema: boolean = true,
-  overwriteOptions?: IModelOptions,
+  overwriteNaming?: INamingOptions,
   extraOptions?: IBuildSchemaOptions
 ) {
   assertionIsClass(cl);
@@ -54,7 +55,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   // Options sanity check
   opt = mergeSchemaOptions(isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt, cl);
 
-  const finalName = getName(cl, overwriteOptions);
+  const finalName = getName(cl, overwriteNaming);
 
   logger.debug('_buildSchema Called for %s with options:', finalName, opt);
 

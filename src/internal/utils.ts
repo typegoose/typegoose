@@ -8,6 +8,7 @@ import type {
   Func,
   GetTypeReturn,
   IModelOptions,
+  INamingOptions,
   IObjectWithTypegooseFunction,
   IPrototype,
   KeyStringAny,
@@ -302,9 +303,9 @@ export function getRightTarget(target: any): any {
  * Get the Class's final name
  * (combines all available options to generate a name)
  * @param cl The Class to get the name for
- * @param overwriteOptions Overwrite ModelOptions to generate a name from (Only name related options are merged)
+ * @param overwriteNaming Overwrite naming options used for generating the name
  */
-export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteOptions?: IModelOptions) {
+export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteNaming?: INamingOptions) {
   // this case (cl being undefined / null) can happen when type casting (or type being "any") happened and wanting to throw a Error (and there using "getName" to help)
   // check if input variable is undefined, if it is throw a error (cannot be combined with the error below because of "getRightTarget")
   assertion(!isNullOrUndefined(cl), () => new NoValidClassError(cl));
@@ -313,7 +314,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteOpti
 
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
   const baseName: string = ctor.name;
-  const customName = overwriteOptions?.options?.customName ?? options.options?.customName;
+  const customName = overwriteNaming?.customName ?? options.options?.customName;
 
   if (typeof customName === 'function') {
     const name = customName(options);
@@ -326,10 +327,10 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteOpti
     return name;
   }
 
-  const automaticName = overwriteOptions?.options?.automaticName ?? options.options?.automaticName;
+  const automaticName = overwriteNaming?.automaticName ?? options.options?.automaticName;
 
   if (automaticName) {
-    const suffix = customName ?? overwriteOptions?.schemaOptions?.collection ?? options.schemaOptions?.collection;
+    const suffix = customName ?? overwriteNaming?.schemaCollection ?? options.schemaOptions?.collection;
 
     return !isNullOrUndefined(suffix) ? `${baseName}_${suffix}` : baseName;
   }
@@ -710,4 +711,19 @@ export function toStringNoFail(value: unknown): string {
   } catch (_) {
     return '(Error: Converting value to String failed)';
   }
+}
+
+/**
+ * Map options from {@link IModelOptions} to {@link INamingOptions}
+ * @param options The options to map
+ * @returns Always a object, contains mapped options from {@link IModelOptions}
+ */
+export function mapModelOptionsToNaming(options: IModelOptions | undefined): INamingOptions {
+  const mappedNaming: INamingOptions = { ...options?.options }; // this copies more than necessary, but works because most of the options are from there
+
+  if (!isNullOrUndefined(options?.schemaOptions?.collection)) {
+    mappedNaming.schemaCollection = options?.schemaOptions?.collection;
+  }
+
+  return mappedNaming;
 }

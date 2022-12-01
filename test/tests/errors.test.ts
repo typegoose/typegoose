@@ -601,10 +601,8 @@ describe('tests for "StringLengthExpectedError" [E026]', () => {
   it('should throw a Error in "utils.getName" when "customName" is defined but not a String [StringLengthExpectedError] [E026]', () => {
     try {
       utils.getName(DummyClass, {
-        options: {
-          // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
-          customName: 10,
-        },
+        // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
+        customName: 10,
       });
 
       fail('Expected to throw "StringLengthExpectedError"');
@@ -617,9 +615,7 @@ describe('tests for "StringLengthExpectedError" [E026]', () => {
   it('should throw a Error in "utils.getName" when "customName" is defined but string does not meet the required length [StringLengthExpectedError] [E026]', () => {
     try {
       utils.getName(DummyClass, {
-        options: {
-          customName: '',
-        },
+        customName: '',
       });
 
       fail('Expected to throw "StringLengthExpectedError"');
@@ -632,10 +628,8 @@ describe('tests for "StringLengthExpectedError" [E026]', () => {
   it('should throw a Error in "utils.getName" when "customName" is defined as a function but does not return a String [StringLengthExpectedError] [E026]', () => {
     try {
       utils.getName(DummyClass, {
-        options: {
-          // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
-          customName: () => 10,
-        },
+        // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
+        customName: () => 10,
       });
 
       fail('Expected to throw "StringLengthExpectedError"');
@@ -648,9 +642,7 @@ describe('tests for "StringLengthExpectedError" [E026]', () => {
   it('should throw a Error in "utils.getName" when "customName" is defined as a function but return does not meet the required length [StringLengthExpectedError] [E026]', () => {
     try {
       utils.getName(DummyClass, {
-        options: {
-          customName: () => '',
-        },
+        customName: () => '',
       });
 
       fail('Expected to throw "StringLengthExpectedError"');
