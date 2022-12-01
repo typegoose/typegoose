@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { DecoratorKeys } from '../../src/internal/constants';
+import { DecoratorKeys, Severity } from '../../src/internal/constants';
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import {
   addModelToTypegoose,
@@ -539,4 +539,28 @@ it('should allow dynamic "foreignField" and "localField" (since mongoose 4.13)',
   expect(found.nested.length).toEqual(2);
   expect(found.nested[0].someProp).toEqual('Hello1');
   expect(found.nested[1].someProp).toEqual('Hello2');
+});
+
+it('should default to "Mixed" when type is still just "Array"', () => {
+  class TestArrayFallback {
+    @prop({ allowMixed: Severity.ALLOW }) // just to not print the warning
+    public test?: string[];
+  }
+
+  const sch = buildSchema(TestArrayFallback);
+  const path = sch.path('test');
+  expect(path).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(path['caster']).toBeInstanceOf(mongoose.Schema.Types.Mixed);
+});
+
+it('should default to "Mixed" when type is still just "Map"', () => {
+  class TestArrayFallback {
+    @prop({ allowMixed: Severity.ALLOW }) // just to not print the warning
+    public test?: Map<string, string>;
+  }
+
+  const sch = buildSchema(TestArrayFallback);
+  const path = sch.path('test');
+  expect(path).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(path['$__schemaType']).toBeInstanceOf(mongoose.Schema.Types.Mixed);
 });
