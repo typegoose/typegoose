@@ -42,7 +42,6 @@ import type {
   SubDocumentType,
   ArraySubDocumentType,
   IBuildSchemaOptions,
-  INamingOptions,
 } from './types';
 import { ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
@@ -70,7 +69,7 @@ parseENV(); // call this before anything to ensure they are applied
 /**
  * Build a Model From a Class
  * @param cl The Class to build a Model from
- * @param options Overwrite SchemaOptions (Merged with Decorator)
+ * @param options Overwrite Options, like for naming or general SchemaOptions the class gets compiled with
  * @returns The finished Model
  * @public
  * @example
@@ -97,7 +96,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
     mergedOptions?.existingMongoose?.model.bind(mergedOptions.existingMongoose) ??
     mongoose.model.bind(mongoose);
 
-  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, mergedOptions.schemaOptions, overwriteNaming));
+  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, mergedOptions));
 
   return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
     existingMongoose: mergedOptions?.existingMongoose,
@@ -126,8 +125,7 @@ export function getModelWithString<U extends AnyParamConstructor<any>, QueryHelp
 /**
  * Generates a Mongoose schema out of class props, iterating through all parents
  * @param cl The Class to build a Schema from
- * @param options Overwrite SchemaOptions (Merged with Decorator)
- * @param overwriteNaming Overwrite Options used for name generation
+ * @param options Overwrite Options, like for naming or general SchemaOptions the class gets compiled with
  * @returns Returns the Build Schema
  * @example
  * ```ts
@@ -138,14 +136,14 @@ export function getModelWithString<U extends AnyParamConstructor<any>, QueryHelp
  */
 export function buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
-  options?: mongoose.SchemaOptions,
-  overwriteNaming?: INamingOptions
+  options?: IModelOptions
 ): mongoose.Schema<DocumentType<InstanceType<U>>> {
   assertionIsClass(cl);
 
+  const overwriteNaming = mapModelOptionsToNaming(options);
   logger.debug('buildSchema called for "%s"', getName(cl, overwriteNaming));
 
-  const mergedOptions = mergeSchemaOptions(options, cl);
+  const mergedOptions = mergeSchemaOptions(options?.schemaOptions, cl);
 
   let sch: mongoose.Schema<DocumentType<InstanceType<U>>> | undefined = undefined;
   /** Parent Constructor */
@@ -420,7 +418,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions.schemaOptions, overwriteNaming);
+  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions);
 
   const mergeHooks = mergedOptions.options?.enableMergeHooks ?? false;
   // Note: this option is not actually for "merging plugins", but if "true" it will *overwrite* all plugins with the base-schema's
