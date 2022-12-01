@@ -84,6 +84,8 @@ exports[`tests for "InvalidTypeError" [E009] should error if no valid type is su
 
 exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to PropType.NONE [InvalidTypeError] [E009] 1`] = `"\\"TestNME.test\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
 
+exports[`tests for "NoDiscriminatorFunctionError" [E031] should throw a Error when the key does not exist in the schema 1`] = `"Path \\"Testy.dummy\\" does not have a function called \\"discriminator\\"! (Nested Discriminator cannot be applied) [E031]"`;
+
 exports[`tests for "NoValidClassError" [E028] should error if no valid class is supplied to "_buildSchema" [NoValidClassError] [E028] 1`] = `
 "Value is not a function or does not have a constructor! [E028]
 Value: \\"hello\\""

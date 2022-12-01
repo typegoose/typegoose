@@ -26,6 +26,7 @@ import {
   ExpectedTypeError,
   InvalidEnumTypeError,
   InvalidOptionsConstructorError,
+  NoDiscriminatorFunctionError,
   PathNotInSchemaError,
   ResolveTypegooseNameError,
 } from '../../src/internal/errors';
@@ -833,6 +834,25 @@ describe('tests for "PathNotInSchemaError" [E030]', () => {
       fail('Expected to throw "PathNotInSchemaError"');
     } catch (err) {
       expect(err).toBeInstanceOf(PathNotInSchemaError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+});
+
+describe('tests for "NoDiscriminatorFunctionError" [E031]', () => {
+  it('should throw a Error when the key does not exist in the schema', () => {
+    class Testy {
+      @prop({
+        discriminators: () => [Testy],
+      })
+      public dummy?: boolean;
+    }
+
+    try {
+      buildSchema(Testy);
+      fail('Expected to throw "NoDiscriminatorFunctionError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(NoDiscriminatorFunctionError);
       expect(err.message).toMatchSnapshot();
     }
   });
