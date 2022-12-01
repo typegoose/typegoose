@@ -98,14 +98,14 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const model =
+  const modelFn =
     mergedOptions?.existingConnection?.model.bind(mergedOptions.existingConnection) ??
     mergedOptions?.existingMongoose?.model.bind(mergedOptions.existingMongoose) ??
     mongoose.model.bind(mongoose);
 
-  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, mergedOptions));
+  const compiledModel: mongoose.Model<any> = modelFn(name, buildSchema(cl, mergedOptions));
 
-  return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
+  return addModelToTypegoose<U, QueryHelpers>(compiledModel, cl, {
     existingMongoose: mergedOptions?.existingMongoose,
     existingConnection: mergedOptions?.existingConnection,
   });
@@ -445,13 +445,13 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
     (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
   }
 
-  const model = from.discriminator(name, sch, {
+  const compiledModel = from.discriminator(name, sch, {
     value: value ? value : name,
     mergeHooks,
     mergePlugins,
   });
 
-  return addModelToTypegoose<U, QueryHelpers>(model, cl);
+  return addModelToTypegoose<U, QueryHelpers>(compiledModel, cl);
 }
 
 /**
