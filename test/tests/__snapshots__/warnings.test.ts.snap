@@ -27,6 +27,8 @@ Array [
 ]
 `;
 
+exports[`should throw a error if property is "Mixed" and Severity.ERROR is used 1`] = `"Setting \\"Mixed\\" is not allowed! (TestMixedError, test) [E017]"`;
+
 exports[`should warn if "justOne" is defined, but no Virtual Populate Options 1`] = `
 Array [
   Array [
@@ -37,6 +39,17 @@ Look here for more: https://typegoose.github.io/typegoose/docs/api/virtuals#virt
 `;
 
 exports[`should warn if property is "Mixed" 1`] = `
+Array [
+  Array [
+    "Setting \\"Mixed\\" for property \\"%s.%s\\"
+Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
+    "TestMixedWarning",
+    "test",
+  ],
+]
+`;
+
+exports[`should warn if property is "Mixed" and a invalid Severity is used 1`] = `
 Array [
   Array [
     "Setting \\"Mixed\\" for property \\"%s.%s\\"
