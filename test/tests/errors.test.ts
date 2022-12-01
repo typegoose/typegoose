@@ -16,6 +16,7 @@ import {
   prop,
   setGlobalOptions,
   PropType,
+  modelOptions,
 } from '../../src/typegoose'; // import order is important with jest
 import { DecoratorKeys } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
@@ -23,6 +24,7 @@ import * as utils from '../../src/internal/utils';
 import { mapValueToSeverity } from '../../src/globalOptions';
 import { BasePropOptions, NestedDiscriminatorsMap } from '../../src/types';
 import {
+  DuplicateOptionsError,
   ExpectedTypeError,
   InvalidEnumTypeError,
   InvalidOptionsConstructorError,
@@ -853,6 +855,32 @@ describe('tests for "NoDiscriminatorFunctionError" [E031]', () => {
       fail('Expected to throw "NoDiscriminatorFunctionError"');
     } catch (err) {
       expect(err).toBeInstanceOf(NoDiscriminatorFunctionError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+});
+
+describe('tests for "DuplicateOptionsError" [E031]', () => {
+  it('should throw a Error when both "discriminators" option is defined as prop-option and as model-option', () => {
+    @modelOptions({
+      options: {
+        discriminators: () => [Basey],
+      },
+    })
+    class Basey {}
+
+    class Testy {
+      @prop({
+        discriminators: () => [Basey],
+      })
+      public dummy?: Basey;
+    }
+
+    try {
+      buildSchema(Testy);
+      fail('Expected to throw "DuplicateOptionsError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(DuplicateOptionsError);
       expect(err.message).toMatchSnapshot();
     }
   });

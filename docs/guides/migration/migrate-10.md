@@ -47,6 +47,16 @@ As a side-effect, the type-narrowing also works with the `else` case and exclude
 
 In Typegoose 10.0 a new ModelOption has been introduced named [`disableLowerIndexes`](../../api/decorators/modelOptions.md#disablelowerindexes) to choose to not inherit any of the lower indexes.
 
+## Nested discriminators can now be defined on the Base Class
+
+With Typegoose 10.0 nested discriminators can now be set via the model-option `options.discriminators` instead of just via the prop-option `discriminators`.  
+This will be useful when the base class (and the discriminators) are used multiple times with the same definition.
+
+:::caution
+A Error is thrown when both this option and the prop-option [`discriminators`](../../api/decorators/prop.md#discriminators) are defined.  
+See [Duplicate Option Definition [E032]](../error-warning-details.md#duplicate-option-definition-e032).
+:::
+
 ## Option `runSyncIndexes` has been removed
 
 The Model Option `runSyncIndexes` has been removed. If wanting to continue to use it, manually call `model.syncIndexes()`.

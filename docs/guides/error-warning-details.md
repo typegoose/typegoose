@@ -510,6 +510,21 @@ The Path `key` of Schema `name` does not have a function called `discriminator`,
 If this Error is encountered, please open a [new Issue in Github](https://github.com/typegoose/typegoose/issues/new/choose).
 :::
 
+### Duplicate Option Definition [E032]
+
+Error: `Duplicate Option definition at [${duplicateAt.join(',')}] [E032]`
+
+Error Class: `DuplicateOptionsError`
+
+Details:  
+The options at `duplicateAt` are defined, but only one can be used.
+
+This Error gets most commonly thrown when:
+
+- When option `discriminators` is defined both as a prop-option and as a model-option.
+
+This Error can be fixed by only defining one of the mention options.
+
 ## Warnings
 
 ### Type is not ${type}, but includes the following ${extra} options [W001]

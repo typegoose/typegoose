@@ -442,6 +442,12 @@ Accepts Type: `() => [DiscriminatorObject | Class]`
 
 Use this function for embedded discriminators.
 
+See [Nested Discriminators](../../guides/advanced/nested-discriminators.mdx) for a guide on how to use nested Discriminators.
+
+:::caution
+A Error is thrown when both this option and the model-option [`discriminators`](./modelOptions.md.md#discriminators) are defined.  
+See [Duplicate Option Definition [E032]](../../guides/error-warning-details.md#duplicate-option-definition-e032).
+:::
 :::note
 The `discriminatorKey` (like in the example property `type`) needs to be always set in a newly created document (via `.create({ type: 'yourKey' })`, or `.save()`)
 :::

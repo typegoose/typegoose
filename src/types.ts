@@ -56,6 +56,9 @@ export type DeferredFunc<T = any> = (...args: unknown[]) => T;
  */
 export type DynamicStringFunc<T extends AnyParamConstructor<any>> = (doc: DocumentType<T>) => string;
 
+/** Type to keep the "discriminators" options consistent in types */
+export type NestedDiscriminatorsFunction = DeferredFunc<(AnyParamConstructor<any> | DiscriminatorObject)[]>;
+
 /**
  * This Interface for most properties uses "mongoose.SchemaTypeOptions<any>['']", but for some special (or typegoose custom) options, it is not used
  *
@@ -207,7 +210,7 @@ export interface BasePropOptions {
    *
    * Note: Custom Typegoose Option
    */
-  discriminators?: DeferredFunc<(AnyParamConstructor<any> | DiscriminatorObject)[]>;
+  discriminators?: NestedDiscriminatorsFunction;
   /**
    * Use option {@link BasePropOptions.type}
    * @see https://typegoose.github.io/typegoose/docs/api/decorators/prop#map-options
@@ -460,6 +463,12 @@ export interface ICustomOptions {
    * @default false
    */
   disableLowerIndexes?: boolean;
+  /**
+   * Set the Nested Discriminators on the *base* of the Discriminators
+   *
+   * This option can be used over the prop-option to not have to re-define discriminators if used in multiple classes
+   */
+  discriminators?: NestedDiscriminatorsFunction;
 }
 
 /** Extra options for "_buildSchema" in "schema.ts" */

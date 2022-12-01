@@ -145,3 +145,9 @@ export class NoDiscriminatorFunctionError extends Error {
     super(`Path "${name}.${key}" does not have a function called "discriminator"! (Nested Discriminator cannot be applied) [E031]`);
   }
 }
+
+export class DuplicateOptionsError extends TypeError {
+  constructor(duplicateAt: string[]) {
+    super(`Duplicate Option definition at [${duplicateAt.join(',')}] [E032]`);
+  }
+}

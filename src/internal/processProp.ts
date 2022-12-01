@@ -3,6 +3,7 @@ import { buildSchema, mongoose, Passthrough } from '../typegoose';
 import type {
   AnyParamConstructor,
   DiscriminatorObject,
+  IModelOptions,
   KeyStringAny,
   MappedInnerOuterOptions,
   NestedDiscriminatorsMap,
@@ -22,6 +23,7 @@ import {
   RefOptionIsUndefinedError,
   SelfContainingClassError,
   StringLengthExpectedError,
+  DuplicateOptionsError,
 } from './errors';
 import * as utils from './utils';
 
@@ -96,9 +98,17 @@ export function processProp(input: ProcessPropOptions): void {
     buildSchema(Type);
   }
 
-  if ('discriminators' in rawOptions) {
+  const modelOptionsOfType: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, Type ?? {}) ?? {};
+
+  // throw a error when both "discriminators" as a prop-option and as a model-option are defined
+  if ('discriminators' in rawOptions && !utils.isNullOrUndefined(modelOptionsOfType?.options?.discriminators)) {
+    throw new DuplicateOptionsError(['discriminators(prop-option)', 'discriminators(model-option)']);
+  }
+
+  if ('discriminators' in rawOptions || !utils.isNullOrUndefined(modelOptionsOfType?.options?.discriminators)) {
+    const discriminatorsToUse = rawOptions?.discriminators ?? modelOptionsOfType?.options?.discriminators;
     logger.debug('Found option "discriminators" in "%s.%s"', name, key);
-    const gotType = utils.getType(rawOptions.discriminators, true);
+    const gotType = utils.getType(discriminatorsToUse, true);
     utils.assertion(gotType.dim === 1, () => new OptionDoesNotSupportOptionError('discriminators', 'dim', '1', `dim: ${gotType.dim}`));
     const discriminators: DiscriminatorObject[] = (gotType.type as (AnyParamConstructor<any> | DiscriminatorObject)[]).map((val, index) => {
       if (utils.isConstructor(val)) {
