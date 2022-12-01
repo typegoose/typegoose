@@ -67,6 +67,12 @@ export { Severity, PropType } from './internal/constants';
 parseENV(); // call this before anything to ensure they are applied
 
 /**
+ * Symbol to track if options have already been merged
+ * This is to reduce the "merge*" calls, which dont need to be run often if already done
+ */
+const AlreadyMerged = Symbol('MOAlreadyMergedOptions');
+
+/**
  * Build a Model From a Class
  * @param cl The Class to build a Model from
  * @param options Overwrite Options, like for naming or general SchemaOptions the class gets compiled with
@@ -82,10 +88,11 @@ parseENV(); // call this before anything to ensure they are applied
 export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(cl: U, options?: IModelOptions) {
   assertionIsClass(cl);
   const rawOptions = typeof options === 'object' ? options : {};
-  const overwriteNaming = mapModelOptionsToNaming(rawOptions);
+  const overwriteNaming = mapModelOptionsToNaming(rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
 
   const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  const name = getName(cl, overwriteNaming); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
+  mergedOptions[AlreadyMerged] = true;
+  const name = getName(cl, overwriteNaming);
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
@@ -143,7 +150,8 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   const overwriteNaming = mapModelOptionsToNaming(options);
   logger.debug('buildSchema called for "%s"', getName(cl, overwriteNaming));
 
-  const mergedOptions = mergeSchemaOptions(options?.schemaOptions, cl);
+  // dont re-run the merging if already done so before (like in getModelForClass)
+  const mergedOptions = options?.[AlreadyMerged] ? options?.schemaOptions : mergeSchemaOptions(options?.schemaOptions, cl);
 
   let sch: mongoose.Schema<DocumentType<InstanceType<U>>> | undefined = undefined;
   /** Parent Constructor */
@@ -410,9 +418,10 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 
   const value = typeof value_or_options === 'string' ? value_or_options : undefined;
   const rawOptions = typeof value_or_options !== 'string' ? value_or_options : typeof options === 'object' ? options : {};
-  const overwriteNaming = mapModelOptionsToNaming(rawOptions);
+  const overwriteNaming = mapModelOptionsToNaming(rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
   const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  const name = getName(cl, overwriteNaming); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
+  mergedOptions[AlreadyMerged] = true;
+  const name = getName(cl, overwriteNaming);
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
