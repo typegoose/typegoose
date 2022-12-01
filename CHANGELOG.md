@@ -1,3 +1,10 @@
+### [9.13.2](https://github.com/typegoose/typegoose/compare/v9.13.1...v9.13.2) (2022-12-01)
+
+
+### Fixes
+
+* deprecate option "runSyncIndexes" ([40f6d30](https://github.com/typegoose/typegoose/commit/40f6d300aa35de2ebb01e8d2dd3e95a0c398fd75))
+
 ### [9.13.1](https://github.com/typegoose/typegoose/compare/v9.13.0...v9.13.1) (2022-11-24)
 
 
