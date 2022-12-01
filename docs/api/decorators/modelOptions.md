@@ -126,6 +126,8 @@ Set this to a Severity you want.
 
 #### runSyncIndexes
 
+<span class="badge badge--warning">Deprecated</span>
+
 Run `model.syncIndexes` when model is finished compiling?
 :::caution
 Only run this while in development. It could cause race-conditions because `getModelForClass` is not async.

@@ -446,7 +446,10 @@ export interface ICustomOptions {
   automaticName?: boolean;
   /** Allow "mongoose.Schema.Types.Mixed"? */
   allowMixed?: Severity;
-  /** Run "model.syncIndexes" when model is finished compiling? */
+  /**
+   * Run "model.syncIndexes" when model is finished compiling?
+   * @deprecated Use "model.syncIndexes()" manually
+   * */
   runSyncIndexes?: boolean;
   /**
    * Disable applying plugins when the class is a discriminator.
