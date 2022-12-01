@@ -45,7 +45,7 @@ function prop(
 
     const mapForTarget = existingMapForTarget ?? (Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap);
 
-    mapForTarget.set(key, { options, target, key, whatis: kind });
+    mapForTarget.set(key, { options, target, key, propType: kind });
 
     logger.debug('Added "%s.%s" to the Decorator Cache', utils.getName(target.constructor), key);
   };

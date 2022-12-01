@@ -1,7 +1,8 @@
 import * as mongoose from 'mongoose';
-import { schemas } from '../../src/internal/data';
+import { DecoratorKeys, Severity } from '../../src/internal/constants';
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import {
+  addModelToTypegoose,
   buildSchema,
   DocumentType,
   getClass,
@@ -325,10 +326,8 @@ it('should add schema paths when there is a virtual called `name`', () => {
 
 describe('utils.getClass', () => {
   it('should get class by string', () => {
-    const doc = new GetClassTestParentModel({ nested: { subprop: 'hi' } });
-
-    expect(getClass(doc.typegooseName())).toEqual(GetClassTestParent);
-    expect(getClass((doc.nested as any).typegooseName())).toEqual(GetClassTestSub);
+    expect(getClass(getName(GetClassTestParent))).toEqual(GetClassTestParent);
+    expect(getClass(getName(GetClassTestSub))).toEqual(GetClassTestSub);
   });
 
   it('should get class by Document / Embedded', () => {
@@ -343,6 +342,19 @@ describe('utils.getClass', () => {
 
     expect(getClass(doc)).toEqual(GetClassTestParent);
     expect(getClass(doc.testy)).toEqual(GetClassTestSub);
+  });
+
+  it('should get class via modelName', () => {
+    const name = 'TestModelName';
+
+    class TestModelName {}
+
+    const m = mongoose.model(name, new mongoose.Schema({}));
+    addModelToTypegoose(m, TestModelName);
+
+    const doc = new m();
+
+    expect(getClass(doc)).toEqual(TestModelName);
   });
 });
 
@@ -411,7 +423,7 @@ it('should use "dim" correctly', () => {
   }
 
   const schema = buildSchema(DimArrayClass);
-  const fromSchemas = schemas.get(getName(DimArrayClass));
+  const fromSchemas = Reflect.getMetadata(DecoratorKeys.CachedSchema, DimArrayClass);
 
   assertion(!isNullOrUndefined(fromSchemas), new Error('"fromSchemas" should not be undefined/null!'));
 
@@ -477,7 +489,7 @@ it('should allow dynamic use of "ref" (since mongoose 4.13)', async () => {
   const NestedRefModel = getModelForClass(NestedRef);
   const ParentRefModel = getModelForClass(ParentRef);
 
-  expect((schemas.get(getName(ParentRef)) as any).nested.ref).toBeInstanceOf(Function);
+  expect(Reflect.getMetadata(DecoratorKeys.CachedSchema, ParentRef).nested.ref).toBeInstanceOf(Function);
 
   const nested = await NestedRefModel.create({ someProp: 'Hello' });
   const parent = await ParentRefModel.create({ from: getName(NestedRef), nested: nested._id });
@@ -527,4 +539,28 @@ it('should allow dynamic "foreignField" and "localField" (since mongoose 4.13)',
   expect(found.nested.length).toEqual(2);
   expect(found.nested[0].someProp).toEqual('Hello1');
   expect(found.nested[1].someProp).toEqual('Hello2');
+});
+
+it('should default to "Mixed" when type is still just "Array"', () => {
+  class TestArrayFallback {
+    @prop({ allowMixed: Severity.ALLOW }) // just to not print the warning
+    public test?: string[];
+  }
+
+  const sch = buildSchema(TestArrayFallback);
+  const path = sch.path('test');
+  expect(path).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(path['caster']).toBeInstanceOf(mongoose.Schema.Types.Mixed);
+});
+
+it('should default to "Mixed" when type is still just "Map"', () => {
+  class TestArrayFallback {
+    @prop({ allowMixed: Severity.ALLOW }) // just to not print the warning
+    public test?: Map<string, string>;
+  }
+
+  const sch = buildSchema(TestArrayFallback);
+  const path = sch.path('test');
+  expect(path).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(path['$__schemaType']).toBeInstanceOf(mongoose.Schema.Types.Mixed);
 });

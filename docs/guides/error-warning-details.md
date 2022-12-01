@@ -5,27 +5,27 @@ title: 'Error & Warning Details'
 
 ## Errors
 
-:::note
-Only Removed Error will have a link to their code, because there is currently no good way to keep the links up-to-date when the file changes
-:::
-
 ### Mongoose Version [E001]
 
-Error: `Please use mongoose 6.7.2 or higher (Current mongoose: x.x.x) [E001]`
+Error: `Please use mongoose 6.7.5 or higher (Current mongoose: x.x.x) [E001]`
 
 Error Class: `Error`
 
 Details:  
-Typegoose requires at least mongoose version `6.7.2`, because that version changed something that affected typegoose internals
+Typegoose requires at least the mentioned mongoose version because that version was validated for that version of typegoose, previous / newer mongoose versions may have functional or type changes which are incompatible with the currently installed typegoose version.
+
+[Mongoose Compatability](../guides/mongoose-compatibility.md)
 
 ### NodeJS Version [E002]
 
-Error: `You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]`
+Error: `You are using a NodeJS Version below 14.17.0, Please Upgrade! [E002]`
 
 Error Class: `Error`
 
 Details:  
-Typegoose requires at least NodeJS Version 12.22, because NodeJS 12 is the lowest actively maintained version AND is the lowest that supports all functions needed by typegoose (without having to add polyfills)
+Typegoose requires at least NodeJS Version 14.17, because:
+
+- it is the lowest LTS version, which many (dev) dependencies already require
 
 ### Function only supports to be called "${supported}" times [E003]
 
@@ -53,7 +53,7 @@ Please look at https://github.com/typegoose/typegoose/issues/42 for more informa
 Error Class: `SelfContainingClassError`
 
 Details:  
-Because of limitations of JS, it is not possible to use a self-containing-class  
+Because of limitations in JavaScript, it is not possible to use a self-containing-class  
 -> But Self-Referencing still works
 
 ### ref is undefined [E005]
@@ -509,6 +509,21 @@ The Path `key` of Schema `name` does not have a function called `discriminator`,
 :::note
 If this Error is encountered, please open a [new Issue in Github](https://github.com/typegoose/typegoose/issues/new/choose).
 :::
+
+### Duplicate Option Definition [E032]
+
+Error: `Duplicate Option definition at [${duplicateAt.join(',')}] [E032]`
+
+Error Class: `DuplicateOptionsError`
+
+Details:  
+The options at `duplicateAt` are defined, but only one can be used.
+
+This Error gets most commonly thrown when:
+
+- When option `discriminators` is defined both as a prop-option and as a model-option.
+
+This Error can be fixed by only defining one of the mention options.
 
 ## Warnings
 

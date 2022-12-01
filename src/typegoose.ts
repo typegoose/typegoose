@@ -2,19 +2,27 @@
 import * as mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
-import { assertion, assertionIsClass, getName, isNullOrUndefined, mergeMetadata, mergeSchemaOptions } from './internal/utils';
+import {
+  assertion,
+  assertionIsClass,
+  getName,
+  isNullOrUndefined,
+  mapModelOptionsToNaming,
+  mergeMetadata,
+  mergeSchemaOptions,
+} from './internal/utils';
 
 /* istanbul ignore next */
 if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '6.7.2')) {
-    throw new Error(`Please use mongoose 6.7.2 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '6.7.5')) {
+    throw new Error(`Please use mongoose 6.7.5 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
-  if (semver.lt(process.version.slice(1), '12.22.0')) {
-    throw new Error('You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]');
+  if (semver.lt(process.version.slice(1), '14.17.0')) {
+    throw new Error('You are using a NodeJS Version below 14.17.0, Please Upgrade! [E002]');
   }
 }
 
@@ -33,6 +41,7 @@ import type {
   ReturnModelType,
   SubDocumentType,
   ArraySubDocumentType,
+  IBuildSchemaOptions,
 } from './types';
 import { ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
@@ -43,7 +52,7 @@ export { setLogLevel, LogLevels } from './logSettings';
 export * from './prop';
 export * from './hooks';
 export * from './plugin';
-export * from './index';
+export * from './indexes';
 export * from './modelOptions';
 export * from './queryMethod';
 export * from './typeguards';
@@ -52,15 +61,21 @@ export * as errors from './internal/errors';
 export * as types from './types';
 // the following types are re-exported (instead of just in "types") because they are often used types
 export { DocumentType, Ref, ReturnModelType, SubDocumentType, ArraySubDocumentType };
-export { getClassForDocument, getClass, getName } from './internal/utils';
+export { getClass, getName } from './internal/utils';
 export { Severity, PropType } from './internal/constants';
 
 parseENV(); // call this before anything to ensure they are applied
 
 /**
+ * Symbol to track if options have already been merged
+ * This is to reduce the "merge*" calls, which dont need to be run often if already done
+ */
+const AlreadyMerged = Symbol('MOAlreadyMergedOptions');
+
+/**
  * Build a Model From a Class
  * @param cl The Class to build a Model from
- * @param options Overwrite SchemaOptions (Merged with Decorator)
+ * @param options Overwrite Options, like for naming or general SchemaOptions the class gets compiled with
  * @returns The finished Model
  * @public
  * @example
@@ -73,28 +88,24 @@ parseENV(); // call this before anything to ensure they are applied
 export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(cl: U, options?: IModelOptions) {
   assertionIsClass(cl);
   const rawOptions = typeof options === 'object' ? options : {};
+  const overwriteNaming = mapModelOptionsToNaming(rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
 
   const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  const name = getName(cl, rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
+  mergedOptions[AlreadyMerged] = true;
+  const name = getName(cl, overwriteNaming);
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const model =
+  const modelFn =
     mergedOptions?.existingConnection?.model.bind(mergedOptions.existingConnection) ??
     mergedOptions?.existingMongoose?.model.bind(mergedOptions.existingMongoose) ??
     mongoose.model.bind(mongoose);
 
-  const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, mergedOptions.schemaOptions, rawOptions));
-  const refetchedOptions = (Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions) ?? {};
+  const compiledModel: mongoose.Model<any> = modelFn(name, buildSchema(cl, mergedOptions));
 
-  if (refetchedOptions?.options?.runSyncIndexes) {
-    // no async/await, to wait for execution on connection in the background
-    compiledmodel.syncIndexes();
-  }
-
-  return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
+  return addModelToTypegoose<U, QueryHelpers>(compiledModel, cl, {
     existingMongoose: mergedOptions?.existingMongoose,
     existingConnection: mergedOptions?.existingConnection,
   });
@@ -121,8 +132,7 @@ export function getModelWithString<U extends AnyParamConstructor<any>, QueryHelp
 /**
  * Generates a Mongoose schema out of class props, iterating through all parents
  * @param cl The Class to build a Schema from
- * @param options Overwrite SchemaOptions (Merged with Decorator)
- * @param overwriteOptions Overwrite ModelOptions (aside from schemaOptions) (Not Merged with Decorator)
+ * @param options Overwrite Options, like for naming or general SchemaOptions the class gets compiled with
  * @returns Returns the Build Schema
  * @example
  * ```ts
@@ -133,38 +143,50 @@ export function getModelWithString<U extends AnyParamConstructor<any>, QueryHelp
  */
 export function buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
-  options?: mongoose.SchemaOptions,
-  overwriteOptions?: IModelOptions
+  options?: IModelOptions
 ): mongoose.Schema<DocumentType<InstanceType<U>>> {
   assertionIsClass(cl);
 
-  logger.debug('buildSchema called for "%s"', getName(cl, overwriteOptions));
+  const overwriteNaming = mapModelOptionsToNaming(options);
+  logger.debug('buildSchema called for "%s"', getName(cl, overwriteNaming));
 
-  const mergedOptions = mergeSchemaOptions(options, cl);
+  // dont re-run the merging if already done so before (like in getModelForClass)
+  const mergedOptions = options?.[AlreadyMerged] ? options?.schemaOptions : mergeSchemaOptions(options?.schemaOptions, cl);
 
   let sch: mongoose.Schema<DocumentType<InstanceType<U>>> | undefined = undefined;
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   /* This array is to execute from lowest class to highest (when extending) */
-  const parentClasses: AnyParamConstructor<any>[] = [];
+  const parentClasses: [AnyParamConstructor<any>, IBuildSchemaOptions][] = [];
+  let upperOptions: IBuildSchemaOptions = {};
 
-  // iterate trough all parents
+  // iterate trough all parents to the lowest class
   while (parentCtor?.name !== 'Object') {
     // add lower classes (when extending) to the front of the array to be processed first
-    parentClasses.unshift(parentCtor);
+    parentClasses.unshift([parentCtor, upperOptions]);
+
+    // clone object, because otherwise it will affect the upper classes too because the same reference is used
+    upperOptions = { ...upperOptions };
+
+    const ropt: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, parentCtor) ?? {};
+
+    // only affect options of lower classes, not the class the options are from
+    if (ropt.options?.disableLowerIndexes) {
+      upperOptions.buildIndexes = false;
+    }
 
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
 
   // iterate and build class schemas from lowest to highest (when extending classes, the lower class will get build first) see https://github.com/typegoose/typegoose/pull/243
-  for (const parentClass of parentClasses) {
+  for (const [parentClass, extraOptions] of parentClasses) {
     // extend schema
-    sch = _buildSchema(parentClass, sch!, mergedOptions, false);
+    sch = _buildSchema(parentClass, sch!, mergedOptions, false, undefined, extraOptions);
   }
 
   // get schema of current model
-  sch = _buildSchema(cl, sch, mergedOptions, true, overwriteOptions);
+  sch = _buildSchema(cl, sch, mergedOptions, true, overwriteNaming);
 
   return sch;
 }
@@ -396,14 +418,16 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 
   const value = typeof value_or_options === 'string' ? value_or_options : undefined;
   const rawOptions = typeof value_or_options !== 'string' ? value_or_options : typeof options === 'object' ? options : {};
+  const overwriteNaming = mapModelOptionsToNaming(rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
   const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  const name = getName(cl, rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
+  mergedOptions[AlreadyMerged] = true;
+  const name = getName(cl, overwriteNaming);
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
-  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions.schemaOptions, rawOptions);
+  const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions);
 
   const mergeHooks = mergedOptions.options?.enableMergeHooks ?? false;
   // Note: this option is not actually for "merging plugins", but if "true" it will *overwrite* all plugins with the base-schema's
@@ -421,13 +445,13 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
     (sch.paths[discriminatorKey] as any).options.$skipDiscriminatorCheck = true;
   }
 
-  const model = from.discriminator(name, sch, {
+  const compiledModel = from.discriminator(name, sch, {
     value: value ? value : name,
     mergeHooks,
     mergePlugins,
   });
 
-  return addModelToTypegoose<U, QueryHelpers>(model, cl);
+  return addModelToTypegoose<U, QueryHelpers>(compiledModel, cl);
 }
 
 /**

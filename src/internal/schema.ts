@@ -4,19 +4,29 @@ import { buildSchema } from '../typegoose';
 import type {
   AnyParamConstructor,
   DecoratedPropertyMetadataMap,
+  IBuildSchemaOptions,
   IHooksArray,
   IIndexArray,
   IModelOptions,
+  INamingOptions,
   IPluginsArray,
   NestedDiscriminatorsMap,
   QueryMethodMap,
   VirtualPopulateMap,
 } from '../types';
 import { DecoratorKeys } from './constants';
-import { constructors, schemas } from './data';
+import { constructors } from './data';
 import { NoDiscriminatorFunctionError, PathNotInSchemaError } from './errors';
 import { processProp } from './processProp';
-import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullOrUndefined, mergeSchemaOptions } from './utils';
+import {
+  assertion,
+  assertionIsClass,
+  assignGlobalModelOptions,
+  getCachedSchema,
+  getName,
+  isNullOrUndefined,
+  mergeSchemaOptions,
+} from './utils';
 
 /**
  * Internal Schema Builder for Classes
@@ -25,7 +35,8 @@ import { assertion, assertionIsClass, assignGlobalModelOptions, getName, isNullO
  * @param origSch A Schema to clone and extend onto
  * @param opt Overwrite SchemaOptions (Merged with Decorator Options)
  * @param isFinalSchema Set if this Schema is the final (top-level) to build, only when "true" are discriminators, hooks, virtuals, etc applied
- * @param overwriteOptions Overwrite ModelOptions for Name Generation (Not Merged with Decorator)
+ * @param overwriteNaming Overwrite options for name generation
+ * @param extraOptions Extra options to affect what needs to be done
  * @returns Returns the Build Schema
  * @private
  */
@@ -34,7 +45,8 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   origSch?: mongoose.Schema<any>,
   opt?: mongoose.SchemaOptions,
   isFinalSchema: boolean = true,
-  overwriteOptions?: IModelOptions
+  overwriteNaming?: INamingOptions,
+  extraOptions?: IBuildSchemaOptions
 ) {
   assertionIsClass(cl);
 
@@ -43,9 +55,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   // Options sanity check
   opt = mergeSchemaOptions(isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt, cl);
 
-  /** used, because when trying to resolve an child, the overwriteOptions for that child are not available */
-  const className = getName(cl);
-  const finalName = getName(cl, overwriteOptions);
+  const finalName = getName(cl, overwriteNaming);
 
   logger.debug('_buildSchema Called for %s with options:', finalName, opt);
 
@@ -58,24 +68,39 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
   if (!isNullOrUndefined(decorators)) {
     for (const decorator of decorators.values()) {
-      processProp(decorator);
+      processProp({ ...decorator, cl: cl });
     }
-  }
-
-  if (!schemas.has(className)) {
-    schemas.set(className, {});
   }
 
   let sch: mongoose.Schema;
 
-  if (!(origSch instanceof Schema)) {
-    sch = new Schema(schemas.get(className), schemaOptions);
-  } else {
-    sch = origSch.clone();
-    sch.add(schemas.get(className)!);
+  {
+    const schemaReflectTarget = getCachedSchema(cl);
+
+    if (!(origSch instanceof Schema)) {
+      sch = new Schema(schemaReflectTarget, schemaOptions);
+    } else {
+      sch = origSch.clone();
+      sch.add(schemaReflectTarget);
+    }
   }
 
   sch.loadClass(cl);
+
+  // in the block below are all the things that need to be done for each class, not just the final schema
+  // for example when using "getOwnMetadata" over "getMetadata" (and having a clone in there)
+  {
+    /** Get Metadata for indices */
+    const indices: IIndexArray[] = Reflect.getOwnMetadata(DecoratorKeys.Index, cl);
+    const buildIndexes = typeof extraOptions?.buildIndexes === 'boolean' ? extraOptions?.buildIndexes : true;
+
+    if (Array.isArray(indices) && buildIndexes) {
+      for (const index of indices) {
+        logger.debug('Applying Index:', index);
+        sch.index(index.fields, index.options);
+      }
+    }
+  }
 
   if (isFinalSchema) {
     /** Get Metadata for Nested Discriminators */
@@ -86,7 +111,6 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
         logger.debug('Applying Nested Discriminators for:', key, discriminators);
 
         const path = sch.path(key) as mongoose.Schema.Types.DocumentArray | undefined;
-        // TODO: add test for this error
         assertion(!isNullOrUndefined(path), () => new PathNotInSchemaError(finalName, key));
         // TODO: add test for this error
         assertion(typeof path.discriminator === 'function', () => new NoDiscriminatorFunctionError(finalName, key));
@@ -112,16 +136,16 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
 
       if (Array.isArray(preHooks)) {
-        // "as any" is used here because mongoose now has static typings for method names, but the intermediate "IHooksArray" has "string"
-        preHooks.forEach((obj) => sch!.pre(obj.method as any, obj.options, obj.func));
+        // "as any" is used here because mongoose explicitly types out many methods, but the input type (from IHooksArray) is a combination of multiple types
+        preHooks.forEach((obj) => callCorrectSignature(sch, 'pre', obj));
       }
 
       /** Get Metadata for PreHooks */
       const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
 
       if (Array.isArray(postHooks)) {
-        // "as any" is used here because mongoose now has static typings for method names, but the intermediate "IHooksArray" has "string"
-        postHooks.forEach((obj) => sch!.post(obj.method as any, obj.options, obj.func));
+        // "as any" is used here because mongoose explicitly types out many methods, but the input type (from IHooksArray) is a combination of multiple types
+        postHooks.forEach((obj) => callCorrectSignature(sch, 'post', obj));
       }
     }
 
@@ -132,16 +156,6 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       for (const [key, options] of virtuals) {
         logger.debug('Applying Virtual Populates:', key, options);
         sch.virtual(key, options);
-      }
-    }
-
-    /** Get Metadata for indices */
-    const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, cl);
-
-    if (Array.isArray(indices)) {
-      for (const index of indices) {
-        logger.debug('Applying Index:', index);
-        sch.index(index.fields, index.options);
       }
     }
 
@@ -175,4 +189,23 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   constructors.set(finalName, cl);
 
   return sch;
+}
+
+/** Simple helper type for "fnToCall" in {@link callCorrectSignature} */
+type GenericPrePostFn = (p1: any, p2: any, p3?: any) => any;
+
+/**
+ * Helper function to call the correct signature for a given "fnToCall" (pre / post hooks)
+ * @param fnToCall The function to call (sch.pre / sch.post)
+ * @param obj The object to call as arguments with
+ */
+function callCorrectSignature(sch: mongoose.Schema, fn: 'pre' | 'post', obj: IHooksArray): void {
+  // we have to bind "sch", otherwise "this" will not be defined in the "pre / post" functions
+  const fnToCall: GenericPrePostFn = (fn === 'pre' ? sch.pre : sch.post).bind(sch);
+
+  if (!isNullOrUndefined(obj.options)) {
+    return fnToCall(obj.methods, obj.options, obj.func);
+  }
+
+  return fnToCall(obj.methods, obj.func);
 }

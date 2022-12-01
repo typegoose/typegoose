@@ -204,7 +204,7 @@ describe('isRefType / isRefTypeArray', () => {
 
     it('should return "false" if all other fail', async () => {
       const obj = { hello: String };
-      expect(isDocument(obj)).toStrictEqual(false);
+      expect(isDocument(obj as any)).toStrictEqual(false);
       expect(
         // @ts-expect-error "Array" is not a supported type for param2, but is used to test the fallback-case
         isRefType(obj, Array)

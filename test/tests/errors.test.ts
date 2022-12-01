@@ -16,16 +16,20 @@ import {
   prop,
   setGlobalOptions,
   PropType,
+  modelOptions,
 } from '../../src/typegoose'; // import order is important with jest
 import { DecoratorKeys } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import * as utils from '../../src/internal/utils';
 import { mapValueToSeverity } from '../../src/globalOptions';
-import { BasePropOptions } from '../../src/types';
+import { BasePropOptions, NestedDiscriminatorsMap } from '../../src/types';
 import {
+  DuplicateOptionsError,
   ExpectedTypeError,
   InvalidEnumTypeError,
   InvalidOptionsConstructorError,
+  NoDiscriminatorFunctionError,
+  PathNotInSchemaError,
   ResolveTypegooseNameError,
 } from '../../src/internal/errors';
 
@@ -285,31 +289,7 @@ it('should error if the Type does not have a valid "OptionsConstructor" [Invalid
 });
 
 describe('tests for "InvalidPropTypeError" [E013]', () => {
-  it('should throw a Error when a unknown PropType is used for "utils#initProperty" [InvalidPropTypeError] [E013]', () => {
-    try {
-      utils.initProperty('a1', 'a2', -1);
-
-      fail('Expected to throw "InvalidPropTypeError"');
-    } catch (err) {
-      expect(err).toBeInstanceOf(errors.InvalidPropTypeError);
-      expect(err.message).toMatchSnapshot();
-    }
-  });
-
   describe('PropType unknown (processProp)', () => {
-    beforeEach(() => {
-      // Mock implementation of "utils.initProperty", otherwise "InvalidPropTypeError.PropType(initProperty)" always gets thrown
-      const origInitProperty = utils.initProperty;
-      jest.spyOn(utils, 'initProperty').mockImplementation((...args) => {
-        return origInitProperty(
-          args[0],
-          args[1],
-          // @ts-expect-error "-1" does not exist in PropType
-          args[2] === -1 ? PropType.NONE : args[2] // map "-1" to "NONE" just to have "utils.initProperty" not throw a Error, but still use it
-        );
-      });
-    });
-
     it('should throw a Error when a unknown PropType is used for "processProp#Passthrough" [InvalidPropTypeError] [E013]', () => {
       class ProcessPropPassthroughPropType {
         @prop({ type: () => new Passthrough({}) }, -1)
@@ -621,10 +601,8 @@ describe('tests for "StringLengthExpectedError" [E026]', () => {
   it('should throw a Error in "utils.getName" when "customName" is defined but not a String [StringLengthExpectedError] [E026]', () => {
     try {
       utils.getName(DummyClass, {
-        options: {
-          // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
-          customName: 10,
-        },
+        // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
+        customName: 10,
       });
 
       fail('Expected to throw "StringLengthExpectedError"');
@@ -637,9 +615,7 @@ describe('tests for "StringLengthExpectedError" [E026]', () => {
   it('should throw a Error in "utils.getName" when "customName" is defined but string does not meet the required length [StringLengthExpectedError] [E026]', () => {
     try {
       utils.getName(DummyClass, {
-        options: {
-          customName: '',
-        },
+        customName: '',
       });
 
       fail('Expected to throw "StringLengthExpectedError"');
@@ -652,10 +628,8 @@ describe('tests for "StringLengthExpectedError" [E026]', () => {
   it('should throw a Error in "utils.getName" when "customName" is defined as a function but does not return a String [StringLengthExpectedError] [E026]', () => {
     try {
       utils.getName(DummyClass, {
-        options: {
-          // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
-          customName: () => 10,
-        },
+        // @ts-expect-error "customName" only accepts "undefined", "string" or a function returning a "string"
+        customName: () => 10,
       });
 
       fail('Expected to throw "StringLengthExpectedError"');
@@ -668,9 +642,7 @@ describe('tests for "StringLengthExpectedError" [E026]', () => {
   it('should throw a Error in "utils.getName" when "customName" is defined as a function but return does not meet the required length [StringLengthExpectedError] [E026]', () => {
     try {
       utils.getName(DummyClass, {
-        options: {
-          customName: () => '',
-        },
+        customName: () => '',
       });
 
       fail('Expected to throw "StringLengthExpectedError"');
@@ -818,23 +790,6 @@ describe('tests for "ExpectedTypeError" [E029]', () => {
       expect(err.message).toMatchSnapshot();
     }
   });
-
-  it('should throw a Error when a hooks options argument is not a object [ExpectedTypeError] [E029]', async () => {
-    const customPre = jest.fn(() => fail('Expected this function to not be executed'));
-    try {
-      // @ts-expect-error the third argument should be undefined or a object
-      @pre<TestHookOptionsNotObject>('save', customPre, 'SomethingElse')
-      class TestHookOptionsNotObject {
-        @prop()
-        public dummy?: string;
-      }
-
-      fail('Expected to throw "ExpectedTypeError"');
-    } catch (err) {
-      expect(err).toBeInstanceOf(ExpectedTypeError);
-      expect(err.message).toMatchSnapshot();
-    }
-  });
 });
 
 it('should throw a Error in "processProp" when using a invalid type for enums [InvalidEnumTypeError] [E012]', () => {
@@ -856,4 +811,69 @@ it('should throw a Error in "processProp" when using a invalid type for enums [I
     expect(err).toBeInstanceOf(InvalidEnumTypeError);
     expect(err.message).toMatchSnapshot();
   }
+});
+
+describe('tests for "PathNotInSchemaError" [E030]', () => {
+  it('should throw a Error when the key does not exist in the schema', () => {
+    class Testy {}
+
+    Reflect.defineMetadata(
+      DecoratorKeys.NestedDiscriminators,
+      new Map([['notExisting', [{ type: Testy }]]]) as NestedDiscriminatorsMap,
+      Testy
+    );
+
+    try {
+      buildSchema(Testy);
+      fail('Expected to throw "PathNotInSchemaError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(PathNotInSchemaError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+});
+
+describe('tests for "NoDiscriminatorFunctionError" [E031]', () => {
+  it('should throw a Error when the key does not exist in the schema', () => {
+    class Testy {
+      @prop({
+        discriminators: () => [Testy],
+      })
+      public dummy?: boolean;
+    }
+
+    try {
+      buildSchema(Testy);
+      fail('Expected to throw "NoDiscriminatorFunctionError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(NoDiscriminatorFunctionError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+});
+
+describe('tests for "DuplicateOptionsError" [E031]', () => {
+  it('should throw a Error when both "discriminators" option is defined as prop-option and as model-option', () => {
+    @modelOptions({
+      options: {
+        discriminators: () => [Basey],
+      },
+    })
+    class Basey {}
+
+    class Testy {
+      @prop({
+        discriminators: () => [Basey],
+      })
+      public dummy?: Basey;
+    }
+
+    try {
+      buildSchema(Testy);
+      fail('Expected to throw "DuplicateOptionsError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(DuplicateOptionsError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });

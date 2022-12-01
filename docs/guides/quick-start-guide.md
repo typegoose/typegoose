@@ -6,7 +6,7 @@ title: 'Quick Start Guide'
 ## Quick Overview of Typegoose
 
 :::note
-This Guide is for Typegoose version ~9.0
+This Guide is for Typegoose version ~10.0
 :::
 
 Typegoose is a "wrapper" for easily writing Mongoose models with TypeScript.
@@ -106,13 +106,13 @@ Like `public: string[]` is in reflection only `Array`.
 
 ### Requirements
 
-- TypeScript version `^4.8` (since 9.13) is recommended, though older ones may also work
-- NodeJS `^12.22.0`
-- Mongoose `~6.7.2`
+- TypeScript version `^4.9` (since 10.0) is recommended, though older ones may also work
+- NodeJS `^14.17.0`
+- Mongoose `~6.7.5`
 - A IDE that supports TypeScript linting is recommended to be used (VSCode is recommended)
 - This Guide expects you to know how Mongoose (or at least its models) works
 - `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
-- tsconfig option `target` being `es6` (or higher)
+- tsconfig option `target` being at least `es6`, recommended is `es2020`
 
 :::info
 tsconfig option `emitDecoratorMetadata` is not strictly required, look [here](./use-without-emitDecoratorMetadata.md) for more
@@ -138,7 +138,7 @@ const kittenSchema = new mongoose.Schema({
 const KittenModel = mongoose.model('Kitten', kittenSchema);
 
 let document = await KittenModel.create({ name: 'Kitty' });
-// "document" has no types
+// "document" has basic mongoose inferred types
 ```
 
 With Typegoose, it can be converted to something like:
@@ -152,16 +152,20 @@ class KittenClass {
 const KittenModel = getModelForClass(KittenClass);
 
 let document = await KittenModel.create({ name: 'Kitty' });
-// "document" has proper types of KittenClass
+// "document" has proper (manual) typescript types of KittenClass
 ```
 
 :::note
-`new KittenModel({})` has no types of KittenClass, because Typegoose doesn't modify functions of Mongoose, [read more here](./faq.md#why-does-new-model-not-have-types)
+`new KittenModel({} /*<-- this here*/)` will have type suggestions, but they are *not enforced*, [read more here](./faq.md#why-does-new-model-not-have-types).
+:::
+:::note
+Since around mongoose 6.0, mongoose can infer types mostly from the schema definition, but it is still not perfect and arguably less overview-able than typegoose's style of classes.  
+Also tsdoc comments are not transferred when using mongoose's inferred types.
 :::
 
 ## Do's and Don'ts of Typegoose
 
-- Typegoose is a wrapper for Mongoose's models
+- Typegoose is a wrapper for Mongoose's models & schemas
 - Typegoose does not modify any functions of Mongoose
 - Typegoose aims to get Mongoose's models to be stable through type-information from classes (without defining extra interfaces)
 - Typegoose aims to make Mongoose more usable by making the models more type-rich with TypeScript
@@ -197,7 +201,7 @@ pre-6.0 static functions needed `@staticMethod`, but this is not needed anymore.
 
 ### Instance Methods
 
-Sometimes extra functions for manipulating data on an instance is needed, they can be done as follows:
+Sometimes extra functions for manipulating data on an instance are needed, they can be done as follows:
 
 ```ts
 class KittenClass {

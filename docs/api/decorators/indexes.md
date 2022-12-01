@@ -14,7 +14,7 @@ function index<T extends BeAnObject = BeAnObject>(fields: mongoose.IndexDefiniti
 | Name                                                          |                                                    Type                                                     | Description                                                   |
 | :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------ |
 | `fields` <span class="badge badge--secondary">Required</span> |                                         `mongoose.IndexDefinition`                                          | All Fields for this single index                              |
-| `options`                                                     | [`IndexOptions<T>`](https://mongodb.github.io/node-mongodb-native/4.7/interfaces/CreateIndexesOptions.html) | Overwrite Schema Options, merged with original schema options |
+| `options`                                                     | [`IndexOptions<T>`](https://mongodb.github.io/node-mongodb-native/4.11/interfaces/CreateIndexesOptions.html) | Overwrite Schema Options, merged with original schema options |
 
 <!--TODO: update "options" type field link with latest mongodb version-->
 
@@ -44,3 +44,7 @@ class Location {
   public location?: number[][];
 }
 ```
+
+## Extra
+
+Inheriting indexes from lower classes can be disabled with [ModelOption `disableLowerIndexes`](./modelOptions.md#disablelowerindexes).

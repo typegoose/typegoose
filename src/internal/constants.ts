@@ -49,6 +49,11 @@ export enum DecoratorKeys {
    * -> Use only for a class
    */
   NestedDiscriminators = 'typegoose:nestedDiscriminators',
+  /**
+   * Storage location for Cached Schemas
+   * -> Use only for a class
+   */
+  CachedSchema = 'typegoose:cachedSchema',
 }
 
 /** This Enum is meant for baseProp to decide for different props (like if it is an arrayProp or prop or mapProp) */
@@ -57,10 +62,6 @@ export enum PropType {
   MAP,
   NONE,
 }
-
-// For Backwards-compatability
-/** @deprecated This was renamed to "PropType" and will be removed in 10.0 */
-export const WhatIsIt = PropType;
 
 /** Severity levels for soft-warnings */
 export enum Severity {

@@ -57,6 +57,12 @@ module.exports = {
       'guides/advanced/manual-schema-modification',
       'guides/advanced/overwrite-this',
     ],
-    Migration: ['guides/migration/migrate-9', 'guides/migration/migrate-8', 'guides/migration/migrate-7', 'guides/migration/migrate-6'],
+    Migration: [
+      'guides/migration/migrate-10',
+      'guides/migration/migrate-9',
+      'guides/migration/migrate-8',
+      'guides/migration/migrate-7',
+      'guides/migration/migrate-6',
+    ],
   },
 };

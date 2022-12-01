@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
 import { getName } from './internal/utils';
 import { logger } from './logSettings';
-import type { BeAnObject, IIndexArray, IndexOptions } from './types';
+import type { IIndexArray, IndexOptions } from './types';
 
 /**
  * Defines a index for this Class which will then be added to the Schema.
@@ -14,10 +14,10 @@ import type { BeAnObject, IIndexArray, IndexOptions } from './types';
  * class ClassName {}
  * ```
  */
-export function index<T extends BeAnObject = BeAnObject>(fields: mongoose.IndexDefinition, options?: IndexOptions<T>): ClassDecorator {
+export function index(fields: mongoose.IndexDefinition, options?: IndexOptions): ClassDecorator {
   return (target: any) => {
     logger.info('Adding "%o" Indexes to %s', { fields, options }, getName(target));
-    const indices: IIndexArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.Index, target) ?? []);
+    const indices: IIndexArray[] = Array.from(Reflect.getOwnMetadata(DecoratorKeys.Index, target) ?? []);
     indices.push({ fields, options });
     Reflect.defineMetadata(DecoratorKeys.Index, indices, target);
   };
