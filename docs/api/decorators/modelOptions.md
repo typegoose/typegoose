@@ -183,3 +183,37 @@ Only hooks that can be matched against each-other can be de-duplicated.
 :::note
 If [`enableMergePlugins`](#enablemergeplugins) and [`enableMergeHooks`](#enablemergehooks) are both `false`, then the global plugins will be automatically applied by typegoose, see [Mongoose Issue #12696](https://github.com/Automattic/mongoose/issues/12696).
 :::
+
+#### disableLowerIndexes
+
+Default: `false`
+
+Disable inheriting lower indexes (still include self), similar to native mongoose `schema.clone().clearIndexes()`.
+
+Example:
+
+```ts
+@index({ dummy1: 1 })
+class IndexInherit5 {
+  @prop()
+  public dummy1?: string;
+}
+
+@index({ dummy2: 1 })
+@modelOptions({ options: { disableLowerIndexes: true } }) // does not inherit index "{ dummy1: 1 }", but will still include "{ dummy2: 1 }"
+class IndexInherit6 extends IndexInherit5 {
+  @prop()
+  public dummy2?: string;
+}
+
+@index({ dummy3: 1 })
+class IndexInherit7 extends IndexInherit6 {
+  @prop()
+  public dummy3?: string;
+}
+
+const sch = buildSchema(IndexInherit7);
+
+const indexes = sch.indexes();
+assert(indexes.length === 2);
+```

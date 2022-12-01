@@ -17,7 +17,7 @@ import type { IIndexArray, IndexOptions } from './types';
 export function index(fields: mongoose.IndexDefinition, options?: IndexOptions): ClassDecorator {
   return (target: any) => {
     logger.info('Adding "%o" Indexes to %s', { fields, options }, getName(target));
-    const indices: IIndexArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.Index, target) ?? []);
+    const indices: IIndexArray[] = Array.from(Reflect.getOwnMetadata(DecoratorKeys.Index, target) ?? []);
     indices.push({ fields, options });
     Reflect.defineMetadata(DecoratorKeys.Index, indices, target);
   };

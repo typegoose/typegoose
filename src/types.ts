@@ -457,6 +457,21 @@ export interface ICustomOptions {
    * @default false
    */
   enableMergeHooks?: boolean;
+  /**
+   * Disable all lower indexes than this class (works like `sch.clone().clearIndexes()`)
+   * @default false
+   */
+  disableLowerIndexes?: boolean;
+}
+
+/** Extra options for "_buildSchema" in "schema.ts" */
+export interface IBuildSchemaOptions {
+  /**
+   * Add indexes from this class?
+   * will be "false" when {@link ICustomOptions.disableLowerIndexes} is "true" for some upper class
+   * @default true
+   */
+  buildIndexes?: boolean;
 }
 
 /** Type for the Values stored in the Reflection for Properties */

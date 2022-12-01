@@ -4,6 +4,7 @@ import { buildSchema } from '../typegoose';
 import type {
   AnyParamConstructor,
   DecoratedPropertyMetadataMap,
+  IBuildSchemaOptions,
   IHooksArray,
   IIndexArray,
   IModelOptions,
@@ -34,6 +35,7 @@ import {
  * @param opt Overwrite SchemaOptions (Merged with Decorator Options)
  * @param isFinalSchema Set if this Schema is the final (top-level) to build, only when "true" are discriminators, hooks, virtuals, etc applied
  * @param overwriteOptions Overwrite ModelOptions for Name Generation (Not Merged with Decorator)
+ * @param extraOptions Extra options to affect what needs to be done
  * @returns Returns the Build Schema
  * @private
  */
@@ -42,7 +44,8 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   origSch?: mongoose.Schema<any>,
   opt?: mongoose.SchemaOptions,
   isFinalSchema: boolean = true,
-  overwriteOptions?: IModelOptions
+  overwriteOptions?: IModelOptions,
+  extraOptions?: IBuildSchemaOptions
 ) {
   assertionIsClass(cl);
 
@@ -82,6 +85,21 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   }
 
   sch.loadClass(cl);
+
+  // in the block below are all the things that need to be done for each class, not just the final schema
+  // for example when using "getOwnMetadata" over "getMetadata" (and having a clone in there)
+  {
+    /** Get Metadata for indices */
+    const indices: IIndexArray[] = Reflect.getOwnMetadata(DecoratorKeys.Index, cl);
+    const buildIndexes = typeof extraOptions?.buildIndexes === 'boolean' ? extraOptions?.buildIndexes : true;
+
+    if (Array.isArray(indices) && buildIndexes) {
+      for (const index of indices) {
+        logger.debug('Applying Index:', index);
+        sch.index(index.fields, index.options);
+      }
+    }
+  }
 
   if (isFinalSchema) {
     /** Get Metadata for Nested Discriminators */
@@ -138,16 +156,6 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       for (const [key, options] of virtuals) {
         logger.debug('Applying Virtual Populates:', key, options);
         sch.virtual(key, options);
-      }
-    }
-
-    /** Get Metadata for indices */
-    const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, cl);
-
-    if (Array.isArray(indices)) {
-      for (const index of indices) {
-        logger.debug('Applying Index:', index);
-        sch.index(index.fields, index.options);
       }
     }
 

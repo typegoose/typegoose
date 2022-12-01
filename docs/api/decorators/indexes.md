@@ -44,3 +44,7 @@ class Location {
   public location?: number[][];
 }
 ```
+
+## Extra
+
+Inheriting indexes from lower classes can be disabled with [ModelOption `disableLowerIndexes`](./modelOptions.md#disablelowerindexes).

@@ -33,6 +33,7 @@ import type {
   ReturnModelType,
   SubDocumentType,
   ArraySubDocumentType,
+  IBuildSchemaOptions,
 } from './types';
 import { ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
@@ -146,21 +147,32 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   /** Parent Constructor */
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   /* This array is to execute from lowest class to highest (when extending) */
-  const parentClasses: AnyParamConstructor<any>[] = [];
+  const parentClasses: [AnyParamConstructor<any>, IBuildSchemaOptions][] = [];
+  let upperOptions: IBuildSchemaOptions = {};
 
-  // iterate trough all parents
+  // iterate trough all parents to the lowest class
   while (parentCtor?.name !== 'Object') {
     // add lower classes (when extending) to the front of the array to be processed first
-    parentClasses.unshift(parentCtor);
+    parentClasses.unshift([parentCtor, upperOptions]);
+
+    // clone object, because otherwise it will affect the upper classes too because the same reference is used
+    upperOptions = { ...upperOptions };
+
+    const ropt: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, parentCtor) ?? {};
+
+    // only affect options of lower classes, not the class the options are from
+    if (ropt.options?.disableLowerIndexes) {
+      upperOptions.buildIndexes = false;
+    }
 
     // set next parent
     parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
   }
 
   // iterate and build class schemas from lowest to highest (when extending classes, the lower class will get build first) see https://github.com/typegoose/typegoose/pull/243
-  for (const parentClass of parentClasses) {
+  for (const [parentClass, extraOptions] of parentClasses) {
     // extend schema
-    sch = _buildSchema(parentClass, sch!, mergedOptions, false);
+    sch = _buildSchema(parentClass, sch!, mergedOptions, false, undefined, extraOptions);
   }
 
   // get schema of current model
