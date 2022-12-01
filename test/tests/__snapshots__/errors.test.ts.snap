@@ -133,6 +133,8 @@ exports[`tests for "NotValidModelError" [E025] should throw a Error when no vali
 
 exports[`tests for "NotValidModelError" [E025] should throw a Error when no valid model is passed to "getDiscriminatorModelForClass" [NotValidModelError] [E025] 1`] = `"Expected \\"getDiscriminatorModelForClass.from\\" to be a valid mongoose.Model! (got: \\"string\\") [E025]"`;
 
+exports[`tests for "PathNotInSchemaError" [E030] should throw a Error when the key does not exist in the schema 1`] = `"Path \\"notExisting\\" on \\"Testy\\" does not exist in the Schema! [E030]"`;
+
 exports[`tests for "RefOptionIsUndefinedError" [E005] should error if "ref" is set to a function, but returns "null" or "undefined" [RefOptionIsUndefinedError] [E005] 1`] = `"Prop-Option \\"ref\\"'s value is \\"null\\" or \\"undefined\\" for \\"Main.nested\\" [E005]"`;
 
 exports[`tests for "RefOptionIsUndefinedError" [E005] should error if ref is set but is "null" or "undefined" [RefOptionIsUndefinedError] [E005] 1`] = `"Prop-Option \\"ref\\"'s value is \\"null\\" or \\"undefined\\" for \\"RefUndefined.someref\\" [E005]"`;

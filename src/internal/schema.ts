@@ -110,7 +110,6 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
         logger.debug('Applying Nested Discriminators for:', key, discriminators);
 
         const path = sch.path(key) as mongoose.Schema.Types.DocumentArray | undefined;
-        // TODO: add test for this error
         assertion(!isNullOrUndefined(path), () => new PathNotInSchemaError(finalName, key));
         // TODO: add test for this error
         assertion(typeof path.discriminator === 'function', () => new NoDiscriminatorFunctionError(finalName, key));

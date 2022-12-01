@@ -21,11 +21,12 @@ import { DecoratorKeys } from '../../src/internal/constants';
 import { _buildSchema } from '../../src/internal/schema';
 import * as utils from '../../src/internal/utils';
 import { mapValueToSeverity } from '../../src/globalOptions';
-import { BasePropOptions } from '../../src/types';
+import { BasePropOptions, NestedDiscriminatorsMap } from '../../src/types';
 import {
   ExpectedTypeError,
   InvalidEnumTypeError,
   InvalidOptionsConstructorError,
+  PathNotInSchemaError,
   ResolveTypegooseNameError,
 } from '../../src/internal/errors';
 
@@ -815,4 +816,24 @@ it('should throw a Error in "processProp" when using a invalid type for enums [I
     expect(err).toBeInstanceOf(InvalidEnumTypeError);
     expect(err.message).toMatchSnapshot();
   }
+});
+
+describe('tests for "PathNotInSchemaError" [E030]', () => {
+  it('should throw a Error when the key does not exist in the schema', () => {
+    class Testy {}
+
+    Reflect.defineMetadata(
+      DecoratorKeys.NestedDiscriminators,
+      new Map([['notExisting', [{ type: Testy }]]]) as NestedDiscriminatorsMap,
+      Testy
+    );
+
+    try {
+      buildSchema(Testy);
+      fail('Expected to throw "PathNotInSchemaError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(PathNotInSchemaError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
 });
