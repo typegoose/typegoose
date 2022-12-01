@@ -88,12 +88,6 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
     mongoose.model.bind(mongoose);
 
   const compiledmodel: mongoose.Model<any> = model(name, buildSchema(cl, mergedOptions.schemaOptions, rawOptions));
-  const refetchedOptions = (Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) as IModelOptions) ?? {};
-
-  if (refetchedOptions?.options?.runSyncIndexes) {
-    // no async/await, to wait for execution on connection in the background
-    compiledmodel.syncIndexes();
-  }
 
   return addModelToTypegoose<U, QueryHelpers>(compiledmodel, cl, {
     existingMongoose: mergedOptions?.existingMongoose,

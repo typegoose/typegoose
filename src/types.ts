@@ -441,8 +441,6 @@ export interface ICustomOptions {
   automaticName?: boolean;
   /** Allow "mongoose.Schema.Types.Mixed"? */
   allowMixed?: Severity;
-  /** Run "model.syncIndexes" when model is finished compiling? */
-  runSyncIndexes?: boolean;
   /**
    * Enable Overwriting of the plugins on the "to-be" discriminator schema with the base schema's
    * Note: this does not actually "merge plugins", it will overwrite the "to-be" discriminator's plugins with the base schema's
