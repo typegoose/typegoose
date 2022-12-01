@@ -11,11 +11,10 @@ function buildSchema<U extends AnyParamConstructor<any>>(cl: U, options?: mongoo
 
 **Parameters:**
 
-| Name                                                      |           Type           | Description                                                   |
-| :-------------------------------------------------------- | :----------------------: | :------------------------------------------------------------ |
-| `cl` <span class="badge badge--secondary">Required</span> |           `U`            | The Class to build a Schema from                              |
-| `options`                                                 | `mongoose.SchemaOptions` | Overwrite Schema Options, merged with original schema options |
-| `overwriteOptions`                                        |     `IModelOptions`      | Overwrite `IModelOptions` for name generation                 |
+| Name                                                      |      Type       | Description                                                                              |
+| :-------------------------------------------------------- | :-------------: | :--------------------------------------------------------------------------------------- |
+| `cl` <span class="badge badge--secondary">Required</span> |       `U`       | The Class to build a Schema from                                                         |
+| `options`                                                 | `IModelOptions` | Overwrite Options, like for naming or general SchemaOptions the class gets compiled with |
 
 `buildSchema` compiles the input class `cl` to a mongoose schema with all options applied.
 
