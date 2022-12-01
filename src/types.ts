@@ -468,7 +468,7 @@ export interface ICustomOptions {
 export interface IBuildSchemaOptions {
   /**
    * Add indexes from this class?
-   * will be "false" when {@link ICustomOptions.disableLowerIndexes} is "true" for some upper class
+   * will be "false" when "ICustomOptions.disableLowerIndexes" is "true" for some upper class
    * @default true
    */
   buildIndexes?: boolean;
