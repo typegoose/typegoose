@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import { CarModel } from '../models/car';
-import { Genders, Role, UserModel } from '../models/user';
+import { Genders, Role, User, UserModel } from '../models/user';
 
 it(
   'should create a User with connections',
@@ -59,8 +59,10 @@ it(
       assertion(!isNullOrUndefined(foundUser.previousJobs), new Error('Expected "previousJobs" to not be undefined/null'));
       assertion(!isNullOrUndefined(foundUser.previousCars), new Error('Expected "previousCars" to not be undefined/null'));
 
-      // @ts-expect-error "id" does not exist in the type by default and mongoose has no handling currently to add virtuals / getters
-      expect(foundUser.toObject({ virtuals: true, getters: true })).toMatchSnapshot({
+      // the following requires a custom type, because property (virtual) "id" does not get added to the type by default
+      expect<mongoose.LeanDocument<User> & { _id: mongoose.Types.ObjectId; id: string }>(
+        foundUser.toObject({ virtuals: true, getters: true })
+      ).toMatchSnapshot({
         _id: expect.any(mongoose.Types.ObjectId),
         id: expect.any(String),
         job: {
