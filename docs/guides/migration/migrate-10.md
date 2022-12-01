@@ -43,6 +43,14 @@ When typescript 4.9 first released, it didnt work with typegoose and version 9.x
 
 As a side-effect, the type-narrowing also works with the `else` case and excludes the `true` case.
 
+## Indexes can now be set to not be inherited
+
+In Typegoose 10.0 a new ModelOption has been introduced named [`disableLowerIndexes`](../../api/decorators/modelOptions.md#disablelowerindexes) to choose to not inherit any of the lower indexes.
+
+## Option `runSyncIndexes` has been removed
+
+The Model Option `runSyncIndexes` has been removed. If wanting to continue to use it, manually call `model.syncIndexes()`.
+
 ## Function `getClassForDocument` has been removed
 
 Function `getClassForDocument` has been removed and merged into [`getClass`](../../api/functions/getClass.md) directly.

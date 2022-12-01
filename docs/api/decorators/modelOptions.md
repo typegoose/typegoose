@@ -124,13 +124,6 @@ Set this to a Severity you want.
 - `WARN`: [default] Warn for it in the logger, but still allow the use of it
 - `ERROR`: Error out when it comes to it
 
-#### runSyncIndexes
-
-Run `model.syncIndexes` when model is finished compiling?
-:::caution
-Only run this while in development. It could cause race-conditions because `getModelForClass` is not async.
-:::
-
 #### enableMergePlugins
 
 Default: `false`
