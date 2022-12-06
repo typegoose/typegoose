@@ -11,7 +11,7 @@ This Guide is written for migration from version `9.13.2` to `10.0.0`, for versi
 
 ## Requirements changed
 
-- Mongoose `6.7.5` or higher is now required
+- Mongoose `6.8.0` or higher is now required
 - Typescript `4.9` or higher is now required to be used
 - NodeJS 14 is now the lowest supported nodejs version
 
