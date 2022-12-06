@@ -218,3 +218,45 @@ async function gh732() {
 }
 
 gh732();
+
+function postHookErrorOption() {
+  @typegoose.post<TestErrorOption>(
+    'count',
+    function (...args) {
+      expectType<NativeError>(args[0]);
+      expectType<any>(args[1]);
+      expectType<typegoose.mongoose.CallbackWithoutResultAndOptionalError>(args[2]);
+    },
+    { errorHandler: true }
+  )
+  @typegoose.post<TestErrorOption>(
+    'deleteOne',
+    function (...args) {
+      expectType<NativeError>(args[0]);
+      expectType<any>(args[1]);
+      expectType<typegoose.mongoose.CallbackWithoutResultAndOptionalError>(args[2]);
+    },
+    { errorHandler: true }
+  )
+  @typegoose.post(
+    'aggregate',
+    function (...args) {
+      expectType<NativeError>(args[0]);
+      expectType<any[]>(args[1]);
+      expectType<typegoose.mongoose.CallbackWithoutResultAndOptionalError>(args[2]);
+    },
+    { errorHandler: true }
+  )
+  @typegoose.post<typeof TestErrorOption>(
+    'insertMany',
+    function (...args) {
+      expectType<NativeError>(args[0]);
+      expectType<any>(args[1]);
+      expectType<typegoose.mongoose.CallbackWithoutResultAndOptionalError>(args[2]);
+    },
+    { errorHandler: true }
+  )
+  class TestErrorOption {}
+}
+
+postHookErrorOption();
