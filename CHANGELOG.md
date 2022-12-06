@@ -1,3 +1,15 @@
+## [10.0.0-beta.2](https://github.com/typegoose/typegoose/compare/v10.0.0-beta.1...v10.0.0-beta.2) (2022-12-06)
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 6.8.0 ([8e8958f](https://github.com/typegoose/typegoose/commit/8e8958f60753e671661086b76c51ac06c2ccb8ed))
+
+
+### Fixes
+
+* **hooks:** update types for new "errorHandler" option ([f52ea0d](https://github.com/typegoose/typegoose/commit/f52ea0d4caf1f73686280ff01123db24b84f54d5))
+
 ## [10.0.0-beta.1](https://github.com/typegoose/typegoose/compare/v9.13.2...v10.0.0-beta.1) (2022-12-01)
 
 
