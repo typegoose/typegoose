@@ -51,7 +51,7 @@ class Cat3 {
 Accepts Type: `boolean`
 
 Set this to true, if the property is required (best practice is `public property!: any`, note the `!`)  
-For more information see the [mongoose documentation](http://mongoosejs.com/docs/api.html#schematype_SchemaType-required)
+For more information see the [mongoose documentation](http://mongoosejs.com/docs/api/schematype.html#schematype_SchemaType-required)
 
 Example:
 
@@ -84,7 +84,7 @@ class IndexedClass {
 
 Accepts Type: `boolean`
 
-Create an Index that sets this property to be [unique](http://mongoosejs.com/docs/api.html#schematype_SchemaType-unique).
+Create an Index that sets this property to be [unique](http://mongoosejs.com/docs/api/schematype.html#schematype_SchemaType-unique).
 
 Example:
 
@@ -217,7 +217,7 @@ Accepts Type: `object` OR `RegExp` OR `(value) => boolean` OR `object[]` Require
 
 Set a custom function for validation (must return a boolean).
 
-Example: (For more Examples look at [Mongoose's Documentation](https://mongoosejs.com/docs/api.html#schematype_SchemaType-validate))
+Example: (For more Examples look at [Mongoose's Documentation](https://mongoosejs.com/docs/api/schematype.html#schematype_SchemaType-validate))
 
 ```ts
 // "maxlength" already exists as an option, this just shows how to use validate
@@ -257,7 +257,7 @@ class Dummy {
 Accepts Type: `boolean`
 
 Set it to `false`, if you want to retrieve data without this property by default  
--> [Read more in Mongoose's official documentation](https://mongoosejs.com/docs/api.html#schematype_SchemaType-select)
+-> [Read more in Mongoose's official documentation](https://mongoosejs.com/docs/api/schematype.html#schematype_SchemaType-select)
 
 ```ts
 class Dummy {

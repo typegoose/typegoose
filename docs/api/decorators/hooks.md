@@ -39,7 +39,7 @@ interface PreHooks {
 | :------------------------------------------------------------ | :-----------------------------------------------------------------------------------: | :---------------------------------------------------- |
 | `method` <span class="badge badge--secondary">Required</span> |                            `string \| RegExp \| string[]`                             | The Method(s) to add the `fn` to                      |
 | `fn` <span class="badge badge--secondary">Required</span>     |                                        `Func`                                         | The Function to run for the Method(s) set in `method` |
-| `options`                                                     | [`mongoose.SchemaPreOptions`](https://mongoosejs.com/docs/api.html#schema_Schema-pre) | Options to set when to run the hook                   |
+| `options`                                                     | [`mongoose.SchemaPreOptions`](https://mongoosejs.com/docs/api/schema.html#schema_Schema-pre) | Options to set when to run the hook                   |
 
 `@pre` is used to set Document & Query pre hooks, works like `schema.pre` only difference is the switched `options` and `method`(`fn`) parameter positions.
 
@@ -123,7 +123,7 @@ interface PostHooks {
 | :------------------------------------------------------------ | :------------------------------------------------------------------------------------: | :---------------------------------------------------- |
 | `method` <span class="badge badge--secondary">Required</span> |                             `string \| RegExp \| string[]`                             | The Method(s) to add the `fn` to                      |
 | `fn` <span class="badge badge--secondary">Required</span>     |                                         `Func`                                         | The Function to run for the Method(s) set in `method` |
-| `options`                                                     | [`mongoose.SchemaPreOptions`](https://mongoosejs.com/docs/api.html#schema_Schema-post) | Options to set when to run the hook                   |
+| `options`                                                     | [`mongoose.SchemaPreOptions`](https://mongoosejs.com/docs/api/schema.html#schema_Schema-post) | Options to set when to run the hook                   |
 
 `@post` is used to set Document & Query pre hooks, works like `schema.post` only difference is the switched `options` and `method`(`fn`) parameter positions.
 

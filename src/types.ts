@@ -115,7 +115,7 @@ export interface BasePropOptions {
   expires?: mongoose.SchemaTypeOptions<any>['expires'];
   /**
    * Should this property have an "text" index?
-   * @link https://mongoosejs.com/docs/api.html#schematype_SchemaType-text
+   * @link https://mongoosejs.com/docs/api/schematype.html#schematype_SchemaType-text
    */
   text?: mongoose.SchemaTypeOptions<any>['text'];
   /** Should subdocuments get their own id?
