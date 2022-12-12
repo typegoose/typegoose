@@ -8,10 +8,10 @@ title: 'getClass'
 ```ts
 function getClass(
   input:
-    | (mongoose.Document & IObjectWithTypegooseFunction)
-    | (mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction)
+    | mongoose.Document
+    | { typegooseName: () => string }
+    | { typegooseName: string }
     | string
-    | IObjectWithTypegooseName
     | any
 ): NewableFunction | undefined
 ```
@@ -24,14 +24,18 @@ function getClass(
 
 `getClass` is used to get a Class from a variety of inputs, which include:
 
-- `mongoose.Document & IObjectWithTypegooseFunction`: get a Class from a document which has a `.typegooseName` function, basically the same as [`getClassForDocument`](./getClassForDocument.md)
-- `mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction`: get a Class from a subdocument which has a `.typegooseName` function
-- `string`: get a Class from a name directly (directly passed to [`getName`](./getName.md))
-- `IObjectWithTypegooseName`: get a Class from any object that has a `.typegooseName` property
-- `any`: try to get a Class from any of the above, without having proper types
+- `mongoose.Document`; Get the name to look-up from `doc.constructor.modelName`, only applies if no `typegooseName` function or property is present
+- `{ typegooseName: () => string }`: Get the name to look-up from the `typegooseName` function (currently automatically added by typegoose)
+- `{ typegooseName: string }`: Get the name to look-up from the `typegooseName` getter / property.
+- `string`: Directly specify the name to look-up.
+- `any`: Try to get a Class from any of the above, without having proper types.
 
-:::note
-`Embedded` & `Document` only work if the class / schema / model was created with Typegoose (through [`buildSchema`](./buildSchema.md)).
+:::caution
+This look-up only works if the class has been correctly registered with [`addModelToTypegoose`](./addModelToTypegoose.md) (automatically done when calling [`getModelForClass`](./getModelForClass.md) or [`getDiscriminatorModelForClass`](./getDiscriminatorModelForClass.md), but **not** for [`buildSchema`](./buildSchema.md)).
+:::
+:::tip
+Any class that got compiled with [`buildSchema`](./buildSchema.md) (transparently used by [`getModelForClass`](./getModelForClass.md) or [`getDiscriminatorModelForClass`](./getDiscriminatorModelForClass.md)) a `typegooseName` function gets automatically added.
+This even makes it possible to get the class from sub-documents / sub-classes.
 :::
 
 ## Example

@@ -8,20 +8,23 @@ title: 'Ref<PopulatedType, RawId>'
 ```ts
 type Ref<
   PopulatedType,
-  RawId extends mongoose.RefType>
+  RawId extends mongoose.RefType = PopulatedType extends { _id?: mongoose.RefType }
+    ? NonNullable<PopulatedType['_id']>
+    : mongoose.Types.ObjectId
+>
 ```
 
 **Parameters:**
 
-| Name                                                     |                      Type                      | Description                                |
-| :------------------------------------------------------- | :--------------------------------------------: | :----------------------------------------- |
-| `PopulatedType` <span class="badge badge--secondary">Required</span> |           `object`           | The Type of the what is expected when it is populated |
-| `RawId`                                           | `mongoose.RefType` | Overwrite the Reference type (the type of `_id` of `PopulatedType`)              |
+| Name                                                                 |        Type        | Description                                                         |
+| :------------------------------------------------------------------- | :----------------: | :------------------------------------------------------------------ |
+| `PopulatedType` <span class="badge badge--secondary">Required</span> |      `object`      | The Type of the what is expected when it is populated               |
+| `RawId`                                                              | `mongoose.RefType` | Overwrite the Reference type (the type of `_id` of `PopulatedType`) |
 
 The Type `Ref<PopulatedType, RawId>` is the type used for [References](https://mongoosejs.com/docs/populate.html).
 
 - `PopulatedType`: This is the Class being referenced.
-- `RawId`: This should be the `_id` Type of the referenced Class, by default its `mongoose.Types.ObjectId`
+- `RawId`: This should be the `_id` Type of the referenced Class, by default its `mongoose.Types.ObjectId` and should get automatically inferred if a `_id` property is present on the target class.
 
 There are typeguards to check if a reference is populated or of the reference type:
 
@@ -34,7 +37,7 @@ For more and better explained examples, look at the [Reference Other Classes](..
 
 ## Example
 
-Referenced Class in the examples:
+Class to-be-referenced:
 
 ```ts
 class Kitten {

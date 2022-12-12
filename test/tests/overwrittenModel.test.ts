@@ -91,3 +91,26 @@ it('should delete model with class when normal name is not found in "models"', (
   deleteModelWithClass(CustomNameOnFunctionCall);
   expect(models.has(model.modelName)).toBeFalsy();
 });
+
+it('should not delete anything if nothing can be found', () => {
+  class TestClass {
+    @prop()
+    public dummy?: string;
+  }
+
+  getModelForClass(TestClass);
+
+  jest.spyOn(models, 'delete').mockImplementationOnce(() => false);
+  jest.spyOn(constructors, 'delete').mockImplementationOnce(() => false);
+  const modelsBefore = models.size;
+  const constructorsBefore = constructors.size;
+
+  expect(models.has('SomeRandomClass')).toStrictEqual(false); // to ensure that no class with that name has been registered
+  expect(constructors.has('SomeRandomClass')).toStrictEqual(false); // to ensure that no class with that name has been registered
+  deleteModelWithClass(class SomeRandomClass {});
+
+  expect(models.size).toStrictEqual(modelsBefore);
+  expect(constructors.size).toStrictEqual(constructorsBefore);
+  expect(models.delete).not.toHaveBeenCalled();
+  expect(constructors.delete).not.toHaveBeenCalled();
+});

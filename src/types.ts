@@ -56,6 +56,9 @@ export type DeferredFunc<T = any> = (...args: unknown[]) => T;
  */
 export type DynamicStringFunc<T extends AnyParamConstructor<any>> = (doc: DocumentType<T>) => string;
 
+/** Type to keep the "discriminators" options consistent in types */
+export type NestedDiscriminatorsFunction = DeferredFunc<(AnyParamConstructor<any> | DiscriminatorObject)[]>;
+
 /**
  * This Interface for most properties uses "mongoose.SchemaTypeOptions<any>['']", but for some special (or typegoose custom) options, it is not used
  *
@@ -112,7 +115,7 @@ export interface BasePropOptions {
   expires?: mongoose.SchemaTypeOptions<any>['expires'];
   /**
    * Should this property have an "text" index?
-   * @link https://mongoosejs.com/docs/api.html#schematype_SchemaType-text
+   * @link https://mongoosejs.com/docs/api/schematype.html#schematype_SchemaType-text
    */
   text?: mongoose.SchemaTypeOptions<any>['text'];
   /** Should subdocuments get their own id?
@@ -207,7 +210,7 @@ export interface BasePropOptions {
    *
    * Note: Custom Typegoose Option
    */
-  discriminators?: DeferredFunc<(AnyParamConstructor<any> | DiscriminatorObject)[]>;
+  discriminators?: NestedDiscriminatorsFunction;
   /**
    * Use option {@link BasePropOptions.type}
    * @see https://typegoose.github.io/typegoose/docs/api/decorators/prop#map-options
@@ -392,15 +395,10 @@ export type RefType = mongoose.RefType;
  */
 export type Ref<
   PopulatedType,
-  RawId extends mongoose.RefType =
-    | (PopulatedType extends { _id?: mongoose.RefType } ? NonNullable<PopulatedType['_id']> : mongoose.Types.ObjectId)
-    | undefined
-> = mongoose.PopulatedDoc<PopulatedType, RawId>;
-
-/**
- * A Function type for a function that doesn't have any arguments and doesn't return anything
- */
-export type EmptyVoidFn = () => void;
+  RawId extends mongoose.RefType = PopulatedType extends { _id?: mongoose.RefType }
+    ? NonNullable<PopulatedType['_id']>
+    : mongoose.Types.ObjectId
+> = mongoose.PopulatedDoc<DocumentType<PopulatedType>, RawId>;
 
 export interface DiscriminatorObject {
   /** The Class to use */
@@ -422,6 +420,16 @@ export interface IModelOptions {
   existingConnection?: mongoose.Connection;
   /** Typegoose Custom Options */
   options?: ICustomOptions;
+}
+
+/** Interface for just all naming options */
+export interface INamingOptions {
+  /** Same as in {@link ICustomOptions} */
+  customName?: ICustomOptions['customName'];
+  /** Same as in {@link ICustomOptions} */
+  automaticName?: ICustomOptions['automaticName'];
+  /** Same as in {@link mongoose.SchemaOptions} */
+  schemaCollection?: mongoose.SchemaOptions['collection'];
 }
 
 /** Typegoose options, mostly for "modelOptions({ options: ICustomOptions })" */
@@ -447,28 +455,6 @@ export interface ICustomOptions {
   /** Allow "mongoose.Schema.Types.Mixed"? */
   allowMixed?: Severity;
   /**
-   * Run "model.syncIndexes" when model is finished compiling?
-   * @deprecated Use "model.syncIndexes()" manually
-   * */
-  runSyncIndexes?: boolean;
-  /**
-   * Disable applying plugins when the class is a discriminator.
-   * This can be set to "true" when encountering that plugins or plugin-hooks are duplicated in a discriminator
-   * This is necessary because currently mongoose merges the base schema for a discriminator into the discriminator schema
-   * which will result in the plugins being overwritten and hooks may be duplicated.
-   * Only applies to discriminator schemas, not the base for the discriminators themself
-   * @see {@link https://github.com/Automattic/mongoose/issues/12472}
-   * @deprecated Not used anymore since version 9.13.0
-   * @default false
-   */
-  disablePluginsOnDiscriminator?: never;
-  /**
-   * Option if the current class is meant to be a discriminator
-   * @deprecated Not used anymore since version 9.13.0
-   * @internal
-   */
-  $isDiscriminator?: never;
-  /**
    * Enable Overwriting of the plugins on the "to-be" discriminator schema with the base schema's
    * Note: this does not actually "merge plugins", it will overwrite the "to-be" discriminator's plugins with the base schema's
    * If {@link ICustomOptions.enableMergePlugins} and {@link ICustomOptions.enableMergeHooks} are both "false", then the global plugins will be automatically applied by typegoose, see https://github.com/Automattic/mongoose/issues/12696
@@ -482,26 +468,46 @@ export interface ICustomOptions {
    * @default false
    */
   enableMergeHooks?: boolean;
+  /**
+   * Disable all lower indexes than this class (works like `sch.clone().clearIndexes()`)
+   * @default false
+   */
+  disableLowerIndexes?: boolean;
+  /**
+   * Set the Nested Discriminators on the *base* of the Discriminators
+   *
+   * This option can be used over the prop-option to not have to re-define discriminators if used in multiple classes
+   */
+  discriminators?: NestedDiscriminatorsFunction;
+}
+
+/** Extra options for "_buildSchema" in "schema.ts" */
+export interface IBuildSchemaOptions {
+  /**
+   * Add indexes from this class?
+   * will be "false" when "ICustomOptions.disableLowerIndexes" is "true" for some upper class
+   * @default true
+   */
+  buildIndexes?: boolean;
 }
 
 /** Type for the Values stored in the Reflection for Properties */
 export interface DecoratedPropertyMetadata {
   /** Prop Options */
-  options: any;
-  /** Target Class */
+  options: KeyStringAny;
+  /** The Target Reflection target for getting metadata from keys */
   target: AnyParamConstructor<any>;
   /** Property name */
   key: string | symbol;
   /** What is it for a prop type? */
-  // TODO: for the next major version (10), change this name to "proptype" or "type"
-  whatis?: PropType;
+  propType?: PropType;
 }
 export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropertyMetadata>;
 
 /**
- * copy-paste from mongodb package (should be same as IndexOptions from 'mongodb')
+ * Alias of "mongoose.IndexOptions" for convenience
  */
-export type IndexOptions<_T> = mongoose.IndexOptions; // TODO: remove unused generic in typegoose 10
+export type IndexOptions = mongoose.IndexOptions;
 
 /**
  * Type for the Values stored in the Reflection for Indexes
@@ -512,7 +518,7 @@ export type IndexOptions<_T> = mongoose.IndexOptions; // TODO: remove unused gen
  */
 export interface IIndexArray {
   fields: KeyStringAny;
-  options?: IndexOptions<unknown>;
+  options?: IndexOptions;
 }
 
 /**
@@ -603,12 +609,12 @@ export interface IHooksArray {
   /** The Function to add as a hooks */
   func: Func;
   /** The Method to where this hook gets triggered */
-  method: string | RegExp;
+  methods: (string | RegExp)[];
   /**
    * Options for Hooks
    * @see https://mongoosejs.com/docs/middleware.html#naming
    */
-  options: HookOptionsEither;
+  options?: HookOptionsEither;
 }
 
 export interface IGlobalOptions {
@@ -626,14 +632,6 @@ export interface IGlobalOptions {
 /** Interface describing a Object that has a "typegooseName" Function */
 export interface IObjectWithTypegooseFunction {
   typegooseName(): string;
-}
-
-/**
- * Interface describing a Object that has a "typegooseName" Value
- * @deprecated This interface and value will be removed in typegoose 10, use {@link IObjectWithTypegooseFunction} instead
- */
-export interface IObjectWithTypegooseName {
-  typegooseName: string;
 }
 
 /** For the types that error that seemingly don't have a prototype */
@@ -657,3 +655,9 @@ export interface GetTypeReturn {
  * This type is separate from "{@link KeyStringAny}" because it has a different meaning
  */
 export type BeAnObject = Record<string, any>;
+
+/** Options used for "processProp" */
+export interface ProcessPropOptions extends DecoratedPropertyMetadata {
+  /** The target Class's static version */
+  cl: AnyParamConstructor<any>;
+}

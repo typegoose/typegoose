@@ -16,7 +16,7 @@ import type { Func, IPluginsArray } from './types';
 export function plugin<TFunc extends Func, TParams = Parameters<TFunc>[1]>(mongoosePlugin: TFunc, options?: TParams): ClassDecorator {
   // don't check if options is an object, because any plugin could make it anything
   return (target: any) => {
-    logger.info('Adding plugin "%s" to "%s" with options: "%o"', mongoosePlugin?.name ?? '<anonymous>', getName(target), options);
+    logger.info('Adding plugin "%s" to "%s" with options: "%o"', mongoosePlugin?.name || '<anonymous>', getName(target), options);
     const plugins: IPluginsArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.Plugins, target) ?? []);
     plugins.push({ mongoosePlugin, options });
     Reflect.defineMetadata(DecoratorKeys.Plugins, plugins, target);

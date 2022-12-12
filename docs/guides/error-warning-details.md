@@ -7,7 +7,7 @@ title: 'Error & Warning Details'
 
 ### Mongoose Version [E001]
 
-Error: `Please use mongoose 6.7.2 or higher (Current mongoose: x.x.x) [E001]`
+Error: `Please use mongoose 6.8.0 or higher (Current mongoose: x.x.x) [E001]`
 
 Error Class: `Error`
 
@@ -18,14 +18,14 @@ Typegoose requires at least the mentioned mongoose version because that version 
 
 ### NodeJS Version [E002]
 
-Error: `You are using a NodeJS Version below 12.22.0, Please Upgrade! [E002]`
+Error: `You are using a NodeJS Version below 14.17.0, Please Upgrade! [E002]`
 
 Error Class: `Error`
 
 Details:  
-Typegoose requires at least NodeJS Version 12.22, because:
+Typegoose requires at least NodeJS Version 14.17, because:
 
-- it is the lowest version also supported by mongoose
+- it is the lowest LTS version, which many (dev) dependencies already require
 
 ### Function only supports to be called "${supported}" times [E003]
 
@@ -509,6 +509,21 @@ The Path `key` of Schema `name` does not have a function called `discriminator`,
 :::note
 If this Error is encountered, please open a [new Issue in Github](https://github.com/typegoose/typegoose/issues/new/choose).
 :::
+
+### Duplicate Option Definition [E032]
+
+Error: `Duplicate Option definition at [${duplicateAt.join(',')}] [E032]`
+
+Error Class: `DuplicateOptionsError`
+
+Details:  
+The options at `duplicateAt` are defined, but only one can be used.
+
+This Error gets most commonly thrown when:
+
+- When option `discriminators` is defined both as a prop-option and as a model-option.
+
+This Error can be fixed by only defining one of the mention options.
 
 ## Warnings
 

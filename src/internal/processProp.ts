@@ -2,15 +2,15 @@ import { logger } from '../logSettings';
 import { buildSchema, mongoose, Passthrough } from '../typegoose';
 import type {
   AnyParamConstructor,
-  DecoratedPropertyMetadata,
   DiscriminatorObject,
+  IModelOptions,
   KeyStringAny,
   MappedInnerOuterOptions,
   NestedDiscriminatorsMap,
+  ProcessPropOptions,
   VirtualPopulateMap,
 } from '../types';
 import { DecoratorKeys, PropType } from './constants';
-import { schemas } from './data';
 import {
   CannotBeSymbolError,
   InvalidEnumTypeError,
@@ -23,6 +23,7 @@ import {
   RefOptionIsUndefinedError,
   SelfContainingClassError,
   StringLengthExpectedError,
+  DuplicateOptionsError,
 } from './errors';
 import * as utils from './utils';
 
@@ -30,12 +31,12 @@ import * as utils from './utils';
  * Function that is the actual processing of the prop's (used for caching)
  * @param input All the options needed for prop's
  */
-export function processProp(input: DecoratedPropertyMetadata): void {
+export function processProp(input: ProcessPropOptions): void {
   const { key, target } = input;
   const name = utils.getName(target);
   const rawOptions: KeyStringAny = Object.assign({}, input.options);
   let Type: any | undefined = Reflect.getMetadata(DecoratorKeys.Type, target, key);
-  const propKind = input.whatis ?? detectPropType(Type);
+  const propKind = input.propType ?? detectPropType(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);
   utils.assertion(typeof key === 'string', () => new CannotBeSymbolError(name, key));
@@ -97,9 +98,17 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     buildSchema(Type);
   }
 
-  if ('discriminators' in rawOptions) {
+  const modelOptionsOfType: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, Type ?? {}) ?? {};
+
+  // throw a error when both "discriminators" as a prop-option and as a model-option are defined
+  if ('discriminators' in rawOptions && !utils.isNullOrUndefined(modelOptionsOfType?.options?.discriminators)) {
+    throw new DuplicateOptionsError(['discriminators(prop-option)', 'discriminators(model-option)']);
+  }
+
+  if ('discriminators' in rawOptions || !utils.isNullOrUndefined(modelOptionsOfType?.options?.discriminators)) {
+    const discriminatorsToUse = rawOptions?.discriminators ?? modelOptionsOfType?.options?.discriminators;
     logger.debug('Found option "discriminators" in "%s.%s"', name, key);
-    const gotType = utils.getType(rawOptions.discriminators, true);
+    const gotType = utils.getType(discriminatorsToUse, true);
     utils.assertion(gotType.dim === 1, () => new OptionDoesNotSupportOptionError('discriminators', 'dim', '1', `dim: ${gotType.dim}`));
     const discriminators: DiscriminatorObject[] = (gotType.type as (AnyParamConstructor<any> | DiscriminatorObject)[]).map((val, index) => {
       if (utils.isConstructor(val)) {
@@ -157,7 +166,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
     );
   }
 
-  const schemaProp = utils.initProperty(name, key, propKind);
+  const schemaProp = utils.getCachedSchema(input.cl);
 
   // do this early, because the other options (enum, ref, refPath, discriminators) should not matter for this one
   if (Type instanceof Passthrough) {
@@ -353,7 +362,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
   }
 
   /** Is this Type (/Class) in the schemas Map? */
-  const isInSchemas = schemas.has(utils.getName(Type));
+  const hasCachedSchema = !utils.isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.CachedSchema, Type));
 
   if (utils.isPrimitive(Type)) {
     if (utils.isObject(Type, true)) {
@@ -400,7 +409,7 @@ export function processProp(input: DecoratedPropertyMetadata): void {
 
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
-  if (utils.isObject(Type) && !isInSchemas) {
+  if (utils.isObject(Type) && !hasCachedSchema) {
     utils.warnMixed(target, key);
     logger.warn(
       'if someone can see this message, please open an new issue at https://github.com/typegoose/typegoose/issues with reproduction code for tests'

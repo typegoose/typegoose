@@ -37,6 +37,7 @@ export async function connect(extraConfig: ExtraConnectionConfig = {}): Promise<
   if (extraConfig.createNewConnection) {
     connection = await mongooseInstance.createConnection(connectionString, options).asPromise();
   } else {
+    mongoose.set('strictQuery', false); // TODO: remove in mongoose 7, disabled deprecation warning
     await mongoose.connect(connectionString, options);
     connection = mongooseInstance.connection;
   }

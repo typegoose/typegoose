@@ -52,10 +52,6 @@ export class InvalidPropTypeError extends Error {
   }
 }
 
-// For Backwards-compatability
-/** @deprecated This was renamed to "InvalidPropTypeError" and will be removed in 10.0 */
-export const InvalidWhatIsItError = InvalidPropTypeError;
-
 export class CannotBeSymbolError extends Error {
   constructor(name: string, key: string | symbol) {
     super(`A property key in Typegoose cannot be an symbol! ("${name}.${toStringNoFail(key)}") [E024]`);
@@ -147,5 +143,11 @@ export class PathNotInSchemaError extends Error {
 export class NoDiscriminatorFunctionError extends Error {
   constructor(name: string, key: string) {
     super(`Path "${name}.${key}" does not have a function called "discriminator"! (Nested Discriminator cannot be applied) [E031]`);
+  }
+}
+
+export class DuplicateOptionsError extends TypeError {
+  constructor(duplicateAt: string[]) {
+    super(`Duplicate Option definition at [${duplicateAt.join(',')}] [E032]`);
   }
 }

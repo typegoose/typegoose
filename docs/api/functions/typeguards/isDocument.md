@@ -8,7 +8,7 @@ title: 'isDocument & isDocumentArray'
 **Typings:**
 
 ```ts
-function isDocument<T, S extends RefType>(doc: Ref<T, S>): doc is DocumentType<T>
+function isDocument<T, S extends RefType>(doc: Ref<T, S> | null | undefined): doc is DocumentType<T>
 ```
 
 **Parameters:**
@@ -29,7 +29,7 @@ class Cat {
   // this example could be smaller, but for demonstation purposes this is a longer version
   public hasPartner(): boolean {
     if (isDocument(this.partner)) {
-      // "this.partner" now has the type of "Cat"
+      // "this.partner" now has the type of "DocumentType<Cat>"
       return true;
     } else {
       return false;
@@ -39,8 +39,7 @@ class Cat {
 ```
 
 :::tip
-Alternatively, since mongoose 6.4.0, [`$assertPopulated`](https://mongoosejs.com/docs/api/document.html#document_Document-undefined) can also be used.  
-Note: the documentation link is currently broken and may change, see [mongoose #11957](https://github.com/Automattic/mongoose/issues/11957).
+Alternatively, since mongoose 6.4.0, [`$assertPopulated`](https://mongoosejs.com/docs/api/document.html#document_Document-$assertPopulated) can also be used, but that function does not act as a type-guard only at runtime to actually check if a full path is populated.
 :::
 
 ## isDocumentArray
@@ -91,7 +90,7 @@ class Cat {
   // this example could be smaller, but for demonstation purposes this is a longer version
   public areAllKittensExisting(): boolean {
     if (isDocumentArray(this.kittens)) {
-      // "this.kittens" now has the type of "Cat"
+      // "this.kittens" now has the type of "DocumentType<Cat>[]"
       return true;
     } else {
       return false;

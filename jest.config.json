@@ -1,11 +1,11 @@
 {
   "preset": "ts-jest",
   "testEnvironment": "node",
-  "globals": {
-    "ts-jest": {
+  "transform": {
+    "\\.ts$": ["ts-jest", {
       "tsconfig": "<rootDir>/tsconfig.json",
       "diagnostics": true
-    }
+    }]
   },
   "moduleFileExtensions": [
     "ts",
@@ -27,5 +27,9 @@
   "maxConcurrency": 2,
   "setupFilesAfterEnv": [
     "<rootDir>/test/setupFile.ts"
-  ]
+  ],
+  "snapshotFormat": {
+    "escapeString": true,
+    "printBasicPrototype": true
+  }
 }

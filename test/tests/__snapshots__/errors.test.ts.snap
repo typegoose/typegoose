@@ -51,13 +51,13 @@ Please look at https://github.com/typegoose/typegoose/issues/42 for more informa
 
 exports[`should throw default error if no error is specified (assertion) [AssertionFallbackError] [E019] 1`] = `"Assert failed - no custom error [E019]"`;
 
+exports[`tests for "DuplicateOptionsError" [E031] should throw a Error when both "discriminators" option is defined as prop-option and as model-option 1`] = `"Duplicate Option definition at [discriminators(prop-option),discriminators(model-option)] [E032]"`;
+
 exports[`tests for "ExpectedTypeError" [E029] should error if no function for hooks is defined [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"fn\\" to have type \\"function\\", got: \\"undefined\\" [E029]"`;
 
 exports[`tests for "ExpectedTypeError" [E029] should error if no valid key is supplied to "getModelWithString" [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"key\\" to have type \\"string\\", got: \\"true\\" [E029]"`;
 
 exports[`tests for "ExpectedTypeError" [E029] should error if the options provided to "setGlobalOptions" are not an object [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"options\\" to have type \\"object\\", got: \\"undefined\\" [E029]"`;
-
-exports[`tests for "ExpectedTypeError" [E029] should throw a Error when a hooks options argument is not a object [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"options\\" to have type \\"object / undefined\\", got: \\"SomethingElse\\" [E029]"`;
 
 exports[`tests for "ExpectedTypeError" [E029] should throw a Error when a hooks second parameter is not a function [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"fn\\" to have type \\"function\\", got: \\"string\\" [E029]"`;
 
@@ -80,13 +80,13 @@ exports[`tests for "InvalidPropTypeError" [E013] PropType unknown (processProp) 
 
 exports[`tests for "InvalidPropTypeError" [E013] should throw a Error when "PropType.MAP" is used for "processProp#refPath" [InvalidPropTypeError] [E013] 1`] = `"\\"1\\"(PropType(refPath)) is invalid for \\"ProcessPropRefPropType.test\\" [E013]"`;
 
-exports[`tests for "InvalidPropTypeError" [E013] should throw a Error when a unknown PropType is used for "utils#initProperty" [InvalidPropTypeError] [E013] 1`] = `"\\"-1\\"(PropType(initProperty)) is invalid for \\"a1.a2\\" [E013]"`;
-
 exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to PropType.ARRAY [InvalidTypeError] [E009] 1`] = `"\\"TestNoMetadataErrorAP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
 
 exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to PropType.MAP [InvalidTypeError] [E009] 1`] = `"\\"TestNoMetadataErrorMP.something\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
 
 exports[`tests for "InvalidTypeError" [E009] should error if no valid type is supplied to PropType.NONE [InvalidTypeError] [E009] 1`] = `"\\"TestNME.test\\"'s Type is invalid! Type is: \\"undefined\\" [E009]"`;
+
+exports[`tests for "NoDiscriminatorFunctionError" [E031] should throw a Error when the key does not exist in the schema 1`] = `"Path \\"Testy.dummy\\" does not have a function called \\"discriminator\\"! (Nested Discriminator cannot be applied) [E031]"`;
 
 exports[`tests for "NoValidClassError" [E028] should error if no valid class is supplied to "_buildSchema" [NoValidClassError] [E028] 1`] = `
 "Value is not a function or does not have a constructor! [E028]
@@ -136,6 +136,8 @@ Value: \\"undefined\\""
 exports[`tests for "NotValidModelError" [E025] should throw a Error when no valid model is passed to "addModelToTypegoose" [NotValidModelError] [E025] 1`] = `"Expected \\"addModelToTypegoose.model\\" to be a valid mongoose.Model! (got: \\"string\\") [E025]"`;
 
 exports[`tests for "NotValidModelError" [E025] should throw a Error when no valid model is passed to "getDiscriminatorModelForClass" [NotValidModelError] [E025] 1`] = `"Expected \\"getDiscriminatorModelForClass.from\\" to be a valid mongoose.Model! (got: \\"string\\") [E025]"`;
+
+exports[`tests for "PathNotInSchemaError" [E030] should throw a Error when the key does not exist in the schema 1`] = `"Path \\"notExisting\\" on \\"Testy\\" does not exist in the Schema! [E030]"`;
 
 exports[`tests for "RefOptionIsUndefinedError" [E005] should error if "ref" is set to a function, but returns "null" or "undefined" [RefOptionIsUndefinedError] [E005] 1`] = `"Prop-Option \\"ref\\"'s value is \\"null\\" or \\"undefined\\" for \\"Main.nested\\" [E005]"`;
 

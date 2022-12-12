@@ -8,7 +8,7 @@ title: 'isRefType & isRefTypeArray'
 **Typings:**
 
 ```ts
-function isRefType<T, S extends RefType>(doc: Ref<T, S> | undefined, refType: AllowedRefTypes): doc is NonNullable<S>
+function isRefType<T, S extends RefType>(doc: Ref<T, S> | null | undefined, refType: AllowedRefTypes): doc is NonNullable<S>
 ```
 
 **Parameters:**
@@ -31,7 +31,7 @@ class Cat {
   // this example could be smaller, but for demonstation purposes this is a longer version
   public hasPartner(): boolean {
     if (isRefType(this.partner, mongoose.Types.ObjectId)) {
-      // "this.partner" now has the type of "Cat._id"'s RefType (This case ObjectId)
+      // "this.partner" now has the type of "Cat._id"'s RefType (in this case "ObjectId")
       return true;
     } else {
       return false;
@@ -93,7 +93,7 @@ class Cat {
   // this example could be smaller, but for demonstation purposes this is a longer version
   public areAllKittensExisting(): boolean {
     if (isRefTypeArray(this.kittens, mongoose.Types.ObjectId)) {
-      // "this.kittens" now has the type of "Cat._id"'s RefType (This case ObjectId)
+      // "this.kittens" now has the type of "Cat._id"'s RefType (in this case "ObjectId")
       return true;
     } else {
       return false;

@@ -1,3 +1,6 @@
+import { index } from '../../src/indexes';
+import { prop } from '../../src/prop';
+import { buildSchema, modelOptions } from '../../src/typegoose';
 import { IndexWeightsModel } from '../models/indexweights';
 import { RatingCarModel, RatingModel, RatingUserModel } from '../models/rating';
 import { SelectModel, SelectStrings } from '../models/select';
@@ -73,4 +76,78 @@ it('should add compound index', async () => {
   } catch (err) {
     expect(err).toHaveProperty('code', 11000);
   }
+});
+
+describe('index order', () => {
+  it('should be able to inherit indexes while defining own indexes', () => {
+    @index({ dummy1: 1 })
+    class IndexInherit1 {
+      @prop()
+      public dummy1?: string;
+    }
+
+    @index({ dummy2: 1 })
+    class IndexInherit2 extends IndexInherit1 {
+      @prop()
+      public dummy2?: string;
+    }
+
+    const sch = buildSchema(IndexInherit2);
+
+    const indexes = sch.indexes();
+    expect(indexes.length).toStrictEqual(2);
+    expect(indexes).toStrictEqual([
+      [{ dummy1: 1 }, { background: true }],
+      [{ dummy2: 1 }, { background: true }],
+    ]);
+  });
+
+  it('should be able to inherit indexes without defining own indexes', () => {
+    @index({ dummy1: 1 })
+    class IndexInherit3 {
+      @prop()
+      public dummy1?: string;
+    }
+
+    class IndexInherit4 extends IndexInherit3 {
+      @prop()
+      public dummy2?: string;
+    }
+
+    const sch = buildSchema(IndexInherit4);
+
+    const indexes = sch.indexes();
+    expect(indexes.length).toStrictEqual(1);
+    expect(indexes).toStrictEqual([[{ dummy1: 1 }, { background: true }]]);
+  });
+
+  it('should not inherit indexes beyond "disableLowerIndexes: false", but still include self', () => {
+    @index({ dummy1: 1 })
+    class IndexInherit5 {
+      @prop()
+      public dummy1?: string;
+    }
+
+    @index({ dummy2: 1 })
+    @modelOptions({ options: { disableLowerIndexes: true } })
+    class IndexInherit6 extends IndexInherit5 {
+      @prop()
+      public dummy2?: string;
+    }
+
+    @index({ dummy3: 1 })
+    class IndexInherit7 extends IndexInherit6 {
+      @prop()
+      public dummy3?: string;
+    }
+
+    const sch = buildSchema(IndexInherit7);
+
+    const indexes = sch.indexes();
+    expect(indexes.length).toStrictEqual(2);
+    expect(indexes).toStrictEqual([
+      [{ dummy2: 1 }, { background: true }],
+      [{ dummy3: 1 }, { background: true }],
+    ]);
+  });
 });

@@ -8,8 +8,8 @@ import type {
   Func,
   GetTypeReturn,
   IModelOptions,
+  INamingOptions,
   IObjectWithTypegooseFunction,
-  IObjectWithTypegooseName,
   IPrototype,
   KeyStringAny,
   MappedInnerOuterOptions,
@@ -17,12 +17,11 @@ import type {
   PropOptionsForString,
   VirtualOptions,
 } from '../types';
-import { DecoratorKeys, Severity, PropType } from './constants';
-import { constructors, globalOptions, schemas } from './data';
+import { DecoratorKeys, Severity } from './constants';
+import { constructors, globalOptions } from './data';
 import {
   AssertionFallbackError,
   InvalidOptionsConstructorError,
-  InvalidPropTypeError,
   NoValidClassError,
   ResolveTypegooseNameError,
   StringLengthExpectedError,
@@ -131,37 +130,23 @@ export function isString(Type: any): Type is string {
 }
 
 /**
- * Generate the initial values for the property to be extended upon
- * @param name Name of the current Model/Class
- * @param key Key of the property
- * @param proptype Type of the Property
+ * Get or init the Cached Schema
+ * @param target The Target to get / init the cached schema
+ * @returns The Schema to use
  */
-export function initProperty(name: string, key: string, proptype: PropType) {
-  const schemaProp = !schemas.has(name) ? schemas.set(name, {}).get(name)! : schemas.get(name)!;
+export function getCachedSchema(target: AnyParamConstructor<any>): Record<string, mongoose.SchemaDefinition<unknown>> {
+  let schemaReflectTarget = Reflect.getMetadata(DecoratorKeys.CachedSchema, target);
 
-  switch (proptype) {
-    case PropType.ARRAY:
-      schemaProp[key] = [{}];
-      break;
-    case PropType.MAP:
-    case PropType.NONE:
-      schemaProp[key] = {};
-      break;
-    default:
-      throw new InvalidPropTypeError(proptype, name, key, 'PropType(initProperty)');
+  if (isNullOrUndefined(schemaReflectTarget)) {
+    Reflect.defineMetadata(DecoratorKeys.CachedSchema, {}, target);
+    schemaReflectTarget = Reflect.getMetadata(DecoratorKeys.CachedSchema, target);
+  } else if (isNullOrUndefined(Reflect.getOwnMetadata(DecoratorKeys.CachedSchema, target))) {
+    // set own metadata and clone object, because otherwise on inheritance it would just modify the base class's object, not its own object
+    schemaReflectTarget = { ...schemaReflectTarget };
+    Reflect.defineMetadata(DecoratorKeys.CachedSchema, schemaReflectTarget, target);
   }
 
-  return schemaProp;
-}
-
-/**
- * Get the Class for a given Document
- * @param document The Document to fetch the class from
- */
-export function getClassForDocument(document: mongoose.Document): NewableFunction | undefined {
-  const modelName = (document.constructor as mongoose.Model<typeof document>).modelName;
-
-  return constructors.get(modelName);
+  return schemaReflectTarget;
 }
 
 /**
@@ -169,12 +154,7 @@ export function getClassForDocument(document: mongoose.Document): NewableFunctio
  * @param input The Input to fetch the class from
  */
 export function getClass(
-  input:
-    | (mongoose.Document & IObjectWithTypegooseFunction)
-    | (mongoose.Schema.Types.Subdocument & IObjectWithTypegooseFunction)
-    | string
-    | IObjectWithTypegooseName
-    | any
+  input: mongoose.Document | IObjectWithTypegooseFunction | { typegooseName: string } | string | any
 ): NewableFunction | undefined {
   if (typeof input === 'string') {
     return constructors.get(input);
@@ -185,6 +165,10 @@ export function getClass(
 
   if (typeof input?.typegooseName === 'function') {
     return constructors.get(input.typegooseName());
+  }
+
+  if (typeof input?.constructor?.modelName === 'string') {
+    return constructors.get(input.constructor.modelName);
   }
 
   throw new ResolveTypegooseNameError(input);
@@ -319,9 +303,9 @@ export function getRightTarget(target: any): any {
  * Get the Class's final name
  * (combines all available options to generate a name)
  * @param cl The Class to get the name for
- * @param overwriteOptions Overwrite ModelOptions to generate a name from (Only name related options are merged)
+ * @param overwriteNaming Overwrite naming options used for generating the name
  */
-export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteOptions?: IModelOptions) {
+export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteNaming?: INamingOptions) {
   // this case (cl being undefined / null) can happen when type casting (or type being "any") happened and wanting to throw a Error (and there using "getName" to help)
   // check if input variable is undefined, if it is throw a error (cannot be combined with the error below because of "getRightTarget")
   assertion(!isNullOrUndefined(cl), () => new NoValidClassError(cl));
@@ -330,7 +314,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteOpti
 
   const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
   const baseName: string = ctor.name;
-  const customName = overwriteOptions?.options?.customName ?? options.options?.customName;
+  const customName = overwriteNaming?.customName ?? options.options?.customName;
 
   if (typeof customName === 'function') {
     const name = customName(options);
@@ -343,10 +327,10 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteOpti
     return name;
   }
 
-  const automaticName = overwriteOptions?.options?.automaticName ?? options.options?.automaticName;
+  const automaticName = overwriteNaming?.automaticName ?? options.options?.automaticName;
 
   if (automaticName) {
-    const suffix = customName ?? overwriteOptions?.schemaOptions?.collection ?? options.schemaOptions?.collection;
+    const suffix = customName ?? overwriteNaming?.schemaCollection ?? options.schemaOptions?.collection;
 
     return !isNullOrUndefined(suffix) ? `${baseName}_${suffix}` : baseName;
   }
@@ -368,7 +352,12 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteOpti
  * @param Type The Type to check
  */
 export function isNotDefined(Type: any) {
-  return typeof Type === 'function' && !isPrimitive(Type) && Type !== Object && !schemas.has(getName(Type));
+  return (
+    typeof Type === 'function' &&
+    !isPrimitive(Type) &&
+    Type !== Object &&
+    isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.CachedSchema, Type))
+  );
 }
 
 /**
@@ -722,4 +711,19 @@ export function toStringNoFail(value: unknown): string {
   } catch (_) {
     return '(Error: Converting value to String failed)';
   }
+}
+
+/**
+ * Map options from {@link IModelOptions} to {@link INamingOptions}
+ * @param options The options to map
+ * @returns Always a object, contains mapped options from {@link IModelOptions}
+ */
+export function mapModelOptionsToNaming(options: IModelOptions | undefined): INamingOptions {
+  const mappedNaming: INamingOptions = { ...options?.options }; // this copies more than necessary, but works because most of the options are from there
+
+  if (!isNullOrUndefined(options?.schemaOptions?.collection)) {
+    mappedNaming.schemaCollection = options?.schemaOptions?.collection;
+  }
+
+  return mappedNaming;
 }

@@ -118,14 +118,14 @@ it('should allow usage of hook-options [typegoose/typegoose#605]', async () => {
 
   expect(reflectHooksPre).toHaveLength(1);
   expect(reflectHooksPre[0]).toStrictEqual<IHooksArray>({
-    method: 'save',
+    methods: ['save'],
     func: customPre,
     options: fullHookOptions,
   });
 
   expect(reflectHooksPost).toHaveLength(1);
   expect(reflectHooksPost[0]).toStrictEqual<IHooksArray>({
-    method: 'save',
+    methods: ['save'],
     func: customPost,
     options: fullHookOptions,
   });
@@ -177,11 +177,33 @@ it('should work with QueryMethod post "this" [typegoose/typegoose#694]', () => {
   const reflectHooksPost: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, TestQueryPostHooks);
 
   expect(reflectHooksPost).toHaveLength(1);
-  expect(reflectHooksPost[0]).toHaveProperty('method', 'findOneAndUpdate');
+  expect(reflectHooksPost[0]).toHaveProperty('methods', ['findOneAndUpdate']);
 
   const schema = buildSchema(TestQueryPostHooks);
   // @ts-expect-error "s" is not in the types, but is used for something like "hooks"
   const schemaHooks: { _pres: Map<string, any>; _posts: Map<string, any> } = schema.s.hooks;
 
   expect(schemaHooks._posts.size).toStrictEqual(1);
+});
+
+it('should not define options when none are provided', () => {
+  @pre('save', function test() {})
+  class Test {}
+
+  buildSchema(Test);
+
+  const hooksPre: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, Test);
+  expect(hooksPre.length).toStrictEqual(1);
+  expect(hooksPre[0]).toHaveProperty('options', undefined);
+});
+
+it('should define options when they are provided', () => {
+  @pre('save', function test() {}, { test: 1 } as any)
+  class Test {}
+
+  buildSchema(Test);
+
+  const hooksPre: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, Test);
+  expect(hooksPre.length).toStrictEqual(1);
+  expect(hooksPre[0]).toHaveProperty('options', { test: 1 });
 });
