@@ -445,7 +445,7 @@ Use this function for embedded discriminators.
 See [Nested Discriminators](../../guides/advanced/nested-discriminators.mdx) for a guide on how to use nested Discriminators.
 
 :::caution
-A Error is thrown when both this option and the model-option [`discriminators`](./modelOptions.md.md#discriminators) are defined.  
+A Error is thrown when both this option and the model-option [`discriminators`](./modelOptions.md#discriminators) are defined.  
 See [Duplicate Option Definition [E032]](../../guides/error-warning-details.md#duplicate-option-definition-e032).
 :::
 :::note
