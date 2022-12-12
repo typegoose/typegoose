@@ -35,7 +35,7 @@ class User {
 const UserModel = getModelForClass(User); // UserModel is a regular Mongoose Model with correct types
 
 (async () => {
-  await mongoose.connect('mongodb://localhost:27017/', { useNewUrlParser: true, useUnifiedTopology: true, dbName: 'test' });
+  await mongoose.connect('mongodb://localhost:27017/', { dbName: 'test' });
 
   const { _id: id } = await UserModel.create({ name: 'JohnDoe', jobs: ['Cleaner'] } as User); // an "as" assertion, to have types for all properties
   const user = await UserModel.findById(id).exec();

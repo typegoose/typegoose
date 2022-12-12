@@ -53,7 +53,7 @@ const SomeClassModel = getModelForClass(SomeClass);
 const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 
 (async () => {
-  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: 'guides', useUnifiedTopology: true });
+  await mongoose.connect(`mongodb://localhost:27017/`, { dbName: 'guides' });
 
   const reference = await SomeReferencedClassModel.create({ dummy: 'hello' });
   const { _id: id } = await SomeClassModel.create({ populateField: reference } as SomeClass);
@@ -88,7 +88,7 @@ const SomeClassModel = getModelForClass(SomeClass);
 const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
 
 (async () => {
-  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: 'guides', useUnifiedTopology: true });
+  await mongoose.connect(`mongodb://localhost:27017/`, { dbName: 'guides' });
 
   const reference = await SomeReferencedClassModel.create({ dummy: 'hello' });
   const { _id: id } = await SomeClassModel.create({ populateField: reference } as SomeClass);
@@ -145,7 +145,7 @@ class SomeClass extends defaultClasses.FindOrCreate {
 const SomeClassModel = getModelForClass(SomeClass);
 
 (async () => {
-  await mongoose.connect(`mongodb://localhost:27017/`, { useNewUrlParser: true, dbName: 'guides' });
+  await mongoose.connect(`mongodb://localhost:27017/`, { dbName: 'guides' });
 
   console.log(await SomeClassModel.findOrCreate({ someField: 'Hello' }));
   console.log(await SomeClassModel.findOrCreate({ someField: 'Hello' })); // both will give the same output
