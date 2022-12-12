@@ -112,7 +112,6 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
         const path = sch.path(key) as mongoose.Schema.Types.DocumentArray | undefined;
         assertion(!isNullOrUndefined(path), () => new PathNotInSchemaError(finalName, key));
-        // TODO: add test for this error
         assertion(typeof path.discriminator === 'function', () => new NoDiscriminatorFunctionError(finalName, key));
 
         for (const { type: child, value: childName } of discriminators) {
