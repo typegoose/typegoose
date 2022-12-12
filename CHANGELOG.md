@@ -1,3 +1,21 @@
+## [10.0.0-beta.3](https://github.com/typegoose/typegoose/compare/v10.0.0-beta.2...v10.0.0-beta.3) (2022-12-12)
+
+
+### Style
+
+* **schema:** remove test todo ([8a3a296](https://github.com/typegoose/typegoose/commit/8a3a2969cb2b6dd5e4dd190cb0283685bbd0fee4))
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 29.2.4 ([296960a](https://github.com/typegoose/typegoose/commit/296960a7df8bed42ce0fb40da3af57f26e69cedb))
+* **@typescript-eslint/*:** upgrade to 5.46.0 ([75576a0](https://github.com/typegoose/typegoose/commit/75576a0b7fe9c196a5c559e2bb2eb226e5fa0725))
+* **eslint:** upgrade to 8.29.0 ([8cb5c46](https://github.com/typegoose/typegoose/commit/8cb5c4601541be7e38ab3e55fe2502c4f20b4ec9))
+* **lint-staged:** upgrade to 13.1.0 ([b904e07](https://github.com/typegoose/typegoose/commit/b904e07ad028531dfaa8392ad586a3c35971d013))
+* **mongodb-memory-server:** upgrade to 8.10.2 ([12b257d](https://github.com/typegoose/typegoose/commit/12b257db432fabb41c7b2b02128c7f844b76d3e5))
+* **prettier:** upgrade to 2.8.1 ([a8a7513](https://github.com/typegoose/typegoose/commit/a8a75135b6b869940731c9b64b28ef171119222a))
+* **typescript:** upgrade to 4.9.4 ([1698424](https://github.com/typegoose/typegoose/commit/169842432ca7af6be4f6c0c844de7a39cc41a271))
+
 ## [10.0.0-beta.2](https://github.com/typegoose/typegoose/compare/v10.0.0-beta.1...v10.0.0-beta.2) (2022-12-06)
 
 
