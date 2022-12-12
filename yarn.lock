@@ -1984,10 +1984,10 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.2.tgz#423c77877d0569db20e1fc80885ac4118314010e"
   integrity sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==
 
-"@tsd/typescript@~4.9.3":
-  version "4.9.3"
-  resolved "https://registry.yarnpkg.com/@tsd/typescript/-/typescript-4.9.3.tgz#87beef743237707b02b88b10056fcf9f58840954"
-  integrity sha512-iyi45620s9QN62rW90KelRJLG7p15g4NhTezxYCHmE5RY/BI270Sn7E8vWtiLzB+9mQgy71sYXcgyDKjtJamSQ==
+"@tsd/typescript@~4.9.4":
+  version "4.9.4"
+  resolved "https://registry.yarnpkg.com/@tsd/typescript/-/typescript-4.9.4.tgz#03ddbae4249621ee83bd496e701e6fec3c3d9944"
+  integrity sha512-70j1vy95LsMvciXWJLrQ9pQaaG1inJJ+gZ/dW/bPdzHUH1VTeSl3BBU6QxqFWh5IjPy6s7xHcUw45R71dw4J3w==
 
 "@types/babel__core@^7.1.14":
   version "7.1.19"
@@ -6953,10 +6953,15 @@ type-fest@^1.0.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-1.4.0.tgz#e9fb813fe3bf1744ec359d55d1affefa76f14be1"
   integrity sha512-yGSza74xk0UG8k+pLh5oeoYirvIiWo5t0/o3zHHAO2tRDiZcxWP7fywNlXhqb6/r6sWvwi+RsyQMWhVLe4BVuA==
 
-typescript@^4.6.4, typescript@~4.9.3:
+typescript@^4.6.4:
   version "4.9.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.3.tgz#3aea307c1746b8c384435d8ac36b8a2e580d85db"
   integrity sha512-CIfGzTelbKNEnLpLdGFgdyKhG23CKdKgQPOBc+OUNrkJ2vr+KSzsSV5kq5iWhEQbok+quxgGzrAtGWCyU7tHnA==
+
+typescript@~4.9.4:
+  version "4.9.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.4.tgz#a2a3d2756c079abda241d75f149df9d561091e78"
+  integrity sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==
 
 uglify-js@^3.1.4:
   version "3.15.5"
