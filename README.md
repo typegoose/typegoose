@@ -37,7 +37,7 @@ const UserModel = getModelForClass(User); // UserModel is a regular Mongoose Mod
 (async () => {
   await mongoose.connect('mongodb://localhost:27017/', { dbName: 'test' });
 
-  const { _id: id } = await UserModel.create({ name: 'JohnDoe', jobs: ['Cleaner'] } as User); // an "as" assertion, to have types for all properties
+  const { _id: id } = await UserModel.create({ name: 'JohnDoe', jobs: ['Cleaner'] });
   const user = await UserModel.findById(id).exec();
 
   console.log(user); // prints { _id: 59218f686409d670a97e53e0, name: 'JohnDoe', __v: 0 }
