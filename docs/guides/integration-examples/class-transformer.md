@@ -6,7 +6,7 @@ title: 'Using with class-transformer'
 Last updated for:
 
 ```txt
-@typegoose/typegoose@9.3.0
+@typegoose/typegoose@10.0.0
 class-transformer@0.5.1
 ```
 
