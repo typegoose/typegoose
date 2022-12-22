@@ -1,4 +1,4 @@
-name: Deploy Github Pages
+name: Test Github Pages for PR
 
 on:
   pull_request:
