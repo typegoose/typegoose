@@ -626,7 +626,7 @@ Example:
 
 ```ts
 class Something {
-  @prop({ allowMixed: Severity.ERROR, type: () => mongoose.Schema.Type.Mixed })
+  @prop({ allowMixed: Severity.ERROR, type: () => mongoose.Schema.Types.Mixed })
   public propy?: any;
 }
 
