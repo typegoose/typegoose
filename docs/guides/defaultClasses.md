@@ -37,7 +37,9 @@ How to override `_id` type:
 <sub>This only works with typegoose 6.0.2+</sub>
 
 ```ts
-class Something extends Base<mongoose.Schema.Type.String> {} // _id is now of type "String" (from mongoose)
+interface Something extends Base {} // have the interface to add the types of "Base" to the class
+class Something {} // have your class, OR
+class Something extends TimeStamps {} // have your class extend some other class
 ```
 
 ### FindOrCreate
