@@ -33,19 +33,24 @@ class SomeChangedID {
 
 ## With the Base Class
 
-With the `Base` class's special `_id` treatment (types), it can be used as follows:
+There is also a `Base` interface typegoose provides, which includes `_id` and `id`, which can be used as follows:
 
 ```ts
-class SomeChangedIDBase extends Base<string> {
+interface Something extends Base<string> {} // have the interface to add the types of "Base" to the class
+class Something { // have your class, OR
+  @prop()
+  public _id: string;
+}
+class Something extends TimeStamps { // have your class extend some other class
   @prop()
   public _id: string;
 }
 ```
 
 :::note
-The `_id` property needs to be duplicated, because the default class `Base` doesn't change anything at runtime (`Base` does not use `@prop`)
+The `_id` property needs to also be included in the actual class, because the default interface `Base` doesn't change anything at runtime (`Base` does not use `@prop`).
 :::
 
 :::info Restriction
-This method (extending Base) can only be used with types that are in `RefType` (all of `mongoose.Schema.Types` should work except `Array`, `Mixed`, `Boolean`).
+This method (extending `Base`) can only be used with types that are in `RefType` (all of `mongoose.Schema.Types` should work except `Array`, `Mixed`, `Boolean`).
 :::
