@@ -3,6 +3,7 @@ import type {
   AggregateExtract,
   CallbackError,
   Document,
+  DocumentOrQueryMiddleware,
   ErrorHandlingMiddlewareFunction,
   HydratedDocument,
   Model,
@@ -36,7 +37,7 @@ type QueryResultType<T> = T extends Query<infer ResultType, any> ? ResultType : 
  * - moved options from second argument to be the last argument
  * - de-duplicate function that were duplicated because of options being the second argument
  * - changing the generics in use to support the classes or overwriting whatever is used
- * VERSION COPY OF 6.8.0
+ * VERSION COPY OF 6.9.0
  */
 interface Hooks {
   // post hooks with errorhandling option
@@ -103,6 +104,18 @@ interface Hooks {
     method: 'insertMany' | RegExp,
     fn: ErrorHandlingMiddlewareFunction<T>,
     options?: SchemaPostOptions
+  ): ClassDecorator;
+
+  // special pre hooks for each "document: true, query: false" and "document: false, query: true"
+  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+    method: DocumentOrQueryMiddleware | DocumentOrQueryMiddleware[],
+    fn: PreMiddlewareFunction<T>,
+    options: SchemaPreOptions & { document: true; query: false }
+  ): ClassDecorator;
+  pre<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
+    method: DocumentOrQueryMiddleware | DocumentOrQueryMiddleware[],
+    fn: PreMiddlewareFunction<T>,
+    options: SchemaPreOptions & { document: false; query: true }
   ): ClassDecorator;
 
   // normal pre hooks

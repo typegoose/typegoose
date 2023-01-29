@@ -260,3 +260,30 @@ function postHookErrorOption() {
 }
 
 postHookErrorOption();
+
+function preHookExplicitDocumentQuery() {
+  @typegoose.pre<TestExplicitOption>(
+    'save',
+    function () {
+      expectType<typegoose.mongoose.HydratedDocument<typegoose.DocumentType<TestExplicitOption>>>(this);
+    },
+    { document: true }
+  )
+  @typegoose.pre(
+    'updateOne',
+    function () {
+      expectType<boolean>(this.isNew);
+    },
+    { document: true, query: false }
+  )
+  @typegoose.pre(
+    'updateOne',
+    function () {
+      this.find();
+    },
+    { document: false, query: true }
+  )
+  class TestExplicitOption {}
+}
+
+preHookExplicitDocumentQuery();
