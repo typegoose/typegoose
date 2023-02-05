@@ -548,4 +548,4 @@ Property "${property}" was defined on "${clName}", but is different from discrim
 ```
 
 Details:  
-The Property [`existingConnection`](../decorators/modelOptions.md#existingconnection) or [`existingMongoose`](../decorators/modelOptions.md#existingmongoose) were defined differently on the discriminator's base model and the discriminator itself, which is not supported.
+The Property [`existingConnection`](../api/decorators/modelOptions.md#existingconnection) or [`existingMongoose`](../api/decorators/modelOptions.md#existingmongoose) were defined differently on the discriminator's base model and the discriminator itself, which is not supported.
