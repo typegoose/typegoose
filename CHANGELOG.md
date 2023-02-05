@@ -1,3 +1,10 @@
+## [10.1.1](https://github.com/typegoose/typegoose/compare/v10.1.0...v10.1.1) (2023-02-05)
+
+
+### Fixes
+
+* **typegoose::getDiscriminatorModelForClass:** add warning when using different "existing*" options ([0599ef2](https://github.com/typegoose/typegoose/commit/0599ef299901e5eb4a47e64fea298a802f25d9c5)), closes [typegoose/typegoose#789](https://github.com/typegoose/typegoose/issues/789)
+
 ## [10.1.0](https://github.com/typegoose/typegoose/compare/v10.0.0...v10.1.0) (2023-01-29)
 
 
