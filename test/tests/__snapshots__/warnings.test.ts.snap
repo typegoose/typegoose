@@ -29,6 +29,70 @@ Array [
 
 exports[`should throw a error if property is "Mixed" and Severity.ERROR is used 1`] = `"Setting \\"Mixed\\" is not allowed! (TestMixedError, test) [E017]"`;
 
+exports[`should warn if "existingConnection" is defined differently on base and discriminator 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "Property \\"existingConnection\\" was defined on \\"DisDecoratorEC\\", but is different from discriminator base \\"DisBaseDecoratorEC\\", which is not supported! [W002]",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`should warn if "existingConnection" is defined differently on base and discriminator 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "Property \\"existingConnection\\" was defined on \\"DisParameterEC\\", but is different from discriminator base \\"DisBaseParameterEC\\", which is not supported! [W002]",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`should warn if "existingMongoose" is defined differently on base and discriminator 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "Property \\"existingMongoose\\" was defined on \\"DisDecoratorEM\\", but is different from discriminator base \\"DisBaseDecoratorEM\\", which is not supported! [W002]",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
+
+exports[`should warn if "existingMongoose" is defined differently on base and discriminator 2`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "Property \\"existingMongoose\\" was defined on \\"DisParameterEM\\", but is different from discriminator base \\"DisBaseParameterEM\\", which is not supported! [W002]",
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
+
 exports[`should warn if "justOne" is defined, but no Virtual Populate Options 1`] = `
 Array [
   Array [

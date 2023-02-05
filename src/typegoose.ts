@@ -10,6 +10,7 @@ import {
   mapModelOptionsToNaming,
   mergeMetadata,
   mergeSchemaOptions,
+  warnNotMatchingExisting,
 } from './internal/utils';
 
 /* istanbul ignore next */
@@ -425,6 +426,13 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
 
   if (models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
+  }
+
+  if (mergedOptions.existingConnection && mergedOptions.existingConnection !== from.db) {
+    warnNotMatchingExisting(from.modelName, getName(cl), 'existingConnection');
+  }
+  if (mergedOptions.existingMongoose && mergedOptions.existingMongoose !== from.base) {
+    warnNotMatchingExisting(from.modelName, getName(cl), 'existingMongoose');
   }
 
   const sch: mongoose.Schema<any> = buildSchema(cl, mergedOptions);

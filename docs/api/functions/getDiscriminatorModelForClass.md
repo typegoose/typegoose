@@ -71,6 +71,11 @@ function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, Query
 
 Option `value` is to overwrite the key the class is registered on as a discriminator, by default it is the generated model name, but can be overwritten with any string, recommended is to use a [string-`enum`](https://www.typescriptlang.org/docs/handbook/enums.html#string-enums) to keep track of names.
 
+:::note
+Note that [`existingConnection`](../decorators/modelOptions.md#existingconnection) and [`existingMongoose`](../decorators/modelOptions.md#existingmongoose) will not be used and instead will be registered on the `from` model's settings.  
+See [`Warning W002`](../../guides/error-warning-details.md#property-was-defined-differently-on-base-and-discriminator-w002).
+:::
+
 ## Example
 
 ```ts

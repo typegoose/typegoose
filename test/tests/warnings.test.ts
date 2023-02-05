@@ -1,5 +1,5 @@
 import { logger } from '../../src/logSettings';
-import { buildSchema, modelOptions, mongoose, prop, Severity } from '../../src/typegoose';
+import { buildSchema, getDiscriminatorModelForClass, getModelForClass, modelOptions, mongoose, prop, Severity } from '../../src/typegoose';
 import * as utils from '../../src/internal/utils';
 
 let spyWarn: jest.SpyInstance;
@@ -109,4 +109,92 @@ it('should warn if property is "Mixed" and a invalid Severity is used', () => {
   buildSchema(TestMixedWarning);
   expect(spyWarn).toHaveBeenCalledTimes(1);
   expect(spyWarn.mock.calls).toMatchSnapshot();
+});
+
+it('should warn if "existingMongoose" is defined differently on base and discriminator', () => {
+  // test setting via decorator
+  {
+    @modelOptions({ existingMongoose: mongoose })
+    class DisBaseDecoratorEM {
+      @prop()
+      public baseDummy?: string;
+    }
+
+    @modelOptions({ existingMongoose: new mongoose.Mongoose() })
+    class DisDecoratorEM extends DisBaseDecoratorEM {
+      @prop()
+      public disDummy?: string;
+    }
+
+    const DisBaseModel = getModelForClass(DisBaseDecoratorEM);
+    getDiscriminatorModelForClass(DisBaseModel, DisDecoratorEM);
+
+    expect(spyWarn).toHaveBeenCalledTimes(1);
+    expect(spyWarn).toMatchSnapshot();
+  }
+
+  spyWarn.mockClear();
+
+  // test setting via options
+  {
+    class DisBaseParameterEM {
+      @prop()
+      public baseDummy?: string;
+    }
+
+    class DisParameterEM extends DisBaseParameterEM {
+      @prop()
+      public disDummy?: string;
+    }
+
+    const DisBaseModel = getModelForClass(DisBaseParameterEM, { existingMongoose: mongoose });
+    getDiscriminatorModelForClass(DisBaseModel, DisParameterEM, { existingMongoose: new mongoose.Mongoose() });
+
+    expect(spyWarn).toHaveBeenCalledTimes(1);
+    expect(spyWarn).toMatchSnapshot();
+  }
+});
+
+it('should warn if "existingConnection" is defined differently on base and discriminator', () => {
+  // test setting via decorator
+  {
+    @modelOptions({ existingConnection: mongoose.connection })
+    class DisBaseDecoratorEC {
+      @prop()
+      public baseDummy?: string;
+    }
+
+    @modelOptions({ existingConnection: mongoose.createConnection() })
+    class DisDecoratorEC extends DisBaseDecoratorEC {
+      @prop()
+      public disDummy?: string;
+    }
+
+    const DisBaseModel = getModelForClass(DisBaseDecoratorEC);
+    getDiscriminatorModelForClass(DisBaseModel, DisDecoratorEC);
+
+    expect(spyWarn).toHaveBeenCalledTimes(1);
+    expect(spyWarn).toMatchSnapshot();
+  }
+
+  spyWarn.mockClear();
+
+  // test setting via options
+  {
+    class DisBaseParameterEC {
+      @prop()
+      public baseDummy?: string;
+    }
+
+    class DisParameterEC extends DisBaseParameterEC {
+      @prop()
+      public disDummy?: string;
+    }
+
+    const DisBaseModel = getModelForClass(DisBaseParameterEC, { existingConnection: mongoose.connection });
+    getDiscriminatorModelForClass(DisBaseModel, DisParameterEC, { existingConnection: mongoose.createConnection() });
+
+    expect(spyWarn).toHaveBeenCalledTimes(1);
+    expect(spyWarn).toMatchSnapshot();
+  }
 });

@@ -701,6 +701,18 @@ export function warnNotCorrectTypeOptions(name: string, key: string, type: strin
 }
 
 /**
+ * Logs a warning for Discriminator setting a different "existing*" property than the base
+ * @param fromName Name of the Base Model
+ * @param clName Name of the Discriminator's class
+ * @param property The property defined that does not match
+ */
+export function warnNotMatchingExisting(fromName: string, clName: string, property: string) {
+  logger.warn(
+    `Property "${property}" was defined on "${clName}", but is different from discriminator base "${fromName}", which is not supported! [W002]`
+  );
+}
+
+/**
  * Try to convert input "value" to a String, without it failing
  * @param value The Value to convert to String
  * @returns A String, either "value.toString" or a placeholder
