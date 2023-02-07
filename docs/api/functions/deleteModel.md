@@ -25,7 +25,7 @@ Use [`deleteModelWithClass`](#deletemodelwithclass) when wanting to delete by cl
 This function also deletes the Model from Mongoose itself.
 :::
 :::caution
-Currently this function does not delete any entries that have different name generation applied at insertion time (like having name generation overwritten in [`getModelForClass`](./getClassForDocument.md))).
+Currently this function does not delete any entries that have different name generation applied at insertion time (like having name generation overwritten in [`getModelForClass`](./getClassForDocument.md)).
 :::
 :::caution
 Will throw a Error when caching is disabled [E033](../../guides/error-warning-details.md#cache-disabled-e033).
