@@ -21,6 +21,10 @@ function getModelWithString<U extends AnyParamConstructor<any>, QueryHelpers = B
 
 Similar to [`getClass`](./getClass.md), only that this function currently directly requires the key.
 
+:::caution
+Will throw a Error when caching is disabled [E033](../../guides/error-warning-details.md#cache-disabled-e033).
+:::
+
 ## Example
 
 ```ts

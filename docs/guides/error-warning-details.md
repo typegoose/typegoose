@@ -525,6 +525,15 @@ This Error gets most commonly thrown when:
 
 This Error can be fixed by only defining one of the mention options.
 
+### Cache Disabled [E033]
+
+Error: `Tried using cache, but was disabled at "${where}" [E033]`
+
+Error Class: `CacheDisabledError`
+
+Details:  
+Tried using a function (`where`) that required cache, but cache was disabled.
+
 ## Warnings
 
 ### Type is not ${type}, but includes the following ${extra} options [W001]

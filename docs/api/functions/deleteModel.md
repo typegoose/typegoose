@@ -27,6 +27,9 @@ This function also deletes the Model from Mongoose itself.
 :::caution
 Currently this function does not delete any entries that have different name generation applied at insertion time (like having name generation overwritten in [`getModelForClass`](./getClassForDocument.md))).
 :::
+:::caution
+Will throw a Error when caching is disabled [E033](../../guides/error-warning-details.md#cache-disabled-e033).
+:::
 
 ```ts
 class SomeUser {}
@@ -50,6 +53,10 @@ function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U)
 | `cl` <span class="badge badge--secondary">Required</span> |  `U`  | The Class to remove from the Cache |
 
 `deleteModelWithClass` tries to find the given Class (`cl`) in the cache and calls [`deleteModel`](#deletemodel) with the key the Class has given.
+
+:::caution
+Will throw a Error when caching is disabled [E033](../../guides/error-warning-details.md#cache-disabled-e033).
+:::
 
 ```ts
 class SomeUser {}

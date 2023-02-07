@@ -624,9 +624,18 @@ export interface IGlobalOptions {
   schemaOptions?: mongoose.SchemaOptions;
   /**
    * Global Options for general Typegoose
-   * (There are currently none)
    */
-  globalOptions?: BeAnObject;
+  globalOptions?: ITypegooseOptions;
+}
+
+export interface ITypegooseOptions {
+  /**
+   * Option to disable caching
+   * completely disables the "constructors" and "models" maps
+   * "false" and "undefined" have the same result of enabling caching
+   * @default false
+   */
+  disableCaching?: boolean;
 }
 
 /** Interface describing a Object that has a "typegooseName" Function */

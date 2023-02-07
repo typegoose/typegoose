@@ -51,6 +51,14 @@ Please look at https://github.com/typegoose/typegoose/issues/42 for more informa
 
 exports[`should throw default error if no error is specified (assertion) [AssertionFallbackError] [E019] 1`] = `"Assert failed - no custom error [E019]"`;
 
+exports[`tests for "CacheDisabledError" [E033] should throw a Error when trying to use "deleteModel" but caching is disabled 1`] = `"Tried using cache, but was disabled at \\"deleteModelWithClass\\" [E033]"`;
+
+exports[`tests for "CacheDisabledError" [E033] should throw a Error when trying to use "deleteModelWithClass" but caching is disabled 1`] = `"Tried using cache, but was disabled at \\"deleteModelWithClass\\" [E033]"`;
+
+exports[`tests for "CacheDisabledError" [E033] should throw a Error when trying to use "getClass" but caching is disabled 1`] = `"Tried using cache, but was disabled at \\"getClass\\" [E033]"`;
+
+exports[`tests for "CacheDisabledError" [E033] should throw a Error when trying to use "getModelWithString" but caching is disabled 1`] = `"Tried using cache, but was disabled at \\"getModelWithString\\" [E033]"`;
+
 exports[`tests for "DuplicateOptionsError" [E031] should throw a Error when both "discriminators" option is defined as prop-option and as model-option 1`] = `"Duplicate Option definition at [discriminators(prop-option),discriminators(model-option)] [E032]"`;
 
 exports[`tests for "ExpectedTypeError" [E029] should error if no function for hooks is defined [ExpectedTypeError] [E029] 1`] = `"Expected Argument \\"fn\\" to have type \\"function\\", got: \\"undefined\\" [E029]"`;

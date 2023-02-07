@@ -24,6 +24,7 @@ import * as utils from '../../src/internal/utils';
 import { mapValueToSeverity } from '../../src/globalOptions';
 import { BasePropOptions, NestedDiscriminatorsMap } from '../../src/types';
 import {
+  CacheDisabledError,
   DuplicateOptionsError,
   ExpectedTypeError,
   InvalidEnumTypeError,
@@ -32,6 +33,7 @@ import {
   PathNotInSchemaError,
   ResolveTypegooseNameError,
 } from '../../src/internal/errors';
+import { globalOptions } from '../../src/internal/data';
 
 beforeEach(() => {
   jest.restoreAllMocks();
@@ -873,6 +875,81 @@ describe('tests for "DuplicateOptionsError" [E031]', () => {
       fail('Expected to throw "DuplicateOptionsError"');
     } catch (err) {
       expect(err).toBeInstanceOf(DuplicateOptionsError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+});
+
+describe('tests for "CacheDisabledError" [E033]', () => {
+  beforeAll(() => {
+    globalOptions['globalOptions'] = globalOptions['globalOptions'] ?? {};
+    globalOptions['globalOptions'].disableCaching = true;
+  });
+
+  afterAll(() => {
+    delete globalOptions['globalOptions']!.disableCaching;
+  });
+
+  it('should throw a Error when trying to use "getClass" but caching is disabled', () => {
+    class E033GetClass {
+      public dummy?: boolean;
+    }
+
+    getModelForClass(E033GetClass);
+
+    try {
+      getClass('E033GetClass');
+      fail('Expected to throw "CacheDisabledError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(CacheDisabledError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error when trying to use "getModelWithString" but caching is disabled', () => {
+    class E033GetModelWithString {
+      public dummy?: boolean;
+    }
+
+    getModelForClass(E033GetModelWithString);
+
+    try {
+      getModelWithString('E033GetModelWithString');
+      fail('Expected to throw "CacheDisabledError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(CacheDisabledError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error when trying to use "deleteModelWithClass" but caching is disabled', () => {
+    class E033DeleteModelWithClass {
+      public dummy?: boolean;
+    }
+
+    getModelForClass(E033DeleteModelWithClass);
+
+    try {
+      deleteModelWithClass(E033DeleteModelWithClass);
+      fail('Expected to throw "CacheDisabledError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(CacheDisabledError);
+      expect(err.message).toMatchSnapshot();
+    }
+  });
+
+  it('should throw a Error when trying to use "deleteModel" but caching is disabled', () => {
+    class E033DeleteModel {
+      public dummy?: boolean;
+    }
+
+    getModelForClass(E033DeleteModel);
+
+    try {
+      deleteModel('E033DeleteModel');
+      fail('Expected to throw "CacheDisabledError"');
+    } catch (err) {
+      expect(err).toBeInstanceOf(CacheDisabledError);
       expect(err.message).toMatchSnapshot();
     }
   });

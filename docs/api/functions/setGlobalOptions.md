@@ -32,4 +32,19 @@ setGlobalOptions({ options: { allowMixed: Severity.ERROR } });
 
 ## Global Typegoose Options {#options}
 
-There are currently no global Typegoose specific options
+### disableCaching
+
+Default: `false`
+
+Set if caching should be disabled.
+
+Enabling this will disable cache (will not clear cache if already something is added).
+
+Effects:
+
+- [`deleteModel`](./deleteModel.md#deletemodel) & [`deleteModelWithClass`](./deleteModel.md#deletemodelwithclass) will throw [`E033`](../../guides/error-warning-details.md#cache-disabled-e033) when used
+- [`getClass`](./getClass.md) will throw [`E033`](../../guides/error-warning-details.md#cache-disabled-e033) when used
+- [`getModelWithString`](./getModelWithString.md) will throw [`E033`](../../guides/error-warning-details.md#cache-disabled-e033) when used
+- [`buildSchema`](./buildSchema.md) will not add anything to the `constructors` cache
+- [`addModelToTypegoose`](./addModelToTypegoose.md) will not add anything to `constructors` and `models` cache (but will still check if the class and model are valid)
+- [`getModelForClass`](./getModelForClass.md) & [`getDiscriminatorModelForClass`](./getDiscriminatorModelForClass.md) will not try to get anything from cache

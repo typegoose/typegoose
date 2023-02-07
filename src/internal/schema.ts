@@ -24,6 +24,7 @@ import {
   assignGlobalModelOptions,
   getCachedSchema,
   getName,
+  isCachingEnabled,
   isNullOrUndefined,
   mergeSchemaOptions,
 } from './utils';
@@ -184,8 +185,10 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     });
   }
 
-  // add the class to the constructors map
-  constructors.set(finalName, cl);
+  if (isCachingEnabled()) {
+    // add the class to the constructors map
+    constructors.set(finalName, cl);
+  }
 
   return sch;
 }

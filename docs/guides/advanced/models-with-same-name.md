@@ -66,6 +66,50 @@ const model = getModelForClass(CustomNameOption);
 expect(model.modelName).to.be.equal('CustomNameOption_CustomName');
 ```
 
+## Disable Caching
+
+Since Typegoose `10.2.0` there is also the option of disabling the cache with [global options](../../api/functions/setGlobalOptions.md#disablecaching).
+
+Example:
+
+```ts
+import { setGlobalOptions } from "@typegoose/typegoose";
+
+setGlobalOptions({ globalOptions: { disableCaching: true } });
+
+class Kitten {
+  @prop()
+  public name: string;
+}
+
+const KittenModelDefault = getModelForClass(Kitten);
+const KittenModelCon1 = getModelForClass(Kitten, { existingConnection: mongoose.createConnection() });
+
+// OR
+{
+  class Kitten {
+    @prop()
+    public name: string;
+  }
+
+  const KittenModel = getModelForClass(Kitten);
+  assert.ok(!!KittenModel.schema.path('name'));
+}
+{
+  class Kitten {
+    @prop()
+    public nameTag: string;
+  }
+
+  const KittenModel = getModelForClass(Kitten, { existingConnection: mongoose.createConnection() }); // still requires being defined on a different connection / mongoose instance
+  assert.ok(!!KittenModel.schema.path('nameTag'));
+}
+```
+
+:::note
+Models still cannot be defined more than once in the same connection / mongoose instance.
+:::
+
 ## Notes
 
 For more details on the usage of these naming features, please look into [the tests that are written for them.](https://github.com/typegoose/typegoose/blob/r6/master/test/tests/customName.test.ts)

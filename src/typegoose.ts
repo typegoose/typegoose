@@ -6,6 +6,7 @@ import {
   assertion,
   assertionIsClass,
   getName,
+  isCachingEnabled,
   isNullOrUndefined,
   mapModelOptionsToNaming,
   mergeMetadata,
@@ -44,7 +45,7 @@ import type {
   ArraySubDocumentType,
   IBuildSchemaOptions,
 } from './types';
-import { ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
+import { CacheDisabledError, ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
 /* exports */
 // export the internally used "mongoose", to not need to always import it
@@ -95,7 +96,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   mergedOptions[AlreadyMerged] = true;
   const name = getName(cl, overwriteNaming);
 
-  if (models.has(name)) {
+  if (isCachingEnabled() && models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
@@ -126,6 +127,7 @@ export function getModelWithString<U extends AnyParamConstructor<any>, QueryHelp
   key: string
 ): undefined | ReturnModelType<U, QueryHelpers> {
   assertion(typeof key === 'string', () => new ExpectedTypeError('key', 'string', key));
+  assertion(isCachingEnabled(), () => new CacheDisabledError('getModelWithString'));
 
   return models.get(key) as any;
 }
@@ -218,6 +220,13 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
   assertion(model.prototype instanceof mongooseModel, new NotValidModelError(model, 'addModelToTypegoose.model'));
   assertionIsClass(cl);
 
+  // only check cache after the above checks, just to make sure they run
+  if (!isCachingEnabled()) {
+    logger.info('Caching is not enabled, skipping adding');
+
+    return model as ReturnModelType<U, QueryHelpers>;
+  }
+
   const name = model.modelName;
 
   assertion(
@@ -252,6 +261,7 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
  */
 export function deleteModel(name: string) {
   assertion(typeof name === 'string', () => new ExpectedTypeError('name', 'string', name));
+  assertion(isCachingEnabled(), () => new CacheDisabledError('deleteModelWithClass'));
 
   logger.debug('Deleting Model "%s"', name);
 
@@ -278,6 +288,7 @@ export function deleteModel(name: string) {
  */
 export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) {
   assertionIsClass(cl);
+  assertion(isCachingEnabled(), () => new CacheDisabledError('deleteModelWithClass'));
 
   let name = getName(cl);
 
@@ -424,7 +435,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   mergedOptions[AlreadyMerged] = true;
   const name = getName(cl, overwriteNaming);
 
-  if (models.has(name)) {
+  if (isCachingEnabled() && models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 

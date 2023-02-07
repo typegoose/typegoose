@@ -21,6 +21,7 @@ import { DecoratorKeys, Severity } from './constants';
 import { constructors, globalOptions } from './data';
 import {
   AssertionFallbackError,
+  CacheDisabledError,
   InvalidOptionsConstructorError,
   NoValidClassError,
   ResolveTypegooseNameError,
@@ -156,6 +157,8 @@ export function getCachedSchema(target: AnyParamConstructor<any>): Record<string
 export function getClass(
   input: mongoose.Document | IObjectWithTypegooseFunction | { typegooseName: string } | string | any
 ): NewableFunction | undefined {
+  assertion(isCachingEnabled(), () => new CacheDisabledError('getClass'));
+
   if (typeof input === 'string') {
     return constructors.get(input);
   }
@@ -738,4 +741,12 @@ export function mapModelOptionsToNaming(options: IModelOptions | undefined): INa
   }
 
   return mappedNaming;
+}
+
+/**
+ * Helper function to check if caching is enabled
+ * @returns "true" if caching is enabled or "false" if disabled
+ */
+export function isCachingEnabled(): boolean {
+  return !(globalOptions.globalOptions?.disableCaching === true);
 }
