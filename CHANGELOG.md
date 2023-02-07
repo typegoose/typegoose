@@ -1,3 +1,10 @@
+## [10.2.0-beta.1](https://github.com/typegoose/typegoose/compare/v10.1.1...v10.2.0-beta.1) (2023-02-07)
+
+
+### Features
+
+* add a way to disable caching ([2528601](https://github.com/typegoose/typegoose/commit/2528601529fd63efceda932809a8edabd128bd92)), closes [typegoose/typegoose#789](https://github.com/typegoose/typegoose/issues/789)
+
 ## [10.1.1](https://github.com/typegoose/typegoose/compare/v10.1.0...v10.1.1) (2023-02-05)
 
 
