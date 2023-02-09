@@ -1,3 +1,15 @@
+## [10.2.0-beta.2](https://github.com/typegoose/typegoose/compare/v10.2.0-beta.1...v10.2.0-beta.2) (2023-02-09)
+
+
+### Features
+
+* add option to locally disable caching ([78ac3bc](https://github.com/typegoose/typegoose/commit/78ac3bce1536cf667d454fd02810035c6758901a))
+
+
+### Fixes
+
+* rename global "disableCaching" to "disableGlobalCaching" ([5deb0eb](https://github.com/typegoose/typegoose/commit/5deb0eb2efca76a4c3f0d3f0e132790e89244024))
+
 ## [10.2.0-beta.1](https://github.com/typegoose/typegoose/compare/v10.1.1...v10.2.0-beta.1) (2023-02-07)
 
 
