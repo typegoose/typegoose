@@ -81,7 +81,7 @@ Since Typegoose `10.2.0` there is also the option of disabling the cache globall
   <TabItem value="global" label="Disable Cache globally">
 
 ```ts
-import { setGlobalOptions } from "@typegoose/typegoose";
+import { setGlobalOptions, getModelForClass, prop } from "@typegoose/typegoose";
 
 setGlobalOptions({ globalOptions: { disableGlobalCaching: true } });
 
@@ -118,7 +118,7 @@ const KittenModelCon1 = getModelForClass(Kitten, { existingConnection: mongoose.
   <TabItem value="local" label="Disable Cache locally" default>
 
 ```ts
-import { modelOptions } from "@typegoose/typegoose";
+import { modelOptions, getModelForClass, prop } from "@typegoose/typegoose";
 
 @modelOptions({ options: { disableCache: true } })
 class Kitten {
