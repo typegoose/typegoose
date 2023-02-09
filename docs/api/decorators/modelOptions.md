@@ -273,7 +273,7 @@ Default: `false`
 
 Disable Caching for current Class (and all classes extending it) or for just a call (for [`buildSchema`](../functions/buildSchema.md) / [`getModelForClass`](../functions/getModelForClass.md) / [`getDiscriminatorModelForClass`](../functions/getDiscriminatorModelForClass.md)).
 
-This Option will NOT overwrite the global [`disableCaching`](../functions/setGlobalOptions.md#disablecaching).
+This Option will NOT overwrite the global [`disableGlobalCaching`](../functions/setGlobalOptions.md#disableglobalcaching) if set.
 
 Example:
 

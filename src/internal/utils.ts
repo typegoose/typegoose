@@ -748,7 +748,7 @@ export function mapModelOptionsToNaming(options: IModelOptions | undefined): INa
  * @returns "true" if caching is enabled or "false" if disabled
  */
 export function isGlobalCachingEnabled(): boolean {
-  return !(globalOptions.globalOptions?.disableCaching === true);
+  return !(globalOptions.globalOptions?.disableGlobalCaching === true);
 }
 
 /**

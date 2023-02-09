@@ -642,7 +642,7 @@ export interface ITypegooseOptions {
    * "false" and "undefined" have the same result of enabling caching
    * @default false
    */
-  disableCaching?: boolean;
+  disableGlobalCaching?: boolean;
 }
 
 /** Interface describing a Object that has a "typegooseName" Function */

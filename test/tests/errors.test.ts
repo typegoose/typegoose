@@ -883,11 +883,11 @@ describe('tests for "DuplicateOptionsError" [E031]', () => {
 describe('tests for "CacheDisabledError" [E033]', () => {
   beforeAll(() => {
     globalOptions['globalOptions'] = globalOptions['globalOptions'] ?? {};
-    globalOptions['globalOptions'].disableCaching = true;
+    globalOptions['globalOptions'].disableGlobalCaching = true;
   });
 
   afterAll(() => {
-    delete globalOptions['globalOptions']!.disableCaching;
+    delete globalOptions['globalOptions']!.disableGlobalCaching;
   });
 
   it('should throw a Error when trying to use "getClass" but caching is disabled', () => {

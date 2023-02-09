@@ -27,7 +27,7 @@ The `setGlobalOptions` call has to be before any `buildSchema` (by extension als
 
 ```ts
 setGlobalOptions({ options: { allowMixed: Severity.ERROR } });
-setGlobalOptions({ globalOptions: { disableCaching: true } }); // does not affect the previous setting of "options"
+setGlobalOptions({ globalOptions: { disableGlobalCaching: true } }); // does not affect the previous setting of "options"
 setGlobalOptions({ globalOptions: { someOtherOption: true } }); // does not affect the previous setting of "globalOptions"
 setGlobalOptions({ options: { disableLowerIndexes: true, allowMixed: Severity.WARN } }); // will overwrite previous setting of "allowMixed"
 
@@ -38,7 +38,7 @@ setGlobalOptions({ options: { disableLowerIndexes: true, allowMixed: Severity.WA
     disableLowerIndexes: true
   },
   globalOptions: {
-    disableCaching: true,
+    disableGlobalCaching: true,
     someOtherOption: true
   }
 }
@@ -46,7 +46,7 @@ setGlobalOptions({ options: { disableLowerIndexes: true, allowMixed: Severity.WA
 
 ## Global Typegoose Options {#options}
 
-### disableCaching
+### disableGlobalCaching
 
 Default: `false`
 

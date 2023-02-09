@@ -75,7 +75,7 @@ expect(model.modelName).to.be.equal('CustomNameOption_CustomName');
 
 ## Disable Caching
 
-Since Typegoose `10.2.0` there is also the option of disabling the cache globally with [global options](../../api/functions/setGlobalOptions.md#disablecaching) or locally via [`@modelOptions`](../../api/decorators/modelOptions.md#disablecaching).
+Since Typegoose `10.2.0` there is also the option of disabling the cache globally with [`setGlobalOptions`](../../api/functions/setGlobalOptions.md)'s [`disableGlobalCaching`](../../api/functions/setGlobalOptions.md#disableglobalcaching) or locally via [`@modelOptions`](../../api/decorators/modelOptions.md#disablecaching).
 
 <Tabs groupId="caching-global-local">
   <TabItem value="global" label="Disable Cache globally">
@@ -83,7 +83,7 @@ Since Typegoose `10.2.0` there is also the option of disabling the cache globall
 ```ts
 import { setGlobalOptions } from "@typegoose/typegoose";
 
-setGlobalOptions({ globalOptions: { disableCaching: true } });
+setGlobalOptions({ globalOptions: { disableGlobalCaching: true } });
 
 class Kitten {
   @prop()
@@ -157,7 +157,7 @@ const KittenModelCon1 = getModelForClass(Kitten, { existingConnection: mongoose.
 Models still cannot be defined more than once in the same connection / mongoose instance.
 :::
 :::caution
-Setting the Cache to be disabled globally will make some functions that rely on it error, see [`E033`](../error-warning-details.md#cache-disabled-e033) and [`disableCaching`](../../api/functions/setGlobalOptions.md#disablecaching) which effects it will have.
+Setting the Cache to be disabled globally will make some functions that rely on it error, see [`E033`](../error-warning-details.md#cache-disabled-e033) and [`disableGlobalCaching`](../../api/functions/setGlobalOptions.md#disableglobalcaching) which effects it will have.
 :::
 
 ## Notes

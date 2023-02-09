@@ -11,11 +11,11 @@ beforeEach(() => {
 describe('global', () => {
   beforeAll(() => {
     globalOptions['globalOptions'] = globalOptions['globalOptions'] ?? {};
-    globalOptions['globalOptions'].disableCaching = true;
+    globalOptions['globalOptions'].disableGlobalCaching = true;
   });
 
   afterAll(() => {
-    delete globalOptions['globalOptions']!.disableCaching;
+    delete globalOptions['globalOptions']!.disableGlobalCaching;
 
     mongoose.deleteModel(/.*/); // typegoose does not cache the model, but mongoose still does per connection / mongoose instance
   });
