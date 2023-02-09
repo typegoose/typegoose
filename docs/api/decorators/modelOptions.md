@@ -267,7 +267,7 @@ await area.save();
 
 See [Nested Discriminators](../../guides/advanced/nested-discriminators.mdx) for a guide on how to use nested Discriminators.
 
-### disableCaching
+#### disableCaching
 
 Default: `false`
 
