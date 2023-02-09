@@ -266,3 +266,52 @@ await area.save();
 ```
 
 See [Nested Discriminators](../../guides/advanced/nested-discriminators.mdx) for a guide on how to use nested Discriminators.
+
+### disableCaching
+
+Default: `false`
+
+Disable Caching for current Class (and all classes extending it) or for just a call (for [`buildSchema`](../functions/buildSchema.md) / [`getModelForClass`](../functions/getModelForClass.md) / [`getDiscriminatorModelForClass`](../functions/getDiscriminatorModelForClass.md)).
+
+This Option will NOT overwrite the global [`disableCaching`](../functions/setGlobalOptions.md#disablecaching).
+
+Example:
+
+```ts
+// some values to keep references
+let KittenModel1: mongoose.Model<any>;
+let KittenModel2: mongoose.Model<any>;
+let KittenClass1: AnyParamConstructor<any>;
+let KittenClass2: AnyParamConstructor<any>;
+{
+  class Kitten {
+    @prop()
+    public name?: string;
+  }
+
+  KittenModel1 = getModelForClass(Kitten, { options: { disableCaching: true } });
+  KittenClass1 = Kitten;
+}
+assert.ok(getModelWithString(getName(KittenClass1)) === undefined); // caching was disabled locally, so it cannot be found - because it was never added
+{
+  class Kitten {
+    @prop()
+    public nameTag?: string;
+  }
+
+  KittenModel2 = getModelForClass(Kitten, {
+    existingConnection: mongoose.createConnection(),
+  });
+  KittenClass2 = Kitten;
+}
+assert.ok(getModelWithString(getName(KittenClass2))); // caching was enabled, so the second can be found
+
+// the following will return the "KittenModel2" instance, because both classes have the same name but only the second one was added to the caching
+// and caching currently works by (typegoose generated) name
+const KittenModel3 = getModelForClass(KittenClass1);
+// Note that the above *would* work if "disableCaching" would be defined via a "@modelOptions" decorator, because then caching would also have been disabled here
+
+assert.ok(KittenModel1 !== KittenModel2); // check that both original models do not match, because caching was disabled they are different
+
+assert.ok(KittenModel3 === KittenModel2); // check that "KittenModel3" is the same reference as "KittenModel2", because "KittenClass2" was added with caching and has the same name
+```

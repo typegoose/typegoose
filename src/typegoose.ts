@@ -7,10 +7,10 @@ import {
   assertionIsClass,
   getName,
   isCachingEnabled,
+  isGlobalCachingEnabled,
   isNullOrUndefined,
   mapModelOptionsToNaming,
   mergeMetadata,
-  mergeSchemaOptions,
   warnNotMatchingExisting,
 } from './internal/utils';
 
@@ -29,7 +29,7 @@ if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version
 }
 
 import { parseENV, setGlobalOptions } from './globalOptions';
-import { DecoratorKeys } from './internal/constants';
+import { AlreadyMerged, DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
 import { logger } from './logSettings';
@@ -69,12 +69,6 @@ export { Severity, PropType } from './internal/constants';
 parseENV(); // call this before anything to ensure they are applied
 
 /**
- * Symbol to track if options have already been merged
- * This is to reduce the "merge*" calls, which dont need to be run often if already done
- */
-const AlreadyMerged = Symbol('MOAlreadyMergedOptions');
-
-/**
  * Build a Model From a Class
  * @param cl The Class to build a Model from
  * @param options Overwrite Options, like for naming or general SchemaOptions the class gets compiled with
@@ -96,7 +90,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   mergedOptions[AlreadyMerged] = true;
   const name = getName(cl, overwriteNaming);
 
-  if (isCachingEnabled() && models.has(name)) {
+  if (isCachingEnabled(mergedOptions.options?.disableCaching) && models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
@@ -110,6 +104,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   return addModelToTypegoose<U, QueryHelpers>(compiledModel, cl, {
     existingMongoose: mergedOptions?.existingMongoose,
     existingConnection: mergedOptions?.existingConnection,
+    disableCaching: mergedOptions.options?.disableCaching,
   });
 }
 
@@ -127,7 +122,7 @@ export function getModelWithString<U extends AnyParamConstructor<any>, QueryHelp
   key: string
 ): undefined | ReturnModelType<U, QueryHelpers> {
   assertion(typeof key === 'string', () => new ExpectedTypeError('key', 'string', key));
-  assertion(isCachingEnabled(), () => new CacheDisabledError('getModelWithString'));
+  assertion(isGlobalCachingEnabled(), () => new CacheDisabledError('getModelWithString'));
 
   return models.get(key) as any;
 }
@@ -154,7 +149,9 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   logger.debug('buildSchema called for "%s"', getName(cl, overwriteNaming));
 
   // dont re-run the merging if already done so before (like in getModelForClass)
-  const mergedOptions = options?.[AlreadyMerged] ? options?.schemaOptions : mergeSchemaOptions(options?.schemaOptions, cl);
+  const rawOptions = typeof options === 'object' ? options : {};
+  const mergedOptions: IModelOptions = rawOptions?.[AlreadyMerged] ? rawOptions : mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
+  mergedOptions[AlreadyMerged] = true;
 
   let sch: mongoose.Schema<DocumentType<InstanceType<U>>> | undefined = undefined;
   /** Parent Constructor */
@@ -213,7 +210,7 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
 export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
   model: mongoose.Model<any>,
   cl: U,
-  options?: { existingMongoose?: mongoose.Mongoose; existingConnection?: any }
+  options?: { existingMongoose?: mongoose.Mongoose; existingConnection?: any; disableCaching?: boolean }
 ) {
   const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
 
@@ -221,7 +218,7 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
   assertionIsClass(cl);
 
   // only check cache after the above checks, just to make sure they run
-  if (!isCachingEnabled()) {
+  if (!isCachingEnabled(options?.disableCaching)) {
     logger.info('Caching is not enabled, skipping adding');
 
     return model as ReturnModelType<U, QueryHelpers>;
@@ -261,7 +258,7 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
  */
 export function deleteModel(name: string) {
   assertion(typeof name === 'string', () => new ExpectedTypeError('name', 'string', name));
-  assertion(isCachingEnabled(), () => new CacheDisabledError('deleteModelWithClass'));
+  assertion(isGlobalCachingEnabled(), () => new CacheDisabledError('deleteModelWithClass'));
 
   logger.debug('Deleting Model "%s"', name);
 
@@ -288,7 +285,7 @@ export function deleteModel(name: string) {
  */
 export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) {
   assertionIsClass(cl);
-  assertion(isCachingEnabled(), () => new CacheDisabledError('deleteModelWithClass'));
+  assertion(isGlobalCachingEnabled(), () => new CacheDisabledError('deleteModelWithClass'));
 
   let name = getName(cl);
 
@@ -435,7 +432,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   mergedOptions[AlreadyMerged] = true;
   const name = getName(cl, overwriteNaming);
 
-  if (isCachingEnabled() && models.has(name)) {
+  if (isCachingEnabled(mergedOptions.options?.disableCaching) && models.has(name)) {
     return models.get(name) as ReturnModelType<U, QueryHelpers>;
   }
 
@@ -464,7 +461,9 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
     mergePlugins,
   });
 
-  return addModelToTypegoose<U, QueryHelpers>(compiledModel, cl);
+  return addModelToTypegoose<U, QueryHelpers>(compiledModel, cl, {
+    disableCaching: mergedOptions.options?.disableCaching,
+  });
 }
 
 /**

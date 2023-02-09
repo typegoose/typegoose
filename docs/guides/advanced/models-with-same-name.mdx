@@ -3,6 +3,13 @@ id: models-with-same-name
 title: 'Models with same name'
 ---
 
+<!--MDX Import section-->
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<!--END MDX Import section-->
+
 This Guide shows all the possibilities for a model to use different names.
 
 :::note
@@ -68,9 +75,10 @@ expect(model.modelName).to.be.equal('CustomNameOption_CustomName');
 
 ## Disable Caching
 
-Since Typegoose `10.2.0` there is also the option of disabling the cache with [global options](../../api/functions/setGlobalOptions.md#disablecaching).
+Since Typegoose `10.2.0` there is also the option of disabling the cache globally with [global options](../../api/functions/setGlobalOptions.md#disablecaching) or locally via [`@modelOptions`](../../api/decorators/modelOptions.md#disablecaching).
 
-Example:
+<Tabs groupId="caching-global-local">
+  <TabItem value="global" label="Disable Cache globally">
 
 ```ts
 import { setGlobalOptions } from "@typegoose/typegoose";
@@ -106,8 +114,50 @@ const KittenModelCon1 = getModelForClass(Kitten, { existingConnection: mongoose.
 }
 ```
 
+  </TabItem>
+  <TabItem value="local" label="Disable Cache locally" default>
+
+```ts
+import { modelOptions } from "@typegoose/typegoose";
+
+@modelOptions({ options: { disableCache: true } })
+class Kitten {
+  @prop()
+  public name: string;
+}
+
+const KittenModelDefault = getModelForClass(Kitten);
+const KittenModelCon1 = getModelForClass(Kitten, { existingConnection: mongoose.createConnection() });
+
+// OR
+{
+  class Kitten {
+    @prop()
+    public name: string;
+  }
+
+  const KittenModel = getModelForClass(Kitten, { options: { disableCaching: true } });
+  assert.ok(!!KittenModel.schema.path('name'));
+}
+{
+  class Kitten {
+    @prop()
+    public nameTag: string;
+  }
+
+  const KittenModel = getModelForClass(Kitten, { existingConnection: mongoose.createConnection(), options: { disableCaching: true } }); // still requires being defined on a different connection / mongoose instance
+  assert.ok(!!KittenModel.schema.path('nameTag'));
+}
+```
+
+  </TabItem>
+</Tabs>
+
 :::note
 Models still cannot be defined more than once in the same connection / mongoose instance.
+:::
+:::caution
+Setting the Cache to be disabled globally will make some functions that rely on it error, see [`E033`](../error-warning-details.md#cache-disabled-e033) and [`disableCaching`](../../api/functions/setGlobalOptions.md#disablecaching) which effects it will have.
 :::
 
 ## Notes

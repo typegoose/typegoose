@@ -479,6 +479,13 @@ export interface ICustomOptions {
    * This option can be used over the prop-option to not have to re-define discriminators if used in multiple classes
    */
   discriminators?: NestedDiscriminatorsFunction;
+  /**
+   * Disable Caching for this Class if defined via `@modelOptions`, or disable caching for the `getModelForClass` / `buildSchema` / `getDiscriminatorModelForClass`
+   * Does NOT overwrite global disabled caching
+   * "undefined" and "false" have the same meaning
+   * @default false
+   */
+  disableCaching?: boolean;
 }
 
 /** Extra options for "_buildSchema" in "schema.ts" */
@@ -630,7 +637,7 @@ export interface IGlobalOptions {
 
 export interface ITypegooseOptions {
   /**
-   * Option to disable caching
+   * Option to disable caching globally
    * completely disables the "constructors" and "models" maps
    * "false" and "undefined" have the same result of enabling caching
    * @default false

@@ -14,7 +14,7 @@ import type {
   QueryMethodMap,
   VirtualPopulateMap,
 } from '../types';
-import { DecoratorKeys } from './constants';
+import { AlreadyMerged, DecoratorKeys } from './constants';
 import { constructors } from './data';
 import { NoDiscriminatorFunctionError, PathNotInSchemaError } from './errors';
 import { processProp } from './processProp';
@@ -26,7 +26,7 @@ import {
   getName,
   isCachingEnabled,
   isNullOrUndefined,
-  mergeSchemaOptions,
+  mergeMetadata,
 } from './utils';
 
 /**
@@ -44,7 +44,7 @@ import {
 export function _buildSchema<U extends AnyParamConstructor<any>>(
   cl: U,
   origSch?: mongoose.Schema<any>,
-  opt?: mongoose.SchemaOptions,
+  opt?: IModelOptions,
   isFinalSchema: boolean = true,
   overwriteNaming?: INamingOptions,
   extraOptions?: IBuildSchemaOptions
@@ -54,16 +54,17 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   assignGlobalModelOptions(cl); // to ensure global options are applied to the current class
 
   // Options sanity check
-  opt = mergeSchemaOptions(isNullOrUndefined(opt) || typeof opt !== 'object' ? {} : opt, cl);
+  const rawOptions = typeof opt === 'object' ? opt : {};
+  const mergedOptions: IModelOptions = rawOptions?.[AlreadyMerged] ? rawOptions : mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
+  mergedOptions[AlreadyMerged] = true;
 
   const finalName = getName(cl, overwriteNaming);
 
-  logger.debug('_buildSchema Called for %s with options:', finalName, opt);
+  logger.debug('_buildSchema Called for %s with options:', finalName, mergedOptions);
 
   /** Simplify the usage */
   const Schema = mongoose.Schema;
-  const ropt: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, cl) ?? {};
-  const schemaOptions = Object.assign({}, ropt?.schemaOptions ?? {}, opt);
+  const schemaOptions = mergedOptions.schemaOptions ?? {};
 
   const decorators = Reflect.getMetadata(DecoratorKeys.PropCache, cl.prototype) as DecoratedPropertyMetadataMap;
 
@@ -185,7 +186,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     });
   }
 
-  if (isCachingEnabled()) {
+  if (isCachingEnabled(mergedOptions.options?.disableCaching)) {
     // add the class to the constructors map
     constructors.set(finalName, cl);
   }
