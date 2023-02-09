@@ -50,9 +50,9 @@ setGlobalOptions({ options: { disableLowerIndexes: true, allowMixed: Severity.WA
 
 Default: `false`
 
-Set if global caching should be disabled.
+Disables Caching Globally (cannot be overwritten by [`disableCaching`](../decorators/modelOptions.md#disablecaching)).
 
-Enabling this will disable cache globally (will not clear cache if already something is added).
+Setting this *will not* clear the existing cache.
 
 If only locally disabled cache is needed, see [`@modelOptions`](../decorators/modelOptions.md)'s [`disableCaching`](../decorators/modelOptions.md#disablecaching) which does *not* have much of the following effects.
 
