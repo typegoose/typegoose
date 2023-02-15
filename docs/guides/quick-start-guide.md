@@ -99,7 +99,7 @@ class User {
 Like `public: string[]` is in reflection only `Array`.  
 :::
 
-[Look here for what `!` means on a property](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html#non-null-assertion-operator)  
+[Look here for what `!` means on a property](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#non-null-assertion-operator-postfix-)  
 [Look here for what `?` means on a property](https://www.typescriptlang.org/docs/handbook/2/functions.html#optional-parameters)  
 
 ## How to Start using typegoose
