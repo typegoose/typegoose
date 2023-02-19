@@ -11,10 +11,8 @@ import type { Severity, PropType } from './internal/constants';
  * const doc: DocumentType<ClassName> = await NameModel.create({});
  * ```
  */
-export type DocumentType<T, QueryHelpers = BeAnObject> = (T extends { _id: unknown }
-  ? mongoose.Document<T['_id'], QueryHelpers, T>
-  : mongoose.Document<any, QueryHelpers, T>) &
-  T &
+export type DocumentType<T, QueryHelpers = BeAnObject> = mongoose.Document<unknown, QueryHelpers, T> &
+  mongoose.Require_id<T> &
   IObjectWithTypegooseFunction;
 /**
  * Get the Type of an instance of a SubDocument with Class properties

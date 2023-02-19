@@ -1,6 +1,6 @@
 import { expectType, expectAssignable, expectError } from 'tsd-lite';
 import * as typegoose from '../../../src/typegoose';
-import { isDocument, isRefType } from '../../../src/typegoose';
+import { isDocument, isRefType, prop } from '../../../src/typegoose';
 import { BeAnObject, IObjectWithTypegooseFunction } from '../../../src/types';
 
 // decorators return type
@@ -21,7 +21,10 @@ expectType<void>(typegoose.setGlobalOptions({}));
 expectType<void>(typegoose.setLogLevel('DEBUG'));
 
 // mongoose related function return types
-class TestClass {}
+class TestClass {
+  @prop()
+  public dummy?: string;
+}
 
 const TestClassModel = typegoose.getModelForClass(TestClass);
 
@@ -166,7 +169,7 @@ async function testDocumentType() {
   const someNewDoc = new TestClassModel();
 
   expectType<
-    typegoose.mongoose.Document<any, BeAnObject, TestClass> &
+    typegoose.mongoose.Document<unknown, BeAnObject, TestClass> &
       TestClass &
       IObjectWithTypegooseFunction & { _id: typegoose.mongoose.Types.ObjectId }
   >(someNewDoc);
@@ -174,7 +177,7 @@ async function testDocumentType() {
   const someCreatedDoc = await TestClassModel.create();
 
   expectType<
-    (typegoose.mongoose.Document<any, BeAnObject, TestClass> &
+    (typegoose.mongoose.Document<unknown, BeAnObject, TestClass> &
       TestClass &
       IObjectWithTypegooseFunction & { _id: typegoose.mongoose.Types.ObjectId })[]
   >(someCreatedDoc);
@@ -182,11 +185,13 @@ async function testDocumentType() {
   const someFoundDoc = await TestClassModel.findOne();
 
   expectType<
-    | (typegoose.mongoose.Document<any, BeAnObject, TestClass> &
+    | (typegoose.mongoose.Document<unknown, BeAnObject, TestClass> &
         TestClass &
         IObjectWithTypegooseFunction & { _id: typegoose.mongoose.Types.ObjectId })
     | null
   >(someFoundDoc);
+
+  expectType<typegoose.mongoose.Types.ObjectId>(someNewDoc._id);
 }
 
 testDocumentType();
@@ -205,7 +210,7 @@ async function gh732() {
   const doc = await SomeClassModel.create({ someoptionalProp: 'helloopt', somerequiredProp: 'helloreq' });
 
   expectType<
-    typegoose.mongoose.Document<any, BeAnObject, SomeClass> &
+    typegoose.mongoose.Document<unknown, BeAnObject, SomeClass> &
       SomeClass &
       IObjectWithTypegooseFunction & { _id: typegoose.mongoose.Types.ObjectId }
   >(doc);

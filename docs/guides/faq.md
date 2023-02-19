@@ -70,3 +70,24 @@ class Cat {
   _id: mongoose.Types.ObjectId;
 }
 ```
+
+### Why is `_id` `unknown`?
+
+It is very likely that your class is just empty, and typescript somehow does not correctly match that and treats it like a generic object.
+
+Example:
+
+```ts
+class Dummy {}
+const DummyModel = getModelForClass(Dummy);
+const newDoc = new DummyModel()
+newDoc._id; // type: unknown
+
+class Dummy {
+  // simple dummy property for types, will complain if actually used
+  public _dummy: never;
+}
+const DummyModel = getModelForClass(Dummy);
+const newDoc = new DummyModel()
+newDoc._id; // type: mongoose.Types.ObjectId
+```
