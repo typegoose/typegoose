@@ -5,7 +5,10 @@ import type { Severity, PropType } from './internal/constants';
  * Get the Type of an instance of a Document with Class properties
  * @example
  * ```ts
- * class ClassName {}
+ * class ClassName {
+ *   @prop()
+ *   public someProperty: string;
+ * }
  * const NameModel = getModelForClass(ClassName);
  *
  * const doc: DocumentType<ClassName> = await NameModel.create({});
