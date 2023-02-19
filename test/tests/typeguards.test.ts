@@ -1,5 +1,5 @@
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
-import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose } from '../../src/typegoose';
+import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose, Ref } from '../../src/typegoose';
 import {
   IsRefTypeArrayModel,
   IsRefTypeModel,
@@ -7,6 +7,7 @@ import {
   IsRefTypeNestedStringModel,
   MTypesArrayRefModel,
   SubModel,
+  UserRef,
   UserRefModel,
 } from '../models/typeguards';
 
@@ -44,7 +45,8 @@ describe('isDocument / isDocumentArray', () => {
       name: 'sub',
     });
 
-    UserSub.master = UserMaster._id;
+    // the casting is required, because otherwise typescript will later in "isDocument(UserSub.master)" infer that its type is "DocumentType<ObjectId>"
+    UserSub.master = UserMaster._id as Ref<UserRef>;
 
     await UserSub.populate('master');
 
