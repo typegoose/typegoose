@@ -32,12 +32,12 @@ type QueryResultType<T> = T extends Query<infer ResultType, any> ? ResultType : 
 
 /**
  * Definitions for "pre" and "post" function overloads
- * basically a copy of https://github.com/Automattic/mongoose/blob/82943da92ba6db7fc27846a63a5a46cd7df049a9/types/index.d.ts#L283-L317
+ * basically a copy of https://github.com/Automattic/mongoose/blob/018074699cf04c1f32bffdfce3253b9027f6955a/types/index.d.ts#L285-L329
  * only modifications done are:
  * - moved options from second argument to be the last argument
  * - de-duplicate function that were duplicated because of options being the second argument
  * - changing the generics in use to support the classes or overwriting whatever is used
- * VERSION COPY OF 6.9.0
+ * VERSION COPY OF 6.10.0
  */
 interface Hooks {
   // post hooks with errorhandling option
