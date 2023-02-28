@@ -33,6 +33,9 @@ function getClass(
 :::caution
 This look-up only works if the class has been correctly registered with [`addModelToTypegoose`](./addModelToTypegoose.md) (automatically done when calling [`getModelForClass`](./getModelForClass.md) or [`getDiscriminatorModelForClass`](./getDiscriminatorModelForClass.md), but **not** for [`buildSchema`](./buildSchema.md)).
 :::
+:::caution
+Will throw a Error when caching is disabled [E033](../../guides/error-warning-details.md#cache-disabled-e033).
+:::
 :::tip
 Any class that got compiled with [`buildSchema`](./buildSchema.md) (transparently used by [`getModelForClass`](./getModelForClass.md) or [`getDiscriminatorModelForClass`](./getDiscriminatorModelForClass.md)) a `typegooseName` function gets automatically added.
 This even makes it possible to get the class from sub-documents / sub-classes.

@@ -30,6 +30,10 @@ This function gets automatically called by functions like [`getModelForClass`](.
 :::tip
 For a full example with `buildSchema` and `addModelToTypegoose` see [Manual Schema Modification](../../guides/advanced/manual-schema-modification.md).
 :::
+:::note
+This function will basically not do much if Caching is disabled.  
+It will still do checks that the passed model and class are valid.
+:::
 
 ## Example
 

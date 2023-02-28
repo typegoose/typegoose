@@ -5,16 +5,17 @@ import type { Severity, PropType } from './internal/constants';
  * Get the Type of an instance of a Document with Class properties
  * @example
  * ```ts
- * class ClassName {}
+ * class ClassName {
+ *   @prop()
+ *   public someProperty: string;
+ * }
  * const NameModel = getModelForClass(ClassName);
  *
  * const doc: DocumentType<ClassName> = await NameModel.create({});
  * ```
  */
-export type DocumentType<T, QueryHelpers = BeAnObject> = (T extends { _id: unknown }
-  ? mongoose.Document<T['_id'], QueryHelpers, T>
-  : mongoose.Document<any, QueryHelpers, T>) &
-  T &
+export type DocumentType<T, QueryHelpers = BeAnObject> = mongoose.Document<unknown, QueryHelpers, T> &
+  mongoose.Require_id<T> &
   IObjectWithTypegooseFunction;
 /**
  * Get the Type of an instance of a SubDocument with Class properties
@@ -479,6 +480,13 @@ export interface ICustomOptions {
    * This option can be used over the prop-option to not have to re-define discriminators if used in multiple classes
    */
   discriminators?: NestedDiscriminatorsFunction;
+  /**
+   * Disable Caching for this Class if defined via `@modelOptions`, or disable caching for the `getModelForClass` / `buildSchema` / `getDiscriminatorModelForClass`
+   * Does NOT overwrite global disabled caching
+   * "undefined" and "false" have the same meaning
+   * @default false
+   */
+  disableCaching?: boolean;
 }
 
 /** Extra options for "_buildSchema" in "schema.ts" */
@@ -624,9 +632,18 @@ export interface IGlobalOptions {
   schemaOptions?: mongoose.SchemaOptions;
   /**
    * Global Options for general Typegoose
-   * (There are currently none)
    */
-  globalOptions?: BeAnObject;
+  globalOptions?: ITypegooseOptions;
+}
+
+export interface ITypegooseOptions {
+  /**
+   * Option to disable caching globally
+   * completely disables the "constructors" and "models" maps
+   * "false" and "undefined" have the same result of enabling caching
+   * @default false
+   */
+  disableGlobalCaching?: boolean;
 }
 
 /** Interface describing a Object that has a "typegooseName" Function */

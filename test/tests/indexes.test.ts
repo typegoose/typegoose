@@ -31,6 +31,8 @@ describe('Property Option {select}', () => {
 });
 
 it('should create and find indexes with weights', async () => {
+  await IndexWeightsModel.ensureIndexes();
+
   const docMongoDB = await IndexWeightsModel.create({
     about: 'NodeJS module for MongoDB',
     content: 'MongoDB-native is the default driver for MongoDB in NodeJS',

@@ -13,6 +13,49 @@
 * **prettier:** upgrade to 2.8.4 ([382d82c](https://github.com/typegoose/typegoose/commit/382d82c88d15e673ec7fe9dd2544003d760eab21))
 * **typescript:** upgrade to 4.9.5 ([92b6779](https://github.com/typegoose/typegoose/commit/92b677943e0cdb27f87f6ebf8e273b6c0234b55b))
 
+
+## [10.2.0-beta.3](https://github.com/typegoose/typegoose/compare/v10.2.0-beta.2...v10.2.0-beta.3) (2023-02-19)
+
+
+### Features
+
+* **types:** change "DocumentType" to actually use a proper "_id" type ([c63c5f1](https://github.com/typegoose/typegoose/commit/c63c5f1528dda78fc2d5c2ffc440a9d09a188b41))
+
+
+### Dependencies
+
+* **@typescript-eslint/*:** upgrade to 5.52.0 ([97cc0b1](https://github.com/typegoose/typegoose/commit/97cc0b17c3318554b4b20b722942753f9e137d9c))
+* **commitlint:** upgrade to 17.4.4 ([c696ac2](https://github.com/typegoose/typegoose/commit/c696ac29d8d5c4b52d6cc84c9c2a0f1d2391c51d))
+* **eslint:** upgrade to 8.34.0 ([7c51f83](https://github.com/typegoose/typegoose/commit/7c51f8356cfaa11d338d28a20e6b38f162ce9a82))
+* **jest:** upgrade to 29.4.3 ([d7ab126](https://github.com/typegoose/typegoose/commit/d7ab126140d10d25eca38ce8531032b956c9a786))
+* **lint-staged:** upgrade to 13.1.2 ([6c4ce7e](https://github.com/typegoose/typegoose/commit/6c4ce7e037eef827785be6793d3d40c875f318fd))
+* **prettier:** upgrade to 2.8.4 ([9fd5e78](https://github.com/typegoose/typegoose/commit/9fd5e78765223b7d7d2408e9a7c8fd40295bbff8))
+* **typescript:** upgrade to 4.9.5 ([27a1838](https://github.com/typegoose/typegoose/commit/27a18388a420b4da7f41d1ba4aba906b04f89e92))
+
+
+### Style
+
+* **types:** update tsdoc example for "DocumentType" ([33fa48e](https://github.com/typegoose/typegoose/commit/33fa48ec6b1b24117653fbd02c3441f1dcf0c69c))
+
+## [10.2.0-beta.2](https://github.com/typegoose/typegoose/compare/v10.2.0-beta.1...v10.2.0-beta.2) (2023-02-09)
+
+
+### Features
+
+* add option to locally disable caching ([78ac3bc](https://github.com/typegoose/typegoose/commit/78ac3bce1536cf667d454fd02810035c6758901a))
+
+
+### Fixes
+
+* rename global "disableCaching" to "disableGlobalCaching" ([5deb0eb](https://github.com/typegoose/typegoose/commit/5deb0eb2efca76a4c3f0d3f0e132790e89244024))
+
+## [10.2.0-beta.1](https://github.com/typegoose/typegoose/compare/v10.1.1...v10.2.0-beta.1) (2023-02-07)
+
+
+### Features
+
+* add a way to disable caching ([2528601](https://github.com/typegoose/typegoose/commit/2528601529fd63efceda932809a8edabd128bd92)), closes [typegoose/typegoose#789](https://github.com/typegoose/typegoose/issues/789)
+
 ## [10.1.1](https://github.com/typegoose/typegoose/compare/v10.1.0...v10.1.1) (2023-02-05)
 
 
