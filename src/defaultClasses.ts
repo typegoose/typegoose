@@ -1,6 +1,6 @@
 import type { Types } from 'mongoose';
 import { modelOptions } from './modelOptions';
-import type { AnyParamConstructor, DocumentType, RefType } from './types';
+import type { RefType } from './types';
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 /**
@@ -20,20 +20,4 @@ export interface Base<IDType extends RefType = Types.ObjectId> {
    * This getter/setter doesn't exist if "schemaOptions.id" being set to "false"
    */
   id: string;
-}
-
-export interface FindOrCreateResult<T> {
-  created: boolean;
-  doc: DocumentType<T>;
-}
-
-/**
- * This class contains all types for the module "mongoose-findorcreate"
- */
-export abstract class FindOrCreate {
-  public static findOrCreate: <T extends FindOrCreate>(
-    this: AnyParamConstructor<T>,
-    condition: any,
-    createWith?: any
-  ) => Promise<FindOrCreateResult<T>>;
 }

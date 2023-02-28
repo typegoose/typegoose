@@ -67,7 +67,6 @@
     "lint-staged": "^13.1.2",
     "mongodb-memory-server": "^8.11.5",
     "mongoose": "~6.10.0",
-    "mongoose-findorcreate": "3.0.0",
     "prettier": "^2.8.4",
     "rimraf": "^4.1.2",
     "semantic-release": "^19.0.5",

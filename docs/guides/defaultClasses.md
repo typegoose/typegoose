@@ -42,16 +42,6 @@ class Something {} // have your class, OR
 class Something extends TimeStamps {} // have your class extend some other class
 ```
 
-### FindOrCreate
-
-This class provides all the types supplied by the plugin [`mongoose-findorcreate`](./integration-examples/common-plugins.mdx#mongoose-findorcreate).
-
-:::note
-This class should only be used, if the plugin is used too
-:::
-
-[An Example can be seen in common-plugins](./integration-examples/common-plugins.mdx#mongoose-findorcreate)
-
 ## Extra information
 
 ### Use multiple classes together
