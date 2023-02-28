@@ -39,7 +39,7 @@ ${extra}
 Error Class: `FunctionCalledMoreThanSupportedError`
 
 Details:  
-For example [`addModelToTypegoose`](../api/functions/addModelToTypegoose.md) only supports to be called once (1) with the same model name, [this problem has a specific Guide](./advanced/models-with-same-name.md).
+For example [`addModelToTypegoose`](../api/functions/addModelToTypegoose.md) only supports to be called once (1) with the same model name, [this problem has a specific Guide](./advanced/models-with-same-name.mdx).
 
 ### Self Containing Class [E004]
 
