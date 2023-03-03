@@ -32,6 +32,7 @@ module.exports = {
       'guides/mongoose-compatibility',
       'guides/deprecation-codes',
       'guides/error-warning-details',
+      'guides/syntax-notes',
     ],
     // 'guides/known-issues' is included in both "Getting Started" and "Guides", because it fits into both categories
     Guides: [
