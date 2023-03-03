@@ -7,7 +7,7 @@ This Page shows different possibilities of how code can be written in Typegoose,
 
 ## `type` & `ref` with function or without
 
-The options [`type`](../api/decorators/prop.md#type) and [`ref`](../api/decorators/prop.md#ref) can be written either as `type: Type` or as `type: () => Type`. Both syntax variations are valid options, but the second should always be preferred when not using primitives, because this "deferred function" syntax can  workaround the issues of [Circular References](./advanced/reference-other-classes.md#circular-dependencies) (in some cases) and also correct situations, where you might run into `use-before-define` errors.
+The options [`type`](../api/decorators/prop.md#type) and [`ref`](../api/decorators/prop.md#ref) can be written either as `type: Type` or as `type: () => Type`. Both syntax variations are valid options, but the second should always be preferred when not using primitives, because this "deferred function" syntax can  workaround the issues of [Circular References](./advanced/reference-other-classes.md#circular-dependencies) (in some cases) and also correct situations, where you might run into `use-before-declaration` errors.
 
 ```ts
 class Cat {
@@ -20,7 +20,7 @@ class Cat {
 }
 
 class Cat {
-  @prop({ type: Food }) // ERROR: Used before definition
+  @prop({ type: Food }) // ERROR: Used before declaration
   public food: Food;
 
   @prop({ type: () => Food }) // no error, thanks to the deferred function
