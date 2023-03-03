@@ -7,7 +7,7 @@ title: 'Array Types & Fields'
 
 It is much easier to declare the array field's type as `type[]` instead of `Array<type>`.
 
-But in some cases, Typescript could give you a warning, when you would like to use <!---->any mongoose array methods<!--[any mongoose array methods](https://mongoosejs.com/docs/api/array.html) <-- the link is invalid for mongoose 6.0 and there is no proper replacement currently --> on the array field.
+But in some cases, Typescript could give you a warning, when you would like to use <!---->any mongoose array methods<!--[any mongoose array methods](https://mongoosejs.com/docs/api/array.html)--> <!-- the link is invalid for mongoose 6.0 and there is no proper replacement currently --> on the array field.
 To avoid such behavior, you could always declare the array field via `mongoose.Types.Array<type>` or `mongoose.Schema.Types.Array<type>`
 
 Example:
