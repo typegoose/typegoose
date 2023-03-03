@@ -3,17 +3,17 @@ import { assertion, getName } from '../../src/internal/utils';
 import { getModelForClass, isDocument, isDocumentArray, isRefType, prop, Ref } from '../../src/typegoose';
 import { RefTestArrayTypesModel, RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
 
-it('check generated ref schema for ObjectID _id', async () => {
-  expect((RefTestModel.schema.path('refField') as any).instance).toEqual('ObjectID');
+it('check generated ref schema for ObjectId _id', async () => {
+  expect((RefTestModel.schema.path('refField') as any).instance).toEqual('ObjectId');
   expect((RefTestModel.schema.path('refField') as any).options.ref).toEqual('RefTest');
-  expect((RefTestModel.schema.path('refField2') as any).instance).toEqual('ObjectID');
+  expect((RefTestModel.schema.path('refField2') as any).instance).toEqual('ObjectId');
   expect((RefTestModel.schema.path('refField2') as any).options.ref).toEqual('RefTest');
 
   expect((RefTestModel.schema.path('refArray') as any).instance).toEqual('Array');
-  expect((RefTestModel.schema.path('refArray') as any).caster.instance).toEqual('ObjectID');
+  expect((RefTestModel.schema.path('refArray') as any).caster.instance).toEqual('ObjectId');
   expect((RefTestModel.schema.path('refArray') as any).caster.options.ref).toEqual('RefTest');
   expect((RefTestModel.schema.path('refArray2') as any).instance).toEqual('Array');
-  expect((RefTestModel.schema.path('refArray2') as any).caster.instance).toEqual('ObjectID');
+  expect((RefTestModel.schema.path('refArray2') as any).caster.instance).toEqual('ObjectId');
   expect((RefTestModel.schema.path('refArray2') as any).caster.options.ref).toEqual('RefTest');
 });
 

@@ -1029,9 +1029,9 @@ it('should store nested address', async () => {
   expect(person.moreAddresses![1].street).toEqual('A Street 3');
 });
 
-it('should properly set Decimal128, ObjectID types to field', () => {
+it('should properly set Decimal128, ObjectId types to field', () => {
   expect((CarModel.schema as any).paths.price.instance).toEqual('Decimal128');
-  expect((CarModel.schema as any).paths.someId.instance).toEqual('ObjectID');
+  expect((CarModel.schema as any).paths.someId.instance).toEqual('ObjectId');
 });
 
 // failed validation will need to be checked
