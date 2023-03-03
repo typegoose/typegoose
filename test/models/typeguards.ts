@@ -12,7 +12,7 @@ export class IsRefTypeNestedObjectId {
 
 export class IsRefType {
   @prop({ ref: IsRefTypeNestedString, type: String })
-  public nestedString?: Ref<IsRefTypeNestedString>;
+  public nestedString?: Ref<IsRefTypeNestedString /* , string */>; // RefType not set, to know if automatic Ref is broken;
 
   @prop({ ref: IsRefTypeNestedObjectId })
   public nestedObjectId?: Ref<IsRefTypeNestedObjectId>;
@@ -24,7 +24,7 @@ export const IsRefTypeModel = getModelForClass(IsRefType);
 
 export class IsRefTypeArray {
   @prop({ ref: IsRefTypeNestedString, type: String })
-  public nestedString?: Ref<IsRefTypeNestedString>[];
+  public nestedString?: Ref<IsRefTypeNestedString /* , string */>[]; // RefType not set, to know if automatic Ref is broken;
 
   @prop({ ref: IsRefTypeNestedString })
   public nestedObjectId?: Ref<IsRefTypeNestedObjectId>[];
