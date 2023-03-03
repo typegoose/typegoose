@@ -171,7 +171,7 @@ it('should pass all mongoose discriminator tests', async () => {
 
   // https://mongoosejs.com/docs/discriminators.html#using-discriminators-with-model-create
   const events = await Promise.all([
-    EventModel.create<mongoose.LeanDocument<ClickedLinkEvent>>({ time: new Date(Date.now()), url: 'google.com' }),
+    EventModel.create<ClickedLinkEvent>({ time: new Date(Date.now()), url: 'google.com' }),
     ClickedLinkEventModel.create({ time: Date.now(), url: 'google.com' }),
     SignedUpEventModel.create({ time: Date.now(), user: 'testuser' }),
   ]);
