@@ -33,6 +33,72 @@ expectType<typegoose.ReturnModelType<typeof TestClass>>(typegoose.getDiscriminat
 expectType<typegoose.mongoose.Schema<typegoose.DocumentType<InstanceType<typeof TestClass>>>>(typegoose.buildSchema(TestClass));
 expectType<typegoose.ReturnModelType<typeof TestClass>>(typegoose.addModelToTypegoose(TestClassModel, TestClass));
 
+function testAutoInferRef() {
+  class AutoObjectId {
+    public _id!: typegoose.mongoose.Types.ObjectId;
+  }
+
+  class AutoString {
+    public _id!: string;
+  }
+
+  class AutoNumber {
+    public _id!: number;
+  }
+
+  class AutoBuffer {
+    public _id!: typegoose.mongoose.Types.Buffer;
+  }
+
+  class AutoRef {
+    @typegoose.prop()
+    public objectid: typegoose.Ref<AutoObjectId>;
+
+    @typegoose.prop()
+    public string: typegoose.Ref<AutoString>;
+
+    @typegoose.prop()
+    public number: typegoose.Ref<AutoNumber>;
+
+    @typegoose.prop()
+    public buffer: typegoose.Ref<AutoBuffer>;
+  }
+
+  const AutoRefModel = typegoose.getModelForClass(AutoRef);
+  const doc = new AutoRefModel({});
+
+  expectType<typegoose.Ref<AutoObjectId, typegoose.mongoose.Types.ObjectId>>(doc.objectid);
+  expectType<typegoose.Ref<AutoString, string>>(doc.string);
+  expectType<typegoose.Ref<AutoNumber, number>>(doc.number);
+  expectType<typegoose.Ref<AutoBuffer, typegoose.mongoose.Types.Buffer>>(doc.buffer);
+
+  if (isDocument(doc.objectid)) {
+    expectType<typegoose.DocumentType<AutoObjectId>>(doc.objectid);
+  } else {
+    expectType<typegoose.mongoose.Types.ObjectId>(doc.objectid);
+  }
+
+  if (isDocument(doc.string)) {
+    expectType<typegoose.DocumentType<AutoString>>(doc.string);
+  } else {
+    expectType<string>(doc.string);
+  }
+
+  if (isDocument(doc.number)) {
+    expectType<typegoose.DocumentType<AutoNumber>>(doc.number);
+  } else {
+    expectType<number>(doc.number);
+  }
+
+  if (isDocument(doc.buffer)) {
+    expectType<typegoose.DocumentType<AutoBuffer>>(doc.buffer);
+  } else {
+    expectType<typegoose.mongoose.Types.Buffer>(doc.buffer);
+  }
+}
+
+testAutoInferRef();
+
 async function typeguards() {
   class TypeguardsClass {
     @typegoose.prop()
