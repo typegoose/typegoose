@@ -1,3 +1,32 @@
+## [11.0.0-beta.1](https://github.com/typegoose/typegoose/compare/v10.3.0...v11.0.0-beta.1) (2023-03-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **mongoose:** mongoose 7.0.0 is now in use
+* Default-Class "FindOrCreate" (and type "FindOrCreateResult") has been removed, because mongoose-findorcreate is not compatible with mongoose 7.0
+
+### Features
+
+* remove usage and references to "mongoose-findorcreate" ([6de3aa9](https://github.com/typegoose/typegoose/commit/6de3aa9c034a52891ef47bf378bedfc010746d08))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 7.0.0 ([0e06ec9](https://github.com/typegoose/typegoose/commit/0e06ec97d18e099026597e2a31d3ca15fbe388e7))
+* **rimraf:** upgrade to 4.1.2 ([88181b6](https://github.com/typegoose/typegoose/commit/88181b64b7c27b3dc9fa867c6996d2fc15c8cec6))
+
+
+### Fixes
+
+* update types and type-tests for mongoose 7.0 ([b3df459](https://github.com/typegoose/typegoose/commit/b3df45987778e66aea1a6a4ec1d90c0611b133d3))
+
+
+### Style
+
+* **hooks:** update version notice ([02fc3bb](https://github.com/typegoose/typegoose/commit/02fc3bb107cee724cf95c61e958266387ff034d2))
+* **test::model::typeguards:** add comments noting that a type is meant to be ([6aa8f17](https://github.com/typegoose/typegoose/commit/6aa8f17c6b967d1d8b4cd9885c997cd7fa54430a))
+
 ## [10.3.0](https://github.com/typegoose/typegoose/compare/v10.2.0...v10.3.0) (2023-02-28)
 
 
