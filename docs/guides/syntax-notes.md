@@ -35,7 +35,7 @@ class Food {
 
 ## `type` with array or without
 
-When defining the `type` in the `prop options`(../api/decorators/prop.md) for an array, the type can be written either as `type: Type` or as `type: [Type]`. Both are valid options and the differences are only cosmetic. However, if you're using more than 1 dimensions, it is *no longer* cosmetic and the type has to indicate the [number of dimensions](../api/decorators/prop#dim). This rule is valid for both [`type` & `ref` with function or without](#type--ref-with-function-or-without).
+When defining the [`type` in the `prop options`](../api/decorators/prop.md) for an array, the type can be written either as `type: Type` or as `type: [Type]`. Both are valid options and the differences are only cosmetic. However, if you're using more than 1 dimensions, it is *no longer* cosmetic and the type has to indicate the [number of dimensions](../api/decorators/prop#dim). This rule is valid for both [`type` & `ref` with function or without](#type--ref-with-function-or-without).
 
 :::note
 If dimension syntax is used in the `ref` option, Typegoose will [throw an error](./error-warning-details.md#the-option-does-not-support-a-option-value-e027) because only `ref: Type` is allowed (no array).
