@@ -1,3 +1,10 @@
+## [10.3.1](https://github.com/typegoose/typegoose/compare/v10.3.0...v10.3.1) (2023-03-13)
+
+
+### Fixes
+
+* **typegoose:** fix "process" variable checking for being undefined on browser ([39743e2](https://github.com/typegoose/typegoose/commit/39743e20a5a065a1f5ee76d3a9b8d2905658d059))
+
 ## [10.3.0](https://github.com/typegoose/typegoose/compare/v10.2.0...v10.3.0) (2023-02-28)
 
 
