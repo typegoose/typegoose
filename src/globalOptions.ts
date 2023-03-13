@@ -26,6 +26,11 @@ export function setGlobalOptions(options: IGlobalOptions) {
 export function parseENV(): void {
   logger.info('"parseENV" got called');
 
+  // do nothing if no process variable existing
+  if (typeof process === 'undefined' || isNullOrUndefined(process?.env)) {
+    return;
+  }
+
   const options: IGlobalOptions = {
     globalOptions: {},
     options: {
