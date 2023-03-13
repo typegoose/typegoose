@@ -1,3 +1,10 @@
+## [10.3.2](https://github.com/typegoose/typegoose/compare/v10.3.1...v10.3.2) (2023-03-13)
+
+
+### Fixes
+
+* **globalOptions:** another fix to check for "process" being undefined ([5d81464](https://github.com/typegoose/typegoose/commit/5d8146465b6ef0e363b958ffdb8d8637e71723d2))
+
 ## [10.3.1](https://github.com/typegoose/typegoose/compare/v10.3.0...v10.3.1) (2023-03-13)
 
 
