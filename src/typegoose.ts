@@ -14,8 +14,9 @@ import {
   warnNotMatchingExisting,
 } from './internal/utils';
 
+// using "typeof process", because somehow js gives a ReferenceError when using "process === undefined" in browser
 /* istanbul ignore next */
-if (!isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
+if (typeof process !== 'undefined' && !isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
   if (semver.lt(mongoose?.version, '6.10.0')) {
