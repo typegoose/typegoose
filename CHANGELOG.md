@@ -1,3 +1,10 @@
+## [10.3.3](https://github.com/typegoose/typegoose/compare/v10.3.2...v10.3.3) (2023-03-18)
+
+
+### Fixes
+
+* **errors:** update E004 message and example ([c777def](https://github.com/typegoose/typegoose/commit/c777def88e92281b71db899023c5eb0a9b3b3e94))
+
 ## [10.3.2](https://github.com/typegoose/typegoose/compare/v10.3.1...v10.3.2) (2023-03-13)
 
 
