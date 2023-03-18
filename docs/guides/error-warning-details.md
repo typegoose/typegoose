@@ -46,15 +46,31 @@ For example [`addModelToTypegoose`](../api/functions/addModelToTypegoose.md) onl
 Error:
 
 ```txt
-It seems like the type used is the same as the target class, which is not supported
-Please look at https://github.com/typegoose/typegoose/issues/42 for more information (${name}.${key}) [E004]
+It seems like the type used is the same as the target class, which is not supported (${name}.${key}) [E004]
 ```
 
 Error Class: `SelfContainingClassError`
 
 Details:  
-Because of limitations in JavaScript, it is not possible to use a self-containing-class  
--> But Self-Referencing still works
+Because of limitations in JavaScript, it is not possible to use a self-containing-classes, but self-referencing still works  
+
+Example:
+
+```ts
+class Cat {
+  @prop()
+  public kitten: Cat[]; // self-containing-class
+
+  // the above will "de-sugar" to
+  @prop({ type: Cat }) // self-containing-class
+  public kitten: Cat[];
+}
+
+class Cat {
+  @prop({ ref: () => Cat })
+  public kitten: Ref<Cat>[]; // not self-containing class
+}
+```
 
 ### ref is undefined [E005]
 

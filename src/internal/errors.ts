@@ -60,10 +60,7 @@ export class CannotBeSymbolError extends Error {
 
 export class SelfContainingClassError extends TypeError {
   constructor(name: string, key: string) {
-    super(
-      'It seems like the type used is the same as the target class, which is not supported\n' +
-        `Please look at https://github.com/typegoose/typegoose/issues/42 for more information ("${name}.${key}") [E004]`
-    );
+    super('It seems like the type used is the same as the target class, which is not supported ' + `("${name}.${key}") [E004]`);
   }
 }
 
