@@ -44,10 +44,7 @@ exports[`should throw a Error when "ref" is a array [OptionDoesNotSupportOption]
 
 exports[`should throw a Error when the property is a Symbol [CannotBeSymbolError] [E024] 1`] = `"A property key in Typegoose cannot be an symbol! (\\"TestPropertySymbol.Symbol()\\") [E024]"`;
 
-exports[`should throw an error if a self-contained class is used [typegoose#42] [SelfContainingClassError] [E004] 1`] = `
-"It seems like the type used is the same as the target class, which is not supported
-Please look at https://github.com/typegoose/typegoose/issues/42 for more information (\\"TestSelfContained.self\\") [E004]"
-`;
+exports[`should throw an error if a self-contained class is used [typegoose#42] [SelfContainingClassError] [E004] 1`] = `"It seems like the type used is the same as the target class, which is not supported (\\"TestSelfContained.self\\") [E004]"`;
 
 exports[`should throw default error if no error is specified (assertion) [AssertionFallbackError] [E019] 1`] = `"Assert failed - no custom error [E019]"`;
 
