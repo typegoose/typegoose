@@ -3,7 +3,7 @@ id: migrate-10
 title: 'Migrate to 10.0.0'
 ---
 
-These are the changes made for 9.0.0 that are breaking or just important to know
+These are the changes made for 10.0.0 that are breaking or just important to know
 
 :::caution Important, Read this first
 This Guide is written for migration from version `9.13.2` to `10.0.0`, for versions `>10.0.0 <11.0.0`, please consult the [CHANGELOG](https://github.com/typegoose/typegoose/blob/master/CHANGELOG.md)
