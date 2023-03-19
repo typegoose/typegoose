@@ -27,6 +27,27 @@
 * **hooks:** update version notice ([02fc3bb](https://github.com/typegoose/typegoose/commit/02fc3bb107cee724cf95c61e958266387ff034d2))
 * **test::model::typeguards:** add comments noting that a type is meant to be ([6aa8f17](https://github.com/typegoose/typegoose/commit/6aa8f17c6b967d1d8b4cd9885c997cd7fa54430a))
 
+## [10.3.3](https://github.com/typegoose/typegoose/compare/v10.3.2...v10.3.3) (2023-03-18)
+
+
+### Fixes
+
+* **errors:** update E004 message and example ([c777def](https://github.com/typegoose/typegoose/commit/c777def88e92281b71db899023c5eb0a9b3b3e94))
+
+## [10.3.2](https://github.com/typegoose/typegoose/compare/v10.3.1...v10.3.2) (2023-03-13)
+
+
+### Fixes
+
+* **globalOptions:** another fix to check for "process" being undefined ([5d81464](https://github.com/typegoose/typegoose/commit/5d8146465b6ef0e363b958ffdb8d8637e71723d2))
+
+## [10.3.1](https://github.com/typegoose/typegoose/compare/v10.3.0...v10.3.1) (2023-03-13)
+
+
+### Fixes
+
+* **typegoose:** fix "process" variable checking for being undefined on browser ([39743e2](https://github.com/typegoose/typegoose/commit/39743e20a5a065a1f5ee76d3a9b8d2905658d059))
+
 ## [10.3.0](https://github.com/typegoose/typegoose/compare/v10.2.0...v10.3.0) (2023-02-28)
 
 
