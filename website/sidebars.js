@@ -59,6 +59,7 @@ module.exports = {
       'guides/advanced/overwrite-this',
     ],
     Migration: [
+      'guides/migration/migrate-11',
       'guides/migration/migrate-10',
       'guides/migration/migrate-9',
       'guides/migration/migrate-8',
