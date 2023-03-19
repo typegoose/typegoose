@@ -1,3 +1,25 @@
+## [11.0.0-beta.2](https://github.com/typegoose/typegoose/compare/v11.0.0-beta.1...v11.0.0-beta.2) (2023-03-19)
+
+
+### Fixes
+
+* **errors:** update E004 message and example ([c777def](https://github.com/typegoose/typegoose/commit/c777def88e92281b71db899023c5eb0a9b3b3e94))
+* **globalOptions:** another fix to check for "process" being undefined ([5d81464](https://github.com/typegoose/typegoose/commit/5d8146465b6ef0e363b958ffdb8d8637e71723d2))
+* **typegoose:** fix "process" variable checking for being undefined on browser ([39743e2](https://github.com/typegoose/typegoose/commit/39743e20a5a065a1f5ee76d3a9b8d2905658d059))
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 29.5.0 ([a2aeefb](https://github.com/typegoose/typegoose/commit/a2aeefb7d87ded392488040627a3646e86db6b3b))
+* **@typescript-eslint/*:** upgrade to 5.55.0 ([40d882f](https://github.com/typegoose/typegoose/commit/40d882f9c151d6f1aa80d43de201561f3911f166))
+* **eslint-config-prettier:** upgrade to 8.7.0 ([9394fcf](https://github.com/typegoose/typegoose/commit/9394fcf5b3253d46809af4ef15691d08480ad22d))
+* **eslint:** upgrade to 8.36.0 ([4b1db7a](https://github.com/typegoose/typegoose/commit/4b1db7a11766ef305c48f3c6e20ba044b4edef65))
+* **jest:** upgrade to 29.5.0 ([50491f0](https://github.com/typegoose/typegoose/commit/50491f0a6c480bd007fc57c45ef79bf430ed9161))
+* **lint-staged:** upgrade to 13.2.0 ([4417d74](https://github.com/typegoose/typegoose/commit/4417d748a33dea03c55d59ba5eba81f7034ee0e5))
+* **mongodb-memory-server:** upgrade to 9.12.1 ([fd2874b](https://github.com/typegoose/typegoose/commit/fd2874bc01e0bd03a6fa5c16d4cb572be308cc70))
+* **mongoose:** upgrade to 7.0.2 ([bedb61d](https://github.com/typegoose/typegoose/commit/bedb61d5c2bdcfd37b5dde8b7a4b9426c4099587))
+* **rimraf:** upgrade to 4.4.0 ([3395239](https://github.com/typegoose/typegoose/commit/33952398cfa8074d3f57dff86ad3649ece3c7566))
+
 ## [11.0.0-beta.1](https://github.com/typegoose/typegoose/compare/v10.3.0...v11.0.0-beta.1) (2023-03-03)
 
 
