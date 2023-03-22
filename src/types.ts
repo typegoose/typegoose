@@ -47,7 +47,7 @@ export type Func = (...args: any[]) => any;
  */
 export type CustomNameFunction = (options: IModelOptions) => string;
 /**
- * Defer an reference with an function (or as other projects call it "Forward declaration")
+ * Defer a reference with a function (or as other projects call it "Forward declaration")
  * @param type This is just to comply with the common pattern of `type => ActualType`
  */
 export type DeferredFunc<T = any> = (...args: unknown[]) => T;
@@ -91,21 +91,21 @@ export interface BasePropOptions {
   allowMixed?: Severity;
   /** Give the Property a default Value */
   default?: mongoose.SchemaTypeOptions<any>['default']; // I know this one does not have much of an effect, because of "any"
-  /** Give an Validator RegExp or Function */
+  /** Give a Validator RegExp or Function */
   validate?: mongoose.SchemaTypeOptions<any>['validate'];
   /**
-   * Should this property have an "unique" index?
+   * Should this property have a "unique" index?
    * @link https://docs.mongodb.com/manual/indexes/#unique-indexes
    */
   unique?: mongoose.SchemaTypeOptions<any>['unique'];
   /**
    * Should this property have an index?
-   * Note: don't use this if you want to do an compound index
+   * Note: don't use this if you want to do a compound index
    * @link https://docs.mongodb.com/manual/indexes
    */
   index?: mongoose.SchemaTypeOptions<any>['index'];
   /**
-   * Should this property have an "sparse" index?
+   * Should this property have a "sparse" index?
    * @link https://docs.mongodb.com/manual/indexes/#sparse-indexes
    */
   sparse?: mongoose.SchemaTypeOptions<any>['sparse'];
@@ -115,7 +115,7 @@ export interface BasePropOptions {
    */
   expires?: mongoose.SchemaTypeOptions<any>['expires'];
   /**
-   * Should this property have an "text" index?
+   * Should this property have a "text" index?
    * @link https://mongoosejs.com/docs/api/schematype.html#schematype_SchemaType-text
    */
   text?: mongoose.SchemaTypeOptions<any>['text'];
@@ -200,14 +200,14 @@ export interface BasePropOptions {
    */
   // eslint-disable-next-line @typescript-eslint/ban-types
   autopopulate?: boolean | Function | KeyStringAny;
-  /** Reference an other Document (you should use Ref<T> as Prop type) */
+  /** Reference other Document (you should use Ref<T> as Prop type) */
   ref?: DeferredFunc<string | AnyParamConstructor<any> | DynamicStringFunc<any>> | string | AnyParamConstructor<any>;
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
   /**
    * Set the Nested Discriminators
    *
-   * Note: "_id: false" as an prop option doesn't work here
+   * Note: "_id: false" as a prop option doesn't work here
    *
    * Note: Custom Typegoose Option
    */
@@ -656,7 +656,7 @@ export interface IPrototype {
   prototype?: any;
 }
 
-/** An Helper Interface for defining a "key" index of "string" and "value" of "any" */
+/** A Helper Interface for defining a "key" index of "string" and "value" of "any" */
 export type KeyStringAny = Record<string, any>;
 
 /**
