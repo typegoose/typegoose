@@ -200,7 +200,7 @@ export interface BasePropOptions {
    */
   // eslint-disable-next-line @typescript-eslint/ban-types
   autopopulate?: boolean | Function | KeyStringAny;
-  /** Reference other Document (you should use Ref<T> as Prop type) */
+  /** Reference another Document (you should use Ref<T> as Prop type) */
   ref?: DeferredFunc<string | AnyParamConstructor<any> | DynamicStringFunc<any>> | string | AnyParamConstructor<any>;
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
