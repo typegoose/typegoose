@@ -1,3 +1,10 @@
+## [10.3.4](https://github.com/typegoose/typegoose/compare/v10.3.3...v10.3.4) (2023-03-23)
+
+
+### Style
+
+* **types:** fix minor grammar mistakes ([#803](https://github.com/typegoose/typegoose/issues/803)) ([6bd97ae](https://github.com/typegoose/typegoose/commit/6bd97ae87c9e39d1538e0f3be465eba69d535cc4))
+
 ## [10.3.3](https://github.com/typegoose/typegoose/compare/v10.3.2...v10.3.3) (2023-03-18)
 
 
