@@ -49,6 +49,13 @@
 * **hooks:** update version notice ([02fc3bb](https://github.com/typegoose/typegoose/commit/02fc3bb107cee724cf95c61e958266387ff034d2))
 * **test::model::typeguards:** add comments noting that a type is meant to be ([6aa8f17](https://github.com/typegoose/typegoose/commit/6aa8f17c6b967d1d8b4cd9885c997cd7fa54430a))
 
+## [10.3.4](https://github.com/typegoose/typegoose/compare/v10.3.3...v10.3.4) (2023-03-23)
+
+
+### Style
+
+* **types:** fix minor grammar mistakes ([#803](https://github.com/typegoose/typegoose/issues/803)) ([6bd97ae](https://github.com/typegoose/typegoose/commit/6bd97ae87c9e39d1538e0f3be465eba69d535cc4))
+
 ## [10.3.3](https://github.com/typegoose/typegoose/compare/v10.3.2...v10.3.3) (2023-03-18)
 
 
