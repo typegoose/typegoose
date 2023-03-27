@@ -1,7 +1,7 @@
 import { expectType, expectAssignable, expectError } from 'tsd-lite';
 import * as typegoose from '../../../src/typegoose';
 import { isDocument, isRefType, prop } from '../../../src/typegoose';
-import { BeAnObject, IObjectWithTypegooseFunction } from '../../../src/types';
+import { BeAnObject, BeAnyObject, IObjectWithTypegooseFunction } from '../../../src/types';
 
 // decorators return type
 expectType<PropertyDecorator>(typegoose.prop());
@@ -234,28 +234,15 @@ typeguards();
 async function testDocumentType() {
   const someNewDoc = new TestClassModel();
 
-  expectType<
-    typegoose.mongoose.Document<unknown, BeAnObject, TestClass> &
-      TestClass &
-      IObjectWithTypegooseFunction & { _id: typegoose.mongoose.Types.ObjectId }
-  >(someNewDoc);
+  expectType<typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>>(someNewDoc);
 
   const someCreatedDoc = await TestClassModel.create();
 
-  expectType<
-    (typegoose.mongoose.Document<unknown, BeAnObject, TestClass> &
-      TestClass &
-      IObjectWithTypegooseFunction & { _id: typegoose.mongoose.Types.ObjectId })[]
-  >(someCreatedDoc);
+  expectType<typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>[]>(someCreatedDoc);
 
   const someFoundDoc = await TestClassModel.findOne();
 
-  expectType<
-    | (typegoose.mongoose.Document<unknown, BeAnObject, TestClass> &
-        TestClass &
-        IObjectWithTypegooseFunction & { _id: typegoose.mongoose.Types.ObjectId })
-    | null
-  >(someFoundDoc);
+  expectType<typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject> | null>(someFoundDoc);
 
   expectType<typegoose.mongoose.Types.ObjectId>(someNewDoc._id);
 }
@@ -275,17 +262,17 @@ async function gh732() {
 
   const doc = await SomeClassModel.create({ someoptionalProp: 'helloopt', somerequiredProp: 'helloreq' });
 
-  expectType<
-    typegoose.mongoose.Document<unknown, BeAnObject, SomeClass> &
-      SomeClass &
-      IObjectWithTypegooseFunction & { _id: typegoose.mongoose.Types.ObjectId }
-  >(doc);
+  expectType<typegoose.mongoose.HydratedDocument<SomeClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>>(doc);
 
   const toobj = doc.toObject();
   const tojson = doc.toJSON();
 
-  expectType<typegoose.mongoose.Require_id<typegoose.mongoose.LeanDocument<SomeClass>>>(toobj);
-  expectType<typegoose.mongoose.FlattenMaps<typegoose.mongoose.LeanDocument<SomeClass>>>(tojson);
+  expectType<
+    SomeClass & { _id: typegoose.mongoose.Types.ObjectId } & Required<{
+        _id: typegoose.mongoose.Types.ObjectId;
+      }>
+  >(toobj);
+  expectType<typegoose.mongoose.FlattenMaps<SomeClass & { _id: typegoose.mongoose.Types.ObjectId }>>(tojson);
 }
 
 gh732();

@@ -9,7 +9,7 @@ import type { Func, IPluginsArray } from './types';
  * @param options Options for the Plugin, if any
  * @example Example:
  * ```ts
- * @plugin(findOrCreate, { optionsHere: true })
+ * @plugin(pluginFunctionHere, { optionsHere: true })
  * class ClassName {}
  * ```
  */

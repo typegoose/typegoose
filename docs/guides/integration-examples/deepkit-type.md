@@ -136,13 +136,13 @@ const mySerializer = new (class CustomSerializer extends jsonSerializer.fork('my
 
 // Note: A custom Serializer has to be used, because the included "mongoId" "decorator" only works with "@deepkit/orm"
 
-// We overwrite mongoId and correctly convert from Mongo ObjectID to string when deserializing
+// We overwrite mongoId and correctly convert from Mongo ObjectId to string when deserializing
 mySerializer.toClass.register('objectId', (property, state) => {
   state.setContext({ ObjectId: ObjectId });
   state.addSetter(`${state.accessor} instanceof String ? ObjectId.createFromHexString(${state.accessor}) : ${state.accessor}`);
 });
 
-// We overwrite mongoId and correctly convert string to Mongo ObjectID when serializing
+// We overwrite mongoId and correctly convert string to Mongo ObjectId when serializing
 mySerializer.fromClass.register('objectId', (property, state) => {
   state.setContext({ ObjectId: ObjectId });
   state.addSetter(`${state.accessor} instanceof ObjectId ? ${state.accessor}.toHexString() : ${state.accessor}`);

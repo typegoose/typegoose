@@ -28,7 +28,12 @@ export type ArraySubDocumentType<T, QueryHelpers = BeAnObject> = DocumentType<T,
 /**
  * Used Internally for ModelTypes
  */
-export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<DocumentType<T, QueryHelpers>, QueryHelpers>;
+export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<
+  T, // raw doc type
+  QueryHelpers, // query helpers
+  IObjectWithTypegooseFunction, // instance methods
+  BeAnyObject // virtuals
+>;
 /**
  * Any-param Constructor
  */
@@ -672,6 +677,12 @@ export interface GetTypeReturn {
  * This type is separate from "{@link KeyStringAny}" because it has a different meaning
  */
 export type BeAnObject = Record<string, any>;
+/**
+ * This type is for mongoose-specific things where {@link BeAnObject} does not work
+ * see https://github.com/Automattic/mongoose/issues/13094
+ */
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type BeAnyObject = {};
 
 /** Options used for "processProp" */
 export interface ProcessPropOptions extends DecoratedPropertyMetadata {

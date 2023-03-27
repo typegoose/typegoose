@@ -60,9 +60,7 @@ it(
       assertion(!isNullOrUndefined(foundUser.previousCars), new Error('Expected "previousCars" to not be undefined/null'));
 
       // the following requires a custom type, because property (virtual) "id" does not get added to the type by default
-      expect<mongoose.LeanDocument<User> & { _id: mongoose.Types.ObjectId; id: string }>(
-        foundUser.toObject({ virtuals: true, getters: true })
-      ).toMatchSnapshot({
+      expect<User & { _id: mongoose.Types.ObjectId; id: string }>(foundUser.toObject({ virtuals: true, getters: true })).toMatchSnapshot({
         _id: expect.any(mongoose.Types.ObjectId),
         id: expect.any(String),
         job: {
@@ -114,43 +112,3 @@ it(
   },
   10 * 1000
 );
-
-it('should create a user with [Plugin].findOrCreate', async () => {
-  const createdUser = await UserModel.findOrCreate({
-    firstName: 'Jane',
-    lastName: 'Doe',
-    gender: Genders.FEMALE,
-  });
-
-  expect(createdUser).not.toBeUndefined();
-  expect(createdUser).toHaveProperty('created');
-  expect(createdUser.created).toBe(true);
-  expect(createdUser).toHaveProperty('doc');
-  expect(createdUser.doc).toHaveProperty('firstName', 'Jane');
-
-  const foundUser = await UserModel.findOrCreate({
-    firstName: 'Jane',
-    lastName: 'Doe',
-  });
-
-  expect(foundUser).not.toBeUndefined();
-  expect(foundUser).toHaveProperty('created');
-  expect(foundUser.created).toBe(false);
-  expect(foundUser).toHaveProperty('doc');
-  expect(foundUser.doc).toHaveProperty('firstName', 'Jane');
-
-  try {
-    await UserModel.create({
-      _id: new mongoose.Types.ObjectId(),
-      firstName: 'John',
-      lastName: 'Doe',
-      age: 20,
-      gender: Genders.MALE,
-      uniqueId: 'john-doe-20',
-      languages: [],
-    });
-  } catch (err) {
-    // Duplicate key error (11000)
-    expect(err).toHaveProperty('code', 11000);
-  }
-});

@@ -1,3 +1,72 @@
+## [11.0.0-beta.3](https://github.com/typegoose/typegoose/compare/v11.0.0-beta.2...v11.0.0-beta.3) (2023-03-27)
+
+
+### Style
+
+* **types:** fix minor grammar mistakes ([#803](https://github.com/typegoose/typegoose/issues/803)) ([6bd97ae](https://github.com/typegoose/typegoose/commit/6bd97ae87c9e39d1538e0f3be465eba69d535cc4))
+
+
+### Dependencies
+
+* **@semantic-release/changelog:** upgrade to 6.0.3 ([3196d08](https://github.com/typegoose/typegoose/commit/3196d08959d267c3bd3e31be6b572fab3afd03e1))
+* **@typescript-eslint/*:** upgrade to 5.56.0 ([0116947](https://github.com/typegoose/typegoose/commit/01169476119886f61a5cf771f3301f0d02ab73bd))
+* **commitlint:** upgrade to 17.5.0 ([d7986a1](https://github.com/typegoose/typegoose/commit/d7986a1ce5faca88d6131f0f34a9666ef1cda875))
+* **eslint-config-prettier:** upgrade to 8.8.0 ([25bfc89](https://github.com/typegoose/typegoose/commit/25bfc89f90b9d900ed182775c1807393f61d634a))
+* **mongoose:** upgrade to 7.0.3 ([8e964ea](https://github.com/typegoose/typegoose/commit/8e964ea28d63d392db2222e88e2d32afd02c0257))
+* **prettier:** upgrade to 2.8.7 ([c72bd0c](https://github.com/typegoose/typegoose/commit/c72bd0ce654b530cc8cab5791ac9daf91965c7d2))
+* **rimraf:** upgrade to 4.4.1 ([f23b668](https://github.com/typegoose/typegoose/commit/f23b6689647650bad26b5aa2c9d736e416c549fd))
+
+## [11.0.0-beta.2](https://github.com/typegoose/typegoose/compare/v11.0.0-beta.1...v11.0.0-beta.2) (2023-03-19)
+
+
+### Fixes
+
+* **errors:** update E004 message and example ([c777def](https://github.com/typegoose/typegoose/commit/c777def88e92281b71db899023c5eb0a9b3b3e94))
+* **globalOptions:** another fix to check for "process" being undefined ([5d81464](https://github.com/typegoose/typegoose/commit/5d8146465b6ef0e363b958ffdb8d8637e71723d2))
+* **typegoose:** fix "process" variable checking for being undefined on browser ([39743e2](https://github.com/typegoose/typegoose/commit/39743e20a5a065a1f5ee76d3a9b8d2905658d059))
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 29.5.0 ([a2aeefb](https://github.com/typegoose/typegoose/commit/a2aeefb7d87ded392488040627a3646e86db6b3b))
+* **@typescript-eslint/*:** upgrade to 5.55.0 ([40d882f](https://github.com/typegoose/typegoose/commit/40d882f9c151d6f1aa80d43de201561f3911f166))
+* **eslint-config-prettier:** upgrade to 8.7.0 ([9394fcf](https://github.com/typegoose/typegoose/commit/9394fcf5b3253d46809af4ef15691d08480ad22d))
+* **eslint:** upgrade to 8.36.0 ([4b1db7a](https://github.com/typegoose/typegoose/commit/4b1db7a11766ef305c48f3c6e20ba044b4edef65))
+* **jest:** upgrade to 29.5.0 ([50491f0](https://github.com/typegoose/typegoose/commit/50491f0a6c480bd007fc57c45ef79bf430ed9161))
+* **lint-staged:** upgrade to 13.2.0 ([4417d74](https://github.com/typegoose/typegoose/commit/4417d748a33dea03c55d59ba5eba81f7034ee0e5))
+* **mongodb-memory-server:** upgrade to 9.12.1 ([fd2874b](https://github.com/typegoose/typegoose/commit/fd2874bc01e0bd03a6fa5c16d4cb572be308cc70))
+* **mongoose:** upgrade to 7.0.2 ([bedb61d](https://github.com/typegoose/typegoose/commit/bedb61d5c2bdcfd37b5dde8b7a4b9426c4099587))
+* **rimraf:** upgrade to 4.4.0 ([3395239](https://github.com/typegoose/typegoose/commit/33952398cfa8074d3f57dff86ad3649ece3c7566))
+
+## [11.0.0-beta.1](https://github.com/typegoose/typegoose/compare/v10.3.0...v11.0.0-beta.1) (2023-03-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **mongoose:** mongoose 7.0.0 is now in use
+* Default-Class "FindOrCreate" (and type "FindOrCreateResult") has been removed, because mongoose-findorcreate is not compatible with mongoose 7.0
+
+### Features
+
+* remove usage and references to "mongoose-findorcreate" ([6de3aa9](https://github.com/typegoose/typegoose/commit/6de3aa9c034a52891ef47bf378bedfc010746d08))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 7.0.0 ([0e06ec9](https://github.com/typegoose/typegoose/commit/0e06ec97d18e099026597e2a31d3ca15fbe388e7))
+* **rimraf:** upgrade to 4.1.2 ([88181b6](https://github.com/typegoose/typegoose/commit/88181b64b7c27b3dc9fa867c6996d2fc15c8cec6))
+
+
+### Fixes
+
+* update types and type-tests for mongoose 7.0 ([b3df459](https://github.com/typegoose/typegoose/commit/b3df45987778e66aea1a6a4ec1d90c0611b133d3))
+
+
+### Style
+
+* **hooks:** update version notice ([02fc3bb](https://github.com/typegoose/typegoose/commit/02fc3bb107cee724cf95c61e958266387ff034d2))
+* **test::model::typeguards:** add comments noting that a type is meant to be ([6aa8f17](https://github.com/typegoose/typegoose/commit/6aa8f17c6b967d1d8b4cd9885c997cd7fa54430a))
+
 ## [10.3.4](https://github.com/typegoose/typegoose/compare/v10.3.3...v10.3.4) (2023-03-23)
 
 
