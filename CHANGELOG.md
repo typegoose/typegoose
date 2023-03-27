@@ -1,3 +1,21 @@
+## [11.0.0-beta.3](https://github.com/typegoose/typegoose/compare/v11.0.0-beta.2...v11.0.0-beta.3) (2023-03-27)
+
+
+### Style
+
+* **types:** fix minor grammar mistakes ([#803](https://github.com/typegoose/typegoose/issues/803)) ([6bd97ae](https://github.com/typegoose/typegoose/commit/6bd97ae87c9e39d1538e0f3be465eba69d535cc4))
+
+
+### Dependencies
+
+* **@semantic-release/changelog:** upgrade to 6.0.3 ([3196d08](https://github.com/typegoose/typegoose/commit/3196d08959d267c3bd3e31be6b572fab3afd03e1))
+* **@typescript-eslint/*:** upgrade to 5.56.0 ([0116947](https://github.com/typegoose/typegoose/commit/01169476119886f61a5cf771f3301f0d02ab73bd))
+* **commitlint:** upgrade to 17.5.0 ([d7986a1](https://github.com/typegoose/typegoose/commit/d7986a1ce5faca88d6131f0f34a9666ef1cda875))
+* **eslint-config-prettier:** upgrade to 8.8.0 ([25bfc89](https://github.com/typegoose/typegoose/commit/25bfc89f90b9d900ed182775c1807393f61d634a))
+* **mongoose:** upgrade to 7.0.3 ([8e964ea](https://github.com/typegoose/typegoose/commit/8e964ea28d63d392db2222e88e2d32afd02c0257))
+* **prettier:** upgrade to 2.8.7 ([c72bd0c](https://github.com/typegoose/typegoose/commit/c72bd0ce654b530cc8cab5791ac9daf91965c7d2))
+* **rimraf:** upgrade to 4.4.1 ([f23b668](https://github.com/typegoose/typegoose/commit/f23b6689647650bad26b5aa2c9d736e416c549fd))
+
 ## [11.0.0-beta.2](https://github.com/typegoose/typegoose/compare/v11.0.0-beta.1...v11.0.0-beta.2) (2023-03-19)
 
 
