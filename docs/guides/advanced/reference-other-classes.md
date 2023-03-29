@@ -174,4 +174,6 @@ And Add a central processing file:
 ```
 
 This may seem like it is not changing much, but actually nodejs will resolve & load all required imports fully before trying to use any of them.  
-And because the `() => Class` way is used, the reference to `Class` will only be resolved once the function is actually called, that is why it works, but just `Class` doesn't.
+And because the `() => Class` way is used, the reference to `Class` will only be resolved once the function is actually called, that is why this method works, but just `Class` doesn't.
+
+To find Circular dependencies, you can use tools like [`dpdm`](https://www.npmjs.com/package/dpdm) or [`madge`](https://www.npmjs.com/package/madge).
