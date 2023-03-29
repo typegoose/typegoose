@@ -30,6 +30,7 @@ import {
   InvalidEnumTypeError,
   InvalidOptionsConstructorError,
   NoDiscriminatorFunctionError,
+  OptionDoesNotSupportOptionError,
   PathNotInSchemaError,
   ResolveTypegooseNameError,
 } from '../../src/internal/errors';
@@ -811,6 +812,28 @@ it('should throw a Error in "processProp" when using a invalid type for enums [I
     fail('Expected "InvalidEnumTypeError" to be thrown');
   } catch (err) {
     expect(err).toBeInstanceOf(InvalidEnumTypeError);
+    expect(err.message).toMatchSnapshot();
+  }
+});
+
+it('should throw a Error in "processProp" when using more dimensions than 0 or 1 [OptionDoesNotSupportOptionError] [E027]', () => {
+  enum TestEnum {
+    v1 = 'v1',
+    v2 = 'v2',
+  }
+
+  class TestEnumDimensions {
+    // @ts-expect-error "enum" option does not support more than 1 dimension
+    @prop({ type: String, enum: [[TestEnum]] })
+    public testVal: TestEnum;
+  }
+
+  try {
+    _buildSchema(TestEnumDimensions);
+
+    fail('Expected "OptionDoesNotSupportOptionError" to be thrown');
+  } catch (err) {
+    expect(err).toBeInstanceOf(OptionDoesNotSupportOptionError);
     expect(err.message).toMatchSnapshot();
   }
 });

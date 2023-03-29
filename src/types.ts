@@ -82,7 +82,7 @@ export interface BasePropOptions {
    */
   required?: mongoose.SchemaTypeOptions<any>['required'];
   /** Only accept Values from the Enum(|Array) */
-  enum?: mongoose.SchemaTypeOptions<any>['enum'];
+  enum?: mongoose.SchemaTypeOptions<any>['enum'] | DeferredFunc<mongoose.SchemaTypeOptions<any>['enum']>;
   /**
    * Add "null" to the enum array
    * Note: Custom Typegoose Option

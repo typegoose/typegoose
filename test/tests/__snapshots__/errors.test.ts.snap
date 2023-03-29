@@ -36,6 +36,8 @@ Type: \\"function SchemaBoolean(path, options) {
 https://typegoose.github.io/typegoose/docs/guides/error-warning-details#invalid-type-for-enum-e012"
 `;
 
+exports[`should throw a Error in "processProp" when using more dimensions than 0 or 1 [OptionDoesNotSupportOptionError] [E027] 1`] = `"The Option \\"enum\\" does not support Option \\"dim\\" other than \\"0 or 1\\" (provided was: \\"dim: 2\\") [E027]"`;
+
 exports[`should throw a Error when "discriminators" is with "dim" other than "1" [OptionDoesNotSupportOption] [E027] 1`] = `"The Option \\"discriminators\\" does not support Option \\"dim\\" other than \\"1\\" (provided was: \\"dim: 2\\") [E027]"`;
 
 exports[`should throw a Error when "mapValueToSeverity" gets called but is not in "Severity" [Error] 1`] = `"\\"value\\" is not in range of \\"Severity\\"! (got: -1)"`;

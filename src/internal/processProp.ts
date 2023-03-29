@@ -277,10 +277,18 @@ export function processProp(input: ProcessPropOptions): void {
     throw new InvalidTypeError(name, key, Type);
   }
 
-  const enumOption = rawOptions.enum;
+  let enumOption = rawOptions.enum;
 
   if (!utils.isNullOrUndefined(enumOption)) {
-    // check if the supplied value is already "mongoose-consumable"
+    const enumType = utils.getType(rawOptions.enum, true);
+    utils.assertion(
+      enumType.dim === 1 || enumType.dim === 0,
+      () => new OptionDoesNotSupportOptionError('enum', 'dim', '0 or 1', `dim: ${enumType.dim}`)
+    );
+
+    enumOption = enumType.type;
+
+    // check if the option is already a array (mongoose enum), if not convert it
     if (!Array.isArray(enumOption)) {
       if (Type === String || Type === mongoose.Schema.Types.String) {
         rawOptions.enum = Object.entries<string>(enumOption) // get all key-value pairs of the enum
@@ -322,6 +330,9 @@ export function processProp(input: ProcessPropOptions): void {
         // most likely this error happened because the code got transpiled with babel or "tsc --transpile-only"
         throw new InvalidEnumTypeError(name, key, Type);
       }
+    } else {
+      // overwrite the "enum" option, to ensure the deferred function type is used
+      rawOptions.enum = enumOption;
     }
   }
 

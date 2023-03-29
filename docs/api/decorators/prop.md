@@ -365,7 +365,7 @@ class Dummy {
 
 ### enum
 
-Accepts Type: `enum | any[]`
+Accepts Type: `TypescriptEnum | (string | number)[]`
 
 Only allow values from the enum (best practice is to use TypeScript's enum).
 
@@ -384,6 +384,10 @@ enum Gender {
 class Enumed {
   @prop({ enum: Gender })
   public gender?: Gender;
+
+  // typegoose enum also supports deferred function
+  @prop({ enum: () => Gender })
+  public gender?: Gender;
 }
 ```
 
@@ -397,6 +401,10 @@ enum Gender {
 }
 
 class Enumed {
+  @prop({ enum: Gender })
+  public gender?: Gender;
+
+  // typegoose enum also supports deferred function
   @prop({ enum: Gender })
   public gender?: Gender;
 }
