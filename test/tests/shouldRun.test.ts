@@ -453,6 +453,52 @@ it('should allow usage of deferred function enum', async () => {
   expect(value2Path.options.enum).toEqual(['test1', 'test2']);
 });
 
+it('should allow usage of { values } for enum, with all typegoose options', async () => {
+  enum SomeNumberEnum {
+    one = 1,
+    two = 2,
+  }
+
+  class TestEnumValues {
+    // test deferred function typescript enum
+    @prop({ enum: { values: () => SomeNumberEnum }, type: Number })
+    public value1?: SomeNumberEnum;
+
+    // test deferred function normal array
+    @prop({ enum: { values: () => ['test1', 'test2'] }, type: String })
+    public value2?: string;
+
+    // test typescript enum
+    @prop({ enum: { values: SomeNumberEnum }, type: Number })
+    public value3?: SomeNumberEnum;
+
+    // test normal array
+    @prop({ enum: { values: ['test1', 'test2'] }, type: String })
+    public value4?: string;
+  }
+
+  const TestEnumValuesModel = getModelForClass(TestEnumValues);
+
+  const doc = new TestEnumValuesModel({ value1: SomeNumberEnum.one, value2: 'test1' } as TestEnumValues);
+  await doc.validate();
+
+  const value1Path: any = TestEnumValuesModel.schema.path('value1');
+  expect(value1Path).toBeInstanceOf(mongoose.Schema.Types.Number);
+  expect(value1Path.options.enum).toEqual({ values: [1, 2] });
+
+  const value2Path: any = TestEnumValuesModel.schema.path('value2');
+  expect(value2Path).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(value2Path.options.enum).toEqual({ values: ['test1', 'test2'] });
+
+  const value3Path: any = TestEnumValuesModel.schema.path('value3');
+  expect(value3Path).toBeInstanceOf(mongoose.Schema.Types.Number);
+  expect(value3Path.options.enum).toEqual({ values: [1, 2] });
+
+  const value4Path: any = TestEnumValuesModel.schema.path('value4');
+  expect(value4Path).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(value4Path.options.enum).toEqual({ values: ['test1', 'test2'] });
+});
+
 it('should add query Methods', async () => {
   interface FindHelpers {
     findByName: AsQueryMethod<typeof findByName>;

@@ -277,21 +277,24 @@ export function processProp(input: ProcessPropOptions): void {
     throw new InvalidTypeError(name, key, Type);
   }
 
-  let enumOption = rawOptions.enum;
+  if (!utils.isNullOrUndefined(rawOptions.enum)) {
+    let useType = rawOptions.enum;
+    let inValues = false;
 
-  if (!utils.isNullOrUndefined(enumOption)) {
-    const enumType = utils.getType(rawOptions.enum, true);
-    utils.assertion(
-      enumType.dim === 1 || enumType.dim === 0,
-      () => new OptionDoesNotSupportOptionError('enum', 'dim', '0 or 1', `dim: ${enumType.dim}`)
-    );
+    if (rawOptions.enum?.constructor === Object && 'values' in rawOptions.enum) {
+      useType = rawOptions.enum.values;
+      inValues = true;
+    }
 
-    enumOption = enumType.type;
+    // disabling lint line, because eslint seemingly cant handle a changing value and a unchanging value in the same destruction
+    // eslint-disable-next-line prefer-const
+    let { dim: enumDim, type: enumType }: { dim: number; type: any } = utils.getType(useType, true);
+    utils.assertion(enumDim === 1 || enumDim === 0, () => new OptionDoesNotSupportOptionError('enum', 'dim', '0 or 1', `dim: ${enumDim}`));
 
     // check if the option is already a array (mongoose enum), if not convert it
-    if (!Array.isArray(enumOption)) {
+    if (!Array.isArray(enumType)) {
       if (Type === String || Type === mongoose.Schema.Types.String) {
-        rawOptions.enum = Object.entries<string>(enumOption) // get all key-value pairs of the enum
+        enumType = Object.entries<string>(enumType) // get all key-value pairs of the enum
           // no reverse-filtering because if it is full of strings, there is no reverse mapping
           .map(([enumKey, enumValue]) => {
             // convert key-value pairs to an mongoose-usable enum
@@ -304,7 +307,7 @@ export function processProp(input: ProcessPropOptions): void {
             return enumValue;
           });
       } else if (Type === Number || Type === mongoose.Schema.Types.Number) {
-        rawOptions.enum = Object.entries<string | number>(enumOption) // get all key-value pairs of the enum
+        enumType = Object.entries<string | number>(enumType) // get all key-value pairs of the enum
           // filter out the "reverse (value -> name) mappings"
           // https://www.typescriptlang.org/docs/handbook/enums.html#reverse-mappings
           .filter(([enumKey, enumValue], _i, arr) => {
@@ -330,9 +333,13 @@ export function processProp(input: ProcessPropOptions): void {
         // most likely this error happened because the code got transpiled with babel or "tsc --transpile-only"
         throw new InvalidEnumTypeError(name, key, Type);
       }
+    }
+
+    // re-assign the option with the updated type
+    if (inValues) {
+      rawOptions.enum.values = enumType;
     } else {
-      // overwrite the "enum" option, to ensure the deferred function type is used
-      rawOptions.enum = enumOption;
+      rawOptions.enum = enumType;
     }
   }
 
