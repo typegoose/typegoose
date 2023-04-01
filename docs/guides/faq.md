@@ -75,7 +75,6 @@ class Cat {
 
 Your class is likely just empty, and typescript somehow does not correctly match that and treats it like a generic object.
 
-
 Example:
 
 ```ts
