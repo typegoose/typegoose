@@ -73,7 +73,8 @@ class Cat {
 
 ### Why is `_id` `unknown`?
 
-It is very likely that your class is just empty, and typescript somehow does not correctly match that and treats it like a generic object.
+Your class is likely just empty, and typescript somehow does not correctly match that and treats it like a generic object.
+
 
 Example:
 
