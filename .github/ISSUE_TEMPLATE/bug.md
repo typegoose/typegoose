@@ -9,7 +9,7 @@ assignees: ''
 <!--Please write extra stuff at the end where mentioned-->
 
 <!--
-- Only include the verions & packages that were used in the environment where typegoose ran
+- Only include the versions & packages that were used in the environment where typegoose ran
 - in "Code Example" add as many code blocks as needed, but when possible try to use an repo / gist
 - in "Do you know *why* it happens replace the "*no*" if you know why
 - Make sure you read [Mastering-Markdown](https://guides.github.com/features/mastering-markdown/)
