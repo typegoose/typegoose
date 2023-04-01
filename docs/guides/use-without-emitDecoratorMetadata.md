@@ -10,7 +10,7 @@ Typegoose can be used without the option [`emitDecoratorMetadata`](https://www.t
 When using `emitDecoratorMetadata`, it is not needed to be explicit about *everything*, like the following example would simply "compile" into the appropriate types.
 
 :::info
-Some Properties (like Arrays & Maps) need to be always explicit, see [`@prop` Array Options](../api/decorators/prop.md#array-options).
+Some properties (like Arrays & Maps) need to be always explicit, see [`@prop` Array Options](../api/decorators/prop.md#array-options).
 :::
 
 ```ts
