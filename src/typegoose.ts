@@ -343,7 +343,7 @@ export function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U) 
  * ```
  */
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
-  from: mongoose.Model<any, any>,
+  from: mongoose.Model<any, any, any, any>,
   cl: U,
   options?: IModelOptions
 ): ReturnModelType<U, QueryHelpers>;
@@ -377,7 +377,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
  * ```
  */
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
-  from: mongoose.Model<any, any>,
+  from: mongoose.Model<any, any, any, any>,
   cl: U,
   value?: string
 ): ReturnModelType<U, QueryHelpers>;
@@ -412,13 +412,13 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
  * ```
  */
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
-  from: mongoose.Model<any, any>,
+  from: mongoose.Model<any, any, any, any>,
   cl: U,
   value?: string,
   options?: IModelOptions
 ): ReturnModelType<U, QueryHelpers>;
 export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>, QueryHelpers = BeAnObject>(
-  from: mongoose.Model<any, any>,
+  from: mongoose.Model<any, any, any, any>,
   cl: U,
   value_or_options?: string | IModelOptions,
   options?: IModelOptions

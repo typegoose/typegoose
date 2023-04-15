@@ -345,3 +345,20 @@ function preHookExplicitDocumentQuery() {
 }
 
 preHookExplicitDocumentQuery();
+
+function discriminatorWithDifferentId() {
+  class Base {
+    @prop({ type: () => String, required: true })
+    _id!: string;
+  }
+
+  class Child extends Base {
+    someProb!: string;
+  }
+
+  const BaseModel = typegoose.getModelForClass(Base);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const ChildModel = typegoose.getDiscriminatorModelForClass(BaseModel, Child);
+}
+
+discriminatorWithDifferentId();
