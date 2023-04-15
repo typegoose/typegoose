@@ -1,3 +1,10 @@
+## [11.0.1](https://github.com/typegoose/typegoose/compare/v11.0.0...v11.0.1) (2023-04-15)
+
+
+### Fixes
+
+* **typegoose::getDiscriminatorModelForClass:** fix "from" type for models with different _id type ([fb752fc](https://github.com/typegoose/typegoose/commit/fb752fc77d5763bccade2d0a8cdd45f8fdad6631))
+
 ## [11.0.0](https://github.com/typegoose/typegoose/compare/v10.3.4...v11.0.0) (2023-03-27)
 
 
