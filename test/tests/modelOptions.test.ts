@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+import { omit } from './../../src/internal/utils';
 import { DecoratorKeys, Severity } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
 import { getName, mergeMetadata } from '../../src/internal/utils';

@@ -1,4 +1,4 @@
-import { intersection, mergeWith, omit } from 'lodash';
+import mergeWith = require('lodash/mergeWith');
 import * as mongoose from 'mongoose';
 import { logger } from '../logSettings';
 import type {
@@ -758,4 +758,29 @@ export function isGlobalCachingEnabled(): boolean {
  */
 export function isCachingEnabled(opt: boolean | undefined): boolean {
   return isGlobalCachingEnabled() && !(opt === true);
+}
+
+/**
+ * Returns an array of unique values that are included in all given arrays, using `SameValueZero` for equality comparisons.
+ *
+ * @param {...Array<T>} array - The arrays to inspect.
+ * @returns {Array<T>} - The array of common elements.
+ */
+export function intersection<T>(...array: T[][]): T[] {
+  return [...array].reduce((a, b) => a.filter((c) => b.includes(c)));
+}
+
+/**
+ * Creates an object composed of the object properties that are not included in the given `paths`.
+ *
+ * @param {object} object - The source object.
+ * @param {string | string[]} paths - The property paths to omit.
+ * @returns {object} - Returns the new object.
+ */
+export function omit(object: object, paths: string | string[]): object {
+  if (!Array.isArray(paths)) {
+    paths = [paths];
+  }
+
+  return Object.fromEntries(Object.entries(object as object).filter(([key]) => !paths.includes(key)));
 }
