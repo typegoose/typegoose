@@ -1,3 +1,10 @@
+## [11.0.2](https://github.com/typegoose/typegoose/compare/v11.0.1...v11.0.2) (2023-04-19)
+
+
+### Fixes
+
+* **types:** add helper type "FilterOutFunctionKeys" ([ce91f29](https://github.com/typegoose/typegoose/commit/ce91f29fba25f04e19f3be2b5033f86ec00d94dd))
+
 ## [11.0.1](https://github.com/typegoose/typegoose/compare/v11.0.0...v11.0.1) (2023-04-15)
 
 
