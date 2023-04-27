@@ -1,3 +1,11 @@
+## [11.0.3](https://github.com/typegoose/typegoose/compare/v11.0.2...v11.0.3) (2023-04-27)
+
+
+### Fixes
+
+* consistently merge ModelOptions with "getMergedModelOptions" ([5fec7e0](https://github.com/typegoose/typegoose/commit/5fec7e06678e13009a167ba7b812071cba8879c6)), closes [typegoose/typegoose#827](https://github.com/typegoose/typegoose/issues/827)
+* **utils:** add function to consistently merge ModelOptions ([e8c9203](https://github.com/typegoose/typegoose/commit/e8c92039f94104b5193fb2bc717b2cf6b6aa35bc))
+
 ## [11.0.2](https://github.com/typegoose/typegoose/compare/v11.0.1...v11.0.2) (2023-04-19)
 
 
