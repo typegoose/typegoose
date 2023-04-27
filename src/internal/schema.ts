@@ -14,20 +14,11 @@ import type {
   QueryMethodMap,
   VirtualPopulateMap,
 } from '../types';
-import { AlreadyMerged, DecoratorKeys } from './constants';
+import { DecoratorKeys } from './constants';
 import { constructors } from './data';
 import { NoDiscriminatorFunctionError, PathNotInSchemaError } from './errors';
 import { processProp } from './processProp';
-import {
-  assertion,
-  assertionIsClass,
-  assignGlobalModelOptions,
-  getCachedSchema,
-  getName,
-  isCachingEnabled,
-  isNullOrUndefined,
-  mergeMetadata,
-} from './utils';
+import { assertion, assertionIsClass, getCachedSchema, getMergedModelOptions, getName, isCachingEnabled, isNullOrUndefined } from './utils';
 
 /**
  * Internal Schema Builder for Classes
@@ -51,12 +42,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 ) {
   assertionIsClass(cl);
 
-  assignGlobalModelOptions(cl); // to ensure global options are applied to the current class
-
-  // Options sanity check
-  const rawOptions = typeof opt === 'object' ? opt : {};
-  const mergedOptions: IModelOptions = rawOptions?.[AlreadyMerged] ? rawOptions : mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  mergedOptions[AlreadyMerged] = true;
+  const mergedOptions = getMergedModelOptions(opt, cl);
 
   const finalName = getName(cl, overwriteNaming);
 
