@@ -5,12 +5,12 @@ import * as semver from 'semver';
 import {
   assertion,
   assertionIsClass,
+  getMergedModelOptions,
   getName,
   isCachingEnabled,
   isGlobalCachingEnabled,
   isNullOrUndefined,
   mapModelOptionsToNaming,
-  mergeMetadata,
   warnNotMatchingExisting,
 } from './internal/utils';
 
@@ -30,7 +30,7 @@ if (typeof process !== 'undefined' && !isNullOrUndefined(process?.version) && !i
 }
 
 import { parseENV, setGlobalOptions } from './globalOptions';
-import { AlreadyMerged, DecoratorKeys } from './internal/constants';
+import { DecoratorKeys } from './internal/constants';
 import { constructors, models } from './internal/data';
 import { _buildSchema } from './internal/schema';
 import { logger } from './logSettings';
@@ -87,8 +87,7 @@ export function getModelForClass<U extends AnyParamConstructor<any>, QueryHelper
   const rawOptions = typeof options === 'object' ? options : {};
   const overwriteNaming = mapModelOptionsToNaming(rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
 
-  const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  mergedOptions[AlreadyMerged] = true;
+  const mergedOptions = getMergedModelOptions(rawOptions, cl);
   const name = getName(cl, overwriteNaming);
 
   if (isCachingEnabled(mergedOptions.options?.disableCaching) && models.has(name)) {
@@ -150,9 +149,7 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   logger.debug('buildSchema called for "%s"', getName(cl, overwriteNaming));
 
   // dont re-run the merging if already done so before (like in getModelForClass)
-  const rawOptions = typeof options === 'object' ? options : {};
-  const mergedOptions: IModelOptions = rawOptions?.[AlreadyMerged] ? rawOptions : mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  mergedOptions[AlreadyMerged] = true;
+  const mergedOptions = getMergedModelOptions(options, cl);
 
   let sch: mongoose.Schema<DocumentType<InstanceType<U>>> | undefined = undefined;
   /** Parent Constructor */
@@ -429,8 +426,7 @@ export function getDiscriminatorModelForClass<U extends AnyParamConstructor<any>
   const value = typeof value_or_options === 'string' ? value_or_options : undefined;
   const rawOptions = typeof value_or_options !== 'string' ? value_or_options : typeof options === 'object' ? options : {};
   const overwriteNaming = mapModelOptionsToNaming(rawOptions); // use "rawOptions" instead of "mergedOptions" to consistently differentiate between classes & models
-  const mergedOptions: IModelOptions = mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
-  mergedOptions[AlreadyMerged] = true;
+  const mergedOptions = getMergedModelOptions(rawOptions, cl);
   const name = getName(cl, overwriteNaming);
 
   if (isCachingEnabled(mergedOptions.options?.disableCaching) && models.has(name)) {
