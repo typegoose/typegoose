@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import { mapValueToSeverity } from '../../src/globalOptions';
-import { DecoratorKeys, PropType, Severity } from '../../src/internal/constants';
+import { AlreadyMerged, DecoratorKeys, PropType, Severity } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
 import {
   assertion,
@@ -1085,4 +1085,13 @@ it(`should Validate Map`, async () => {
       'InternetUser validation failed: projects.p1: `project` is not a valid enum value for path `projects.p1`.'
     );
   }
+});
+
+it('should not merge together symbols', () => {
+  class Test {}
+
+  const res = mergeMetadata(DecoratorKeys.ModelOptions, { [AlreadyMerged]: true, anotherValue: true }, Test);
+
+  expect(res).toStrictEqual({ anotherValue: true });
+  expect(res[AlreadyMerged]).toBeUndefined();
 });
