@@ -1,5 +1,6 @@
 ## [11.1.0](https://github.com/typegoose/typegoose/compare/v11.0.3...v11.1.0) (2023-04-29)
 
+Note: when updating to this version, `@types/node@16` is required (instead of the previous `@14`)
 
 ### Dependencies
 
