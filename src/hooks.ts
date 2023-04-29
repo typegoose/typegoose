@@ -3,7 +3,7 @@ import type {
   AggregateExtract,
   CallbackError,
   Document,
-  DocumentOrQueryMiddleware,
+  MongooseQueryOrDocumentMiddleware,
   ErrorHandlingMiddlewareFunction,
   HydratedDocument,
   Model,
@@ -108,12 +108,12 @@ interface Hooks {
 
   // special pre hooks for each "document: true, query: false" and "document: false, query: true"
   pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
-    method: DocumentOrQueryMiddleware | DocumentOrQueryMiddleware[],
+    method: MongooseQueryOrDocumentMiddleware | MongooseQueryOrDocumentMiddleware[],
     fn: PreMiddlewareFunction<T>,
     options: SchemaPreOptions & { document: true; query: false }
   ): ClassDecorator;
   pre<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
-    method: DocumentOrQueryMiddleware | DocumentOrQueryMiddleware[],
+    method: MongooseQueryOrDocumentMiddleware | MongooseQueryOrDocumentMiddleware[],
     fn: PreMiddlewareFunction<T>,
     options: SchemaPreOptions & { document: false; query: true }
   ): ClassDecorator;
