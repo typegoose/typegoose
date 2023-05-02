@@ -1,3 +1,34 @@
+## [10.4.0](https://github.com/typegoose/typegoose/compare/v10.3.4...v10.4.0) (2023-05-02)
+
+
+### Dependencies
+
+* **@semantic-release/changelog:** upgrade to 6.0.3 ([07ef745](https://github.com/typegoose/typegoose/commit/07ef745abaa250a04ed81973bd52902938bd9090))
+* **@types/jest:** upgrade to 29.5.1 ([32926b1](https://github.com/typegoose/typegoose/commit/32926b1fa6a52b48c3c67d19a04c875ae85e9f5e))
+* **@types/lodash:** upgrade to 4.14.194 ([74e3e30](https://github.com/typegoose/typegoose/commit/74e3e30b43b22521541d3c035da521c01f7325f9))
+* **@typescript-eslint/*:** upgrade to 5.59.2 ([799fcf6](https://github.com/typegoose/typegoose/commit/799fcf64750eeb5f1b0f38d581680b9c00c3f6f1))
+* **commitlint:** upgrade to 17.6.1 ([6242a75](https://github.com/typegoose/typegoose/commit/6242a7514ed9c93cb84f70d8e61d168d1bad7450))
+* **eslint-config-prettier:** upgrade to 8.8.0 ([de27921](https://github.com/typegoose/typegoose/commit/de27921037374751d08ae87ba2f0c90e9988f1be))
+* **eslint:** upgrade to 8.39.0 ([cb6000a](https://github.com/typegoose/typegoose/commit/cb6000ae9acc98605b7ec379c32316222b20bd61))
+* **jest:** upgrade to 29.5.0 ([e2512c9](https://github.com/typegoose/typegoose/commit/e2512c9a8db757ce3be413cd88c813093721d21c))
+* **lint-staged:** upgrade to 13.2.2 ([380cb76](https://github.com/typegoose/typegoose/commit/380cb767ecbfed107b7cd833e5ebfe1e1fcdb2ef))
+* **mongodb-memory-server:** upgrade to 8.12.2 ([950fa0b](https://github.com/typegoose/typegoose/commit/950fa0ba9463e08e9b8bc756d09936615ed39223))
+* **mongoose:** upgrade to 6.11.0 ([a392262](https://github.com/typegoose/typegoose/commit/a392262c9b46875b09647d6d5c7b9ceeaa37a85b))
+* **prettier:** upgrade to 2.8.8 ([354be24](https://github.com/typegoose/typegoose/commit/354be2440e68bce436daf84995e41e03b522939e))
+* **semver:** upgrade to 7.5.0 ([e57bd3b](https://github.com/typegoose/typegoose/commit/e57bd3b204d41d8ba3d445367c1a64d5d8f0d038))
+* **ts-jest:** upgrade to 29.1.0 ([cfb66bd](https://github.com/typegoose/typegoose/commit/cfb66bd3ecf740b07f6300a7ff30db817b326b2a))
+
+
+### Style
+
+* **test::model::typeguards:** add comments noting that a type is meant to be ([269cf7f](https://github.com/typegoose/typegoose/commit/269cf7f96ba0d3b1d24fefaf0520366cb46fb67e))
+
+
+### Fixes
+
+* consistently merge ModelOptions with "getMergedModelOptions" ([cdbb70e](https://github.com/typegoose/typegoose/commit/cdbb70e94df36be76eec94657d59aba63d9097d4)), closes [typegoose/typegoose#827](https://github.com/typegoose/typegoose/issues/827)
+* **utils:** add function to consistently merge ModelOptions ([42e86f3](https://github.com/typegoose/typegoose/commit/42e86f3bc1f932d19d7384868c25c770ed4d1863))
+
 ## [10.3.4](https://github.com/typegoose/typegoose/compare/v10.3.3...v10.3.4) (2023-03-23)
 
 
