@@ -50,7 +50,7 @@
     "@semantic-release/npm": "^9.0.2",
     "@semantic-release/release-notes-generator": "^10.0.3",
     "@tsd/typescript": "~4.9.5",
-    "@types/jest": "^29.4.0",
+    "@types/jest": "^29.5.1",
     "@types/lodash": "^4.14.194",
     "@types/node": "~14.14.31",
     "@types/semver": "^7.3.13",
