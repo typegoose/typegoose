@@ -1877,10 +1877,10 @@
     "@pnpm/network.ca-file" "^1.0.1"
     config-chain "^1.1.11"
 
-"@semantic-release/changelog@^6.0.2":
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/@semantic-release/changelog/-/changelog-6.0.2.tgz#fdcdbd368788c8fcc69c4af29bf2064f4afb45f4"
-  integrity sha512-jHqfTkoPbDEOAgAP18mGP53IxeMwxTISN+GwTRy9uLu58UjARoZU8ScCgWGeO2WPkEsm57H8AkyY02W2ntIlIw==
+"@semantic-release/changelog@^6.0.3":
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/@semantic-release/changelog/-/changelog-6.0.3.tgz#6195630ecbeccad174461de727d5f975abc23eeb"
+  integrity sha512-dZuR5qByyfe3Y03TpmCvAxCyTnp7r5XwtHRf/8vD9EAn4ZWbavUX8adMtXYzE86EVh0gyLA7lm5yW4IV30XUag==
   dependencies:
     "@semantic-release/error" "^3.0.0"
     aggregate-error "^3.0.0"
