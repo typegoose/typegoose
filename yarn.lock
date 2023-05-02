@@ -2687,6 +2687,13 @@ bson@^4.7.0:
   dependencies:
     buffer "^5.6.0"
 
+bson@^4.7.2:
+  version "4.7.2"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-4.7.2.tgz#320f4ad0eaf5312dd9b45dc369cc48945e2a5f2e"
+  integrity sha512-Ry9wCtIZ5kGqkJoi6aD8KjxFZEx78guTQDnpXWiNthsxzrxAK/i8E6pCHAIZTbaEFWcOCvbecMukfK7XUvyLpQ==
+  dependencies:
+    buffer "^5.6.0"
+
 buffer-crc32@~0.2.3:
   version "0.2.13"
   resolved "https://registry.yarnpkg.com/buffer-crc32/-/buffer-crc32-0.2.13.tgz#0d333e3f00eac50aa1454abd30ef8c2a5d9a7242"
@@ -5432,12 +5439,12 @@ mongodb-memory-server@^8.12.2:
     mongodb-memory-server-core "8.12.2"
     tslib "^2.5.0"
 
-mongodb@4.14.0:
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-4.14.0.tgz#3a21ca602069b2494b7066a7709056c8cece6bf6"
-  integrity sha512-coGKkWXIBczZPr284tYKFLg+KbGPPLlSbdgfKAb6QqCFt5bo5VFZ50O3FFzsw4rnkqjwT6D8Qcoo9nshYKM7Mg==
+mongodb@4.16.0:
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-4.16.0.tgz#8b0043de7b577c6a7e0ce44a2ca7315b9c0a7927"
+  integrity sha512-0EB113Fsucaq1wsY0dOhi1fmZOwFtLOtteQkiqOXGklvWMnSH3g2QS53f0KTP+/6qOkuoXE2JksubSZNmxeI+g==
   dependencies:
-    bson "^4.7.0"
+    bson "^4.7.2"
     mongodb-connection-string-url "^2.5.4"
     socks "^2.7.1"
   optionalDependencies:
@@ -5461,14 +5468,14 @@ mongoose-findorcreate@3.0.0:
   resolved "https://registry.yarnpkg.com/mongoose-findorcreate/-/mongoose-findorcreate-3.0.0.tgz#490acf67c16061de74f7d1b92906538a62554a6d"
   integrity sha512-kQhDe5XDj6tMv8kq1wjK+hITGIGUl60rj8oGLupF9poNsqIDkAJBXudZKcCdSyBZ7p6DLK2+0jSBthrb26tSYQ==
 
-mongoose@~6.10.0:
-  version "6.10.0"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.10.0.tgz#42aa9134b665cb17d7b6e9a7ba89f89751021074"
-  integrity sha512-0zrKDEnmNscYyAyN94smo2LlJ63gaezKHpHM+KQ+6EiAgAnah5Kt3hQSYzOTQX/63YNdT1oJXiLlB5LqTdcjUw==
+mongoose@~6.11.0:
+  version "6.11.0"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.11.0.tgz#94791732dd84ca7b390dc9fb50b78b53a2a6b396"
+  integrity sha512-MM4yE8oZOY0x7eeimD6/2IxtPTQu5cc2c7wZAkvybW8dtZmjC9s+0Obre5rxW4XVNOfLfJSiRbPojl38278PjQ==
   dependencies:
-    bson "^4.7.0"
+    bson "^4.7.2"
     kareem "2.5.1"
-    mongodb "4.14.0"
+    mongodb "4.16.0"
     mpath "0.9.0"
     mquery "4.0.3"
     ms "2.1.3"
