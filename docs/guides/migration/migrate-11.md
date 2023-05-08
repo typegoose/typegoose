@@ -11,7 +11,7 @@ This Guide is written for migration from version `10.3.3` to `11.0.0`, for versi
 
 ## Requirements changed
 
-- Mongoose `7.0.3` or higher is now required
+- Mongoose `7.1.0` or higher is now required
 
 ## Default class `FindOrCreate` has been removed
 

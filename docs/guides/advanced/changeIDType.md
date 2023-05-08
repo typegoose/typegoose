@@ -8,18 +8,23 @@ You can easily change the type of the `_id` field by doing:
 ```ts
 class SomeChangedID {
   @prop()
-  public _id: string; // change the type of _id to string
+  public _id!: string; // change the type of _id to string
 }
 ```
 
-:::note
-When the type is manually set (having an `@prop`, even for `ObjectId`), then the value need to be always defined before saving, or using the [`default`](../../api/decorators/prop.md#default) option
-:::
-
-To disable the `_id` field altogether (useful in arrays of subdocuments), add option [`@prop({ _id: false })`](api/decorators/prop.md#_id) or on the subdocument class [`@modelOptions({ schemaOptions: { _id: false } })`](https://mongoosejs.com/docs/guide.html#_id) (This option has no effect when the class / schema is the root schema).
+The example above sets the `_id` type to be a string, but does not provide a `default` function, so the `_id` property needs to be always set manually before saving / inserting a document, use the [`default`](../../api/decorators/prop.md#default) option to set a function to generate a new id everytime, be careful to not forget that using `default: fn()` will only call the function *once at scope time* instead of *everytime a new document is created*.
 
 ```ts
-@modelOptions({ schemaOptions: { _id: false } }) // either with the schema option
+class SomeUUIDv4 {
+  @prop({ required: true, default: () => uuidv4() })
+  public _id!: string;
+}
+```
+
+The `_id` property can also be disabled for subdocuments, with the [prop option `_id: false`](../../api/decorators/prop.md#_id) for the field in the class that uses the subdocument, or the [schema option `_id`](https://mongoosejs.com/docs/guide.html#_id), but note that the schema-option does not disable `_id` if it is not a sub-document.
+
+```ts
+@modelOptions({ schemaOptions: { _id: false } }) // with the schema option
 class WithNoId {
   @prop()
   public someValue: string;
@@ -32,6 +37,10 @@ class SomeChangedID {
 ```
 
 ## With the Base Class
+
+:::caution
+It is recommended to use the manual approach over using `Base`, because default classes may be removed in the future and dont greatly support extending from each other.
+:::
 
 There is also a `Base` interface typegoose provides, which includes `_id` and `id`, which can be used as follows:
 

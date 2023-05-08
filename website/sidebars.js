@@ -22,7 +22,13 @@ module.exports = {
       'api/functions/get-name',
     ],
     TypeGuards: ['api/functions/typeguards/is-document', 'api/functions/typeguards/is-ref-type'],
-    Types: ['api/types/document-type', 'api/types/return-model-type', 'api/types/ref-type', 'api/types/additional-types'],
+    Types: [
+      'api/types/document-type',
+      'api/types/return-model-type',
+      'api/types/ref-type',
+      'api/types/additional-types',
+      'api/types/utility-types',
+    ],
   },
   guides: {
     'Getting Started': [

@@ -13,7 +13,7 @@ It is not recommended to run compilers with option `transpile-only` (like `tsc -
 
 ### tsconfig-paths
 
-TypeScript provides the option to alias paths (with `tsconfig-paths`), but is somehow incompatible with Typegoose, [more info in here](https://github.com/szokodiakos/typegoose/issues/392).
+TypeScript provides the option to alias paths (with `tsconfig-paths`) but is somehow incompatible with Typegoose, [more info in here](https://github.com/szokodiakos/typegoose/issues/392).
 
 ### Self-Containing classes
 

@@ -291,7 +291,7 @@ Both `get` & `set` must be defined all the time, even when just wanting to use o
 :::
 
 :::note
-If the [PropType](#PropType) (Primitive / Array / Map) is different from what is got from the reflection, it requires **explicit** setting that it is different
+If the [PropType](#proptype) (Primitive / Array / Map) is different from what is got from the reflection, it requires **explicit** setting that it is different
 :::
 
 Pre-process string to string:

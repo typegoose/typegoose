@@ -345,3 +345,87 @@ function preHookExplicitDocumentQuery() {
 }
 
 preHookExplicitDocumentQuery();
+
+function discriminatorWithDifferentId() {
+  class Base {
+    @prop({ type: () => String, required: true })
+    _id!: string;
+  }
+
+  class Child extends Base {
+    someProb!: string;
+  }
+
+  const BaseModel = typegoose.getModelForClass(Base);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const ChildModel = typegoose.getDiscriminatorModelForClass(BaseModel, Child);
+}
+
+discriminatorWithDifferentId();
+
+function testFilterFunctionsType() {
+  class Nested {
+    @prop()
+    public test?: string;
+  }
+
+  class Root {
+    @prop()
+    public primitive?: string;
+
+    @prop({ type: String })
+    public primitiveArr?: string[];
+
+    public test(v: string) {
+      console.log('hello', v);
+    }
+
+    get testy() {
+      return 'hello';
+    }
+
+    set testy(v) {
+      return;
+    }
+
+    public static stest(v: string) {
+      console.log('stest', v);
+    }
+
+    @prop()
+    public nest?: Nested;
+
+    @prop()
+    public ref?: typegoose.Ref<Nested>;
+
+    @prop({ type: () => Nested })
+    public nestArr?: Nested[];
+
+    @prop({ ref: () => Nested })
+    public refArr?: typegoose.Ref<Nested>[];
+  }
+
+  expectType<{
+    ref?: typegoose.types.Ref<Nested, typegoose.mongoose.Types.ObjectId> | undefined;
+    test: (v: string) => void;
+    primitive?: string | undefined;
+    primitiveArr?: string[] | undefined;
+    nest?: Nested | undefined;
+    nestArr?: Nested[] | undefined;
+    refArr?: typegoose.types.Ref<Nested>[] | undefined;
+    testy: string;
+  }>(undefined as any as Pick<Root, keyof Root>);
+
+  expectType<{
+    ref?: typegoose.types.Ref<Nested, typegoose.mongoose.Types.ObjectId> | undefined;
+    // test: (v: string) => void;
+    primitive?: string | undefined;
+    primitiveArr?: string[] | undefined;
+    nest?: Nested | undefined;
+    nestArr?: Nested[] | undefined;
+    refArr?: typegoose.types.Ref<Nested>[] | undefined;
+    testy: string;
+  }>(undefined as any as typegoose.types.FilterOutFunctionKeys<Root>);
+}
+
+testFilterFunctionsType();

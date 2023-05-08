@@ -6,7 +6,7 @@ title: 'Quick Start Guide'
 ## Quick Overview of Typegoose
 
 :::note
-This Guide is for Typegoose version ~10.0
+This Guide is for Typegoose version ~11.0
 :::
 
 Typegoose is a "wrapper" for easily writing Mongoose models with TypeScript.
@@ -107,8 +107,8 @@ Like `public: string[]` is in reflection only `Array`.
 ### Requirements
 
 - TypeScript version `^4.9` (since 10.0) is recommended, though older ones may also work
-- NodeJS `^14.17.0`
-- Mongoose `~7.0.3`
+- NodeJS `^14.17.0` (and `@types/node@16`)
+- Mongoose `~7.1.0`
 - A IDE that supports TypeScript linting is recommended to be used (VSCode is recommended)
 - This Guide expects you to know how Mongoose (or at least its models) works
 - `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`

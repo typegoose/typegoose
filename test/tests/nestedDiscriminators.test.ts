@@ -150,6 +150,94 @@ it('should make use of nested-discriminators (options as object) [typegoose/type
   }
 });
 
+it('should work on multi-dimensional arrays', async () => {
+  enum BuildingTypes {
+    Garage = 'G',
+    SummerHouse = 'S',
+  }
+
+  @modelOptions({
+    schemaOptions: {
+      discriminatorKey: 'type',
+      // set to "throw" that if the discriminators don't get applied it fails instead of silently discarding non-existent values
+      // strict: 'throw',
+      _id: false,
+    },
+  })
+  class BuildingObject {
+    @prop({ default: 100 })
+    public width: number;
+
+    @prop({ required: true, enum: BuildingTypes })
+    public type: BuildingTypes;
+  }
+
+  class GarageObject extends BuildingObject {
+    @prop({ default: 10 })
+    public slotsForCars: number;
+  }
+
+  class SummerHouseObject extends BuildingObject {
+    @prop({ default: 100 })
+    public distanceToLake: number;
+  }
+
+  class AreaObject {
+    @prop({
+      type: [[BuildingObject]],
+      discriminators: () => [
+        { type: GarageObject, value: BuildingTypes.Garage },
+        { type: SummerHouseObject, value: BuildingTypes.SummerHouse },
+      ],
+    })
+    public buildings: BuildingObject[][];
+  }
+
+  const AreaModel = getModelForClass(AreaObject);
+
+  {
+    const schema = AreaModel.schema;
+    type ArrayPathLevel1 = mongoose.Schema.Types.Array & { casterConstructor: { caster: mongoose.Schema.Types.String } };
+    const schemaPathLevel1: ArrayPathLevel1 = schema.path('buildings') as any;
+    // console.log('level 1', schemaPathLevel1);
+    expect(schemaPathLevel1).toBeInstanceOf(mongoose.Schema.Types.Array);
+    type ArrayPathLevel2 = mongoose.Schema.Types.DocumentArray & {
+      casterConstructor: { caster: mongoose.Schema.Types.String };
+      schemaOptions: any;
+    };
+    const schemaPathLevel2: ArrayPathLevel2 = schema.path('buildings.$') as any;
+    // console.log('level 2', schemaPathLevel2.schemaOptions.type.discriminators);
+    expect(schemaPathLevel2).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
+    expect(schemaPathLevel2.schemaOptions.type).toHaveProperty('discriminators');
+  }
+
+  {
+    const area = await AreaModel.create({
+      buildings: [
+        [
+          { type: BuildingTypes.SummerHouse, distanceToLake: 100 } as SummerHouseObject,
+          { type: BuildingTypes.Garage, slotsForCars: 20 } as GarageObject,
+        ],
+      ],
+    });
+
+    const docPOJO = area.toJSON();
+    expect(docPOJO).toHaveProperty('buildings');
+    expect(docPOJO.buildings[0]).toEqual([
+      {
+        width: 100,
+        type: BuildingTypes.SummerHouse,
+        distanceToLake: 100,
+      },
+      {
+        width: 100,
+        type: BuildingTypes.Garage,
+        slotsForCars: 20,
+      },
+    ]);
+  }
+});
+
 describe('as model-option on base', () => {
   it('should make use of nested-discriminators [typegoose/typegoose#25]', async () => {
     enum BuildingTypes {

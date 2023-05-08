@@ -706,3 +706,17 @@ export interface ProcessPropOptions extends DecoratedPropertyMetadata {
   /** The target Class's static version */
   cl: AnyParamConstructor<any>;
 }
+
+/**
+ * Get all keys from "T" that are a function
+ * does NOT filter out getters / setters
+ */
+export type GetFunctionKeys<T extends object> = {
+  [K in keyof T]: T[K] extends (...args: any) => any ? K : never;
+}[keyof T];
+
+/**
+ * Remove all properties from "T" that are a function
+ * does NOT filter out getters / setters
+ */
+export type FilterOutFunctionKeys<T extends object> = Omit<T, GetFunctionKeys<T>>;

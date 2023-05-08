@@ -1,22 +1,43 @@
-## [11.1.0-beta.1](https://github.com/typegoose/typegoose/compare/v11.0.0...v11.1.0-beta.1) (2023-03-29)
+## [11.1.0](https://github.com/typegoose/typegoose/compare/v11.0.3...v11.1.0) (2023-04-29)
 
+Note: when updating to this version, `@types/node@16` is required (instead of the previous `@14`)
 
-### Features
+### Dependencies
 
-* support "enum" being a deferred function ([3b754f0](https://github.com/typegoose/typegoose/commit/3b754f0a18a3d1d1c5549d29d50542faf9153a5f))
+* **@types/jest:** upgrade to 29.5.1 ([16000b5](https://github.com/typegoose/typegoose/commit/16000b5439546ff1e092c2df32a444c37da8c907))
+* **@types/lodash:** upgrade to 4.14.194 ([19dda46](https://github.com/typegoose/typegoose/commit/19dda46396d2dc873d1208913e38be6e77e257a1))
+* **@types/node:** upgrade to 16.11.7 ([d2739b9](https://github.com/typegoose/typegoose/commit/d2739b981272510a76709921ae5c71904bc9ada5))
+* **@typescript-eslint/*:** upgrade to 5.59.1 ([0b5ed3a](https://github.com/typegoose/typegoose/commit/0b5ed3a1a294a58693336e216240562a7bb6bc88))
+* **commitlint:** upgrade to 17.6.1 ([19b9ffd](https://github.com/typegoose/typegoose/commit/19b9ffd38b4da2359d231be8532d2f925fa6c948))
+* **eslint:** upgrade to 8.39.0 ([ca7d21e](https://github.com/typegoose/typegoose/commit/ca7d21e2c9c53ca1f450c2bdf30180d28911d8ad))
+* **lint-staged:** upgrade to 13.2.2 ([056eb2c](https://github.com/typegoose/typegoose/commit/056eb2c531b02a53cdbe5bea62e56ed991cf3fcc))
+* **mongodb-memory-server:** upgrade to 8.12.2 ([dd03def](https://github.com/typegoose/typegoose/commit/dd03def3228ed0fd6ecc52040fe066050ea7aa4e))
+* **mongoose:** upgrade to 7.1.0 ([017b7a1](https://github.com/typegoose/typegoose/commit/017b7a1dfc8b243912cca120e5bddb21b1550da2))
+* **prettier:** upgrade to 2.8.8 ([e84fd4e](https://github.com/typegoose/typegoose/commit/e84fd4e3473d89c4e037c33cbbf7cf3a12898ce0))
+* **semver:** upgrade to 7.5.0 ([9c09ed6](https://github.com/typegoose/typegoose/commit/9c09ed6e4121ad28d71739a5120b694056b06f17))
+* **ts-jest:** upgrade to 29.1.0 ([69be082](https://github.com/typegoose/typegoose/commit/69be082474d24b2344ffb03c737dd14b78cbc682))
+
+## [11.0.3](https://github.com/typegoose/typegoose/compare/v11.0.2...v11.0.3) (2023-04-27)
 
 
 ### Fixes
 
-* allow usage and translation of "enum: { values: Type }" ([3ca1d5f](https://github.com/typegoose/typegoose/commit/3ca1d5fe04cd19f16b4f19e9ea16310bcb640466))
+* consistently merge ModelOptions with "getMergedModelOptions" ([5fec7e0](https://github.com/typegoose/typegoose/commit/5fec7e06678e13009a167ba7b812071cba8879c6)), closes [typegoose/typegoose#827](https://github.com/typegoose/typegoose/issues/827)
+* **utils:** add function to consistently merge ModelOptions ([e8c9203](https://github.com/typegoose/typegoose/commit/e8c92039f94104b5193fb2bc717b2cf6b6aa35bc))
+
+## [11.0.2](https://github.com/typegoose/typegoose/compare/v11.0.1...v11.0.2) (2023-04-19)
 
 
-### Dependencies
+### Fixes
 
-* **@types/lodash:** upgrade to 4.14.192 ([b9ec3fe](https://github.com/typegoose/typegoose/commit/b9ec3fe22f7f9e5bf47b6629f0e973c3904eb012))
-* **@typescript-eslint/*:** upgrade to 5.57.0 ([ed40301](https://github.com/typegoose/typegoose/commit/ed40301d69cb0fa6dbd50bb2102561575e7445a4))
-* **commitlint:** upgrade to 17.5.1 ([1a3db22](https://github.com/typegoose/typegoose/commit/1a3db22e1e33fdce7d36ea9f06dfde26d740d7c0))
-* **eslint:** upgrade to 8.37.0 ([62cac9f](https://github.com/typegoose/typegoose/commit/62cac9f8eef2d85a996b529063d4ebb8273d2f05))
+* **types:** add helper type "FilterOutFunctionKeys" ([ce91f29](https://github.com/typegoose/typegoose/commit/ce91f29fba25f04e19f3be2b5033f86ec00d94dd))
+
+## [11.0.1](https://github.com/typegoose/typegoose/compare/v11.0.0...v11.0.1) (2023-04-15)
+
+
+### Fixes
+
+* **typegoose::getDiscriminatorModelForClass:** fix "from" type for models with different _id type ([fb752fc](https://github.com/typegoose/typegoose/commit/fb752fc77d5763bccade2d0a8cdd45f8fdad6631))
 
 ## [11.0.0](https://github.com/typegoose/typegoose/compare/v10.3.4...v11.0.0) (2023-03-27)
 
