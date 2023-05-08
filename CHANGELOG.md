@@ -1,3 +1,29 @@
+## [11.2.0-beta.1](https://github.com/typegoose/typegoose/compare/v11.1.0...v11.2.0-beta.1) (2023-05-08)
+
+
+### Features
+
+* support "enum" being a deferred function ([3b754f0](https://github.com/typegoose/typegoose/commit/3b754f0a18a3d1d1c5549d29d50542faf9153a5f))
+
+
+### Reverts
+
+* Revert "dependencies(@types/node): upgrade to 16.11.7" ([90c5fde](https://github.com/typegoose/typegoose/commit/90c5fde4f1f3addeb7843f4cc88a1fab76ca7cfd))
+
+
+### Fixes
+
+* allow usage and translation of "enum: { values: Type }" ([3ca1d5f](https://github.com/typegoose/typegoose/commit/3ca1d5fe04cd19f16b4f19e9ea16310bcb640466))
+
+
+### Dependencies
+
+* **@types/lodash:** upgrade to 4.14.192 ([b9ec3fe](https://github.com/typegoose/typegoose/commit/b9ec3fe22f7f9e5bf47b6629f0e973c3904eb012))
+* **@types/node:** upgrade to 14.18.45 ([502436a](https://github.com/typegoose/typegoose/commit/502436a43ff20ab675cf6d876693526cc7ce2241))
+* **@typescript-eslint/*:** upgrade to 5.57.0 ([ed40301](https://github.com/typegoose/typegoose/commit/ed40301d69cb0fa6dbd50bb2102561575e7445a4))
+* **commitlint:** upgrade to 17.5.1 ([1a3db22](https://github.com/typegoose/typegoose/commit/1a3db22e1e33fdce7d36ea9f06dfde26d740d7c0))
+* **eslint:** upgrade to 8.37.0 ([62cac9f](https://github.com/typegoose/typegoose/commit/62cac9f8eef2d85a996b529063d4ebb8273d2f05))
+
 ## [11.1.0](https://github.com/typegoose/typegoose/compare/v11.0.3...v11.1.0) (2023-04-29)
 
 Note: when updating to this version, `@types/node@16` is required (instead of the previous `@14`)
