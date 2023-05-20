@@ -65,6 +65,23 @@ export type DynamicStringFunc<T extends AnyParamConstructor<any>> = (doc: Docume
 /** Type to keep the "discriminators" options consistent in types */
 export type NestedDiscriminatorsFunction = DeferredFunc<(AnyParamConstructor<any> | DiscriminatorObject)[]>;
 
+/** Type for enum "values" */
+// TODO: replace with actual mongoose type if it becomes available
+export type EnumValues =
+  | Array<string | number | null>
+  | ReadonlyArray<string | number | null>
+  | { [path: string | number]: string | number | null }; // unlike the mongoose type, "path" is a "string" or "number" here because of how typescript enums work
+
+/** Type for the enum object with custom message*/
+// TODO: replace with actual mongoose type if it becomes available
+export interface EnumObj {
+  values: EnumValues | DeferredFunc<EnumValues>; // unlike the mongoose type, this will have to use "DeferredFunc"
+  message?: string;
+}
+
+/** Type for combines {@link EnumValues} and {@link @EnumObj} */
+export type EnumCombinedType = EnumValues | EnumObj;
+
 /**
  * This Interface for most properties uses "mongoose.SchemaTypeOptions<any>['']", but for some special (or typegoose custom) options, it is not used
  *
@@ -82,7 +99,7 @@ export interface BasePropOptions {
    */
   required?: mongoose.SchemaTypeOptions<any>['required'];
   /** Only accept Values from the Enum(|Array) */
-  enum?: mongoose.SchemaTypeOptions<any>['enum'];
+  enum?: EnumCombinedType | DeferredFunc<EnumCombinedType> | { values: DeferredFunc<EnumValues>; message?: string };
   /**
    * Add "null" to the enum array
    * Note: Custom Typegoose Option

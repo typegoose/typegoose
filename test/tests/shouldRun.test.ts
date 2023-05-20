@@ -393,6 +393,112 @@ it('should add "null" to the enum (addNullToEnum)', async () => {
   expect(path.options.enum).toEqual([1, 2, 3, null]);
 });
 
+it('should allow usage of enum with 0 or 1 dimensions', async () => {
+  enum SomeNumberEnum {
+    one = 1,
+    two = 2,
+  }
+
+  class TestEnumDimensions0or1 {
+    // 0 dimensions
+    @prop({ enum: SomeNumberEnum, type: Number })
+    public value1?: SomeNumberEnum;
+
+    // 1 dimensions
+    @prop({ enum: ['test1', 'test2'], type: String })
+    public value2?: string;
+  }
+
+  const TestEnumDimensions0or1Model = getModelForClass(TestEnumDimensions0or1);
+
+  const doc = new TestEnumDimensions0or1Model({ value1: SomeNumberEnum.one, value2: 'test1' } as TestEnumDimensions0or1);
+  await doc.validate();
+
+  const value1Path: any = TestEnumDimensions0or1Model.schema.path('value1');
+  expect(value1Path).toBeInstanceOf(mongoose.Schema.Types.Number);
+  expect(value1Path.options.enum).toEqual([1, 2]);
+
+  const value2Path: any = TestEnumDimensions0or1Model.schema.path('value2');
+  expect(value2Path).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(value2Path.options.enum).toEqual(['test1', 'test2']);
+});
+
+it('should allow usage of deferred function enum', async () => {
+  enum SomeNumberEnum {
+    one = 1,
+    two = 2,
+  }
+
+  class TestEnumDeferredFunc {
+    // 0 dimensions
+    @prop({ enum: () => SomeNumberEnum, type: Number })
+    public value1?: SomeNumberEnum;
+
+    // 1 dimensions
+    @prop({ enum: () => ['test1', 'test2'], type: String })
+    public value2?: string;
+  }
+
+  const TestEnumDeferredFuncModel = getModelForClass(TestEnumDeferredFunc);
+
+  const doc = new TestEnumDeferredFuncModel({ value1: SomeNumberEnum.one, value2: 'test1' } as TestEnumDeferredFunc);
+  await doc.validate();
+
+  const value1Path: any = TestEnumDeferredFuncModel.schema.path('value1');
+  expect(value1Path).toBeInstanceOf(mongoose.Schema.Types.Number);
+  expect(value1Path.options.enum).toEqual([1, 2]);
+
+  const value2Path: any = TestEnumDeferredFuncModel.schema.path('value2');
+  expect(value2Path).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(value2Path.options.enum).toEqual(['test1', 'test2']);
+});
+
+it('should allow usage of { values } for enum, with all typegoose options', async () => {
+  enum SomeNumberEnum {
+    one = 1,
+    two = 2,
+  }
+
+  class TestEnumValues {
+    // test deferred function typescript enum
+    @prop({ enum: { values: () => SomeNumberEnum }, type: Number })
+    public value1?: SomeNumberEnum;
+
+    // test deferred function normal array
+    @prop({ enum: { values: () => ['test1', 'test2'] }, type: String })
+    public value2?: string;
+
+    // test typescript enum
+    @prop({ enum: { values: SomeNumberEnum }, type: Number })
+    public value3?: SomeNumberEnum;
+
+    // test normal array
+    @prop({ enum: { values: ['test1', 'test2'] }, type: String })
+    public value4?: string;
+  }
+
+  const TestEnumValuesModel = getModelForClass(TestEnumValues);
+
+  const doc = new TestEnumValuesModel({ value1: SomeNumberEnum.one, value2: 'test1' } as TestEnumValues);
+  await doc.validate();
+
+  const value1Path: any = TestEnumValuesModel.schema.path('value1');
+  expect(value1Path).toBeInstanceOf(mongoose.Schema.Types.Number);
+  expect(value1Path.options.enum).toEqual({ values: [1, 2] });
+
+  const value2Path: any = TestEnumValuesModel.schema.path('value2');
+  expect(value2Path).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(value2Path.options.enum).toEqual({ values: ['test1', 'test2'] });
+
+  const value3Path: any = TestEnumValuesModel.schema.path('value3');
+  expect(value3Path).toBeInstanceOf(mongoose.Schema.Types.Number);
+  expect(value3Path.options.enum).toEqual({ values: [1, 2] });
+
+  const value4Path: any = TestEnumValuesModel.schema.path('value4');
+  expect(value4Path).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(value4Path.options.enum).toEqual({ values: ['test1', 'test2'] });
+});
+
 it('should add query Methods', async () => {
   interface FindHelpers {
     findByName: AsQueryMethod<typeof findByName>;
