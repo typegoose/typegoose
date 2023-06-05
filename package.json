@@ -52,7 +52,7 @@
     "@tsd/typescript": "~4.9.5",
     "@types/jest": "^29.5.2",
     "@types/lodash": "^4.14.195",
-    "@types/node": "~14.18.45",
+    "@types/node": "~14.18.48",
     "@types/semver": "^7.5.0",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
     "@typescript-eslint/parser": "^5.59.8",
