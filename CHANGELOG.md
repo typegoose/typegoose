@@ -1,3 +1,37 @@
+## [11.2.0](https://github.com/typegoose/typegoose/compare/v11.1.0...v11.2.0) (2023-05-20)
+
+
+### Features
+
+* support "enum" being a deferred function ([3b754f0](https://github.com/typegoose/typegoose/commit/3b754f0a18a3d1d1c5549d29d50542faf9153a5f))
+
+
+### Reverts
+
+* Revert "dependencies(@types/node): upgrade to 16.11.7" ([90c5fde](https://github.com/typegoose/typegoose/commit/90c5fde4f1f3addeb7843f4cc88a1fab76ca7cfd))
+
+
+### Fixes
+
+* allow usage and translation of "enum: { values: Type }" ([3ca1d5f](https://github.com/typegoose/typegoose/commit/3ca1d5fe04cd19f16b4f19e9ea16310bcb640466))
+
+
+### Dependencies
+
+* **@types/lodash:** upgrade to 4.14.192 ([b9ec3fe](https://github.com/typegoose/typegoose/commit/b9ec3fe22f7f9e5bf47b6629f0e973c3904eb012))
+* **@types/node:** upgrade to 14.18.45 ([502436a](https://github.com/typegoose/typegoose/commit/502436a43ff20ab675cf6d876693526cc7ce2241))
+* **@types/semver:** upgrade to 7.5.0 ([162d0a6](https://github.com/typegoose/typegoose/commit/162d0a6daa66c8f6ae8817c60e5b3a155a535381))
+* **@typescript-eslint/*:** upgrade to 5.57.0 ([ed40301](https://github.com/typegoose/typegoose/commit/ed40301d69cb0fa6dbd50bb2102561575e7445a4))
+* **@typescript-eslint/*:** upgrade to 5.59.6 ([b4c7760](https://github.com/typegoose/typegoose/commit/b4c776027d42860eeb34a7ca2ac59d909b91fd54))
+* **commitlint:** upgrade to 17.5.1 ([1a3db22](https://github.com/typegoose/typegoose/commit/1a3db22e1e33fdce7d36ea9f06dfde26d740d7c0))
+* **commitlint:** upgrade to 17.6.3 ([4181605](https://github.com/typegoose/typegoose/commit/41816058272e15dc26ce5d4a62c5b087e0ed1ee9))
+* **eslint:** upgrade to 8.37.0 ([62cac9f](https://github.com/typegoose/typegoose/commit/62cac9f8eef2d85a996b529063d4ebb8273d2f05))
+* **eslint:** upgrade to 8.41.0 ([e2f55d7](https://github.com/typegoose/typegoose/commit/e2f55d76c9c3ceb721faa30142fca777330122ae))
+* **mongoose:** upgrade to 7.2.0 ([c53fa61](https://github.com/typegoose/typegoose/commit/c53fa61324485d9d952ae18c87bd1fff1331ee79))
+* **semver:** upgrade to 7.5.1 ([0b929d2](https://github.com/typegoose/typegoose/commit/0b929d247dc442f410470d3a271ce710d666eefe))
+* **tslib:** upgrade to 2.5.2 ([1c9b9cb](https://github.com/typegoose/typegoose/commit/1c9b9cb2049e73a19778f908c588196cf4801f50))
+
+
 ## [11.2.0-beta.2](https://github.com/typegoose/typegoose/compare/v11.2.0-beta.1...v11.2.0-beta.2) (2023-05-20)
 
 
