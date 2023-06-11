@@ -24,11 +24,4 @@ jobs:
         with:
           node-version: 18.x
       - name: Install & Build
-        run: bash ./ghPagesPre.sh
-      - name: Deploy to Github Pages
-        uses: JamesIves/github-pages-deploy-action@v4.4.2
-        with:
-          branch: gh-pages
-          folder: . # the root, because the provided script already moves files
-          git-config-name: github-pages-deploy # Set a Different name for the commit in "gh-pages" branch than the commiter itself
-          git-config-email: <>
+        run: node scripts/ghPagesDeploy.js
