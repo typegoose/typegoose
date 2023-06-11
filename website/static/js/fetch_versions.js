@@ -2,7 +2,7 @@
   Script to fetch the latest versions and add them to the dropdown
 */
 
-window.addEventListener('load', async () => {
+async function addVersions() {
   const baseUrl = '/typegoose/';
 
   // get all required elements and log a error if not found
@@ -62,7 +62,7 @@ window.addEventListener('load', async () => {
 
     versions_dropdown_ul.appendChild(li_elem);
   }
-});
+}
 
 /**
  * try to parse the version from the current location
