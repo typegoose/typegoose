@@ -77,7 +77,7 @@ class Cat {
 
 const CatModel = getModelForClass(Cat);
 
-const catdoc = new CatModel({ favoritePlace: { name: "countertop" }})
+const catdoc = new CatModel({ favoritePlace: { name: "countertop" } })
 
 catdoc.favoritePlace.parent() === catdoc;
 ```
