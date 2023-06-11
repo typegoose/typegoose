@@ -1,11 +1,27 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const deployInfo = require('../scripts/getDeployInfo.js')();
+
+console.log(`Deploying editBranch "${deployInfo.branch}" and deployPath "${deployInfo.deployPath}" deployName "${deployInfo.deployName}"`);
+
+let baseUrl = '/typegoose/' + deployInfo.deployPath;
+
+if (!baseUrl.endsWith('/')) {
+  baseUrl += '/';
+}
+
 module.exports = {
   title: 'typegoose',
   tagline: 'Define Mongoose models using TypeScript classes',
   url: 'https://typegoose.github.io',
-  baseUrl: '/typegoose/',
+  baseUrl: baseUrl,
   favicon: 'img/favicon.ico',
   organizationName: 'typegoose',
   projectName: 'typegoose',
+  scripts: [
+    {
+      src: baseUrl + 'js/fetch_versions.js',
+    },
+  ],
   themeConfig: {
     algolia: {
       apiKey: '27478265b7cee23844ccb8cf79943e2c',
@@ -20,6 +36,12 @@ module.exports = {
       //   src: 'img/logo.svg',
       // },
       items: [
+        {
+          // cannot use "docsVersionDropdown" because we are not using docusaurus' versioning system
+          type: 'html',
+          position: 'right',
+          value: `<div id="versions_dropdown" class="navbar__item dropdown dropdown--hoverable dropdown--right"><a href="#" aria-haspopup="true" aria-expanded="false" role="button" class="navbar__link">${deployInfo.deployName}</a><ul class="dropdown__menu"></ul></div>`,
+        },
         {
           to: 'docs/guides/quick-start-guide',
           activeBasePath: 'guides',
@@ -84,7 +106,7 @@ module.exports = {
           path: '../docs',
           routeBasePath: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/typegoose/typegoose/edit/master/docs',
+          editUrl: `https://github.com/typegoose/typegoose/edit/${deployInfo.branch}/docs`,
           remarkPlugins: [[require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }]],
         },
         theme: {
