@@ -1,3 +1,22 @@
+## [11.3.0-beta.1](https://github.com/typegoose/typegoose/compare/v11.2.0...v11.3.0-beta.1) (2023-06-16)
+
+
+### Dependencies
+
+* **@semantic-release/github:** upgrade to 8.1.0 ([55a64d9](https://github.com/typegoose/typegoose/commit/55a64d9086d0ad6999a43def10241e9d824795c3))
+* **@types/jest:** upgrade to 29.5.2 ([ced9aee](https://github.com/typegoose/typegoose/commit/ced9aee92768cd361b10919c490af4e0d42034c6))
+* **@types/lodash:** upgrade to 4.14.195 ([c5c57fd](https://github.com/typegoose/typegoose/commit/c5c57fd7ea400545facd2f23a479d99ac70c47f9))
+* **@types/node:** upgrade to 14.18.48 ([ec31169](https://github.com/typegoose/typegoose/commit/ec31169d9ba01a0fadd9f701b1ceb7f2cd67cdfe))
+* **@typescript-eslint/*:** upgrade to 5.59.11 ([13947d4](https://github.com/typegoose/typegoose/commit/13947d445339173b33e5bb025100624276b92c5e))
+* **@typescript-eslint/*:** upgrade to 5.59.8 ([39db711](https://github.com/typegoose/typegoose/commit/39db7117f21a635555e9209779531b803993621f))
+* **commitlint:** upgrade to 17.6.5 ([d94e87f](https://github.com/typegoose/typegoose/commit/d94e87fe7144cd2e30f10774a636c51115ca42a1))
+* **eslint:** upgrade to 8.42.0 ([476375e](https://github.com/typegoose/typegoose/commit/476375e2f0fc6d3526b35f1ecb97ec689d5cc1b2))
+* **mongodb-memory-server:** upgrade to 8.13.0 ([55c501f](https://github.com/typegoose/typegoose/commit/55c501fe7480a45b8e01da7466e732b7c46cb7d1))
+* **mongoose:** upgrade to 7.2.3 ([e0374bd](https://github.com/typegoose/typegoose/commit/e0374bd422ece10393860247b50c5b6ba8ce7b3a)), closes [typegoose/typegoose#846](https://github.com/typegoose/typegoose/issues/846)
+* **mongoose:** upgrade to 7.3.0 ([e78ce78](https://github.com/typegoose/typegoose/commit/e78ce780abc269cefb895702c6813247c9f2b017))
+* **semver:** upgrade to 7.5.2 ([84934a0](https://github.com/typegoose/typegoose/commit/84934a06ea9c8162963e4fc23e0dbcb9aadd7bc1))
+* **tslib:** upgrade to 2.5.3 ([1fcdc17](https://github.com/typegoose/typegoose/commit/1fcdc17b9a30e53465bec2d5254f694dee5f5878))
+
 ## [11.2.0](https://github.com/typegoose/typegoose/compare/v11.1.0...v11.2.0) (2023-05-20)
 
 
