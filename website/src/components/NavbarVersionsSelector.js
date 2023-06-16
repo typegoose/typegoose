@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import { useCollapsible, Collapsible } from '@docusaurus/theme-common';
+import { useLocation } from '@docusaurus/router';
 import NavbarNavLink from '@theme/NavbarItem/NavbarNavLink';
 import NavbarItem from '@theme/NavbarItem/DefaultNavbarItem';
 
@@ -98,6 +99,8 @@ function NavbarVersionsSelectorDesktop({ position, className, ...props }) {
 
   const versions = getVersions(props);
 
+  const localpath = useLocation().pathname;
+
   return (
     <div
       ref={dropdownRef}
@@ -129,11 +132,13 @@ function NavbarVersionsSelectorDesktop({ position, className, ...props }) {
         {versions.map(([versionKey, versionPath], i) => (
           <NavbarItem
             isDropdownItem
-            activeClassName="dropdown__link--active"
+            // cannot use "isActive" and "activeClassName", because those do not run when "href" is used
+            // and "href" is required because "to" *always* prepends the baseUrl
+            className={clsx(isActiveVersion(localpath, versionPath) ? 'dropdown__link--active' : '', className)}
             label={versionKey}
-            to={versionPath}
+            href={versionPath}
+            autoAddBaseUrl={false} // otherwise docusaurus will always prepend baseurl, even if href is used
             key={i}
-            isActive={(_, b) => isActiveVersion(b.pathname, versionPath)}
           />
         ))}
       </ul>
@@ -153,6 +158,8 @@ function NavbarVersionsSelectorMobile({
   const { collapsed, toggleCollapsed } = useCollapsible({
     initialState: true,
   });
+
+  const localpath = useLocation().pathname;
 
   return (
     <li
@@ -179,11 +186,13 @@ function NavbarVersionsSelectorMobile({
             mobile
             isDropdownItem
             onClick={onClick}
-            activeClassName="menu__link--active"
-            isActive={(_, b) => isActiveVersion(b.pathname, versionPath)}
+            // cannot use "isActive" and "activeClassName", because those do not run when "href" is used
+            // and "href" is required because "to" *always* prepends the baseUrl
+            className={clsx(isActiveVersion(localpath, versionPath) ? 'menu__link--active' : '', className)}
             activeBasePath={versionPath}
             label={versionKey}
-            to={versionPath}
+            href={versionPath}
+            autoAddBaseUrl={false} // otherwise docusaurus will always prepend baseurl, even if href is used
             key={i}
           />
         ))}
