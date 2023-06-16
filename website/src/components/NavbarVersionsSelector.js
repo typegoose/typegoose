@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { useCollapsible, Collapsible } from '@docusaurus/theme-common';
 import { useLocation } from '@docusaurus/router';
 import NavbarNavLink from '@theme/NavbarItem/NavbarNavLink';
-import NavbarItem from '@theme/NavbarItem/DefaultNavbarItem';
 
 // Base Copy from "swizzle @docusaurus/theme-classic NavbarItem/DropdownNavbarItem"
 
@@ -149,7 +148,6 @@ function NavbarVersionsSelectorMobile({
   className,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   position, // Need to destructure position from props so that it doesn't get passed on.
-  onClick,
   ...props
 }) {
   const versions = getVersions(props);
