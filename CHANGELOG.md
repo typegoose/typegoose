@@ -1,3 +1,10 @@
+## [11.3.0-beta.2](https://github.com/typegoose/typegoose/compare/v11.3.0-beta.1...v11.3.0-beta.2) (2023-06-16)
+
+
+### Style
+
+* **website/fetch_versions:** disable eslint rule for function ([187a7f1](https://github.com/typegoose/typegoose/commit/187a7f17dcee0d49945635fd6c34020fcd48d25e))
+
 ## [11.3.0-beta.1](https://github.com/typegoose/typegoose/compare/v11.2.0...v11.3.0-beta.1) (2023-06-16)
 
 
