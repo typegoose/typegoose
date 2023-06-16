@@ -2,6 +2,7 @@
   Script to fetch the latest versions and add them to the dropdown
 */
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function addVersions() {
   const baseUrl = '/typegoose/';
 
