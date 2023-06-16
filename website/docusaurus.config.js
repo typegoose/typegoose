@@ -17,11 +17,6 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'typegoose',
   projectName: 'typegoose',
-  scripts: [
-    {
-      src: baseUrl + 'js/fetch_versions.js',
-    },
-  ],
   themeConfig: {
     algolia: {
       apiKey: '27478265b7cee23844ccb8cf79943e2c',
@@ -38,9 +33,9 @@ module.exports = {
       items: [
         {
           // cannot use "docsVersionDropdown" because we are not using docusaurus' versioning system
-          type: 'html',
+          type: 'custom-versions-selector',
           position: 'right',
-          value: `<div id="versions_dropdown" class="navbar__item dropdown dropdown--hoverable dropdown--right"><a href="#" aria-haspopup="true" aria-expanded="false" role="button" class="navbar__link">${deployInfo.deployName}</a><ul class="dropdown__menu"></ul></div>`,
+          label: deployInfo.deployName,
         },
         {
           to: 'docs/guides/quick-start-guide',
