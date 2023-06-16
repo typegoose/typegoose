@@ -129,17 +129,16 @@ function NavbarVersionsSelectorDesktop({ position, className, ...props }) {
         {props.label}
       </NavbarNavLink>
       <ul className="dropdown__menu">
-        {versions.map(([versionKey, versionPath], i) => (
-          <NavbarItem
-            isDropdownItem
-            // cannot use "isActive" and "activeClassName", because those do not run when "href" is used
-            // and "href" is required because "to" *always* prepends the baseUrl
-            className={clsx(isActiveVersion(localpath, versionPath) ? 'dropdown__link--active' : '', className)}
-            label={versionKey}
-            href={versionPath}
-            autoAddBaseUrl={false} // otherwise docusaurus will always prepend baseurl, even if href is used
-            key={i}
-          />
+        {versions.map(([versionKey, versionPath]) => (
+          // cant use built-in components because they either always prepend the baseUrl or dont treat links as external
+          <li>
+            <a
+              href={versionPath}
+              className={clsx(isActiveVersion(localpath, versionPath) ? 'dropdown__link--active' : '', 'dropdown__link', className)}
+            >
+              {versionKey}
+            </a>
+          </li>
         ))}
       </ul>
     </div>
@@ -181,20 +180,16 @@ function NavbarVersionsSelectorMobile({
         Versions
       </NavbarNavLink>
       <Collapsible lazy as="ul" className="menu__list" collapsed={collapsed}>
-        {versions.map(([versionKey, versionPath], i) => (
-          <NavbarItem
-            mobile
-            isDropdownItem
-            onClick={onClick}
-            // cannot use "isActive" and "activeClassName", because those do not run when "href" is used
-            // and "href" is required because "to" *always* prepends the baseUrl
-            className={clsx(isActiveVersion(localpath, versionPath) ? 'menu__link--active' : '', className)}
-            activeBasePath={versionPath}
-            label={versionKey}
-            href={versionPath}
-            autoAddBaseUrl={false} // otherwise docusaurus will always prepend baseurl, even if href is used
-            key={i}
-          />
+        {versions.map(([versionKey, versionPath]) => (
+          // cant use built-in components because they either always prepend the baseUrl or dont treat links as external
+          <li className="menu__list-item">
+            <a
+              href={versionPath}
+              className={clsx(isActiveVersion(localpath, versionPath) ? 'menu__link--active' : '', 'menu__link', className)}
+            >
+              {versionKey}
+            </a>
+          </li>
         ))}
       </Collapsible>
     </li>
