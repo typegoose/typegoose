@@ -32,6 +32,10 @@ module.exports = {
       // },
       items: [
         {
+          type: 'custom-beta-notice',
+          position: 'left',
+        },
+        {
           // cannot use "docsVersionDropdown" because we are not using docusaurus' versioning system
           type: 'custom-versions-selector',
           position: 'right',
