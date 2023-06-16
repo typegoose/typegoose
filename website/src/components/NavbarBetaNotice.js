@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import NavbarNavLink from '@theme/NavbarItem/NavbarNavLink';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 
 // Base Copy from "./NavbarVersionsSelector.js"
 
@@ -24,7 +25,6 @@ function versionFromUrl() {
  */
 function getLabel() {
   const caps = versionFromUrl();
-  console.log('caps', caps, window.location.pathname);
 
   if (!caps) {
     return false;
@@ -100,5 +100,9 @@ function NavbarBetaNoticeMobile({
 export default function NavbarBetaNotice({ mobile = false, ...props }) {
   const Comp = mobile ? NavbarBetaNoticeMobile : NavbarBetaNoticeDesktop;
 
-  return <Comp {...props} />;
+  return (
+    <BrowserOnly>
+      <Comp {...props} />
+    </BrowserOnly>
+  );
 }
