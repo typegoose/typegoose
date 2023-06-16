@@ -100,9 +100,5 @@ function NavbarBetaNoticeMobile({
 export default function NavbarBetaNotice({ mobile = false, ...props }) {
   const Comp = mobile ? NavbarBetaNoticeMobile : NavbarBetaNoticeDesktop;
 
-  return (
-    <BrowserOnly>
-      <Comp {...props} />
-    </BrowserOnly>
-  );
+  return <BrowserOnly>{() => <Comp {...props} />}</BrowserOnly>;
 }
