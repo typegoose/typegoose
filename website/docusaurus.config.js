@@ -17,17 +17,15 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'typegoose',
   projectName: 'typegoose',
-  scripts: [
-    {
-      src: baseUrl + 'js/fetch_versions.js',
-    },
-  ],
   themeConfig: {
     algolia: {
       apiKey: '27478265b7cee23844ccb8cf79943e2c',
       appId: 'E5557YWQXF',
       indexName: 'typegoose',
       contextualSearch: false, // since docusaurus v2.beta-15, it is defaulted to "true", but somehow breaks current search
+      searchParameters: {
+        facetFilters: [`version:${deployInfo.searchName}`],
+      },
     },
     navbar: {
       title: 'typegoose',
@@ -37,10 +35,14 @@ module.exports = {
       // },
       items: [
         {
+          type: 'custom-beta-notice',
+          position: 'left',
+        },
+        {
           // cannot use "docsVersionDropdown" because we are not using docusaurus' versioning system
-          type: 'html',
+          type: 'custom-versions-selector',
           position: 'right',
-          value: `<div id="versions_dropdown" class="navbar__item dropdown dropdown--hoverable dropdown--right"><a href="#" aria-haspopup="true" aria-expanded="false" role="button" class="navbar__link">${deployInfo.deployName}</a><ul class="dropdown__menu"></ul></div>`,
+          label: deployInfo.deployName,
         },
         {
           to: 'docs/guides/quick-start-guide',
@@ -115,4 +117,7 @@ module.exports = {
       },
     ],
   ],
+  customFields: {
+    deployInfo: deployInfo,
+  },
 };
