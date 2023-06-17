@@ -23,6 +23,9 @@ module.exports = {
       appId: 'E5557YWQXF',
       indexName: 'typegoose',
       contextualSearch: false, // since docusaurus v2.beta-15, it is defaulted to "true", but somehow breaks current search
+      searchParameters: {
+        facetFilters: [`version:${deployInfo.searchName}`],
+      },
     },
     navbar: {
       title: 'typegoose',
