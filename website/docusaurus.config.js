@@ -114,4 +114,7 @@ module.exports = {
       },
     ],
   ],
+  customFields: {
+    deployInfo: deployInfo,
+  },
 };
