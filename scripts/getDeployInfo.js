@@ -39,5 +39,6 @@ module.exports = function getDeployInfo() {
     deployPath: !!deployName ? `versions/${deployName}` : '',
     // deploy name should always be defined, if not set via the above, use the package.json major version
     deployName: !!deployName ? deployName : packagejson.version.split('.')[0] + '.x',
+    searchName: deployName.length === 0 ? 'current' : deployName,
   };
 };
