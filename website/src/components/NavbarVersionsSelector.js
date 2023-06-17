@@ -128,9 +128,9 @@ function NavbarVersionsSelectorDesktop({ position, className, ...props }) {
         {props.label}
       </NavbarNavLink>
       <ul className="dropdown__menu">
-        {versions.map(([versionKey, versionPath]) => (
+        {versions.map(([versionKey, versionPath], i) => (
           // cant use built-in components because they either always prepend the baseUrl or dont treat links as external
-          <li>
+          <li key={i}>
             <a
               href={versionPath}
               className={clsx(isActiveVersion(localpath, versionPath) ? 'dropdown__link--active' : '', 'dropdown__link', className)}
@@ -178,9 +178,9 @@ function NavbarVersionsSelectorMobile({
         Versions
       </NavbarNavLink>
       <Collapsible lazy as="ul" className="menu__list" collapsed={collapsed}>
-        {versions.map(([versionKey, versionPath]) => (
+        {versions.map(([versionKey, versionPath], i) => (
           // cant use built-in components because they either always prepend the baseUrl or dont treat links as external
-          <li className="menu__list-item">
+          <li className="menu__list-item" key={i}>
             <a
               href={versionPath}
               className={clsx(isActiveVersion(localpath, versionPath) ? 'menu__link--active' : '', 'menu__link', className)}
