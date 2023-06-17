@@ -1,3 +1,12 @@
+## [11.3.0-beta.3](https://github.com/typegoose/typegoose/compare/v11.3.0-beta.2...v11.3.0-beta.3) (2023-06-17)
+
+
+### Dependencies
+
+* **@types/node:** upgrade to 14.18.51 ([79ff1cc](https://github.com/typegoose/typegoose/commit/79ff1ccbbeebbc026cf6f83afc94c93cf4b8ceec))
+* **eslint:** upgrade to 8.43.0 ([25ac895](https://github.com/typegoose/typegoose/commit/25ac8955276fe04e7bf9a8cc7a5824b47e34d902))
+* **rimraf:** upgrade to 5.0.1 ([227bc3c](https://github.com/typegoose/typegoose/commit/227bc3c0bb9d11201f75b85087ca8cd48f7a914f))
+
 ## [11.3.0-beta.2](https://github.com/typegoose/typegoose/compare/v11.3.0-beta.1...v11.3.0-beta.2) (2023-06-16)
 
 
