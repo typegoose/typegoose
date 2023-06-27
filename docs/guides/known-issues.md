@@ -101,3 +101,11 @@ Since 24.2.22 (d/m/y) NodeJS 17.6 is released which should include the fix.
 
 Typescript has its own `DocumentType` when having `DOM` enabled in `tsconfig` option `lib`, in any case the correct `DocumentType` has to be imported directly from typegoose.  
 It is also recommended to remove the option `DOM` from the `tsconfig` option `lib` when possible.
+
+### Typescript 5.0 ES Decorators
+
+Typescript 5.0 has support for ES Decorators (Stage 3) so `@decorator` is now valid syntax whether `experimentalDecorators` is `true` or `false` (Stage 2), but the implementations are not type and runtime compatible and would require special handling, also the new ES Decorators (Stage 3) *dont support metadata*, which typegoose heavily relies on. (and no [use without `emitDecoratorMetadata`](./use-without-emitDecoratorMetadata.md) cannot be used as a workaround).
+
+TL;DR: typegoose currently does not support ES Decorators (Stage 3) and `experimentalDecorators: true` has to be enabled.
+
+Example Error: `Unable to resolve signature of property decorator when called as an expression. Argument of type 'undefined' is not assignable to parameter of type 'Object'.ts(1240)`
