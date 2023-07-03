@@ -75,7 +75,7 @@ export function processProp(input: ProcessPropOptions): void {
   }
 
   // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
-  if (Type === cl.constructor) {
+  if (Type === cl) {
     throw new SelfContainingClassError(name, key);
   }
 
@@ -189,11 +189,11 @@ export function processProp(input: ProcessPropOptions): void {
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, input.c, key);
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, input.cl, key);
 
         return;
       case PropType.MAP:
-        const mapped = utils.mapOptions(rawOptions, newType, input.c, key);
+        const mapped = utils.mapOptions(rawOptions, newType, input.cl, key);
 
         schemaProp[key] = {
           ...mapped.outer,
@@ -223,7 +223,7 @@ export function processProp(input: ProcessPropOptions): void {
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, input.c, key, undefined, { ref });
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, input.cl, key, undefined, { ref });
         break;
       case PropType.NONE:
         schemaProp[key] = {
@@ -233,7 +233,7 @@ export function processProp(input: ProcessPropOptions): void {
         };
         break;
       case PropType.MAP:
-        const mapped = utils.mapOptions(rawOptions, refType, input.c, key);
+        const mapped = utils.mapOptions(rawOptions, refType, input.cl, key);
 
         schemaProp[key] = {
           ...mapped.outer,
@@ -263,7 +263,7 @@ export function processProp(input: ProcessPropOptions): void {
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, input.c, key, undefined, { refPath });
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, input.cl, key, undefined, { refPath });
         break;
       case PropType.NONE:
         schemaProp[key] = {
@@ -391,12 +391,12 @@ export function processProp(input: ProcessPropOptions): void {
 
   if (utils.isPrimitive(Type)) {
     if (utils.isObject(Type, true)) {
-      utils.warnMixed(input.c, key);
+      utils.warnMixed(input.cl, key);
     }
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, Type, input.c, key);
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, Type, input.cl, key);
 
         return;
       case PropType.MAP:
@@ -405,11 +405,11 @@ export function processProp(input: ProcessPropOptions): void {
 
         // Map the correct options for the end type
         if (utils.isTypeMeantToBeArray(rawOptions)) {
-          mapped = utils.mapOptions(rawOptions, mongoose.Schema.Types.Array, input.c, key);
+          mapped = utils.mapOptions(rawOptions, mongoose.Schema.Types.Array, input.cl, key);
           // "rawOptions" is not used here, because that would duplicate some options to where the should not be
-          finalType = utils.mapArrayOptions({ ...mapped.inner, dim: rawOptions.dim }, Type, input.c, key);
+          finalType = utils.mapArrayOptions({ ...mapped.inner, dim: rawOptions.dim }, Type, input.cl, key);
         } else {
-          mapped = utils.mapOptions(rawOptions, Type, input.c, key);
+          mapped = utils.mapOptions(rawOptions, Type, input.cl, key);
           finalType = { ...mapped.inner, type: Type };
         }
 
@@ -450,7 +450,7 @@ export function processProp(input: ProcessPropOptions): void {
   const virtualSchema = buildSchema(Type);
   switch (propKind) {
     case PropType.ARRAY:
-      schemaProp[key] = utils.mapArrayOptions(rawOptions, virtualSchema, input.c, key, Type);
+      schemaProp[key] = utils.mapArrayOptions(rawOptions, virtualSchema, input.cl, key, Type);
 
       return;
     case PropType.MAP:
@@ -458,7 +458,7 @@ export function processProp(input: ProcessPropOptions): void {
       if ('dim' in rawOptions) {
         logger.debug('Map SubDocument Array for "%s.%s"', name, key);
 
-        const { type, ...outer } = utils.mapArrayOptions(rawOptions, virtualSchema, input.c, key, Type);
+        const { type, ...outer } = utils.mapArrayOptions(rawOptions, virtualSchema, input.cl, key, Type);
 
         schemaProp[key] = {
           ...outer,
@@ -469,7 +469,7 @@ export function processProp(input: ProcessPropOptions): void {
         return;
       }
 
-      const mapped = utils.mapOptions(rawOptions, virtualSchema, input.c, key, Type);
+      const mapped = utils.mapOptions(rawOptions, virtualSchema, input.cl, key, Type);
 
       schemaProp[key] = {
         ...mapped.outer,

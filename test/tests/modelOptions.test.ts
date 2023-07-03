@@ -5,6 +5,7 @@ import { getName, mergeMetadata } from '../../src/internal/utils';
 import { addModelToTypegoose, buildSchema, getModelForClass, modelOptions, mongoose, prop } from '../../src/typegoose';
 import { IModelOptions } from '../../src/types';
 import { connect } from '../utils/connect';
+import { CustomTypes, getAccessMetadata } from '../../src/wrapDecorator';
 
 describe('typegoose-specific-options', () => {
   it('should set Severity right', () => {
@@ -32,6 +33,13 @@ describe('typegoose-specific-options', () => {
   });
 });
 
+function targetHelper(cl): CustomTypes {
+  const metadata = getAccessMetadata(cl);
+  const name = getName(cl);
+
+  return { metadata, name, className: name };
+}
+
 describe('existingMongoose & existingConnection', () => {
   it('should use default-existingMongoose', () => {
     @modelOptions({ existingMongoose: mongoose })
@@ -50,7 +58,7 @@ describe('existingMongoose & existingConnection', () => {
     @modelOptions({ existingConnection: { hello: 1 } })
     class Dummy {}
 
-    const out = mergeMetadata(DecoratorKeys.ModelOptions, { existingConnection: { hi: 1 } }, Dummy);
+    const out = mergeMetadata(DecoratorKeys.ModelOptions, { existingConnection: { hi: 1 } }, targetHelper(Dummy));
 
     expect(out).toEqual(Object.assign({}, omit(globalOptions, 'globalOptions'), { existingConnection: { hi: 1 } }));
   });

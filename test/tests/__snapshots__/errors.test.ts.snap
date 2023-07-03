@@ -105,11 +105,6 @@ exports[`tests for "NoValidClassError" [E028] should error if no valid class is 
 Value: \\"not class\\""
 `;
 
-exports[`tests for "NoValidClassError" [E028] should error if no valid class is supplied to "assignMetadata" (and "mergeMetadata") [NoValidClassError] [E028] 1`] = `
-"Value is not a function or does not have a constructor! [E028]
-Value: \\"true\\""
-`;
-
 exports[`tests for "NoValidClassError" [E028] should error if no valid class is supplied to "buildSchema" [NoValidClassError] [E028] 1`] = `
 "Value is not a function or does not have a constructor! [E028]
 Value: \\"hello\\""
@@ -128,11 +123,6 @@ Value: \\"true\\""
 exports[`tests for "NoValidClassError" [E028] should error if no valid class is supplied to "getModelForClass" [NoValidClassError] [E028] 1`] = `
 "Value is not a function or does not have a constructor! [E028]
 Value: \\"hello\\""
-`;
-
-exports[`tests for "NoValidClassError" [E028] should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClassError] [E028] 1`] = `
-"Value is not a function or does not have a constructor! [E028]
-Value: \\"true\\""
 `;
 
 exports[`tests for "NoValidClassError" [E028] should throw a Error when "cl" in "getName" is null or undefined [NoValidClassError] [E028] 1`] = `

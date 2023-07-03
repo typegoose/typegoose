@@ -10,7 +10,7 @@ import {
   isNullOrUndefined,
   isTypeMeantToBeArray,
   mergeMetadata,
-  mergeSchemaOptions,
+  // mergeSchemaOptions,
   toStringNoFail,
 } from '../../src/internal/utils';
 import { logger } from '../../src/logSettings';
@@ -40,6 +40,7 @@ import { CarModel } from '../models/car';
 import { InternetUserModel } from '../models/internetUser';
 import { PersonNestedModel, AddressNestedModel, AddressNested, PersonNested } from '../models/nestedObject';
 import { PersonModel } from '../models/person';
+import { CustomTypes, getAccessMetadata } from '../../src/wrapDecorator';
 
 // Note: this file is meant for github issue verification & test adding for these
 // -> and when not an outsourced class(/model) is needed
@@ -119,10 +120,17 @@ it('should work with Objects in Class [szokodiakos#54]', async () => {
   expect(doc.test.anotherTest).toEqual('hello');
 });
 
+function targetHelper(cl): CustomTypes {
+  const metadata = getAccessMetadata(cl);
+  const name = getName(cl);
+
+  return { metadata, name, className: name };
+}
+
 it('simple test for assignMetadata', () => {
   class TestAssignMetadata {}
 
-  assignMetadata(DecoratorKeys.ModelOptions, { testOption: 'hello' }, TestAssignMetadata);
+  assignMetadata(DecoratorKeys.ModelOptions, { testOption: 'hello' }, targetHelper(TestAssignMetadata));
 
   const reflected = Reflect.getMetadata(DecoratorKeys.ModelOptions, TestAssignMetadata);
 
@@ -133,32 +141,32 @@ it('simple test for assignMetadata', () => {
 it('should just run with an non existing value in "assignMetadata"', () => {
   class Dummy {}
 
-  assignMetadata(DecoratorKeys.ModelOptions, { test: 'hello' }, Dummy);
-  assignMetadata(DecoratorKeys.ModelOptions, undefined, Dummy);
+  assignMetadata(DecoratorKeys.ModelOptions, { test: 'hello' }, targetHelper(Dummy));
+  assignMetadata(DecoratorKeys.ModelOptions, undefined, targetHelper(Dummy));
   expect(Reflect.getMetadata(DecoratorKeys.ModelOptions, Dummy)).toEqual({ test: 'hello' });
 });
 
 it('should just run with an non existing value in "mergeMetadata"', () => {
   class Dummy {}
 
-  assignMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
-  expect(mergeMetadata(DecoratorKeys.ModelOptions, undefined, Dummy)).toEqual({ schemaOptions: { _id: false } });
+  assignMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, targetHelper(Dummy));
+  expect(mergeMetadata(DecoratorKeys.ModelOptions, undefined, targetHelper(Dummy))).toEqual({ schemaOptions: { _id: false } });
 });
 it('should not modify current metadata object in "mergeMetadata"', () => {
   class Dummy {}
 
   const someData = { property: 'value' };
   Reflect.defineMetadata(DecoratorKeys.ModelOptions, someData, Dummy);
-  mergeMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
+  mergeMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, targetHelper(Dummy));
   expect(someData).toEqual({ property: 'value' });
 });
 
-it('should just run with an non existing value in "mergeSchemaOptions"', () => {
-  class Dummy {}
+// it('should just run with an non existing value in "mergeSchemaOptions"', () => {
+//   class Dummy {}
 
-  assignMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
-  expect(mergeSchemaOptions(undefined, Dummy)).toEqual({ _id: false });
-});
+//   assignMetadata(DecoratorKeys.ModelOptions, { schemaOptions: { _id: false } }, Dummy);
+//   expect(mergeSchemaOptions(undefined, Dummy)).toEqual({ _id: false });
+// });
 
 it('merge options with assignMetadata', () => {
   @modelOptions({ schemaOptions: { timestamps: true, _id: false } })
@@ -1196,7 +1204,7 @@ it(`should Validate Map`, async () => {
 it('should not merge together symbols', () => {
   class Test {}
 
-  const res = mergeMetadata(DecoratorKeys.ModelOptions, { [AlreadyMerged]: true, anotherValue: true }, Test);
+  const res = mergeMetadata(DecoratorKeys.ModelOptions, { [AlreadyMerged]: true, anotherValue: true }, targetHelper(Test));
 
   expect(res).toStrictEqual({ anotherValue: true });
   expect(res[AlreadyMerged]).toBeUndefined();

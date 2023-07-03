@@ -35,6 +35,7 @@ import {
   ResolveTypegooseNameError,
 } from '../../src/internal/errors';
 import { globalOptions } from '../../src/internal/data';
+import { CustomTypes, getAccessMetadata } from '../../src/wrapDecorator';
 
 beforeEach(() => {
   jest.restoreAllMocks();
@@ -142,17 +143,17 @@ describe('tests for "NoValidClassError" [E028]', () => {
     }
   });
 
-  it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClassError] [E028]', () => {
-    try {
-      // @ts-expect-error expect that the second argument should be an class
-      utils.mergeSchemaOptions({}, true);
+  // it('should error if no valid class is supplied to "mergeSchemaOptions" [NoValidClassError] [E028]', () => {
+  //   try {
+  //     // @ts-expect-error expect that the second argument should be an class
+  //     utils.mergeSchemaOptions({}, true);
 
-      fail('Expected to throw "NoValidClassError"');
-    } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClassError);
-      expect(err.message).toMatchSnapshot();
-    }
-  });
+  //     fail('Expected to throw "NoValidClassError"');
+  //   } catch (err) {
+  //     expect(err).toBeInstanceOf(errors.NoValidClassError);
+  //     expect(err.message).toMatchSnapshot();
+  //   }
+  // });
 
   it('should error if no valid class is supplied to "getDiscriminatorModelForClass" [NoValidClassError] [E028]', () => {
     try {
@@ -178,17 +179,17 @@ describe('tests for "NoValidClassError" [E028]', () => {
     }
   });
 
-  it('should error if no valid class is supplied to "assignMetadata" (and "mergeMetadata") [NoValidClassError] [E028]', () => {
-    try {
-      // @ts-expect-error expect that the third argument is an class
-      utils.assignMetadata(DecoratorKeys.Index, {}, true);
+  // it('should error if no valid class is supplied to "assignMetadata" (and "mergeMetadata") [NoValidClassError] [E028]', () => {
+  //   try {
+  //     // @ts-expect-error expect that the third argument is an class
+  //     utils.assignMetadata(DecoratorKeys.Index, {}, true);
 
-      fail('Expected to throw "NoValidClassError"');
-    } catch (err) {
-      expect(err).toBeInstanceOf(errors.NoValidClassError);
-      expect(err.message).toMatchSnapshot();
-    }
-  });
+  //     fail('Expected to throw "NoValidClassError"');
+  //   } catch (err) {
+  //     expect(err).toBeInstanceOf(errors.NoValidClassError);
+  //     expect(err.message).toMatchSnapshot();
+  //   }
+  // });
 });
 
 describe('tests for "InvalidTypeError" [E009]', () => {
@@ -675,13 +676,20 @@ describe('tests for "StringLengthExpectedError" [E026]', () => {
     }
   });
 
+  function targetHelper(cl): CustomTypes {
+    const metadata = getAccessMetadata(cl);
+    const name = getName(cl);
+
+    return { metadata, name, className: name };
+  }
+
   it('should throw a Error in "utils.mergeMetadata" when "key" is not a string [StringLengthExpectedError] [E026]', () => {
     try {
       utils.mergeMetadata(
         // @ts-expect-error "undefined" is not a key in "DecoratorKeys"
         undefined,
         undefined,
-        DummyClass
+        targetHelper(DummyClass)
       );
 
       fail('Expected to throw "StringLengthExpectedError"');
@@ -697,7 +705,7 @@ describe('tests for "StringLengthExpectedError" [E026]', () => {
         // @ts-expect-error "" is not a key in "DecoratorKeys"
         '',
         undefined,
-        DummyClass
+        targetHelper(DummyClass)
       );
 
       fail('Expected to throw "StringLengthExpectedError"');

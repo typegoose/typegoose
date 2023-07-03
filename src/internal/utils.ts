@@ -27,7 +27,7 @@ import {
   ResolveTypegooseNameError,
   StringLengthExpectedError,
 } from './errors';
-import { CustomTypes, getAccessMetadata } from '../wrapDecorator';
+import { CustomTypes, getAccessMetadata, isESDecorator } from '../wrapDecorator';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -379,7 +379,7 @@ export function isNotDefined(Type: any) {
 export function mapArrayOptions(
   rawOptions: any,
   Type: AnyParamConstructor<any> | mongoose.Schema,
-  c: CustomTypes,
+  target: any,
   pkey: string,
   loggerType?: AnyParamConstructor<any>,
   extraInner?: KeyStringAny
@@ -394,7 +394,7 @@ export function mapArrayOptions(
   const dim = rawOptions.dim; // needed, otherwise it will be included (and not removed) in the returnObject
   delete rawOptions.dim;
 
-  const mapped = mapOptions(rawOptions, Type, c, pkey, loggerType);
+  const mapped = mapOptions(rawOptions, Type, target, pkey, loggerType);
 
   /** The Object that gets returned */
   const returnObject: KeyStringAny = {
@@ -410,7 +410,7 @@ export function mapArrayOptions(
 
   rawOptions.dim = dim; // re-add for "createArrayFromDimensions"
 
-  returnObject.type = createArrayFromDimensions(rawOptions, returnObject.type, c.className!, pkey);
+  returnObject.type = createArrayFromDimensions(rawOptions, returnObject.type, getName(target), pkey);
 
   if (loggerType) {
     logger.debug('(Array) Final mapped Options for Type "%s"', getName(loggerType), returnObject);
@@ -430,7 +430,7 @@ export function mapArrayOptions(
 export function mapOptions(
   rawOptions: any,
   Type: AnyParamConstructor<any> | (mongoose.Schema & IPrototype),
-  c: CustomTypes,
+  target: any,
   pkey: string,
   loggerType?: AnyParamConstructor<any>
 ): MappedInnerOuterOptions {
@@ -454,7 +454,7 @@ export function mapOptions(
       Type = mongoose.Schema.Types[loggerTypeName];
 
       if (Type === mongoose.Schema.Types.Mixed) {
-        warnMixed(c, pkey);
+        warnMixed(target, pkey);
       }
     }
   }
@@ -470,7 +470,7 @@ export function mapOptions(
     OptionsCTOR = mongoose.Schema.Types.Subdocument.prototype.OptionsConstructor;
   }
 
-  assertion(!isNullOrUndefined(OptionsCTOR), () => new InvalidOptionsConstructorError(c.className!, pkey, loggerType));
+  assertion(!isNullOrUndefined(OptionsCTOR), () => new InvalidOptionsConstructorError(getName(target), pkey, loggerType));
 
   const options = Object.assign({}, rawOptions); // for sanity
 
@@ -525,10 +525,13 @@ export function isTypeMeantToBeArray(rawOptions: any): boolean {
  * @param target Target Class
  * @param key Property key
  */
-export function warnMixed({ metadata, className }: CustomTypes, key: string): void | never {
-  const name = className;
-  const modelOptions: IModelOptions = metadata.getMetadata(DecoratorKeys.ModelOptions) ?? {};
-  const rawOptions = metadata.getMetadata(DecoratorKeys.PropCache) as DecoratedPropertyMetadataMap | undefined;
+export function warnMixed(target: any, key: string): void | never {
+  const name = getName(target);
+  const modelOptions: IModelOptions =
+    getAccessMetadata(isESDecorator ? target : getRightTarget(target)).getMetadata(DecoratorKeys.ModelOptions) ?? {};
+  const rawOptions = getAccessMetadata(isESDecorator ? target : target.prototype).getMetadata(DecoratorKeys.PropCache) as
+    | DecoratedPropertyMetadataMap
+    | undefined;
 
   const setSeverity: Severity = rawOptions?.get(key)?.options?.allowMixed ?? modelOptions.options?.allowMixed ?? Severity.WARN;
 
