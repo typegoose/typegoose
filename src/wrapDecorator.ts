@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { getName, isNullOrUndefined } from './internal/utils';
+import { assertion, getName, isNullOrUndefined } from './internal/utils';
 import { logger } from './logSettings';
 
 // we have to declare the function as available, because no reflection types are imported anymore
@@ -8,6 +8,7 @@ declare global {
   namespace Reflect {
     function defineMetadata(metadataKey: any, metadataValue: any, target: Object): void;
     function getMetadata(metadataKey: any, target: Object): any;
+    function getMetadata(metadataKey: any, target: Object, propertyKey: string | symbol): any;
     function getOwnMetadata(metadataKey: any, target: Object): any;
   }
 }
@@ -149,7 +150,7 @@ export class AccessMetadataReflect implements IAccessMetadata {
  * Class for the ES decorator metadata implementation
  */
 export class AccessMetadataES implements IAccessMetadata {
-  protected metadata: DecoratorMetadata;
+  protected metadata?: DecoratorMetadata;
 
   public getOwnMetadata(key: string): unknown {
     return Object.getOwnPropertyDescriptor(this.metadata, key)?.value;
@@ -162,10 +163,11 @@ export class AccessMetadataES implements IAccessMetadata {
       return undefined;
     }
 
-    return this.metadata[key];
+    return this.metadata && this.metadata[key];
   }
 
   public defineMetadata(key: string, value: unknown): void {
+    assertion(!isNullOrUndefined(this.metadata), new Error('Expected this.metadata to be defined'));
     this.metadata[key] = value;
   }
 

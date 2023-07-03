@@ -10,7 +10,7 @@ import type {
   ProcessPropOptions,
   VirtualPopulateMap,
 } from '../types';
-import { getAccessMetadata } from '../wrapDecorator';
+import { getAccessMetadata, isESDecorator } from '../wrapDecorator';
 import { DecoratorKeys, PropType } from './constants';
 import {
   CannotBeSymbolError,
@@ -38,7 +38,7 @@ export function processProp(input: ProcessPropOptions): void {
   const cmetadata = getAccessMetadata(input.cl);
   const name = className!;
   const rawOptions: KeyStringAny = Object.assign({}, input.options);
-  let Type: any | undefined = metadata.getMetadata(DecoratorKeys.Type, key);
+  let Type: any | undefined = isESDecorator ? undefined : metadata.getMetadata(DecoratorKeys.Type, key); // TODO: typescript has not types for ES Decorators yet
   const propKind = input.propType ?? detectPropType(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);
