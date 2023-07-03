@@ -37,7 +37,7 @@ export function processProp(input: ProcessPropOptions): void {
   const { metadata, className } = input.c;
   const name = className!;
   const rawOptions: KeyStringAny = Object.assign({}, input.options);
-  let Type: any | undefined = /* metadata.getMetadata(DecoratorKeys.Type, key) */ undefined; // TODO
+  let Type: any | undefined = metadata.getMetadata(DecoratorKeys.Type, key);
   const propKind = input.propType ?? detectPropType(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);

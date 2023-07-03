@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { getName, isNullOrUndefined } from './internal/utils';
+import { logger } from './logSettings';
 
 // we have to declare the function as available, because no reflection types are imported anymore
 declare global {
@@ -110,7 +111,7 @@ export interface IAccessMetadata {
   /** Get the value from the own metadata object, not via inheritance */
   getOwnMetadata(key: string): unknown;
   /** Get the value from the object, regardless of if it is inherited */
-  getMetadata(key: string): unknown;
+  getMetadata(key: string, key2?: string | symbol): unknown;
   /** Define metadata at the key on the own metadata object */
   defineMetadata(key: string, value: unknown): unknown;
 }
@@ -126,8 +127,12 @@ export class AccessMetadataReflect implements IAccessMetadata {
     return Reflect.getOwnMetadata(key, this.target);
   }
 
-  public getMetadata(key: string): unknown {
-    return Reflect.getMetadata(key, this.target);
+  public getMetadata(key: string, key2?: string | symbol): unknown {
+    if (isNullOrUndefined(key2)) {
+      return Reflect.getMetadata(key, this.target);
+    }
+
+    return Reflect.getMetadata(key, this.target, key2);
   }
 
   public defineMetadata(key: string, value: unknown): void {
@@ -150,7 +155,13 @@ export class AccessMetadataES implements IAccessMetadata {
     return Object.getOwnPropertyDescriptor(this.metadata, key)?.value;
   }
 
-  public getMetadata(key: string): unknown {
+  public getMetadata(key: string, key2?: unknown): unknown {
+    if (!isNullOrUndefined(key2)) {
+      logger.error('AccessMetadataES does not support key2 for getMetadata!');
+
+      return undefined;
+    }
+
     return this.metadata[key];
   }
 
