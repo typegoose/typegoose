@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { getName } from './internal/utils';
+import { getName, isNullOrUndefined } from './internal/utils';
 
 // we have to declare the function as available, because no reflection types are imported anymore
 declare global {
@@ -67,12 +67,17 @@ export function wrapClassDecorator(cb: (c: CustomTypes) => void): ClassDecorator
       })) as ESClassDecorator;
   }
 
-  return ((target) =>
+  return ((target, context) => {
+    if (!isNullOrUndefined(context)) {
+      throw new Error('Expected experimental decorators, got ES decorator');
+    }
+
     cb({
       metadata: new AccessMetadataReflect(target),
       name: getName(target as any),
       className: getName(target as any),
-    })) as ClassDecorator;
+    });
+  }) as ClassDecorator;
 }
 
 /**
@@ -88,12 +93,17 @@ export function wrapPropertyDecorator(cb: (c: PropertyCustomTypes) => void): Pro
       })) as ESClassFieldDecorator;
   }
 
-  return ((target, name) =>
+  return ((target, name) => {
+    if (typeof name === 'object') {
+      throw new Error('Expected experimental decorators, got ES decorator');
+    }
+
     cb({
       metadata: new AccessMetadataReflect(target),
       name: name,
       className: getName(target.constructor as any),
-    })) as PropertyDecorator;
+    });
+  }) as PropertyDecorator;
 }
 
 export interface IAccessMetadata {
