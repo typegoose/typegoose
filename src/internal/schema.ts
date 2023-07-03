@@ -19,7 +19,7 @@ import { constructors } from './data';
 import { NoDiscriminatorFunctionError, PathNotInSchemaError } from './errors';
 import { processProp } from './processProp';
 import { assertion, assertionIsClass, getCachedSchema, getMergedModelOptions, getName, isCachingEnabled, isNullOrUndefined } from './utils';
-import { getAccessMetadata } from '../wrapDecorator';
+import { getAccessMetadata, isESDecorator } from '../wrapDecorator';
 
 /**
  * Internal Schema Builder for Classes
@@ -53,7 +53,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   const Schema = mongoose.Schema;
   const schemaOptions = mergedOptions.schemaOptions ?? {};
 
-  const metadata = getAccessMetadata(cl);
+  const metadata = getAccessMetadata(isESDecorator ? cl : cl.prototype);
 
   const decorators = metadata.getMetadata(DecoratorKeys.PropCache) as DecoratedPropertyMetadataMap;
 

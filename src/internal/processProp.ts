@@ -10,6 +10,7 @@ import type {
   ProcessPropOptions,
   VirtualPopulateMap,
 } from '../types';
+import { getAccessMetadata } from '../wrapDecorator';
 import { DecoratorKeys, PropType } from './constants';
 import {
   CannotBeSymbolError,
@@ -95,11 +96,11 @@ export function processProp(input: ProcessPropOptions): void {
     Type = mongoose.Schema.Types.Mixed;
   }
 
-  if (utils.isNotDefined(Type, metadata)) {
+  if (utils.isNotDefined(Type, getAccessMetadata(Type))) {
     buildSchema(Type);
   }
 
-  const modelOptionsOfType: IModelOptions = metadata.getMetadata(DecoratorKeys.ModelOptions) ?? {};
+  const modelOptionsOfType: IModelOptions = getAccessMetadata(Type ?? {}).getMetadata(DecoratorKeys.ModelOptions) ?? {};
 
   // throw a error when both "discriminators" as a prop-option and as a model-option are defined
   if ('discriminators' in rawOptions && !utils.isNullOrUndefined(modelOptionsOfType?.options?.discriminators)) {
@@ -385,7 +386,7 @@ export function processProp(input: ProcessPropOptions): void {
   }
 
   /** Is this Type (/Class) in the schemas Map? */
-  const hasCachedSchema = !utils.isNullOrUndefined(metadata.getMetadata(DecoratorKeys.CachedSchema));
+  const hasCachedSchema = !utils.isNullOrUndefined(getAccessMetadata(Type).getMetadata(DecoratorKeys.CachedSchema));
 
   if (utils.isPrimitive(Type)) {
     if (utils.isObject(Type, true)) {

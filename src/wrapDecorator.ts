@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-const isESDecorator = isESDecoratorFn();
+export const isESDecorator = isESDecoratorFn();
 
 console.log('IS ES DECO', isESDecorator);
 
