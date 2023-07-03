@@ -354,12 +354,12 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteNami
  * Check if "Type" is a class and if it is already in "schemas"
  * @param Type The Type to check
  */
-export function isNotDefined(Type: any, metadata: CustomTypes['metadata']) {
+export function isNotDefined(Type: any) {
   return (
     typeof Type === 'function' &&
     !isPrimitive(Type) &&
     Type !== Object &&
-    isNullOrUndefined(metadata.getMetadata(DecoratorKeys.CachedSchema))
+    isNullOrUndefined(getAccessMetadata(Type).getMetadata(DecoratorKeys.CachedSchema))
   );
 }
 

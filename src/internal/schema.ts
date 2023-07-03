@@ -54,6 +54,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   const schemaOptions = mergedOptions.schemaOptions ?? {};
 
   const metadata = getAccessMetadata(isESDecorator ? cl : cl.prototype);
+  const cmetadata = getAccessMetadata(cl);
 
   const decorators = metadata.getMetadata(DecoratorKeys.PropCache) as DecoratedPropertyMetadataMap;
 
@@ -66,7 +67,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   let sch: mongoose.Schema;
 
   {
-    const schemaReflectTarget = getCachedSchema(metadata);
+    const schemaReflectTarget = getCachedSchema(cmetadata);
 
     if (!(origSch instanceof Schema)) {
       sch = new Schema(schemaReflectTarget, schemaOptions);
@@ -82,7 +83,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   // for example when using "getOwnMetadata" over "getMetadata" (and having a clone in there)
   {
     /** Get Metadata for indices */
-    const indices: IIndexArray[] | undefined = metadata.getOwnMetadata(DecoratorKeys.Index) as IIndexArray[] | undefined;
+    const indices: IIndexArray[] | undefined = cmetadata.getOwnMetadata(DecoratorKeys.Index) as IIndexArray[] | undefined;
     const buildIndexes = typeof extraOptions?.buildIndexes === 'boolean' ? extraOptions?.buildIndexes : true;
 
     if (Array.isArray(indices) && buildIndexes) {
@@ -95,7 +96,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
   if (isFinalSchema) {
     /** Get Metadata for Nested Discriminators */
-    const disMap: NestedDiscriminatorsMap | undefined = metadata.getMetadata(DecoratorKeys.NestedDiscriminators) as
+    const disMap: NestedDiscriminatorsMap | undefined = cmetadata.getMetadata(DecoratorKeys.NestedDiscriminators) as
       | NestedDiscriminatorsMap
       | undefined;
 
@@ -125,7 +126,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     // Hooks
     {
       /** Get Metadata for PreHooks */
-      const preHooks: IHooksArray[] | undefined = metadata.getMetadata(DecoratorKeys.HooksPre) as IHooksArray[] | undefined;
+      const preHooks: IHooksArray[] | undefined = cmetadata.getMetadata(DecoratorKeys.HooksPre) as IHooksArray[] | undefined;
 
       if (Array.isArray(preHooks)) {
         // "as any" is used here because mongoose explicitly types out many methods, but the input type (from IHooksArray) is a combination of multiple types
@@ -133,7 +134,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       }
 
       /** Get Metadata for PreHooks */
-      const postHooks: IHooksArray[] | undefined = metadata.getMetadata(DecoratorKeys.HooksPost) as IHooksArray[] | undefined;
+      const postHooks: IHooksArray[] | undefined = cmetadata.getMetadata(DecoratorKeys.HooksPost) as IHooksArray[] | undefined;
 
       if (Array.isArray(postHooks)) {
         // "as any" is used here because mongoose explicitly types out many methods, but the input type (from IHooksArray) is a combination of multiple types
@@ -142,7 +143,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     }
 
     /** Get Metadata for Virtual Populates */
-    const virtuals: VirtualPopulateMap | undefined = metadata.getMetadata(DecoratorKeys.VirtualPopulate) as VirtualPopulateMap | undefined;
+    const virtuals: VirtualPopulateMap | undefined = cmetadata.getMetadata(DecoratorKeys.VirtualPopulate) as VirtualPopulateMap | undefined;
 
     if (virtuals instanceof Map) {
       for (const [key, options] of virtuals) {
@@ -152,7 +153,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     }
 
     /** Get Metadata for Query Methods */
-    const queryMethods: QueryMethodMap | undefined = metadata.getMetadata(DecoratorKeys.QueryMethod) as QueryMethodMap | undefined;
+    const queryMethods: QueryMethodMap | undefined = cmetadata.getMetadata(DecoratorKeys.QueryMethod) as QueryMethodMap | undefined;
 
     if (queryMethods instanceof Map) {
       for (const [funcName, func] of queryMethods) {
@@ -162,7 +163,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     }
 
     /** Get Metadata for indices */
-    const plugins: IPluginsArray[] | undefined = metadata.getMetadata(DecoratorKeys.Plugins) as IPluginsArray[] | undefined;
+    const plugins: IPluginsArray[] | undefined = cmetadata.getMetadata(DecoratorKeys.Plugins) as IPluginsArray[] | undefined;
 
     if (Array.isArray(plugins)) {
       for (const plugin of plugins) {

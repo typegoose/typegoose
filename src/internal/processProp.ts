@@ -35,6 +35,7 @@ import * as utils from './utils';
 export function processProp(input: ProcessPropOptions): void {
   const { key, cl } = input;
   const { metadata, className } = input.c;
+  const cmetadata = getAccessMetadata(input.cl);
   const name = className!;
   const rawOptions: KeyStringAny = Object.assign({}, input.options);
   let Type: any | undefined = metadata.getMetadata(DecoratorKeys.Type, key);
@@ -96,7 +97,7 @@ export function processProp(input: ProcessPropOptions): void {
     Type = mongoose.Schema.Types.Mixed;
   }
 
-  if (utils.isNotDefined(Type, getAccessMetadata(Type))) {
+  if (utils.isNotDefined(Type)) {
     buildSchema(Type);
   }
 
@@ -128,10 +129,10 @@ export function processProp(input: ProcessPropOptions): void {
     });
 
     const disMap: NestedDiscriminatorsMap = new Map(
-      (metadata.getMetadata(DecoratorKeys.NestedDiscriminators) as NestedDiscriminatorsMap | undefined) ?? []
+      (cmetadata.getMetadata(DecoratorKeys.NestedDiscriminators) as NestedDiscriminatorsMap | undefined) ?? []
     );
     disMap.set(key, discriminators);
-    metadata.defineMetadata(DecoratorKeys.NestedDiscriminators, disMap);
+    cmetadata.defineMetadata(DecoratorKeys.NestedDiscriminators, disMap);
 
     delete rawOptions.discriminators;
   }
@@ -157,10 +158,10 @@ export function processProp(input: ProcessPropOptions): void {
     }
 
     const virtuals: VirtualPopulateMap = new Map(
-      (metadata.getMetadata(DecoratorKeys.VirtualPopulate) as VirtualPopulateMap | undefined) ?? []
+      (cmetadata.getMetadata(DecoratorKeys.VirtualPopulate) as VirtualPopulateMap | undefined) ?? []
     );
     virtuals.set(key, rawOptions);
-    metadata.defineMetadata(DecoratorKeys.VirtualPopulate, virtuals);
+    cmetadata.defineMetadata(DecoratorKeys.VirtualPopulate, virtuals);
 
     return;
   }
@@ -172,7 +173,7 @@ export function processProp(input: ProcessPropOptions): void {
     );
   }
 
-  const schemaProp = utils.getCachedSchema(metadata);
+  const schemaProp = utils.getCachedSchema(cmetadata);
 
   // do this early, because the other options (enum, ref, refPath, discriminators) should not matter for this one
   if (Type instanceof Passthrough) {
