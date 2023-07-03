@@ -1,5 +1,6 @@
 import type * as mongoose from 'mongoose';
 import type { Severity, PropType } from './internal/constants';
+import { PropertyCustomTypes } from './wrapDecorator';
 
 /**
  * Get the Type of an instance of a Document with Class properties
@@ -705,6 +706,7 @@ export type BeAnyObject = {};
 export interface ProcessPropOptions extends DecoratedPropertyMetadata {
   /** The target Class's static version */
   cl: AnyParamConstructor<any>;
+  c: PropertyCustomTypes;
 }
 
 /**

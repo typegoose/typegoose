@@ -32,10 +32,11 @@ import * as utils from './utils';
  * @param input All the options needed for prop's
  */
 export function processProp(input: ProcessPropOptions): void {
-  const { key, target } = input;
-  const name = utils.getName(target);
+  const { key, cl } = input;
+  const { metadata, className } = input.c;
+  const name = className!;
   const rawOptions: KeyStringAny = Object.assign({}, input.options);
-  let Type: any | undefined = Reflect.getMetadata(DecoratorKeys.Type, target, key);
+  let Type: any | undefined = /* metadata.getMetadata(DecoratorKeys.Type, key) */ undefined; // TODO
   const propKind = input.propType ?? detectPropType(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);
@@ -72,7 +73,7 @@ export function processProp(input: ProcessPropOptions): void {
   }
 
   // prevent "infinite" buildSchema loop / Maximum Stack size exceeded
-  if (Type === target.constructor) {
+  if (Type === cl.constructor) {
     throw new SelfContainingClassError(name, key);
   }
 
@@ -94,11 +95,11 @@ export function processProp(input: ProcessPropOptions): void {
     Type = mongoose.Schema.Types.Mixed;
   }
 
-  if (utils.isNotDefined(Type)) {
+  if (utils.isNotDefined(Type, metadata)) {
     buildSchema(Type);
   }
 
-  const modelOptionsOfType: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, Type ?? {}) ?? {};
+  const modelOptionsOfType: IModelOptions = metadata.getMetadata(DecoratorKeys.ModelOptions) ?? {};
 
   // throw a error when both "discriminators" as a prop-option and as a model-option are defined
   if ('discriminators' in rawOptions && !utils.isNullOrUndefined(modelOptionsOfType?.options?.discriminators)) {
@@ -125,9 +126,11 @@ export function processProp(input: ProcessPropOptions): void {
       throw new Error(`"${name}.${key}" discriminators index "${index}" is not an object or an constructor!`);
     });
 
-    const disMap: NestedDiscriminatorsMap = new Map(Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, target.constructor) ?? []);
+    const disMap: NestedDiscriminatorsMap = new Map(
+      (metadata.getMetadata(DecoratorKeys.NestedDiscriminators) as NestedDiscriminatorsMap | undefined) ?? []
+    );
     disMap.set(key, discriminators);
-    Reflect.defineMetadata(DecoratorKeys.NestedDiscriminators, disMap, target.constructor);
+    metadata.defineMetadata(DecoratorKeys.NestedDiscriminators, disMap);
 
     delete rawOptions.discriminators;
   }
@@ -152,9 +155,11 @@ export function processProp(input: ProcessPropOptions): void {
       throw new NotAllVPOPElementsError(name, key);
     }
 
-    const virtuals: VirtualPopulateMap = new Map(Reflect.getMetadata(DecoratorKeys.VirtualPopulate, target.constructor) ?? []);
+    const virtuals: VirtualPopulateMap = new Map(
+      (metadata.getMetadata(DecoratorKeys.VirtualPopulate) as VirtualPopulateMap | undefined) ?? []
+    );
     virtuals.set(key, rawOptions);
-    Reflect.defineMetadata(DecoratorKeys.VirtualPopulate, virtuals, target.constructor);
+    metadata.defineMetadata(DecoratorKeys.VirtualPopulate, virtuals);
 
     return;
   }
@@ -166,7 +171,7 @@ export function processProp(input: ProcessPropOptions): void {
     );
   }
 
-  const schemaProp = utils.getCachedSchema(input.cl);
+  const schemaProp = utils.getCachedSchema(metadata);
 
   // do this early, because the other options (enum, ref, refPath, discriminators) should not matter for this one
   if (Type instanceof Passthrough) {
@@ -182,11 +187,11 @@ export function processProp(input: ProcessPropOptions): void {
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, target, key);
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, input.c, key);
 
         return;
       case PropType.MAP:
-        const mapped = utils.mapOptions(rawOptions, newType, target, key);
+        const mapped = utils.mapOptions(rawOptions, newType, input.c, key);
 
         schemaProp[key] = {
           ...mapped.outer,
@@ -216,7 +221,7 @@ export function processProp(input: ProcessPropOptions): void {
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { ref });
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, input.c, key, undefined, { ref });
         break;
       case PropType.NONE:
         schemaProp[key] = {
@@ -226,7 +231,7 @@ export function processProp(input: ProcessPropOptions): void {
         };
         break;
       case PropType.MAP:
-        const mapped = utils.mapOptions(rawOptions, refType, target, key);
+        const mapped = utils.mapOptions(rawOptions, refType, input.c, key);
 
         schemaProp[key] = {
           ...mapped.outer,
@@ -256,7 +261,7 @@ export function processProp(input: ProcessPropOptions): void {
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { refPath });
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, input.c, key, undefined, { refPath });
         break;
       case PropType.NONE:
         schemaProp[key] = {
@@ -380,16 +385,16 @@ export function processProp(input: ProcessPropOptions): void {
   }
 
   /** Is this Type (/Class) in the schemas Map? */
-  const hasCachedSchema = !utils.isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.CachedSchema, Type));
+  const hasCachedSchema = !utils.isNullOrUndefined(metadata.getMetadata(DecoratorKeys.CachedSchema));
 
   if (utils.isPrimitive(Type)) {
     if (utils.isObject(Type, true)) {
-      utils.warnMixed(target, key);
+      utils.warnMixed(input.c, key);
     }
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, Type, target, key);
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, Type, input.c, key);
 
         return;
       case PropType.MAP:
@@ -398,11 +403,11 @@ export function processProp(input: ProcessPropOptions): void {
 
         // Map the correct options for the end type
         if (utils.isTypeMeantToBeArray(rawOptions)) {
-          mapped = utils.mapOptions(rawOptions, mongoose.Schema.Types.Array, target, key);
+          mapped = utils.mapOptions(rawOptions, mongoose.Schema.Types.Array, input.c, key);
           // "rawOptions" is not used here, because that would duplicate some options to where the should not be
-          finalType = utils.mapArrayOptions({ ...mapped.inner, dim: rawOptions.dim }, Type, target, key);
+          finalType = utils.mapArrayOptions({ ...mapped.inner, dim: rawOptions.dim }, Type, input.c, key);
         } else {
-          mapped = utils.mapOptions(rawOptions, Type, target, key);
+          mapped = utils.mapOptions(rawOptions, Type, input.c, key);
           finalType = { ...mapped.inner, type: Type };
         }
 
@@ -428,7 +433,7 @@ export function processProp(input: ProcessPropOptions): void {
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
   if (utils.isObject(Type) && !hasCachedSchema) {
-    utils.warnMixed(target, key);
+    utils.warnMixed(input.c, key);
     logger.warn(
       'if someone can see this message, please open an new issue at https://github.com/typegoose/typegoose/issues with reproduction code for tests'
     );
@@ -443,7 +448,7 @@ export function processProp(input: ProcessPropOptions): void {
   const virtualSchema = buildSchema(Type);
   switch (propKind) {
     case PropType.ARRAY:
-      schemaProp[key] = utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type);
+      schemaProp[key] = utils.mapArrayOptions(rawOptions, virtualSchema, input.c, key, Type);
 
       return;
     case PropType.MAP:
@@ -451,7 +456,7 @@ export function processProp(input: ProcessPropOptions): void {
       if ('dim' in rawOptions) {
         logger.debug('Map SubDocument Array for "%s.%s"', name, key);
 
-        const { type, ...outer } = utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type);
+        const { type, ...outer } = utils.mapArrayOptions(rawOptions, virtualSchema, input.c, key, Type);
 
         schemaProp[key] = {
           ...outer,
@@ -462,7 +467,7 @@ export function processProp(input: ProcessPropOptions): void {
         return;
       }
 
-      const mapped = utils.mapOptions(rawOptions, virtualSchema, target, key, Type);
+      const mapped = utils.mapOptions(rawOptions, virtualSchema, input.c, key, Type);
 
       schemaProp[key] = {
         ...mapped.outer,

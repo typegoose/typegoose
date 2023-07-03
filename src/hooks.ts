@@ -18,9 +18,10 @@ import type {
 } from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
 import { ExpectedTypeError } from './internal/errors';
-import { assertion, getName } from './internal/utils';
+import { assertion } from './internal/utils';
 import { logger } from './logSettings';
 import type { AnyParamConstructor, DocumentType, HookOptionsEither, IHooksArray, ReturnModelType } from './types';
+import { CustomTypes, wrapClassDecorator } from './wrapDecorator';
 
 /** Type copied from mongoose, because it is not exported but used in hooks */
 type QueryResultType<T> = T extends Query<infer ResultType, any> ? ResultType : never;
@@ -45,110 +46,114 @@ interface Hooks {
     method: MongooseQueryMiddleware | MongooseQueryMiddleware[] | RegExp,
     fn: ErrorHandlingMiddlewareFunction<T>,
     options: SchemaPostOptions & { errorHandler: true }
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
     method: MongooseDocumentMiddleware | MongooseDocumentMiddleware[] | RegExp,
     fn: ErrorHandlingMiddlewareFunction<T>,
     options: SchemaPostOptions & { errorHandler: true }
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   post<T extends Aggregate<any>>(
     method: 'aggregate' | RegExp,
     fn: ErrorHandlingMiddlewareFunction<T, Array<any>>,
     options: SchemaPostOptions & { errorHandler: true }
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   post<S extends AnyParamConstructor<any> | Model<any>, T = S extends Model<any> ? S : ReturnModelType<S>>(
     method: 'insertMany' | RegExp,
     fn: ErrorHandlingMiddlewareFunction<T>,
     options: SchemaPostOptions & { errorHandler: true }
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
 
   // normal post hooks
   post<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
     method: MongooseQueryMiddleware | MongooseQueryMiddleware[] | RegExp,
     fn: PostMiddlewareFunction<T, QueryResultType<T>>,
     options?: SchemaPostOptions
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
     method: MongooseDocumentMiddleware | MongooseDocumentMiddleware[] | RegExp,
     fn: PostMiddlewareFunction<T, T>,
     options?: SchemaPostOptions
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   post<T extends Aggregate<any>>(
     method: 'aggregate' | RegExp,
     fn: PostMiddlewareFunction<T, Array<AggregateExtract<T>>>,
     options?: SchemaPostOptions
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   post<S extends AnyParamConstructor<any> | Model<any>, T = S extends Model<any> ? S : ReturnModelType<S>>(
     method: 'insertMany' | RegExp,
     fn: PostMiddlewareFunction<T, T>,
     options?: SchemaPostOptions
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
 
   // error handling post hooks
   post<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
     method: MongooseQueryMiddleware | MongooseQueryMiddleware[] | RegExp,
     fn: ErrorHandlingMiddlewareFunction<T>,
     options?: SchemaPostOptions
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
     method: MongooseDocumentMiddleware | MongooseDocumentMiddleware[] | RegExp,
     fn: ErrorHandlingMiddlewareFunction<T>,
     options?: SchemaPostOptions
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   post<T extends Aggregate<any>>(
     method: 'aggregate' | RegExp,
     fn: ErrorHandlingMiddlewareFunction<T, Array<any>>,
     options?: SchemaPostOptions
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   post<S extends AnyParamConstructor<any> | Model<any>, T = S extends Model<any> ? S : ReturnModelType<S>>(
     method: 'insertMany' | RegExp,
     fn: ErrorHandlingMiddlewareFunction<T>,
     options?: SchemaPostOptions
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
 
   // special pre hooks for each "document: true, query: false" and "document: false, query: true"
   pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
     method: MongooseQueryOrDocumentMiddleware | MongooseQueryOrDocumentMiddleware[],
     fn: PreMiddlewareFunction<T>,
     options: SchemaPreOptions & { document: true; query: false }
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   pre<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
     method: MongooseQueryOrDocumentMiddleware | MongooseQueryOrDocumentMiddleware[],
     fn: PreMiddlewareFunction<T>,
     options: SchemaPreOptions & { document: false; query: true }
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
 
   // normal pre hooks
   pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
     method: 'save',
     fn: PreSaveMiddlewareFunction<T>,
     options?: SchemaPreOptions
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   pre<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(
     method: MongooseQueryMiddleware | MongooseQueryMiddleware[] | RegExp,
     fn: PreMiddlewareFunction<T>,
     options?: SchemaPreOptions
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
     method: MongooseDocumentMiddleware | MongooseDocumentMiddleware[] | RegExp,
     fn: PreMiddlewareFunction<T>,
     options?: SchemaPreOptions
-  ): ClassDecorator;
-  pre<T extends Aggregate<any>>(method: 'aggregate' | RegExp, fn: PreMiddlewareFunction<T>, options?: SchemaPreOptions): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
+  pre<T extends Aggregate<any>>(
+    method: 'aggregate' | RegExp,
+    fn: PreMiddlewareFunction<T>,
+    options?: SchemaPreOptions
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
   pre<S extends AnyParamConstructor<any> | Model<any>, T = S extends Model<any> ? S : ReturnModelType<S>>(
     method: 'insertMany' | RegExp,
     fn: (this: T, next: (err?: CallbackError) => void, docs: any | Array<any>) => void | Promise<void>,
     options?: SchemaPreOptions
-  ): ClassDecorator;
+  ): /* ReturnType<typeof wrapClassDecorator> */ any;
 }
 
 // TSDoc for the hooks can't be added without adding it to *every* overload
 const hooks: Hooks = {
   pre(...args) {
-    return (target: any) => addToHooks(target, 'pre', args);
+    return wrapClassDecorator((dargs) => addToHooks(dargs, 'pre', args));
   },
   post(...args) {
-    return (target: any) => addToHooks(target, 'post', args);
+    return wrapClassDecorator((dargs) => addToHooks(dargs, 'post', args));
   },
 };
 
@@ -158,7 +163,7 @@ const hooks: Hooks = {
  * @param hookType What type is it
  * @param args All Arguments, that should be passed-through
  */
-function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
+function addToHooks({ metadata, className }: CustomTypes, hookType: 'pre' | 'post', args: any[]): void {
   // Convert Method to array if only a string is provided
   const methods: IHooksArray['methods'] = Array.isArray(args[0]) ? args[0] : [args[0]];
   const func: (...args: any[]) => void = args[1];
@@ -170,18 +175,18 @@ function addToHooks(target: any, hookType: 'pre' | 'post', args: any[]): void {
     logger.warn(`"addToHooks" parameter "args" has a length of over 3 (length: ${args.length})`);
   }
 
-  logger.info('Adding hooks for "[%s]" to "%s" as type "%s"', methods.join(','), getName(target), hookType);
+  logger.info('Adding hooks for "[%s]" to "%s" as type "%s"', methods.join(','), className, hookType);
 
   switch (hookType) {
     case 'post':
-      const postHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPost, target) ?? []);
+      const postHooks: IHooksArray[] = Array.from((metadata.getMetadata(DecoratorKeys.HooksPost) as IHooksArray[] | undefined) ?? []);
       postHooks.push({ func, methods, options: hookOptions });
-      Reflect.defineMetadata(DecoratorKeys.HooksPost, postHooks, target);
+      metadata.defineMetadata(DecoratorKeys.HooksPost, postHooks);
       break;
     case 'pre':
-      const preHooks: IHooksArray[] = Array.from(Reflect.getMetadata(DecoratorKeys.HooksPre, target) ?? []);
+      const preHooks: IHooksArray[] = Array.from((metadata.getMetadata(DecoratorKeys.HooksPre) as IHooksArray[] | undefined) ?? []);
       preHooks.push({ func, methods, options: hookOptions });
-      Reflect.defineMetadata(DecoratorKeys.HooksPre, preHooks, target);
+      metadata.defineMetadata(DecoratorKeys.HooksPre, preHooks);
       break;
   }
 }

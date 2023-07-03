@@ -27,6 +27,7 @@ import {
   ResolveTypegooseNameError,
   StringLengthExpectedError,
 } from './errors';
+import { CustomTypes, getAccessMetadata } from '../wrapDecorator';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
@@ -135,19 +136,19 @@ export function isString(Type: any): Type is string {
  * @param target The Target to get / init the cached schema
  * @returns The Schema to use
  */
-export function getCachedSchema(target: AnyParamConstructor<any>): Record<string, mongoose.SchemaDefinition<unknown>> {
-  let schemaReflectTarget = Reflect.getMetadata(DecoratorKeys.CachedSchema, target);
+export function getCachedSchema(metadata: CustomTypes['metadata']): Record<string, mongoose.SchemaDefinition<unknown>> {
+  let schemaReflectTarget = metadata.getMetadata(DecoratorKeys.CachedSchema) as object | undefined;
 
   if (isNullOrUndefined(schemaReflectTarget)) {
-    Reflect.defineMetadata(DecoratorKeys.CachedSchema, {}, target);
-    schemaReflectTarget = Reflect.getMetadata(DecoratorKeys.CachedSchema, target);
-  } else if (isNullOrUndefined(Reflect.getOwnMetadata(DecoratorKeys.CachedSchema, target))) {
+    metadata.defineMetadata(DecoratorKeys.CachedSchema, {});
+    schemaReflectTarget = metadata.getMetadata(DecoratorKeys.CachedSchema) as object;
+  } else if (isNullOrUndefined(metadata.getOwnMetadata(DecoratorKeys.CachedSchema))) {
     // set own metadata and clone object, because otherwise on inheritance it would just modify the base class's object, not its own object
     schemaReflectTarget = { ...schemaReflectTarget };
-    Reflect.defineMetadata(DecoratorKeys.CachedSchema, schemaReflectTarget, target);
+    metadata.defineMetadata(DecoratorKeys.CachedSchema, schemaReflectTarget);
   }
 
-  return schemaReflectTarget;
+  return schemaReflectTarget as any;
 }
 
 /**
@@ -239,13 +240,13 @@ export function includesAllVirtualPOP(options: Partial<VirtualOptions>): options
  * @param cl The Class to read and assign the new metadata to
  * @internal
  */
-export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): any {
+export function assignMetadata(key: DecoratorKeys, value: unknown, c: CustomTypes): any {
   if (isNullOrUndefined(value)) {
     return value;
   }
 
-  const newValue = mergeMetadata(key, value, cl);
-  Reflect.defineMetadata(key, newValue, cl);
+  const newValue = mergeMetadata(key, value, c);
+  c.metadata.defineMetadata(key, newValue);
 
   return newValue;
 }
@@ -260,12 +261,11 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamC
  * @returns Returns the merged output, where "value" overwrites existing Metadata values
  * @internal
  */
-export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): T {
-  assertion(typeof key === 'string' && key.length > 0, () => new StringLengthExpectedError(1, key, getName(cl), 'key'));
-  assertionIsClass(cl);
+export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, { metadata, className }: CustomTypes): T {
+  assertion(typeof key === 'string' && key.length > 0, () => new StringLengthExpectedError(1, key, className!, 'key'));
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
-  return mergeWith({}, Reflect.getMetadata(key, cl), value, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
+  return mergeWith({}, metadata.getMetadata(key) as any, value, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
 }
 
 /**
@@ -284,14 +284,14 @@ function customMerger(key: string | number, val: unknown): undefined | unknown {
   return undefined;
 }
 
-/**
- * Merge only schemaOptions from ModelOptions of the class
- * @param value The value to use
- * @param cl The Class to get the values from
- */
-export function mergeSchemaOptions<U extends AnyParamConstructor<any>>(value: mongoose.SchemaOptions | undefined, cl: U) {
-  return mergeMetadata<IModelOptions>(DecoratorKeys.ModelOptions, { schemaOptions: value }, cl).schemaOptions;
-}
+// /**
+//  * Merge only schemaOptions from ModelOptions of the class
+//  * @param value The value to use
+//  * @param cl The Class to get the values from
+//  */
+// export function mergeSchemaOptions<U extends AnyParamConstructor<any>>(value: mongoose.SchemaOptions | undefined, cl: U) {
+//   return mergeMetadata<IModelOptions>(DecoratorKeys.ModelOptions, { schemaOptions: value }, cl).schemaOptions;
+// }
 
 /**
  * Tries to return the right target
@@ -315,7 +315,7 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteNami
   const ctor: any = getRightTarget(cl);
   assertion(isConstructor(ctor), () => new NoValidClassError(ctor));
 
-  const options: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, ctor) ?? {};
+  const options: IModelOptions = getAccessMetadata(ctor).getMetadata(DecoratorKeys.ModelOptions) ?? {};
   const baseName: string = ctor.name;
   const customName = overwriteNaming?.customName ?? options.options?.customName;
 
@@ -354,12 +354,12 @@ export function getName<U extends AnyParamConstructor<any>>(cl: U, overwriteNami
  * Check if "Type" is a class and if it is already in "schemas"
  * @param Type The Type to check
  */
-export function isNotDefined(Type: any) {
+export function isNotDefined(Type: any, metadata: CustomTypes['metadata']) {
   return (
     typeof Type === 'function' &&
     !isPrimitive(Type) &&
     Type !== Object &&
-    isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.CachedSchema, Type))
+    isNullOrUndefined(metadata.getMetadata(DecoratorKeys.CachedSchema))
   );
 }
 
@@ -379,7 +379,7 @@ export function isNotDefined(Type: any) {
 export function mapArrayOptions(
   rawOptions: any,
   Type: AnyParamConstructor<any> | mongoose.Schema,
-  target: any,
+  c: CustomTypes,
   pkey: string,
   loggerType?: AnyParamConstructor<any>,
   extraInner?: KeyStringAny
@@ -394,7 +394,7 @@ export function mapArrayOptions(
   const dim = rawOptions.dim; // needed, otherwise it will be included (and not removed) in the returnObject
   delete rawOptions.dim;
 
-  const mapped = mapOptions(rawOptions, Type, target, pkey, loggerType);
+  const mapped = mapOptions(rawOptions, Type, c, pkey, loggerType);
 
   /** The Object that gets returned */
   const returnObject: KeyStringAny = {
@@ -410,7 +410,7 @@ export function mapArrayOptions(
 
   rawOptions.dim = dim; // re-add for "createArrayFromDimensions"
 
-  returnObject.type = createArrayFromDimensions(rawOptions, returnObject.type, getName(target), pkey);
+  returnObject.type = createArrayFromDimensions(rawOptions, returnObject.type, c.className!, pkey);
 
   if (loggerType) {
     logger.debug('(Array) Final mapped Options for Type "%s"', getName(loggerType), returnObject);
@@ -430,7 +430,7 @@ export function mapArrayOptions(
 export function mapOptions(
   rawOptions: any,
   Type: AnyParamConstructor<any> | (mongoose.Schema & IPrototype),
-  target: any,
+  c: CustomTypes,
   pkey: string,
   loggerType?: AnyParamConstructor<any>
 ): MappedInnerOuterOptions {
@@ -454,7 +454,7 @@ export function mapOptions(
       Type = mongoose.Schema.Types[loggerTypeName];
 
       if (Type === mongoose.Schema.Types.Mixed) {
-        warnMixed(target, pkey);
+        warnMixed(c, pkey);
       }
     }
   }
@@ -470,7 +470,7 @@ export function mapOptions(
     OptionsCTOR = mongoose.Schema.Types.Subdocument.prototype.OptionsConstructor;
   }
 
-  assertion(!isNullOrUndefined(OptionsCTOR), () => new InvalidOptionsConstructorError(getName(target), pkey, loggerType));
+  assertion(!isNullOrUndefined(OptionsCTOR), () => new InvalidOptionsConstructorError(c.className!, pkey, loggerType));
 
   const options = Object.assign({}, rawOptions); // for sanity
 
@@ -525,10 +525,10 @@ export function isTypeMeantToBeArray(rawOptions: any): boolean {
  * @param target Target Class
  * @param key Property key
  */
-export function warnMixed(target: any, key: string): void | never {
-  const name = getName(target);
-  const modelOptions: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, getRightTarget(target)) ?? {};
-  const rawOptions = Reflect.getMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap | undefined;
+export function warnMixed({ metadata, className }: CustomTypes, key: string): void | never {
+  const name = className;
+  const modelOptions: IModelOptions = metadata.getMetadata(DecoratorKeys.ModelOptions) ?? {};
+  const rawOptions = metadata.getMetadata(DecoratorKeys.PropCache) as DecoratedPropertyMetadataMap | undefined;
 
   const setSeverity: Severity = rawOptions?.get(key)?.options?.allowMixed ?? modelOptions.options?.allowMixed ?? Severity.WARN;
 
@@ -567,10 +567,10 @@ export function isNullOrUndefined(val: unknown): val is null | undefined {
  * @param target Target Class
  * @returns "true" when it assigned options
  */
-export function assignGlobalModelOptions(target: any): boolean {
-  if (isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.ModelOptions, target))) {
-    logger.info('Assigning global Schema Options to "%s"', getName(target));
-    assignMetadata(DecoratorKeys.ModelOptions, omit(globalOptions, 'globalOptions'), target);
+export function assignGlobalModelOptions(c: CustomTypes): boolean {
+  if (isNullOrUndefined(c.metadata.getMetadata(DecoratorKeys.ModelOptions))) {
+    logger.info('Assigning global Schema Options to "%s"', c.className);
+    assignMetadata(DecoratorKeys.ModelOptions, omit(globalOptions, 'globalOptions'), c);
 
     return true;
   }
@@ -591,12 +591,15 @@ export function assignGlobalModelOptions(target: any): boolean {
  */
 export function getMergedModelOptions(rawOptions: IModelOptions | undefined, cl: AnyParamConstructor<any>): IModelOptions {
   const opt = typeof rawOptions === 'object' ? rawOptions : {};
+  const metadata = getAccessMetadata(cl);
+  const className = getName(cl);
+  const c: CustomTypes = { metadata, className, name: className };
 
-  if (assignGlobalModelOptions(cl)) {
+  if (assignGlobalModelOptions(c)) {
     opt[AlreadyMerged] = false;
   }
 
-  const mergedOptions: IModelOptions = opt?.[AlreadyMerged] ? opt : mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
+  const mergedOptions: IModelOptions = opt?.[AlreadyMerged] ? opt : mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, c);
   mergedOptions[AlreadyMerged] = true;
 
   return mergedOptions;

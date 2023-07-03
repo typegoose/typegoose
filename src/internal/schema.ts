@@ -19,6 +19,7 @@ import { constructors } from './data';
 import { NoDiscriminatorFunctionError, PathNotInSchemaError } from './errors';
 import { processProp } from './processProp';
 import { assertion, assertionIsClass, getCachedSchema, getMergedModelOptions, getName, isCachingEnabled, isNullOrUndefined } from './utils';
+import { getAccessMetadata } from '../wrapDecorator';
 
 /**
  * Internal Schema Builder for Classes
@@ -52,18 +53,20 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   const Schema = mongoose.Schema;
   const schemaOptions = mergedOptions.schemaOptions ?? {};
 
-  const decorators = Reflect.getMetadata(DecoratorKeys.PropCache, cl.prototype) as DecoratedPropertyMetadataMap;
+  const metadata = getAccessMetadata(cl);
+
+  const decorators = metadata.getMetadata(DecoratorKeys.PropCache) as DecoratedPropertyMetadataMap;
 
   if (!isNullOrUndefined(decorators)) {
     for (const decorator of decorators.values()) {
-      processProp({ ...decorator, cl: cl });
+      processProp({ ...decorator, cl: cl, c: { metadata, name: decorator.key, className: getName(cl) } });
     }
   }
 
   let sch: mongoose.Schema;
 
   {
-    const schemaReflectTarget = getCachedSchema(cl);
+    const schemaReflectTarget = getCachedSchema(metadata);
 
     if (!(origSch instanceof Schema)) {
       sch = new Schema(schemaReflectTarget, schemaOptions);
@@ -79,7 +82,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
   // for example when using "getOwnMetadata" over "getMetadata" (and having a clone in there)
   {
     /** Get Metadata for indices */
-    const indices: IIndexArray[] = Reflect.getOwnMetadata(DecoratorKeys.Index, cl);
+    const indices: IIndexArray[] | undefined = metadata.getOwnMetadata(DecoratorKeys.Index) as IIndexArray[] | undefined;
     const buildIndexes = typeof extraOptions?.buildIndexes === 'boolean' ? extraOptions?.buildIndexes : true;
 
     if (Array.isArray(indices) && buildIndexes) {
@@ -92,7 +95,9 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
   if (isFinalSchema) {
     /** Get Metadata for Nested Discriminators */
-    const disMap: NestedDiscriminatorsMap = Reflect.getMetadata(DecoratorKeys.NestedDiscriminators, cl);
+    const disMap: NestedDiscriminatorsMap | undefined = metadata.getMetadata(DecoratorKeys.NestedDiscriminators) as
+      | NestedDiscriminatorsMap
+      | undefined;
 
     if (disMap instanceof Map) {
       for (const [key, discriminators] of disMap) {
@@ -120,7 +125,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     // Hooks
     {
       /** Get Metadata for PreHooks */
-      const preHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPre, cl);
+      const preHooks: IHooksArray[] | undefined = metadata.getMetadata(DecoratorKeys.HooksPre) as IHooksArray[] | undefined;
 
       if (Array.isArray(preHooks)) {
         // "as any" is used here because mongoose explicitly types out many methods, but the input type (from IHooksArray) is a combination of multiple types
@@ -128,7 +133,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       }
 
       /** Get Metadata for PreHooks */
-      const postHooks: IHooksArray[] = Reflect.getMetadata(DecoratorKeys.HooksPost, cl);
+      const postHooks: IHooksArray[] | undefined = metadata.getMetadata(DecoratorKeys.HooksPost) as IHooksArray[] | undefined;
 
       if (Array.isArray(postHooks)) {
         // "as any" is used here because mongoose explicitly types out many methods, but the input type (from IHooksArray) is a combination of multiple types
@@ -137,7 +142,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     }
 
     /** Get Metadata for Virtual Populates */
-    const virtuals: VirtualPopulateMap = Reflect.getMetadata(DecoratorKeys.VirtualPopulate, cl);
+    const virtuals: VirtualPopulateMap | undefined = metadata.getMetadata(DecoratorKeys.VirtualPopulate) as VirtualPopulateMap | undefined;
 
     if (virtuals instanceof Map) {
       for (const [key, options] of virtuals) {
@@ -147,7 +152,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     }
 
     /** Get Metadata for Query Methods */
-    const queryMethods: QueryMethodMap = Reflect.getMetadata(DecoratorKeys.QueryMethod, cl);
+    const queryMethods: QueryMethodMap | undefined = metadata.getMetadata(DecoratorKeys.QueryMethod) as QueryMethodMap | undefined;
 
     if (queryMethods instanceof Map) {
       for (const [funcName, func] of queryMethods) {
@@ -157,7 +162,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
     }
 
     /** Get Metadata for indices */
-    const plugins: IPluginsArray[] = Reflect.getMetadata(DecoratorKeys.Plugins, cl);
+    const plugins: IPluginsArray[] | undefined = metadata.getMetadata(DecoratorKeys.Plugins) as IPluginsArray[] | undefined;
 
     if (Array.isArray(plugins)) {
       for (const plugin of plugins) {

@@ -11,6 +11,7 @@ import type {
   PropOptionsForString,
   VirtualOptions,
 } from './types';
+import { wrapPropertyDecorator } from './wrapDecorator';
 
 /**
  * Set Property Options for the property below
@@ -33,22 +34,22 @@ import type {
 function prop(
   options?: BasePropOptions | ArrayPropOptions | MapPropOptions | PropOptionsForNumber | PropOptionsForString | VirtualOptions,
   kind?: PropType
-): PropertyDecorator {
-  return (target: any, key: string | symbol) => {
+): /* ReturnType<typeof wrapPropertyDecorator> */ any {
+  return wrapPropertyDecorator(({ metadata, name: key, className }) => {
     options = options ?? {};
 
-    const existingMapForTarget = Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap;
+    const existingMapForTarget = metadata.getOwnMetadata(DecoratorKeys.PropCache) as DecoratedPropertyMetadataMap;
 
     if (utils.isNullOrUndefined(existingMapForTarget)) {
-      Reflect.defineMetadata(DecoratorKeys.PropCache, new Map<string, DecoratedPropertyMetadata>(), target);
+      metadata.defineMetadata(DecoratorKeys.PropCache, new Map<string, DecoratedPropertyMetadata>());
     }
 
-    const mapForTarget = existingMapForTarget ?? (Reflect.getOwnMetadata(DecoratorKeys.PropCache, target) as DecoratedPropertyMetadataMap);
+    const mapForTarget = existingMapForTarget ?? (metadata.getOwnMetadata(DecoratorKeys.PropCache) as DecoratedPropertyMetadataMap);
 
-    mapForTarget.set(key, { options, target, key, propType: kind });
+    mapForTarget.set(key, { options, target: class {}, key, propType: kind });
 
-    logger.debug('Added "%s.%s" to the Decorator Cache', utils.getName(target.constructor), key);
-  };
+    logger.debug('Added "%s.%s" to the Decorator Cache', className, key);
+  });
 }
 
 export { prop };

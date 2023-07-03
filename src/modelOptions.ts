@@ -1,6 +1,7 @@
 import { DecoratorKeys } from './internal/constants';
 import { assignGlobalModelOptions, assignMetadata } from './internal/utils';
 import type { IModelOptions } from './types';
+import { wrapClassDecorator } from './wrapDecorator';
 
 /**
  * Define Options for the Class
@@ -13,11 +14,11 @@ import type { IModelOptions } from './types';
  * // The default Class "TimeStamps" can be used for type information and options already set
  * ```
  */
-export function modelOptions(options: IModelOptions): ClassDecorator {
-  return (target: any) => {
-    assignGlobalModelOptions(target);
-    assignMetadata(DecoratorKeys.ModelOptions, options, target);
-  };
+export function modelOptions(options: IModelOptions): /* ReturnType<typeof wrapClassDecorator> */ any {
+  return wrapClassDecorator((c) => {
+    assignGlobalModelOptions(c);
+    assignMetadata(DecoratorKeys.ModelOptions, options, c);
+  });
 }
 
 // Export it PascalCased

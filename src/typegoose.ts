@@ -1,6 +1,5 @@
 /* imports */
 import * as mongoose from 'mongoose';
-import 'reflect-metadata';
 import * as semver from 'semver';
 import {
   assertion,
@@ -47,6 +46,7 @@ import type {
   IBuildSchemaOptions,
 } from './types';
 import { CacheDisabledError, ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
+import { getAccessMetadata } from './wrapDecorator';
 
 /* exports */
 // export the internally used "mongoose", to not need to always import it
@@ -59,7 +59,7 @@ export * from './indexes';
 export * from './modelOptions';
 export * from './queryMethod';
 export * from './typeguards';
-export * as defaultClasses from './defaultClasses';
+// export * as defaultClasses from './defaultClasses';
 export * as errors from './internal/errors';
 export * as types from './types';
 // the following types are re-exported (instead of just in "types") because they are often used types
@@ -166,7 +166,7 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
     // clone object, because otherwise it will affect the upper classes too because the same reference is used
     upperOptions = { ...upperOptions };
 
-    const ropt: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, parentCtor) ?? {};
+    const ropt: IModelOptions = getAccessMetadata(parentCtor).getMetadata(DecoratorKeys.ModelOptions) ?? {};
 
     // only affect options of lower classes, not the class the options are from
     if (ropt.options?.disableLowerIndexes) {

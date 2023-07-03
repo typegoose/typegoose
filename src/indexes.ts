@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import { DecoratorKeys } from './internal/constants';
-import { getName } from './internal/utils';
 import { logger } from './logSettings';
 import type { IIndexArray, IndexOptions } from './types';
+import { wrapClassDecorator } from './wrapDecorator';
 
 /**
  * Defines a index for this Class which will then be added to the Schema.
@@ -14,13 +14,13 @@ import type { IIndexArray, IndexOptions } from './types';
  * class ClassName {}
  * ```
  */
-export function index(fields: mongoose.IndexDefinition, options?: IndexOptions): ClassDecorator {
-  return (target: any) => {
-    logger.info('Adding "%o" Indexes to %s', { fields, options }, getName(target));
-    const indices: IIndexArray[] = Array.from(Reflect.getOwnMetadata(DecoratorKeys.Index, target) ?? []);
+export function index(fields: mongoose.IndexDefinition, options?: IndexOptions): /* ReturnType<typeof wrapClassDecorator> */ any {
+  return wrapClassDecorator(({ metadata, className }) => {
+    logger.info('Adding "%o" Indexes to %s', { fields, options }, className);
+    const indices: IIndexArray[] = Array.from((metadata.getOwnMetadata(DecoratorKeys.Index) as IIndexArray[] | undefined) ?? []);
     indices.push({ fields, options });
-    Reflect.defineMetadata(DecoratorKeys.Index, indices, target);
-  };
+    metadata.defineMetadata(DecoratorKeys.Index, indices);
+  });
 }
 
 // Export it PascalCased
