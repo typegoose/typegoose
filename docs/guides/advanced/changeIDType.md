@@ -36,10 +36,12 @@ class SomeChangedID {
 }
 ```
 
-## With the Base Class
+<div id="with-the-base-class"></div>
+
+## With the Base Interface
 
 :::caution
-It is recommended to use the manual approach over using `Base`, because default classes may be removed in the future and dont greatly support extending from each other.
+It is recommended to use the manual approach over using `Base`, because default classes & interfaces may be removed in the future and dont greatly support extending from each other.
 :::
 
 There is also a `Base` interface typegoose provides, which includes `_id` and `id`, which can be used as follows:
