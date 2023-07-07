@@ -29,7 +29,7 @@ import { plugin, getModelForClass, defaultClasses } from '@typegoose/typegoose';
 import * as findOrCreate from 'mongoose-findorcreate';
 
 @plugin(findOrCreate)
-class User extends FindOrCreate {}
+class User extends defaultClasses.FindOrCreate {}
 
 const UserModel = getModelForClass(User);
 const result = await UserModel.findOrCreate({ ... });
