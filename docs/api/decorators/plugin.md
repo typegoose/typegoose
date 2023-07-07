@@ -25,11 +25,11 @@ If the Plugin to be added has options defined, it can be automatically inferred 
 ## Example
 
 ```ts
-import { plugin, getModelForClass, defaultClasses } from '@typegoose/typegoose';
+import { plugin, getModelForClass } from '@typegoose/typegoose';
 import * as findOrCreate from 'mongoose-findorcreate';
 
 @plugin(findOrCreate)
-class User extends defaultClasses.FindOrCreate {}
+class User {}
 
 const UserModel = getModelForClass(User);
 const result = await UserModel.findOrCreate({ ... });
