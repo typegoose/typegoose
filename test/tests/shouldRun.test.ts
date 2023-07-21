@@ -1201,3 +1201,18 @@ it('should not merge together symbols', () => {
   expect(res).toStrictEqual({ anotherValue: true });
   expect(res[AlreadyMerged]).toBeUndefined();
 });
+
+it('should resolve non-arrow function types correctly (#873)', () => {
+  class Testy {
+    @prop({
+      type: function () {
+        return String;
+      },
+    })
+    public test?: any;
+  }
+
+  const schema = buildSchema(Testy);
+  // expect(schema.path('test')).toBeInstanceOf(mongoose.Schema.Types.String); // expected
+  expect(schema.path('test')).toBeInstanceOf(mongoose.Schema.Types.Subdocument); // current
+});

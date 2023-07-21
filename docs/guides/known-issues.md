@@ -109,3 +109,18 @@ Typescript 5.0 has support for ES Decorators (Stage 3) so `@decorator` is now va
 TL;DR: typegoose currently does not support ES Decorators (Stage 3) and `experimentalDecorators: true` has to be enabled.
 
 Example Error: `Unable to resolve signature of property decorator when called as an expression. Argument of type 'undefined' is not assignable to parameter of type 'Object'.ts(1240)`
+
+### Deferred function with explicit function
+
+When deferred functions are using with explicit functions, then the expected resulting type is not actually returned.
+
+Example of a deferred function: `type: () => Something`  
+Example of a explicit function: `type: function() { return Something; }`
+
+Explicit functions can implicitly occur if the `tsconfig`'s `target` is not set to at lest `es6`.
+
+The reason currently is that there is not good way to differentiate between classes¹, functions like `String`², and other function like mongoose's types³ which are callable without `new` (could likely be worked around), but it is not worth the performance to check for all of this and likely also does not cover all the bases.
+
+- ¹: classes could be differentiated with `/^class\s/.test(Function.prototype.toString.call(obj))`
+- ²: native types could be differentiated with `/\[native code\]/.test(Function.prototype.toString.call(obj))`
+- ³: could likely be differenitated by matching references & names against `mongoose.Types.*` and `mongoose.Schema.Types.*`
