@@ -1,3 +1,10 @@
+## [11.4.1](https://github.com/typegoose/typegoose/compare/v11.4.0...v11.4.1) (2023-08-02)
+
+
+### Fixes
+
+* **types::QueryHelperThis:** use InstanceType<T> instead of T ([b9cf61f](https://github.com/typegoose/typegoose/commit/b9cf61fd334073126ebbaa478e8822d44d31badf))
+
 ## [11.4.0](https://github.com/typegoose/typegoose/compare/v11.3.0...v11.4.0) (2023-07-19)
 
 
