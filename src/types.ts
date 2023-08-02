@@ -597,14 +597,15 @@ export type AsQueryMethod<T extends (...args: any) => any> = (...args: Parameter
  * Helper type to easily set the `this` type in a QueryHelper function
  *
  * @example
- * function findById(this: QueryHelperThis<YourClass, YourClassQueryHelpers>, id: string) {
+ * function findById(this: QueryHelperThis<typeof YourClass, YourClassQueryHelpers>, id: string) {
  *   return this.findOne({ _id: id });
  * }
  */
 export type QueryHelperThis<
+  // TODO: consider replacing T directly with S
   T extends AnyParamConstructor<any>,
   QueryHelpers,
-  S = DocumentType<T, QueryHelpers>
+  S = DocumentType<InstanceType<T>, QueryHelpers>
 > = mongoose.QueryWithHelpers<S | null, S, QueryHelpers>;
 
 /**

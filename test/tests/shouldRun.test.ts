@@ -540,6 +540,7 @@ it('should add query Methods', async () => {
   const found = await QueryMethodsModel.find().findByName('hello').findByLastname('world').orFail().exec();
   assertion(isDocumentArray(found), new Error('Found is not an document array'));
   expect(found[0].toObject()).toEqual(doc.toObject());
+  expect(found[0].name).toStrictEqual('hello');
 });
 
 it('should add query Methods with inheritance', async () => {

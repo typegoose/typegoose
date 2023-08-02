@@ -429,3 +429,58 @@ function testFilterFunctionsType() {
 }
 
 testFilterFunctionsType();
+
+async function queryhelpers() {
+  interface FindHelpers {
+    findByName: typegoose.types.AsQueryMethod<typeof findByName>;
+    findByLastname: typegoose.types.AsQueryMethod<typeof findByLastname>;
+  }
+
+  function findByName(this: typegoose.types.QueryHelperThis<typeof QueryMethodsClass, FindHelpers>, name: string) {
+    expectType<
+      typegoose.mongoose.QueryWithHelpers<
+        typegoose.DocumentType<QueryMethodsClass, FindHelpers> | null,
+        typegoose.DocumentType<QueryMethodsClass, FindHelpers>,
+        FindHelpers
+      >
+    >(this);
+
+    return this.find({ name });
+  }
+
+  function findByLastname(this: typegoose.types.QueryHelperThis<typeof QueryMethodsClass, FindHelpers>, lastname: string) {
+    expectType<
+      typegoose.mongoose.QueryWithHelpers<
+        typegoose.DocumentType<QueryMethodsClass, FindHelpers> | null,
+        typegoose.DocumentType<QueryMethodsClass, FindHelpers>,
+        FindHelpers
+      >
+    >(this);
+
+    return this.find({ lastname });
+  }
+
+  @typegoose.queryMethod(findByName)
+  @typegoose.queryMethod(findByLastname)
+  class QueryMethodsClass {
+    @prop({ required: true })
+    public name: string;
+
+    @prop({ required: true })
+    public lastname: string;
+  }
+
+  const QueryMethodsModel = typegoose.getModelForClass<typeof QueryMethodsClass, FindHelpers>(QueryMethodsClass);
+
+  const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
+
+  expectType<string>(doc.name);
+  expectType<string>(doc.lastname);
+
+  const found = await QueryMethodsModel.find().findByName('hello').findByLastname('world').orFail().exec();
+
+  expectType<string>(found[0].name);
+  expectType<string>(found[0].lastname);
+}
+
+queryhelpers();
