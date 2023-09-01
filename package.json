@@ -58,7 +58,7 @@
     "@typescript-eslint/parser": "^5.59.2",
     "class-transformer": "0.5.1",
     "commitlint": "^17.7.1",
-    "eslint": "^8.39.0",
+    "eslint": "^8.48.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
