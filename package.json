@@ -39,8 +39,8 @@
     "mongoose": "~6.11.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.6.1",
-    "@commitlint/config-conventional": "^17.6.1",
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
     "@deepkit/core": "1.0.1-alpha.58",
     "@deepkit/type": "1.0.1-alpha.58",
     "@semantic-release/changelog": "^6.0.3",
@@ -57,7 +57,7 @@
     "@typescript-eslint/eslint-plugin": "^5.59.2",
     "@typescript-eslint/parser": "^5.59.2",
     "class-transformer": "0.5.1",
-    "commitlint": "^17.6.1",
+    "commitlint": "^17.7.1",
     "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
