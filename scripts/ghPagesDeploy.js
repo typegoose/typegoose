@@ -52,7 +52,7 @@ function main() {
   console.log('\nSwitching Branches\n');
 
   // ensure there is nothing blocking from changing branches
-  execSync('git add *', { stdio: 'inherit' });
+  execSync('git add -A', { stdio: 'inherit' });
   execSync('git stash push', { stdio: 'inherit' });
 
   // works because "website" does not exist on the gh-pages branch
@@ -102,7 +102,7 @@ function main() {
   console.log('\nCommiting Changes\n');
 
   // add stage all changes
-  execSync('git add *', { stdio: 'inherit' });
+  execSync('git add -A', { stdio: 'inherit' });
 
   if (!hasChanges()) {
     console.log('No changes, exiting');
