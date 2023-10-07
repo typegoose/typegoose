@@ -1,3 +1,27 @@
+## [11.5.1](https://github.com/typegoose/typegoose/compare/v11.5.0...v11.5.1) (2023-10-07)
+
+
+### Style
+
+* apply prettier 3.0 formatting changes ([07826fa](https://github.com/typegoose/typegoose/commit/07826fa25d1c8a36ae533e5c4d4332f37c2d7dcc))
+
+
+### Dev-Dependencies
+
+* **@types/jest:** upgrade to 29.5.5 ([e1a1a9f](https://github.com/typegoose/typegoose/commit/e1a1a9f7c5083c0199698a3908b6a9bf87d4083d))
+* **@types/lodash:** upgrade to 4.14.199 ([0985e4f](https://github.com/typegoose/typegoose/commit/0985e4f581d5780526feca7477f1da4a25cd43f9))
+* **@types/node:** upgrade to 14.18.63 ([f62f379](https://github.com/typegoose/typegoose/commit/f62f379c7c557cd25f2683ce52f6a6b991c781c2))
+* **@types/semver:** upgrade to 7.5.3 ([41683d7](https://github.com/typegoose/typegoose/commit/41683d71378ff37e156d53ad25f331833252810c))
+* **@typescript-eslint/*:** upgrade to 5.62.0 ([2b84106](https://github.com/typegoose/typegoose/commit/2b8410604c7278ceeb42687f0cf435b16d03e32b))
+* **commitlint:** upgrade to 17.7.2 ([bad796b](https://github.com/typegoose/typegoose/commit/bad796b0ee00c8bc9afa9ab39309ef53da56633f))
+* **eslint-config-prettier:** upgrade to 8.10.0 ([a15c884](https://github.com/typegoose/typegoose/commit/a15c884bbd6fbe0881d8c779667e6e3ccd367508))
+* **eslint-config-prettier:** upgrade to 9.0.0 ([93e3f85](https://github.com/typegoose/typegoose/commit/93e3f8507bfdf1c47feefc8f1da9c5ca1b47400e))
+* **eslint:** upgrade to 8.51.0 ([5313ded](https://github.com/typegoose/typegoose/commit/5313dede47917453e4339f9ab31ee66027b25fc7))
+* **jest:** upgrade to 29.7.0 ([13d92f7](https://github.com/typegoose/typegoose/commit/13d92f7c6f8c16ae5ecd9beb0163382bbfa6ce81))
+* **mongodb-memory-server:** upgrade to 9.0.0 ([88df9ab](https://github.com/typegoose/typegoose/commit/88df9ab77a317231171ac647b8bf80e736049804))
+* **prettier:** upgrade to 3.0.3 ([7c198cd](https://github.com/typegoose/typegoose/commit/7c198cdf36b2c6c2e63db2b29c8ba9297185335a))
+* **rimraf:** upgrade to 5.0.5 ([b72f5c6](https://github.com/typegoose/typegoose/commit/b72f5c624829e4d8244a61a6c3af79e9d7f15eda))
+
 ## [11.5.0](https://github.com/typegoose/typegoose/compare/v11.4.1...v11.5.0) (2023-09-01)
 
 
