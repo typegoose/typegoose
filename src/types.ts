@@ -420,7 +420,7 @@ export type Ref<
   PopulatedType,
   RawId extends mongoose.RefType = PopulatedType extends { _id?: mongoose.RefType }
     ? NonNullable<PopulatedType['_id']>
-    : mongoose.Types.ObjectId
+    : mongoose.Types.ObjectId,
 > = mongoose.PopulatedDoc<DocumentType<PopulatedType>, RawId>;
 
 export interface DiscriminatorObject {
@@ -605,7 +605,7 @@ export type QueryHelperThis<
   // TODO: consider replacing T directly with S
   T extends AnyParamConstructor<any>,
   QueryHelpers,
-  S = DocumentType<InstanceType<T>, QueryHelpers>
+  S = DocumentType<InstanceType<T>, QueryHelpers>,
 > = mongoose.QueryWithHelpers<S | null, S, QueryHelpers>;
 
 /**
