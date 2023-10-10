@@ -9,7 +9,7 @@ module.exports = {
           {type: 'feat', release: 'minor'},
           {type: 'fix', release: 'patch'},
           {type: 'docs', release: false},
-          {type: 'style', release: 'patch'},
+          {type: 'style', release: false},
           {type: 'refactor', release: 'patch'},
           {type: 'perf', release: 'patch'},
           {type: 'test', release: false},
