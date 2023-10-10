@@ -1,3 +1,10 @@
+## [11.6.0](https://github.com/typegoose/typegoose/compare/v11.5.1...v11.6.0) (2023-10-10)
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 7.6.1 ([61ae900](https://github.com/typegoose/typegoose/commit/61ae90083cecf1bd80ef147d76701dfa7f0c2b19))
+
 ## [11.5.1](https://github.com/typegoose/typegoose/compare/v11.5.0...v11.5.1) (2023-10-07)
 
 
