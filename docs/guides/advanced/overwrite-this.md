@@ -35,21 +35,56 @@ If you would ever need to get the *instance*(`Kitten`) type of a class while you
 Example:
 
 ```ts
+class Kitten {
+  public dummy?: string;
+}
+
+// the two basic differences, static & instance:
+
+// T1 & T2 are "typeof Kitten" (static Kitten) and are interchangeable definitions
+const T1 = Kitten;
+// explicit type
+const T2: typeof Kitten = Kitten;
+
+// T3 & T4 are "Kitten" (instance of Kitten) and are interchangeable definitions
+const T3 = new Kitten();
+// explicit type
+const T4: Kitten = new Kitten();
+
+// combinations & errors
+
+// T5 & T6 are "Kitten" (instance of Kitten), whereas the assigned value of T5 is "typeof Kitten" (static Kitten)
+const T5: Kitten = Kitten; // Error: Value of type 'typeof Kitten' has no properties in common with type 'Kitten'. Did you mean to call it?
+const T6: Kitten = new Kitten(); // this is actually the correct type
+
+// T7 is "typeof Kitten" (static Kitten), and assigned is a "Kitten" (instance of Kitten)
+const T7: typeof Kitten = new Kitten(); // Error: Property 'prototype' is missing in type 'Kitten' but required in type 'typeof Kitten'
+```
+
+Also note that the rules slightly change if the class is *empty*:
+
+```ts
 class Kitten {}
 
-// T is "typeof Kitten" (static Kitten)
-const T = Kitten;
+// the two basic differences, static & instance:
 
-// T is "Kitten" (instance of Kitten)
-const T = Kitten;
-// T is "Kitten" (instance of Kitten)
-const T: Kitten = Kitten; // Error cannot assign "typeof Kitten" to "Kitten"
-// T is "typeof Kitten" (static Kitten)
-const T: typeof Kitten = Kitten;
-// T is "Kitten" (instance of Kitten)
-const T = new Kitten();
-// T is "Kitten" (instance of Kitten)
-const T: Kitten = new Kitten();
-// T is "typeof Kitten" (static Kitten)
-const T: typeof Kitten = new Kitten(); // Error cannot assign "Kitten" to "typeof Kitten"
+// T1 & T2 are "typeof Kitten" (static Kitten)
+const T1 = Kitten;
+// explicit type
+const T2: typeof Kitten = Kitten;
+
+// T3 & T4 are "Kitten" (instance of Kitten)
+const T3 = new Kitten();
+// explicit type
+const T4: Kitten = new Kitten();
+
+// combinations & errors
+
+// DIFFERENCE
+// T5 & T6 are "Kitten" (instance of Kitten), whereas the assigned value of T5 is "typeof Kitten" (static Kitten)
+const T5: Kitten = Kitten; // somehow this does not result in any error
+const T6: Kitten = new Kitten(); // this is actually the correct type
+
+// T7 is "typeof Kitten" (static Kitten), and assigned is a "Kitten" (instance of Kitten)
+const T7: typeof Kitten = new Kitten(); // Error: Property 'prototype' is missing in type 'Kitten' but required in type 'typeof Kitten'
 ```
