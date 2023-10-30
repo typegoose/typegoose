@@ -196,7 +196,7 @@ describe('misc', () => {
         public dummy2?: string;
       }
 
-      // Note: This is a behavioral test currently, so the functionality may not be correct
+      // Note: This is NOT a behavioral test anymore, so the functionality should be correct
 
       // should not have its own options
       expect(Reflect.getOwnMetadata(DecoratorKeys.ModelOptions, InheritTopNoCustomOptions)).toStrictEqual(undefined);
@@ -206,7 +206,7 @@ describe('misc', () => {
       });
       // should merge and return the corrected options
       expect(getMergedModelOptions(undefined, InheritTopNoCustomOptions)).toStrictEqual({
-        options: { disableLowerIndexes: true, allowMixed: Severity.ALLOW, disableCaching: true },
+        options: { allowMixed: Severity.ALLOW, disableCaching: true },
         [AlreadyMerged]: true,
       });
     }
@@ -221,15 +221,15 @@ describe('misc', () => {
 
       // should have its own options
       expect(Reflect.getOwnMetadata(DecoratorKeys.ModelOptions, InheritTopCustomOptions)).toStrictEqual({
-        options: { disableLowerIndexes: true, allowMixed: Severity.ALLOW, disableCaching: true, customName: 'testyinherit' },
+        options: { allowMixed: Severity.ALLOW, disableCaching: true, customName: 'testyinherit' },
       });
       // should get its own options
       expect(Reflect.getMetadata(DecoratorKeys.ModelOptions, InheritTopCustomOptions)).toStrictEqual({
-        options: { disableLowerIndexes: true, allowMixed: Severity.ALLOW, disableCaching: true, customName: 'testyinherit' },
+        options: { allowMixed: Severity.ALLOW, disableCaching: true, customName: 'testyinherit' },
       });
       // should merge and return the corrected options
       expect(getMergedModelOptions(undefined, InheritTopCustomOptions)).toStrictEqual({
-        options: { disableLowerIndexes: true, allowMixed: Severity.ALLOW, disableCaching: true, customName: 'testyinherit' },
+        options: { allowMixed: Severity.ALLOW, disableCaching: true, customName: 'testyinherit' },
         [AlreadyMerged]: true,
       });
     }

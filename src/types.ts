@@ -493,6 +493,8 @@ export interface ICustomOptions {
   enableMergeHooks?: boolean;
   /**
    * Disable all lower indexes than this class (works like `sch.clone().clearIndexes()`)
+   *
+   * This option DOES NOT get inherited
    * @default false
    */
   disableLowerIndexes?: boolean;

@@ -181,6 +181,10 @@ If [`enableMergePlugins`](#enablemergeplugins) and [`enableMergeHooks`](#enablem
 
 Default: `false`
 
+:::caution
+This option does not get inherited anymore since `11.7.0`.
+:::
+
 Disable inheriting lower indexes (still include self), similar to native mongoose `schema.clone().clearIndexes()`.
 
 Example:

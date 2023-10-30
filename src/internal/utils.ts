@@ -265,7 +265,18 @@ export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: A
   assertion(typeof key === 'string' && key.length > 0, () => new StringLengthExpectedError(1, key, getName(cl), 'key'));
   assertionIsClass(cl);
 
-  const classMetadata = getOwn ? Reflect.getOwnMetadata(key, cl) : Reflect.getMetadata(key, cl);
+  let classMetadata = (getOwn ? Reflect.getOwnMetadata(key, cl) : Reflect.getMetadata(key, cl)) ?? {};
+
+  // dont inherit some options if the current class does not have its own metadata
+  // this is somewhat hacky
+  if (key === DecoratorKeys.ModelOptions && !Reflect.hasOwnMetadata(key, cl) && 'options' in classMetadata) {
+    // this has to be done, because otherwise it will be deleted on the original
+    classMetadata = { ...classMetadata };
+    classMetadata.options = { ...classMetadata.options };
+
+    // dont inherit "disableLowerIndexes" because that would otherwise be inherited and so disable all indexes if inherited, not just from where it was set
+    delete classMetadata?.options?.disableLowerIndexes;
+  }
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
   return mergeWith({}, classMetadata, value, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
