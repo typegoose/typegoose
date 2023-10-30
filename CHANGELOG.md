@@ -1,3 +1,37 @@
+## [11.7.0-beta.1](https://github.com/typegoose/typegoose/compare/v11.6.0...v11.7.0-beta.1) (2023-10-30)
+
+
+### Features
+
+* dont inherit typegoose option "disableLowerIndexes" ([7706715](https://github.com/typegoose/typegoose/commit/77067152296cde9d57129d01ba64a05c539ced40))
+* **hooks:** update hook definitions to match mongoose 7.6.2 ([c97bb88](https://github.com/typegoose/typegoose/commit/c97bb8847da3e7ce3c344e510331705a1a3e559f))
+* **typegoose::buildSchema:** correctly get and set "superOptions" if the top level class sets it ([717a60c](https://github.com/typegoose/typegoose/commit/717a60c41ee59e5e52b90f4ea21a6b9596665f91)), closes [typegoose/typegoose#890](https://github.com/typegoose/typegoose/issues/890)
+
+
+### Fixes
+
+* **utils::mergeMetadata:** add options to use "getOwnMetadata" instead of "getMetadata" ([148983b](https://github.com/typegoose/typegoose/commit/148983b5f5fd964c849f05781fe5ac74cb03a54e))
+
+
+### Style
+
+* **typegoose::buildSchema:** rename variable to make more sense ([ca4863c](https://github.com/typegoose/typegoose/commit/ca4863ca9066ad699a156a8eab110cb1430a5451))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 7.6.3 ([c9399f2](https://github.com/typegoose/typegoose/commit/c9399f21302572b475ad2f1f13bf98206439eb12))
+
+
+### Dev-Dependencies
+
+* **@types/jest:** upgrade to 29.5.6 ([375057a](https://github.com/typegoose/typegoose/commit/375057a5d0870303abc1feda9add4fd712689768))
+* **@types/lodash:** upgrade to 4.14.200 ([ab70e0c](https://github.com/typegoose/typegoose/commit/ab70e0c0f3e43bbe6e717ac196f644baebefa724))
+* **@types/semver:** upgrade to 7.5.4 ([a86d143](https://github.com/typegoose/typegoose/commit/a86d1434a841ed6f5cfa47704207f76cb92392b9))
+* **eslint-plugin-prettier:** upgrade to 5.0.1 ([80f448f](https://github.com/typegoose/typegoose/commit/80f448f85f946ae874b4e7605b787284f4edf950))
+* **eslint:** upgrade to 8.52.0 ([feecd5f](https://github.com/typegoose/typegoose/commit/feecd5f305cd138232f70d2f5e01c815aa7ab315))
+* **mongodb-memory-server:** upgrade to 9.0.1 ([22c233d](https://github.com/typegoose/typegoose/commit/22c233dc587bac1de3e8806db6d9f6bf7a64d51c))
+
 ## [11.6.0](https://github.com/typegoose/typegoose/compare/v11.5.1...v11.6.0) (2023-10-10)
 
 
