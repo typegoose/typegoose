@@ -156,21 +156,22 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   let parentCtor = Object.getPrototypeOf(cl.prototype).constructor;
   /* This array is to execute from lowest class to highest (when extending) */
   const parentClasses: [AnyParamConstructor<any>, IBuildSchemaOptions][] = [];
-  let upperOptions: IBuildSchemaOptions = {};
+  /** Options for the next lower class that gets unshifted to {@link parentClasses} (ie the super-class) */
+  let superOptions: IBuildSchemaOptions = {};
 
   // iterate trough all parents to the lowest class
   while (parentCtor?.name !== 'Object') {
     // add lower classes (when extending) to the front of the array to be processed first
-    parentClasses.unshift([parentCtor, upperOptions]);
+    parentClasses.unshift([parentCtor, superOptions]);
 
     // clone object, because otherwise it will affect the upper classes too because the same reference is used
-    upperOptions = { ...upperOptions };
+    superOptions = { ...superOptions };
 
     const ropt: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, parentCtor) ?? {};
 
     // only affect options of lower classes, not the class the options are from
     if (ropt.options?.disableLowerIndexes) {
-      upperOptions.buildIndexes = false;
+      superOptions.buildIndexes = false;
     }
 
     // set next parent
