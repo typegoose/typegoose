@@ -1,7 +1,7 @@
 import { omit } from 'lodash';
-import { DecoratorKeys, Severity } from '../../src/internal/constants';
+import { AlreadyMerged, DecoratorKeys, Severity } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
-import { getName, mergeMetadata } from '../../src/internal/utils';
+import { getMergedModelOptions, getName, mergeMetadata } from '../../src/internal/utils';
 import { addModelToTypegoose, buildSchema, getModelForClass, modelOptions, mongoose, prop } from '../../src/typegoose';
 import { IModelOptions } from '../../src/types';
 import { connect } from '../utils/connect';
@@ -179,5 +179,59 @@ describe('misc', () => {
     expect(doc).not.toBeUndefined();
     expect(doc.key).not.toBeUndefined();
     expect(doc.key).not.toHaveProperty('_id');
+  });
+
+  it('should inherit all typegoose custom options, unless re-specified', () => {
+    // base inherit class
+    @modelOptions({ options: { disableLowerIndexes: true, allowMixed: Severity.ALLOW, disableCaching: true } })
+    class InheritLowest {
+      @prop()
+      public dummy1?: string;
+    }
+
+    // test class without "modelOptions" set itself
+    {
+      class InheritTopNoCustomOptions extends InheritLowest {
+        @prop()
+        public dummy2?: string;
+      }
+
+      // Note: This is a behavioral test currently, so the functionality may not be correct
+
+      // should not have its own options
+      expect(Reflect.getOwnMetadata(DecoratorKeys.ModelOptions, InheritTopNoCustomOptions)).toStrictEqual(undefined);
+      // should get the lower options, even if they are not correct
+      expect(Reflect.getMetadata(DecoratorKeys.ModelOptions, InheritTopNoCustomOptions)).toStrictEqual({
+        options: { disableLowerIndexes: true, allowMixed: Severity.ALLOW, disableCaching: true },
+      });
+      // should merge and return the corrected options
+      expect(getMergedModelOptions(undefined, InheritTopNoCustomOptions)).toStrictEqual({
+        options: { disableLowerIndexes: true, allowMixed: Severity.ALLOW, disableCaching: true },
+        [AlreadyMerged]: true,
+      });
+    }
+
+    // test class with "modelOptions" set
+    {
+      @modelOptions({ options: { customName: 'testyinherit' } })
+      class InheritTopCustomOptions extends InheritLowest {
+        @prop()
+        public dummy3?: string;
+      }
+
+      // should have its own options
+      expect(Reflect.getOwnMetadata(DecoratorKeys.ModelOptions, InheritTopCustomOptions)).toStrictEqual({
+        options: { disableLowerIndexes: true, allowMixed: Severity.ALLOW, disableCaching: true, customName: 'testyinherit' },
+      });
+      // should get its own options
+      expect(Reflect.getMetadata(DecoratorKeys.ModelOptions, InheritTopCustomOptions)).toStrictEqual({
+        options: { disableLowerIndexes: true, allowMixed: Severity.ALLOW, disableCaching: true, customName: 'testyinherit' },
+      });
+      // should merge and return the corrected options
+      expect(getMergedModelOptions(undefined, InheritTopCustomOptions)).toStrictEqual({
+        options: { disableLowerIndexes: true, allowMixed: Severity.ALLOW, disableCaching: true, customName: 'testyinherit' },
+        [AlreadyMerged]: true,
+      });
+    }
   });
 });
