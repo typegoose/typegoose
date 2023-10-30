@@ -257,15 +257,18 @@ export function assignMetadata(key: DecoratorKeys, value: unknown, cl: AnyParamC
  * @param key Metadata key to read existing metadata from
  * @param value Option to merge with
  * @param cl The Class to read the metadata from
+ * @param getOwn Use "getOwnMetadata" isntead of "getMetadata"
  * @returns Returns the merged output, where "value" overwrites existing Metadata values
  * @internal
  */
-export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>): T {
+export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: AnyParamConstructor<any>, getOwn: boolean = false): T {
   assertion(typeof key === 'string' && key.length > 0, () => new StringLengthExpectedError(1, key, getName(cl), 'key'));
   assertionIsClass(cl);
 
+  const classMetadata = getOwn ? Reflect.getOwnMetadata(key, cl) : Reflect.getMetadata(key, cl);
+
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
-  return mergeWith({}, Reflect.getMetadata(key, cl), value, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
+  return mergeWith({}, classMetadata, value, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
 }
 
 /**
@@ -587,16 +590,23 @@ export function assignGlobalModelOptions(target: any): boolean {
  * Note: applies global options to the decorator options if unset, but does not set the final options
  * @param rawOptions Options to merge(-overwrite) all previous options
  * @param cl The Class to get / set the ModelOptions on
+ * @param getOwn use "getOwnMetadata" instead of "getMetadata"
  * @returns A ModelOptions object
  */
-export function getMergedModelOptions(rawOptions: IModelOptions | undefined, cl: AnyParamConstructor<any>): IModelOptions {
+export function getMergedModelOptions(
+  rawOptions: IModelOptions | undefined,
+  cl: AnyParamConstructor<any>,
+  getOwn: boolean = false
+): IModelOptions {
   const opt = typeof rawOptions === 'object' ? rawOptions : {};
 
   if (assignGlobalModelOptions(cl)) {
     opt[AlreadyMerged] = false;
   }
 
-  const mergedOptions: IModelOptions = opt?.[AlreadyMerged] ? opt : mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl);
+  // dont skip merging if "getOwn" is "true"
+  const mergedOptions: IModelOptions =
+    opt?.[AlreadyMerged] && !getOwn ? opt : mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl, getOwn);
   mergedOptions[AlreadyMerged] = true;
 
   return mergedOptions;
