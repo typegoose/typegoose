@@ -159,6 +159,13 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   /** Options for the next lower class that gets unshifted to {@link parentClasses} (ie the super-class) */
   let superOptions: IBuildSchemaOptions = {};
 
+  // first run for some options based on input class options (if any), because the while-loop is for the prototypes (if any)
+  {
+    // get new options because "mergedOptions" is merged with lower options, but "upperOptions" requires the "own" version, if any
+    const mergedOwnOptions = getMergedModelOptions(options, cl, true);
+    applySuperOptions(superOptions, mergedOwnOptions);
+  }
+
   // iterate trough all parents to the lowest class
   while (parentCtor?.name !== 'Object') {
     // add lower classes (when extending) to the front of the array to be processed first
@@ -167,11 +174,11 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
     // clone object, because otherwise it will affect the upper classes too because the same reference is used
     superOptions = { ...superOptions };
 
-    const ropt: IModelOptions = Reflect.getMetadata(DecoratorKeys.ModelOptions, parentCtor) ?? {};
+    {
+      // only get the own metadata, possible because "upperOptions" at the moment only requires the "own" metadata
+      const ropt: IModelOptions = Reflect.getOwnMetadata(DecoratorKeys.ModelOptions, parentCtor) ?? {};
 
-    // only affect options of lower classes, not the class the options are from
-    if (ropt.options?.disableLowerIndexes) {
-      superOptions.buildIndexes = false;
+      applySuperOptions(superOptions, ropt);
     }
 
     // set next parent
@@ -188,6 +195,18 @@ export function buildSchema<U extends AnyParamConstructor<any>>(
   sch = _buildSchema(cl, sch, mergedOptions, true, overwriteNaming);
 
   return sch;
+}
+
+/**
+ * Apply options to "superOptions" object, based on "modelOptions"
+ * @param superOptions The "superOptions" object
+ * @param modelOptions The Model Options of the current class
+ */
+function applySuperOptions(superOptions: IBuildSchemaOptions, modelOptions: IModelOptions) {
+  // only affect options of lower classes, not the class the options are from
+  if (modelOptions.options?.disableLowerIndexes) {
+    superOptions.buildIndexes = false;
+  }
 }
 
 /**

@@ -1,4 +1,6 @@
 import { index } from '../../src/indexes';
+import { AlreadyMerged, Severity } from '../../src/internal/constants';
+import { getMergedModelOptions } from '../../src/internal/utils';
 import { prop } from '../../src/prop';
 import { buildSchema, modelOptions } from '../../src/typegoose';
 import { IndexWeightsModel } from '../models/indexweights';
@@ -123,33 +125,71 @@ describe('index order', () => {
     expect(indexes).toStrictEqual([[{ dummy1: 1 }, { background: true }]]);
   });
 
-  it('should not inherit indexes beyond "disableLowerIndexes: false", but still include self', () => {
+  it('should not inherit indexes beyond "disableLowerIndexes: false", but still include self (mid level)', () => {
     @index({ dummy1: 1 })
-    class IndexInherit5 {
+    class IndexInheritLowest {
       @prop()
       public dummy1?: string;
     }
 
     @index({ dummy2: 1 })
     @modelOptions({ options: { disableLowerIndexes: true } })
-    class IndexInherit6 extends IndexInherit5 {
+    class IndexInheritMid1 extends IndexInheritLowest {
       @prop()
       public dummy2?: string;
     }
 
     @index({ dummy3: 1 })
-    class IndexInherit7 extends IndexInherit6 {
+    class IndexInheritMid2 extends IndexInheritMid1 {
       @prop()
       public dummy3?: string;
     }
 
-    const sch = buildSchema(IndexInherit7);
+    @index({ dummy4: 1 })
+    class IndexInheritTop extends IndexInheritMid2 {
+      @prop()
+      public dummy4?: string;
+    }
+
+    const sch = buildSchema(IndexInheritTop);
 
     const indexes = sch.indexes();
-    expect(indexes.length).toStrictEqual(2);
+    expect(indexes.length).toStrictEqual(3);
     expect(indexes).toStrictEqual([
       [{ dummy2: 1 }, { background: true }],
       [{ dummy3: 1 }, { background: true }],
+      [{ dummy4: 1 }, { background: true }],
     ]);
+
+    // the following checks are just to actually make sure the options are correctly set and inherited
+    expect(getMergedModelOptions(undefined, IndexInheritMid2)).toStrictEqual({
+      options: { allowMixed: Severity.WARN },
+      [AlreadyMerged]: true,
+    });
+    expect(getMergedModelOptions(undefined, IndexInheritTop)).toStrictEqual({
+      options: { allowMixed: Severity.WARN },
+      [AlreadyMerged]: true,
+    });
+  });
+
+  it('should not inherit indexes beyond "disableLowerIndexes: false", but still include self (self option set) [typegoose/typegoose#890]', () => {
+    @index({ dummy1: 1 })
+    class IndexInheritLowest {
+      @prop()
+      public dummy1?: string;
+    }
+
+    @index({ dummy2: 1 })
+    @modelOptions({ options: { disableLowerIndexes: true } })
+    class IndexInheritTop extends IndexInheritLowest {
+      @prop()
+      public dummy2?: string;
+    }
+
+    const sch = buildSchema(IndexInheritTop);
+
+    const indexes = sch.indexes();
+    expect(indexes.length).toStrictEqual(1);
+    expect(indexes).toStrictEqual([[{ dummy2: 1 }, { background: true }]]);
   });
 });
