@@ -5,7 +5,7 @@
   "main": "lib/typegoose.js",
   "types": "lib/typegoose.d.ts",
   "engines": {
-    "node": ">=14.17.0"
+    "node": ">=16.20.1"
   },
   "files": [
     "lib/**/*.js",
