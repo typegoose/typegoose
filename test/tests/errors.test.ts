@@ -295,7 +295,11 @@ describe('tests for "InvalidPropTypeError" [E013]', () => {
   describe('PropType unknown (processProp)', () => {
     it('should throw a Error when a unknown PropType is used for "processProp#Passthrough" [InvalidPropTypeError] [E013]', () => {
       class ProcessPropPassthroughPropType {
-        @prop({ type: () => new Passthrough({}) }, -1)
+        @prop(
+          { type: () => new Passthrough({}) },
+          // @ts-expect-error Using a invalid PropType to test handling of invalid number
+          -1
+        )
         public test?: any;
       }
 
@@ -311,7 +315,11 @@ describe('tests for "InvalidPropTypeError" [E013]', () => {
 
     it('should throw a Error when a unknown PropType is used for "processProp#ref" [InvalidPropTypeError] [E013]', () => {
       class ProcessPropRefPropType {
-        @prop({ ref: 'hi' }, -1)
+        @prop(
+          { ref: 'hi' },
+          // @ts-expect-error Using a invalid PropType to test handling of invalid number
+          -1
+        )
         public test?: any;
       }
 
@@ -330,7 +338,11 @@ describe('tests for "InvalidPropTypeError" [E013]', () => {
         @prop()
         public hi?: string;
 
-        @prop({ refPath: 'hi' }, -1)
+        @prop(
+          { refPath: 'hi' },
+          // @ts-expect-error Using a invalid PropType to test handling of invalid number
+          -1
+        )
         public test?: any;
       }
 
@@ -346,7 +358,11 @@ describe('tests for "InvalidPropTypeError" [E013]', () => {
 
     it('should throw a Error when a unknown PropType is used for "processProp#primitive" [InvalidPropTypeError] [E013]', () => {
       class ProcessPropRefPropType {
-        @prop({ type: () => String }, -1)
+        @prop(
+          { type: () => String },
+          // @ts-expect-error Using a invalid PropType to test handling of invalid number
+          -1
+        )
         public test?: string;
       }
 
@@ -367,7 +383,11 @@ describe('tests for "InvalidPropTypeError" [E013]', () => {
       }
 
       class ProcessPropRefPropType {
-        @prop({ type: () => Sub }, -1)
+        @prop(
+          { type: () => Sub },
+          // @ts-expect-error Using a invalid PropType to test handling of invalid number
+          -1
+        )
         public test?: Sub;
       }
 

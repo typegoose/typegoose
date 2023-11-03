@@ -106,7 +106,7 @@ Like `public: string[]` is in reflection only `Array`.
 
 ### Requirements
 
-- TypeScript version `^4.9` (since 10.0) is recommended, though older ones may also work
+- TypeScript version `^5.2` (since 10.0) is recommended, though older ones may also work
 - NodeJS `>=16.20.1` (and `@types/node@16`)
 - Mongoose `~7.6.3`
 - A IDE that supports TypeScript linting is recommended to be used (VSCode is recommended)
