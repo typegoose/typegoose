@@ -481,6 +481,12 @@ async function queryhelpers() {
 
   expectType<string>(found[0].name);
   expectType<string>(found[0].lastname);
+
+  expectType<typegoose.types.DocumentType<QueryMethodsClass, FindHelpers>[]>(found);
+
+  const found2 = await QueryMethodsModel.find().findByName('hello');
+
+  expectType<typegoose.types.DocumentType<QueryMethodsClass, FindHelpers>[]>(found2);
 }
 
 queryhelpers();
