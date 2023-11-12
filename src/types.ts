@@ -604,11 +604,10 @@ export type AsQueryMethod<T extends (...args: any) => any> = (...args: Parameter
  * }
  */
 export type QueryHelperThis<
-  // TODO: consider replacing T directly with S
   T extends AnyParamConstructor<any>,
   QueryHelpers,
   S = DocumentType<InstanceType<T>, QueryHelpers>,
-> = mongoose.QueryWithHelpers<S | null, S, QueryHelpers>;
+> = mongoose.QueryWithHelpers<S | null, S, QueryHelpers, InstanceType<T>>;
 
 /**
  * Type for the Values stored in the Reflection for Query Methods
