@@ -11,7 +11,7 @@ This Guide is written for migration from version `11.7.0` to `12.0.0`, for versi
 
 ## Requirements changed
 
-- Mongoose `8.0.0` or higher is now required
+- Mongoose `8.0.1` or higher is now required
 - Typescript `5.2` or higher is now required to be used
 - NodeJS 16 is now the lowest supported nodejs version
 
