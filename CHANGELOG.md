@@ -1,3 +1,10 @@
+## [11.7.1](https://github.com/typegoose/typegoose/compare/v11.7.0...v11.7.1) (2023-11-16)
+
+
+### Fixes
+
+* **types::QueryHelperThis:** provide generic "RawDocType" ([ff778ea](https://github.com/typegoose/typegoose/commit/ff778eafc498ac76ba139a658bfae40ba438adf9)), closes [#870](https://github.com/typegoose/typegoose/issues/870) [#870](https://github.com/typegoose/typegoose/issues/870)
+
 ## [11.7.0](https://github.com/typegoose/typegoose/compare/v11.6.0...v11.7.0) (2023-11-03)
 
 
