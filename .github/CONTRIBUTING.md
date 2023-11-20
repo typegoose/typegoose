@@ -1,4 +1,4 @@
-# How to Contribue
+# How to Contribute
 
 ## Language
 

@@ -1,0 +1,5 @@
+{
+  "testFileMatch": [
+    "**/*.test-d.ts"
+  ]
+}
