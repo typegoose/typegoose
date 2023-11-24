@@ -69,7 +69,7 @@
     "rimraf": "^5.0.5",
     "semantic-release": "^19.0.5",
     "ts-jest": "^29.1.1",
-    "tstyche": "^1.0.0-beta.3",
+    "tstyche": "^1.0.0-beta.4",
     "typescript": "~4.9.5"
   },
   "dependencies": {
