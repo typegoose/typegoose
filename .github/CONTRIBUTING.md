@@ -1,4 +1,4 @@
-# How to Contribue
+# How to Contribute
 
 ## Language
 
@@ -101,7 +101,7 @@ The rest of the commit message is then used for this.
 
 When doing code examples in the documentation:
 - ensure that the spacing is `2` spaces, no tabs
-- use single-quotes (`'`), and not double-quotes (`"`) to keep the documentation consitent (only use template strings where necessary) (except comment, there use double-quotes for readability)
+- use single-quotes (`'`), and not double-quotes (`"`) to keep the documentation consistent (only use template strings where necessary) (except comment, there use double-quotes for readability)
 - prefer the usage of template strings over `"hello " + variable + " world`
 
 When generally writing (outside of code examples):
