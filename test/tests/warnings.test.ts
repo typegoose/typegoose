@@ -100,7 +100,12 @@ it('should allow mixed without warnings or error for "Mixed" if Severity.ALLOW i
 });
 
 it('should warn if property is "Mixed" and a invalid Severity is used', () => {
-  @modelOptions({ options: { allowMixed: -1 } })
+  @modelOptions({
+    options: {
+      // @ts-expect-error Using a invalid Severity to test handling of invalid number
+      allowMixed: -1,
+    },
+  })
   class TestMixedWarning {
     @prop({ type: () => mongoose.Schema.Types.Mixed })
     public test?: any;

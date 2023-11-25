@@ -6,6 +6,11 @@ const path = require('node:path');
 
 /* Constants / Config */
 
+/*
+Modify this comment block to trigger a doc re-deploy:
+1
+*/
+
 /** keep ".git", ".github", "website" and "scripts" */
 const keepRegex = /^(?:\.git|website|scripts|versions)/;
 /** Regex to filter and get versions output from git ls-tree */

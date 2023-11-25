@@ -91,7 +91,9 @@ export function isAnRefType(Type: any): boolean {
 export function isObject(Type: any, once: boolean = false): boolean {
   if (typeof Type?.name === 'string') {
     let prototype = Type.prototype;
-    let name = Type.name;
+    // schemaName is "Mixed", whereas name for ".Types.Mixed" is since mongoose 8.0 "SchemaMixed"
+    // so use "schemaName" if it exists and use ".name" as a fallback
+    let name = Type?.schemaName ?? Type.name;
     while (name) {
       if (name === 'Object' || name === 'Mixed') {
         return true;
