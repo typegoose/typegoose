@@ -12,6 +12,7 @@ Define Mongoose models using TypeScript classes
 Migration Guides:  
 (Date format: `dd-mm-yyyy`)
 
+- [11 to 12](https://typegoose.github.io/typegoose/versions/beta/docs/guides/migration/migrate-12) (released on `XX-XX-2023`)
 - [10 to 11](https://typegoose.github.io/typegoose/docs/guides/migration/migrate-11) (released on `27-03-2023`)
 - [9 to 10](https://typegoose.github.io/typegoose/docs/guides/migration/migrate-10) (released on `12-12-2022`)
 - [8 to 9](https://typegoose.github.io/typegoose/docs/guides/migration/migrate-9) (released on `22-09-2021`)

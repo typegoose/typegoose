@@ -143,8 +143,8 @@ export function processProp(input: ProcessPropOptions): void {
       typeof rawOptions.ref === 'string'
         ? rawOptions.ref
         : utils.isConstructor(rawOptions.ref)
-        ? utils.getName(rawOptions.ref)
-        : rawOptions.ref;
+          ? utils.getName(rawOptions.ref)
+          : rawOptions.ref;
   }
 
   if (utils.isWithVirtualPOP(rawOptions)) {

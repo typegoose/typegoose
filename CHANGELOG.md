@@ -1,3 +1,49 @@
+## [12.0.0-beta.1](https://github.com/typegoose/typegoose/compare/v11.7.1...v12.0.0-beta.1) (2023-11-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* **mongoose:** mongoose 8.0.0 is now the version in use
+* **tsconfig.json:** tsconfig "target" is now "es2021" which could be potentially breaking
+* **package.json:** Minimal NodeJS version is now 16.20.1
+
+### Features
+
+* **package.json:** update nodejs version to 16.20 ([8dd8467](https://github.com/typegoose/typegoose/commit/8dd84673e2cadf00667e29a1b592a0e587db8270))
+* **tsconfig.json:** update "target" to match minimal NodeJS capabilities ([ce3cf74](https://github.com/typegoose/typegoose/commit/ce3cf74042a6221841ab673b080ebdaba202e81e))
+
+
+### Fixes
+
+* **types::QueryHelperThis:** provide generic "RawDocType" ([74cdf28](https://github.com/typegoose/typegoose/commit/74cdf288cc8bd7e0de52d05de29824d101496f45)), closes [#870](https://github.com/typegoose/typegoose/issues/870) [#870](https://github.com/typegoose/typegoose/issues/870)
+
+
+### Style
+
+* **processProp:** fix lint ([db6042a](https://github.com/typegoose/typegoose/commit/db6042a17bcb0f3f22f9ecdc7d82fbabdf1f6d14))
+* **types::EnumValues:** remove some TODOs ([5f0abf5](https://github.com/typegoose/typegoose/commit/5f0abf5321ba995963be8604b5a80b0116f3e1d9))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.0.0 ([fc16e81](https://github.com/typegoose/typegoose/commit/fc16e8136df8f6f7890078462504b329c8f0c96f))
+* **mongoose:** upgrade to 8.0.1 ([6223bf8](https://github.com/typegoose/typegoose/commit/6223bf82ca9c075ae89daebe481546ed758ba8c4))
+
+
+### Dev-Dependencies
+
+* **@types/jest:** upgrade to 29.5.8 ([571d2af](https://github.com/typegoose/typegoose/commit/571d2af5edeabecadae1baa80f0ac2bd6b9b181d))
+* **@types/lodash:** upgrade to 4.14.201 ([9be7a9e](https://github.com/typegoose/typegoose/commit/9be7a9ed27fcd802508b797ba74e5b4d5f57243e))
+* **@types/node:** upgrade to 16.11.7 ([e0de5a1](https://github.com/typegoose/typegoose/commit/e0de5a1afa99c05fb1f61371deb90fab44c26375))
+* **@types/semver:** upgrade to 7.5.5 ([1bdd67b](https://github.com/typegoose/typegoose/commit/1bdd67b62d6e2e54daf789f00ea47aca8df4ab2f))
+* **@typescript-eslint/*:** upgrade to 6.11.0 ([470cae7](https://github.com/typegoose/typegoose/commit/470cae7cca9573c6b9729d93d66f70264dee2e99))
+* **@typescript-eslint/*:** upgrade to 6.9.1 ([1e7784d](https://github.com/typegoose/typegoose/commit/1e7784d36fa0aafc29671b6322b0d8469c6a644c))
+* **eslint:** upgrade to 8.53.0 ([f8a1573](https://github.com/typegoose/typegoose/commit/f8a1573e8960e8db0492f396cc15ea4ba363c8c6))
+* **jest-runner-tsd:** upgrade to 5.0.0 ([9d2dc2d](https://github.com/typegoose/typegoose/commit/9d2dc2d06ad37c58e523041aa8b50372f3eb37de))
+* **lint-staged:** upgrade to 14.0.1 ([b77a092](https://github.com/typegoose/typegoose/commit/b77a092acf8494b9c56cf5967eb4eb13dc3ae6ae))
+* **prettier:** upgrade to 3.1.0 ([433488b](https://github.com/typegoose/typegoose/commit/433488b608319b1324f1ec787b61c1f69e5c749d))
+* **typescript:** upgrade to 5.2.2 ([e5ce00b](https://github.com/typegoose/typegoose/commit/e5ce00b31079080b8a8a6954db5a87a78ed0fe78))
+
 ## [11.7.1](https://github.com/typegoose/typegoose/compare/v11.7.0...v11.7.1) (2023-11-16)
 
 

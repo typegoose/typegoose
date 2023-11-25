@@ -279,7 +279,7 @@ gh732();
 
 function postHookErrorOption() {
   @typegoose.post<TestErrorOption>(
-    'count',
+    'countDocuments',
     function (...args) {
       expectType<NativeError>(args[0]);
       expectType<any>(args[1]);
