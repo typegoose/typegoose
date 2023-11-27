@@ -68,8 +68,6 @@ jobs:
         run: yarn install --frozen-lockfile
       - name: Test Types
         run: yarn run test:types
-        env:
-          CI: true
   publish:
     permissions:
       contents: write # for actions/checkout to fetch code and for semantic-release to push commits, release releases and tags
