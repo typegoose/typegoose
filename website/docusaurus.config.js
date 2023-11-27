@@ -108,7 +108,9 @@ module.exports = {
           path: '../docs',
           routeBasePath: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: `https://github.com/typegoose/typegoose/edit/${deployInfo.branch}/docs`,
+          editUrl: ({ docPath }) => {
+            return `https://holocron.so/github/pr/typegoose/typegoose/${deployInfo.branch}/editor/docs/${docPath}`
+          },
           remarkPlugins: [[require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }]],
         },
         theme: {
