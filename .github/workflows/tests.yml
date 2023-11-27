@@ -67,7 +67,7 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
       - name: Test Types
-        run: yarn run test:types --target 5.2,latest
+        run: yarn run test:types
         env:
           CI: true
   publish:
