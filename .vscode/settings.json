@@ -14,7 +14,7 @@
   "javascript.format.enable": false,
   "typescript.format.enable": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "files.associations": {
     "*.ts.snap": "javascript",
