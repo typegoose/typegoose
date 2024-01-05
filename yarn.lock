@@ -6574,10 +6574,10 @@ tslib@^2.4.0, tslib@^2.5.0, tslib@^2.6.0, tslib@^2.6.2:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
 
-tstyche@1.0.0-beta.5:
-  version "1.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/tstyche/-/tstyche-1.0.0-beta.5.tgz#cf3371b0cc95545aceb12754918c0eec4defd291"
-  integrity sha512-JFHBf1dlT4ZwdB3jV+mVjQxBt5z4w9+Xgi0yehxzUMSfco5zyY8EpVZ3jpEHLlc/o4BFaF3xt+WrFHhvV3DfvA==
+tstyche@1.0.0-beta.9:
+  version "1.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/tstyche/-/tstyche-1.0.0-beta.9.tgz#bdb50c129b8441526e6ba9798dc7ec308a054da4"
+  integrity sha512-Ru+SOXzeufGYa5geyMlSHXh49ZP50zN0nzjQJE4LBem40g7dU9DQ9YX1odBSIh4vhyzKEjVFLC7fFk9PhtDJtA==
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"

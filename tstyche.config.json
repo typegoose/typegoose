@@ -1,8 +1,5 @@
 {
   "$schema": "https://tstyche.org/schemas/config.json",
-  "target": [
-    "current"
-  ],
   "testFileMatch": [
     "**/*.test-d.ts"
   ]
