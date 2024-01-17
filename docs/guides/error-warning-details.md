@@ -7,7 +7,7 @@ title: 'Error & Warning Details'
 
 ### Mongoose Version [E001]
 
-Error: `Please use mongoose 8.0.1 or higher (Current mongoose: x.x.x) [E001]`
+Error: `Please use mongoose 8.1.0 or higher (Current mongoose: x.x.x) [E001]`
 
 Error Class: `Error`
 
