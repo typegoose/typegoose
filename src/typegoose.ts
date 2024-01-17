@@ -1,6 +1,6 @@
 /* imports */
 import * as mongoose from 'mongoose';
-import 'reflect-metadata';
+import 'reflect-metadata/lite';
 import * as semver from 'semver';
 import {
   assertion,
