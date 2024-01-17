@@ -441,7 +441,8 @@ async function queryhelpers() {
       typegoose.mongoose.QueryWithHelpers<
         typegoose.DocumentType<QueryMethodsClass, FindHelpers> | null,
         typegoose.DocumentType<QueryMethodsClass, FindHelpers>,
-        FindHelpers
+        FindHelpers,
+        QueryMethodsClass
       >
     >(this);
 
@@ -453,7 +454,8 @@ async function queryhelpers() {
       typegoose.mongoose.QueryWithHelpers<
         typegoose.DocumentType<QueryMethodsClass, FindHelpers> | null,
         typegoose.DocumentType<QueryMethodsClass, FindHelpers>,
-        FindHelpers
+        FindHelpers,
+        QueryMethodsClass
       >
     >(this);
 
