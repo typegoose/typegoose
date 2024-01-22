@@ -29,7 +29,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Load MongoDB binary cache
         id: cache-mongodb-binaries
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/mongodb-binaries
           key: ${{ matrix.node-version }}
@@ -60,7 +60,7 @@ jobs:
           node-version: 18.x
       - name: Load MongoDB binary cache
         id: cache-mongodb-binaries
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/mongodb-binaries
           key: types
@@ -86,7 +86,7 @@ jobs:
           node-version: 18.x
       - name: Load MongoDB binary cache
         id: cache-mongodb-binaries
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/mongodb-binaries
           key: publish
