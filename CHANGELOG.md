@@ -1,3 +1,24 @@
+## [12.1.0](https://github.com/typegoose/typegoose/compare/v12.0.0...v12.1.0) (2024-01-17)
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.1.0 ([99b3eca](https://github.com/typegoose/typegoose/commit/99b3eca7c3f8674801d4e128954cba7052a3ae39))
+* **reflect-metadata:** upgrade to 0.2.1 ([0cc46a7](https://github.com/typegoose/typegoose/commit/0cc46a79948e26b782d249414d7e9fd06d16c650))
+
+
+### Dev-Dependencies
+
+* **@types/jest:** upgrade to 29.5.11 ([db83044](https://github.com/typegoose/typegoose/commit/db830446a1d8872549becd2b954bd4f98826c9c6))
+* **@typescript-eslint/*:** upgrade to 6.19.0 ([d48adfb](https://github.com/typegoose/typegoose/commit/d48adfb140a04251862b735bd45195bd56bb36de))
+* **commitlint:** upgrade to 17.8.1 ([77ed29f](https://github.com/typegoose/typegoose/commit/77ed29f80390bed4490a0a2f9017b473ed993a99))
+* **eslint-config-prettier:** upgrade to 9.1.0 ([97b7859](https://github.com/typegoose/typegoose/commit/97b7859885cadd4ca51d8491610a5d4a28942faf))
+* **eslint-plugin-prettier:** upgrade to 5.1.3 ([6536299](https://github.com/typegoose/typegoose/commit/6536299f07ff4d4aaeb44cbb54f24d793b95d48b))
+* **eslint:** upgrade to 8.56.0 ([464cb26](https://github.com/typegoose/typegoose/commit/464cb269b4b2e52b59af135c3701e820f3196b9f))
+* **mongodb-memory-server:** upgrade to 9.1.5 ([432798b](https://github.com/typegoose/typegoose/commit/432798b03eb3ad93ffb1fd71184805b208dcd120))
+* **prettier:** upgrade to 3.2.4 ([91cdff8](https://github.com/typegoose/typegoose/commit/91cdff8fff621880d12d5434e25b3db1da73239d))
+* **typescript:** upgrade to 5.3.3 ([6a821f8](https://github.com/typegoose/typegoose/commit/6a821f8afcbb79dda244e456e21b39c092b55b93))
+
 ## [12.0.0](https://github.com/typegoose/typegoose/compare/v11.7.1...v12.0.0) (2023-11-25)
 
 
