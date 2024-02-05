@@ -48,6 +48,8 @@ jobs:
       - name: Send codecov.io stats
         if: matrix.node-version == '18.x'
         uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
   test-types:
     permissions:
       contents: read  # for actions/checkout to fetch code
