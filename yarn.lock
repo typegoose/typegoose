@@ -30,13 +30,6 @@
   dependencies:
     "@babel/highlight" "^7.16.7"
 
-"@babel/code-frame@^7.15.8":
-  version "7.18.6"
-  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.18.6.tgz#3b25d38c89600baa2dcc219edfa88a74eb2c427a"
-  integrity sha512-TDCmlK5eOvH+eH7cdAFlNXeVJqWIQ7gW9tY1GJIpUtFb6CmjVyq2VM3u71bOyR8CRihcCgMUYoDNyLXao3+70Q==
-  dependencies:
-    "@babel/highlight" "^7.18.6"
-
 "@babel/compat-data@^7.17.10":
   version "7.17.10"
   resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.17.10.tgz#711dc726a492dfc8be8220028b1b92482362baab"
@@ -180,7 +173,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/highlight@^7.18.6", "@babel/highlight@^7.23.4":
+"@babel/highlight@^7.23.4":
   version "7.23.4"
   resolved "https://registry.yarnpkg.com/@babel/highlight/-/highlight-7.23.4.tgz#edaadf4d8232e1a961432db785091207ead0621b"
   integrity sha512-acGdbYSfp2WheJoJm/EBBBLh/ID8KDc64ISZ9DYtBmC8/Q204PZJLHyzeB5qMzJ5trcOkybd78M4x2KWsUq++A==
@@ -1446,11 +1439,6 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.4.tgz#0b92dcc0cc1c81f6f306a381f28e31b1a56536e9"
   integrity sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==
 
-"@tsd/typescript@~5.3.3":
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/@tsd/typescript/-/typescript-5.3.3.tgz#bc01854b6e0e746b5f70a6b48c30c7b95b81a74e"
-  integrity sha512-CQlfzol0ldaU+ftWuG52vH29uRoKboLinLy84wS8TQOu+m+tWoaUfk4svL4ij2V8M5284KymJBlHUusKj6k34w==
-
 "@types/babel__core@^7.1.14":
   version "7.1.19"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.19.tgz#7b497495b7d1b4812bdb9d02804d0576f43ee460"
@@ -2509,15 +2497,6 @@ cosmiconfig@^8.0.0:
     js-yaml "^4.1.0"
     parse-json "^5.2.0"
     path-type "^4.0.0"
-
-create-jest-runner@^0.12.0:
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/create-jest-runner/-/create-jest-runner-0.12.2.tgz#5b934d9a90a5b29ac56080139b9b913abb7a6ba2"
-  integrity sha512-laoTt/EHTa0MXXveZfwebaxprz1RdV5my2gvl01D3LcSb8nrXzfdflxHwkvwlcGt8/WO+i+MmEt7XBj++3e2jg==
-  dependencies:
-    chalk "^4.1.0"
-    jest-worker "^29.0.0"
-    p-limit "^3.1.0"
 
 create-jest@^29.7.0:
   version "29.7.0"
@@ -4032,16 +4011,6 @@ jest-resolve@^29.7.0:
     resolve.exports "^2.0.0"
     slash "^3.0.0"
 
-jest-runner-tsd@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/jest-runner-tsd/-/jest-runner-tsd-5.0.0.tgz#b388f28e7b47481e17fbc1961995b4d26cdb9cf0"
-  integrity sha512-vcjJX382rSuGUpySL+T8PuPbqKu+gv3ZeO2sdT/9vq1O+WcKH8/7q09x9CHt2lzMcKNhdhJ6tDMLClpHBildgw==
-  dependencies:
-    "@babel/code-frame" "^7.15.8"
-    chalk "^4.1.2"
-    create-jest-runner "^0.12.0"
-    tsd-lite "^0.7.0"
-
 jest-runner@^29.7.0:
   version "29.7.0"
   resolved "https://registry.yarnpkg.com/jest-runner/-/jest-runner-29.7.0.tgz#809af072d408a53dcfd2e849a4c976d3132f718e"
@@ -4172,16 +4141,6 @@ jest-watcher@^29.7.0:
     emittery "^0.13.1"
     jest-util "^29.7.0"
     string-length "^4.0.1"
-
-jest-worker@^29.0.0:
-  version "29.3.1"
-  resolved "https://registry.yarnpkg.com/jest-worker/-/jest-worker-29.3.1.tgz#e9462161017a9bb176380d721cab022661da3d6b"
-  integrity sha512-lY4AnnmsEWeiXirAIA0c9SDPbuCBq8IYuDVL8PMm0MZ2PEs2yPvRA/J64QBXuZp7CYKrDM/rmNrc9/i3KJQncw==
-  dependencies:
-    "@types/node" "*"
-    jest-util "^29.3.1"
-    merge-stream "^2.0.0"
-    supports-color "^8.0.0"
 
 jest-worker@^29.7.0:
   version "29.7.0"
@@ -6582,15 +6541,15 @@ ts-node@^10.8.1:
     v8-compile-cache-lib "^3.0.1"
     yn "3.1.1"
 
-tsd-lite@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/tsd-lite/-/tsd-lite-0.7.0.tgz#838b4cff49082802eb08158afe7875acd1d74d36"
-  integrity sha512-XhQ7w/RPzfjSb98LIQB1qx7yAvRV6+h5JFP4dCvd79Hbp23X8CCx4EdRAQm6faTkRdprKYvZE8kxlK6LpJp8vg==
-
 tslib@^2.4.0, tslib@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
+
+tstyche@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/tstyche/-/tstyche-1.0.0.tgz#e19f3829ccb25ef48334df0724b6f98dc298cebf"
+  integrity sha512-iIpktIBuWL0M+KgCO8TIgo+QGS+mD24ll+wAYCFsd8IkA3Lai0ETqGSilHo1PC59+2lf71qJmWShFZwMMH4i1g==
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"

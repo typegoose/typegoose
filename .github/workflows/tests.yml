@@ -16,7 +16,7 @@ permissions:
 jobs:
   tests:
     permissions:
-      contents: read  # for actions/checkout to fetch code
+      contents: read # for actions/checkout to fetch code
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -52,7 +52,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
   test-types:
     permissions:
-      contents: read  # for actions/checkout to fetch code
+      contents: read # for actions/checkout to fetch code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -69,12 +69,10 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
       - name: Test Types
-        run: yarn run test:types --colors
-        env:
-          CI: true
+        run: yarn run test:types
   publish:
     permissions:
-      contents: write  # for actions/checkout to fetch code and for semantic-release to push commits, release releases and tags
+      contents: write # for actions/checkout to fetch code and for semantic-release to push commits, release releases and tags
       issues: write # for semantic-release to comment on and close issues
       pull-requests: write # for semantic-release to comment on and close pull requests
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta' || startsWith(github.ref, 'refs/heads/old')
