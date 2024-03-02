@@ -58,9 +58,26 @@ By default typegoose sets the default for the option `type` (if not defined) to 
 :::
 
 :::note
-The generic-parameter `IDType` from `Ref` is not automatically inferred from the generic-parameter `Class` yet (may be in the future)  
 The option `type` is not automatically inferred at runtime, because this could cause more "Circular Dependency" issues.  
 See [Common Problems](#common-problems) for more.
+:::
+
+:::tip
+The generic-parameter `RawId` in [`Ref`](../../api/types/ref-type.md) is automatically inferred if the `PopulatedType` sets a `_id` property that is in `RefType`:
+
+```ts
+class Cat {
+  @prop()
+  public _id: string;
+}
+
+class Person {
+  @prop({ ref: () => Cat, type: () => String })
+  public pet?: Ref<Cat>;
+}
+```
+
+though remember that the `type` options **still** needs to be set!
 :::
 
 ## Population
