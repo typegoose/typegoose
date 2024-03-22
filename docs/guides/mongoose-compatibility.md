@@ -8,7 +8,8 @@ The version values use [npm's semver convention](https://www.npmjs.com/package/s
 If no upper mongoose version is defined and a newer typegoose version exists within the range of the lower typegoose version, take the next typegoose versions start point as the upper range (exclusive) for the lower typegoose version, this is because mongoose may break something (like types) even in patch versions.
 
 | Typegoose Version | Mongoose Version |
-| ----------------- | ---------------- |
+|-------------------|------------------|
+| 12.3.x            | ~8.2.3           |
 | 12.2.x            | ~8.2.0           |
 | 12.1.x            | ~8.1.0           |
 | 12.0.x            | ~8.0.1           |

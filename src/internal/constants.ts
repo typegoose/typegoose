@@ -20,6 +20,11 @@ export enum DecoratorKeys {
    */
   Index = 'typegoose:indexes',
   /**
+   * Storage location for Search Indexes
+   * -> Use only for a class
+   */
+  SearchIndex = 'typegoose:searchIndexes',
+  /**
    * Storage location for Plugins
    * -> Use only for a class
    */
