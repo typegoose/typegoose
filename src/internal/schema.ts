@@ -12,6 +12,7 @@ import type {
   IPluginsArray,
   NestedDiscriminatorsMap,
   QueryMethodMap,
+  SearchIndexDescription,
   VirtualPopulateMap,
 } from '../types';
 import { DecoratorKeys } from './constants';
@@ -86,6 +87,19 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
       for (const index of indices) {
         logger.debug('Applying Index:', index);
         sch.index(index.fields, index.options);
+      }
+    }
+  }
+
+  {
+    /** Get Metadata for Search Indices */
+    const searchIndices: SearchIndexDescription[] = Reflect.getOwnMetadata(DecoratorKeys.SearchIndex, cl);
+    const buildSearchIndexes = typeof extraOptions?.buildSearchIndexes === 'boolean' ? extraOptions?.buildSearchIndexes : true;
+
+    if (buildSearchIndexes && Array.isArray(searchIndices)) {
+      for (const index of searchIndices) {
+        logger.debug('Applying Search Index:', index);
+        sch.searchIndex(index);
       }
     }
   }
