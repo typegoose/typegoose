@@ -76,7 +76,7 @@
   "dependencies": {
     "lodash": "^4.17.20",
     "loglevel": "^1.9.1",
-    "reflect-metadata": "^0.2.1",
+    "reflect-metadata": "^0.2.2",
     "semver": "^7.6.0",
     "tslib": "^2.6.2"
   },
