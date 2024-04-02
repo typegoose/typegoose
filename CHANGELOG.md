@@ -1,3 +1,16 @@
+## [12.3.0-beta.2](https://github.com/typegoose/typegoose/compare/v12.3.0-beta.1...v12.3.0-beta.2) (2024-04-02)
+
+
+### Features
+
+* add support for declaring search indexes ([#921](https://github.com/typegoose/typegoose/issues/921)) ([5246241](https://github.com/typegoose/typegoose/commit/5246241dfa3c4e41e162c09d482aacba41b52a65))
+
+
+### Fixes
+
+* **typegoose:** update minimal node version check to match engines ([a07c9ee](https://github.com/typegoose/typegoose/commit/a07c9ee50282863a1f300ac603e1f9870927b5da))
+* **typegoose:** update mongoose version check for 8.2.4 ([f197dbe](https://github.com/typegoose/typegoose/commit/f197dbe99fd8d4b1f77bd6949d2c10d228eab4ed))
+
 ## [12.3.0-beta.1](https://github.com/typegoose/typegoose/compare/v12.2.0...v12.3.0-beta.1) (2024-03-30)
 
 
