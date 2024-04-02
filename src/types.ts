@@ -1,5 +1,5 @@
 import type * as mongoose from 'mongoose';
-import type { Severity, PropType } from './internal/constants';
+import type { PropType, Severity } from './internal/constants';
 
 /**
  * Get the Type of an instance of a Document with Class properties
@@ -519,6 +519,12 @@ export interface IBuildSchemaOptions {
    * @default true
    */
   buildIndexes?: boolean;
+
+  /**
+   * Add search indexes from this class?
+   * @default true
+   */
+  buildSearchIndexes?: boolean;
 }
 
 /** Type for the Values stored in the Reflection for Properties */
@@ -532,6 +538,7 @@ export interface DecoratedPropertyMetadata {
   /** What is it for a prop type? */
   propType?: PropType;
 }
+
 export type DecoratedPropertyMetadataMap = Map<string | symbol, DecoratedPropertyMetadata>;
 
 /**
@@ -543,13 +550,22 @@ export type IndexOptions = mongoose.IndexOptions;
  * Type for the Values stored in the Reflection for Indexes
  * @example
  * ```ts
- * const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, target) || []);
+ * const indices: IIndexArray[] = Reflect.getMetadata(DecoratorKeys.Index, target) || [];
  * ```
  */
 export interface IIndexArray {
   fields: KeyStringAny;
   options?: IndexOptions;
 }
+
+/**
+ * Type for the Values stored in the Reflection for Search Indexes
+ * @example
+ * ```ts
+ * const searchIndices: SearchIndexDescription[] = Reflect.getMetadata(DecoratorKeys.SearchIndex, target) || [];
+ * ```
+ */
+export type SearchIndexDescription = mongoose.SearchIndexDescription;
 
 /**
  * Type for the Values stored in the Reflection for Plugins

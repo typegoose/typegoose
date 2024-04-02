@@ -6,6 +6,7 @@ module.exports = {
       'api/decorators/model-options',
       'api/decorators/hooks',
       'api/decorators/indexes',
+      'api/decorators/searchIndexes',
       'api/decorators/plugin',
       'api/decorators/query-method',
     ],
