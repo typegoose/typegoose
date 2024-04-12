@@ -1,4 +1,4 @@
-import { expectType, expectAssignable, expectError } from 'tsd-lite';
+import { expectType, expectAssignable, expectNotAssignable } from 'tsd-lite';
 import * as typegoose from '../../../src/typegoose';
 import { isDocument, isRefType, prop } from '../../../src/typegoose';
 import { BeAnObject, BeAnyObject, IObjectWithTypegooseFunction } from '../../../src/types';
@@ -226,7 +226,7 @@ async function typeguards() {
   isRefType('string', String);
 
   // test errors
-  expectError<Parameters<typeof isDocument>[0]>({});
+  expectNotAssignable<Parameters<typeof isDocument>[0]>({});
 }
 
 typeguards();
