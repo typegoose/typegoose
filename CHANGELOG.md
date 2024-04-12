@@ -1,3 +1,15 @@
+## [12.4.0-beta.1](https://github.com/typegoose/typegoose/compare/v12.3.0...v12.4.0-beta.1) (2024-04-12)
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.3.1 ([a431d3a](https://github.com/typegoose/typegoose/commit/a431d3ab314346f770f276b873558ef151ee986c))
+
+
+### Dev-Dependencies
+
+* **jest-runner-tsd:** upgrade to 6.0.0 ([06ec544](https://github.com/typegoose/typegoose/commit/06ec544b28121a33eec994aaae977efbfd5c7fdd))
+
 ## [12.3.0](https://github.com/typegoose/typegoose/compare/v12.2.0...v12.3.0) (2024-04-06)
 
 
