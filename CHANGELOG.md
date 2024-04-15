@@ -10,6 +10,14 @@
 
 * **jest-runner-tsd:** upgrade to 6.0.0 ([06ec544](https://github.com/typegoose/typegoose/commit/06ec544b28121a33eec994aaae977efbfd5c7fdd))
 
+
+## [12.3.1](https://github.com/typegoose/typegoose/compare/v12.3.0...v12.3.1) (2024-04-15)
+
+
+### Fixes
+
+* **searchindex:** export "[@search](https://github.com/search)Index" in main entry point ([#930](https://github.com/typegoose/typegoose/issues/930)) ([9674e51](https://github.com/typegoose/typegoose/commit/9674e51cc940db9d20d4d233be06b197444c8229)), closes [#921](https://github.com/typegoose/typegoose/issues/921)
+
 ## [12.3.0](https://github.com/typegoose/typegoose/compare/v12.2.0...v12.3.0) (2024-04-06)
 
 

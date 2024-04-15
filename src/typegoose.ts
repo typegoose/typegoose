@@ -56,6 +56,7 @@ export * from './prop';
 export * from './hooks';
 export * from './plugin';
 export * from './indexes';
+export * from './searchIndexes';
 export * from './modelOptions';
 export * from './queryMethod';
 export * from './typeguards';
