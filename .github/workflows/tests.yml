@@ -13,6 +13,11 @@ on:
 permissions:
   contents: read
 
+env:
+  # Download mongodb binaries to ~/.cache/mongodb-binaries instead of local node_modules
+  # Used for separate cache
+  MONGOMS_PREFER_GLOBAL_PATH: true
+
 jobs:
   tests:
     permissions:
