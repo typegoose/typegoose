@@ -1,3 +1,17 @@
+## [12.5.0](https://github.com/typegoose/typegoose/compare/v12.4.0...v12.5.0) (2024-05-19)
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.4.0 ([7a3e65e](https://github.com/typegoose/typegoose/commit/7a3e65eca52e9ee7d3b8fd94ae2d336338d6fecc))
+* **semver:** upgrade to 7.6.2 ([877b7da](https://github.com/typegoose/typegoose/commit/877b7daa77b0099d88d901f9eb1107731aad9931))
+
+
+### Dev-Dependencies
+
+* **@types/lodash:** upgrade to 4.17.4 ([b4193fa](https://github.com/typegoose/typegoose/commit/b4193fa7b5c1cd4d170d8197379dbba21b82ad22))
+* **rimraf:** upgrade to 5.0.7 ([54559a3](https://github.com/typegoose/typegoose/commit/54559a362312deb889346f79340417008745ad27))
+
 ## [12.4.0](https://github.com/typegoose/typegoose/compare/v12.3.1...v12.4.0) (2024-04-22)
 
 
