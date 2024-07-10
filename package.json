@@ -61,7 +61,7 @@
     "lint-staged": "^14.0.1",
     "mongodb-memory-server": "^9.2.0",
     "mongoose": "~8.4.0",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.2",
     "rimraf": "^5.0.7",
     "ts-jest": "^29.1.2",
     "typescript": "~5.3.3"
