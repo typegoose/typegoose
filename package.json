@@ -68,7 +68,7 @@
     "mongodb-memory-server": "^9.0.1",
     "mongoose": "~7.6.3",
     "prettier": "^3.3.2",
-    "rimraf": "^5.0.5",
+    "rimraf": "^5.0.9",
     "semantic-release": "^19.0.5",
     "ts-jest": "^29.1.1",
     "typescript": "~4.9.5"
