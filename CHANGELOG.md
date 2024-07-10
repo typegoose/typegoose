@@ -1,3 +1,19 @@
+## [12.6.0](https://github.com/typegoose/typegoose/compare/v12.5.0...v12.6.0) (2024-07-10)
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.5.0 ([8f3e4f6](https://github.com/typegoose/typegoose/commit/8f3e4f6446d85783bc3fb8a89211a8c38062d5b4))
+* **tslib:** upgrade to 2.6.3 ([f299ccc](https://github.com/typegoose/typegoose/commit/f299cccf3ed9d0dd2fedc05babd8c7132afe3b8c))
+
+
+### Dev-Dependencies
+
+* **@types/lodash:** upgrade to 4.17.6 ([86b8a0f](https://github.com/typegoose/typegoose/commit/86b8a0f66e67dcb6be9c51c214865d916cbdf707))
+* **mongodb-memory-server:** upgrade to 9.4.0 ([578671e](https://github.com/typegoose/typegoose/commit/578671efa21a3d851f5fc4c78ad1590c7f6c4d08))
+* **prettier:** upgrade to 3.3.2 ([1f6ccb1](https://github.com/typegoose/typegoose/commit/1f6ccb1dfdfafa7fb89c06b60a3f15113e07d808))
+* **ts-jest:** upgrade to 29.2.1 ([f16d6f2](https://github.com/typegoose/typegoose/commit/f16d6f203388062775591f44bd2198491c5dfc34))
+
 ## [12.5.0](https://github.com/typegoose/typegoose/compare/v12.4.0...v12.5.0) (2024-05-19)
 
 
