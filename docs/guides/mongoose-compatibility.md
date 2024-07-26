@@ -16,6 +16,7 @@ If no upper mongoose version is defined and a newer typegoose version exists wit
 | 12.2.x            | ~8.2.0           |
 | 12.1.x            | ~8.1.0           |
 | 12.0.x            | ~8.0.1           |
+| 11.8.x            | ~7.8.0           |
 | 11.7.x            | ~7.6.3           |
 | 11.6.x            | ~7.6.1           |
 | 11.5.x            | ~7.5.0           |
