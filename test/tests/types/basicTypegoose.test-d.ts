@@ -1,24 +1,24 @@
-import { expectType, expectAssignable, expectNotAssignable } from 'tsd-lite';
+import { expect } from 'tstyche';
 import * as typegoose from '../../../src/typegoose';
 import { isDocument, isRefType, prop } from '../../../src/typegoose';
 import { BeAnObject, BeAnyObject, IObjectWithTypegooseFunction } from '../../../src/types';
 
 // decorators return type
-expectType<PropertyDecorator>(typegoose.prop());
-expectType<ClassDecorator>(typegoose.index({}));
-expectType<ClassDecorator>(typegoose.modelOptions({}));
-expectType<ClassDecorator>(typegoose.plugin(() => void 0));
-expectType<ClassDecorator>(typegoose.pre('save', () => void 0));
-expectType<ClassDecorator>(typegoose.post('save', () => void 0));
-expectType<ClassDecorator>(
+expect(typegoose.prop()).type.toBe<PropertyDecorator>();
+expect(typegoose.index({})).type.toBe<ClassDecorator>();
+expect(typegoose.modelOptions({})).type.toBe<ClassDecorator>();
+expect(typegoose.plugin(() => void 0)).type.toBe<ClassDecorator>();
+expect(typegoose.pre('save', () => void 0)).type.toBe<ClassDecorator>();
+expect(typegoose.post('save', () => void 0)).type.toBe<ClassDecorator>();
+expect(
   typegoose.queryMethod(function () {
     return this;
   })
-);
+).type.toBe<ClassDecorator>();
 
 // non mongoose related function return types
-expectType<void>(typegoose.setGlobalOptions({}));
-expectType<void>(typegoose.setLogLevel('DEBUG'));
+expect(typegoose.setGlobalOptions({})).type.toBeVoid();
+expect(typegoose.setLogLevel('DEBUG')).type.toBeVoid();
 
 // mongoose related function return types
 class TestClass {
@@ -28,10 +28,10 @@ class TestClass {
 
 const TestClassModel = typegoose.getModelForClass(TestClass);
 
-expectType<typegoose.ReturnModelType<typeof TestClass>>(typegoose.getModelForClass(TestClass));
-expectType<typegoose.ReturnModelType<typeof TestClass>>(typegoose.getDiscriminatorModelForClass(TestClassModel, TestClass));
-expectType<typegoose.mongoose.Schema<typegoose.DocumentType<InstanceType<typeof TestClass>>>>(typegoose.buildSchema(TestClass));
-expectType<typegoose.ReturnModelType<typeof TestClass>>(typegoose.addModelToTypegoose(TestClassModel, TestClass));
+expect(typegoose.getModelForClass(TestClass)).type.toBe<typegoose.ReturnModelType<typeof TestClass>>();
+expect(typegoose.getDiscriminatorModelForClass(TestClassModel, TestClass)).type.toBe<typegoose.ReturnModelType<typeof TestClass>>();
+expect(typegoose.buildSchema(TestClass)).type.toBe<typegoose.mongoose.Schema<typegoose.DocumentType<InstanceType<typeof TestClass>>>>();
+expect(typegoose.addModelToTypegoose(TestClassModel, TestClass)).type.toBe<typegoose.ReturnModelType<typeof TestClass>>();
 
 function testAutoInferRef() {
   class AutoObjectId {
@@ -67,33 +67,33 @@ function testAutoInferRef() {
   const AutoRefModel = typegoose.getModelForClass(AutoRef);
   const doc = new AutoRefModel({});
 
-  expectType<typegoose.Ref<AutoObjectId, typegoose.mongoose.Types.ObjectId>>(doc.objectid);
-  expectType<typegoose.Ref<AutoString, string>>(doc.string);
-  expectType<typegoose.Ref<AutoNumber, number>>(doc.number);
-  expectType<typegoose.Ref<AutoBuffer, typegoose.mongoose.Types.Buffer>>(doc.buffer);
+  expect(doc.objectid).type.toBe<typegoose.Ref<AutoObjectId, typegoose.mongoose.Types.ObjectId>>();
+  expect(doc.string).type.toBe<typegoose.Ref<AutoString, string>>();
+  expect(doc.number).type.toBe<typegoose.Ref<AutoNumber, number>>();
+  expect(doc.buffer).type.toBe<typegoose.Ref<AutoBuffer, typegoose.mongoose.Types.Buffer>>();
 
   if (isDocument(doc.objectid)) {
-    expectType<typegoose.DocumentType<AutoObjectId>>(doc.objectid);
+    expect(doc.objectid).type.toBe<typegoose.DocumentType<AutoObjectId>>();
   } else {
-    expectType<typegoose.mongoose.Types.ObjectId>(doc.objectid);
+    expect(doc.objectid).type.toBe<typegoose.mongoose.Types.ObjectId>();
   }
 
   if (isDocument(doc.string)) {
-    expectType<typegoose.DocumentType<AutoString>>(doc.string);
+    expect(doc.string).type.toBe<typegoose.DocumentType<AutoString>>();
   } else {
-    expectType<string>(doc.string);
+    expect(doc.string).type.toBeString();
   }
 
   if (isDocument(doc.number)) {
-    expectType<typegoose.DocumentType<AutoNumber>>(doc.number);
+    expect(doc.number).type.toBe<typegoose.DocumentType<AutoNumber>>();
   } else {
-    expectType<number>(doc.number);
+    expect(doc.number).type.toBeNumber();
   }
 
   if (isDocument(doc.buffer)) {
-    expectType<typegoose.DocumentType<AutoBuffer>>(doc.buffer);
+    expect(doc.buffer).type.toBe<typegoose.DocumentType<AutoBuffer>>();
   } else {
-    expectType<typegoose.mongoose.Types.Buffer>(doc.buffer);
+    expect(doc.buffer).type.toBe<typegoose.mongoose.Types.Buffer>();
   }
 }
 
@@ -121,10 +121,10 @@ async function typeguards() {
   // top-level tests
   {
     if (typegoose.isDocument(someNewDoc)) {
-      expectAssignable<typegoose.DocumentType<TypeguardsClass>>(someNewDoc);
+      expect(someNewDoc).type.toBeAssignableWith<typegoose.DocumentType<TypeguardsClass>>();
     } else {
       // this type is currently wrong, typescript cannot remove the case because the input is not restricted enough
-      expectAssignable<unknown>(someNewDoc);
+      expect<unknown>().type.toBeAssignableWith(someNewDoc);
     }
 
     if (typegoose.isRefType(someNewDoc, typegoose.mongoose.Types.ObjectId)) {
@@ -139,62 +139,62 @@ async function typeguards() {
     // isDocument
     {
       if (typegoose.isDocument(someNewDoc.refObjectId)) {
-        expectType<typegoose.DocumentType<TypeguardsClass>>(someNewDoc.refObjectId);
+        expect(someNewDoc.refObjectId).type.toBe<typegoose.DocumentType<TypeguardsClass>>();
       } else {
-        expectType<typegoose.mongoose.Types.ObjectId | undefined>(someNewDoc.refObjectId);
+        expect(someNewDoc.refObjectId).type.toBe<typegoose.mongoose.Types.ObjectId | undefined>();
       }
 
       if (typegoose.isDocument(someNewDoc.refString)) {
-        expectAssignable<typegoose.DocumentType<TypeguardsClass>>(someNewDoc.refString);
+        expect(someNewDoc.refString).type.toBeAssignableTo<typegoose.DocumentType<TypeguardsClass>>();
       } else {
-        expectType<string | undefined>(someNewDoc.refString);
+        expect(someNewDoc.refString).type.toBe<string | undefined>();
       }
     }
 
     // isDocumentArray
     {
       if (typegoose.isDocumentArray(someNewDoc.refObjectIdArray)) {
-        expectType<typegoose.DocumentType<TypeguardsClass>[]>(someNewDoc.refObjectIdArray);
+        expect(someNewDoc.refObjectIdArray).type.toBe<typegoose.DocumentType<TypeguardsClass>[]>();
       } else {
         // currently has to be multiple "| undefined" because of https://github.com/typegoose/typegoose/issues/730
-        expectType<typegoose.Ref<TypeguardsClass, typegoose.mongoose.Types.ObjectId>[] | undefined>(someNewDoc.refObjectIdArray);
+        expect(someNewDoc.refObjectIdArray).type.toBe<typegoose.Ref<TypeguardsClass, typegoose.mongoose.Types.ObjectId>[] | undefined>();
       }
 
       if (typegoose.isDocumentArray(someNewDoc.refStringArray)) {
-        expectType<typegoose.DocumentType<TypeguardsClass>[]>(someNewDoc.refStringArray);
+        expect(someNewDoc.refStringArray).type.toBe<typegoose.DocumentType<TypeguardsClass>[]>();
       } else {
-        expectType<typegoose.Ref<TypeguardsClass, string>[] | undefined>(someNewDoc.refStringArray);
+        expect(someNewDoc.refStringArray).type.toBe<typegoose.Ref<TypeguardsClass, string>[] | undefined>();
       }
     }
 
     // isRefType
     {
       if (typegoose.isRefType(someNewDoc.refObjectId, typegoose.mongoose.Types.ObjectId)) {
-        expectType<typegoose.mongoose.Types.ObjectId>(someNewDoc.refObjectId);
+        expect(someNewDoc.refObjectId).type.toBe<typegoose.mongoose.Types.ObjectId>();
       } else {
-        expectType<typegoose.DocumentType<TypeguardsClass> | undefined>(someNewDoc.refObjectId);
+        expect(someNewDoc.refObjectId).type.toBe<typegoose.DocumentType<TypeguardsClass> | undefined>();
       }
 
       if (typegoose.isRefType(someNewDoc.refString, String)) {
-        expectType<string>(someNewDoc.refString);
+        expect(someNewDoc.refString).type.toBeString();
       } else {
-        expectType<typegoose.DocumentType<TypeguardsClass> | undefined>(someNewDoc.refString);
+        expect(someNewDoc.refString).type.toBe<typegoose.DocumentType<TypeguardsClass> | undefined>();
       }
     }
 
     // isRefTypeArray
     {
       if (typegoose.isRefTypeArray(someNewDoc.refObjectIdArray, typegoose.mongoose.Types.ObjectId)) {
-        expectType<typegoose.mongoose.Types.ObjectId[]>(someNewDoc.refObjectIdArray);
+        expect(someNewDoc.refObjectIdArray).type.toBe<typegoose.mongoose.Types.ObjectId[]>();
       } else {
         // currently has to be multiple "| undefined" because of https://github.com/typegoose/typegoose/issues/730
-        expectType<typegoose.Ref<TypeguardsClass, typegoose.mongoose.Types.ObjectId>[] | undefined>(someNewDoc.refObjectIdArray);
+        expect(someNewDoc.refObjectIdArray).type.toBe<typegoose.Ref<TypeguardsClass, typegoose.mongoose.Types.ObjectId>[] | undefined>();
       }
 
       if (typegoose.isRefTypeArray(someNewDoc.refStringArray, String)) {
-        expectType<string[]>(someNewDoc.refStringArray);
+        expect(someNewDoc.refStringArray).type.toBe<string[]>();
       } else {
-        expectType<typegoose.Ref<TypeguardsClass, string>[] | undefined>(someNewDoc.refStringArray);
+        expect(someNewDoc.refStringArray).type.toBe<typegoose.Ref<TypeguardsClass, string>[] | undefined>();
       }
     }
   }
@@ -204,10 +204,10 @@ async function typeguards() {
   // top-level tests
   {
     if (typegoose.isDocument(someFoundDoc)) {
-      expectAssignable<typegoose.DocumentType<TypeguardsClass>>(someFoundDoc);
+      expect(someFoundDoc).type.toBeAssignableTo<typegoose.DocumentType<TypeguardsClass>>();
     } else {
       // this type is currently wrong, typescript cannot remove the case because the input is not restricted enough
-      expectAssignable<unknown>(someFoundDoc);
+      expect(someFoundDoc).type.toBeAssignableTo<unknown>();
     }
 
     if (typegoose.isRefType(someFoundDoc, typegoose.mongoose.Types.ObjectId)) {
@@ -226,7 +226,7 @@ async function typeguards() {
   isRefType('string', String);
 
   // test errors
-  expectNotAssignable<Parameters<typeof isDocument>[0]>({});
+  expect<Parameters<typeof isDocument>[0]>().type.not.toBeAssignableWith({});
 }
 
 typeguards();
@@ -234,17 +234,23 @@ typeguards();
 async function testDocumentType() {
   const someNewDoc = new TestClassModel();
 
-  expectType<typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>>(someNewDoc);
+  expect(someNewDoc).type.toBe<typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>>();
 
   const someCreatedDoc = await TestClassModel.create();
 
-  expectType<typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>[]>(someCreatedDoc);
+  expect(someCreatedDoc).type.toBe<
+    typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>[]
+  >();
 
   const someFoundDoc = await TestClassModel.findOne();
 
-  expectType<typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject> | null>(someFoundDoc);
+  expect(someFoundDoc).type.toBe<typegoose.mongoose.HydratedDocument<
+    TestClass,
+    IObjectWithTypegooseFunction & BeAnyObject,
+    BeAnObject
+  > | null>();
 
-  expectType<typegoose.mongoose.Types.ObjectId>(someNewDoc._id);
+  expect(someNewDoc._id).type.toBe<typegoose.mongoose.Types.ObjectId>();
 }
 
 testDocumentType();
@@ -262,17 +268,17 @@ async function gh732() {
 
   const doc = await SomeClassModel.create({ someoptionalProp: 'helloopt', somerequiredProp: 'helloreq' });
 
-  expectType<typegoose.mongoose.HydratedDocument<SomeClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>>(doc);
+  expect(doc).type.toBe<typegoose.mongoose.HydratedDocument<SomeClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>>();
 
   const toobj = doc.toObject();
   const tojson = doc.toJSON();
 
-  expectType<
+  expect(toobj).type.toBe<
     SomeClass & { _id: typegoose.mongoose.Types.ObjectId } & Required<{
         _id: typegoose.mongoose.Types.ObjectId;
       }>
-  >(toobj);
-  expectType<typegoose.mongoose.FlattenMaps<SomeClass & { _id: typegoose.mongoose.Types.ObjectId }>>(tojson);
+  >();
+  expect(tojson).type.toBe<typegoose.mongoose.FlattenMaps<SomeClass & { _id: typegoose.mongoose.Types.ObjectId }>>();
 }
 
 gh732();
@@ -281,36 +287,36 @@ function postHookErrorOption() {
   @typegoose.post<TestErrorOption>(
     'countDocuments',
     function (...args) {
-      expectType<NativeError>(args[0]);
-      expectType<any>(args[1]);
-      expectType<typegoose.mongoose.CallbackWithoutResultAndOptionalError>(args[2]);
+      expect(args[0]).type.toBe<NativeError>();
+      expect(args[1]).type.toBeAny();
+      expect(args[2]).type.toBe<typegoose.mongoose.CallbackWithoutResultAndOptionalError>();
     },
     { errorHandler: true }
   )
   @typegoose.post<TestErrorOption>(
     'deleteOne',
     function (...args) {
-      expectType<NativeError>(args[0]);
-      expectType<any>(args[1]);
-      expectType<typegoose.mongoose.CallbackWithoutResultAndOptionalError>(args[2]);
+      expect(args[0]).type.toBe<NativeError>();
+      expect(args[1]).type.toBeAny();
+      expect(args[2]).type.toBe<typegoose.mongoose.CallbackWithoutResultAndOptionalError>();
     },
     { errorHandler: true }
   )
   @typegoose.post(
     'aggregate',
     function (...args) {
-      expectType<NativeError>(args[0]);
-      expectType<any[]>(args[1]);
-      expectType<typegoose.mongoose.CallbackWithoutResultAndOptionalError>(args[2]);
+      expect(args[0]).type.toBe<NativeError>();
+      expect(args[1]).type.toBe<any[]>();
+      expect(args[2]).type.toBe<typegoose.mongoose.CallbackWithoutResultAndOptionalError>();
     },
     { errorHandler: true }
   )
   @typegoose.post<typeof TestErrorOption>(
     'insertMany',
     function (...args) {
-      expectType<NativeError>(args[0]);
-      expectType<any>(args[1]);
-      expectType<typegoose.mongoose.CallbackWithoutResultAndOptionalError>(args[2]);
+      expect(args[0]).type.toBe<NativeError>();
+      expect(args[1]).type.toBeAny();
+      expect(args[2]).type.toBe<typegoose.mongoose.CallbackWithoutResultAndOptionalError>();
     },
     { errorHandler: true }
   )
@@ -323,14 +329,14 @@ function preHookExplicitDocumentQuery() {
   @typegoose.pre<TestExplicitOption>(
     'save',
     function () {
-      expectType<typegoose.mongoose.HydratedDocument<typegoose.DocumentType<TestExplicitOption>>>(this);
+      expect(this).type.toBe<typegoose.mongoose.HydratedDocument<typegoose.DocumentType<TestExplicitOption>>>();
     },
     { document: true }
   )
   @typegoose.pre(
     'updateOne',
     function () {
-      expectType<boolean>(this.isNew);
+      expect(this.isNew).type.toBeBoolean();
     },
     { document: true, query: false }
   )
@@ -405,7 +411,7 @@ function testFilterFunctionsType() {
     public refArr?: typegoose.Ref<Nested>[];
   }
 
-  expectType<{
+  expect<Pick<Root, keyof Root>>().type.toBe<{
     ref?: typegoose.types.Ref<Nested, typegoose.mongoose.Types.ObjectId> | undefined;
     test: (v: string) => void;
     primitive?: string | undefined;
@@ -414,9 +420,9 @@ function testFilterFunctionsType() {
     nestArr?: Nested[] | undefined;
     refArr?: typegoose.types.Ref<Nested>[] | undefined;
     testy: string;
-  }>(undefined as any as Pick<Root, keyof Root>);
+  }>();
 
-  expectType<{
+  expect<typegoose.types.FilterOutFunctionKeys<Root>>().type.toBe<{
     ref?: typegoose.types.Ref<Nested, typegoose.mongoose.Types.ObjectId> | undefined;
     // test: (v: string) => void;
     primitive?: string | undefined;
@@ -425,7 +431,7 @@ function testFilterFunctionsType() {
     nestArr?: Nested[] | undefined;
     refArr?: typegoose.types.Ref<Nested>[] | undefined;
     testy: string;
-  }>(undefined as any as typegoose.types.FilterOutFunctionKeys<Root>);
+  }>();
 }
 
 testFilterFunctionsType();
@@ -437,27 +443,27 @@ async function queryhelpers() {
   }
 
   function findByName(this: typegoose.types.QueryHelperThis<typeof QueryMethodsClass, FindHelpers>, name: string) {
-    expectType<
+    expect(this).type.toBe<
       typegoose.mongoose.QueryWithHelpers<
         typegoose.DocumentType<QueryMethodsClass, FindHelpers> | null,
         typegoose.DocumentType<QueryMethodsClass, FindHelpers>,
         FindHelpers,
         QueryMethodsClass
       >
-    >(this);
+    >();
 
     return this.find({ name });
   }
 
   function findByLastname(this: typegoose.types.QueryHelperThis<typeof QueryMethodsClass, FindHelpers>, lastname: string) {
-    expectType<
+    expect(this).type.toBe<
       typegoose.mongoose.QueryWithHelpers<
         typegoose.DocumentType<QueryMethodsClass, FindHelpers> | null,
         typegoose.DocumentType<QueryMethodsClass, FindHelpers>,
         FindHelpers,
         QueryMethodsClass
       >
-    >(this);
+    >();
 
     return this.find({ lastname });
   }
@@ -476,19 +482,19 @@ async function queryhelpers() {
 
   const doc = await QueryMethodsModel.create({ name: 'hello', lastname: 'world' });
 
-  expectType<string>(doc.name);
-  expectType<string>(doc.lastname);
+  expect(doc.name).type.toBeString();
+  expect(doc.lastname).type.toBeString();
 
   const found = await QueryMethodsModel.find().findByName('hello').findByLastname('world').orFail().exec();
 
-  expectType<string>(found[0].name);
-  expectType<string>(found[0].lastname);
+  expect(found[0].name).type.toBeString();
+  expect(found[0].lastname).type.toBeString();
 
-  expectType<typegoose.types.DocumentType<QueryMethodsClass, FindHelpers>[]>(found);
+  expect(found).type.toBe<typegoose.types.DocumentType<QueryMethodsClass, FindHelpers>[]>();
 
   const found2 = await QueryMethodsModel.find().findByName('hello');
 
-  expectType<typegoose.types.DocumentType<QueryMethodsClass, FindHelpers>[]>(found2);
+  expect(found2).type.toBe<typegoose.types.DocumentType<QueryMethodsClass, FindHelpers>[]>();
 }
 
 queryhelpers();
