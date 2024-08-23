@@ -216,7 +216,7 @@ export interface BasePropOptions {
    */
   alias?: mongoose.SchemaTypeOptions<any>['alias'];
   /**
-   * This option as only an effect when the plugin `mongoose-autopopulate` is used
+   * This option has only an effect when the plugin `mongoose-autopopulate` is used
    */
   // eslint-disable-next-line @typescript-eslint/ban-types
   autopopulate?: boolean | Function | KeyStringAny;
