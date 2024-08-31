@@ -1,3 +1,27 @@
+## [12.7.0](https://github.com/typegoose/typegoose/compare/v12.6.0...v12.7.0) (2024-08-31)
+
+
+### Style
+
+* **types:** fix typo in BasePropOptions's autopopulate description ([#952](https://github.com/typegoose/typegoose/issues/952)) ([8613414](https://github.com/typegoose/typegoose/commit/8613414dd0bbb7599e327fb1990527792f346ba9))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.6.0 ([d3cc8c0](https://github.com/typegoose/typegoose/commit/d3cc8c0436eeb3e49c25af9169e1bd74d0785b51))
+* **semver:** upgrade to 7.6.3 ([52c01b7](https://github.com/typegoose/typegoose/commit/52c01b72d8e5bdde967558063c7302d4432685ff))
+* **tslib:** upgrade to 2.7.0 ([6cb1d44](https://github.com/typegoose/typegoose/commit/6cb1d44025d732c04badfbf99df9bc165899eb35))
+
+
+### Dev-Dependencies
+
+* **@types/lodash:** upgrade to 4.17.7 ([5ee6344](https://github.com/typegoose/typegoose/commit/5ee63440a4403ef398f0fabe92e061b89d565720))
+* **eslint-plugin-prettier:** upgrade to 5.2.1 ([37a6774](https://github.com/typegoose/typegoose/commit/37a67747bf096c471fc27192867af3eec3ea7607))
+* **mongodb-memory-server:** upgrade to 10.0.0 ([f3097dd](https://github.com/typegoose/typegoose/commit/f3097dd7fa09f5c7da7ffa34eab364d71b513a8c))
+* **prettier:** upgrade to 3.3.3 ([f05c6d3](https://github.com/typegoose/typegoose/commit/f05c6d34edcb0f87b5a6c8e288296aa01a92bde6))
+* **rimraf:** upgrade to 5.0.10 ([357b04f](https://github.com/typegoose/typegoose/commit/357b04ff90dc1c81e74df7fac28018c480faf621))
+* **ts-jest:** upgrade to 29.2.5 ([8ba7a22](https://github.com/typegoose/typegoose/commit/8ba7a225ddd877f2ea76700076b8c8edc63e878e))
+
 ## [12.6.0](https://github.com/typegoose/typegoose/compare/v12.5.0...v12.6.0) (2024-07-10)
 
 
