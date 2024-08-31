@@ -69,7 +69,7 @@
     "lodash": "^4.17.20",
     "loglevel": "^1.9.1",
     "reflect-metadata": "^0.2.2",
-    "semver": "^7.6.2",
+    "semver": "^7.6.3",
     "tslib": "^2.6.3"
   },
   "publishConfig": {
