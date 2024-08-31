@@ -60,7 +60,7 @@
     "mongodb-memory-server": "^9.4.0",
     "mongoose": "~8.5.0",
     "prettier": "^3.3.3",
-    "rimraf": "^5.0.7",
+    "rimraf": "^5.0.10",
     "ts-jest": "^29.2.5",
     "tstyche": "^2.1.1",
     "typescript": "~5.3.3"
