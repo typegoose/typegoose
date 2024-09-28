@@ -1,3 +1,19 @@
+## [12.8.0](https://github.com/typegoose/typegoose/compare/v12.7.0...v12.8.0) (2024-09-28)
+
+
+### Dependencies
+
+* **loglevel:** upgrade to 1.9.2 ([42d34c6](https://github.com/typegoose/typegoose/commit/42d34c6745380a61eb047fffc74241961b429e24))
+* **mongoose:** upgrade to 8.7.0 ([d25ddf4](https://github.com/typegoose/typegoose/commit/d25ddf4c222954eb9be6c7a28e29d83bdcd3a1ed))
+
+
+### Dev-Dependencies
+
+* **@types/jest:** upgrade to 29.5.13 ([8f737fc](https://github.com/typegoose/typegoose/commit/8f737fc6e777828619527315ae6f776015836a31))
+* **@types/lodash:** upgrade to 4.17.9 ([be6aba1](https://github.com/typegoose/typegoose/commit/be6aba180879bab68b12e5e6768a84025fe02d95))
+* **eslint:** upgrade to 8.57.1 ([a3a08e3](https://github.com/typegoose/typegoose/commit/a3a08e384a7dd79a013c479c5c883f786f982662))
+* **mongodb-memory-server:** upgrade to 10.0.1 ([5464812](https://github.com/typegoose/typegoose/commit/546481203dd1c24dcf8292c20af6d735dd7326c4))
+
 ## [12.7.0](https://github.com/typegoose/typegoose/compare/v12.6.0...v12.7.0) (2024-08-31)
 
 
