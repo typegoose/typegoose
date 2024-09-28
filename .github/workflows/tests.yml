@@ -106,13 +106,13 @@ jobs:
         with:
           # dry_run: true
           extra_plugins: |
-            @semantic-release/git
-            @semantic-release/changelog
-            @semantic-release/commit-analyzer
-            @semantic-release/release-notes-generator
-            @semantic-release/github
-            @semantic-release/npm
-            @commitlint/config-conventional
+            @semantic-release/git@10.x
+            @semantic-release/changelog@6.x
+            @semantic-release/commit-analyzer@13.x
+            @semantic-release/release-notes-generator@14.x
+            @semantic-release/github@10.x
+            @semantic-release/npm@12.x
+            @commitlint/config-conventional@19.x
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
