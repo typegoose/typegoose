@@ -3502,10 +3502,10 @@ mongodb-connection-string-url@^3.0.0:
     "@types/whatwg-url" "^11.0.2"
     whatwg-url "^13.0.0"
 
-mongodb-memory-server-core@10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-10.0.0.tgz#50dc79ba92fbe40bbff64f89a876d4e92a5cc91a"
-  integrity sha512-AdYi4nVqe3Pk95fRJ+DegbDdEfAG9wujNsVvJWbwh8+ZJd+d3JJK1PHxRyJ9rMvoczvlli5M30eMig7zBuF5pQ==
+mongodb-memory-server-core@10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-10.0.1.tgz#f227ece12c1fd2dfc8c6c6ad0511b5ff3d677222"
+  integrity sha512-sJGqoS3saNNJKQjocrqxRISUP6g2N6/D+k1JEqKYo2p9YzUOOvEopxROyvBlqkiVa67/vdf2FV4v+rOvNIHURg==
   dependencies:
     async-mutex "^0.5.0"
     camelcase "^6.3.0"
@@ -3520,12 +3520,12 @@ mongodb-memory-server-core@10.0.0:
     tslib "^2.6.3"
     yauzl "^3.1.3"
 
-mongodb-memory-server@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-10.0.0.tgz#14aeba6b0f8b379404a732d66d17b756c3d36133"
-  integrity sha512-7Geo/s4lst/QHw+N8/stdnyb08xn68O0zbSee62jgoPfWOXfSPhX9a8OvyOY/o23oYk9ra2EpA2Oejenb3JKfw==
+mongodb-memory-server@^10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-10.0.1.tgz#becb660ee406c99f6a1bc5d17a3bd20a3bf63d9a"
+  integrity sha512-Zoeel0Hn+vPuFESoLJvaHyblu7gWl7hwxsMljetzhEnR7NWaUIvaP7FIu/EKu55Owks8PiuxReKflJWqARbLDw==
   dependencies:
-    mongodb-memory-server-core "10.0.0"
+    mongodb-memory-server-core "10.0.1"
     tslib "^2.6.3"
 
 mongodb@6.8.0, mongodb@^6.7.0:
