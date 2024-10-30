@@ -15,7 +15,7 @@ import type { PropType, Severity } from './internal/constants';
  * ```
  */
 export type DocumentType<T, QueryHelpers = BeAnObject> = mongoose.Document<unknown, QueryHelpers, T> &
-  mongoose.Require_id<T> &
+  mongoose.Default__v<mongoose.Require_id<T>> &
   IObjectWithTypegooseFunction;
 /**
  * Get the Type of an instance of a SubDocument with Class properties
