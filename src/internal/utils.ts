@@ -662,7 +662,7 @@ export function createArrayFromDimensions(rawOptions: any, extra: any, name: str
  */
 export function assertion(cond: any, error?: Error | DeferredFunc<Error>): asserts cond {
   if (!cond) {
-    throw typeof error === 'function' ? error() : error ?? new AssertionFallbackError();
+    throw typeof error === 'function' ? error() : (error ?? new AssertionFallbackError());
   }
 }
 
