@@ -1,3 +1,23 @@
+## [12.9.0-beta.1](https://github.com/typegoose/typegoose/compare/v12.8.0...v12.9.0-beta.1) (2024-11-03)
+
+
+### Fixes
+
+* **types:** add "Default__v" type because of mongoose 8.8 ([a3d1477](https://github.com/typegoose/typegoose/commit/a3d147796baa0e771d35bd81ee0e11e22a3740c8))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.8.0 ([306bcdd](https://github.com/typegoose/typegoose/commit/306bcdd9a63856a3f4f92d4409befc6cfc5eb52a))
+* **tslib:** upgrade to 2.8.1 ([add96f5](https://github.com/typegoose/typegoose/commit/add96f558742aa7c061066cc636f97ec142d3d29))
+
+
+### Dev-Dependencies
+
+* **@types/jest:** upgrade to 29.5.14 ([ea96773](https://github.com/typegoose/typegoose/commit/ea9677376d94f7313088809a30c3a230f1f5f3c5))
+* **@types/lodash:** upgrade to 4.17.13 ([25a1446](https://github.com/typegoose/typegoose/commit/25a14466d57275b1b6800df004ac5eed230b0a25))
+* **mongodb-memory-server:** upgrade to 10.1.2 ([279b598](https://github.com/typegoose/typegoose/commit/279b5982ef6700385c22413f305825f1da99253d))
+
 ## [12.8.0](https://github.com/typegoose/typegoose/compare/v12.7.0...v12.8.0) (2024-09-28)
 
 
