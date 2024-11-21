@@ -1,3 +1,10 @@
+## [11.8.1](https://github.com/typegoose/typegoose/compare/v11.8.0...v11.8.1) (2024-11-21)
+
+
+### Fixes
+
+* **typegoose:** move "parseENV" call before loading defaultclasses ([4ab2073](https://github.com/typegoose/typegoose/commit/4ab207346a97bfcec1909c5a783c8479acc5548e)), closes [#939](https://github.com/typegoose/typegoose/issues/939) [#issuecomment-2490189922](https://github.com/typegoose/typegoose/issues/issuecomment-2490189922)
+
 ## [11.8.0](https://github.com/typegoose/typegoose/compare/v11.7.1...v11.8.0) (2024-07-26)
 
 
