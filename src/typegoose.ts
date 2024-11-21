@@ -48,6 +48,8 @@ import type {
 } from './types';
 import { CacheDisabledError, ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
 
+parseENV(); // call this before anything to ensure they are applied (including before defaultclasses)
+
 /* exports */
 // export the internally used "mongoose", to not need to always import it
 export { mongoose, setGlobalOptions };
@@ -66,8 +68,6 @@ export * as types from './types';
 export { DocumentType, Ref, ReturnModelType, SubDocumentType, ArraySubDocumentType };
 export { getClass, getName } from './internal/utils';
 export { Severity, PropType } from './internal/constants';
-
-parseENV(); // call this before anything to ensure they are applied
 
 /**
  * Build a Model From a Class
