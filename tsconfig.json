@@ -17,7 +17,8 @@
     "importHelpers": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "esModuleInterop": true
   },
   "include": [
     "src/**/*.ts",
