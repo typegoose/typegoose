@@ -24,6 +24,8 @@
     "test/**/*.ts",
     "*.js",
     ".*.js",
+    "*.cjs",
+    ".*.cjs",
     "website/**/*.js",
     "scripts/**/*.js"
   ],
