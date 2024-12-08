@@ -11,8 +11,10 @@
   "files": [
     "lib/**/*.js",
     "lib/**/*.d.ts",
+    "lib/package.json",
     "esm/**/*.js",
-    "esm/**/*.d.ts"
+    "esm/**/*.d.ts",
+    "esm/package.json"
   ],
   "type": "module",
   "exports": {
@@ -22,8 +24,8 @@
     }
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "build:esm": "tsc -p tsconfig.build_esm.json",
+    "build": "tsc -p tsconfig.build.json && cp stubs/cjs-package.json lib/package.json",
+    "build:esm": "tsc -p tsconfig.build_esm.json && cp stubs/mjs-package.json esm/package.json",
     "build:tests": "tsc -p tsconfig.buildTests.json",
     "lint": "eslint -c ./.eslintrc.cjs \"./**/*.{js,ts,cjs,mjs,cts,mts}\"",
     "test": "jest",
