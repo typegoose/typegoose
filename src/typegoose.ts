@@ -1,5 +1,5 @@
 /* imports */
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import 'reflect-metadata';
 import * as semver from 'semver';
 import {
