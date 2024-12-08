@@ -161,6 +161,7 @@ $RECYCLE.BIN/
 build
 .env
 lib
+esm
 
 # ts's build info
 .tsbuildinfo

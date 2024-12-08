@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "test/**/*.ts",
+    "*.js"
+  ],
+  "compilerOptions": {
+    "outDir": "esm",
+    "module": "Node16",
+    "moduleResolution": "node16"
+  }
+}

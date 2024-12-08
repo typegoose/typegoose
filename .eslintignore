@@ -1,5 +1,6 @@
 flow-typed/*
 lib/*
+esm/*
 build/*
 #website/* #don't ignore website (like sidebars.js)
 website/build/*
