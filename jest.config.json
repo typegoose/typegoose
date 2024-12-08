@@ -28,6 +28,9 @@
   "setupFilesAfterEnv": [
     "<rootDir>/test/setupFile.ts"
   ],
+  "moduleNameMapper": {
+    "^(\\.{1,2}\\/.*)\\.js$": "$1"
+  },
   "snapshotFormat": {
     "escapeString": true,
     "printBasicPrototype": true
