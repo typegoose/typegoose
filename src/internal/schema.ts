@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import { logger } from '../logSettings';
-import { buildSchema } from '../typegoose';
+import { logger } from '../logSettings.js';
+import { buildSchema } from '../typegoose.js';
 import type {
   AnyParamConstructor,
   DecoratedPropertyMetadataMap,
@@ -14,12 +14,20 @@ import type {
   QueryMethodMap,
   SearchIndexDescription,
   VirtualPopulateMap,
-} from '../types';
-import { DecoratorKeys } from './constants';
-import { constructors } from './data';
-import { NoDiscriminatorFunctionError, PathNotInSchemaError } from './errors';
-import { processProp } from './processProp';
-import { assertion, assertionIsClass, getCachedSchema, getMergedModelOptions, getName, isCachingEnabled, isNullOrUndefined } from './utils';
+} from '../types.js';
+import { DecoratorKeys } from './constants.js';
+import { constructors } from './data.js';
+import { NoDiscriminatorFunctionError, PathNotInSchemaError } from './errors.js';
+import { processProp } from './processProp.js';
+import {
+  assertion,
+  assertionIsClass,
+  getCachedSchema,
+  getMergedModelOptions,
+  getName,
+  isCachingEnabled,
+  isNullOrUndefined,
+} from './utils.js';
 
 /**
  * Internal Schema Builder for Classes

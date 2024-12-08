@@ -1,7 +1,7 @@
-import { DecoratorKeys } from './internal/constants';
-import { getName } from './internal/utils';
-import { logger } from './logSettings';
-import type { Func, IPluginsArray } from './types';
+import { DecoratorKeys } from './internal/constants.js';
+import { getName } from './internal/utils.js';
+import { logger } from './logSettings.js';
+import type { Func, IPluginsArray } from './types.js';
 
 /**
  * Add a mongoose Middleware-Plugin

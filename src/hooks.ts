@@ -21,11 +21,11 @@ import type {
   MongooseQueryAndDocumentMiddleware,
   InsertManyOptions,
 } from 'mongoose';
-import { DecoratorKeys } from './internal/constants';
-import { ExpectedTypeError } from './internal/errors';
-import { assertion, getName } from './internal/utils';
-import { logger } from './logSettings';
-import type { AnyParamConstructor, DocumentType, HookOptionsEither, IHooksArray, ReturnModelType } from './types';
+import { DecoratorKeys } from './internal/constants.js';
+import { ExpectedTypeError } from './internal/errors.js';
+import { assertion, getName } from './internal/utils.js';
+import { logger } from './logSettings.js';
+import type { AnyParamConstructor, DocumentType, HookOptionsEither, IHooksArray, ReturnModelType } from './types.js';
 
 /** Type copied from mongoose, because it is not exported but used in hooks */
 type QueryResultType<T> = T extends Query<infer ResultType, any> ? ResultType : never;

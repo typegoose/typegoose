@@ -1,6 +1,6 @@
 import lodash from 'lodash';
 import mongoose from 'mongoose';
-import { logger } from '../logSettings';
+import { logger } from '../logSettings.js';
 import type {
   AnyParamConstructor,
   DecoratedPropertyMetadataMap,
@@ -16,9 +16,9 @@ import type {
   PropOptionsForNumber,
   PropOptionsForString,
   VirtualOptions,
-} from '../types';
-import { AlreadyMerged, DecoratorKeys, Severity } from './constants';
-import { constructors, globalOptions } from './data';
+} from '../types.js';
+import { AlreadyMerged, DecoratorKeys, Severity } from './constants.js';
+import { constructors, globalOptions } from './data.js';
 import {
   AssertionFallbackError,
   CacheDisabledError,
@@ -26,7 +26,7 @@ import {
   NoValidClassError,
   ResolveTypegooseNameError,
   StringLengthExpectedError,
-} from './errors';
+} from './errors.js';
 
 /**
  * Returns true, if the type is included in mongoose.Schema.Types
