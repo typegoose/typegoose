@@ -14,7 +14,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "build:tests": "tsc -p tsconfig.buildTests.json",
-    "lint": "eslint -c ./.eslintrc.js \"./**/*.{js,ts,cjs,mjs,cts,mts}\"",
+    "lint": "eslint -c ./.eslintrc.cjs \"./**/*.{js,ts,cjs,mjs,cts,mts}\"",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
