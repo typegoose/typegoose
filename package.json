@@ -4,6 +4,7 @@
   "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
   "types": "lib/typegoose.d.ts",
+  "type": "commonjs",
   "engines": {
     "node": ">=16.20.1"
   },
