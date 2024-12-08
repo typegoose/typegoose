@@ -10,10 +10,20 @@
   },
   "files": [
     "lib/**/*.js",
-    "lib/**/*.d.ts"
+    "lib/**/*.d.ts",
+    "esm/**/*.js",
+    "esm/**/*.d.ts"
   ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./esm/typegoose.js",
+      "require": "./lib/typegoose.js"
+    }
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "build:esm": "tsc -p tsconfig.build_esm.json",
     "build:tests": "tsc -p tsconfig.buildTests.json",
     "lint": "eslint -c ./.eslintrc.cjs \"./**/*.{js,ts,cjs,mjs,cts,mts}\"",
     "test": "jest",
@@ -22,7 +32,7 @@
     "test:watchCoverage": "jest --collectCoverage --watchAll",
     "test:types": "tstyche",
     "watch": "tsc -w -p tsconfig.buildTests.json",
-    "clean": "rimraf lib .tsbuildinfo coverage doc build",
+    "clean": "rimraf lib esm .tsbuildinfo coverage doc build",
     "prepare": "husky install",
     "website": "yarn --cwd website/ run start"
   },
