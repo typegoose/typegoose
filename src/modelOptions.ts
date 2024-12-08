@@ -1,6 +1,6 @@
-import { DecoratorKeys } from './internal/constants';
-import { assignGlobalModelOptions, assignMetadata } from './internal/utils';
-import type { IModelOptions } from './types';
+import { DecoratorKeys } from './internal/constants.js';
+import { assignGlobalModelOptions, assignMetadata } from './internal/utils.js';
+import type { IModelOptions } from './types.js';
 
 /**
  * Define Options for the Class

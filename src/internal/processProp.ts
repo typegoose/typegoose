@@ -1,5 +1,5 @@
-import { logger } from '../logSettings';
-import { buildSchema, mongoose, Passthrough } from '../typegoose';
+import { logger } from '../logSettings.js';
+import { buildSchema, mongoose, Passthrough } from '../typegoose.js';
 import type {
   AnyParamConstructor,
   DiscriminatorObject,
@@ -9,8 +9,8 @@ import type {
   NestedDiscriminatorsMap,
   ProcessPropOptions,
   VirtualPopulateMap,
-} from '../types';
-import { DecoratorKeys, PropType } from './constants';
+} from '../types.js';
+import { DecoratorKeys, PropType } from './constants.js';
 import {
   CannotBeSymbolError,
   InvalidEnumTypeError,
@@ -24,8 +24,8 @@ import {
   SelfContainingClassError,
   StringLengthExpectedError,
   DuplicateOptionsError,
-} from './errors';
-import * as utils from './utils';
+} from './errors.js';
+import * as utils from './utils.js';
 
 /**
  * Function that is the actual processing of the prop's (used for caching)

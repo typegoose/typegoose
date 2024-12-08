@@ -1,7 +1,7 @@
-import { DecoratorKeys } from './internal/constants';
-import { getName } from './internal/utils';
-import { logger } from './logSettings';
-import type { SearchIndexDescription } from './types';
+import { DecoratorKeys } from './internal/constants.js';
+import { getName } from './internal/utils.js';
+import { logger } from './logSettings.js';
+import type { SearchIndexDescription } from './types.js';
 
 /**
  * Defines a search index for this Class which will then be added to the Schema.

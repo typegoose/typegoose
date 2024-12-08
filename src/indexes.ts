@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import { DecoratorKeys } from './internal/constants';
-import { getName } from './internal/utils';
-import { logger } from './logSettings';
-import type { IIndexArray, IndexOptions } from './types';
+import { DecoratorKeys } from './internal/constants.js';
+import { getName } from './internal/utils.js';
+import { logger } from './logSettings.js';
+import type { IIndexArray, IndexOptions } from './types.js';
 
 /**
  * Defines a index for this Class which will then be added to the Schema.

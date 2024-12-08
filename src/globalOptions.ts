@@ -1,9 +1,9 @@
-import { Severity } from './internal/constants';
-import { globalOptions } from './internal/data';
-import { ExpectedTypeError } from './internal/errors';
-import { assertion, isNullOrUndefined } from './internal/utils';
-import { logger } from './logSettings';
-import type { IGlobalOptions } from './types';
+import { Severity } from './internal/constants.js';
+import { globalOptions } from './internal/data.js';
+import { ExpectedTypeError } from './internal/errors.js';
+import { assertion, isNullOrUndefined } from './internal/utils.js';
+import { logger } from './logSettings.js';
+import type { IGlobalOptions } from './types.js';
 
 /**
  * Set Typegoose's global Options

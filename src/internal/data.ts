@@ -1,6 +1,6 @@
 import type { Model } from 'mongoose';
-import type { IGlobalOptions } from '../types';
-import { Severity } from './constants';
+import type { IGlobalOptions } from '../types.js';
+import { Severity } from './constants.js';
 
 /** Models Map */
 export const models: Map<string, Model<any>> = new Map();
