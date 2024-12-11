@@ -315,22 +315,43 @@ class Dummy {
 
 ### type
 
-Accepts Type: `any | () => any`
+Accepts Type: `any | any[] | () => (any | any[])`
 
-Overwrite the type generated for the `design:type` reflection
+Overwrite the type generated for the `design:type` reflection.
+
+Example:
+
+```ts
+class Dummy {
+  // explicitly set type
+  @prop({ type: String })
+  public version1: string;
+
+  // supports deferred-function style
+  @prop({ type: () => String })
+  public version2: string;
+}
+```
 
 :::note
-Mongoose initializes arrayProp arrays with `[]` instead of `null` / `undefined`
+Mongoose initializes arrays with `[]` instead of `null` / `undefined`
 :::
 
-Example: Arrays (array item types can't be automatically inferred via Reflect)
+Example: Arrays (array item types can't be automatically inferred via reflection)
 
 ```ts
 class Dummy {
   @prop({ type: String })
-  public hello: string[];
+  public hello1: string[];
+
+  // supports wrapping type in nested arrays
+  // nested arrays are counted and will be used as option "dim"
+  @prop({ type: [[String]] })
+  public hello2: string[][];
 }
 ```
+
+(`type: [[String]]` is equivalent to [`type: String, dim: 2`](#dim))
 
 Example: get as `string[]`, save as `string`
 
@@ -691,7 +712,7 @@ class Something {
 }
 ```
 
-This option `dim` can be omitted, when used with the `() => [Type]` syntax (since `7.4.0`):
+The option `dim` can be omitted when used with the `() => [Type]` syntax (since `7.4.0`):
 
 ```ts
 class ArrayInType {

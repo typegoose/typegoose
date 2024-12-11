@@ -186,10 +186,11 @@ export interface BasePropOptions {
    */
   get?: mongoose.SchemaTypeOptions<any>['get'];
   /**
-   * This may be needed if get/set is used
-   * (this sets the type how it is saved to the DB)
+   * Explicitly set what type the schema path has.
+   * When used with `ref` this defined the reference-type (default `ObjectId`).
    */
-  type?: DeferredFunc<AnyParamConstructor<any>> | DeferredFunc<unknown> | unknown;
+  // using "unknown[]" may be redundant, but is still there to better convey the intention
+  type?: DeferredFunc<AnyParamConstructor<any>> | DeferredFunc<unknown | unknown[]> | unknown | unknown[];
   /**
    * Make a property read-only
    * @example
