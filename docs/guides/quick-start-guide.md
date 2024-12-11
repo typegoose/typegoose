@@ -89,7 +89,7 @@ class User {
   @prop({ ref: () => Car })
   public mainCar?: Ref<Car>; // This is a single Reference
 
-  @prop({ ref: () => [Car] })
+  @prop({ ref: () => Car })
   public cars?: Ref<Car>[]; // This is a Reference Array
 }
 ```
