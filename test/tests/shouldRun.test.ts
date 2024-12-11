@@ -1217,3 +1217,20 @@ it('should resolve non-arrow function types correctly (#873)', () => {
   // expect(schema.path('test')).toBeInstanceOf(mongoose.Schema.Types.String); // expected
   expect(schema.path('test')).toBeInstanceOf(mongoose.Schema.Types.Subdocument); // current
 });
+
+it('should allow ref deferred functions', () => {
+  class Lower {
+    @prop()
+    public something?: string;
+  }
+
+  class RefDeferred {
+    @prop({ ref: () => Lower })
+    public ref?: Ref<Lower>;
+  }
+
+  const schema = buildSchema(RefDeferred);
+
+  expect((schema.path('ref') as any).instance).toEqual('ObjectId');
+  expect((schema.path('ref') as any).options.ref).toEqual('Lower');
+});
