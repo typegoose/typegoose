@@ -1,3 +1,27 @@
+## [12.10.0](https://github.com/typegoose/typegoose/compare/v12.9.1...v12.10.0) (2024-12-14)
+
+
+### Fixes
+
+* **tsconfig:** enable "esModuleInterop" ([dc26ef8](https://github.com/typegoose/typegoose/commit/dc26ef880db605314d8cb76f1158e53c530db450))
+
+
+### Style
+
+* change import style to use default imports ([7f920be](https://github.com/typegoose/typegoose/commit/7f920be89b1b493db35c4e784a97db1a9a34a9bb))
+* **types:** add "unknown[]" to "prop[#type](https://github.com/typegoose/typegoose/issues/type)" to better convey intention ([96229f1](https://github.com/typegoose/typegoose/commit/96229f140d26c7fbf6b57b0cec5b5d96ad744c09))
+* **utils::lodash:** change import style to use default imports ([04847f7](https://github.com/typegoose/typegoose/commit/04847f7a1905a2743592b71f1b44aebf5175dce7))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.9.0 ([6f39022](https://github.com/typegoose/typegoose/commit/6f390224fb43f87fefae40d63736c9af73daf442))
+
+
+### Dev-Dependencies
+
+* **prettier:** upgrade to 3.4.2 ([cc6c4d5](https://github.com/typegoose/typegoose/commit/cc6c4d506e866aaa6b0340ffdf0c3da4f8171949))
+
 ## [12.9.1](https://github.com/typegoose/typegoose/compare/v12.9.0...v12.9.1) (2024-11-21)
 
 
