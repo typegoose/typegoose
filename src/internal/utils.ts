@@ -1,4 +1,4 @@
-import { intersection, mergeWith, omit } from 'lodash';
+import lodash from 'lodash';
 import mongoose from 'mongoose';
 import { logger } from '../logSettings';
 import type {
@@ -184,7 +184,7 @@ export function getClass(
  * @param options The raw Options that may contain the wanted options
  */
 export function isWithStringValidate(options: PropOptionsForString): string[] {
-  return intersection(Object.keys(options), ['match', 'minlength', 'maxlength']);
+  return lodash.intersection(Object.keys(options), ['match', 'minlength', 'maxlength']);
 }
 
 /**
@@ -192,7 +192,7 @@ export function isWithStringValidate(options: PropOptionsForString): string[] {
  * @param options The raw Options
  */
 export function isWithStringTransform(options: PropOptionsForString): string[] {
-  return intersection(Object.keys(options), ['lowercase', 'uppercase', 'trim']);
+  return lodash.intersection(Object.keys(options), ['lowercase', 'uppercase', 'trim']);
 }
 
 /**
@@ -200,7 +200,7 @@ export function isWithStringTransform(options: PropOptionsForString): string[] {
  * @param options The raw Options
  */
 export function isWithNumberValidate(options: PropOptionsForNumber): string[] {
-  return intersection(Object.keys(options), ['min', 'max']);
+  return lodash.intersection(Object.keys(options), ['min', 'max']);
 }
 
 /**
@@ -208,7 +208,7 @@ export function isWithNumberValidate(options: PropOptionsForNumber): string[] {
  * @param options The raw Options
  */
 export function isWithEnumValidate(options: PropOptionsForNumber | PropOptionsForString): string[] {
-  return intersection(Object.keys(options), ['enum']);
+  return lodash.intersection(Object.keys(options), ['enum']);
 }
 
 const virtualOptions = ['localField', 'foreignField'];
@@ -281,7 +281,7 @@ export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: A
   }
 
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
-  return mergeWith({}, classMetadata, value, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
+  return lodash.mergeWith({}, classMetadata, value, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
 }
 
 /**
@@ -586,7 +586,7 @@ export function isNullOrUndefined(val: unknown): val is null | undefined {
 export function assignGlobalModelOptions(target: any): boolean {
   if (isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.ModelOptions, target))) {
     logger.info('Assigning global Schema Options to "%s"', getName(target));
-    assignMetadata(DecoratorKeys.ModelOptions, omit(globalOptions, 'globalOptions'), target);
+    assignMetadata(DecoratorKeys.ModelOptions, lodash.omit(globalOptions, 'globalOptions'), target);
 
     return true;
   }
