@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { DecoratorKeys, Severity } from '../../src/internal/constants';
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import {

@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { NumberValidatorEnum, NumberValidatorsModel } from '../models/numberValidators';
 
 // Please try to keep this file in sync with ./arrayValidator.test.ts

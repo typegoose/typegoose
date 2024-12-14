@@ -127,7 +127,7 @@ Example:
 
 ```ts
 import { t, jsonSerializer } from '@deepkit/type';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 // Shorten type
 const ObjectId = mongoose.Types.ObjectId;

@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { getClass, isDocument } from '../../src/typegoose';
 import { Car, CarModel } from '../models/car';
 import { PersonModel } from '../models/person';

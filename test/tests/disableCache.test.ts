@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { constructors, globalOptions, models } from '../../src/internal/data';
 import { prop } from '../../src/prop';
 import { buildSchema, getDiscriminatorModelForClass, getModelForClass, getName, modelOptions } from '../../src/typegoose';

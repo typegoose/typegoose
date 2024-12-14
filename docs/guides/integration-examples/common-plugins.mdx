@@ -33,7 +33,7 @@ Typegoose has the prop option `autopopulate` implemented, but it only has an eff
   <TabItem value="esModuleInterop-false" label="esModuleInterop: false" default>
 
 ```ts
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import * as autopopulate from 'mongoose-autopopulate';
 import { plugin, prop, Ref, getModelForClass } from '@typegoose/typegoose';
 
@@ -68,7 +68,7 @@ const SomeReferencedClassModel = getModelForClass(SomeReferencedClass);
   <TabItem value="esModuleInterop-true" label="esModuleInterop: true">
 
 ```ts
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import autopopulate from 'mongoose-autopopulate';
 import { plugin, prop, Ref, getModelForClass } from '@typegoose/typegoose';
 
@@ -133,7 +133,7 @@ The plugin `mongoose-findorcreate` can easily be used with typegoose. Here's how
 
 ```ts
 import { DocumentType, getModelForClass, plugin, prop, defaultClasses } from '@typegoose/typegoose';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import * as findorcreate from 'mongoose-findorcreate';
 
 /**

@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { isNullOrUndefined } from './internal/utils';
 import { logger } from './logSettings';
 import type { DocumentType, Ref, RefType } from './types';

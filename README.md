@@ -24,7 +24,7 @@ Migration Guides:
 
 ```ts
 import { prop, getModelForClass } from '@typegoose/typegoose';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 class User {
   @prop()

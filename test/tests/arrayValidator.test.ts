@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
 import { ArrayValidatorEnumNumber, ArrayValidatorEnumString, ArrayValidatorsModel } from '../models/arrayValidators';
 

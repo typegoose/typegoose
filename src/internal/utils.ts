@@ -1,5 +1,5 @@
 import { intersection, mergeWith, omit } from 'lodash';
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import { logger } from '../logSettings';
 import type {
   AnyParamConstructor,
