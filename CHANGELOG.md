@@ -1,3 +1,11 @@
+## [12.10.1](https://github.com/typegoose/typegoose/compare/v12.10.0...v12.10.1) (2024-12-14)
+
+
+### Fixes
+
+* **logSettings:** re-export used functions explicitly ([b3dbe11](https://github.com/typegoose/typegoose/commit/b3dbe1169dfe833f8dcba04a1ab3bedaaf669da0))
+* **logSettings:** revert removing "import * as logger" ([ca11619](https://github.com/typegoose/typegoose/commit/ca116198c8e9e5b045ba881558db044c33512481))
+
 ## [12.10.0](https://github.com/typegoose/typegoose/compare/v12.9.1...v12.10.0) (2024-12-14)
 
 
