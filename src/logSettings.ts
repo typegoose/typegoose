@@ -1,4 +1,4 @@
-import logger from 'loglevel';
+import * as logger from 'loglevel';
 
 export { logger };
 
