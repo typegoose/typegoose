@@ -1218,19 +1218,96 @@ it('should resolve non-arrow function types correctly (#873)', () => {
   expect(schema.path('test')).toBeInstanceOf(mongoose.Schema.Types.Subdocument); // current
 });
 
-it('should allow ref deferred functions', () => {
-  class Lower {
-    @prop()
-    public something?: string;
-  }
+describe('ref', () => {
+  it('should allow deferred functions', () => {
+    class Lower {
+      @prop()
+      public something?: string;
+    }
 
-  class RefDeferred {
-    @prop({ ref: () => Lower })
-    public ref?: Ref<Lower>;
-  }
+    class RefDeferred {
+      @prop({ ref: () => Lower })
+      public ref?: Ref<Lower>;
+    }
 
-  const schema = buildSchema(RefDeferred);
+    const schema = buildSchema(RefDeferred);
 
-  expect((schema.path('ref') as any).instance).toEqual('ObjectId');
-  expect((schema.path('ref') as any).options.ref).toEqual('Lower');
+    expect((schema.path('ref') as any).instance).toEqual('ObjectId');
+    expect((schema.path('ref') as any).options.ref).toEqual('Lower');
+  });
+
+  it('should allow ref & type deferred functions', () => {
+    class Lower {
+      @prop()
+      public something?: string;
+    }
+
+    class RefDeferred {
+      @prop({ ref: () => Lower, type: () => String })
+      public ref?: Ref<Lower, string>;
+    }
+
+    const schema = buildSchema(RefDeferred);
+
+    expect((schema.path('ref') as any).instance).toEqual('String');
+    expect((schema.path('ref') as any).options.ref).toEqual('Lower');
+  });
+
+  it('should allow array dimensions', () => {
+    class Lower {
+      @prop()
+      public something?: string;
+    }
+
+    class RefDeferred {
+      @prop({ ref: () => Lower, dim: 3 })
+      public ref?: Ref<Lower>[][][];
+    }
+
+    const schema = buildSchema(RefDeferred);
+
+    const schemaPath = schema.path('ref') as any;
+    expect(schemaPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(schemaPath.instance).toEqual('Array');
+
+    const path2 = schemaPath.caster;
+    expect(path2).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(path2.instance).toEqual('Array');
+
+    const path3 = path2.caster;
+    expect(path3).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(path3.instance).toEqual('Array');
+
+    const lowest = path3.caster;
+    expect(lowest.options.ref).toEqual('Lower');
+  });
+
+  it('should allow array dimensions, via "type" inference', () => {
+    class Lower {
+      @prop()
+      public something?: string;
+    }
+
+    class RefDeferred {
+      @prop({ ref: () => Lower, type: () => [[[mongoose.Types.ObjectId]]] })
+      public ref?: Ref<Lower>[][][];
+    }
+
+    const schema = buildSchema(RefDeferred);
+
+    const schemaPath = schema.path('ref') as any;
+    expect(schemaPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(schemaPath.instance).toEqual('Array');
+
+    const path2 = schemaPath.caster;
+    expect(path2).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(path2.instance).toEqual('Array');
+
+    const path3 = path2.caster;
+    expect(path3).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(path3.instance).toEqual('Array');
+
+    const lowest = path3.caster;
+    expect(lowest.options.ref).toEqual('Lower');
+  });
 });
