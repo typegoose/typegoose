@@ -1,3 +1,12 @@
+## [10.6.0](https://github.com/typegoose/typegoose/compare/v10.5.0...v10.6.0) (2024-12-18)
+
+
+### Dependencies
+
+* **@types/jest:** upgrade to 29.5.14 ([f1dabaa](https://github.com/typegoose/typegoose/commit/f1dabaad776ab3472b3bae92944b87e13e937014))
+* **@types/semver:** upgrade to 7.5.8 ([0fc61e9](https://github.com/typegoose/typegoose/commit/0fc61e9ca8962d0d23a8011af70b194b30559402))
+* **mongoose:** upgrade to 6.13.0 ([5b1a75f](https://github.com/typegoose/typegoose/commit/5b1a75f327184bd222d40eaac2fbe123f36e8967)), closes [#971](https://github.com/typegoose/typegoose/issues/971)
+
 ## [10.5.0](https://github.com/typegoose/typegoose/compare/v10.4.0...v10.5.0) (2023-09-01)
 
 
