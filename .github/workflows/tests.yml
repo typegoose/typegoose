@@ -17,7 +17,7 @@ jobs:
   tests:
     permissions:
       contents: read  # for actions/checkout to fetch code
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x, 19.x]
