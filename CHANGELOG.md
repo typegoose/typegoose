@@ -1,3 +1,23 @@
+## [12.11.0](https://github.com/typegoose/typegoose/compare/v12.10.2...v12.11.0) (2025-02-08)
+
+
+### Features
+
+* infer "type: [TYPE]" as PropType.ARRAY, unless manually specified ([68e5a37](https://github.com/typegoose/typegoose/commit/68e5a37f9c574178eb2757a3cd6d8a9baf22db5b))
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.10.0 ([1daf0f7](https://github.com/typegoose/typegoose/commit/1daf0f781664633c5fb965b08f8545def084302c))
+* **semver:** upgrade to 7.7.1 ([eef140a](https://github.com/typegoose/typegoose/commit/eef140a7389c8b24e215371d6ba0a15a51a65c82))
+
+
+### Dev-Dependencies
+
+* **@types/lodash:** upgrade to 4.17.15 ([112747c](https://github.com/typegoose/typegoose/commit/112747cf215f801676c8b77b92a3a7d8ccd7e9c9))
+* **eslint-plugin-prettier:** upgrade to 5.2.3 ([e2d77fe](https://github.com/typegoose/typegoose/commit/e2d77fe6435373e069cc49daabe5bce12196e785))
+* **mongodb-memory-server:** upgrade to 10.1.3 ([e25bdb0](https://github.com/typegoose/typegoose/commit/e25bdb06f4ab516455e7cb075d70fab97cf976c7))
+
 ## [12.10.2](https://github.com/typegoose/typegoose/compare/v12.10.1...v12.10.2) (2025-02-08)
 
 
