@@ -1,3 +1,10 @@
+## [12.10.2](https://github.com/typegoose/typegoose/compare/v12.10.1...v12.10.2) (2025-02-08)
+
+
+### Fixes
+
+* **logSettings:** actually allow more levels than "warn" and "error" ([e406af2](https://github.com/typegoose/typegoose/commit/e406af2f9ab7c76f67ba2c759e90a9d7fcd45b9f))
+
 ## [12.10.1](https://github.com/typegoose/typegoose/compare/v12.10.0...v12.10.1) (2024-12-14)
 
 
