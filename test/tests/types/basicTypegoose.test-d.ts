@@ -276,9 +276,11 @@ async function gh732() {
   expect(toobj).type.toBe<
     SomeClass & { _id: typegoose.mongoose.Types.ObjectId } & Required<{
         _id: typegoose.mongoose.Types.ObjectId;
-      }>
+      }> & { __v: number }
   >();
-  expect(tojson).type.toBe<typegoose.mongoose.FlattenMaps<SomeClass & { _id: typegoose.mongoose.Types.ObjectId }>>();
+  expect(tojson).type.toBe<
+    typegoose.mongoose.FlattenMaps<typegoose.mongoose.Default__v<SomeClass & { _id: typegoose.mongoose.Types.ObjectId }>>
+  >();
 }
 
 gh732();
