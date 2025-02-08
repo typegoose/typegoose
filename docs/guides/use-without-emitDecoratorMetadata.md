@@ -41,6 +41,10 @@ class Kitten {
 }
 ```
 
+:::tip
+Since typegoose 12.11.0, `type: [TYPE]` will also infer [`PropType.ARRAY`](../api/decorators/prop.md#proptype), unless manually specified.
+:::
+
 [Look here for what `PropType` is](../api/decorators/prop.md#proptype)
 
 ## References

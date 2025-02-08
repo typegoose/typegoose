@@ -36,7 +36,7 @@ export function processProp(input: ProcessPropOptions): void {
   const name = utils.getName(target);
   const rawOptions: KeyStringAny = Object.assign({}, input.options);
   let Type: any | undefined = Reflect.getMetadata(DecoratorKeys.Type, target, key);
-  const propKind = input.propType ?? detectPropType(Type);
+  let propKind = input.propType ?? detectPropType(Type);
 
   logger.debug('Starting to process "%s.%s"', name, key);
   utils.assertion(typeof key === 'string', () => new CannotBeSymbolError(name, key));
@@ -66,6 +66,13 @@ export function processProp(input: ProcessPropOptions): void {
 
     if (gotType.dim > 0) {
       rawOptions.dim = gotType.dim;
+
+      // Infer "type: [TYPE]" as a array, only if the PropType is not manually set or already inferred as something else
+      // This is useful if reflection fails or when working without "emitDecoratorMetadata"
+      if (utils.isNullOrUndefined(input.propType) && propKind == PropType.NONE) {
+        logger.debug('Detected "type" being set to a array, using PropType.ARRAY');
+        propKind = PropType.ARRAY;
+      }
     }
 
     delete rawOptions.type;

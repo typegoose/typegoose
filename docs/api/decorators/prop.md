@@ -353,6 +353,10 @@ class Dummy {
 
 (`type: [[String]]` is equivalent to [`type: String, dim: 2`](#dim))
 
+:::tip
+Since typegoose 12.11.0, `type: [TYPE]` will also infer [`PropType.ARRAY`](#proptype), unless manually specified.
+:::
+
 Example: get as `string[]`, save as `string`
 
 ```ts

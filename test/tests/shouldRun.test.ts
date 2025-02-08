@@ -1311,3 +1311,51 @@ describe('ref', () => {
     expect(lowest.options.ref).toEqual('Lower');
   });
 });
+
+it('should set PropType.ARRAY if dim is above 1 and Type is PropType.NONE and not manually set', () => {
+  class ArrayTypeInferred {
+    // inferred via reflection
+    @prop()
+    public normalInferred?: string;
+
+    // explicitly set via "type" option
+    @prop({ type: String })
+    public normalExplicit?: Omit<string, ''>;
+
+    // inferred via reflection
+    @prop({ type: [String] })
+    public arrayInferred?: string[];
+
+    // overwriting PropType with dim > 0, without reflection
+    @prop({ type: [String] })
+    public arrayExplicit?: Omit<string[], ''>;
+
+    // overwriting PropType manually
+    @prop({ type: [String] }, PropType.NONE)
+    public proptypeExplicit?: Omit<string[], ''>;
+  }
+
+  const schema = buildSchema(ArrayTypeInferred);
+
+  const path1 = schema.path('normalInferred') as any;
+  expect(path1).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(path1.instance).toEqual('String');
+
+  const path2 = schema.path('normalExplicit') as any;
+  expect(path2).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(path2.instance).toEqual('String');
+
+  const path3 = schema.path('arrayInferred') as any;
+  expect(path3).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(path3.instance).toEqual('Array');
+  expect(path3.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+
+  const path4 = schema.path('arrayExplicit') as any;
+  expect(path4).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(path4.instance).toEqual('Array');
+  expect(path4.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+
+  const path5 = schema.path('proptypeExplicit') as any;
+  expect(path5).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(path5.instance).toEqual('String');
+});
