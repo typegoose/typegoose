@@ -231,17 +231,18 @@ export function addModelToTypegoose<U extends AnyParamConstructor<any>, QueryHel
   cl: U,
   options?: { existingMongoose?: mongoose.Mongoose; existingConnection?: any; disableCaching?: boolean }
 ) {
-  const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
-
-  assertion(model.prototype instanceof mongooseModel, new NotValidModelError(model, 'addModelToTypegoose.model'));
-  assertionIsClass(cl);
-
-  // only check cache after the above checks, just to make sure they run
+  // run this before the assertions below, for compatability with mongoose browser (browser version does not have "mongoose.Model")
+  // see https://github.com/typegoose/typegoose/issues/981
   if (!isCachingEnabled(options?.disableCaching)) {
     logger.info('Caching is not enabled, skipping adding');
 
     return model as ReturnModelType<U, QueryHelpers>;
   }
+
+  const mongooseModel = options?.existingMongoose?.Model || options?.existingConnection?.base?.Model || mongoose.Model;
+
+  assertion(model.prototype instanceof mongooseModel, new NotValidModelError(model, 'addModelToTypegoose.model'));
+  assertionIsClass(cl);
 
   const name = model.modelName;
 
