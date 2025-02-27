@@ -3,6 +3,11 @@ id: error-warning-details
 title: 'Error & Warning Details'
 ---
 
+<!--
+NOTE: Javascript templating & Typescript brackets need to be escaped via code-blocks, html codes or a backslash
+see https://docusaurus.io/blog/preparing-your-site-for-docusaurus-v3#common-mdx-problems
+-->
+
 ## Errors
 
 ### Mongoose Version [E001]
@@ -28,7 +33,7 @@ Typegoose requires at least NodeJS Version 16.20.1, because:
 - it is the mongoose minimal nodejs version
 - it is the lowest LTS version, which many (dev) dependencies already require
 
-### Function only supports to be called "${supported}" times [E003]
+### Function only supports to be called "`${supported}`" times [E003]
 
 Error:
 
@@ -371,7 +376,7 @@ Error Class: [`TypeError`](https://github.com/typegoose/typegoose/blob/8fad2ac21
 Details:  
 The function used to create a custom model name (via the `modelOptions` "option" prop) must return a string and it should not be empty.
 
-### "ref" is not supported for "${propKind}"! (${name}, ${key}) [E023]
+### "ref" is not supported for "`${propKind}`"! (`${name}`, `${key}`) [E023]
 
 <span class="badge badge--warning">This Error got removed in 9.0.0</span>
 
@@ -397,7 +402,7 @@ Error Class: `CannotBeSymbolError`
 Details:  
 A Property Key in Typegoose cannot be a Symbol, it must be a String (also a limitation of mongoose)
 
-### Expected "${where}" to be a valid mongoose.Model! [E025]
+### Expected "`${where}`" to be a valid mongoose.Model! [E025]
 
 Error: `Expected "${where}" to be a valid mongoose.Model! (got: "${model}") [E025]`
 
@@ -553,7 +558,7 @@ Tried using a function (`where`) that required cache, but cache was disabled.
 
 ## Warnings
 
-### Type is not ${type}, but includes the following ${extra} options [W001]
+### Type is not `${type}`, but includes the following `${extra}` options [W001]
 
 Warning:
 

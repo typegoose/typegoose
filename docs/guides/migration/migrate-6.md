@@ -66,7 +66,7 @@ Update: `@staticMethod` & `@instanceMethod` were removed in 6.1.0-1
 
 The type `ModelType` has been abstracted to `ReturnModelType<typeof Class>` with documentation. But, if for any reason `ModelType` is needed, it needs to be imported from `@typegoose/typegoose/lib/types`.
 
-## [IC] data.ts collections are now Map<T, S>
+## [IC] data.ts collections are now `Map<T, S>`
 
 data.ts's collections got refactored to use ES6 Maps
 
