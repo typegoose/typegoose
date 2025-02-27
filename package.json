@@ -89,5 +89,8 @@
   "bugs": {
     "url": "https://github.com/typegoose/typegoose/issues"
   },
-  "homepage": "https://typegoose.github.io/typegoose/"
+  "homepage": "https://typegoose.github.io/typegoose/",
+  "resolutions": {
+    "micromatch": "~4.0.8"
+  }
 }
