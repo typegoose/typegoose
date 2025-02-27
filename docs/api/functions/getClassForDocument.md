@@ -22,7 +22,7 @@ function getClassForDocument(document: mongoose.Document): NewableFunction | und
 :::note
 This function only works if the schema has been created with [`buildSchema`](./buildSchema.md) or a property / function has been manually added.
 :::
-:::caution
+:::warning
 This Function has been removed in typegoose 10.0, use [`getClass`](./getClass.md) instead.
 :::
 

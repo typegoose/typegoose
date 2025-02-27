@@ -25,7 +25,7 @@ This type is the logical AND of `mongoose.Document` and `T`.
 With this type, `typeof Class` cannot be used.
 :::
 
-:::caution
+:::warning
 If the current project's tsconfig also includes `compilerOptions.lib` with `dom`, then the types from Typegoose and Typescript will conflict.  
 Solution is to remove `dom` from the `lib` array.
 :::

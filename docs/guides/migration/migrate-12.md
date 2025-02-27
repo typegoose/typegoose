@@ -5,7 +5,7 @@ title: 'Migrate to 12.0.0'
 
 These are the changes made for 12.0.0 that are breaking or just important to know
 
-:::caution Important, Read this first
+:::warning Important, Read this first
 This Guide is written for migration from version `11.7.1` to `12.0.0`, for versions `>12.0.0 <13.0.0`, please consult the [CHANGELOG](https://github.com/typegoose/typegoose/blob/master/CHANGELOG.md)
 :::
 

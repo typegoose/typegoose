@@ -30,10 +30,10 @@ function getClass(
 - `string`: Directly specify the name to look-up.
 - `any`: Try to get a Class from any of the above, without having proper types.
 
-:::caution
+:::warning
 This look-up only works if the class has been correctly registered with [`addModelToTypegoose`](./addModelToTypegoose.md) (automatically done when calling [`getModelForClass`](./getModelForClass.md) or [`getDiscriminatorModelForClass`](./getDiscriminatorModelForClass.md), but **not** for [`buildSchema`](./buildSchema.md)).
 :::
-:::caution
+:::warning
 Will throw a Error when caching is disabled [E033](../../guides/error-warning-details.md#cache-disabled-e033).
 :::
 :::tip

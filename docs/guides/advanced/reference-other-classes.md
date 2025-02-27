@@ -138,7 +138,7 @@ class Main {
 
 When you get errors about references, try making the name of the referenced class a string.
 
-:::caution
+:::warning
 The new `() => Class` is meant to help with Circular Dependencies, but cannot remove the problems in all cases, see [Circular Dependencies](#circular-dependencies) for more.
 :::
 

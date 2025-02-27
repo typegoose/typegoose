@@ -19,7 +19,7 @@ function setGlobalOptions(options: IGlobalOptions)
 
 Only the specified options in `options` are changed, if a subsequent call is made with different keys, it will not affect other keys, only the first 2 levels are merged.
 
-:::caution
+:::warning
 The `setGlobalOptions` call has to be before any `buildSchema` (by extension also `getModelForClass`) calls, which means when doing `export const Model = buildSchema(class)`, the `setGlobalOptions` call has to be before any of the imports that export schemas / models.
 :::
 

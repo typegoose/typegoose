@@ -5,7 +5,7 @@ title: 'Migrate to 10.0.0'
 
 These are the changes made for 10.0.0 that are breaking or just important to know
 
-:::caution Important, Read this first
+:::warning Important, Read this first
 This Guide is written for migration from version `9.13.2` to `10.0.0`, for versions `>10.0.0 <11.0.0`, please consult the [CHANGELOG](https://github.com/typegoose/typegoose/blob/master/CHANGELOG.md)
 :::
 
@@ -52,7 +52,7 @@ In Typegoose 10.0 a new ModelOption has been introduced named [`disableLowerInde
 With Typegoose 10.0 nested discriminators can now be set via the model-option `options.discriminators` instead of just via the prop-option `discriminators`.  
 This will be useful when the base class (and the discriminators) are used multiple times with the same definition.
 
-:::caution
+:::warning
 A Error is thrown when both this option and the prop-option [`discriminators`](../../api/decorators/prop.md#discriminators) are defined.  
 See [Duplicate Option Definition [E032]](../error-warning-details.md#duplicate-option-definition-e032).
 :::

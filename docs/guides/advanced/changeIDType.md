@@ -40,7 +40,7 @@ class SomeChangedID {
 
 ## With the Base Interface
 
-:::caution
+:::warning
 It is recommended to use the manual approach over using `Base`, because default classes & interfaces may be removed in the future and dont greatly support extending from each other.
 :::
 

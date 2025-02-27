@@ -477,7 +477,7 @@ Use this function for embedded discriminators.
 
 See [Nested Discriminators](../../guides/advanced/nested-discriminators.mdx) for a guide on how to use nested Discriminators.
 
-:::caution
+:::warning
 A Error is thrown when both this option and the model-option [`discriminators`](./modelOptions.md#discriminators) are defined.  
 See [Duplicate Option Definition [E032]](../../guides/error-warning-details.md#duplicate-option-definition-e032).
 :::
@@ -578,7 +578,7 @@ await area.save();
 
 `innerOptions` is used to override options at the "Type" level
 
-:::caution
+:::warning
 Use this only when absolutely necessary and please open a new issue about it
 :::
 :::note
@@ -615,7 +615,7 @@ class Something {
 
 `outerOptions` is used to override options at the "Array" level
 
-:::caution
+:::warning
 Use this only when absolutely necessary and please open a new issue about it
 :::
 :::note
@@ -976,7 +976,7 @@ For Examples, look at:
 
 ## Passthrough Class
 
-:::caution
+:::warning
 It is not recommended to use this class, it should always be another class if nesting, like [in the quick-start-guide](../../guides/quick-start-guide.md/#quick-overview-of-typegoose) is wanted
 :::
 

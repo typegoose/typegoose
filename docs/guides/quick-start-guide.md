@@ -94,7 +94,7 @@ class User {
 }
 ```
 
-:::caution
+:::warning
 `type` has to be defined when working with Arrays, because Reflection only returns basic information. [Look here for why](https://github.com/microsoft/TypeScript/issues/7169)  
 Like `public: string[]` is in reflection only `Array`.  
 :::

@@ -5,7 +5,7 @@ title: 'Migrate to 6.0.0'
 
 These are the changes made for 6.0.0 that are breaking or just important to know.
 
-:::caution Important, Read this first
+:::warning Important, Read this first
 This Guide is written for migration from version `5.9.2` to `6.0.0`, for versions `>6.0.0 <7.0.0`, please consult the [CHANGELOG](https://github.com/typegoose/typegoose/blob/master/CHANGELOG.md)
 :::
 

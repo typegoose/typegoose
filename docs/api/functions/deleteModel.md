@@ -21,13 +21,13 @@ function deleteModel(name: string)
 
 Use [`deleteModelWithClass`](#deletemodelwithclass) when wanting to delete by class instead of by key directly.
 
-:::caution
+:::warning
 This function also deletes the Model from Mongoose itself.
 :::
-:::caution
+:::warning
 Currently this function does not delete any entries that have different name generation applied at insertion time (like having name generation overwritten in [`getModelForClass`](./getClassForDocument.md)).
 :::
-:::caution
+:::warning
 Will throw a Error when caching is disabled [E033](../../guides/error-warning-details.md#cache-disabled-e033).
 :::
 
@@ -54,7 +54,7 @@ function deleteModelWithClass<U extends AnyParamConstructor<any>>(cl: U)
 
 `deleteModelWithClass` tries to find the given Class (`cl`) in the cache and calls [`deleteModel`](#deletemodel) with the key the Class has given.
 
-:::caution
+:::warning
 Will throw a Error when caching is disabled [E033](../../guides/error-warning-details.md#cache-disabled-e033).
 :::
 

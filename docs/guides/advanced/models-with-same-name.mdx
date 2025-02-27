@@ -156,7 +156,7 @@ const KittenModelCon1 = getModelForClass(Kitten, { existingConnection: mongoose.
 :::note
 Models still cannot be defined more than once in the same connection / mongoose instance.
 :::
-:::caution
+:::warning
 Setting the Cache to be disabled globally will make some functions that rely on it error, see [`E033`](../error-warning-details.md#cache-disabled-e033) and [`disableGlobalCaching`](../../api/functions/setGlobalOptions.md#disableglobalcaching) which effects it will have.
 :::
 

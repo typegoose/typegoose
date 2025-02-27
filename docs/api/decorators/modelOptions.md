@@ -130,7 +130,7 @@ Default: `false`
 
 Enable Overwriting of the plugins on the "to-be" discriminator schema with the base schema's.
 
-:::caution
+:::warning
 This does not actually "merge plugins", it will overwrite the "to-be" discriminator's plugins with the base schema's!
 :::
 
@@ -169,7 +169,7 @@ class MergeHooks {
 }
 ```
 
-:::caution
+:::warning
 Only hooks that can be matched against each-other can be de-duplicated.
 :::
 
@@ -181,7 +181,7 @@ If [`enableMergePlugins`](#enablemergeplugins) and [`enableMergeHooks`](#enablem
 
 Default: `false`
 
-:::caution
+:::warning
 This option does not get inherited anymore since `11.7.0`.
 :::
 
@@ -221,7 +221,7 @@ Accepts Type: `() => [DiscriminatorObject | Class]`
 
 Define Nested Discriminators on the base Class directly instead of having to re-define the `discriminators` option everywhere it is used.
 
-:::caution
+:::warning
 A Error is thrown when both this option and the prop-option [`discriminators`](./prop.md#discriminators) are defined.  
 See [Duplicate Option Definition [E032]](../../guides/error-warning-details.md#duplicate-option-definition-e032).
 :::

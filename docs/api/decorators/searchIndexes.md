@@ -18,7 +18,7 @@ function searchIndex(description: SearchIndexDescription): ClassDecorator
 `@searchIndex` is used to set search indices on the schema, this decorator acts
 like [`schema.searchIndex()`](https://mongoosejs.com/docs/api/schema.html#Schema.prototype.searchIndex()).
 
-:::caution
+:::warning
 Search indices are only supported in `M10` (or higher) Mongo Atlas clusters running MongoDB 6.0+ or 7.0+. Full
 documentation
 can be found [here](https://www.mongodb.com/docs/atlas/atlas-search/manage-indexes/).
