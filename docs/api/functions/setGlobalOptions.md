@@ -15,7 +15,7 @@ function setGlobalOptions(options: IGlobalOptions)
 | :-------- | :--------------: | :---------------------------- |
 | `options` | `IGlobalOptions` | The Options to apply globally |
 
-`setGlobalOptions` is used to set [`schemaOptions`](../decorators/modelOptions.md#schemaoptions) and [`options`](../decorators/modelOptions.md#options-1) of [`IModelOptions`](../decorators/modelOptions.md#imodeloptions) globally (applied to all schemas created by [`buildSchema`](./buildSchema.md)) and also set some global operation options for typegoose with [`globalOptions`](#options) property.
+`setGlobalOptions` is used to set [`schemaOptions`](../decorators/modelOptions.md#schemaoptions) and [`options`](../decorators/modelOptions.md#options) of [`IModelOptions`](../decorators/modelOptions.md#imodeloptions) globally (applied to all schemas created by [`buildSchema`](./buildSchema.md)) and also set some global operation options for typegoose with [`globalOptions`](#options) property.
 
 Only the specified options in `options` are changed, if a subsequent call is made with different keys, it will not affect other keys, only the first 2 levels are merged.
 
