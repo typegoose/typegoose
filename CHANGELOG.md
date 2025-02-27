@@ -1,3 +1,22 @@
+## [12.12.0](https://github.com/typegoose/typegoose/compare/v12.11.0...v12.12.0) (2025-02-27)
+
+
+### Fixes
+
+* **typegoose:** move "isCachingEnabled" in "addModelToTypegoose" before assertions ([8bfa8c4](https://github.com/typegoose/typegoose/commit/8bfa8c4d7ad8a2405175b1aa2bdd719f4f5d29cf)), closes [#981](https://github.com/typegoose/typegoose/issues/981)
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.11.0 ([5ac66ac](https://github.com/typegoose/typegoose/commit/5ac66ace9e754a15c3c9aaa10a3f848856b1fc9e))
+
+
+### Dev-Dependencies
+
+* **mongodb-memory-server:** upgrade to 10.1.4 ([9290abd](https://github.com/typegoose/typegoose/commit/9290abd9b7a3708a6bf7e5756ae9fc5dacad66be))
+* **prettier:** upgrade to 3.5.2 ([542ac77](https://github.com/typegoose/typegoose/commit/542ac776e81d2c81c2ab76ce2b3f0ada408e811c))
+* **ts-jest:** upgrade to 29.2.6 ([7091dde](https://github.com/typegoose/typegoose/commit/7091dde8048d45f0592468c225a44c9e5bcd5f63))
+
 ## [12.11.0](https://github.com/typegoose/typegoose/compare/v12.10.2...v12.11.0) (2025-02-08)
 
 
