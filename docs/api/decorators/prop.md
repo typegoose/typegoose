@@ -977,7 +977,7 @@ For Examples, look at:
 ## Passthrough Class
 
 :::warning
-It is not recommended to use this class, it should always be another class if nesting, like [in the quick-start-guide](../../guides/quick-start-guide.md/#quick-overview-of-typegoose) is wanted
+It is not recommended to use this class, it should always be another class if nesting, like [in the quick-start-guide](../../guides/quick-start-guide.md#quick-overview-of-typegoose) is wanted
 :::
 
 The `Passthrough` class is, like the name implies, is to pass-through a schema definition directly, without "wrapping" it in a `new Schema({})` explicitly.
