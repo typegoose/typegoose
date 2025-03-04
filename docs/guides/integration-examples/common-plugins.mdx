@@ -217,8 +217,8 @@ For more details, see [this issue](https://github.com/ramiel/mongoose-sequence/i
 Last updated for:
 
 ```txt
-@typegoose/typegoose@11.0.0-beta.1
-@typegoose/auto-increment@3.0.0
+@typegoose/typegoose@12.12.0
+@typegoose/auto-increment@4.11.0
 ```
 
 ```bash npm2yarn
@@ -242,7 +242,8 @@ const SomeModel = getModelForClass(SomeClass);
 
 const doc = await SomeModel.create({ someIncrementedField: 10 });
 
-await doc.save(); // someIncrementedField will be 11
+await doc.save(); // someIncrementedField will be incremented here
+console.log(doc.someIncrementedField); // will print "11"
 ```
 
 ### AutoIncrementID
@@ -261,7 +262,8 @@ class SomeClass {
 
 const SomeModel = getModelForClass(SomeClass);
 
-const doc = await SomeModel.create({ someIncrementedField: 10 }); // _id will be 1
+const doc1 = await SomeModel.create({ someIncrementedField: 10 }); // _id will be 1
+const doc2 = await SomeModel.create({ someIncrementedField: 20 }); // _id will be 2
 ```
 
 ---
