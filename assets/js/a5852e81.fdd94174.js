@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunktypegoose_website=self.webpackChunktypegoose_website||[]).push([[2598],{3806:(e,t,s)=>{s.r(t),s.d(t,{default:()=>u});var n=s(6540),o=s(6347),r=s(6025);const u=function(){return n.createElement(o.rd,{to:(0,r.A)("/")})}}}]);
