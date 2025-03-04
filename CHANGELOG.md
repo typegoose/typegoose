@@ -1,3 +1,16 @@
+## [12.13.0](https://github.com/typegoose/typegoose/compare/v12.12.0...v12.13.0) (2025-03-04)
+
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.12.0 ([f1ee800](https://github.com/typegoose/typegoose/commit/f1ee8006eafc96d0f4988f00c10986bfaec6e79e))
+
+
+### Dev-Dependencies
+
+* **@types/lodash:** upgrade to 4.17.16 ([09b5c54](https://github.com/typegoose/typegoose/commit/09b5c5491be555973fde9f849258a72a9cb5b6b1))
+* **prettier:** upgrade to 3.5.3 ([6155413](https://github.com/typegoose/typegoose/commit/6155413b835917ff876fa1c22fc39c8e1f3b9e4d))
+
 ## [12.12.0](https://github.com/typegoose/typegoose/compare/v12.11.0...v12.12.0) (2025-02-27)
 
 
