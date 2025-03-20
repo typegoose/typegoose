@@ -89,13 +89,6 @@ module.exports = {
 There are some workarounds for some minification problems, like the class name (which would be the model name) can be changed with [`customName`](../api/decorators/model-options#customname).
 :::
 
-### `@types/node` breaking change
-
-Early January 2022, there was a update in `@types/node`, which was actually a breaking change which causes typescript compile errors to show up (like for `GridFSBucketWriteStream` from mongodb, even though unused).
-
-~~The current only workaround is to pin the versions of `@types/node` used to ones before the update, which in the case of typegoose is `@types/node@12.20.39`.~~  
-As of 02-02-2022 (d/m/y), mongoose has released `6.2.0` which upgraded `mongodb` to a version that has updated types, and typegoose `9.6.0` uses this mongoose version.
-
 ### NodeJS 17.5 Breaking Change
 
 NodeJS 17.5 was released, which included a breaking change for mongoose, which resulted in a error (/ crash of the application).
