@@ -61,6 +61,12 @@ module.exports = {
 }
 ```
 
+### esbuild
+
+`esbuild` and anything that uses it (`tsx`) are known to be a problem as `esbuild` does not support `emitDecoratorMetadata`.
+
+The workarounds are to either not use anything that uses `esbuild` or follow [Use Without "emitDecoratorMetadata"](./use-without-emitDecoratorMetadata.md).
+
 ### prop on get & set
 
 `@prop` cannot be applied to `get` & `set` (ES6 class keywords), because virtuals do not accept options & [`schema.loadClass`](https://mongoosejs.com/docs/advanced_schemas.html#creating-from-es6-classes-using-loadclass) wouldn't load these.
