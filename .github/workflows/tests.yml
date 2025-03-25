@@ -106,13 +106,11 @@ jobs:
         with:
           # dry_run: true
           # using semantic-release 23.x because of https://github.com/semantic-release/release-notes-generator/issues/675
+          # plugins included in semantic-release by default:
+          # @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm @semantic-release/github
           extra_plugins: |
             @semantic-release/git@10.x
             @semantic-release/changelog@6.x
-            @semantic-release/commit-analyzer@13.x
-            @semantic-release/release-notes-generator@14.x
-            @semantic-release/github@10.x
-            @semantic-release/npm@12.x
             @commitlint/config-conventional@19.x
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
