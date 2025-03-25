@@ -1,19 +1,13 @@
-## 12.14.0 (2025-03-25)
+## [12.14.0](https://github.com/typegoose/typegoose/compare/v12.13.0...v12.14.0) (2025-03-25)
 
-* chore(deps): bump @babel/helpers from 7.26.9 to 7.26.10 in /website (#986) ([6edf4f4](https://github.com/typegoose/typegoose/commit/6edf4f4)), closes [#986](https://github.com/typegoose/typegoose/issues/986)
-* chore(deps): bump @babel/runtime from 7.24.4 to 7.26.10 in /website (#985) ([78f1b47](https://github.com/typegoose/typegoose/commit/78f1b47)), closes [#985](https://github.com/typegoose/typegoose/issues/985)
-* chore(deps): bump @babel/runtime-corejs3 in /website (#987) ([584e4d6](https://github.com/typegoose/typegoose/commit/584e4d6)), closes [#987](https://github.com/typegoose/typegoose/issues/987)
-* chore(deps): bump cycjimmy/semantic-release-action from 4.1.0 to 4.2.0 (#984) ([0abfd32](https://github.com/typegoose/typegoose/commit/0abfd32)), closes [#984](https://github.com/typegoose/typegoose/issues/984)
-* chore(deps): bump prismjs from 1.29.0 to 1.30.0 in /website ([20b36cb](https://github.com/typegoose/typegoose/commit/20b36cb))
-* chore(workflows/tests): explicitly install "conventional-changelog-writer@8.0.1" ([8ebf913](https://github.com/typegoose/typegoose/commit/8ebf913))
-* chore(workflows/tests): remove default semantic-release plugins ([3798764](https://github.com/typegoose/typegoose/commit/3798764))
-* chore(workflows/website-pr): enable for all branches ([2d13a47](https://github.com/typegoose/typegoose/commit/2d13a47))
-* deps(mongoose): upgrade to 8.13.0 ([cc25059](https://github.com/typegoose/typegoose/commit/cc25059))
-* devdeps(eslint-plugin-prettier): upgrade to 5.2.4 ([4ebc94c](https://github.com/typegoose/typegoose/commit/4ebc94c))
-* devdeps(ts-jest): upgrade to 29.3.0 ([68bceb5](https://github.com/typegoose/typegoose/commit/68bceb5))
-* docs(known-issues): add section for esbuild ([765cd86](https://github.com/typegoose/typegoose/commit/765cd86)), closes [#988](https://github.com/typegoose/typegoose/issues/988)
-* docs(known-issues): remove "`@types/node` breaking change" section ([3d9d9c3](https://github.com/typegoose/typegoose/commit/3d9d9c3))
-* Merge pull request #983 from typegoose/dependabot/npm_and_yarn/website/prismjs-1.30.0 ([535744a](https://github.com/typegoose/typegoose/commit/535744a)), closes [#983](https://github.com/typegoose/typegoose/issues/983)
+### Dependencies
+
+* **mongoose:** upgrade to 8.13.0 ([cc25059](https://github.com/typegoose/typegoose/commit/cc25059))
+
+### Dev-Dependencies
+
+* **eslint-plugin-prettier:** upgrade to 5.2.4 ([4ebc94c](https://github.com/typegoose/typegoose/commit/4ebc94c))
+* **ts-jest:** upgrade to 29.3.0 ([68bceb5](https://github.com/typegoose/typegoose/commit/68bceb5))
 
 ## [12.13.0](https://github.com/typegoose/typegoose/compare/v12.12.0...v12.13.0) (2025-03-04)
 
