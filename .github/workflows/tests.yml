@@ -111,7 +111,7 @@ jobs:
           extra_plugins: |
             @semantic-release/git@10.x
             @semantic-release/changelog@6.x
-            @commitlint/config-conventional@19.x
+            conventional-changelog-conventionalcommits@8
             conventional-changelog-writer@8.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
