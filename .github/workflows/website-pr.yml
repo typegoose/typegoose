@@ -17,9 +17,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
-      - name: change to "website"
-        run: cd website
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn --cwd=website install --frozen-lockfile
       - name: Build the Website
-        run: yarn run build
+        run: yarn --cwd=website run build
