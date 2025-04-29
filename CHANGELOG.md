@@ -1,3 +1,15 @@
+## [12.15.0](https://github.com/typegoose/typegoose/compare/v12.14.0...v12.15.0) (2025-04-29)
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.14.0 ([9791638](https://github.com/typegoose/typegoose/commit/979163839cc8f4db81253432c40d71ece3d6a3b8))
+
+### Dev-Dependencies
+
+* **@types/semver:** upgrade to 7.7.0 ([1b380cb](https://github.com/typegoose/typegoose/commit/1b380cb0e32b3a4ea8496eedf0c0a4160c4ead30))
+* **eslint-plugin-prettier:** upgrade to 5.2.6 ([9329367](https://github.com/typegoose/typegoose/commit/9329367662bc03fe53a9f9487cdc44f355918f56))
+* **ts-jest:** upgrade to 29.3.2 ([b5e2551](https://github.com/typegoose/typegoose/commit/b5e2551617137572d31367e9bf7086219f9bb4f6))
+
 ## [12.14.0](https://github.com/typegoose/typegoose/compare/v12.13.0...v12.14.0) (2025-03-25)
 
 ### Dependencies
