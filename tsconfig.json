@@ -27,6 +27,7 @@
     ".*.js",
     "*.cjs",
     ".*.cjs",
+    "*.mjs",
     "website/**/*.js",
     "scripts/**/*.js"
   ],

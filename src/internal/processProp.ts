@@ -192,7 +192,7 @@ export function processProp(input: ProcessPropOptions): void {
         schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, target, key);
 
         return;
-      case PropType.MAP:
+      case PropType.MAP: {
         const mapped = utils.mapOptions(rawOptions, newType, target, key);
 
         schemaProp[key] = {
@@ -202,6 +202,7 @@ export function processProp(input: ProcessPropOptions): void {
         };
 
         return;
+      }
       case PropType.NONE:
         schemaProp[key] = {
           ...rawOptions,
@@ -232,7 +233,7 @@ export function processProp(input: ProcessPropOptions): void {
           ...rawOptions,
         };
         break;
-      case PropType.MAP:
+      case PropType.MAP: {
         const mapped = utils.mapOptions(rawOptions, refType, target, key);
 
         schemaProp[key] = {
@@ -245,6 +246,7 @@ export function processProp(input: ProcessPropOptions): void {
           },
         };
         break;
+      }
       default:
         throw new InvalidPropTypeError(propKind, name, key, 'PropType(ref)');
     }
@@ -399,7 +401,7 @@ export function processProp(input: ProcessPropOptions): void {
         schemaProp[key] = utils.mapArrayOptions(rawOptions, Type, target, key);
 
         return;
-      case PropType.MAP:
+      case PropType.MAP: {
         let mapped: MappedInnerOuterOptions;
         let finalType: mongoose.SchemaTypeOptions<any>;
 
@@ -420,6 +422,7 @@ export function processProp(input: ProcessPropOptions): void {
         };
 
         return;
+      }
       case PropType.NONE:
         schemaProp[key] = {
           ...rawOptions,
@@ -453,7 +456,7 @@ export function processProp(input: ProcessPropOptions): void {
       schemaProp[key] = utils.mapArrayOptions(rawOptions, virtualSchema, target, key, Type);
 
       return;
-    case PropType.MAP:
+    case PropType.MAP: {
       // special handling if the lower type should be an array
       if ('dim' in rawOptions) {
         logger.debug('Map SubDocument Array for "%s.%s"', name, key);
@@ -478,6 +481,7 @@ export function processProp(input: ProcessPropOptions): void {
       };
 
       return;
+    }
     case PropType.NONE:
       schemaProp[key] = {
         ...rawOptions,

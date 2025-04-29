@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "build:tests": "tsc -p tsconfig.buildTests.json",
-    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint -c ./.eslintrc.cjs \"./**/*.{js,ts,cjs,mjs,cts,mts}\"",
+    "lint": "eslint -c ./eslint.config.mjs \"./**/*.{js,ts,cjs,mjs,cts,mts}\"",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
@@ -46,8 +46,7 @@
     "@types/lodash": "^4.17.16",
     "@types/node": "~18.19.87",
     "@types/semver": "^7.7.0",
-    "@typescript-eslint/eslint-plugin": "^8.31.1",
-    "@typescript-eslint/parser": "^8.31.1",
+    "typescript-eslint": "^8.31.1",
     "class-transformer": "0.5.1",
     "commitlint": "^19.8.0",
     "eslint": "^9.25.1",

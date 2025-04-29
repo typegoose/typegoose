@@ -4,4 +4,7 @@
     "*.js",
     "**/*.test-d.ts"
   ],
+  "compilerOptions": {
+    "allowJs": false
+  }
 }
