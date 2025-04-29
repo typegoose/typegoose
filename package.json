@@ -59,7 +59,7 @@
     "jest": "^29.7.0",
     "lint-staged": "^14.0.1",
     "mongodb-memory-server": "^10.1.4",
-    "mongoose": "~8.14.0",
+    "mongoose": "git+https://github.com/hasezoey/mongoose.git#fixKareem",
     "prettier": "^3.5.3",
     "rimraf": "^5.0.10",
     "ts-jest": "^29.3.2",
