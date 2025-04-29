@@ -13,7 +13,7 @@ This Guide is written for migration from version `12.15.0` to `13.0.0`, for vers
 
 - Mongoose `9.0.0` or higher is now required
 <!-- - Typescript `5.2` or higher is now required to be used -->
-<!-- - NodeJS 16 is now the lowest supported nodejs version -->
+- NodeJS 18 is now the lowest supported nodejs version
 
 <!-- ## TSConfig Target is now `es2021`
 
