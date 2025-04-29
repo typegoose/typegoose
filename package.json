@@ -40,8 +40,8 @@
     "mongoose": "~8.14.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.7.1",
-    "@commitlint/config-conventional": "^17.8.1",
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.16",
     "@types/node": "~18.19.87",
@@ -49,7 +49,7 @@
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "class-transformer": "0.5.1",
-    "commitlint": "^17.8.1",
+    "commitlint": "^19.8.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.6",
