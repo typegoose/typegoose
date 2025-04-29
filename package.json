@@ -61,7 +61,7 @@
     "prettier": "^3.5.3",
     "rimraf": "^5.0.10",
     "ts-jest": "^29.3.2",
-    "tstyche": "^2.1.1",
+    "tstyche": "^3.5.0",
     "typescript": "~5.7.3"
   },
   "dependencies": {
