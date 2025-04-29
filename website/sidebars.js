@@ -44,11 +44,7 @@ module.exports = {
     // 'guides/known-issues' is included in both "Getting Started" and "Guides", because it fits into both categories
     Guides: [
       {
-        'Integration Examples': [
-          'guides/integration-examples/using-with-class-transformer',
-          'guides/integration-examples/using-with-deepkit-type',
-          'guides/integration-examples/common-plugins',
-        ],
+        'Integration Examples': ['guides/integration-examples/using-with-class-transformer', 'guides/integration-examples/common-plugins'],
         Miscellaneous: ['guides/advanced/logger', 'guides/all-decorators', 'guides/use-without-emitDecoratorMetadata', 'guides/motivation'],
       },
       'guides/default-classes',

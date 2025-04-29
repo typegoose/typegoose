@@ -42,8 +42,6 @@
   "devDependencies": {
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.8.1",
-    "@deepkit/core": "1.0.1-alpha.58",
-    "@deepkit/type": "1.0.1-alpha.58",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.16",
     "@types/node": "~16.11.7",
