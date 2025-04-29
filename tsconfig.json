@@ -11,7 +11,7 @@
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowJs": false,
+    "allowJs": true,
     "outDir": "build",
     "inlineSourceMap": true,
     "importHelpers": true,

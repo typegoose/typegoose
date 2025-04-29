@@ -731,7 +731,6 @@ export function isConstructor(obj: any): obj is AnyParamConstructor<any> {
 //  * (if "process" does not exist, the codes are not cached, and are always logged again)
 //  * This Function is here to try to make typegoose compatible with the browser (see https://github.com/typegoose/typegoose/issues/33)
 //  */
-// eslint-disable-next-line @typescript-eslint/ban-types
 // export function deprecate<T extends Function>(fn: T, message: string, code: string): T {
 //   if (!isNullOrUndefined(process)) {
 //     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -780,6 +779,7 @@ export function warnNotMatchingExisting(fromName: string, clName: string, proper
 export function toStringNoFail(value: unknown): string {
   try {
     return String(value);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_) {
     return '(Error: Converting value to String failed)';
   }

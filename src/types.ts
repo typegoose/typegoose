@@ -219,7 +219,7 @@ export interface BasePropOptions {
   /**
    * This option has only an effect when the plugin `mongoose-autopopulate` is used
    */
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   autopopulate?: boolean | Function | KeyStringAny;
   /** Reference another Document (you should use Ref<T> as Prop type) */
   ref?: DeferredFunc<string | AnyParamConstructor<any> | DynamicStringFunc<any>> | string | AnyParamConstructor<any>;
@@ -715,7 +715,7 @@ export type BeAnObject = Record<string, any>;
  * This type is for mongoose-specific things where {@link BeAnObject} does not work
  * see https://github.com/Automattic/mongoose/issues/13094
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type BeAnyObject = {};
 
 /** Options used for "processProp" */

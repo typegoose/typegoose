@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const path = require('path');
-
 module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'prettier'],
@@ -8,7 +5,11 @@ module.exports = {
   parserOptions: {
     sourceType: 'module',
     useJSXTextNode: true,
-    project: [path.resolve(__dirname, 'tsconfig.json')],
+    projectService: {
+      allowDefaultProject: [],
+      defaultProject: 'tsconfig.json',
+    },
+    tsconfigRootDir: __dirname,
   },
   rules: {
     'no-underscore-dangle': 0,
@@ -94,4 +95,12 @@ module.exports = {
     node: true,
     jest: true,
   },
+  overrides: [
+    {
+      files: ['scripts/**/*.js', 'website/**/*.js'],
+      rules: {
+        '@typescript-eslint/no-require-imports': 0,
+      },
+    },
+  ],
 };
