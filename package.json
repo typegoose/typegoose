@@ -62,7 +62,7 @@
     "rimraf": "^5.0.10",
     "ts-jest": "^29.3.2",
     "tstyche": "^2.1.1",
-    "typescript": "~5.3.3"
+    "typescript": "~5.7.3"
   },
   "dependencies": {
     "lodash": "^4.17.20",
