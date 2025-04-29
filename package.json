@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "build:tests": "tsc -p tsconfig.buildTests.json",
-    "lint": "eslint -c ./.eslintrc.cjs \"./**/*.{js,ts,cjs,mjs,cts,mts}\"",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint -c ./.eslintrc.cjs \"./**/*.{js,ts,cjs,mjs,cts,mts}\"",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
@@ -50,7 +50,7 @@
     "@typescript-eslint/parser": "^8.31.1",
     "class-transformer": "0.5.1",
     "commitlint": "^19.8.0",
-    "eslint": "^8.57.1",
+    "eslint": "^9.25.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
     "husky": "^9.1.7",
