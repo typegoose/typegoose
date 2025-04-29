@@ -616,7 +616,7 @@ it('should output correct defaults with multiple inheritance [typegoose/typegoos
 
   class Child extends Parent {
     @prop({ default: () => 'overwritten' })
-    public UID?: string;
+    declare public UID?: string;
   }
 
   class GrandChild extends Child {

@@ -112,7 +112,7 @@ Like `public: string[]` is in reflection only `Array`.
 - A IDE that supports TypeScript linting is recommended to be used (VSCode is recommended)
 - This Guide expects you to know how Mongoose (or at least its models) works
 - `experimentalDecorators` and `emitDecoratorMetadata` must be enabled in `tsconfig.json`
-- tsconfig option `target` being at least `es6`, recommended is `es2020`
+- tsconfig option `target` being at least `es6`, recommended is `es2022`
 
 :::info
 tsconfig option `emitDecoratorMetadata` is not strictly required, look [here](./use-without-emitDecoratorMetadata.md) for more
