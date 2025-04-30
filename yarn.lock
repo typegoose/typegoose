@@ -3327,9 +3327,9 @@ mongodb@~6.16.0:
     bson "^6.10.3"
     mongodb-connection-string-url "^3.0.0"
 
-"mongoose@git+https://github.com/hasezoey/mongoose.git#fixKareem":
+"mongoose@git+https://github.com/Automattic/mongoose.git#9.0":
   version "8.14.0"
-  resolved "git+https://github.com/hasezoey/mongoose.git#9b9ba10905b94339c290a67823555a8466b7b830"
+  resolved "git+https://github.com/Automattic/mongoose.git#8f4ec142da69cc28dadd9061791c1b2db6d5f948"
   dependencies:
     bson "^6.10.3"
     kareem "git+https://github.com/mongoosejs/kareem.git#vkarpov15/v3"
