@@ -12,7 +12,7 @@ class SomeChangedID {
 }
 ```
 
-The example above sets the `_id` type to be a string, but does not provide a `default` function, so the `_id` property needs to be always set manually before saving / inserting a document, use the [`default`](../../api/decorators/prop.md#default) option to set a function to generate a new id everytime, be careful to not forget that using `default: fn()` will only call the function *once at scope time* instead of *everytime a new document is created*.
+The example above sets the `_id` type to be a string, but does not provide a `default` function, so the `_id` property needs to be always set manually before saving / inserting a document, use the [`default`](../../api/decorators/prop.md#default) option to set a function to generate a new id automatically, be careful to not forget that using `default: fn()` will only call the function *once at scope time* instead of *everytime a new document is created*.
 
 ```ts
 class SomeUUIDv4 {
@@ -40,27 +40,22 @@ class SomeChangedID {
 
 ## With the Base Interface
 
-:::warning
-It is recommended to use the manual approach over using `Base`, because default classes & interfaces may be removed in the future and dont greatly support extending from each other.
-:::
-
-There is also a `Base` interface typegoose provides, which includes `_id` and `id`, which can be used as follows:
+There is also a [`Base` interface](../defaultClasses.md#base) typegoose provides which includes `_id` and `id`, it can be used as follows:
 
 ```ts
-interface Something extends Base<string> {} // have the interface to add the types of "Base" to the class
-class Something { // have your class, OR
+class Something implements Base<string> {
   @prop()
   public _id: string;
+  // .. other properties "Base" might provide and needs to be implemented
 }
-class Something extends TimeStamps { // have your class extend some other class
+
+// The Base interface can also be used together with other classes and other interfaces
+class Something extends TimeStamps implements Base<string> {
   @prop()
   public _id: string;
+  // .. other properties "Base" might provide and needs to be implemented
 }
 ```
-
-:::note
-The `_id` property needs to also be included in the actual class, because the default interface `Base` doesn't change anything at runtime (`Base` does not use `@prop`).
-:::
 
 :::info Restriction
 This method (extending `Base`) can only be used with types that are in `RefType` (all of `mongoose.Schema.Types` should work except `Array`, `Mixed`, `Boolean`).
