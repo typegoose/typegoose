@@ -1,3 +1,9 @@
+## [12.15.1](https://github.com/typegoose/typegoose/compare/v12.15.0...v12.15.1) (2025-05-08)
+
+### Fixes
+
+* **hooks:** update for specific "init" hook methods ([63f3f28](https://github.com/typegoose/typegoose/commit/63f3f28be06791ad4a8f2e71b5af1f930a68f665)), closes [#997](https://github.com/typegoose/typegoose/issues/997)
+
 ## [12.15.0](https://github.com/typegoose/typegoose/compare/v12.14.0...v12.15.0) (2025-04-29)
 
 ### Dependencies
