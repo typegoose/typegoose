@@ -178,6 +178,10 @@ interface Hooks {
     fn: PreSaveMiddlewareFunction<T>,
     options?: SchemaPreOptions
   ): ClassDecorator;
+  pre<S extends object | HydratedDocument<any, any>, RawDocType = unknown>(
+    method: 'init',
+    fn: (this: S, doc: RawDocType) => void
+  ): ClassDecorator;
   pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
     method: MongooseDistinctDocumentMiddleware | MongooseDistinctDocumentMiddleware[],
     fn: PreMiddlewareFunction<T>,

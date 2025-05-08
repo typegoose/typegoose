@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { expect } from 'tstyche';
 import * as typegoose from '../../../src/typegoose';
 import { isDocument, isRefType, prop } from '../../../src/typegoose';
@@ -500,3 +501,34 @@ async function queryhelpers() {
 }
 
 queryhelpers();
+
+function initHook814() {
+  @typegoose.pre('init', (doc) => {
+    expect(this).type.toBe<typegoose.DocumentType<any>>();
+    expect(doc).type.toBe<unknown>();
+  })
+  class BasicNoOptions {
+    @typegoose.prop()
+    public something?: string;
+  }
+
+  @typegoose.pre<typegoose.DocumentType<OverwriteFirstGeneric>>('init', function hook(doc) {
+    expect(this).type.toBe<typegoose.DocumentType<OverwriteFirstGeneric>>();
+    expect(doc).type.toBe<unknown>();
+  })
+  class OverwriteFirstGeneric {
+    @typegoose.prop()
+    public something?: string;
+  }
+
+  @typegoose.pre<typegoose.DocumentType<OverwriteBothGenerics>, OverwriteBothGenerics>('init', function hook(doc) {
+    expect(this).type.toBe<typegoose.DocumentType<OverwriteBothGenerics>>();
+    expect(doc).type.toBe<OverwriteBothGenerics>();
+  })
+  class OverwriteBothGenerics {
+    @typegoose.prop()
+    public something?: string;
+  }
+}
+
+initHook814();
