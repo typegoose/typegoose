@@ -98,6 +98,10 @@ interface Hooks {
     fn: PostMiddlewareFunction<T, T>,
     options?: SchemaPostOptions & { document: true; query: false }
   ): ClassDecorator;
+  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+    method: 'init',
+    fn: PostMiddlewareFunction<T, T>
+  ): ClassDecorator;
 
   // this = Query
   post<S extends object | Query<any, any>, T = S extends Query<any, any> ? S : Query<DocumentType<S>, DocumentType<S>>>(

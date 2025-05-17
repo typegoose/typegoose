@@ -507,6 +507,10 @@ function initHook814() {
     expect(this).type.toBe<typegoose.DocumentType<any>>();
     expect(doc).type.toBe<unknown>();
   })
+  @typegoose.post('init', (doc) => {
+    expect(this).type.toBe<any>();
+    expect(doc).type.toBe<typegoose.mongoose.HydratedDocument<typegoose.DocumentType<unknown>>>();
+  })
   class BasicNoOptions {
     @typegoose.prop()
     public something?: string;
@@ -516,6 +520,10 @@ function initHook814() {
     expect(this).type.toBe<typegoose.DocumentType<OverwriteFirstGeneric>>();
     expect(doc).type.toBe<unknown>();
   })
+  @typegoose.post<typegoose.DocumentType<OverwriteFirstGeneric>>('init', function hook(doc) {
+    expect(this).type.toBe<typegoose.DocumentType<OverwriteFirstGeneric>>();
+    expect(doc).type.toBe<typegoose.DocumentType<OverwriteFirstGeneric>>();
+  })
   class OverwriteFirstGeneric {
     @typegoose.prop()
     public something?: string;
@@ -524,6 +532,10 @@ function initHook814() {
   @typegoose.pre<typegoose.DocumentType<OverwriteBothGenerics>, OverwriteBothGenerics>('init', function hook(doc) {
     expect(this).type.toBe<typegoose.DocumentType<OverwriteBothGenerics>>();
     expect(doc).type.toBe<OverwriteBothGenerics>();
+  })
+  @typegoose.post<unknown, typegoose.DocumentType<OverwriteFirstGeneric>>('init', function hook(doc) {
+    expect(this).type.toBe<typegoose.DocumentType<OverwriteFirstGeneric>>();
+    expect(doc).type.toBe<typegoose.DocumentType<OverwriteFirstGeneric>>();
   })
   class OverwriteBothGenerics {
     @typegoose.prop()
