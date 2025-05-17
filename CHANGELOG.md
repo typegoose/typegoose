@@ -1,3 +1,18 @@
+## [12.16.0](https://github.com/typegoose/typegoose/compare/v12.15.1...v12.16.0) (2025-05-17)
+
+### Fixes
+
+* **hooks:** update for specific "init"(post) hooks methods ([05e1724](https://github.com/typegoose/typegoose/commit/05e1724b349f123b7c57331e428cba90be8de32c))
+
+### Dependencies
+
+* **mongoose:** upgrade to  8.15.0 ([941f86f](https://github.com/typegoose/typegoose/commit/941f86f9435c8f0784d9dcd5b8024a70eff1a034))
+* **semver:** upgrade to  7.7.2 ([44ce473](https://github.com/typegoose/typegoose/commit/44ce4738c617401a68ce370a860aebdcaabf2ae2))
+
+### Dev-Dependencies
+
+* **ts-jest:** upgrade to 29.3.4 ([16b821d](https://github.com/typegoose/typegoose/commit/16b821df0ffdf9f1963879643194197afc39b4c4))
+
 ## [12.15.1](https://github.com/typegoose/typegoose/compare/v12.15.0...v12.15.1) (2025-05-08)
 
 ### Fixes
