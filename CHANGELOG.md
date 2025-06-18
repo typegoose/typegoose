@@ -1,3 +1,15 @@
+## [12.17.0](https://github.com/typegoose/typegoose/compare/v12.16.0...v12.17.0) (2025-06-18)
+
+### Dependencies
+
+* **mongoose:** upgrade to  8.16.0 ([4c6fff0](https://github.com/typegoose/typegoose/commit/4c6fff08dd3d48e798182ceb08b7eb646f3e68a0))
+
+### Dev-Dependencies
+
+* **@types/lodash:** upgrade to 4.17.18 ([8d0f028](https://github.com/typegoose/typegoose/commit/8d0f0280d5223a79bf2be843377cc099987aebcf))
+* **eslint-plugin-prettier:** upgrade to 5.5.0 ([5458820](https://github.com/typegoose/typegoose/commit/54588204aea5cfa62b37e4c46dca2282c9bfd6da))
+* **ts-jest:** upgrade to 29.4.0 ([727d214](https://github.com/typegoose/typegoose/commit/727d214ea3801759a77bae297b4d43ebeaa52365))
+
 ## [12.16.0](https://github.com/typegoose/typegoose/compare/v12.15.1...v12.16.0) (2025-05-17)
 
 ### Fixes
