@@ -61,7 +61,7 @@ it(
 
       // the following requires a custom type, because property (virtual) "id" does not get added to the type by default
       expect<User & { _id: mongoose.Types.ObjectId; id: string }>(
-        foundUser.toObject<User & { id: string }>({ virtuals: true, getters: true })
+        foundUser.toObject<User & { _id: mongoose.Types.ObjectId; id: string }>({ virtuals: true, getters: true })
       ).toMatchSnapshot({
         _id: expect.any(mongoose.Types.ObjectId),
         id: expect.any(String),
