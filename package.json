@@ -45,7 +45,7 @@
     "@deepkit/core": "1.0.1-alpha.58",
     "@deepkit/type": "1.0.1-alpha.58",
     "@types/jest": "^29.5.14",
-    "@types/lodash": "^4.17.18",
+    "@types/lodash": "^4.17.20",
     "@types/node": "~16.11.7",
     "@types/semver": "^7.7.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
