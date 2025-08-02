@@ -1,3 +1,17 @@
+## [12.18.0](https://github.com/typegoose/typegoose/compare/v12.17.0...v12.18.0) (2025-08-02)
+
+### Dependencies
+
+* **mongoose:** upgrade to  8.17.0 ([074f9e6](https://github.com/typegoose/typegoose/commit/074f9e6dcf759da42e594f6d5eb45d5ccf5f5d74))
+
+### Dev-Dependencies
+
+* **@types/lodash:** upgrade to 4.17.20 ([56c9423](https://github.com/typegoose/typegoose/commit/56c9423540a8f38c83904e338d30b28f22fb461c))
+* **eslint-config-prettier:** upgrade to 9.1.2 ([84d1d6c](https://github.com/typegoose/typegoose/commit/84d1d6c0a15fc067d36ddb60949ed848d0c76efd))
+* **eslint-plugin-prettier:** upgrade to 5.5.3 ([a1e4171](https://github.com/typegoose/typegoose/commit/a1e41714b36063511478f63c27b0d141bc940d3b))
+* **mongodb-memory-server:** upgrade to 10.2.0 ([bf8479e](https://github.com/typegoose/typegoose/commit/bf8479e56197c024f80ee6b50e50ba1a0d0c3c2f))
+* **prettier:** upgrade to 3.6.2 ([1dc4dce](https://github.com/typegoose/typegoose/commit/1dc4dcebe6740c8eaf9a574ceff0971f7ce3370d))
+
 ## [12.17.0](https://github.com/typegoose/typegoose/compare/v12.16.0...v12.17.0) (2025-06-18)
 
 ### Dependencies
