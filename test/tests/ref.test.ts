@@ -10,11 +10,11 @@ it('check generated ref schema for ObjectId _id', async () => {
   expect((RefTestModel.schema.path('refField2') as any).options.ref).toEqual('RefTest');
 
   expect((RefTestModel.schema.path('refArray') as any).instance).toEqual('Array');
-  expect((RefTestModel.schema.path('refArray') as any).caster.instance).toEqual('ObjectId');
-  expect((RefTestModel.schema.path('refArray') as any).caster.options.ref).toEqual('RefTest');
+  expect((RefTestModel.schema.path('refArray') as any).embeddedSchemaType.instance).toEqual('ObjectId');
+  expect((RefTestModel.schema.path('refArray') as any).embeddedSchemaType.options.ref).toEqual('RefTest');
   expect((RefTestModel.schema.path('refArray2') as any).instance).toEqual('Array');
-  expect((RefTestModel.schema.path('refArray2') as any).caster.instance).toEqual('ObjectId');
-  expect((RefTestModel.schema.path('refArray2') as any).caster.options.ref).toEqual('RefTest');
+  expect((RefTestModel.schema.path('refArray2') as any).embeddedSchemaType.instance).toEqual('ObjectId');
+  expect((RefTestModel.schema.path('refArray2') as any).embeddedSchemaType.options.ref).toEqual('RefTest');
 });
 
 it('check generated ref schema for string _id', async () => {
@@ -24,11 +24,11 @@ it('check generated ref schema for string _id', async () => {
   expect((RefTestModel.schema.path('refFieldString2') as any).options.ref).toEqual('RefTestString');
 
   expect((RefTestModel.schema.path('refArrayString') as any).instance).toEqual('Array');
-  expect((RefTestModel.schema.path('refArrayString') as any).caster.instance).toEqual('String');
-  expect((RefTestModel.schema.path('refArrayString') as any).caster.options.ref).toEqual('RefTestString');
+  expect((RefTestModel.schema.path('refArrayString') as any).embeddedSchemaType.instance).toEqual('String');
+  expect((RefTestModel.schema.path('refArrayString') as any).embeddedSchemaType.options.ref).toEqual('RefTestString');
   expect((RefTestModel.schema.path('refArrayString2') as any).instance).toEqual('Array');
-  expect((RefTestModel.schema.path('refArrayString2') as any).caster.instance).toEqual('String');
-  expect((RefTestModel.schema.path('refArrayString2') as any).caster.options.ref).toEqual('RefTestString');
+  expect((RefTestModel.schema.path('refArrayString2') as any).embeddedSchemaType.instance).toEqual('String');
+  expect((RefTestModel.schema.path('refArrayString2') as any).embeddedSchemaType.options.ref).toEqual('RefTestString');
 });
 
 it('check generated ref schema for number _id', async () => {
@@ -38,11 +38,11 @@ it('check generated ref schema for number _id', async () => {
   expect((RefTestModel.schema.path('refFieldNumber2') as any).options.ref).toEqual('RefTestNumber');
 
   expect((RefTestModel.schema.path('refArrayNumber') as any).instance).toEqual('Array');
-  expect((RefTestModel.schema.path('refArrayNumber') as any).caster.instance).toEqual('Number');
-  expect((RefTestModel.schema.path('refArrayNumber') as any).caster.options.ref).toEqual('RefTestNumber');
+  expect((RefTestModel.schema.path('refArrayNumber') as any).embeddedSchemaType.instance).toEqual('Number');
+  expect((RefTestModel.schema.path('refArrayNumber') as any).embeddedSchemaType.options.ref).toEqual('RefTestNumber');
   expect((RefTestModel.schema.path('refArrayNumber2') as any).instance).toEqual('Array');
-  expect((RefTestModel.schema.path('refArrayNumber2') as any).caster.instance).toEqual('Number');
-  expect((RefTestModel.schema.path('refArrayNumber2') as any).caster.options.ref).toEqual('RefTestNumber');
+  expect((RefTestModel.schema.path('refArrayNumber2') as any).embeddedSchemaType.instance).toEqual('Number');
+  expect((RefTestModel.schema.path('refArrayNumber2') as any).embeddedSchemaType.options.ref).toEqual('RefTestNumber');
 });
 
 it('check generated ref schema for Buffer _id', async () => {
@@ -52,11 +52,11 @@ it('check generated ref schema for Buffer _id', async () => {
   expect((RefTestModel.schema.path('refFieldBuffer2') as any).options.ref).toEqual('RefTestBuffer');
 
   expect((RefTestModel.schema.path('refArrayBuffer') as any).instance).toEqual('Array');
-  expect((RefTestModel.schema.path('refArrayBuffer') as any).caster.instance).toEqual('Buffer');
-  expect((RefTestModel.schema.path('refArrayBuffer') as any).caster.options.ref).toEqual('RefTestBuffer');
+  expect((RefTestModel.schema.path('refArrayBuffer') as any).embeddedSchemaType.instance).toEqual('Buffer');
+  expect((RefTestModel.schema.path('refArrayBuffer') as any).embeddedSchemaType.options.ref).toEqual('RefTestBuffer');
   expect((RefTestModel.schema.path('refArrayBuffer2') as any).instance).toEqual('Array');
-  expect((RefTestModel.schema.path('refArrayBuffer2') as any).caster.instance).toEqual('Buffer');
-  expect((RefTestModel.schema.path('refArrayBuffer2') as any).caster.options.ref).toEqual('RefTestBuffer');
+  expect((RefTestModel.schema.path('refArrayBuffer2') as any).embeddedSchemaType.instance).toEqual('Buffer');
+  expect((RefTestModel.schema.path('refArrayBuffer2') as any).embeddedSchemaType.options.ref).toEqual('RefTestBuffer');
 });
 
 it('check reference with string _id', async () => {
@@ -269,7 +269,7 @@ it('reference arrays should work with mongoose.Types.Array<Ref<T>>', async () =>
   expect(found.toObject()).toEqual(doc.depopulate('array').toObject());
   const schemaPath: any = RefTestArrayTypesModel.schema.path('array');
   expect(schemaPath).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect(schemaPath.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(schemaPath.embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.String);
 
   expect(Array.from(found.array!.toObject())).toEqual([stringdoc._id, stringdoc._id]);
 });

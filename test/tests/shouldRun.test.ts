@@ -339,7 +339,7 @@ it('should also allow "mongoose.Types.Array<string>" as possible type', () => {
   const schema = buildSchema(TypesArray);
 
   expect(schema.path('someString')).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect((schema.path('someString') as any).caster).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect((schema.path('someString') as any).embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.String);
 });
 
 it('should give a warning when type is "any" [typegoose/typegoose#152]', () => {
@@ -654,7 +654,7 @@ describe('get/set options', () => {
     expect(schema.path('normal')).toBeInstanceOf(mongoose.Schema.Types.Number);
     expect(schema.path('normal')).not.toHaveProperty('caster');
     expect(schema.path('array')).toBeInstanceOf(mongoose.Schema.Types.Array);
-    expect((schema.path('array') as any).caster).toBeInstanceOf(mongoose.Schema.Types.Number);
+    expect((schema.path('array') as any).embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.Number);
     expect(schema.path('map')).toBeInstanceOf(mongoose.Schema.Types.Map);
     expect((schema.path('map') as any).$__schemaType).toBeInstanceOf(mongoose.Schema.Types.Number);
     expect(schema.path('map')).not.toHaveProperty('caster');
@@ -761,12 +761,12 @@ describe('test the Passthrough class (non "direct")', () => {
 
     /** Type to shorten using another type and to add "caster", because it does not exist on the type */
     type ArrayWithCaster = mongoose.Schema.Types.Array & { caster: any };
-    expect((typegooseSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
-      mongoose.Schema.Types.String
-    );
-    expect((mongooseSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').caster).toBeInstanceOf(
-      mongoose.Schema.Types.String
-    );
+    expect(
+      (typegooseSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').embeddedSchemaType
+    ).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect(
+      (mongooseSomethingExtraPath as SubDocumentAlias).schema.path<ArrayWithCaster>('someExtraPath').embeddedSchemaType
+    ).toBeInstanceOf(mongoose.Schema.Types.String);
 
     // This is somehow not working, because somehow these 2 variables are not equal (maybe because of Symbols?)
     // expect((somethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toMatchObject(
@@ -793,11 +793,11 @@ describe('test the Passthrough class (non "direct")', () => {
     expect(typegooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
     expect(mongooseSomethingPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
 
-    expect((typegooseSomethingPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
-    expect((mongooseSomethingPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
+    expect((typegooseSomethingPath as any).embeddedSchemaType.schema).toBeInstanceOf(mongoose.Schema);
+    expect((mongooseSomethingPath as any).embeddedSchemaType.schema).toBeInstanceOf(mongoose.Schema);
 
-    expect((typegooseSomethingPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
-    expect((mongooseSomethingPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect((typegooseSomethingPath as any).embeddedSchemaType.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect((mongooseSomethingPath as any).embeddedSchemaType.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
 
     expect(spyWarn).toHaveBeenCalledTimes(1);
     expect(spyWarn.mock.calls).toMatchSnapshot();
@@ -866,11 +866,11 @@ describe('test the Passthrough class with "direct"', () => {
     expect(mongooseChildPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
     expect(typegooseChildPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
 
-    expect((mongooseChildPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
-    expect((typegooseChildPath as any).caster.schema).toBeInstanceOf(mongoose.Schema);
+    expect((mongooseChildPath as any).embeddedSchemaType.schema).toBeInstanceOf(mongoose.Schema);
+    expect((typegooseChildPath as any).embeddedSchemaType.schema).toBeInstanceOf(mongoose.Schema);
 
-    expect((mongooseChildPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
-    expect((typegooseChildPath as any).caster.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect((mongooseChildPath as any).embeddedSchemaType.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect((typegooseChildPath as any).embeddedSchemaType.schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
   });
 
   it('should make use of the "Passthrough" class with "direct" (PropType.MAP)', () => {
@@ -949,7 +949,7 @@ it('should allow Maps with SubDocument Array "Map<string SubDocument[]>"', async
   expect(nestingPath).toBeInstanceOf(mongoose.Schema.Types.Map);
   expect(casterNestingPath).toBeInstanceOf(mongoose.Schema.Types.DocumentArray);
   // this somehow does not work
-  // expect(casterNestingPath.caster).toEqual(mongoose.Schema.Types.Embedded);
+  // expect(casterNestingPath.embeddedSchemaType).toEqual(mongoose.Schema.Types.Embedded);
   expect(casterNestingPath.schema.path('dummy')).toBeInstanceOf(mongoose.Schema.Types.String);
   expect(casterNestingPath.schema.paths).not.toHaveProperty('_id');
 });
@@ -1042,7 +1042,7 @@ it('should correctly map a Map<string, string[]> [typegoose/typegoose#682]', () 
 
   expect(path).toBeInstanceOf(mongoose.Schema.Types.Map);
   expect(path['$__schemaType']).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect(path['$__schemaType'].caster).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(path['$__schemaType'].embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.String);
 });
 
 it('should properly get if the type is meant to be a array', () => {
@@ -1270,15 +1270,15 @@ describe('ref', () => {
     expect(schemaPath).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(schemaPath.instance).toEqual('Array');
 
-    const path2 = schemaPath.caster;
+    const path2 = schemaPath.embeddedSchemaType;
     expect(path2).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(path2.instance).toEqual('Array');
 
-    const path3 = path2.caster;
+    const path3 = path2.embeddedSchemaType;
     expect(path3).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(path3.instance).toEqual('Array');
 
-    const lowest = path3.caster;
+    const lowest = path3.embeddedSchemaType;
     expect(lowest.options.ref).toEqual('Lower');
   });
 
@@ -1299,15 +1299,15 @@ describe('ref', () => {
     expect(schemaPath).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(schemaPath.instance).toEqual('Array');
 
-    const path2 = schemaPath.caster;
+    const path2 = schemaPath.embeddedSchemaType;
     expect(path2).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(path2.instance).toEqual('Array');
 
-    const path3 = path2.caster;
+    const path3 = path2.embeddedSchemaType;
     expect(path3).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect(path3.instance).toEqual('Array');
 
-    const lowest = path3.caster;
+    const lowest = path3.embeddedSchemaType;
     expect(lowest.options.ref).toEqual('Lower');
   });
 });
@@ -1348,12 +1348,12 @@ it('should set PropType.ARRAY if dim is above 1 and Type is PropType.NONE and no
   const path3 = schema.path('arrayInferred') as any;
   expect(path3).toBeInstanceOf(mongoose.Schema.Types.Array);
   expect(path3.instance).toEqual('Array');
-  expect(path3.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(path3.embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.String);
 
   const path4 = schema.path('arrayExplicit') as any;
   expect(path4).toBeInstanceOf(mongoose.Schema.Types.Array);
   expect(path4.instance).toEqual('Array');
-  expect(path4.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(path4.embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.String);
 
   const path5 = schema.path('proptypeExplicit') as any;
   expect(path5).toBeInstanceOf(mongoose.Schema.Types.String);
