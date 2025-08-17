@@ -101,8 +101,8 @@ describe('index order', () => {
     const indexes = sch.indexes();
     expect(indexes.length).toStrictEqual(2);
     expect(indexes).toStrictEqual([
-      [{ dummy1: 1 }, { background: true }],
-      [{ dummy2: 1 }, { background: true }],
+      [{ dummy1: 1 }, {}],
+      [{ dummy2: 1 }, {}],
     ]);
   });
 
@@ -122,7 +122,7 @@ describe('index order', () => {
 
     const indexes = sch.indexes();
     expect(indexes.length).toStrictEqual(1);
-    expect(indexes).toStrictEqual([[{ dummy1: 1 }, { background: true }]]);
+    expect(indexes).toStrictEqual([[{ dummy1: 1 }, {}]]);
   });
 
   it('should not inherit indexes beyond "disableLowerIndexes: false", but still include self (mid level)', () => {
@@ -156,9 +156,9 @@ describe('index order', () => {
     const indexes = sch.indexes();
     expect(indexes.length).toStrictEqual(3);
     expect(indexes).toStrictEqual([
-      [{ dummy2: 1 }, { background: true }],
-      [{ dummy3: 1 }, { background: true }],
-      [{ dummy4: 1 }, { background: true }],
+      [{ dummy2: 1 }, {}],
+      [{ dummy3: 1 }, {}],
+      [{ dummy4: 1 }, {}],
     ]);
 
     // the following checks are just to actually make sure the options are correctly set and inherited
@@ -190,6 +190,6 @@ describe('index order', () => {
 
     const indexes = sch.indexes();
     expect(indexes.length).toStrictEqual(1);
-    expect(indexes).toStrictEqual([[{ dummy2: 1 }, { background: true }]]);
+    expect(indexes).toStrictEqual([[{ dummy2: 1 }, {}]]);
   });
 });
