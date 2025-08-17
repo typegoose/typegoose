@@ -1,7 +1,7 @@
 import { expect } from 'tstyche';
 import * as typegoose from '../../../src/typegoose';
 import { isDocument, isRefType, prop } from '../../../src/typegoose';
-import { BeAnObject, BeAnyObject, IObjectWithTypegooseFunction } from '../../../src/types';
+import { BeAnObject, DefaultIdVirtual, IObjectWithTypegooseFunction } from '../../../src/types';
 
 // decorators return type
 expect(typegoose.prop()).type.toBe<PropertyDecorator>();
@@ -121,7 +121,7 @@ async function typeguards() {
   // top-level tests
   {
     if (typegoose.isDocument(someNewDoc)) {
-      expect(someNewDoc).type.toBeAssignableWith<typegoose.DocumentType<TypeguardsClass>>();
+      expect(someNewDoc).type.toBeAssignableTo<typegoose.DocumentType<TypeguardsClass>>();
     } else {
       // this type is currently wrong, typescript cannot remove the case because the input is not restricted enough
       expect<unknown>().type.toBeAssignableWith(someNewDoc);
@@ -234,20 +234,23 @@ typeguards();
 async function testDocumentType() {
   const someNewDoc = new TestClassModel();
 
-  expect(someNewDoc).type.toBe<typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>>();
+  expect(someNewDoc).type.toBe<
+    typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & DefaultIdVirtual, BeAnObject, DefaultIdVirtual>
+  >();
 
   const someCreatedDoc = await TestClassModel.create();
 
   expect(someCreatedDoc).type.toBe<
-    typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>[]
+    typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & DefaultIdVirtual, BeAnObject, DefaultIdVirtual>[]
   >();
 
   const someFoundDoc = await TestClassModel.findOne();
 
   expect(someFoundDoc).type.toBe<typegoose.mongoose.HydratedDocument<
     TestClass,
-    IObjectWithTypegooseFunction & BeAnyObject,
-    BeAnObject
+    IObjectWithTypegooseFunction & DefaultIdVirtual,
+    BeAnObject,
+    DefaultIdVirtual
   > | null>();
 
   expect(someNewDoc._id).type.toBe<typegoose.mongoose.Types.ObjectId>();
@@ -268,7 +271,9 @@ async function gh732() {
 
   const doc = await SomeClassModel.create({ someoptionalProp: 'helloopt', somerequiredProp: 'helloreq' });
 
-  expect(doc).type.toBe<typegoose.mongoose.HydratedDocument<SomeClass, IObjectWithTypegooseFunction & BeAnyObject, BeAnObject>>();
+  expect(doc).type.toBe<
+    typegoose.mongoose.HydratedDocument<SomeClass, IObjectWithTypegooseFunction & DefaultIdVirtual, BeAnObject, DefaultIdVirtual>
+  >();
 
   const toobj = doc.toObject();
   const tojson = doc.toJSON();
