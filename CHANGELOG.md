@@ -1,3 +1,19 @@
+## [12.19.0-beta.1](https://github.com/typegoose/typegoose/compare/v12.18.0...v12.19.0-beta.1) (2025-08-25)
+
+### Features
+
+* **modelOptions:** allow specifying generics ([1f35e6b](https://github.com/typegoose/typegoose/commit/1f35e6ba1bbfdfd3e3522eedb412582a6aaab578)), closes [#1004](https://github.com/typegoose/typegoose/issues/1004) [#1005](https://github.com/typegoose/typegoose/issues/1005)
+
+### Dependencies
+
+* **mongoose:** upgrade to  8.18.0 ([6b59f9c](https://github.com/typegoose/typegoose/commit/6b59f9c5e3f0b57561d11ec24c1d1f5e87c5d5c9))
+* **typescript:** upgrade to  5.4.5 ([e431018](https://github.com/typegoose/typegoose/commit/e431018799f0037efeb37cc0e9387420f217b33c))
+
+### Dev-Dependencies
+
+* **eslint-plugin-prettier:** upgrade to 5.5.4 ([017e905](https://github.com/typegoose/typegoose/commit/017e905ac65cbfb5475bcacfaad478b1bd85941a))
+* **ts-jest:** upgrade to 29.4.1 ([267f89d](https://github.com/typegoose/typegoose/commit/267f89dec16e69d4d51a54eb4fd36593296e6f65))
+
 ## [12.18.0](https://github.com/typegoose/typegoose/compare/v12.17.0...v12.18.0) (2025-08-02)
 
 ### Dependencies
