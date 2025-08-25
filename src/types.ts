@@ -433,11 +433,30 @@ export interface DiscriminatorObject {
   value?: string;
 }
 
-export interface IModelOptions {
+// Disable ban-types because we want the same defaults as mongoose
+/* eslint-disable @typescript-eslint/ban-types */
+export interface IModelOptions<
+  DocType = unknown,
+  TInstanceMethods = {},
+  QueryHelpers = {},
+  TStaticMethods = {},
+  TVirtuals = {},
+  THydratedDocumentType = mongoose.HydratedDocument<DocType, TInstanceMethods, QueryHelpers>,
+  TModelType = mongoose.Model<DocType, QueryHelpers, TInstanceMethods, TVirtuals, THydratedDocumentType>,
+> {
+  /* eslint-enable @typescript-eslint/ban-types */
   /** An Existing Mongoose Connection */
   existingMongoose?: mongoose.Mongoose;
   /** Supports all Mongoose's Schema Options */
-  schemaOptions?: mongoose.SchemaOptions;
+  schemaOptions?: mongoose.SchemaOptions<
+    DocType,
+    TInstanceMethods,
+    QueryHelpers,
+    TStaticMethods,
+    TVirtuals,
+    THydratedDocumentType,
+    TModelType
+  >;
   /** An Existing Connection */
   existingConnection?: mongoose.Connection;
   /** Typegoose Custom Options */
