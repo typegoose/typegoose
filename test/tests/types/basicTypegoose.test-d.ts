@@ -544,3 +544,25 @@ function initHook814() {
 }
 
 initHook814();
+
+function modelOptionsGenerics() {
+  @typegoose.modelOptions<typeof Test>({
+    schemaOptions: {
+      toObject: {
+        transform(doc, ret, options) {
+          expect(doc).type.toBe<typegoose.DocumentType<Test>>();
+          expect(ret).type.toBeAssignableTo<Test>();
+        },
+      },
+    },
+  })
+  class Test {
+    @prop()
+    public prop1?: string;
+
+    @prop({ required: true })
+    public test1!: number;
+  }
+}
+
+modelOptionsGenerics();

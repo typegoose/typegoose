@@ -1,6 +1,6 @@
 import { DecoratorKeys } from './internal/constants';
 import { assignGlobalModelOptions, assignMetadata } from './internal/utils';
-import type { IModelOptions } from './types';
+import type { AnyParamConstructor, BeAnObject, IModelOptions } from './types';
 
 /**
  * Define Options for the Class
@@ -13,7 +13,9 @@ import type { IModelOptions } from './types';
  * // The default Class "TimeStamps" can be used for type information and options already set
  * ```
  */
-export function modelOptions(options: IModelOptions): ClassDecorator {
+export function modelOptions<U extends AnyParamConstructor<any> = any, QueryHelpers = BeAnObject>(
+  options: IModelOptions<U, QueryHelpers>
+): ClassDecorator {
   return (target: any) => {
     assignGlobalModelOptions(target);
     assignMetadata(DecoratorKeys.ModelOptions, options, target);

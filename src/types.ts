@@ -433,11 +433,18 @@ export interface DiscriminatorObject {
   value?: string;
 }
 
-export interface IModelOptions {
+export interface IModelOptions<U extends AnyParamConstructor<any> = any, QueryHelpers = BeAnObject> {
   /** An Existing Mongoose Connection */
   existingMongoose?: mongoose.Mongoose;
   /** Supports all Mongoose's Schema Options */
-  schemaOptions?: mongoose.SchemaOptions;
+  schemaOptions?: mongoose.SchemaOptions<
+    InstanceType<U>,
+    IObjectWithTypegooseFunction,
+    QueryHelpers,
+    BeAnyObject,
+    BeAnyObject,
+    DocumentType<InstanceType<U>>
+  >;
   /** An Existing Connection */
   existingConnection?: mongoose.Connection;
   /** Typegoose Custom Options */
