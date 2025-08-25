@@ -108,9 +108,12 @@ jobs:
           # "conventional-changelog-writer" is exactly installed as "cycjimmy/semantic-release-action" depends on 8.0.0, which causes errors
           # plugins included in semantic-release by default:
           # @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm @semantic-release/github
+          # "@semantic-release/github" is now included again as "semantic-release" depends on "11.0.0" and "cycjimmy/semantic-release-action" resolves to that
+          # but "11.0.1" fixes https://github.com/semantic-release/github/issues/942
           extra_plugins: |
             @semantic-release/git@10.x
             @semantic-release/changelog@6.x
+            @semantic-release/github@^11.0.1
             conventional-changelog-conventionalcommits@8
             conventional-changelog-writer@8.0.1
         env:
