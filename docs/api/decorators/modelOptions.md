@@ -11,9 +11,9 @@ function modelOptions(options: IModelOptions): ClassDecorator
 
 **Parameters:**
 
-| Name                                                      |           Type           | Description                                                   |
-| :-------------------------------------------------------- | :----------------------: | :------------------------------------------------------------ |
-| `options` <span class="badge badge--secondary">Required</span> |           [`IModelOptions`](#imodeloptions)            | The Options to add to the Class                              |
+| Name                                                           |               Type                | Description                     |
+| :------------------------------------------------------------- | :-------------------------------: | :------------------------------ |
+| `options` <span class="badge badge--secondary">Required</span> | [`IModelOptions`](#imodeloptions) | The Options to add to the Class |
 
 `@modelOptions` is used to set options on a Class.
 
@@ -27,6 +27,10 @@ Example:
 
 ```ts
 @modelOptions({ schemaOptions: { collection: 'NotSomething' } })
+class Something {}
+
+// or specify a generic for some typed "schemaOptions":
+@modelOptions<typeof Something>({ schemaOptions: { collection: 'NotSomething' } })
 class Something {}
 ```
 

@@ -28,31 +28,25 @@ And also applies the following `schemaOptions`:
 
 The Base *Interface* provides the following fields:
 
-| Field Name |           Type            |
-| :--------: | :-----------------------: |
-|   `_id`    | `mongoose.Types.ObjectId` |
-|    `id`    |         `string`          |
+| Field Name |                           Type                           |
+| :--------: | :------------------------------------------------------: |
+|   `_id`    | The chosen ID-Type, by default `mongoose.Types.ObjectId` |
+|    `id`    |                         `string`                         |
 
-How to override `_id` type:  
-<sub>This only works with typegoose 6.0.2+</sub>
-
-```ts
-interface Something extends Base {} // have the interface to add the types of "Base" to the class
-class Something {} // have your class, OR
-class Something extends TimeStamps {} // have your class extend some other class
-```
-
-## Extra information
-
-### Use multiple classes together
-
-Because Typescript & JavaScript don't have functions for multiple inheritance, it can only be achieved by the following
-
-```ts
-interface Something extends Base {} // have the interface to add the types of "Base" to the class
-class Something extends TimeStamps {} // have your class
-```
-
-:::note
-This only works because `Base` only has types and does not modify anything.
+:::tip
+Note that `@prop()` should **not** be used on the implemented properties, unless you specifically want to overwrite default behavior or [change the `_id` type](./advanced/changeIDType.md).
 :::
+
+Example Usage:  
+<sub>This only works with typegoose 8.0.0+</sub>
+
+```ts
+class Something implements Base {
+  public _id!: ObjectId
+  public id!: string;
+}
+// Base can also be used together with other classes
+class Something extends TimeStamps implements Base {
+  // ... properties to implement
+}
+```

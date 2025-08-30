@@ -1,3 +1,82 @@
+## [12.19.0](https://github.com/typegoose/typegoose/compare/v12.18.0...v12.19.0) (2025-08-25)
+
+### Features
+
+* **modelOptions:** allow specifying generics ([1f35e6b](https://github.com/typegoose/typegoose/commit/1f35e6ba1bbfdfd3e3522eedb412582a6aaab578)), closes [#1004](https://github.com/typegoose/typegoose/issues/1004) [#1005](https://github.com/typegoose/typegoose/issues/1005)
+
+### Dependencies
+
+* **mongoose:** upgrade to  8.18.0 ([6b59f9c](https://github.com/typegoose/typegoose/commit/6b59f9c5e3f0b57561d11ec24c1d1f5e87c5d5c9))
+* **typescript:** upgrade to  5.4.5 ([e431018](https://github.com/typegoose/typegoose/commit/e431018799f0037efeb37cc0e9387420f217b33c))
+
+### Dev-Dependencies
+
+* **eslint-plugin-prettier:** upgrade to 5.5.4 ([017e905](https://github.com/typegoose/typegoose/commit/017e905ac65cbfb5475bcacfaad478b1bd85941a))
+* **ts-jest:** upgrade to 29.4.1 ([267f89d](https://github.com/typegoose/typegoose/commit/267f89dec16e69d4d51a54eb4fd36593296e6f65))
+
+## [12.19.0-beta.1](https://github.com/typegoose/typegoose/compare/v12.18.0...v12.19.0-beta.1) (2025-08-25)
+
+### Features
+
+* **modelOptions:** allow specifying generics ([1f35e6b](https://github.com/typegoose/typegoose/commit/1f35e6ba1bbfdfd3e3522eedb412582a6aaab578)), closes [#1004](https://github.com/typegoose/typegoose/issues/1004) [#1005](https://github.com/typegoose/typegoose/issues/1005)
+
+### Dependencies
+
+* **mongoose:** upgrade to  8.18.0 ([6b59f9c](https://github.com/typegoose/typegoose/commit/6b59f9c5e3f0b57561d11ec24c1d1f5e87c5d5c9))
+* **typescript:** upgrade to  5.4.5 ([e431018](https://github.com/typegoose/typegoose/commit/e431018799f0037efeb37cc0e9387420f217b33c))
+
+### Dev-Dependencies
+
+* **eslint-plugin-prettier:** upgrade to 5.5.4 ([017e905](https://github.com/typegoose/typegoose/commit/017e905ac65cbfb5475bcacfaad478b1bd85941a))
+* **ts-jest:** upgrade to 29.4.1 ([267f89d](https://github.com/typegoose/typegoose/commit/267f89dec16e69d4d51a54eb4fd36593296e6f65))
+
+## [12.18.0](https://github.com/typegoose/typegoose/compare/v12.17.0...v12.18.0) (2025-08-02)
+
+### Dependencies
+
+* **mongoose:** upgrade to  8.17.0 ([074f9e6](https://github.com/typegoose/typegoose/commit/074f9e6dcf759da42e594f6d5eb45d5ccf5f5d74))
+
+### Dev-Dependencies
+
+* **@types/lodash:** upgrade to 4.17.20 ([56c9423](https://github.com/typegoose/typegoose/commit/56c9423540a8f38c83904e338d30b28f22fb461c))
+* **eslint-config-prettier:** upgrade to 9.1.2 ([84d1d6c](https://github.com/typegoose/typegoose/commit/84d1d6c0a15fc067d36ddb60949ed848d0c76efd))
+* **eslint-plugin-prettier:** upgrade to 5.5.3 ([a1e4171](https://github.com/typegoose/typegoose/commit/a1e41714b36063511478f63c27b0d141bc940d3b))
+* **mongodb-memory-server:** upgrade to 10.2.0 ([bf8479e](https://github.com/typegoose/typegoose/commit/bf8479e56197c024f80ee6b50e50ba1a0d0c3c2f))
+* **prettier:** upgrade to 3.6.2 ([1dc4dce](https://github.com/typegoose/typegoose/commit/1dc4dcebe6740c8eaf9a574ceff0971f7ce3370d))
+
+## [12.17.0](https://github.com/typegoose/typegoose/compare/v12.16.0...v12.17.0) (2025-06-18)
+
+### Dependencies
+
+* **mongoose:** upgrade to  8.16.0 ([4c6fff0](https://github.com/typegoose/typegoose/commit/4c6fff08dd3d48e798182ceb08b7eb646f3e68a0))
+
+### Dev-Dependencies
+
+* **@types/lodash:** upgrade to 4.17.18 ([8d0f028](https://github.com/typegoose/typegoose/commit/8d0f0280d5223a79bf2be843377cc099987aebcf))
+* **eslint-plugin-prettier:** upgrade to 5.5.0 ([5458820](https://github.com/typegoose/typegoose/commit/54588204aea5cfa62b37e4c46dca2282c9bfd6da))
+* **ts-jest:** upgrade to 29.4.0 ([727d214](https://github.com/typegoose/typegoose/commit/727d214ea3801759a77bae297b4d43ebeaa52365))
+
+## [12.16.0](https://github.com/typegoose/typegoose/compare/v12.15.1...v12.16.0) (2025-05-17)
+
+### Fixes
+
+* **hooks:** update for specific "init"(post) hooks methods ([05e1724](https://github.com/typegoose/typegoose/commit/05e1724b349f123b7c57331e428cba90be8de32c))
+
+### Dependencies
+
+* **mongoose:** upgrade to  8.15.0 ([941f86f](https://github.com/typegoose/typegoose/commit/941f86f9435c8f0784d9dcd5b8024a70eff1a034))
+* **semver:** upgrade to  7.7.2 ([44ce473](https://github.com/typegoose/typegoose/commit/44ce4738c617401a68ce370a860aebdcaabf2ae2))
+
+### Dev-Dependencies
+
+* **ts-jest:** upgrade to 29.3.4 ([16b821d](https://github.com/typegoose/typegoose/commit/16b821df0ffdf9f1963879643194197afc39b4c4))
+
+## [12.15.1](https://github.com/typegoose/typegoose/compare/v12.15.0...v12.15.1) (2025-05-08)
+
+### Fixes
+
+* **hooks:** update for specific "init" hook methods ([63f3f28](https://github.com/typegoose/typegoose/commit/63f3f28be06791ad4a8f2e71b5af1f930a68f665)), closes [#997](https://github.com/typegoose/typegoose/issues/997)
+
 ## [12.15.0](https://github.com/typegoose/typegoose/compare/v12.14.0...v12.15.0) (2025-04-29)
 
 ### Dependencies

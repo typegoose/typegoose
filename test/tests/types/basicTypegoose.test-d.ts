@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { expect } from 'tstyche';
 import * as typegoose from '../../../src/typegoose';
 import { isDocument, isRefType, prop } from '../../../src/typegoose';
@@ -370,7 +371,7 @@ function discriminatorWithDifferentId() {
   }
 
   const BaseModel = typegoose.getModelForClass(Base);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const ChildModel = typegoose.getDiscriminatorModelForClass(BaseModel, Child);
 }
 
@@ -505,3 +506,68 @@ async function queryhelpers() {
 }
 
 queryhelpers();
+
+function initHook814() {
+  @typegoose.pre('init', (doc) => {
+    expect(this).type.toBe<typegoose.DocumentType<any>>();
+    expect(doc).type.toBe<unknown>();
+  })
+  @typegoose.post('init', (doc) => {
+    expect(this).type.toBe<any>();
+    expect(doc).type.toBe<typegoose.mongoose.HydratedDocument<typegoose.DocumentType<unknown>>>();
+  })
+  class BasicNoOptions {
+    @typegoose.prop()
+    public something?: string;
+  }
+
+  @typegoose.pre<typegoose.DocumentType<OverwriteFirstGeneric>>('init', function hook(doc) {
+    expect(this).type.toBe<typegoose.DocumentType<OverwriteFirstGeneric>>();
+    expect(doc).type.toBe<unknown>();
+  })
+  @typegoose.post<typegoose.DocumentType<OverwriteFirstGeneric>>('init', function hook(doc) {
+    expect(this).type.toBe<typegoose.DocumentType<OverwriteFirstGeneric>>();
+    expect(doc).type.toBe<typegoose.DocumentType<OverwriteFirstGeneric>>();
+  })
+  class OverwriteFirstGeneric {
+    @typegoose.prop()
+    public something?: string;
+  }
+
+  @typegoose.pre<typegoose.DocumentType<OverwriteBothGenerics>, OverwriteBothGenerics>('init', function hook(doc) {
+    expect(this).type.toBe<typegoose.DocumentType<OverwriteBothGenerics>>();
+    expect(doc).type.toBe<OverwriteBothGenerics>();
+  })
+  @typegoose.post<unknown, typegoose.DocumentType<OverwriteFirstGeneric>>('init', function hook(doc) {
+    expect(this).type.toBe<typegoose.DocumentType<OverwriteFirstGeneric>>();
+    expect(doc).type.toBe<typegoose.DocumentType<OverwriteFirstGeneric>>();
+  })
+  class OverwriteBothGenerics {
+    @typegoose.prop()
+    public something?: string;
+  }
+}
+
+initHook814();
+
+function modelOptionsGenerics() {
+  @typegoose.modelOptions<typeof Test>({
+    schemaOptions: {
+      toObject: {
+        transform(doc, ret, options) {
+          expect(doc).type.toBe<typegoose.DocumentType<Test>>();
+          expect(ret).type.toBeAssignableTo<Test>();
+        },
+      },
+    },
+  })
+  class Test {
+    @prop()
+    public prop1?: string;
+
+    @prop({ required: true })
+    public test1!: number;
+  }
+}
+
+modelOptionsGenerics();
