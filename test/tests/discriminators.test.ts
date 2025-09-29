@@ -103,9 +103,8 @@ it('should pass all mongoose discriminator tests', async () => {
       discriminatorKey: 'kind',
     },
   })
-  @Pre('validate', function (next) {
+  @Pre('validate', function () {
     ++eventValidationCalls;
-    next();
   })
   class Event {
     public kind?: string;
@@ -114,9 +113,8 @@ it('should pass all mongoose discriminator tests', async () => {
     public time?: Date;
   }
 
-  @Pre('validate', function (next) {
+  @Pre('validate', function () {
     ++clickedLinkEventValidationCalls;
-    next();
   })
   class ClickedLinkEvent extends Event {
     @Prop()

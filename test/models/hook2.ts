@@ -1,9 +1,7 @@
 import { getModelForClass, post, pre, prop } from '../../src/typegoose';
 
-@pre<Hook2>('save', function (next) {
+@pre<Hook2>('save', function () {
   this.text = 'saved';
-
-  next();
 })
 @pre<Hook2>('updateMany', async function (this: any) {
   this._update.text = 'updateManied';
