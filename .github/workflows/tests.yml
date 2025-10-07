@@ -119,4 +119,5 @@ jobs:
             conventional-changelog-writer@8.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: TestNoToken
+          # replace with trusted-publishing once available, see https://github.com/semantic-release/npm/issues/958
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
