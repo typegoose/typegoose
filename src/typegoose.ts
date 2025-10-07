@@ -19,8 +19,8 @@ import {
 if (typeof process !== 'undefined' && !isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '8.18.0')) {
-    throw new Error(`Please use mongoose 8.18.0 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '8.19.1')) {
+    throw new Error(`Please use mongoose 8.19.1 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
