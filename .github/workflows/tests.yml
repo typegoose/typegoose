@@ -82,6 +82,7 @@ jobs:
       contents: write  # for actions/checkout to fetch code and for semantic-release to push commits, release releases and tags
       issues: write # for semantic-release to comment on and close issues
       pull-requests: write # for semantic-release to comment on and close pull requests
+      id-token: write # for semantic-release to enable use of OIDC for npm provenance
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/beta' || startsWith(github.ref, 'refs/heads/old')
     needs: [tests, test-types]
     runs-on: ubuntu-latest
@@ -118,4 +119,3 @@ jobs:
             conventional-changelog-writer@8.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
