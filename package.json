@@ -62,7 +62,7 @@
     "mongoose": "~8.18.0",
     "prettier": "^3.6.2",
     "rimraf": "^5.0.10",
-    "ts-jest": "^29.4.1",
+    "ts-jest": "^29.4.4",
     "tstyche": "^2.1.1",
     "typescript": "~5.4.5"
   },
