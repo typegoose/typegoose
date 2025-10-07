@@ -119,3 +119,4 @@ jobs:
             conventional-changelog-writer@8.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: TestNoToken
