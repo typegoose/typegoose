@@ -12,7 +12,7 @@ see https://docusaurus.io/blog/preparing-your-site-for-docusaurus-v3#common-mdx-
 
 ### Mongoose Version [E001]
 
-Error: `Please use mongoose 8.18.0 or higher (Current mongoose: x.x.x) [E001]`
+Error: `Please use mongoose 8.19.1 or higher (Current mongoose: x.x.x) [E001]`
 
 Error Class: `Error`
 

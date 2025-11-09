@@ -974,10 +974,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@mongodb-js/saslprep@^1.1.9", "@mongodb-js/saslprep@^1.3.0":
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@mongodb-js/saslprep/-/saslprep-1.3.2.tgz#51e5cad2f24b8759702d9cc185da0a3ef3784bad"
-  integrity sha512-QgA5AySqB27cGTXBFmnpifAi7HxoGUeezwo6p9dI03MuDB6Pp33zgclqVb6oVK3j6I9Vesg0+oojW2XxB59SGg==
+"@mongodb-js/saslprep@^1.3.0":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@mongodb-js/saslprep/-/saslprep-1.3.1.tgz#a7d6cfc085f801e51ba5cbec6aa84cad858e1d2d"
+  integrity sha512-6nZrq5kfAz0POWyhljnbWQQJQ5uT8oE2ddX303q1uY0tWsivWKgBDXBBvuFPwOqRRalXJuVO9EjOdVtuhLX0zg==
   dependencies:
     sparse-bitfield "^3.0.3"
 
@@ -1132,10 +1132,10 @@
   dependencies:
     undici-types "~7.16.0"
 
-"@types/semver@^7.7.0":
-  version "7.7.0"
-  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.7.0.tgz#64c441bdae033b378b6eef7d0c3d77c329b9378e"
-  integrity sha512-k107IF4+Xr7UHjwDc7Cfd6PRQfbdkiRabXGRjo07b4WyPahFBZCZ1sE+BNxYIJPPg73UkfOsVOLwqVc/6ETrIA==
+"@types/semver@^7.7.1":
+  version "7.7.1"
+  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.7.1.tgz#3ce3af1a5524ef327d2da9e4fd8b6d95c8d70528"
+  integrity sha512-FmgJfu+MOcQ370SD0ev7EI8TlCAfKYU+B4m5T3yXc1CiRN94g/SZPtsCkk506aUDtlMnFZvasDwHHUcZUEaYuA==
 
 "@types/stack-utils@^2.0.0":
   version "2.0.1"
@@ -1499,10 +1499,10 @@ bser@2.1.1:
   dependencies:
     node-int64 "^0.4.0"
 
-bson@^6.10.1:
-  version "6.10.3"
-  resolved "https://registry.yarnpkg.com/bson/-/bson-6.10.3.tgz#5f9a463af6b83e264bedd08b236d1356a30eda47"
-  integrity sha512-MTxGsqgYTwfshYWTRdmZRC+M7FnG1b4y7RO7p2k3X24Wq0yv1m77Wsj0BzlPzd/IowgESfsruQCUToa7vbOpPQ==
+bson@^6.10.4:
+  version "6.10.4"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-6.10.4.tgz#d530733bb5bb16fb25c162e01a3344fab332fd2b"
+  integrity sha512-WIsKqkSC0ABoBJuT1LEX+2HEvNmNKKgnTAyd0fL8qzK4SH2i9NXg+t08YtdZp/V9IZ33cxe3iV4yM0qg8lMQng==
 
 bson@^7.0.0:
   version "7.0.0"
@@ -3275,7 +3275,7 @@ minimist@^1.2.5, minimist@^1.2.8:
   resolved "https://registry.yarnpkg.com/minipass/-/minipass-7.1.2.tgz#93a9626ce5e5e66bd4db86849e7515e92340a707"
   integrity sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==
 
-mongodb-connection-string-url@^3.0.0:
+mongodb-connection-string-url@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/mongodb-connection-string-url/-/mongodb-connection-string-url-3.0.2.tgz#e223089dfa0a5fa9bf505f8aedcbc67b077b33e7"
   integrity sha512-rMO7CGo/9BFwyZABcKAWL8UJwH/Kc2x0g72uhDWzG48URRax5TCIcJ7Rc3RZqffZzO/Gwff/jyKwCU9TN8gehA==
@@ -3291,10 +3291,10 @@ mongodb-connection-string-url@^7.0.0:
     "@types/whatwg-url" "^13.0.0"
     whatwg-url "^14.1.0"
 
-mongodb-memory-server-core@10.2.0:
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-10.2.0.tgz#5f2c2bd1497005a3d05c87286f730328dbb94ebf"
-  integrity sha512-IsgWlsXdZxbMNoa3hqazMQ/QeMazEztMBr/fK6OrHefJLlZtCEtIIYoAKJDYDQjcwId0CRkW3WRy05WEuyClDg==
+mongodb-memory-server-core@10.2.2:
+  version "10.2.2"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server-core/-/mongodb-memory-server-core-10.2.2.tgz#d6a8120f7f63789143be495c186384ea68a3cf7e"
+  integrity sha512-11p0KRQ099RIuchQTF/TzpH7hQW4L2yrEhxS2WfmWqwHPVIOvhtFle8+pntvhppPZBiFr3uVvsowfY/pgDQNsA==
   dependencies:
     async-mutex "^0.5.0"
     camelcase "^6.3.0"
@@ -3309,22 +3309,22 @@ mongodb-memory-server-core@10.2.0:
     tslib "^2.8.1"
     yauzl "^3.2.0"
 
-mongodb-memory-server@^10.2.0:
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-10.2.0.tgz#027cafb988bdd4e6cc9c8c52724cf16cbf1340ff"
-  integrity sha512-FG4OVoXjBHC7f8Mdyj1TZ6JyTtMex+qniEzoY1Rsuo/FvHSOHYzGYVbuElamjHuam+HLxWTWEpc43fqke8WNGw==
+mongodb-memory-server@^10.2.2:
+  version "10.2.2"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-10.2.2.tgz#117f4cccf474d0fc61ef8fa8839d65c2426b2551"
+  integrity sha512-UFs96KIgvzjG2hZMbdSciZfh1Th4LTxtRygvAKGW9Xw/T6lVx2D1KCe1yGVhm6TyxYy1aryqFF87oURj6StlxQ==
   dependencies:
-    mongodb-memory-server-core "10.2.0"
+    mongodb-memory-server-core "10.2.2"
     tslib "^2.8.1"
 
 mongodb@^6.9.0:
-  version "6.13.0"
-  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-6.13.0.tgz#366dc4987d4aeb4b6ef7ba18cd815ab2950fd045"
-  integrity sha512-KeESYR5TEaFxOuwRqkOm3XOsMqCSkdeDMjaW5u2nuKfX7rqaofp7JQGoi7sVqQcNJTKuveNbzZtWMstb8ABP6Q==
+  version "6.20.0"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-6.20.0.tgz#5212dcf512719385287aa4574265352eefb01d8e"
+  integrity sha512-Tl6MEIU3K4Rq3TSHd+sZQqRBoGlFsOgNrH5ltAcFBV62Re3Fd+FcaVf8uSEQFOJ51SDowDVttBTONMfoYWrWlQ==
   dependencies:
-    "@mongodb-js/saslprep" "^1.1.9"
-    bson "^6.10.1"
-    mongodb-connection-string-url "^3.0.0"
+    "@mongodb-js/saslprep" "^1.3.0"
+    bson "^6.10.4"
+    mongodb-connection-string-url "^3.0.2"
 
 mongodb@~7.0:
   version "7.0.0"
@@ -4044,10 +4044,10 @@ ts-api-utils@^2.0.1:
   resolved "https://registry.yarnpkg.com/ts-api-utils/-/ts-api-utils-2.1.0.tgz#595f7094e46eed364c13fd23e75f9513d29baf91"
   integrity sha512-CUgTZL1irw8u29bzrOD/nH85jqyc74D6SshFgujOIA7osm2Rz7dYH77agkx7H4FBNxDq7Cjf+IjaX/8zwFW+ZQ==
 
-ts-jest@^29.4.1:
-  version "29.4.1"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-29.4.1.tgz#42d33beb74657751d315efb9a871fe99e3b9b519"
-  integrity sha512-SaeUtjfpg9Uqu8IbeDKtdaS0g8lS6FT6OzM3ezrDfErPJPHNDo/Ey+VFGP1bQIDfagYDLyRpd7O15XpG1Es2Uw==
+ts-jest@^29.4.4:
+  version "29.4.4"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-29.4.4.tgz#fc6fefe28652ed81b8e1381ef8391901d9f81417"
+  integrity sha512-ccVcRABct5ZELCT5U0+DZwkXMCcOCLi2doHRrKy1nK/s7J7bch6TzJMsrY09WxgUUIP/ITfmcDS8D2yl63rnXw==
   dependencies:
     bs-logger "^0.2.6"
     fast-json-stable-stringify "^2.1.0"
@@ -4153,12 +4153,20 @@ webidl-conversions@^7.0.0:
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-7.0.0.tgz#256b4e1882be7debbf01d05f0aa2039778ea080a"
   integrity sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==
 
-whatwg-url@^14.1.0, "whatwg-url@^14.1.0 || ^13.0.0":
+whatwg-url@^14.1.0:
   version "14.2.0"
   resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-14.2.0.tgz#4ee02d5d725155dae004f6ae95c73e7ef5d95663"
   integrity sha512-De72GdQZzNTUBBChsXueQUnPKDkg/5A5zp7pFDuQAj5UFoENpiACU0wlCvzpAGnTkj++ihpKwKyYewn/XNUbKw==
   dependencies:
     tr46 "^5.1.0"
+    webidl-conversions "^7.0.0"
+
+"whatwg-url@^14.1.0 || ^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-13.0.0.tgz#b7b536aca48306394a34e44bda8e99f332410f8f"
+  integrity sha512-9WWbymnqj57+XEuqADHrCJ2eSXzn8WXIW/YSGaZtb2WKAInQ6CHfaUUcTyyver0p8BDg5StLQq8h1vtZuwmOig==
+  dependencies:
+    tr46 "^4.1.1"
     webidl-conversions "^7.0.0"
 
 which@^2.0.1:

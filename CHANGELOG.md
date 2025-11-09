@@ -1,3 +1,15 @@
+## [12.20.0](https://github.com/typegoose/typegoose/compare/v12.19.0...v12.20.0) (2025-10-07)
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.19.1 ([ffde89f](https://github.com/typegoose/typegoose/commit/ffde89fddcad870eb93aee506504fe2325fb32c9))
+
+### Dev-Dependencies
+
+* **@types/semver:** upgrade to 7.7.1 ([ed1afb7](https://github.com/typegoose/typegoose/commit/ed1afb76fb7a11a2610077741b4fc8d11924b695))
+* **mongodb-memory-server:** upgrade to 10.2.2 ([15f2a4c](https://github.com/typegoose/typegoose/commit/15f2a4c61abaf6ec3bc7be6695aac606d6719317))
+* **ts-jest:** upgrade to 29.4.4 ([e383405](https://github.com/typegoose/typegoose/commit/e3834055ce4c9f638cd29b93676535c3fea354f6))
+
 ## [12.19.0](https://github.com/typegoose/typegoose/compare/v12.18.0...v12.19.0) (2025-08-25)
 
 ### Features
