@@ -6,7 +6,7 @@
   "types": "lib/typegoose.d.ts",
   "type": "commonjs",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.19.0"
   },
   "files": [
     "lib/**/*.js",

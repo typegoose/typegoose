@@ -24,8 +24,8 @@ if (typeof process !== 'undefined' && !isNullOrUndefined(process?.version) && !i
   }
 
   /* istanbul ignore next */
-  if (semver.lt(process.version.slice(1), '16.20.1')) {
-    throw new Error('You are using a NodeJS Version below 16.20.1, Please Upgrade! [E002]');
+  if (semver.lt(process.version.slice(1), '20.19.0')) {
+    throw new Error('You are using a NodeJS Version below 20.19.0, Please Upgrade! [E002]');
   }
 }
 

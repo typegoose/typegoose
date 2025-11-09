@@ -23,12 +23,12 @@ Typegoose requires at least the mentioned mongoose version because that version 
 
 ### NodeJS Version [E002]
 
-Error: `You are using a NodeJS Version below 16.20.1, Please Upgrade! [E002]`
+Error: `You are using a NodeJS Version below 20.19.0, Please Upgrade! [E002]`
 
 Error Class: `Error`
 
 Details:  
-Typegoose requires at least NodeJS Version 16.20.1, because:
+Typegoose requires at least the mentioned NodeJS Version, because:
 
 - it is the mongoose minimal nodejs version
 - it is the lowest LTS version, which many (dev) dependencies already require
