@@ -239,10 +239,10 @@ async function testDocumentType() {
     typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & DefaultIdVirtual, BeAnObject, DefaultIdVirtual>
   >();
 
-  const someCreatedDoc = await TestClassModel.create();
+  const someCreatedDoc = await TestClassModel.create({});
 
   expect(someCreatedDoc).type.toBe<
-    typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & DefaultIdVirtual, BeAnObject, DefaultIdVirtual>[]
+    typegoose.mongoose.HydratedDocument<TestClass, IObjectWithTypegooseFunction & DefaultIdVirtual, BeAnObject, DefaultIdVirtual>
   >();
 
   const someFoundDoc = await TestClassModel.findOne();

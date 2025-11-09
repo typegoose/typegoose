@@ -206,7 +206,7 @@ it('should allow self-referencing classes', async () => {
 
   const SelfReferenceModel = getModelForClass(SelfReference);
 
-  const doc1 = await SelfReferenceModel.create();
+  const doc1 = await SelfReferenceModel.create({});
   const doc2 = await SelfReferenceModel.create({ ref: doc1 });
 
   const found = await SelfReferenceModel.findById(doc2).orFail().populate('ref').exec();
@@ -1147,7 +1147,7 @@ it('should validate Decimal128', async () => {
   try {
     await CarModel.create({
       carModel: 'Tesla',
-      price: 'NO DECIMAL',
+      price: 'NO DECIMAL' as any,
     });
     fail('Validation must fail.');
   } catch (e) {
@@ -1181,7 +1181,7 @@ it(`should Validate Map`, async () => {
   try {
     await InternetUserModel.create({
       projects: {
-        p1: 'project',
+        p1: 'project' as any,
       },
     });
     fail('Validation should Fail');

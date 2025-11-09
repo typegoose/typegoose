@@ -23,7 +23,7 @@ it('should respect enum', async () => {
   try {
     await NumberValidatorsModel.create({
       enumed: 5, // number not in the enum
-    });
+    } as any);
 
     fail('Expected to throw ValidationError!');
   } catch (err) {
