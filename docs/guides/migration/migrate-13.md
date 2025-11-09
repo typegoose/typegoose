@@ -15,7 +15,7 @@ This Guide is written for migration from version `12.15.0` to `13.0.0`, for vers
 - Typescript `5.7` or higher is now required to be used
 - NodeJS 18 is now the lowest supported nodejs version
 
-## TSConfig Target is now `es2022`
+## TSConfig Target is now `es2023`
 
-The `tsconfig` target has been changed to `es2022`, which also makes the ouput incompatible with anything before NodeJS 16.  
+The `tsconfig` target has been changed to `es2023`, which also makes the ouput incompatible with anything before NodeJS 16.  
 This was changed because it outputs less polyfills and makes debugging easier (also bundle size is *slightly* lower)
