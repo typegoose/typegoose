@@ -1025,7 +1025,7 @@ it('utils.assertion should make use of arg1 being a function', () => {
     }
   }
 
-  expect(assertion.bind(undefined, false, () => new CustomError())).toThrowError(CustomError);
+  expect(assertion.bind(undefined, false, () => new CustomError())).toThrow(CustomError);
 });
 
 it('should correctly map a Map<string, string[]> [typegoose/typegoose#682]', () => {

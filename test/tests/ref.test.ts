@@ -365,7 +365,7 @@ it('should map options correctly on an ref-array', async () => {
   const reference1 = await RefArrayOptionsMappingNestedModel.create({ dummy: 'hello1' });
   expect(reference1).toBeDefined();
   await RefArrayOptionsMappingModel.create({ normalRef: reference1, normalRefArray: [reference1, reference1] });
-  expect(validateInner).not.toBeCalled();
+  expect(validateInner).not.toHaveBeenCalled();
   // array's default to "[]" instead of "undefined", so validators are called
   expect(validateOuter).toHaveBeenNthCalledWith(1, expect.any(Array));
   expect(validateOuter).toHaveBeenNthCalledWith(2, expect.any(Array));
@@ -375,7 +375,7 @@ it('should map options correctly on an ref-array', async () => {
   const reference2 = await RefArrayOptionsMappingNestedModel.create({ dummy: 'hello2' });
   expect(reference2).toBeDefined();
   await RefArrayOptionsMappingModel.create({ validatedRef: reference2, validatedRefArray: [reference2, reference2] });
-  expect(validateInner).toBeCalledWith(reference2._id);
+  expect(validateInner).toHaveBeenCalledWith(reference2._id);
   expect(validateOuter).toHaveBeenNthCalledWith(1, expect.arrayContaining([reference2._id, reference2._id]));
   expect(validateOuter).toHaveBeenNthCalledWith(2, expect.any(Array));
 
@@ -384,7 +384,7 @@ it('should map options correctly on an ref-array', async () => {
   const reference3 = await RefArrayOptionsMappingNestedModel.create({ dummy: 'hello3' });
   expect(reference3).toBeDefined();
   await RefArrayOptionsMappingModel.create({ explicitDoubleRefArray: [reference3, reference3] });
-  expect(validateInner).toBeCalledWith(reference3._id);
+  expect(validateInner).toHaveBeenCalledWith(reference3._id);
   // the order is different, because defaults get created *after* normal values, and so validators of those defaults are also called later
   expect(validateOuter).toHaveBeenNthCalledWith(1, expect.arrayContaining([reference3._id, reference3._id]));
   expect(validateOuter).toHaveBeenNthCalledWith(2, expect.any(Array));
