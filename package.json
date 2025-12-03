@@ -44,7 +44,7 @@
     "@commitlint/config-conventional": "^19.8.0",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.21",
-    "@types/node": "~24.10.0",
+    "@types/node": "~24.10.1",
     "@types/semver": "^7.7.1",
     "class-transformer": "0.5.1",
     "commitlint": "^19.8.0",
