@@ -4228,10 +4228,10 @@ tslib@^2.8.1:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.8.1.tgz#612efe4ed235d567e8aba5f2a5fab70280ade83f"
   integrity sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==
 
-tstyche@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/tstyche/-/tstyche-3.5.0.tgz#2cf1797c9664c544e6ebe8c2fada772680460755"
-  integrity sha512-N4SUp/ZWaMGEcglpVFIzKez0GQEiBdfFDgcnqwv9O1mePZgos8N1cZCzNgGtPGo/w0ym04MjJcDnsw1sorEzgA==
+tstyche@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/tstyche/-/tstyche-5.0.1.tgz#bdbc1cb1a9da9c54873c38092344817646ee01b0"
+  integrity sha512-3qwfvSMAProLC+oCmI7Eg/adzLB2A28stnyEdgi1riK+mE39z1+DU9dW1M1+1icCgPct56iRmU5QfyUOuMFE8g==
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
