@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x, 22.x]
+        node-version: [20.x, 22.x, 24.x]
     steps:
       - uses: actions/checkout@v6
       - name: Use Node.js ${{ matrix.node-version }}
@@ -51,7 +51,7 @@ jobs:
         env:
           CI: true
       - name: Send codecov.io stats
-        if: matrix.node-version == '18.x'
+        if: matrix.node-version == '24.x'
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -61,10 +61,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Use Node.js 18
+      - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
-          node-version: 18.x
+          node-version: 24.x
       - name: Load MongoDB binary cache
         id: cache-mongodb-binaries
         uses: actions/cache@v4
@@ -88,10 +88,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Use Node.js 18
+      - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
-          node-version: 18.x
+          node-version: 24.x
       - name: Load MongoDB binary cache
         id: cache-mongodb-binaries
         uses: actions/cache@v4
@@ -103,21 +103,16 @@ jobs:
       - name: Build
         run: yarn build
       - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@ba330626c4750c19d8299de843f05c7aa5574f62 # v5.0.2
+        uses: cycjimmy/semantic-release-action@b12c8f6015dc215fe37bc154d4ad456dd3833c90 # v6.0.0
         with:
           # dry_run: true
           # "conventional-changelog-writer" is exactly installed as "cycjimmy/semantic-release-action" depends on 8.0.0, which causes errors
           # plugins included in semantic-release by default:
           # @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/npm @semantic-release/github
-          # "@semantic-release/github" is now included again as "semantic-release" depends on "11.0.0" and "cycjimmy/semantic-release-action" resolves to that
-          # but "11.0.1" fixes https://github.com/semantic-release/github/issues/942
           extra_plugins: |
             @semantic-release/git@10.x
             @semantic-release/changelog@6.x
-            @semantic-release/github@^11.0.1
-            conventional-changelog-conventionalcommits@8
-            conventional-changelog-writer@8.0.1
+            conventional-changelog-conventionalcommits@9
+            conventional-changelog-writer@8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # replace with trusted-publishing once available, see https://github.com/semantic-release/npm/issues/958
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

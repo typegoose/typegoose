@@ -47,26 +47,22 @@ export class HookArray {
   public testArray!: string[];
 }
 
-@pre<BaseHook>('save', function (next) {
+@pre<BaseHook>('save', function () {
   this.hooksMessages.push('Base');
-  next();
 })
-@post<BaseHook>('findOne', async (doc, next) => {
+@post<BaseHook>('findOne', async (doc) => {
   doc.hooksMessages.push('Post Base');
-  next();
 })
 export class BaseHook {
   @prop({ type: String, default: [] })
   public hooksMessages!: string[];
 }
 
-@pre<ExtendedHook>('save', function (next) {
+@pre<ExtendedHook>('save', function () {
   this.hooksMessages.push('Actual');
-  next();
 })
-@post<ExtendedHook>('findOne', async (doc, next) => {
+@post<ExtendedHook>('findOne', async (doc) => {
   doc.hooksMessages.push('Post Actual');
-  next();
 })
 class ExtendedHook extends BaseHook {}
 

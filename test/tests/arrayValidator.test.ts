@@ -68,7 +68,7 @@ it('should respect enum [String]', async () => {
       enumedString: [
         'not in the enum', // string not in the enum
       ],
-    });
+    } as any);
 
     fail('Expected to throw ValidationError!');
   } catch (err) {
@@ -96,7 +96,7 @@ it('should respect enum [Number]', async () => {
       enumedNumber: [
         5, // number not in the enum
       ],
-    });
+    } as any);
 
     fail('Expected to throw ValidationError!');
   } catch (err) {

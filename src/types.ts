@@ -14,7 +14,7 @@ import type { PropType, Severity } from './internal/constants';
  * const doc: DocumentType<ClassName> = await NameModel.create({});
  * ```
  */
-export type DocumentType<T, QueryHelpers = BeAnObject> = mongoose.Document<unknown, QueryHelpers, T> &
+export type DocumentType<T, QueryHelpers = BeAnObject> = mongoose.Document<unknown, QueryHelpers, T, DefaultIdVirtual> &
   mongoose.Default__v<mongoose.Require_id<T>> &
   IObjectWithTypegooseFunction;
 /**
@@ -32,7 +32,7 @@ export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<
   T, // raw doc type
   QueryHelpers, // query helpers
   IObjectWithTypegooseFunction, // instance methods
-  BeAnyObject // virtuals
+  DefaultIdVirtual // virtuals
 >;
 /**
  * Any-param Constructor
@@ -219,7 +219,7 @@ export interface BasePropOptions {
   /**
    * This option has only an effect when the plugin `mongoose-autopopulate` is used
    */
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   autopopulate?: boolean | Function | KeyStringAny;
   /** Reference another Document (you should use Ref<T> as Prop type) */
   ref?: DeferredFunc<string | AnyParamConstructor<any> | DynamicStringFunc<any>> | string | AnyParamConstructor<any>;
@@ -722,7 +722,7 @@ export type BeAnObject = Record<string, any>;
  * This type is for mongoose-specific things where {@link BeAnObject} does not work
  * see https://github.com/Automattic/mongoose/issues/13094
  */
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type BeAnyObject = {};
 
 /** Options used for "processProp" */
@@ -744,3 +744,5 @@ export type GetFunctionKeys<T extends object> = {
  * does NOT filter out getters / setters
  */
 export type FilterOutFunctionKeys<T extends object> = Omit<T, GetFunctionKeys<T>>;
+
+export type DefaultIdVirtual = { id: string };

@@ -2,12 +2,10 @@ import { getModelForClass, pre, prop } from '../../src/typegoose';
 import { PersistentModel } from './persistentModel';
 
 // add a pre-save hook to PersistentModel
-@pre<PersistentModel>('save', function (next) {
+@pre<PersistentModel>('save', function () {
   if (!this.createdAt) {
     this.createdAt = new Date();
   }
-
-  next();
 })
 export class Person extends PersistentModel {
   // add new property

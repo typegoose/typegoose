@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const deployInfo = require('../scripts/getDeployInfo.js')();
 
 console.log(`Deploying editBranch "${deployInfo.branch}" and deployPath "${deployInfo.deployPath}" deployName "${deployInfo.deployName}"`);

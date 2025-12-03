@@ -388,8 +388,8 @@ it('should set innerOptions correctly', () => {
   const path: any = schema.path('someArray');
 
   expect(path).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect(path.caster).toBeInstanceOf(mongoose.Schema.Types.String);
-  expect(path.caster.options).toHaveProperty('hello', true);
+  expect(path.embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(path.embeddedSchemaType.options).toHaveProperty('hello', true);
   expect(path.options).not.toHaveProperty('hello', true);
 });
 
@@ -403,8 +403,8 @@ it('should set outerOptions correctly', () => {
   const path: any = schema.path('someArray');
 
   expect(path).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect(path.caster).toBeInstanceOf(mongoose.Schema.Types.String);
-  expect(path.caster.options).not.toHaveProperty('hello', true);
+  expect(path.embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(path.embeddedSchemaType.options).not.toHaveProperty('hello', true);
   expect(path.options).toHaveProperty('hello', true);
 });
 
@@ -429,11 +429,11 @@ it('should use "dim" correctly', () => {
 
   // test primitive path
   {
-    type PrimitivePath = mongoose.Schema.Types.Array & { casterConstructor: { caster: mongoose.Schema.Types.String } };
+    type PrimitivePath = mongoose.Schema.Types.Array & { embeddedSchemaType: { embeddedSchemaType: mongoose.Schema.Types.String } };
     const primitivePath: PrimitivePath = schema.path('primitive') as any;
     expect(primitivePath).toBeInstanceOf(mongoose.Schema.Types.Array);
-    expect(primitivePath.casterConstructor).toBeInstanceOf(mongoose.Schema.Types.Array);
-    expect(primitivePath.casterConstructor.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect(primitivePath.embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(primitivePath.embeddedSchemaType.embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.String);
 
     const primitiveFromSchemas: { type: [[{ type: mongoose.Schema.Types.String }]] } = fromSchemas.primitive as any;
     expect(primitiveFromSchemas).not.toHaveProperty('dim');
@@ -443,12 +443,14 @@ it('should use "dim" correctly', () => {
 
   // test nested path
   {
-    type SubDocumentPath = mongoose.Schema.Types.Array & { casterConstructor: { caster: { schema: mongoose.Schema } } };
+    type SubDocumentPath = mongoose.Schema.Types.Array & {
+      embeddedSchemaType: { embeddedSchemaType: { schema: mongoose.Schema; constructor: { schemaName: string } } };
+    };
     const subdocumentPath: SubDocumentPath = schema.path('subdocument') as any;
     expect(subdocumentPath).toBeInstanceOf(mongoose.Schema.Types.Array);
-    expect(subdocumentPath.casterConstructor).toBeInstanceOf(mongoose.Schema.Types.Array);
-    expect(subdocumentPath.casterConstructor.caster).toBeInstanceOf(Function);
-    expect(subdocumentPath.casterConstructor.caster.schema).toBeInstanceOf(mongoose.Schema);
+    expect(subdocumentPath.embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.Array);
+    expect(subdocumentPath.embeddedSchemaType.embeddedSchemaType.constructor.schemaName).toStrictEqual('DocumentArrayElement');
+    expect(subdocumentPath.embeddedSchemaType.schema).toBeInstanceOf(mongoose.Schema);
 
     const subdocumentFromSchemas: { type: [[{ type: mongoose.Schema }]] } = fromSchemas.subdocument as any;
     expect(subdocumentFromSchemas).not.toHaveProperty('dim');
@@ -465,11 +467,11 @@ it('should allow NestJS / Type-Graphql way of defining arrays [typegoose#365]', 
 
   const schema = buildSchema(ArrayAsType);
 
-  type PrimitivePath = mongoose.Schema.Types.Array & { casterConstructor: { caster: mongoose.Schema.Types.String } };
+  type PrimitivePath = mongoose.Schema.Types.Array & { casterConstructor: { caster: mongoose.Schema.Types.String } } & any;
   const primitivePath: PrimitivePath = schema.path('primitive') as any;
   expect(primitivePath).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect(primitivePath.casterConstructor).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect(primitivePath.casterConstructor.caster).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(primitivePath.embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(primitivePath.embeddedSchemaType.embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.String);
 });
 
 it('should allow dynamic use of "ref" (since mongoose 4.13)', async () => {
@@ -550,7 +552,7 @@ it('should default to "Mixed" when type is still just "Array"', () => {
   const sch = buildSchema(TestArrayFallback);
   const path = sch.path('test');
   expect(path).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect(path['caster']).toBeInstanceOf(mongoose.Schema.Types.Mixed);
+  expect((path as any).embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.Mixed);
 });
 
 it('should default to "Mixed" when type is still just "Map"', () => {
