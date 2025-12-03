@@ -57,7 +57,7 @@
     "mongodb-memory-server": "^10.2.2",
     "mongoose": "git+https://github.com/Automattic/mongoose.git#9.0",
     "prettier": "^3.7.4",
-    "rimraf": "^5.0.10",
+    "rimraf": "^6.1.2",
     "ts-jest": "^29.4.6",
     "tstyche": "^3.5.0",
     "typescript": "~5.9.3",
