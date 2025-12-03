@@ -174,7 +174,7 @@ it('check reference with buffer _id', async () => {
   expect(_id1.equals(refFieldBuffer)).toEqual(true);
   const { _id: refArrayId } = await RefTestModel.create({ refArrayBuffer: [_id1, _id2] });
   const { refArrayBuffer } = await RefTestModel.findById(refArrayId).orFail().exec();
-  expect(Array.from(refArrayBuffer!)).toEqual([_id1, _id2]);
+  expect(Array.from(refArrayBuffer!)).toStrictEqual([_id1, _id2]);
 });
 
 it('check typeguards', async () => {
