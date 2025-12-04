@@ -1,3 +1,13 @@
+## [13.0.0-beta.2](https://github.com/typegoose/typegoose/compare/v13.0.0-beta.1...v13.0.0-beta.2) (2025-12-04)
+
+### Features
+
+* apply global options at build-time ([21aa014](https://github.com/typegoose/typegoose/commit/21aa0148af18c5c602b1ffc0762ed22ab8cba28f)), closes [#939](https://github.com/typegoose/typegoose/issues/939)
+
+### Dev-Dependencies
+
+* **mongodb-memory-server:** upgrade to 11.0.0-beta.3 ([31022be](https://github.com/typegoose/typegoose/commit/31022be87f08bb99f22319b1e368a5557e58f15e))
+
 ## [13.0.0-beta.1](https://github.com/typegoose/typegoose/compare/v12.20.0...v13.0.0-beta.1) (2025-12-03)
 
 ### ⚠ BREAKING CHANGES
