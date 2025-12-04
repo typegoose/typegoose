@@ -1,5 +1,5 @@
 import { DecoratorKeys } from './internal/constants';
-import { assignGlobalModelOptions, assignMetadata } from './internal/utils';
+import { assignMetadata } from './internal/utils';
 import type { AnyParamConstructor, BeAnObject, IModelOptions } from './types';
 
 /**
@@ -17,7 +17,6 @@ export function modelOptions<U extends AnyParamConstructor<any> = any, QueryHelp
   options: IModelOptions<U, QueryHelpers>
 ): ClassDecorator {
   return (target: any) => {
-    assignGlobalModelOptions(target);
     assignMetadata(DecoratorKeys.ModelOptions, options, target);
   };
 }

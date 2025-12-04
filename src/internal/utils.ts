@@ -280,8 +280,17 @@ export function mergeMetadata<T = any>(key: DecoratorKeys, value: unknown, cl: A
     delete classMetadata?.options?.disableLowerIndexes;
   }
 
+  return mergeObjects(classMetadata, value);
+}
+
+/**
+ * Merge 2 different objects into a new object, with {@link customMerger} (deep merge).
+ * @param src1 Properties overlapping with `src2` will be overwritten by `src2`
+ * @param src2 Properties overlapping with `src1` will be overwritten
+ */
+function mergeObjects<T = any>(src1: T, src2: T): T {
   // Please don't remove the other values from the function, even when unused - it is made to be clear what is what
-  return lodash.mergeWith({}, classMetadata, value, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
+  return lodash.mergeWith({}, src1, src2, (_objValue, srcValue, ckey) => customMerger(ckey, srcValue));
 }
 
 /**
@@ -579,28 +588,10 @@ export function isNullOrUndefined(val: unknown): val is null | undefined {
 }
 
 /**
- * Assign Global ModelOptions if not already existing
- * @param target Target Class
- * @returns "true" when it assigned options
- */
-export function assignGlobalModelOptions(target: any): boolean {
-  if (isNullOrUndefined(Reflect.getMetadata(DecoratorKeys.ModelOptions, target))) {
-    logger.info('Assigning global Schema Options to "%s"', getName(target));
-    assignMetadata(DecoratorKeys.ModelOptions, lodash.omit(globalOptions, 'globalOptions'), target);
-
-    return true;
-  }
-
-  return false;
-}
-
-/**
- * Consistently get the "ModelOptions", merged with (the following is the order in which options are applied):
- * 1. globalOptions if unset
- * 2. decorator ModelOptions
- * 3. input "rawOptions"
+ * Consistently get the "ModelOptions", merged with.
  *
- * Note: applies global options to the decorator options if unset, but does not set the final options
+ * Property (deep) priority list:
+ * input "rawOptions" > decorator `ModelOptions` > globalOptions
  * @param rawOptions Options to merge(-overwrite) all previous options
  * @param cl The Class to get / set the ModelOptions on
  * @param getOwn use "getOwnMetadata" instead of "getMetadata"
@@ -611,18 +602,19 @@ export function getMergedModelOptions(
   cl: AnyParamConstructor<any>,
   getOwn: boolean = false
 ): IModelOptions {
-  const opt = typeof rawOptions === 'object' ? rawOptions : {};
-
-  if (assignGlobalModelOptions(cl)) {
-    opt[AlreadyMerged] = false;
-  }
+  let opt = typeof rawOptions === 'object' ? rawOptions : {};
 
   // dont skip merging if "getOwn" is "true"
-  const mergedOptions: IModelOptions =
-    opt?.[AlreadyMerged] && !getOwn ? opt : mergeMetadata(DecoratorKeys.ModelOptions, rawOptions, cl, getOwn);
-  mergedOptions[AlreadyMerged] = true;
+  if (!(opt?.[AlreadyMerged] && !getOwn)) {
+    opt = mergeMetadata(DecoratorKeys.ModelOptions, opt, cl, getOwn);
 
-  return mergedOptions;
+    logger.info('Applying global Schema Options to "%s"', getName(cl));
+    opt = mergeObjects(lodash.omit(globalOptions, 'globalOptions'), opt);
+
+    opt[AlreadyMerged] = true;
+  }
+
+  return opt;
 }
 
 /**

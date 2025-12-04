@@ -6,7 +6,7 @@ import { logger } from './logSettings';
 import type { IGlobalOptions } from './types';
 
 /**
- * Set Typegoose's global Options
+ * Set Typegoose's global Options.
  */
 export function setGlobalOptions(options: IGlobalOptions) {
   assertion(!isNullOrUndefined(options) && typeof options === 'object', () => new ExpectedTypeError('options', 'object', options));

@@ -675,7 +675,7 @@ export interface IGlobalOptions {
   /** Typegoose Options */
   options?: ICustomOptions;
   /** Schema Options that should get applied to all models */
-  schemaOptions?: mongoose.SchemaOptions;
+  schemaOptions?: mongoose.SchemaOptions<any, IObjectWithTypegooseFunction>;
   /**
    * Global Options for general Typegoose
    */
