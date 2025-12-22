@@ -19,13 +19,13 @@ import {
 if (typeof process !== 'undefined' && !isNullOrUndefined(process?.version) && !isNullOrUndefined(mongoose?.version)) {
   // for usage on client side
   /* istanbul ignore next */
-  if (semver.lt(mongoose?.version, '8.19.1')) {
-    throw new Error(`Please use mongoose 8.19.1 or higher (Current mongoose: ${mongoose.version}) [E001]`);
+  if (semver.lt(mongoose?.version, '9.0.0')) {
+    throw new Error(`Please use mongoose 9.0.0 or higher (Current mongoose: ${mongoose.version}) [E001]`);
   }
 
   /* istanbul ignore next */
-  if (semver.lt(process.version.slice(1), '16.20.1')) {
-    throw new Error('You are using a NodeJS Version below 16.20.1, Please Upgrade! [E002]');
+  if (semver.lt(process.version.slice(1), '20.19.0')) {
+    throw new Error('You are using a NodeJS Version below 20.19.0, Please Upgrade! [E002]');
   }
 }
 

@@ -1,12 +1,12 @@
 {
   "name": "@typegoose/typegoose",
-  "version": "12.20.0",
+  "version": "13.0.0-beta.2",
   "description": "Define Mongoose models using TypeScript classes",
   "main": "lib/typegoose.js",
   "types": "lib/typegoose.d.ts",
   "type": "commonjs",
   "engines": {
-    "node": ">=16.20.1"
+    "node": ">=20.19.0"
   },
   "files": [
     "lib/**/*.js",
@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "build:tests": "tsc -p tsconfig.buildTests.json",
-    "lint": "eslint -c ./.eslintrc.cjs \"./**/*.{js,ts,cjs,mjs,cts,mts}\"",
+    "lint": "eslint -c ./eslint.config.mjs \"./**/*.{js,ts,cjs,mjs,cts,mts}\"",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
@@ -23,8 +23,8 @@
     "test:types": "tstyche",
     "watch": "tsc -w -p tsconfig.buildTests.json",
     "clean": "rimraf lib .tsbuildinfo coverage doc build",
-    "prepare": "husky install",
-    "website": "yarn --cwd website/ run start"
+    "prepare": "husky",
+    "website": "npm run --prefix website/ start"
   },
   "repository": {
     "type": "git",
@@ -37,40 +37,37 @@
   ],
   "license": "MIT",
   "peerDependencies": {
-    "mongoose": "~8.19.1"
+    "mongoose": "~9.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.7.1",
-    "@commitlint/config-conventional": "^17.8.1",
-    "@deepkit/core": "1.0.1-alpha.58",
-    "@deepkit/type": "1.0.1-alpha.58",
-    "@types/jest": "^29.5.14",
-    "@types/lodash": "^4.17.20",
-    "@types/node": "~16.11.7",
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
+    "@types/jest": "^30.0.0",
+    "@types/lodash": "^4.17.21",
+    "@types/node": "~24.10.1",
     "@types/semver": "^7.7.1",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
     "class-transformer": "0.5.1",
-    "commitlint": "^17.8.1",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^9.1.2",
+    "commitlint": "^20.2.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
-    "husky": "^8.0.3",
-    "jest": "^29.7.0",
-    "lint-staged": "^14.0.1",
-    "mongodb-memory-server": "^10.2.2",
-    "mongoose": "~8.19.1",
-    "prettier": "^3.6.2",
-    "rimraf": "^5.0.10",
-    "ts-jest": "^29.4.4",
-    "tstyche": "^2.1.1",
-    "typescript": "~5.4.5"
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
+    "lint-staged": "^16.2.7",
+    "mongodb-memory-server": "^11.0.0",
+    "mongoose": "~9.0.0",
+    "prettier": "^3.7.4",
+    "rimraf": "^6.1.2",
+    "ts-jest": "^29.4.6",
+    "tstyche": "^5.0.2",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.50.0"
   },
   "dependencies": {
     "lodash": "^4.17.20",
     "loglevel": "^1.9.2",
     "reflect-metadata": "^0.2.2",
-    "semver": "^7.7.2",
+    "semver": "^7.7.3",
     "tslib": "^2.8.1"
   },
   "publishConfig": {

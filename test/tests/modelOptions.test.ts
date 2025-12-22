@@ -1,6 +1,4 @@
-import { omit } from 'lodash';
 import { AlreadyMerged, DecoratorKeys, Severity } from '../../src/internal/constants';
-import { globalOptions } from '../../src/internal/data';
 import { getMergedModelOptions, getName, mergeMetadata } from '../../src/internal/utils';
 import { addModelToTypegoose, buildSchema, getModelForClass, modelOptions, mongoose, prop } from '../../src/typegoose';
 import { IModelOptions } from '../../src/types';
@@ -52,7 +50,7 @@ describe('existingMongoose & existingConnection', () => {
 
     const out = mergeMetadata(DecoratorKeys.ModelOptions, { existingConnection: { hi: 1 } }, Dummy);
 
-    expect(out).toEqual(Object.assign({}, omit(globalOptions, 'globalOptions'), { existingConnection: { hi: 1 } }));
+    expect(out).toEqual({ existingConnection: { hi: 1 } });
   });
 
   it('should use correct Mongoose', async () => {

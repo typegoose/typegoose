@@ -39,7 +39,7 @@ export class Default extends DiscriminatedUser<DefaultProfile> {
   public default?: string;
 
   @prop()
-  public profile?: DefaultProfile;
+  declare public profile?: DefaultProfile;
 }
 
 export const DiscriminatedUserModel = getModelForClass(DiscriminatedUser);

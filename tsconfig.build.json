@@ -5,6 +5,7 @@
     "*.js"
   ],
   "compilerOptions": {
-    "outDir": "lib"
+    "outDir": "lib",
+    "allowJs": false
   }
 }

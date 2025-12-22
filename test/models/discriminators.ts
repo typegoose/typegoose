@@ -13,7 +13,7 @@ export class DisAbove extends DisMain {
   public above1!: string;
 
   @prop({ default: 'DisAbove' })
-  public __t?: string;
+  declare public __t?: string;
 }
 
 export const DisMainModel = getModelForClass(DisMain);

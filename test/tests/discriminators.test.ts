@@ -1,3 +1,4 @@
+import { HydratedDocFromModel } from 'mongoose';
 import { assertion } from '../../src/internal/utils';
 import {
   DocumentType,
@@ -103,9 +104,8 @@ it('should pass all mongoose discriminator tests', async () => {
       discriminatorKey: 'kind',
     },
   })
-  @Pre('validate', function (next) {
+  @Pre('validate', function () {
     ++eventValidationCalls;
-    next();
   })
   class Event {
     public kind?: string;
@@ -114,9 +114,8 @@ it('should pass all mongoose discriminator tests', async () => {
     public time?: Date;
   }
 
-  @Pre('validate', function (next) {
+  @Pre('validate', function () {
     ++clickedLinkEventValidationCalls;
-    next();
   })
   class ClickedLinkEvent extends Event {
     @Prop()
@@ -171,7 +170,9 @@ it('should pass all mongoose discriminator tests', async () => {
 
   // https://mongoosejs.com/docs/discriminators.html#using-discriminators-with-model-create
   const events = await Promise.all([
-    EventModel.create<ClickedLinkEvent>({ time: new Date(Date.now()), url: 'google.com' }),
+    EventModel.create({ time: new Date(Date.now()), url: 'google.com' } as Partial<mongoose.InferSchemaType<ClickedLinkEvent>>) as Promise<
+      HydratedDocFromModel<typeof ClickedLinkEventModel>
+    >,
     ClickedLinkEventModel.create({ time: Date.now(), url: 'google.com' }),
     SignedUpEventModel.create({ time: Date.now(), user: 'testuser' }),
   ]);

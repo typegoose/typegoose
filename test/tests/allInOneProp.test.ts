@@ -10,7 +10,7 @@ it('should work with normal prop', async () => {
 
 it('should work with array prop', async () => {
   expect(AllInOnePropModel.schema.path('array')).toBeInstanceOf(mongoose.Schema.Types.Array);
-  expect((AllInOnePropModel.schema.path('array') as any).caster).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect((AllInOnePropModel.schema.path('array') as any).embeddedSchemaType).toBeInstanceOf(mongoose.Schema.Types.String);
   const { _id } = await AllInOnePropModel.create({ array: ['Hello There', 'Hi'] });
   const found = await AllInOnePropModel.findById(_id).orFail().exec();
   expect(Array.from(found.array!)).toEqual(['Hello There', 'Hi']);
