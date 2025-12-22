@@ -47,7 +47,7 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Test
-        run: npm run test:coverage --colors
+        run: npm run test:coverage -- --colors
         env:
           CI: true
       - name: Send codecov.io stats
