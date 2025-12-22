@@ -1,3 +1,9 @@
+## [12.20.1](https://github.com/typegoose/typegoose/compare/v12.20.0...v12.20.1) (2025-12-22)
+
+### Fixes
+
+* trigger patch release due to 13.0.0 ([931a357](https://github.com/typegoose/typegoose/commit/931a357d83e5a12711a567408cdad2d960a1ae08))
+
 ## [12.20.0](https://github.com/typegoose/typegoose/compare/v12.19.0...v12.20.0) (2025-10-07)
 
 ### Dependencies
