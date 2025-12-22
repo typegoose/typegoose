@@ -136,7 +136,7 @@ Arrow Functions cannot be used here, because the binding of `this` is required t
 ## Example {#post-example}
 
 ```ts
-@post<Car>('save', (car) => {
+@post<Car>('save', function (car) {
   if (car.topSpeedInKmH > 300) {
     console.log(car.model, 'is fast!');
   }
