@@ -24,7 +24,7 @@
     "watch": "tsc -w -p tsconfig.buildTests.json",
     "clean": "rimraf lib .tsbuildinfo coverage doc build",
     "prepare": "husky",
-    "website": "yarn --cwd website/ run start"
+    "website": "npm run --prefix website/ start"
   },
   "repository": {
     "type": "git",

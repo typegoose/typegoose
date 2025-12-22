@@ -48,10 +48,10 @@ function main() {
   console.log('\nInstall & Build of website\n');
 
   // make sure everything is correctly installed
-  execSync('yarn --cwd ./website install', { stdio: 'inherit' });
+  execSync('npm ci --prefix=website/', { stdio: 'inherit' });
 
   // build the website
-  execSync('yarn --cwd ./website build', { stdio: 'inherit' });
+  execSync('npm run --prefix=website/ build', { stdio: 'inherit' });
 
   console.log('\nSwitching Branches\n');
 
