@@ -48,7 +48,7 @@
     "@types/semver": "^7.7.1",
     "class-transformer": "0.5.1",
     "commitlint": "^20.2.0",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "husky": "^9.1.7",
