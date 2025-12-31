@@ -1,3 +1,10 @@
+## [12.21.0](https://github.com/typegoose/typegoose/compare/v12.20.1...v12.21.0) (2025-12-31)
+
+### Dependencies
+
+* **mongoose:** upgrade to 8.20.4 ([7e9269a](https://github.com/typegoose/typegoose/commit/7e9269a72dfb8b08e78c027961148faf3f0b967a))
+* **mongoose:** upgrade to 8.21.0 ([4950f2e](https://github.com/typegoose/typegoose/commit/4950f2e6753309d8d6d5017986b12402299295c2))
+
 ## [12.20.1](https://github.com/typegoose/typegoose/compare/v12.20.0...v12.20.1) (2025-12-22)
 
 ### Fixes
