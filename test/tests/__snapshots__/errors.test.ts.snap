@@ -30,8 +30,8 @@ exports[`should fail when using String-Enum on an Number Type [NotNumberTypeErro
 
 exports[`should throw a Error in "processProp" when using a invalid type for enums [InvalidEnumTypeError] [E012] 1`] = `
 "Invalid Type used for options \\"enum\\" at \\"TestInvalidEnumType.testVal\\"! [E012]
-Type: \\"function SchemaBoolean(path, options) {
-  SchemaType.call(this, path, options, 'Boolean');
+Type: \\"function SchemaBoolean(path, options, _schemaOptions, parentSchema) {
+  SchemaType.call(this, path, options, 'Boolean', parentSchema);
 }\\"
 https://typegoose.github.io/typegoose/docs/guides/error-warning-details#invalid-type-for-enum-e012"
 `;

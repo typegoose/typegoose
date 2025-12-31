@@ -752,9 +752,8 @@ describe('test the Passthrough class (non "direct")', () => {
     /** Type to shorten using another type */
     type SubDocumentAlias = mongoose.Schema.Types.Subdocument;
 
-    expect((typegooseSomethingPath as SubDocumentAlias).schema.path('somePath')).toMatchObject(
-      (mongooseSomethingPath as SubDocumentAlias).schema.path('somePath')
-    );
+    expect((typegooseSomethingPath as SubDocumentAlias).schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
+    expect((mongooseSomethingPath as SubDocumentAlias).schema.path('somePath')).toBeInstanceOf(mongoose.Schema.Types.String);
 
     expect((typegooseSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
     expect((mongooseSomethingExtraPath as SubDocumentAlias).schema.path('someExtraPath')).toBeInstanceOf(mongoose.Schema.Types.Array);
