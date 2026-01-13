@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`globalOptions should allow setting "allowMixed" as global option [typegoose/typegoose#1024] 1`] = `"Setting \\"Mixed\\" is not allowed! (TestGlobalAllowMixed, someMixed) [E017]"`;

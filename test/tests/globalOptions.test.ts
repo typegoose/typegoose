@@ -1,7 +1,7 @@
 import { AlreadyMerged, DecoratorKeys } from '../../src/internal/constants';
 import { globalOptions } from '../../src/internal/data';
-import { getMergedModelOptions } from '../../src/internal/utils';
-import { buildSchema, modelOptions, prop, setGlobalOptions, Severity } from '../../src/typegoose';
+import { assertion, getMergedModelOptions } from '../../src/internal/utils';
+import { buildSchema, modelOptions, mongoose, prop, setGlobalOptions, Severity } from '../../src/typegoose';
 import type { IModelOptions } from '../../src/types';
 
 describe('globalOptions', () => {
@@ -105,5 +105,23 @@ describe('globalOptions', () => {
       },
       [AlreadyMerged]: true,
     });
+  });
+
+  it('should allow setting "allowMixed" as global option [typegoose/typegoose#1024]', () => {
+    class TestGlobalAllowMixed {
+      @prop({ type: () => mongoose.Schema.Types.Mixed })
+      public someMixed?: any;
+    }
+
+    setGlobalOptions({ options: { allowMixed: Severity.ERROR } });
+
+    try {
+      buildSchema(TestGlobalAllowMixed);
+      fail('Expected getModelForClass to fail');
+    } catch (err) {
+      expect(err).toBeInstanceOf(TypeError);
+      assertion(err instanceof TypeError); // typescript check
+      expect(err.message).toMatchSnapshot();
+    }
   });
 });

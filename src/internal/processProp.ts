@@ -32,7 +32,7 @@ import * as utils from './utils';
  * @param input All the options needed for prop's
  */
 export function processProp(input: ProcessPropOptions): void {
-  const { key, target } = input;
+  const { key, target, mergedOptions } = input;
   const name = utils.getName(target);
   const rawOptions: KeyStringAny = Object.assign({}, input.options);
   let Type: any | undefined = Reflect.getMetadata(DecoratorKeys.Type, target, key);
@@ -189,11 +189,11 @@ export function processProp(input: ProcessPropOptions): void {
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, target, key);
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, newType, target, key, mergedOptions);
 
         return;
       case PropType.MAP: {
-        const mapped = utils.mapOptions(rawOptions, newType, target, key);
+        const mapped = utils.mapOptions(rawOptions, newType, target, key, mergedOptions);
 
         schemaProp[key] = {
           ...mapped.outer,
@@ -224,7 +224,7 @@ export function processProp(input: ProcessPropOptions): void {
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { ref });
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, mergedOptions, undefined, { ref });
         break;
       case PropType.NONE:
         schemaProp[key] = {
@@ -234,7 +234,7 @@ export function processProp(input: ProcessPropOptions): void {
         };
         break;
       case PropType.MAP: {
-        const mapped = utils.mapOptions(rawOptions, refType, target, key);
+        const mapped = utils.mapOptions(rawOptions, refType, target, key, mergedOptions);
 
         schemaProp[key] = {
           ...mapped.outer,
@@ -265,7 +265,7 @@ export function processProp(input: ProcessPropOptions): void {
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, undefined, { refPath });
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, refType, target, key, mergedOptions, undefined, { refPath });
         break;
       case PropType.NONE:
         schemaProp[key] = {
@@ -393,12 +393,12 @@ export function processProp(input: ProcessPropOptions): void {
 
   if (utils.isPrimitive(Type)) {
     if (utils.isObject(Type, true)) {
-      utils.warnMixed(target, key);
+      utils.warnMixed(target, key, mergedOptions);
     }
 
     switch (propKind) {
       case PropType.ARRAY:
-        schemaProp[key] = utils.mapArrayOptions(rawOptions, Type, target, key);
+        schemaProp[key] = utils.mapArrayOptions(rawOptions, Type, target, key, mergedOptions);
 
         return;
       case PropType.MAP: {
@@ -407,11 +407,11 @@ export function processProp(input: ProcessPropOptions): void {
 
         // Map the correct options for the end type
         if (utils.isTypeMeantToBeArray(rawOptions)) {
-          mapped = utils.mapOptions(rawOptions, mongoose.Schema.Types.Array, target, key);
+          mapped = utils.mapOptions(rawOptions, mongoose.Schema.Types.Array, target, key, mergedOptions);
           // "rawOptions" is not used here, because that would duplicate some options to where the should not be
-          finalType = utils.mapArrayOptions({ ...mapped.inner, dim: rawOptions.dim }, Type, target, key);
+          finalType = utils.mapArrayOptions({ ...mapped.inner, dim: rawOptions.dim }, Type, target, key, mergedOptions);
         } else {
-          mapped = utils.mapOptions(rawOptions, Type, target, key);
+          mapped = utils.mapOptions(rawOptions, Type, target, key, mergedOptions);
           finalType = { ...mapped.inner, type: Type };
         }
 
@@ -438,7 +438,7 @@ export function processProp(input: ProcessPropOptions): void {
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
   if (utils.isObject(Type) && !hasCachedSchema) {
-    utils.warnMixed(target, key);
+    utils.warnMixed(target, key, mergedOptions);
     logger.warn(
       'if someone can see this message, please open an new issue at https://github.com/typegoose/typegoose/issues with reproduction code for tests'
     );

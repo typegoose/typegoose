@@ -57,7 +57,7 @@ export function _buildSchema<U extends AnyParamConstructor<any>>(
 
   if (!isNullOrUndefined(decorators)) {
     for (const decorator of decorators.values()) {
-      processProp({ ...decorator, cl: cl });
+      processProp({ ...decorator, cl: cl, mergedOptions });
     }
   }
 

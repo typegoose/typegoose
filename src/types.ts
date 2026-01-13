@@ -729,6 +729,8 @@ export type BeAnyObject = {};
 export interface ProcessPropOptions extends DecoratedPropertyMetadata {
   /** The target Class's static version */
   cl: AnyParamConstructor<any>;
+  /** The already merged model options for the current class */
+  mergedOptions: IModelOptions;
 }
 
 /**
