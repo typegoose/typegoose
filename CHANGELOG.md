@@ -1,3 +1,10 @@
+## [13.0.1](https://github.com/typegoose/typegoose/compare/v13.0.0...v13.0.1) (2026-01-13)
+
+### Fixes
+
+* pass along merged "IModelOptions" to "processProp" and then to "warnMixed" ([5d4db21](https://github.com/typegoose/typegoose/commit/5d4db21c2f970068a83b4c3662f1e9578389f57d)), closes [#1024](https://github.com/typegoose/typegoose/issues/1024)
+* **types::IGlobalOptions:** remove "disableLowerIndexes" properties from "options" ([731a36b](https://github.com/typegoose/typegoose/commit/731a36b10ab804a27b84cf941c646e549c7ca3e4))
+
 ## [13.0.1-beta.1](https://github.com/typegoose/typegoose/compare/v13.0.0...v13.0.1-beta.1) (2026-01-13)
 
 ### Fixes
