@@ -673,7 +673,7 @@ export interface IHooksArray {
 
 export interface IGlobalOptions {
   /** Typegoose Options */
-  options?: ICustomOptions;
+  options?: Omit<ICustomOptions, 'disableLowerIndexes'>;
   /** Schema Options that should get applied to all models */
   schemaOptions?: mongoose.SchemaOptions<any, IObjectWithTypegooseFunction>;
   /**
