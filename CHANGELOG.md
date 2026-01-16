@@ -1,3 +1,9 @@
+## [13.1.0](https://github.com/typegoose/typegoose/compare/v13.0.1...v13.1.0) (2026-01-16)
+
+### Dependencies
+
+* **mongoose:** upgrade to 9.1.4 ([ea5188b](https://github.com/typegoose/typegoose/commit/ea5188bb7f998aab9cf6bb43e853c549b1854992))
+
 ## [13.0.1](https://github.com/typegoose/typegoose/compare/v13.0.0...v13.0.1) (2026-01-13)
 
 ### Fixes
