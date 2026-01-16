@@ -54,7 +54,7 @@ interface Hooks {
     fn: ErrorHandlingMiddlewareFunction<T>,
     options: SchemaPostOptions & { errorHandler: true }
   ): ClassDecorator;
-  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>>>(
     method: MongooseDocumentMiddleware | MongooseDocumentMiddleware[] | RegExp,
     fn: ErrorHandlingMiddlewareFunction<T>,
     options: SchemaPostOptions & { errorHandler: true }
@@ -88,17 +88,17 @@ interface Hooks {
   ): ClassDecorator;
 
   // this = Document
-  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>>>(
     method: MongooseDistinctDocumentMiddleware | MongooseDistinctDocumentMiddleware[],
     fn: PostMiddlewareFunction<T, T>,
     options?: SchemaPostOptions
   ): ClassDecorator;
-  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>>>(
     method: MongooseQueryOrDocumentMiddleware | MongooseQueryOrDocumentMiddleware[] | RegExp,
     fn: PostMiddlewareFunction<T, T>,
     options?: SchemaPostOptions & { document: true; query: false }
   ): ClassDecorator;
-  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+  post<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>>>(
     method: 'init',
     fn: PostMiddlewareFunction<T, T>
   ): ClassDecorator;
@@ -123,7 +123,7 @@ interface Hooks {
   // this = Union of Document and Query, could be called with any of them
   post<
     S extends object | Query<any, any> | HydratedDocument<any, any>,
-    T = S extends Query<any, any> ? S : S extends Document ? S : HydratedDocument<DocumentType<S>, any>,
+    T = S extends Query<any, any> ? S : S extends Document ? S : HydratedDocument<DocumentType<S>>,
   >(
     method: MongooseQueryOrDocumentMiddleware | MongooseQueryOrDocumentMiddleware[] | RegExp,
     fn: ErrorHandlingMiddlewareFunction<T>,
@@ -169,7 +169,7 @@ interface Hooks {
   // this = Union of Document and Query, could be called with any of them
   pre<
     S extends object | Query<any, any> | HydratedDocument<any, any>,
-    T = S extends Query<any, any> ? S : S extends Document ? S : HydratedDocument<DocumentType<S>, any>,
+    T = S extends Query<any, any> ? S : S extends Document ? S : HydratedDocument<DocumentType<S>>,
   >(
     method: MongooseQueryAndDocumentMiddleware | MongooseQueryAndDocumentMiddleware[] | RegExp,
     fn: PreMiddlewareFunction<T>,
@@ -177,7 +177,7 @@ interface Hooks {
   ): ClassDecorator;
 
   // this = Document
-  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>>>(
     method: 'save',
     fn: PreSaveMiddlewareFunction<T>,
     options?: SchemaPreOptions
@@ -186,17 +186,17 @@ interface Hooks {
     method: 'init',
     fn: (this: S, doc: RawDocType) => void
   ): ClassDecorator;
-  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>>>(
     method: MongooseDistinctDocumentMiddleware | MongooseDistinctDocumentMiddleware[],
     fn: PreMiddlewareFunction<T>,
     options?: SchemaPreOptions
   ): ClassDecorator;
-  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>>>(
     method: MongooseQueryAndDocumentMiddleware | MongooseQueryAndDocumentMiddleware[] | RegExp,
     fn: PreMiddlewareFunction<T>,
     options?: SchemaPreOptions & { document: true }
   ): ClassDecorator;
-  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>, any>>(
+  pre<S extends object | HydratedDocument<any, any>, T = S extends Document ? S : HydratedDocument<DocumentType<S>>>(
     method: MongooseQueryOrDocumentMiddleware | MongooseQueryOrDocumentMiddleware[] | RegExp,
     fn: PreMiddlewareFunction<T>,
     options?: SchemaPreOptions & { document: true; query: false }
@@ -222,7 +222,7 @@ interface Hooks {
   // this = Union of Document and Query, could be called with any of them
   pre<
     S extends object | Query<any, any> | HydratedDocument<any, any>,
-    T = S extends Query<any, any> ? S : S extends Document ? S : HydratedDocument<DocumentType<S>, any>,
+    T = S extends Query<any, any> ? S : S extends Document ? S : HydratedDocument<DocumentType<S>>,
   >(
     method: MongooseQueryOrDocumentMiddleware | MongooseQueryOrDocumentMiddleware[] | RegExp,
     fn: PreMiddlewareFunction<T>,
