@@ -266,6 +266,96 @@ const doc1 = await SomeModel.create({ someIncrementedField: 10 }); // _id will b
 const doc2 = await SomeModel.create({ someIncrementedField: 20 }); // _id will be 2
 ```
 
+## mongoose-paginate-v2
+
+Last updated for:
+
+```txt
+@typegoose/typegoose@13.1.0
+mongoose-paginate-v2@1.9.1
+```
+
+```bash npm2yarn
+npm install --save mongoose-paginate-v2
+```
+
+Typegoose can be used together with `mongoose-paginate-v2`'s types.
+
+Though actual usage requires some manual type picking, due to `mongoose-paginate-v2` not providing anything other than a `mongoose.Model` wrapper, which is not directly comaptible with typegoose's types:
+
+<Tabs groupId="esModuleInterop">
+  <TabItem value="esModuleInterop-false" label="esModuleInterop: false" default>
+
+```ts
+import * as mongoose from 'mongoose';
+import * as paginatePlugin from 'mongoose-paginate-v2';
+import { DocumentType, getModelForClass, plugin, prop, ReturnModelType } from '@typegoose/typegoose';
+
+@plugin(paginatePlugin)
+class User {
+  @prop()
+  public username?: string;
+}
+
+const UserModel = getModelForClass(User) as ReturnModelType<typeof User> & Pick<mongoose.PaginateModel<DocumentType<User>>, 'paginate'>;
+
+(async () => {
+  await mongoose.connect(`mongodb://localhost:27017/`, { dbName: 'guides' });
+
+  // types are mostly available
+  const result = await UserModel.paginate({ username: 'hello' }, { page: 0, limit: 10 });
+  console.log('docs', result.docs);
+
+  if (result.docs.length > 0) {
+    const id = result.docs[0]._id;
+    console.log('id of first', id);
+  }
+
+  await mongoose.disconnect();
+})();
+```
+
+  </TabItem>
+  <TabItem value="esModuleInterop-true" label="esModuleInterop: true">
+
+```ts
+import mongoose from 'mongoose';
+import paginatePlugin from 'mongoose-paginate-v2';
+import { DocumentType, getModelForClass, plugin, prop, ReturnModelType } from '@typegoose/typegoose';
+
+@plugin(paginatePlugin)
+class User {
+  @prop()
+  public username?: string;
+}
+
+const UserModel = getModelForClass(User) as ReturnModelType<typeof User> & Pick<mongoose.PaginateModel<DocumentType<User>>, 'paginate'>;
+
+(async () => {
+  await mongoose.connect(`mongodb://localhost:27017/`, { dbName: 'guides' });
+
+  // types are mostly available
+  const result = await UserModel.paginate({ username: 'hello' }, { page: 0, limit: 10 });
+  console.log('docs', result.docs);
+
+  if (result.docs.length > 0) {
+    const id = result.docs[0]._id;
+    console.log('id of first', id);
+  }
+
+  await mongoose.disconnect();
+})();
+```
+
+  </TabItem>
+</Tabs>
+
+:::note
+Please note that as of `mongoose-paginate-v2@1.9.1` types for `FilterQuery` do not work, likely due to not being updated for mongoose 9.0.
+
+See [mongoose-paginate-v2#239](https://github.com/aravindnc/mongoose-paginate-v2/issues/239)
+:::
+
 ---
 
 :::note
