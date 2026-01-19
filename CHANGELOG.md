@@ -1,3 +1,9 @@
+## [13.1.1-beta.1](https://github.com/typegoose/typegoose/compare/v13.1.0...v13.1.1-beta.1) (2026-01-19)
+
+### Fixes
+
+* **types:** add "DocumentArrayType" for document arrays ([6692d07](https://github.com/typegoose/typegoose/commit/6692d07933f7a51e22f8ee79478b8ce68e83e60b)), closes [#1025](https://github.com/typegoose/typegoose/issues/1025)
+
 ## [13.1.0](https://github.com/typegoose/typegoose/compare/v13.0.1...v13.1.0) (2026-01-16)
 
 ### Dependencies
