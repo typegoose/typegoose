@@ -26,6 +26,10 @@ export type SubDocumentType<T, QueryHelpers = BeAnObject> = DocumentType<T, Quer
  */
 export type ArraySubDocumentType<T, QueryHelpers = BeAnObject> = DocumentType<T, QueryHelpers> & mongoose.Types.ArraySubdocument;
 /**
+ * Get the Type for a SubDocument Array, with all extra functions from mongoose
+ */
+export type DocumentArrayType<T, QueryHelpers = BeAnObject> = mongoose.Types.DocumentArray<T, ArraySubDocumentType<T, QueryHelpers>>;
+/**
  * Used Internally for ModelTypes
  */
 export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<

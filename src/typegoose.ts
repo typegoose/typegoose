@@ -44,6 +44,7 @@ import type {
   ReturnModelType,
   SubDocumentType,
   ArraySubDocumentType,
+  DocumentArrayType,
   IBuildSchemaOptions,
 } from './types';
 import { CacheDisabledError, ExpectedTypeError, FunctionCalledMoreThanSupportedError, NotValidModelError } from './internal/errors';
@@ -66,7 +67,7 @@ export * as defaultClasses from './defaultClasses';
 export * as errors from './internal/errors';
 export * as types from './types';
 // the following types are re-exported (instead of just in "types") because they are often used types
-export { DocumentType, Ref, ReturnModelType, SubDocumentType, ArraySubDocumentType };
+export { DocumentType, Ref, ReturnModelType, SubDocumentType, ArraySubDocumentType, DocumentArrayType };
 export { getClass, getName } from './internal/utils';
 export { Severity, PropType } from './internal/constants';
 

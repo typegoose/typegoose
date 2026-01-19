@@ -569,3 +569,47 @@ function modelOptionsGenerics() {
 }
 
 modelOptionsGenerics();
+
+async function documentArrayType() {
+  class Child {
+    @prop()
+    public prop1?: string;
+
+    @prop({ required: true })
+    public prop2!: number;
+  }
+
+  class Parent {
+    @prop()
+    public someOtherProp?: string;
+
+    @prop({ required: true, type: () => [Child] })
+    public array1!: typegoose.DocumentArrayType<Child>;
+
+    @prop({ type: () => [Child] })
+    public array2?: typegoose.DocumentArrayType<Child>;
+  }
+
+  const Model = typegoose.getModelForClass(Parent);
+
+  const doc = await Model.create({
+    someOtherProp: 'hello0',
+    array1: [{ prop1: 'hello1', prop2: 1 }],
+    array2: [{ prop1: 'hello2', prop2: 2 }],
+  });
+
+  expect(doc.someOtherProp).type.toBe<string | undefined>();
+  expect(doc.array1).type.toBe<typegoose.mongoose.Types.DocumentArray<Child, typegoose.ArraySubDocumentType<Child>>>();
+  expect(doc.array1.id('nonexistend')).type.toBe<typegoose.ArraySubDocumentType<Child> | null>();
+  expect(doc.array1[0]).type.toBe<typegoose.ArraySubDocumentType<Child>>();
+  expect(doc.array1[0].parentArray()).type.toBe<typegoose.mongoose.Types.DocumentArray<unknown>>();
+  expect(doc.array1[0].ownerDocument()).type.toBe<typegoose.mongoose.Document>();
+
+  expect(doc.array2).type.toBe<typegoose.mongoose.Types.DocumentArray<Child, typegoose.ArraySubDocumentType<Child>> | undefined>();
+  expect(doc.array2!.id('nonexistend')).type.toBe<typegoose.ArraySubDocumentType<Child> | null>();
+  expect(doc.array2![0]).type.toBe<typegoose.ArraySubDocumentType<Child>>();
+  expect(doc.array2![0].parentArray()).type.toBe<typegoose.mongoose.Types.DocumentArray<unknown>>();
+  expect(doc.array2![0].ownerDocument()).type.toBe<typegoose.mongoose.Document>();
+}
+
+documentArrayType();
