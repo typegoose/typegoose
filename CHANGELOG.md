@@ -1,3 +1,14 @@
+## [13.2.0-beta.1](https://github.com/typegoose/typegoose/compare/v13.1.1-beta.1...v13.2.0-beta.1) (2026-02-26)
+
+### Features
+
+* support "refPath" as a function ([ee187fa](https://github.com/typegoose/typegoose/commit/ee187fa4b37c258bd5bfd83be80f3d03a6e35835)), closes [#1028](https://github.com/typegoose/typegoose/issues/1028)
+
+### Dependencies
+
+* **mongoose:** upgrade to 9.2.1 ([c7382bc](https://github.com/typegoose/typegoose/commit/c7382bcb4f8fb19b7a305314aa6ea9dfdacbe1f2))
+* **mongoose:** upgrade to 9.2.2 ([9238112](https://github.com/typegoose/typegoose/commit/92381121787d06baff66e55420f7161fa9b74cb1))
+
 ## [13.1.1-beta.1](https://github.com/typegoose/typegoose/compare/v13.1.0...v13.1.1-beta.1) (2026-01-19)
 
 ### Fixes
