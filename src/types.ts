@@ -228,7 +228,7 @@ export interface BasePropOptions {
   /** Reference another Document (you should use Ref<T> as Prop type) */
   ref?: DeferredFunc<string | AnyParamConstructor<any> | DynamicStringFunc<any>> | string | AnyParamConstructor<any>;
   /** Take the Path and try to resolve it to a Model */
-  refPath?: string;
+  refPath?: string | DynamicStringFunc<any>;
   /**
    * Set the Nested Discriminators
    *

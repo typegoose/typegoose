@@ -259,7 +259,7 @@ export function processProp(input: ProcessPropOptions): void {
     delete rawOptions.refPath;
 
     utils.assertion(
-      typeof refPath === 'string' && refPath.length > 0,
+      (typeof refPath === 'string' && refPath.length > 0) || typeof refPath === 'function',
       () => new StringLengthExpectedError(1, refPath, `${name}.${key}`, 'refPath')
     );
 

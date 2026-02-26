@@ -430,3 +430,48 @@ it('Reference-Maps should work and be populated', async () => {
   assertion(isDocument(found_doc1));
   expect(found_doc1.dummy).toEqual('1');
 });
+
+it('should support refPath as a function', async () => {
+  class ChildA {
+    @prop({ required: true })
+    public propA!: string;
+  }
+
+  class ChildB {
+    @prop({ required: true })
+    public propB!: string;
+  }
+
+  const ChildAModel = getModelForClass(ChildA);
+  const ChildBModel = getModelForClass(ChildB);
+
+  class RefPathTest {
+    @prop({ required: true, enum: [ChildAModel.modelName, ChildBModel.modelName] })
+    public model!: string;
+
+    @prop({
+      refPath: function () {
+        return 'model';
+      },
+    })
+    public ref!: Ref<ChildA | ChildB>;
+  }
+
+  const RefPathTestModel = getModelForClass(RefPathTest);
+
+  const childAdoc = await ChildAModel.create({ propA: 'helloA' });
+  const childBdoc = await ChildBModel.create({ propB: 'helloB' });
+
+  const doc1 = await RefPathTestModel.create({ model: ChildAModel.modelName, ref: childAdoc._id } as any);
+  const doc2 = await RefPathTestModel.create({ model: ChildBModel.modelName, ref: childBdoc._id } as any);
+
+  const foundA = await RefPathTestModel.findById(doc1._id).populate('ref').orFail();
+
+  expect(foundA.model).toStrictEqual(ChildAModel.modelName);
+  expect((foundA.ref as ChildA).propA).toStrictEqual('helloA');
+
+  const foundB = await RefPathTestModel.findById(doc2._id).populate('ref').orFail();
+
+  expect(foundB.model).toStrictEqual(ChildBModel.modelName);
+  expect((foundB.ref as ChildB).propB).toStrictEqual('helloB');
+});
