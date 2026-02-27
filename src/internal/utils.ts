@@ -514,7 +514,8 @@ export function mapOptions(
       logger.info('The Type "%s" has a property "OptionsConstructor" but it does not extend "SchemaTypeOptions"', getName(loggerType));
     }
 
-    ret.outer = options;
+    // later options get deleted, but we dont want to actually delete on `options` itself
+    ret.outer = Object.assign({}, options);
   }
 
   if (typeof options?.innerOptions === 'object') {
