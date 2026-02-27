@@ -1382,3 +1382,26 @@ it('should support mapping MIXED options on Maps', () => {
   expect(spyWarn).toHaveBeenCalledTimes(1);
   expect(spyWarn.mock.calls).toMatchSnapshot();
 });
+
+it('should support mapping custom options on MIXED with Maps', () => {
+  const spyWarn = jest.spyOn(logger, 'warn').mockImplementation(() => void 0);
+
+  class TestMixedMapsCustomOptions {
+    @prop({ type: mongoose.Schema.Types.Mixed, outerOptions: { testOuter: true }, innerOptions: { testInner: true } }, PropType.MAP)
+    public test?: unknown;
+  }
+
+  const schema = buildSchema(TestMixedMapsCustomOptions);
+  const testPath = schema.path('test');
+  expect(testPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(testPath.options).toHaveProperty('validate');
+  expect(testPath.options).toHaveProperty('testOuter', true);
+  expect(testPath.options).not.toHaveProperty('testInner');
+
+  expect(testPath['$__schemaType']).toBeInstanceOf(mongoose.Schema.Types.Mixed);
+  expect(testPath['$__schemaType'].options).toHaveProperty('testInner', true);
+  expect(testPath['$__schemaType'].options).not.toHaveProperty('testOuter');
+
+  expect(spyWarn).toHaveBeenCalledTimes(1);
+  expect(spyWarn.mock.calls).toMatchSnapshot();
+});
