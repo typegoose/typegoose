@@ -501,7 +501,10 @@ export function mapOptions(
 
   const options = Object.assign({}, rawOptions); // for sanity
 
-  if (OptionsCTOR.prototype instanceof mongoose.SchemaTypeOptions) {
+  // test that the OptionsCTOR extends, or is "SchemaTypeOptions"
+  // this is necessary due to `class A {}; class B extends A {}; B.prototype instanceof A === true;`
+  // but not due to `class A {}; A instanceof A === false;`
+  if (OptionsCTOR.prototype instanceof mongoose.SchemaTypeOptions || OptionsCTOR === mongoose.SchemaTypeOptions) {
     for (const [key, value] of Object.entries(options)) {
       if (Object.getOwnPropertyNames(OptionsCTOR.prototype).includes(key)) {
         ret.inner[key] = value;

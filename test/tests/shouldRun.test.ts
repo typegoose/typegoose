@@ -1361,3 +1361,24 @@ it('should set PropType.ARRAY if dim is above 1 and Type is PropType.NONE and no
   expect(path5).toBeInstanceOf(mongoose.Schema.Types.String);
   expect(path5.instance).toEqual('String');
 });
+
+it('should support mapping MIXED options on Maps', () => {
+  const spyWarn = jest.spyOn(logger, 'warn').mockImplementation(() => void 0);
+
+  class TestMixedOnMaps {
+    @prop({ type: mongoose.Schema.Types.Mixed, validate: () => true, sparse: true }, PropType.MAP)
+    public test?: unknown;
+  }
+
+  const schema = buildSchema(TestMixedOnMaps);
+  const testPath = schema.path('test');
+  expect(testPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(testPath.options).toHaveProperty('validate');
+  expect(testPath.options['sparse']).toBeUndefined();
+
+  expect(testPath['$__schemaType']).toBeInstanceOf(mongoose.Schema.Types.Mixed);
+  expect(testPath['$__schemaType'].options).toHaveProperty('sparse', true);
+
+  expect(spyWarn).toHaveBeenCalledTimes(1);
+  expect(spyWarn.mock.calls).toMatchSnapshot();
+});
