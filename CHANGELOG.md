@@ -1,3 +1,11 @@
+## [13.2.0-beta.2](https://github.com/typegoose/typegoose/compare/v13.2.0-beta.1...v13.2.0-beta.2) (2026-02-27)
+
+### Fixes
+
+* **processProp:** allow overwriting "type" in "Map" with "innerOptions" ([c7851f8](https://github.com/typegoose/typegoose/commit/c7851f888488041106050978f8a257c703862dfe)), closes [#1031](https://github.com/typegoose/typegoose/issues/1031)
+* **utils::mapOptions:** check that it extends OR *is* a options constructor ([a37752a](https://github.com/typegoose/typegoose/commit/a37752a1ea8babc68d5ff5cac349df64b3aa2afe)), closes [#1031](https://github.com/typegoose/typegoose/issues/1031)
+* **utils::mapOptions:** shallow-copy instead of assign ([4754ca9](https://github.com/typegoose/typegoose/commit/4754ca9195a71a5352c6d10300803ba8ad855892)), closes [#1031](https://github.com/typegoose/typegoose/issues/1031)
+
 ## [13.2.0-beta.1](https://github.com/typegoose/typegoose/compare/v13.1.1-beta.1...v13.2.0-beta.1) (2026-02-26)
 
 ### Features
