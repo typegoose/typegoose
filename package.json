@@ -40,14 +40,14 @@
     "mongoose": "~9.2.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.2.0",
-    "@commitlint/config-conventional": "^20.2.0",
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.21",
     "@types/node": "~24.10.1",
     "@types/semver": "^7.7.1",
     "class-transformer": "0.5.1",
-    "commitlint": "^20.2.0",
+    "commitlint": "^20.4.2",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
