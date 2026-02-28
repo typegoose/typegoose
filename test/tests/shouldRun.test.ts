@@ -1402,3 +1402,22 @@ it('should support mapping custom options on MIXED with Maps', () => {
   expect(spyWarn).toHaveBeenCalledTimes(1);
   expect(spyWarn.mock.calls).toMatchSnapshot();
 });
+
+it('should support manually overwriting inner `type` in Maps', () => {
+  const spyWarn = jest.spyOn(logger, 'warn').mockImplementation(() => void 0);
+
+  class TestMapsWithManualTypeOverwrite {
+    @prop({ type: mongoose.Schema.Types.Mixed, innerOptions: { type: String } }, PropType.MAP)
+    public test?: unknown;
+  }
+
+  const schema = buildSchema(TestMapsWithManualTypeOverwrite);
+  const testPath = schema.path('test');
+  expect(testPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(testPath.options).toHaveProperty('validate');
+
+  expect(testPath['$__schemaType']).toBeInstanceOf(mongoose.Schema.Types.String);
+
+  expect(spyWarn).toHaveBeenCalledTimes(1);
+  expect(spyWarn.mock.calls).toMatchSnapshot();
+});

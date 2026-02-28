@@ -410,7 +410,7 @@ export function processProp(input: ProcessPropOptions): void {
           finalType = utils.mapArrayOptions({ ...mapped.inner, dim: rawOptions.dim }, Type, target, key);
         } else {
           mapped = utils.mapOptions(rawOptions, Type, target, key);
-          finalType = { ...mapped.inner, type: Type };
+          finalType = { type: Type, ...mapped.inner };
         }
 
         schemaProp[key] = {
