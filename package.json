@@ -61,7 +61,7 @@
     "ts-jest": "^29.4.6",
     "tstyche": "^5.0.2",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.50.0"
+    "typescript-eslint": "^8.56.1"
   },
   "dependencies": {
     "lodash": "^4.17.20",
