@@ -1,3 +1,11 @@
+## [12.21.1](https://github.com/typegoose/typegoose/compare/v12.21.0...v12.21.1) (2026-02-28)
+
+### Fixes
+
+* **processProp:** allow overwriting "type" in "Map" with "innerOptions" ([9912d97](https://github.com/typegoose/typegoose/commit/9912d978d7f70eea0529f2cdd7aa6ce7c43d74f9)), closes [#1031](https://github.com/typegoose/typegoose/issues/1031)
+* **utils::mapOptions:** check that it extends OR *is* a options constructor ([cc99653](https://github.com/typegoose/typegoose/commit/cc996531f9f59183d63e10703606c4abe15ad742)), closes [#1031](https://github.com/typegoose/typegoose/issues/1031)
+* **utils::mapOptions:** shallow-copy instead of assign ([f0d3451](https://github.com/typegoose/typegoose/commit/f0d3451e5af9b44f9056598a177cd163297f9ab5)), closes [#1031](https://github.com/typegoose/typegoose/issues/1031)
+
 ## [12.21.0](https://github.com/typegoose/typegoose/compare/v12.20.1...v12.21.0) (2025-12-31)
 
 ### Dependencies
