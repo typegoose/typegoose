@@ -1,3 +1,29 @@
+## [13.2.0](https://github.com/typegoose/typegoose/compare/v13.1.0...v13.2.0) (2026-02-28)
+
+### Features
+
+* support "refPath" as a function ([ee187fa](https://github.com/typegoose/typegoose/commit/ee187fa4b37c258bd5bfd83be80f3d03a6e35835)), closes [#1028](https://github.com/typegoose/typegoose/issues/1028)
+
+### Fixes
+
+* **processProp:** allow overwriting "type" in "Map" with "innerOptions" ([c7851f8](https://github.com/typegoose/typegoose/commit/c7851f888488041106050978f8a257c703862dfe)), closes [#1031](https://github.com/typegoose/typegoose/issues/1031)
+* **types:** add "DocumentArrayType" for document arrays ([6692d07](https://github.com/typegoose/typegoose/commit/6692d07933f7a51e22f8ee79478b8ce68e83e60b)), closes [#1025](https://github.com/typegoose/typegoose/issues/1025)
+* **utils::mapOptions:** check that it extends OR *is* a options constructor ([a37752a](https://github.com/typegoose/typegoose/commit/a37752a1ea8babc68d5ff5cac349df64b3aa2afe)), closes [#1031](https://github.com/typegoose/typegoose/issues/1031)
+* **utils::mapOptions:** shallow-copy instead of assign ([4754ca9](https://github.com/typegoose/typegoose/commit/4754ca9195a71a5352c6d10300803ba8ad855892)), closes [#1031](https://github.com/typegoose/typegoose/issues/1031)
+
+### Dependencies
+
+* **mongoose:** upgrade to 9.2.1 ([c7382bc](https://github.com/typegoose/typegoose/commit/c7382bcb4f8fb19b7a305314aa6ea9dfdacbe1f2))
+* **mongoose:** upgrade to 9.2.2 ([9238112](https://github.com/typegoose/typegoose/commit/92381121787d06baff66e55420f7161fa9b74cb1))
+
+### Dev-Dependencies
+
+* **commitlint:** upgrade to 20.4.2 ([5e28b9f](https://github.com/typegoose/typegoose/commit/5e28b9fd17f31c783224f9c5ec50a12931ac31b7))
+* **eslint:** upgrade to 10.0.2 ([40df5ec](https://github.com/typegoose/typegoose/commit/40df5ec025889d68b7ada51b90492e6396c779d2))
+* **mongodb-memory-server:** upgrade to 11.0.1 ([426e7b6](https://github.com/typegoose/typegoose/commit/426e7b60ba39fcf0bea15564cfeff34b7a52a34c))
+* **prettier:** upgrade to 3.8.1 ([85ccba9](https://github.com/typegoose/typegoose/commit/85ccba9bf99f00e240757e87ff6998e109ed059c))
+* **typescript-eslint:** upgrade to 8.56.1 ([e850cd7](https://github.com/typegoose/typegoose/commit/e850cd78c40d0ace1fa1de35eabb18c8ab083268))
+
 ## [13.2.0-beta.2](https://github.com/typegoose/typegoose/compare/v13.2.0-beta.1...v13.2.0-beta.2) (2026-02-27)
 
 ### Fixes
