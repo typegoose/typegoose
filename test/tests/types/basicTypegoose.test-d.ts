@@ -613,3 +613,38 @@ async function documentArrayType() {
 }
 
 documentArrayType();
+
+async function supportsBulkSaveWithOverwrite() {
+  class Foo {
+    @prop()
+    public name?: string;
+  }
+
+  const FooModel = typegoose.getModelForClass(Foo);
+
+  const foo: typegoose.DocumentType<Foo> = new FooModel({
+    name: 'test',
+  });
+
+  // changed with mongoose 9.2.3 to take "THydratedDocumentType" instead of plain "Array"
+  await FooModel.bulkSave([foo]);
+}
+
+supportsBulkSaveWithOverwrite();
+
+async function supportsBulkSaveWithoutOverwrite() {
+  class Foo {
+    @prop()
+    public name?: string;
+  }
+
+  const FooModel = typegoose.getModelForClass(Foo);
+
+  const foo = new FooModel({
+    name: 'test',
+  });
+
+  await FooModel.bulkSave([foo]);
+}
+
+supportsBulkSaveWithoutOverwrite();
