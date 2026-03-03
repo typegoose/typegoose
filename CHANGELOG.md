@@ -1,3 +1,9 @@
+## [13.2.1](https://github.com/typegoose/typegoose/compare/v13.2.0...v13.2.1) (2026-03-03)
+
+### Fixes
+
+* **types:** include default virtuals in the Document type properly ([d6665fb](https://github.com/typegoose/typegoose/commit/d6665fbf00dfe58887928caa6d0da18bf9bb96eb)), closes [#1034](https://github.com/typegoose/typegoose/issues/1034)
+
 ## [13.2.0](https://github.com/typegoose/typegoose/compare/v13.1.0...v13.2.0) (2026-02-28)
 
 ### Features
