@@ -1,3 +1,9 @@
+## [13.3.0-beta.1](https://github.com/typegoose/typegoose/compare/v13.2.1...v13.3.0-beta.1) (2026-03-12)
+
+### Features
+
+* **utils::mapOptions:** try to map options to the outer type first ([40e714f](https://github.com/typegoose/typegoose/commit/40e714f8367329357ce8f10d1a702709a3d5d81c)), closes [#1036](https://github.com/typegoose/typegoose/issues/1036)
+
 ## [13.2.1](https://github.com/typegoose/typegoose/compare/v13.2.0...v13.2.1) (2026-03-03)
 
 ### Fixes
