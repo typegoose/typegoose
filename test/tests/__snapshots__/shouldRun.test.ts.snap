@@ -20,39 +20,6 @@ Look here for how to disable this message: https://typegoose.github.io/typegoose
 ]
 `;
 
-exports[`should support manually overwriting inner \`type\` in Maps 1`] = `
-Array [
-  Array [
-    "Setting \\"Mixed\\" for property \\"%s.%s\\"
-Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
-    "TestMapsWithManualTypeOverwrite",
-    "test",
-  ],
-]
-`;
-
-exports[`should support mapping MIXED options on Maps 1`] = `
-Array [
-  Array [
-    "Setting \\"Mixed\\" for property \\"%s.%s\\"
-Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
-    "TestMixedOnMaps",
-    "test",
-  ],
-]
-`;
-
-exports[`should support mapping custom options on MIXED with Maps 1`] = `
-Array [
-  Array [
-    "Setting \\"Mixed\\" for property \\"%s.%s\\"
-Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
-    "TestMixedMapsCustomOptions",
-    "test",
-  ],
-]
-`;
-
 exports[`should work with Objects in Class [szokodiakos#54] 1`] = `
 Array [
   Array [

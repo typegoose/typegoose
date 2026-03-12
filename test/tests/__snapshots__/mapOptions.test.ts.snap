@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`utils: mapOptions PropType.MAP should support manually overwriting inner \`type\` in Maps 1`] = `
+Array [
+  Array [
+    "Setting \\"Mixed\\" for property \\"%s.%s\\"
+Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
+    "TestMapsWithManualTypeOverwrite",
+    "test",
+  ],
+]
+`;
+
+exports[`utils: mapOptions PropType.MAP should support mapping MIXED options on Maps 1`] = `
+Array [
+  Array [
+    "Setting \\"Mixed\\" for property \\"%s.%s\\"
+Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
+    "TestMixedOnMaps",
+    "test",
+  ],
+]
+`;
+
+exports[`utils: mapOptions PropType.MAP should support mapping custom options on MIXED with Maps 1`] = `
+Array [
+  Array [
+    "Setting \\"Mixed\\" for property \\"%s.%s\\"
+Look here for how to disable this message: https://typegoose.github.io/typegoose/docs/api/decorators/model-options/#allowmixed",
+    "TestMixedMapsCustomOptions",
+    "test",
+  ],
+]
+`;
