@@ -193,7 +193,7 @@ export function processProp(input: ProcessPropOptions): void {
 
         return;
       case PropType.MAP: {
-        const mapped = utils.mapOptions(rawOptions, newType, target, key, mergedOptions);
+        const mapped = utils.mapOptions(rawOptions, newType, target, key, mergedOptions, PropType.MAP);
 
         schemaProp[key] = {
           ...mapped.outer,
@@ -234,7 +234,7 @@ export function processProp(input: ProcessPropOptions): void {
         };
         break;
       case PropType.MAP: {
-        const mapped = utils.mapOptions(rawOptions, refType, target, key, mergedOptions);
+        const mapped = utils.mapOptions(rawOptions, refType, target, key, mergedOptions, PropType.MAP);
 
         schemaProp[key] = {
           ...mapped.outer,
@@ -407,11 +407,11 @@ export function processProp(input: ProcessPropOptions): void {
 
         // Map the correct options for the end type
         if (utils.isTypeMeantToBeArray(rawOptions)) {
-          mapped = utils.mapOptions(rawOptions, mongoose.Schema.Types.Array, target, key, mergedOptions);
+          mapped = utils.mapOptions(rawOptions, mongoose.Schema.Types.Array, target, key, mergedOptions, PropType.MAP);
           // "rawOptions" is not used here, because that would duplicate some options to where the should not be
           finalType = utils.mapArrayOptions({ ...mapped.inner, dim: rawOptions.dim }, Type, target, key, mergedOptions);
         } else {
-          mapped = utils.mapOptions(rawOptions, Type, target, key, mergedOptions);
+          mapped = utils.mapOptions(rawOptions, Type, target, key, mergedOptions, PropType.MAP);
           finalType = { type: Type, ...mapped.inner };
         }
 
@@ -472,7 +472,7 @@ export function processProp(input: ProcessPropOptions): void {
         return;
       }
 
-      const mapped = utils.mapOptions(rawOptions, virtualSchema, target, key, Type);
+      const mapped = utils.mapOptions(rawOptions, virtualSchema, target, key, Type, PropType.MAP);
 
       schemaProp[key] = {
         ...mapped.outer,

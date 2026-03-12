@@ -282,7 +282,7 @@ it('should error if the Type does not have a valid "OptionsConstructor" [Invalid
   }
 
   try {
-    utils.mapOptions({}, CustomType, Error, 'undefined-pkey', {});
+    utils.mapOptions({}, CustomType, Error, 'undefined-pkey', {}, PropType.NONE);
 
     fail('Expected to throw "InvalidOptionsConstructor"');
   } catch (err) {

@@ -17,7 +17,7 @@ import type {
   PropOptionsForString,
   VirtualOptions,
 } from '../types';
-import { AlreadyMerged, DecoratorKeys, Severity } from './constants';
+import { AlreadyMerged, DecoratorKeys, PropType, Severity } from './constants';
 import { constructors, globalOptions } from './data';
 import {
   AssertionFallbackError,
@@ -420,7 +420,7 @@ export function mapArrayOptions(
   const dim = rawOptions.dim; // needed, otherwise it will be included (and not removed) in the returnObject
   delete rawOptions.dim;
 
-  const mapped = mapOptions(rawOptions, Type, target, pkey, modelOptions, loggerType);
+  const mapped = mapOptions(rawOptions, Type, target, pkey, modelOptions, PropType.ARRAY, loggerType);
 
   /** The Object that gets returned */
   const returnObject: KeyStringAny = {
@@ -451,6 +451,7 @@ export function mapArrayOptions(
  * @param Type The Type of the array
  * @param target The Target class
  * @param pkey Key of the Property
+ * @param propType Property type for the outer options
  * @param loggerType Type to use for logging
  */
 export function mapOptions(
@@ -459,6 +460,7 @@ export function mapOptions(
   target: any,
   pkey: string,
   modelOptions: IModelOptions,
+  propType: PropType,
   loggerType?: AnyParamConstructor<any>
 ): MappedInnerOuterOptions {
   logger.debug('mapOptions called');
@@ -501,12 +503,23 @@ export function mapOptions(
 
   const options = Object.assign({}, rawOptions); // for sanity
 
+  // Try to map options to the outer type first, to correctly map things like "default" and "required" on Map & Array
+  let OuterOptionsCTOR: undefined | mongoose.SchemaTypeOptions<unknown> = undefined;
+
+  if (propType === PropType.ARRAY) {
+    OuterOptionsCTOR = mongoose.Schema.Types.Array.prototype.OptionsConstructor;
+  } else if (propType === PropType.MAP) {
+    OuterOptionsCTOR = mongoose.Schema.Types.Map.prototype.OptionsConstructor;
+  }
+
   // test that the OptionsCTOR extends, or is "SchemaTypeOptions"
   // this is necessary due to `class A {}; class B extends A {}; B.prototype instanceof A === true;`
   // but not due to `class A {}; A instanceof A === false;`
   if (OptionsCTOR.prototype instanceof mongoose.SchemaTypeOptions || OptionsCTOR === mongoose.SchemaTypeOptions) {
     for (const [key, value] of Object.entries(options)) {
-      if (Object.getOwnPropertyNames(OptionsCTOR.prototype).includes(key)) {
+      if (OuterOptionsCTOR && Object.getOwnPropertyNames(OuterOptionsCTOR).includes(key)) {
+        ret.outer[key] = value;
+      } else if (Object.getOwnPropertyNames(OptionsCTOR.prototype).includes(key)) {
         ret.inner[key] = value;
       } else {
         ret.outer[key] = value;

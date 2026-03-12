@@ -1424,3 +1424,101 @@ it('should support manually overwriting inner `type` in Maps', () => {
   expect(spyWarn).toHaveBeenCalledTimes(1);
   expect(spyWarn.mock.calls).toMatchSnapshot();
 });
+
+it('should map options to the outer Type first, if possible (Map)', () => {
+  function mapDefault() {
+    return new Map();
+  }
+
+  class TestMapMapping {
+    @prop({ type: String, default: mapDefault, required: true })
+    public test!: Map<string, string>;
+  }
+
+  const schema = buildSchema(TestMapMapping);
+  const testPath = schema.path('test');
+
+  expect(testPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(testPath.options).toHaveProperty('required', true);
+  expect(testPath.options).toHaveProperty('default', mapDefault);
+
+  const innerType = testPath['$__schemaType'];
+
+  expect(innerType).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(innerType.options).toHaveProperty('required', undefined);
+  expect(innerType.options).toHaveProperty('default', undefined);
+});
+
+it('should map options to the outer Type first, if possible; special case: ref (Map)', () => {
+  class Child {
+    @prop({})
+    public dummy?: string;
+  }
+
+  class TestMapMapping {
+    @prop({ ref: () => Child })
+    public test!: Map<string, Ref<Child>>;
+  }
+
+  const childModelName = getName(Child);
+  const schema = buildSchema(TestMapMapping);
+  const testPath = schema.path('test');
+
+  // mongoose does the mapping from the outer "ref" to the inner "ref"
+  expect(testPath).toBeInstanceOf(mongoose.Schema.Types.Map);
+  expect(testPath.options).toHaveProperty('ref', undefined);
+
+  const innerType = testPath['$__schemaType'];
+
+  expect(innerType).toBeInstanceOf(mongoose.Schema.Types.ObjectId);
+  expect(innerType.options).toHaveProperty('ref', childModelName);
+});
+
+it('should map options to the outer Type first, if possible (Array)', () => {
+  function arrayDefault() {
+    return [];
+  }
+
+  class TestArrayMapping {
+    @prop({ default: arrayDefault, required: true, type: String })
+    public test!: string[];
+  }
+
+  const schema = buildSchema(TestArrayMapping);
+  const testPath = schema.path('test');
+
+  expect(testPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(testPath.options).toHaveProperty('required', true);
+  expect(testPath.options).toHaveProperty('default', arrayDefault);
+
+  const innerType = testPath['embeddedSchemaType'];
+
+  expect(innerType).toBeInstanceOf(mongoose.Schema.Types.String);
+  expect(innerType.options).toHaveProperty('required', undefined);
+  expect(innerType.options).toHaveProperty('default', undefined);
+});
+
+it('should map options to the outer Type first, if possible; special case: ref (Array)', () => {
+  class Child {
+    @prop({})
+    public dummy?: string;
+  }
+
+  class TestArrayMapping {
+    @prop({ ref: () => Child })
+    public test!: Ref<Child>[];
+  }
+
+  const childModelName = getName(Child);
+  const schema = buildSchema(TestArrayMapping);
+  const testPath = schema.path('test');
+
+  // mongoose does the mapping from the outer "ref" to the inner "ref"
+  expect(testPath).toBeInstanceOf(mongoose.Schema.Types.Array);
+  expect(testPath.options).toHaveProperty('ref', undefined);
+
+  const innerType = testPath['embeddedSchemaType'];
+
+  expect(innerType).toBeInstanceOf(mongoose.Schema.Types.ObjectId);
+  expect(innerType.options).toHaveProperty('ref', childModelName);
+});
