@@ -62,7 +62,7 @@
     "tstyche": "^7.1.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.56.1",
-    "globals": "^17.3.0",
+    "globals": "^17.5.0",
     "@eslint/js": "^10.0.1"
   },
   "dependencies": {
