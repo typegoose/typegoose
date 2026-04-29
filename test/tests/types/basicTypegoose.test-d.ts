@@ -648,3 +648,56 @@ async function supportsBulkSaveWithoutOverwrite() {
 }
 
 supportsBulkSaveWithoutOverwrite();
+
+function strictPluginOptions() {
+  interface PluginOptions {
+    test1?: boolean;
+  }
+
+  function somePlugin(schema: typegoose.mongoose.Schema, options: PluginOptions) {
+    schema.virtual('testy', () => undefined);
+  }
+
+  typegoose.plugin(somePlugin, {});
+  typegoose.plugin(somePlugin, { test1: true });
+
+  // @ts-expect-error Object literal may only specify known properties, and 'unknownOption' does not exist in type 'PluginOptions'
+  typegoose.plugin(somePlugin, { unknownOption: true });
+}
+
+strictPluginOptions();
+
+function pluginsWithUnknownOptions() {
+  function somePlugin1(schema: typegoose.mongoose.Schema, options: unknown) {
+    schema.virtual('testy', () => undefined);
+  }
+
+  typegoose.plugin(somePlugin1, {});
+  typegoose.plugin(somePlugin1, { test1: true });
+  typegoose.plugin(somePlugin1, { unknownOption: true });
+
+  function somePlugin2(schema: typegoose.mongoose.Schema, options: any) {
+    schema.virtual('testy', () => undefined);
+  }
+
+  typegoose.plugin(somePlugin2, {});
+  typegoose.plugin(somePlugin2, { test1: true });
+  typegoose.plugin(somePlugin2, { unknownOption: true });
+}
+
+pluginsWithUnknownOptions();
+
+function pluginWithoutOptions() {
+  function somePlugin(schema: typegoose.mongoose.Schema) {
+    schema.virtual('testy', () => undefined);
+  }
+
+  // @ts-expect-error Argument of type '{}' is not assignable to parameter of type 'undefined'
+  typegoose.plugin(somePlugin, {});
+  // @ts-expect-error Argument of type '{ test1: boolean; }' is not assignable to parameter of type 'undefined'
+  typegoose.plugin(somePlugin, { test1: true });
+  // @ts-expect-error Argument of type '{ unknownOption: boolean; }' is not assignable to parameter of type 'undefined'
+  typegoose.plugin(somePlugin, { unknownOption: true });
+}
+
+pluginWithoutOptions();
