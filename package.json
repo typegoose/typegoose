@@ -54,7 +54,7 @@
     "husky": "^9.1.7",
     "jest": "^30.3.0",
     "lint-staged": "^16.4.0",
-    "mongodb-memory-server": "^11.0.1",
+    "mongodb-memory-server": "^11.1.0",
     "mongoose": "~9.6.0",
     "prettier": "^3.8.3",
     "rimraf": "^6.1.3",
