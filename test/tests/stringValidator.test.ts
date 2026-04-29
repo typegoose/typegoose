@@ -45,6 +45,7 @@ it('should lowercase', async () => {
 it('should respect enum', async () => {
   try {
     await StringValidatorsModel.create({
+      // @ts-expect-error Explicitly checking other types
       enumed: 'not in the enum', // string not in the enum
     });
 

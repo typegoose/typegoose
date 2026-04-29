@@ -9,6 +9,7 @@ If no upper mongoose version is defined and a newer typegoose version exists wit
 
 | Typegoose Version | Mongoose Version |
 | ----------------- | ---------------- |
+| 13.3.x            | ~9.6.0           |
 | 13.2.x            | ~9.2.2           |
 | 13.1.x            | ~9.1.4           |
 | 13.0.x            | ~9.0.0           |
