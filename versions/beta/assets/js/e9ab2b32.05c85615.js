@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunktypegoose_website=globalThis.webpackChunktypegoose_website||[]).push([[4595],{4245(e,s,t){t.r(s),t.d(s,{default:()=>a});t(6540);var o=t(6347),u=t(6025),i=t(4848);const a=function(){return(0,i.jsx)(o.rd,{to:(0,u.Ay)("docs/guides/quick-start-guide")})}}}]);

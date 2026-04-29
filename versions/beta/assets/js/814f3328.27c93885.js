@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunktypegoose_website=globalThis.webpackChunktypegoose_website||[]).push([[7472],{5513(e){e.exports=JSON.parse('{"title":"Recent posts","items":[]}')}}]);

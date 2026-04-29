@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunktypegoose_website=globalThis.webpackChunktypegoose_website||[]).push([[6458],{1654(e,s,t){t.r(s),t.d(s,{default:()=>n});t(6540);var o=t(6347),i=t(6025),a=t(4848);const n=function(){return(0,a.jsx)(o.rd,{to:(0,i.Ay)("docs/api/index-api")})}}}]);
