@@ -43,7 +43,7 @@
     "@commitlint/cli": "^20.5.2",
     "@commitlint/config-conventional": "^20.5.0",
     "@types/jest": "^30.0.0",
-    "@types/lodash": "^4.17.21",
+    "@types/lodash": "^4.17.24",
     "@types/node": "~24.10.1",
     "@types/semver": "^7.7.1",
     "class-transformer": "0.5.1",
