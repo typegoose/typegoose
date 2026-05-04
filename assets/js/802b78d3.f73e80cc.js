@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunktypegoose_website=globalThis.webpackChunktypegoose_website||[]).push([[8753],{1251(e){e.exports=JSON.parse('{"metadata":{"permalink":"/typegoose/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":0,"blogDescription":"Blog","blogTitle":"Blog"}}')}}]);
