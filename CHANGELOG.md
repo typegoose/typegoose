@@ -1,3 +1,21 @@
+## [13.4.0](https://github.com/typegoose/typegoose/compare/v13.3.0...v13.4.0) (2026-07-03)
+
+### Dependencies
+
+* **mongoose:** upgrade to 9.7.3 ([2734bf3](https://github.com/typegoose/typegoose/commit/2734bf376d193b5cf66de65fd9616275eb86c5ec))
+
+### Dev-Dependencies
+
+* **eslint-plugin-prettier:** upgrade to 5.5.6 ([f0e1c4a](https://github.com/typegoose/typegoose/commit/f0e1c4a38df0467b591b705cb33bc4a624d3b1e7))
+* **eslint:** upgrade to 10.6.0 ([67e6094](https://github.com/typegoose/typegoose/commit/67e609428e86a6607aafb6d2102405302400d19d))
+* **globals:** upgrade to 17.7.0 ([e5e40d3](https://github.com/typegoose/typegoose/commit/e5e40d33ae4c40f9821cd436d17f3fa76a1fcb2f))
+* **jest:** upgrade to 30.4.2 ([d6cae2e](https://github.com/typegoose/typegoose/commit/d6cae2ef167d71126af2cfdd3f8b2a6e75ed550b))
+* **mongodb-memory-server:** upgrade to 11.2.0 ([ab6feb5](https://github.com/typegoose/typegoose/commit/ab6feb5b9c49e398d0c60bd23f2a7e393cdf594c))
+* **prettier:** upgrade to 3.9.4 ([eb7bbb8](https://github.com/typegoose/typegoose/commit/eb7bbb8343ffa6f76a4a53132f24c746ab3cc1f3))
+* **ts-jest:** upgrade to 29.4.11 ([8d822ba](https://github.com/typegoose/typegoose/commit/8d822bae612e49d06f7168664ef2af32bd8f8afd))
+* **tstyche:** upgrade to 7.2.1 ([8a7b70c](https://github.com/typegoose/typegoose/commit/8a7b70c8bc90318cad033e73c6ae89b5780f3520))
+* **typescript-eslint:** upgrade to 8.62.1 ([9e68fc2](https://github.com/typegoose/typegoose/commit/9e68fc2c733b4c45d8710ecf4a77791c0b109ca6))
+
 ## [13.3.0](https://github.com/typegoose/typegoose/compare/v13.2.1...v13.3.0) (2026-05-04)
 
 ### Features
