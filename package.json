@@ -52,7 +52,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "husky": "^9.1.7",
-    "jest": "^30.3.0",
+    "jest": "^30.4.2",
     "lint-staged": "^16.4.0",
     "mongodb-memory-server": "^11.2.0",
     "mongoose": "~9.6.0",
