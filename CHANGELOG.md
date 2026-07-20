@@ -1,3 +1,10 @@
+## [13.4.1-beta.1](https://github.com/typegoose/typegoose/compare/v13.4.0...v13.4.1-beta.1) (2026-07-20)
+
+### Fixes
+
+* **types:** allow custom "id" path types again ([bccaea0](https://github.com/typegoose/typegoose/commit/bccaea06e68703ca156292c0dff5ab06c1e9af2e)), closes [#1068](https://github.com/typegoose/typegoose/issues/1068)
+* **types:** use upstream "DefaultIdVirtual" ([354c35d](https://github.com/typegoose/typegoose/commit/354c35d0b9f57f3b699a87df870c6365710f00f9))
+
 ## [13.4.0](https://github.com/typegoose/typegoose/compare/v13.3.0...v13.4.0) (2026-07-03)
 
 ### Dependencies
