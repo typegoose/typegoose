@@ -14,10 +14,10 @@ import type { PropType, Severity } from './internal/constants';
  * const doc: DocumentType<ClassName> = await NameModel.create({});
  * ```
  */
-export type DocumentType<T, QueryHelpers = BeAnObject> = mongoose.Document<unknown, QueryHelpers, T, DefaultIdVirtual> &
+export type DocumentType<T, QueryHelpers = BeAnObject> = mongoose.Document<unknown, QueryHelpers, T, mongoose.DefaultIdVirtual> &
   mongoose.Default__v<mongoose.Require_id<T>> &
   IObjectWithTypegooseFunction &
-  DefaultIdVirtual;
+  mongoose.DefaultIdVirtual;
 /**
  * Get the Type of an instance of a SubDocument with Class properties
  */
@@ -37,7 +37,7 @@ export type ModelType<T, QueryHelpers = BeAnObject> = mongoose.Model<
   T, // raw doc type
   QueryHelpers, // query helpers
   IObjectWithTypegooseFunction, // instance methods
-  DefaultIdVirtual // virtuals
+  mongoose.DefaultIdVirtual // virtuals
 >;
 /**
  * Any-param Constructor
@@ -749,5 +749,3 @@ export type GetFunctionKeys<T extends object> = {
  * does NOT filter out getters / setters
  */
 export type FilterOutFunctionKeys<T extends object> = Omit<T, GetFunctionKeys<T>>;
-
-export type DefaultIdVirtual = { id: string };
