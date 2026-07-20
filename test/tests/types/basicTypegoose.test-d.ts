@@ -705,3 +705,22 @@ function pluginWithoutOptions() {
 }
 
 pluginWithoutOptions();
+
+async function allowCustomIdField() {
+  @typegoose.modelOptions({ schemaOptions: { id: false } })
+  class WithId {
+    @prop({ required: true })
+    public id!: number;
+
+    @prop()
+    public other?: string;
+  }
+
+  const Model = typegoose.getModelForClass(WithId);
+
+  const doc = await Model.create({ id: 0, other: 'hello' });
+
+  expect(doc.id).type.toBe<number>();
+}
+
+allowCustomIdField();
