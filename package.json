@@ -61,7 +61,7 @@
     "ts-jest": "^29.4.12",
     "tstyche": "^7.2.5",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.62.1",
+    "typescript-eslint": "^8.70.1",
     "globals": "^17.7.0",
     "@eslint/js": "^10.0.1"
   },
