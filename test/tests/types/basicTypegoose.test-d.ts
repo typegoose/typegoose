@@ -2,7 +2,7 @@
 import { expect } from 'tstyche';
 import * as typegoose from '../../../src/typegoose';
 import { isDocument, isRefType, prop } from '../../../src/typegoose';
-import { BeAnObject, DefaultIdVirtual, IObjectWithTypegooseFunction } from '../../../src/types';
+import { BeAnObject, IObjectWithTypegooseFunction } from '../../../src/types';
 
 // decorators return type
 expect(typegoose.prop()).type.toBe<PropertyDecorator>();
@@ -233,6 +233,8 @@ async function typeguards() {
 typeguards();
 
 async function testDocumentType() {
+  type DefaultIdVirtual = typegoose.mongoose.DefaultIdVirtual;
+
   const someNewDoc = new TestClassModel();
 
   expect(someNewDoc).type.toBe<
@@ -260,6 +262,8 @@ async function testDocumentType() {
 testDocumentType();
 
 async function gh732() {
+  type DefaultIdVirtual = typegoose.mongoose.DefaultIdVirtual;
+
   class SomeClass {
     @typegoose.prop()
     public someoptionalProp?: string;
@@ -701,3 +705,22 @@ function pluginWithoutOptions() {
 }
 
 pluginWithoutOptions();
+
+async function allowCustomIdField() {
+  @typegoose.modelOptions({ schemaOptions: { id: false } })
+  class WithId {
+    @prop({ required: true })
+    public id!: number;
+
+    @prop()
+    public other?: string;
+  }
+
+  const Model = typegoose.getModelForClass(WithId);
+
+  const doc = await Model.create({ id: 0, other: 'hello' });
+
+  expect(doc.id).type.toBe<number>();
+}
+
+allowCustomIdField();
