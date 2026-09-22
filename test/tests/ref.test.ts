@@ -376,8 +376,8 @@ it('should map options correctly on an ref-array', async () => {
   expect(reference2).toBeDefined();
   await RefArrayOptionsMappingModel.create({ validatedRef: reference2, validatedRefArray: [reference2, reference2] });
   expect(validateInner).toHaveBeenCalledWith(reference2._id);
-  expect(validateOuter).toHaveBeenNthCalledWith(1, expect.arrayContaining([reference2._id, reference2._id]));
-  expect(validateOuter).toHaveBeenNthCalledWith(2, expect.any(Array));
+  expect(validateOuter).toHaveBeenNthCalledWith(1, []);
+  expect(validateOuter).toHaveBeenNthCalledWith(2, expect.arrayContaining([reference2._id, reference2._id]));
 
   jest.clearAllMocks();
 
@@ -385,9 +385,8 @@ it('should map options correctly on an ref-array', async () => {
   expect(reference3).toBeDefined();
   await RefArrayOptionsMappingModel.create({ explicitDoubleRefArray: [reference3, reference3] });
   expect(validateInner).toHaveBeenCalledWith(reference3._id);
-  // the order is different, because defaults get created *after* normal values, and so validators of those defaults are also called later
-  expect(validateOuter).toHaveBeenNthCalledWith(1, expect.arrayContaining([reference3._id, reference3._id]));
-  expect(validateOuter).toHaveBeenNthCalledWith(2, expect.any(Array));
+  expect(validateOuter).toHaveBeenNthCalledWith(1, []);
+  expect(validateOuter).toHaveBeenNthCalledWith(2, expect.arrayContaining([reference3._id, reference3._id]));
 });
 
 it('Reference-Maps should work and be populated', async () => {
