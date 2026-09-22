@@ -13,8 +13,8 @@
     "@docusaurus/core": "3.10.2",
     "@docusaurus/preset-classic": "3.10.2",
     "@docusaurus/remark-plugin-npm2yarn": "3.10.2",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "browserslist": {
     "production": [
