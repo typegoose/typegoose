@@ -1,3 +1,4 @@
+import * as os from 'node:os';
 import mongoose from 'mongoose';
 import { config } from './config';
 
@@ -10,6 +11,10 @@ interface ExtraConnectionConfig {
 // to not duplicate code
 const staticOptions: mongoose.ConnectOptions = {
   autoIndex: true,
+  // Workaround for NODE-7832 / mongodb driver 7.6+ dynamic import('os') in Jest VM
+  runtimeAdapters: {
+    os,
+  },
 };
 
 /**
