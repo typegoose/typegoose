@@ -123,3 +123,21 @@ The reason currently is that there is not a good way to differentiate between cl
 - ¹: classes could be differentiated with `/^class\s/.test(Function.prototype.toString.call(obj))`
 - ²: native types could be differentiated with `/\[native code\]/.test(Function.prototype.toString.call(obj))`, but what about mocked or proxied types?
 - ³: could likely be differenitated by matching references & names against `mongoose.Types.*` and `mongoose.Schema.Types.*`
+
+### Jest hangs with MongoDB Driver 7.6+ / Mongoose 9.10+ (NODE-7832)
+
+Starting with MongoDB driver version `7.6.0` (used in Mongoose `9.10.0` and higher), running tests inside Jest may hang indefinitely.
+This is caused by an internal dynamic `import('node:os')` in the MongoDB driver that does not resolve cleanly within Jest's VM context (see [NODE-7832](https://jira.mongodb.org/browse/NODE-7832)).
+
+As a workaround until fixed upstream, provide the Node.js `os` module explicitly via `runtimeAdapters` in the Mongoose connection options:
+
+```ts
+import * as os from 'node:os';
+import mongoose from 'mongoose';
+
+await mongoose.connect(uri, {
+  runtimeAdapters: {
+    os,
+  },
+});
+```
