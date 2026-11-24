@@ -1,4 +1,4 @@
-import { getModelForClass, getName, mongoose, prop, Ref } from '../../src/typegoose';
+import { getModelForClass, getName, mongoose, prop, type Ref } from '../../src/typegoose';
 
 export class RefTestBuffer {
   @prop()

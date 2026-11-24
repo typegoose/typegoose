@@ -1,5 +1,5 @@
 import { isNullOrUndefined } from '../../src/internal/utils';
-import { DocumentType, getModelForClass, prop, Ref, ReturnModelType } from '../../src/typegoose';
+import { DocumentType, getModelForClass, prop, type Ref, ReturnModelType } from '../../src/typegoose';
 import { Car } from './car';
 import { Job } from './job';
 

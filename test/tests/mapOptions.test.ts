@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { prop } from '../../src/prop';
-import { buildSchema, getName, PropType, Ref } from '../../src/typegoose';
+import { buildSchema, getName, PropType, type Ref } from '../../src/typegoose';
 import { logger } from '../../src/logSettings';
 
 describe('utils: mapOptions', () => {

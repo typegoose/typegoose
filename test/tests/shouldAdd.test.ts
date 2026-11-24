@@ -11,7 +11,7 @@ import {
   isDocument,
   isDocumentArray,
   prop,
-  Ref,
+  type Ref,
 } from '../../src/typegoose';
 import { Alias, AliasModel } from '../models/alias';
 import { GetClassTestParent, GetClassTestParentModel, GetClassTestSub } from '../models/getClass';

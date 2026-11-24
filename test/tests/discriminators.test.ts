@@ -11,7 +11,7 @@ import {
   Pre,
   prop,
   Prop,
-  Ref,
+  type Ref,
   plugin,
   modelOptions,
 } from '../../src/typegoose';

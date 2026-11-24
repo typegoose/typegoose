@@ -1,5 +1,5 @@
 import { assertion, isNullOrUndefined } from '../../src/internal/utils';
-import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose, Ref } from '../../src/typegoose';
+import { isDocument, isDocumentArray, isRefType, isRefTypeArray, mongoose, type Ref } from '../../src/typegoose';
 import {
   IsRefTypeArrayModel,
   IsRefTypeModel,

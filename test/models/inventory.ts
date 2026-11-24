@@ -1,5 +1,5 @@
 // Tests for discriminators and refPaths
-import { getModelForClass, getName, prop, Ref } from '../../src/typegoose';
+import { getModelForClass, getName, prop, type Ref } from '../../src/typegoose';
 
 export class Scooter {
   @prop()

@@ -5,8 +5,8 @@
       "esnext"
     ],
     "removeComments": false,
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "node20",
+    "moduleResolution": "node16",
     "newLine": "LF",
     "declaration": true,
     "experimentalDecorators": true,
@@ -18,7 +18,8 @@
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "isolatedModules": true
   },
   "include": [
     "src/**/*.ts",

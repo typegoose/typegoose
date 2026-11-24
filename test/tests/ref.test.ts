@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { assertion, getName } from '../../src/internal/utils';
-import { getModelForClass, isDocument, isDocumentArray, isRefType, prop, Ref } from '../../src/typegoose';
+import { getModelForClass, isDocument, isDocumentArray, isRefType, prop, type Ref } from '../../src/typegoose';
 import { RefTestArrayTypesModel, RefTestBufferModel, RefTestModel, RefTestNumberModel, RefTestStringModel } from '../models/refTests';
 
 it('check generated ref schema for ObjectId _id', async () => {
