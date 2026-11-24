@@ -1,3 +1,11 @@
+## 12.22.0 (2026-11-24)
+
+* deps(mongoose): upgrade to 8.24.11 ([c3fbd73](https://github.com/typegoose/typegoose/commit/c3fbd73)), closes [#1113](https://github.com/typegoose/typegoose/issues/1113)
+* chore: switch to npm ([1c7a63c](https://github.com/typegoose/typegoose/commit/1c7a63c))
+* chore(husky): remove "yarn" prefix ([c015249](https://github.com/typegoose/typegoose/commit/c015249))
+* chore(workflows): update actions/checkout to v7 ([91c6482](https://github.com/typegoose/typegoose/commit/91c6482))
+* chore(workflows/tests): upgrade semantic release ([9082b90](https://github.com/typegoose/typegoose/commit/9082b90))
+
 ## [12.21.1](https://github.com/typegoose/typegoose/compare/v12.21.0...v12.21.1) (2026-02-28)
 
 ### Fixes
