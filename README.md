@@ -148,8 +148,8 @@ class User {
 ## Testing
 
 ```sh
-yarn install
-yarn run test
+npm install
+npm run test
 ```
 
 ## Versioning
